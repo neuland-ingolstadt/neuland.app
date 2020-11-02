@@ -392,6 +392,32 @@ data:
 }
 ```
 
+### addreservation
+```
+service: thiapp
+method:  reservations
+format:  json
+session: <session token>
+type:    1
+subtype: 1
+cmd:     addreservation
+data:    {"resource":"3","from":"06:00","to":"10:00","at":"2020-11-03","place":"-1"}
+```
+
+```json
+{
+    "data": [
+        0,
+        [
+            "<reservation number>"
+        ]
+    ],
+    "date": "02.11.2020",
+    "status": 0,
+    "time": "21:29:51"
+}
+```
+
 ### delreservation
 ```
 service: thiapp
@@ -413,7 +439,7 @@ data:    6678
 }
 ```
 
-### 
+### getavailabilities
 ```
 service: thiapp
 method:  reservations
