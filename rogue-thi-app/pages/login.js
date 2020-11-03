@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styles from '../styles/Login.module.css'
 import React, { useState } from 'react'
-import { thiApiRequest } from '../lib/thi-api-request'
+import { login } from '../lib/thi-api-client'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
@@ -14,19 +14,14 @@ export default function Login (props) {
   const router = useRouter()
 
   async function attemptLogin () {
-    const res = await thiApiRequest({
-      service: 'session',
-      method: 'open',
-      format: 'json',
-      username: username,
-      passwd: password
-    })
+    try {
+      const { session } = await login(username, password)
+      localStorage.session = session
 
-    if (typeof res.data === 'string') { setFailure(res.data) } // e.g. 'Wrong credentials'
-
-    console.log(res.data[0])
-
-    router.push('/')
+      router.push('/')
+    } catch (e) {
+      setFailure(e.toString())
+    }
   }
 
   return (
