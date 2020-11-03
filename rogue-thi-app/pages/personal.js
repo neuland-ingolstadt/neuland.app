@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styles from '../styles/Login.module.css'
+import cstyles from '../styles/Common.module.css'
+import styles from '../styles/Personal.module.css'
 import React, { useState, useEffect } from 'react'
 import { getPersonalData } from '../lib/thi-api-client'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -23,13 +24,13 @@ export default function Personal (props) {
   }, [])
 
   return (
-    <div className={styles.container}>
+    <div className={cstyles.container}>
       <Head>
         <title>Rogue-THI</title>
       </Head>
 
-      <div className={styles.main}>
-        <h1 className={styles.title}>
+      <div className={cstyles.main}>
+        <h1 className={cstyles.title}>
           Personal Data
         </h1>
 
@@ -56,7 +57,7 @@ export default function Personal (props) {
         </ListGroup>
       </div>
 
-      <footer className={styles.footer}>
+      <footer className={cstyles.footer}>
         <strong>unofficial thi app</strong>
       </footer>
     </div>

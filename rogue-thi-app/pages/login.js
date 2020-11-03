@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styles from '../styles/Login.module.css'
+import styles from '../styles/Common.module.css'
 import React, { useState } from 'react'
 import { login } from '../lib/thi-api-client'
 import Button from 'react-bootstrap/Button'
