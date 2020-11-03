@@ -1,0 +1,13 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.jsonText {
+  width: 400px;
+  height: 300px;
+}
