@@ -24,7 +24,10 @@
 				var params = JSON.parse(paramsEl.value);
 				thiAppRequest(params)
 					.then(result => document.getElementById("output").innerText = JSON.stringify(result, null, 4))
-					.catch(e => alert(e.toString()));
+					.catch(e => {
+						alert("API Error! View console for details");
+						console.error(e);
+					});
 			}
 		</script>
 	</body>
