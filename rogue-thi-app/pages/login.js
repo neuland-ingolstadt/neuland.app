@@ -3,25 +3,23 @@ import styles from '../styles/Home.module.css'
 import React, { useState } from 'react'
 import { thiApiRequest } from '../lib/thi-api-request'
 
-const [username, setUsername] = useState('');
-const [password, setPassword] = useState('');
-const [failure, setFailure] = useState(false);
+export default function Login (props) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [failure, setFailure] = useState(false)
 
-export default function Login(props) {
-
-  async function attemptLogin() {
-    const response = await thiApiRequest({
+  async function attemptLogin () {
+    const res = await thiApiRequest({
       service: 'session',
       method: 'open',
       format: 'json',
       username: username,
-      passwd: password,
-    });
+      passwd: password
+    })
 
-    if(typeof res.data === 'string')
-      setFailure(res.data); // e.g. 'Wrong credentials'
+    if (typeof res.data === 'string') { setFailure(res.data) } // e.g. 'Wrong credentials'
 
-    props.onLoginSuccess(res.data[0]);
+    console.log(res.data[0])
   }
 
   return (
@@ -35,17 +33,17 @@ export default function Login(props) {
           Rogue-THI Login
         </h1>
 
-        { failure ? <div class="alert alert-error" role="alert">{failure}</div> : ''}
-        <input type="text" placeholder="abc1234@thi.de" class="form-control"
+        { failure ? <div className="alert alert-error" role="alert">{failure}</div> : ''}
+        <input type="text" placeholder="abc1234@thi.de" className="form-control"
           value={username} onChange={e => setUsername(e.target.value)} />
-        <input type="password" placeholder="Password" class="form-control"
+        <input type="password" placeholder="Password" className="form-control"
           value={password} onChange={e => setPassword(e.target.value)} />
 
-        <button class="btn btn-primary" click={attemptLogin()}></button>
+        <button className="btn btn-primary" onClick={attemptLogin}>Login</button>
       </main>
 
       <footer className={styles.footer}>
-        <strong>Inofficial!</strong> THI App.
+        <strong>unofficial thi app</strong>
       </footer>
     </div>
   )
