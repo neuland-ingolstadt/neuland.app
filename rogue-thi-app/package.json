@@ -8,10 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "next": "10.0.0",
     "node-forge": "git+https://github.com/alexhorn/forge.git#no-jquery",
     "react": "17.0.1",
+    "react-bootstrap": "^1.4.0",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
