@@ -99,6 +99,49 @@ session: <session token>
 }
 ```
 
+## Exams
+```
+service: thiapp
+method:  exams
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": [
+        0,
+        [
+            {
+                "ancode": "001",
+                "anm_date": "2020-11-04",
+                "anm_time": "18:39:21",
+                "anmerkung": "Termin durch PrÃ¼fer bestimmt",
+                "exam_rooms": null,
+                "exam_seat": null,
+                "exam_time": null,
+                "exm_date": null,
+                "fs_semesterzeiten": "39",
+                "hilfsmittel": "{\"3 DIN-A4 Blätter handschriftliche Formelsammlung\",\"nicht programmierbarer Taschenrechner / pocket calculator, not programmable\",\"3 DIN-A4 Blätter handschriftliche Formelsammlung\",\"nicht programmierbarer Taschenrechner / pocket calculator, not programmable\",\"3 DIN-A4 Blätter handschriftliche Formelsammlung\",\"nicht programmierbarer Taschenrechner / pocket calculator, not programmable\"}",
+                "modus": "1",
+                "prf_katalog_id": "109477",
+                "pruefer_namen": "<prof name>",
+                "pruefungs_art": "schrP90 - schriftliche Prüfung, 90 Minuten",
+                "pruefvorgezogen": "2021-01-19",
+                "sem": "220",
+                "stg": "<short course of study e.g. ROB>",
+                "titel": "Elektrotechnik",
+                "uname": "<username>"
+            },
+            // MORE...
+        ]
+    ],
+    "date": "04.11.2020",
+    "status": 0,
+    "time": "21:40:00"
+}
+```
+
 ## Grades
 ```
 service: thiapp
