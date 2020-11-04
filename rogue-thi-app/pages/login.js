@@ -56,6 +56,9 @@ export default function Login (props) {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
+          <Form.Text className="text-muted">
+            <a href="https://github.com/M4GNV5/THI-App/blob/master/data-security.md">Is my data safe?</a>
+          </Form.Text>
         </Form.Group>
 
         <Button onClick={attemptLogin}>Login</Button>
