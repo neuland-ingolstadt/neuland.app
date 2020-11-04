@@ -38,8 +38,8 @@ export default function Library (props) {
 
     const response = await getLibraryReservations(session)
     response.forEach(x => {
-      x.start = new Date(x.reservation_begin)
-      x.end = new Date(x.reservation_end)
+      x.start = new Date(x.reservation_begin.replace(' ', 'T'))
+      x.end = new Date(x.reservation_end.replace(' ', 'T'))
     })
     setReservations(response)
 
@@ -147,8 +147,8 @@ export default function Library (props) {
                 )}
               </div>
 
-              {(new Date(day.date + ' ' + time.from)).toLocaleString()}
-              {' '}- {(new Date(day.date + ' ' + time.to)).toLocaleTimeString()}
+              {(new Date(day.date + 'T' + time.from)).toLocaleString()}
+              {' '}- {(new Date(day.date + 'T' + time.to)).toLocaleTimeString()}
               <br />
               <Button variant="primary" onClick={() => {
                 setReservationDay(day)

@@ -31,8 +31,8 @@ async function getTimetablePreview (session) {
   const nextItems = resp.timetable
     .map(x => {
       // parse dates
-      x.start_date = new Date(`${x.datum} ${x.von}`)
-      x.end_date = new Date(`${x.datum} ${x.bis}`)
+      x.start_date = new Date(`${x.datum}T${x.von}`)
+      x.end_date = new Date(`${x.datum}T${x.bis}`)
       return x
     })
     .filter(x => x.end_date > now)
