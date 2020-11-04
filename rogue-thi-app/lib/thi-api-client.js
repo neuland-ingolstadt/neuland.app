@@ -86,3 +86,91 @@ export async function getMensaPlan (session) {
 
   return res.data[0]
 }
+
+export async function getLibraryReservations (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'reservations',
+    type: 1,
+    subtype: 1,
+    cmd: 'getreservation',
+    data: '',
+    format: 'json',
+    session
+  })
+
+  if (res.data === 'No reservation data') {
+    return []
+  }
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1]
+}
+
+export async function getAvailableLibrarySeats (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'reservations',
+    type: 1,
+    subtype: 1,
+    cmd: 'getavailabilities',
+    data: '',
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1]
+}
+
+export async function addLibraryReservation (session, roomId, day, start, end, place) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'reservations',
+    type: 1,
+    subtype: 1,
+    cmd: 'addreservation',
+    data: JSON.stringify({
+      resource: roomId,
+      at: day,
+      from: start,
+      to: end,
+      place,
+    }),
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1][0]
+}
+
+export async function removeLibraryReservation (session, reservationId) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'reservations',
+    type: 1,
+    subtype: 1,
+    cmd: 'delreservation',
+    data: reservationId,
+    format: 'json',
+    session
+  })
+
+  if (res.data === 'No reservation data') {
+    return true // dafuq THI API?
+  }
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return true
+}
