@@ -143,6 +143,13 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          title="Noten"
+          link="/grades"
+        >
+          Notenblatt einsehen.
+        </HomeCard>
+
+        <HomeCard
           title="Räume"
           link="/rooms"
         >
