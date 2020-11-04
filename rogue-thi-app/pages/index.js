@@ -17,6 +17,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/Home.module.css'
 
 import { getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
+import { formatFriendlyDateTime } from '../lib/date-utils'
 
 async function getPersonalDataPreview () {
   const resp = await getPersonalData(localStorage.session)
@@ -45,23 +46,6 @@ async function getMensaPlanPreview () {
 
   return Object.values(resp.gerichte)
     .map(x => x.name[1])
-}
-
-function formatFriendlyDateTime (datetime) {
-  if (!datetime) {
-    return null
-  }
-
-  let date
-  if (datetime.toDateString() === new Date().toDateString()) {
-    date = 'Heute'
-  } else {
-    date = datetime.toLocaleDateString()
-  }
-
-  const time = datetime.toLocaleTimeString()
-
-  return `${date}, ${time}`
 }
 
 function HomeCard ({ link, title, children }) {

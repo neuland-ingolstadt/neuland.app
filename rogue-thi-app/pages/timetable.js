@@ -7,28 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import styles from '../styles/Timetable.module.css'
 
 import { getTimetable } from '../lib/thi-api-client'
-
-function formatFriendlyTime (datetime) {
-  return datetime.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' })
-}
-
-function formatFriendlyDate (datetime) {
-  const today = new Date()
-  const tomorrow = new Date()
-  tomorrow.setDate(today.getDate() + 1)
-
-  if (typeof datetime === 'string') {
-    datetime = new Date(datetime)
-  }
-
-  if (datetime.toDateString() === today.toDateString()) {
-    return 'Heute'
-  } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return 'Morgen'
-  } else {
-    return datetime.toLocaleString([], { weekday: 'long', day: 'numeric', month: 'long' })
-  }
-}
+import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable () {
   const today = new Date()
