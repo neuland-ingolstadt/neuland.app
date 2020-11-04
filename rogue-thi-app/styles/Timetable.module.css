@@ -1,0 +1,19 @@
+.dateBoundary {
+    margin-top: 20px;
+}
+
+.item {
+    display: flex;
+}
+
+.left {
+    flex: 1;
+}
+
+.room {
+    color: gray;
+}
+
+.right {
+    color: gray;
+}
