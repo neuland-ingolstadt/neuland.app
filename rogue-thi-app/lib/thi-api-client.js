@@ -54,8 +54,8 @@ export async function getTimetable (session, date) {
     method: 'stpl',
     format: 'json',
     session,
-    day: date.getDay(),
-    month: date.getMonth(),
+    day: date.getDate(),
+    month: date.getMonth() + 1,
     year: 1900 + date.getYear(),
     details: 0
   })
@@ -65,9 +65,24 @@ export async function getTimetable (session, date) {
   } // e.g. 'Wrong credentials'
 
   return {
-    semester: res.data[0],
-    today: res.data[1],
-    timestamp: res.data[2],
-    events: res.data[3]
+    semester: res.data[1],
+    holidays: res.data[2],
+    events: res.data[2],
+    timetable: res.data[3]
   }
+}
+
+export async function getMensaPlan (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'mensa',
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[0]
 }

@@ -1,65 +1,168 @@
-import Head from 'next/head'
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+
+import Link from 'next/link'
+
+import Container from 'react-bootstrap/Container'
+import Button from 'react-bootstrap/Button'
+import Card from 'react-bootstrap/Card'
+import ListGroup from 'react-bootstrap/ListGroup'
+
+import ReactPlaceholder from 'react-placeholder'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+import { getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
+
+async function getPersonalDataPreview () {
+  const resp = await getPersonalData(localStorage.session)
+  return resp.persdata.user
+}
+
+async function getTimetablePreview () {
+  const resp = await getTimetable(localStorage.session, new Date())
+  const now = new Date()
+
+  const nextItems = resp.timetable
+    .map(x => {
+      // parse dates
+      x.start_date = new Date(`${x.datum} ${x.von}`)
+      x.end_date = new Date(`${x.datum} ${x.bis}`)
+      return x
+    })
+    .filter(x => x.end_date > now)
+    .sort((a, b) => a.start_date - b.start_date)
+
+  return nextItems[0]
+}
+
+async function getMensaPlanPreview () {
+  const resp = await getMensaPlan(localStorage.session)
+
+  return Object.values(resp.gerichte)
+    .map(x => x.name[1])
+}
+
+function formatFriendlyDateTime (datetime) {
+  if (!datetime) {
+    return null
+  }
+
+  let date
+  if (datetime.toDateString() === new Date().toDateString()) {
+    date = 'Heute'
+  } else {
+    date = datetime.toLocaleDateString()
+  }
+
+  const time = datetime.toLocaleTimeString()
+
+  return `${date}, ${time}`
+}
+
+function HomeCard ({ link, title, children }) {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Link href={link}>
+      <Card className={styles.card}>
+        <Card.Body>
+          <Card.Title>
+            {title}
+          </Card.Title>
+          <Card.Text>
+            {children}
+          </Card.Text>
+        </Card.Body>
+          <Button variant="link" className={styles.cardButton}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </Button>
+      </Card>
+    </Link>
+  )
+}
+HomeCard.propTypes = {
+  link: PropTypes.string,
+  title: PropTypes.string,
+  children: PropTypes.array
+}
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+export default function Home () {
+  const [personalData, setPersonalData] = useState(null)
+  const [timetable, setTimetable] = useState(null)
+  const [mensaPlan, setMensaPlan] = useState(null)
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+  useEffect(() => {
+    getPersonalDataPreview()
+      .then(resp => setPersonalData(resp))
+      .catch(console.error)
+    getTimetablePreview()
+      .then(resp => setTimetable(resp))
+      .catch(console.error)
+    getMensaPlanPreview()
+      .then(resp => setMensaPlan(resp))
+      .catch(console.error)
+  }, [])
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+  return (
+    <Container>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className={styles.cardDeck}>
+        <HomeCard
+          title="Konto"
+          link="/personal"
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+          <ReactPlaceholder type="text" rows={1} ready={personalData}>
+            Eingeloggt als {personalData}.
+          </ReactPlaceholder>
+        </HomeCard>
+
+        <HomeCard
+          title="Stundenplan"
+          link="/timetable"
+        >
+          <ReactPlaceholder type="text" rows={2} ready={timetable}>
+            <div>
+              {timetable && timetable.veranstaltung}
+            </div>
+            <div className="text-muted">
+              {timetable && formatFriendlyDateTime(timetable.start_date)}
+            </div>
+          </ReactPlaceholder>
+        </HomeCard>
+
+        <HomeCard
+          title="Speiseplan"
+          link="/meals"
+        >
+          <ReactPlaceholder type="text" rows={3} ready={mensaPlan}>
+            <ListGroup variant="flush">
+              {mensaPlan && mensaPlan.map((x, i) =>
+                <ListGroup.Item key={i}>
+                  {x}
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          </ReactPlaceholder>
+        </HomeCard>
+
+        <HomeCard
+          title="Räume"
+          link="/rooms"
+        >
+          Einen freien Raum finden.
+        </HomeCard>
+
+        <HomeCard
+          title="Bibliothek"
+          link="/library"
+        >
+          Einen Platz reservieren.
+        </HomeCard>
+
+      </div>
+
+    </Container>
   )
 }
