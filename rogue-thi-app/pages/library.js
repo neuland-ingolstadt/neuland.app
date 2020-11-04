@@ -11,6 +11,7 @@ import {
 } from '../lib/thi-api-client'
 
 import ReactPlaceholder from 'react-placeholder'
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
@@ -75,11 +76,7 @@ export default function Library (props) {
   }, [])
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Rogue-THI</title>
-      </Head>
-
+    <Container>
       <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
         <Modal.Header closeButton>
           <Modal.Title>Sitzplatz reservieren</Modal.Title>
@@ -116,61 +113,51 @@ export default function Library (props) {
         </Modal.Footer>
       </Modal>
 
-      <div className={styles.main}>
-        <h1 className={styles.title}>
-          Bibliothek
-        </h1>
+      <h4 className={styles.heading}>
+        Deine Reservierungen
+      </h4>
+      <ReactPlaceholder type="text" rows={2} ready={reservations}>
+        <ListGroup>
+        {reservations && reservations.map((x, i) =>
+          <ListGroup.Item key={i}>
+            <div className={styles.floatRight}>
+              <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
+                <FontAwesomeIcon icon={faTrashAlt} />
+              </Button>
+            </div>
 
-        <h3>
-          Deine Reservierungen
-        </h3>
-        <ReactPlaceholder type="text" rows={2} ready={reservations}>
-          <ListGroup className={styles.wideList}>
-          {reservations && reservations.map((x, i) =>
-            <ListGroup.Item key={i}>
+            <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
+            {x.start.toLocaleDateString()}: {x.start.toLocaleTimeString()} - {x.end.toLocaleTimeString()}
+          </ListGroup.Item>
+        )}
+        </ListGroup>
+      </ReactPlaceholder>
+
+      <h4 className={styles.heading}>
+        Verfügbare Plätze
+      </h4>
+      <ListGroup>
+        {available && available.map((day, i) =>
+          day.resource.map((time, j) =>
+            
+            <ListGroup.Item key={i + "-" + j}>
               <div className={styles.floatRight}>
-                <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </Button>
+                {Object.entries(time.resources).map(([roomId, room]) =>
+                  <span>{room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}<br /></span>
+                )}
               </div>
 
-              <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
-              {x.start.toLocaleDateString()}: {x.start.toLocaleTimeString()} - {x.end.toLocaleTimeString()}
+              {(new Date(day.date + ' ' + time.from)).toLocaleString()}
+              {' '}- {(new Date(day.date + ' ' + time.to)).toLocaleTimeString()}
+              <br />
+              <Button variant="primary" onClick={() => {
+                setReservationDay(day)
+                setReservationTime(time)
+              }}>Reservieren</Button>
             </ListGroup.Item>
-          )}
-          </ListGroup>
-        </ReactPlaceholder>
-
-        <h3>
-          Verfügbare Plätze
-        </h3>
-        <ListGroup className={styles.wideList}>
-          {available && available.map((day, i) =>
-            day.resource.map((time, j) =>
-              
-              <ListGroup.Item key={i + "-" + j}>
-                <div className={styles.floatRight}>
-                  {Object.entries(time.resources).map(([roomId, room]) =>
-                    <span>{room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}<br /></span>
-                  )}
-                </div>
-
-                {(new Date(day.date + ' ' + time.from)).toLocaleString()}
-                {' '}- {(new Date(day.date + ' ' + time.to)).toLocaleTimeString()}
-                <br />
-                <Button variant="primary" onClick={() => {
-                  setReservationDay(day)
-                  setReservationTime(time)
-                }}>Reservieren</Button>
-              </ListGroup.Item>
-            )
-          )}
-        </ListGroup>
-      </div>
-
-      <footer className={styles.footer}>
-        <strong>unofficial thi app</strong>
-      </footer>
-    </div>
+          )
+        )}
+      </ListGroup>
+    </Container>
   )
 }
