@@ -8,7 +8,7 @@ const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const USER_AGENT = 'Better THI-App https://github.com/M4GNV5/THI-App'
 
-const PROXY_URL = 'ws://localhost:8080'
+const PROXY_URL = 'wss://thi.hopfenspace.org/websocket'
 
 // T-TeleSec GlobalRoot Class 2
 // valid until 02.10.2033, 1:59:59 CEST
@@ -131,7 +131,8 @@ export function thiApiRequest (params) {
       client.process(ab2str(event.data))
     })
     socket.addEventListener('error', function (event) {
-      reject(event)
+      console.log(event)
+      reject(new Error('WebSocket connection failed'))
     })
   })
 }
