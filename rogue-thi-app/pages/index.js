@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 
 import Link from 'next/link'
@@ -92,17 +93,21 @@ export default function Home () {
   const [personalData, setPersonalData] = useState(null)
   const [timetable, setTimetable] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
+  const router = useRouter()
 
   useEffect(() => {
-    getPersonalDataPreview()
-      .then(resp => setPersonalData(resp))
-      .catch(console.error)
-    getTimetablePreview()
-      .then(resp => setTimetable(resp))
-      .catch(console.error)
-    getMensaPlanPreview()
-      .then(resp => setMensaPlan(resp))
-      .catch(console.error)
+    Promise.all([
+      getPersonalDataPreview()
+        .then(resp => setPersonalData(resp)),
+      getTimetablePreview()
+        .then(resp => setTimetable(resp)),
+      getMensaPlanPreview()
+        .then(resp => setMensaPlan(resp))
+    ])
+      .catch(err => {
+        console.error(err)
+        router.push('/login')
+      })
   }, [])
 
   return (
