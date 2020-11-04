@@ -39,6 +39,7 @@ const THI_CERTS = [
 ]
 
 export function thiApiRequest (params) {
+  console.log(params)
   function ab2str (buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf))
   }

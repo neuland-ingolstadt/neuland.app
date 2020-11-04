@@ -10,13 +10,24 @@ import Form from 'react-bootstrap/Form'
 export default function Login (props) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [saveCredentials, setSaveCredentials] = useState(false)
   const [failure, setFailure] = useState(false)
   const router = useRouter()
 
   async function attemptLogin () {
     try {
-      const { session } = await login(username, password)
+      const session = await login(username, password)
       localStorage.session = session
+      localStorage.sessionCreated = Date.now()
+
+      if (saveCredentials) {
+        localStorage.username = username
+        localStorage.password = password
+      }
+      else {
+        localStorage.username = ''
+        localStorage.password = ''
+      }
 
       router.push('/')
     } catch (e) {
@@ -59,6 +70,14 @@ export default function Login (props) {
           <Form.Text className="text-muted">
             <a href="https://github.com/M4GNV5/THI-App/blob/master/data-security.md">Is my data safe?</a>
           </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Check
+            type="checkbox"
+            label="Stay logged in"
+            onChange={e => setSaveCredentials(e.target.value)}
+          />
         </Form.Group>
 
         <Button onClick={attemptLogin}>Login</Button>

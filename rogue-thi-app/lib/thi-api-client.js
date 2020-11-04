@@ -1,18 +1,34 @@
 import { thiApiRequest } from './thi-api-request'
 
 export async function obtainSession(router) {
-  const session = localStorage.session
+  let session = localStorage.session
+  const age = parseInt(localStorage.sessionCreated)
+  const username = localStorage.username
+  const password = localStorage.password
 
-  if (!session) {
-    // TODO re-login using saved password?
-    router.push('/')
-    throw new Error('No session available')
+  console.log(age, session && age && age + 3 * 60 * 60 * 1000 < Date.now())
+
+  if (session && age && age + 3 * 60 * 60 * 1000 < Date.now()) {
+    if(!await isAlive(session))
+      session = false
   }
 
-  // TODO check isalive
+  if (!session && username && password) {
+    try {
+      session = await login(username, password)
+      localStorage.sessionCreated = Date.now()
+    }
+    catch(e) {
+      router.push('/login')
+      throw e
+    }
+  }
+
+  if (!session) {
+    router.push('/login')
+  }
 
   return session
-
 }
 
 export async function login (username, password) {
@@ -28,9 +44,7 @@ export async function login (username, password) {
     throw res.data
   } // e.g. 'Wrong credentials'
 
-  return {
-    session: res.data[0]
-  }
+  return res.data[0]
 }
 
 export async function isAlive (session) {
@@ -40,10 +54,6 @@ export async function isAlive (session) {
     format: 'json',
     session
   })
-
-  if (res.status !== 0) {
-    throw res.data
-  } // e.g. 'Wrong credentials'
 
   return res.data === 'STATUS_OK'
 }
