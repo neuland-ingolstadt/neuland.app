@@ -1,5 +1,20 @@
 import { thiApiRequest } from './thi-api-request'
 
+export async function obtainSession(router) {
+  const session = localStorage.session
+
+  if (!session) {
+    // TODO re-login using saved password?
+    router.push('/')
+    throw new Error('No session available')
+  }
+
+  // TODO check isalive
+
+  return session
+
+}
+
 export async function login (username, password) {
   const res = await thiApiRequest({
     service: 'session',

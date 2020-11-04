@@ -6,13 +6,14 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import styles from '../styles/Timetable.module.css'
 
-import { getTimetable } from '../lib/thi-api-client'
+import { obtainSession, getTimetable } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 
-async function getFriendlyTimetable () {
+async function getFriendlyTimetable (router) {
   const today = new Date()
 
-  const { timetable } = await getTimetable(localStorage.session, new Date())
+  const session = await obtainSession(router)
+  const { timetable } = await getTimetable(session, new Date())
 
   // get all available dates
   const dates = timetable
@@ -41,7 +42,7 @@ export default function Timetable () {
   const [timetable, setTimetable] = useState(null)
 
   useEffect(() => {
-    getFriendlyTimetable()
+    getFriendlyTimetable(router)
       .then(resp => setTimetable(resp))
       .catch(err => {
         console.error(err)

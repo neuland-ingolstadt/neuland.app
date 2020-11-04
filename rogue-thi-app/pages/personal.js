@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import cstyles from '../styles/Common.module.css'
 import styles from '../styles/Personal.module.css'
 import React, { useState, useEffect } from 'react'
-import { getPersonalData } from '../lib/thi-api-client'
+import { obtainSession, getPersonalData } from '../lib/thi-api-client'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 export default function Personal (props) {
@@ -11,12 +11,7 @@ export default function Personal (props) {
   const router = useRouter()
 
   useEffect(async () => {
-    const session = localStorage.session
-    if(!session) {
-      router.push('/login')
-      return;
-    }
-  
+    const session = await obtainSession(router)
     const response = await getPersonalData(session)
     const data = response.persdata
     data.pcounter = response.pcounter

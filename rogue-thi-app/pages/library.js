@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 import React, { useState, useEffect } from 'react'
 import {
+  obtainSession,
   getLibraryReservations,
   getAvailableLibrarySeats,
   addLibraryReservation,
@@ -32,26 +33,16 @@ export default function Library (props) {
     "Lesesaal Galerie": "Galerie",
   }
 
-  function getSession () {
-    const session = localStorage.session
-    if(!session) {
-      router.push('/login')
-      throw new Error('No session available')
-    }
+  async function refreshData (session) {
 
-    return session
-  }
-
-  async function refreshData () {
-
-    const response = await getLibraryReservations(getSession())
+    const response = await getLibraryReservations(session)
     response.forEach(x => {
       x.start = new Date(x.reservation_begin)
       x.end = new Date(x.reservation_end)
     })
     setReservations(response)
 
-    const available = await getAvailableLibrarySeats(getSession())
+    const available = await getAvailableLibrarySeats(session)
     setAvailable(available)
   }
 
@@ -60,25 +51,27 @@ export default function Library (props) {
     setReservationTime(null)
   }
   async function deleteReservation (id) {
-    await removeLibraryReservation(getSession(), id)
-    await refreshData()
+    const session = await obtainSession(router)
+    await removeLibraryReservation(session, id)
+    await refreshData(session)
   }
   async function addReservation () {
+    const session = await obtainSession(router)
     await addLibraryReservation(
-      getSession(),
+      session,
       reservationRoom,
       reservationDay.date,
       reservationTime.from,
       reservationTime.to,
       reservationSeat
     )
-    await refreshData()
+    await refreshData(session)
     hideReservationModal()
   }
 
   useEffect(async () => {
-
-    await refreshData()
+    const session = await obtainSession(router)
+    refreshData(session)
   }, [])
 
   return (

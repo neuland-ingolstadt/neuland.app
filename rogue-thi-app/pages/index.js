@@ -16,16 +16,16 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Home.module.css'
 
-import { getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
+import { obtainSession, getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
-async function getPersonalDataPreview () {
-  const resp = await getPersonalData(localStorage.session)
+async function getPersonalDataPreview (session) {
+  const resp = await getPersonalData(session)
   return resp.persdata.user
 }
 
-async function getTimetablePreview () {
-  const resp = await getTimetable(localStorage.session, new Date())
+async function getTimetablePreview (session) {
+  const resp = await getTimetable(session, new Date())
   const now = new Date()
 
   const nextItems = resp.timetable
@@ -41,8 +41,8 @@ async function getTimetablePreview () {
   return nextItems.slice(0, 2)
 }
 
-async function getMensaPlanPreview () {
-  const resp = await getMensaPlan(localStorage.session)
+async function getMensaPlanPreview (session) {
+  const resp = await getMensaPlan(session)
 
   return Object.values(resp.gerichte)
     .map(x => x.name[1])
@@ -79,13 +79,15 @@ export default function Home () {
   const [mensaPlan, setMensaPlan] = useState(null)
   const router = useRouter()
 
-  useEffect(() => {
+  useEffect(async () => {
+    const session = await obtainSession(router)
+
     Promise.all([
-      getPersonalDataPreview()
+      getPersonalDataPreview(session)
         .then(resp => setPersonalData(resp)),
-      getTimetablePreview()
+      getTimetablePreview(session)
         .then(resp => setTimetable(resp)),
-      getMensaPlanPreview()
+      getMensaPlanPreview(session)
         .then(resp => setMensaPlan(resp))
     ])
       .catch(err => {
