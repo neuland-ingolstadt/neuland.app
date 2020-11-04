@@ -36,7 +36,7 @@ async function getTimetablePreview () {
     .filter(x => x.end_date > now)
     .sort((a, b) => a.start_date - b.start_date)
 
-  return nextItems[0]
+  return nextItems.slice(0, 2)
 }
 
 async function getMensaPlanPreview () {
@@ -122,13 +122,19 @@ export default function Home () {
           title="Stundenplan"
           link="/timetable"
         >
-          <ReactPlaceholder type="text" rows={2} ready={timetable}>
-            <div>
-              {timetable && timetable.veranstaltung}
-            </div>
-            <div className="text-muted">
-              {timetable && formatFriendlyDateTime(timetable.start_date)}
-            </div>
+          <ReactPlaceholder type="text" rows={4} ready={timetable}>
+            <ListGroup variant="flush">
+            {timetable && timetable.map((x, i) =>
+              <ListGroup.Item key={i}>
+                <div>
+                  {x.veranstaltung}, {x.raum}
+                </div>
+                <div className="text-muted">
+                  {formatFriendlyDateTime(x.start_date)}
+                </div>
+              </ListGroup.Item>
+            )}
+            </ListGroup>
           </ReactPlaceholder>
         </HomeCard>
 
