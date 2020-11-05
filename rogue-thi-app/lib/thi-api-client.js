@@ -1,6 +1,21 @@
 import { thiApiRequest } from './thi-api-request'
+import NodeCache from 'node-cache'
 
-export async function obtainSession(router) {
+const CACHE_TTL = 600
+const CACHE_CHECK = 300
+
+const KEY_GET_PERSONAL_DATA = 'getPersonalData'
+const KEY_GET_TIMETABLE = 'getTimetable'
+const KEY_GET_EXAMS = 'getExams'
+const KEY_GET_GRADES = 'getGrades'
+const KEY_GET_MENSA_PLAN = 'getMensaPlan'
+
+const cache = new NodeCache({
+  stdTTL: CACHE_TTL,
+  checkperiod: CACHE_CHECK
+})
+
+export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)
   const username = localStorage.username
@@ -9,8 +24,9 @@ export async function obtainSession(router) {
   console.log(age, session && age && age + 3 * 60 * 60 * 1000 < Date.now())
 
   if (session && age && age + 3 * 60 * 60 * 1000 < Date.now()) {
-    if(!await isAlive(session))
+    if (!await isAlive(session)) {
       session = false
+    }
   }
 
   if (!session && username && password) {
@@ -18,8 +34,7 @@ export async function obtainSession(router) {
       session = await login(username, password)
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
-    }
-    catch(e) {
+    } catch (e) {
       router.push('/login')
       throw e
     }
@@ -33,6 +48,8 @@ export async function obtainSession(router) {
 }
 
 export async function login (username, password) {
+  cache.flushAll()
+
   const res = await thiApiRequest({
     service: 'session',
     method: 'open',
@@ -60,35 +77,45 @@ export async function isAlive (session) {
 }
 
 export async function getPersonalData (session) {
-  const res = await thiApiRequest({
-    service: 'thiapp',
-    method: 'persdata',
-    format: 'json',
-    session
-  })
+  let res = cache.get(KEY_GET_PERSONAL_DATA)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'persdata',
+      format: 'json',
+      session
+    })
+  }
 
   if (res.status !== 0) {
     throw res.data
   } // e.g. 'Wrong credentials'
+
+  cache.set(KEY_GET_PERSONAL_DATA, res)
 
   return res.data[1]
 }
 
 export async function getTimetable (session, date) {
-  const res = await thiApiRequest({
-    service: 'thiapp',
-    method: 'stpl',
-    format: 'json',
-    session,
-    day: date.getDate(),
-    month: date.getMonth() + 1,
-    year: 1900 + date.getYear(),
-    details: 0
-  })
+  let res = cache.get(KEY_GET_TIMETABLE)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'stpl',
+      format: 'json',
+      session,
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: 1900 + date.getYear(),
+      details: 0
+    })
+  }
 
   if (res.status !== 0) {
     throw res.data
   } // e.g. 'Wrong credentials'
+
+  cache.set(KEY_GET_TIMETABLE, res)
 
   return {
     semester: res.data[1],
@@ -99,46 +126,61 @@ export async function getTimetable (session, date) {
 }
 
 export async function getExams (session) {
-  const res = await thiApiRequest({
-    service: 'thiapp',
-    method: 'exams',
-    format: 'json',
-    session
-  })
+  let res = cache.get(KEY_GET_EXAMS)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'exams',
+      format: 'json',
+      session
+    })
+  }
 
   if (res.status !== 0) {
     throw res.data
   } // e.g. 'Wrong credentials'
+
+  cache.set(KEY_GET_EXAMS, res)
 
   return res.data[1]
 }
 
 export async function getGrades (session) {
-  const res = await thiApiRequest({
-    service: 'thiapp',
-    method: 'grades',
-    format: 'json',
-    session
-  })
+  let res = cache.get(KEY_GET_GRADES)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'grades',
+      format: 'json',
+      session
+    })
+  }
 
   if (res.status !== 0) {
     throw res.data
   } // e.g. 'Wrong credentials'
+
+  cache.set(KEY_GET_GRADES, res)
 
   return res.data[1]
 }
 
 export async function getMensaPlan (session) {
-  const res = await thiApiRequest({
-    service: 'thiapp',
-    method: 'mensa',
-    format: 'json',
-    session
-  })
+  let res = cache.get(KEY_GET_MENSA_PLAN)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'mensa',
+      format: 'json',
+      session
+    })
+  }
 
   if (res.status !== 0) {
     throw res.data
   } // e.g. 'Wrong credentials'
+
+  cache.set(KEY_GET_MENSA_PLAN, res)
 
   return res.data[0]
 }
