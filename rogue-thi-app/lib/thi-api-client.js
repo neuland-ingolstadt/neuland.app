@@ -190,7 +190,7 @@ export async function getMensaPlan (session) {
 
   cache.set(KEY_GET_MENSA_PLAN, res)
 
-  return res.data[0]
+  return res.data
 }
 
 export async function getLibraryReservations (session) {

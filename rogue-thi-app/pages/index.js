@@ -131,7 +131,7 @@ export default function Home () {
 
         <HomeCard
           title="Speiseplan"
-          link="/meals"
+          link="/mensa"
         >
           <ReactPlaceholder type="text" rows={3} ready={mensaPlan}>
             <ListGroup variant="flush">
