@@ -16,6 +16,7 @@ export async function obtainSession(router) {
   if (!session && username && password) {
     try {
       session = await login(username, password)
+      localStorage.session = session
       localStorage.sessionCreated = Date.now()
     }
     catch(e) {
@@ -95,6 +96,21 @@ export async function getTimetable (session, date) {
     events: res.data[2],
     timetable: res.data[3]
   }
+}
+
+export async function getExams (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'exams',
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1]
 }
 
 export async function getMensaPlan (session) {

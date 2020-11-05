@@ -21,7 +21,7 @@ import { formatFriendlyDateTime } from '../lib/date-utils'
 
 async function getPersonalDataPreview (session) {
   const resp = await getPersonalData(session)
-  return resp.persdata.user
+  return `${resp.persdata.vname} ${resp.persdata.name} (${resp.persdata.user})`
 }
 
 async function getTimetablePreview (session) {
@@ -149,6 +149,13 @@ export default function Home () {
           link="/grades"
         >
           Notenblatt einsehen.
+        </HomeCard>
+
+        <HomeCard
+          title="Prüfungen"
+          link="/exams"
+        >
+          Prüfungstermine und Räume.
         </HomeCard>
 
         <HomeCard
