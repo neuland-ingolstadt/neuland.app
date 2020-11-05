@@ -9,6 +9,11 @@ import {
   addLibraryReservation,
   removeLibraryReservation
 } from '../lib/thi-api-client'
+import {
+  formatFriendlyDate,
+  formatFriendlyTime,
+  formatFriendlyDateTime
+} from '../lib/date-utils'
 
 import ReactPlaceholder from 'react-placeholder'
 import Container from 'react-bootstrap/Container'
@@ -129,7 +134,7 @@ export default function Library (props) {
             </div>
 
             <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
-            {x.start.toLocaleDateString()}: {x.start.toLocaleTimeString()} - {x.end.toLocaleTimeString()}
+            {formatFriendlyDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
           </ListGroup.Item>
         )}
         </ListGroup>
@@ -149,8 +154,8 @@ export default function Library (props) {
                 )}
               </div>
 
-              {(new Date(day.date + 'T' + time.from)).toLocaleString()}
-              {' '}- {(new Date(day.date + 'T' + time.to)).toLocaleTimeString()}
+              {formatFriendlyDateTime(new Date(day.date + 'T' + time.from))}
+              {' '}- {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
               <br />
               <Button variant="primary" onClick={() => {
                 setReservationDay(day)
@@ -160,6 +165,7 @@ export default function Library (props) {
           )
         )}
       </ListGroup>
+      <br />
     </Container>
   )
 }
