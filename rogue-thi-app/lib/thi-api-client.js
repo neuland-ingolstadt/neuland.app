@@ -1,8 +1,9 @@
 import { thiApiRequest } from './thi-api-request'
-import NodeCache from 'node-cache'
+import MemoryCache from './memory-cache'
+import LocalStorageCache from './localstorage-cache'
 
-const CACHE_TTL = 600
-const CACHE_CHECK = 300
+const CACHE_NAMESPACE = 'thi-api-client'
+const CACHE_TTL = 600000
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
@@ -10,18 +11,23 @@ const KEY_GET_EXAMS = 'getExams'
 const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_MENSA_PLAN = 'getMensaPlan'
 
-const cache = new NodeCache({
-  stdTTL: CACHE_TTL,
-  checkperiod: CACHE_CHECK
-})
+let cache
+if (typeof localStorage === 'undefined') {
+  cache = new MemoryCache({
+    ttl: CACHE_TTL
+  })
+} else {
+  cache = new LocalStorageCache({
+    namespace: CACHE_NAMESPACE,
+    ttl: CACHE_TTL
+  })
+}
 
 export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)
   const username = localStorage.username
   const password = localStorage.password
-
-  console.log(age, session && age && age + 3 * 60 * 60 * 1000 < Date.now())
 
   if (session && age && age + 3 * 60 * 60 * 1000 < Date.now()) {
     if (!await isAlive(session)) {
@@ -97,7 +103,9 @@ export async function getPersonalData (session) {
 }
 
 export async function getTimetable (session, date) {
-  let res = cache.get(KEY_GET_TIMETABLE)
+  const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}`
+
+  let res = cache.get(key)
   if (!res) {
     res = await thiApiRequest({
       service: 'thiapp',
@@ -115,7 +123,7 @@ export async function getTimetable (session, date) {
     throw res.data
   } // e.g. 'Wrong credentials'
 
-  cache.set(KEY_GET_TIMETABLE, res)
+  cache.set(key, res)
 
   return {
     semester: res.data[1],
@@ -238,7 +246,7 @@ export async function addLibraryReservation (session, roomId, day, start, end, p
       at: day,
       from: start,
       to: end,
-      place,
+      place
     }),
     format: 'json',
     session
