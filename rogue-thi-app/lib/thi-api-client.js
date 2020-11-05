@@ -10,6 +10,7 @@ const KEY_GET_TIMETABLE = 'getTimetable'
 const KEY_GET_EXAMS = 'getExams'
 const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_MENSA_PLAN = 'getMensaPlan'
+const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 
 let cache
 if (typeof localStorage === 'undefined') {
@@ -191,6 +192,31 @@ export async function getMensaPlan (session) {
   cache.set(KEY_GET_MENSA_PLAN, res)
 
   return res.data
+}
+
+export async function getFreeRooms (session, date) {
+  const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
+
+  let res = cache.get(key)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'thiapp',
+      method: 'rooms',
+      format: 'json',
+      session,
+      day: date.getDate(),
+      month: date.getMonth() + 1,
+      year: 1900 + date.getYear(),
+    })
+  }
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  cache.set(key, res)
+
+  return res.data[1]
 }
 
 export async function getLibraryReservations (session) {
