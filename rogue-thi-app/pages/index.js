@@ -42,9 +42,9 @@ async function getTimetablePreview (session) {
 }
 
 async function getMensaPlanPreview (session) {
-  const resp = await getMensaPlan(session)
+  const days = await getMensaPlan(session)
 
-  return Object.values(resp.gerichte)
+  return Object.values(days[0].gerichte)
     .map(x => x.name[1])
 }
 
@@ -70,7 +70,7 @@ function HomeCard ({ link, title, children }) {
 HomeCard.propTypes = {
   link: PropTypes.string,
   title: PropTypes.string,
-  children: PropTypes.array
+  children: PropTypes.any
 }
 
 export default function Home () {
