@@ -37,4 +37,14 @@ export default class LocalStorageCache {
       expiry: Date.now() + this.ttl
     })
   }
+
+  flushAll () {
+    let i = 0
+    let key = localStorage.key(i)
+    do {
+      localStorage.removeItem(key)
+      i++
+      key = localStorage.key(i)
+    } while(typeof key === 'string')
+  }
 }

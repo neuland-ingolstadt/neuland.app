@@ -3,7 +3,7 @@ import MemoryCache from './memory-cache'
 import LocalStorageCache from './localstorage-cache'
 
 const CACHE_NAMESPACE = 'thi-api-client'
-const CACHE_TTL = 600000
+const CACHE_TTL = 10 * 60 * 1000
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'

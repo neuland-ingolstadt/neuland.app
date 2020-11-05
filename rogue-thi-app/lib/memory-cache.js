@@ -37,4 +37,8 @@ export default class MemoryCache {
       expiry: Date.now() + this.ttl
     })
   }
+
+  flushAll () {
+    this.cache = {}
+  }
 }
