@@ -39,6 +39,7 @@ export default function Timetable () {
 
   return (
     <Container>
+      <h1>Mensa</h1>
       {mensaPlan && mensaPlan.map((day, idx) =>
         <ListGroup key={idx}>
           <h4 className={styles.dateBoundary}>

@@ -113,6 +113,8 @@ export default function Library (props) {
         </Modal.Footer>
       </Modal>
 
+      <h1>Bibliothek</h1>
+
       <h4 className={styles.heading}>
         Deine Reservierungen
       </h4>

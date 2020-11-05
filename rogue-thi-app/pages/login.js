@@ -49,7 +49,7 @@ export default function Login (props) {
         { failure && <Alert variant="danger">{failure}</Alert>}
 
         <Form.Group>
-          <Form.Label>THI Username</Form.Label>
+          <Form.Label>THI Nutzername</Form.Label>
           <Form.Control
             type="text"
             placeholder="abc1234"
@@ -60,7 +60,7 @@ export default function Login (props) {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Passwort</Form.Label>
           <Form.Control
             type="password"
             className="form-control"

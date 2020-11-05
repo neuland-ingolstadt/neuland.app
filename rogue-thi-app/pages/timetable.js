@@ -52,6 +52,7 @@ export default function Timetable () {
 
   return (
     <Container>
+      <h1>Stundenplan</h1>
       {timetable && timetable.map((group, idx) =>
         <ListGroup key={idx}>
           <h4 className={styles.dateBoundary}>
@@ -76,6 +77,7 @@ export default function Timetable () {
           )}
         </ListGroup>
       )}
+      <br />
     </Container>
   )
 }

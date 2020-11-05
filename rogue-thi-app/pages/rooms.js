@@ -50,6 +50,7 @@ export default function Timetable () {
 
   return (
     <Container>
+      <h1>Freie Räume</h1>
       {freeRooms && freeRooms.map((day, i) =>
         Object.values(day.hours).map((hour, j) =>
           <ListGroup key={i + '-' + j}>
