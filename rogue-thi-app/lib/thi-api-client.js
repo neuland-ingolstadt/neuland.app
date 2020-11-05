@@ -113,6 +113,21 @@ export async function getExams (session) {
   return res.data[1]
 }
 
+export async function getGrades (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'grades',
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw res.data
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1]
+}
+
 export async function getMensaPlan (session) {
   const res = await thiApiRequest({
     service: 'thiapp',

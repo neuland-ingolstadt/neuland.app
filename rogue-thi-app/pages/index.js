@@ -145,17 +145,10 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
-          title="Noten"
-          link="/grades"
-        >
-          Notenblatt einsehen.
-        </HomeCard>
-
-        <HomeCard
-          title="Prüfungen"
+          title="Noten und Prüfungen"
           link="/exams"
         >
-          Prüfungstermine und Räume.
+          Prüfungstermine und Ergebnisse
         </HomeCard>
 
         <HomeCard

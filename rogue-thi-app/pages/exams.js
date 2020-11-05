@@ -8,17 +8,22 @@ import Button from 'react-bootstrap/Button'
 
 import styles from '../styles/Timetable.module.css'
 
-import { obtainSession, getExams } from '../lib/thi-api-client'
+import { obtainSession, getExams, getGrades } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
 export default function Exams () {
   const router = useRouter()
   const [exams, setExams] = useState(null)
+  const [grades, setGrades] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
     const session = await obtainSession(router)
-    const examList = await getExams(session)
+    const [examList, gradeList] = await Promise.all([
+      getExams(session),
+      getGrades(session)
+    ])
+
     const now = new Date()
 
     setExams(examList
@@ -36,6 +41,10 @@ export default function Exams () {
       })
       .filter(x => x.date === null || x.date > now)
     )
+
+    setGrades(gradeList
+      .filter(x => x.note))
+
   }, [])
 
   return (
@@ -72,11 +81,11 @@ export default function Exams () {
           <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
               <div className={styles.left}>
                 <div className={styles.name}>
-                    <strong>{item.titel}</strong><br />
-                    {item.stg}, {item.pruefer_namen}
+                  <strong>{item.titel}</strong><br />
+                  <strong>{item.stg}</strong>; {item.pruefer_namen}
                 </div>
                 <div className={styles.room}>
-                    Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}
+                  Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}
                 </div>
               </div>
               <div className={styles.right}>
@@ -85,6 +94,30 @@ export default function Exams () {
           </ListGroup.Item>
           )}
       </ListGroup>
+
+      <ListGroup>
+        <h4 className={styles.dateBoundary}>
+          Noten
+        </h4>
+
+        {grades && grades.map((item, idx) =>
+        <ListGroup.Item key={idx} className={styles.item}>
+          <div className={styles.left}>
+            <div className={styles.name}>
+              <strong>{item.titel}</strong>
+            </div>
+            <div className={styles.room}>
+              {item.stg}
+            </div>
+          </div>
+          <div className={styles.right}>
+            Note: {item.note}<br />
+            ECTS: {item.ects}
+          </div>
+        </ListGroup.Item>
+        )}
+      </ListGroup>
+      <br />
     </Container>
   )
 }
