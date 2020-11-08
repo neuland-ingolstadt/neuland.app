@@ -49,6 +49,7 @@ async function filterRooms (session, building, date, time, duration) {
     .flatMap(room =>
       openings[room].map(opening => ({
         room,
+        type: opening.type,
         from: opening.from,
         until: opening.until
       }))
@@ -165,7 +166,8 @@ export default function Rooms () {
         {filterResults && filterResults.map((result, idx) =>
           <ListGroup.Item key={idx} className={styles.item}>
             <div className={styles.left}>
-              {result.room}
+              {result.room}<br />
+              {result.type}
             </div>
             <div className={styles.right}>
               {formatFriendlyTime(result.from)}<br />
