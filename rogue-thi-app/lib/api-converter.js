@@ -29,20 +29,28 @@ export function getRoomOpenings (rooms, date) {
   const openings = {}
   // get todays rooms
   rooms.filter(room => room.datum === date)
-    // unpack
+    // flatten room types
     .flatMap(room => room.rtypes)
+    // flatten time slots
     .flatMap(rtype =>
       Object.values(rtype.stunden)
-        .map(stunde => ({ type: rtype.raumtyp, ...stunde }))
+        .map(stunde => ({
+          type: rtype.raumtyp,
+          ...stunde
+        }))
     )
+    // flatten room list
     .flatMap(stunde =>
       stunde.raeume.split(', ')
-        .map(room => ({ room, ...stunde }))
+        .map(room => ({
+          room,
+          type: stunde.type,
+          from: new Date(date + 'T' + stunde.von),
+          until: new Date(date + 'T' + stunde.bis)
+        }))
     )
     // iterate over every room
-    .forEach(({ room, type, von, bis }) => {
-      const from = new Date(date + 'T' + von)
-      const until = new Date(date + 'T' + bis)
+    .forEach(({ room, type, from, until }) => {
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
       // find overlapping opening
