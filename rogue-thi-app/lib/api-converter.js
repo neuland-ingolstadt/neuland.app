@@ -32,19 +32,17 @@ export function getRoomOpenings (rooms, date) {
     // unpack
     .flatMap(room => room.rtypes)
     .flatMap(rtype =>
-      // flatten
       Object.values(rtype.stunden)
-        .flatMap(stunde =>
-          stunde.raeume.split(', ')
-            .map(room => {
-              const from = new Date(date + 'T' + stunde.von)
-              const until = new Date(date + 'T' + stunde.bis)
-              return { room, type: rtype.raumtyp, from, until }
-            })
-        )
+        .map(stunde => ({ type: rtype.raumtyp, ...stunde }))
+    )
+    .flatMap(stunde =>
+      stunde.raeume.split(', ')
+        .map(room => ({ room, ...stunde }))
     )
     // iterate over every room
-    .forEach(({ room, type, from, until }) => {
+    .forEach(({ room, type, von, bis }) => {
+      const from = new Date(date + 'T' + von)
+      const until = new Date(date + 'T' + bis)
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
       // find overlapping opening
