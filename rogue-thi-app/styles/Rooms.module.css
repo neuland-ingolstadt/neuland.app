@@ -1,0 +1,32 @@
+.searchForm {
+  width: 100%;
+  display: flex;
+}
+
+.searchForm * {
+  margin-right: 20px;
+}
+
+.searchForm select {
+  max-width: 200px;
+}
+
+.dateBoundary {
+  margin-top: 20px;
+}
+
+.item {
+  display: flex;
+}
+
+.left {
+  flex: 1;
+}
+
+.room {
+  color: gray;
+}
+
+.right {
+  color: gray;
+}

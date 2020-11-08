@@ -206,7 +206,7 @@ export async function getFreeRooms (session, date) {
       session,
       day: date.getDate(),
       month: date.getMonth() + 1,
-      year: 1900 + date.getYear(),
+      year: 1900 + date.getYear()
     })
   }
 
