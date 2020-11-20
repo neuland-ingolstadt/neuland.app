@@ -15,6 +15,7 @@ export default function Exams () {
   const router = useRouter()
   const [exams, setExams] = useState(null)
   const [grades, setGrades] = useState(null)
+  const [missingGrades, setMissingGrades] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
@@ -42,8 +43,12 @@ export default function Exams () {
       .filter(x => x.date === null || x.date > now)
     )
 
-    setGrades(gradeList
-      .filter(x => x.note))
+    const newGrades = gradeList.filter(x => x.note && x.ects)
+    setGrades(newGrades)
+
+    setMissingGrades(gradeList
+      .filter(x => !x.note)
+      .filter(x => !newGrades.some(y => x.titel.trim() === y.titel.trim())))
 
   }, [])
 
@@ -111,8 +116,31 @@ export default function Exams () {
             </div>
           </div>
           <div className={styles.right}>
-            Note: {item.note}<br />
+            Note: {item.note.replace('*', ' (angerechnet)')}<br />
             ECTS: {item.ects}
+          </div>
+        </ListGroup.Item>
+        )}
+      </ListGroup>
+
+      <ListGroup>
+        <h4 className={styles.dateBoundary}>
+          Ausstehende Fächer
+        </h4>
+
+        {missingGrades && missingGrades.map((item, idx) =>
+        <ListGroup.Item key={idx} className={styles.item}>
+          <div className={styles.left}>
+            <div className={styles.name}>
+              <strong>{item.titel}</strong>
+            </div>
+            <div className={styles.room}>
+              {item.stg}
+            </div>
+          </div>
+          <div className={styles.right}>
+            Frist: {item.frist || '-'}<br />
+            ECTS: {item.ects || '-'}
           </div>
         </ListGroup.Item>
         )}
