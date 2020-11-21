@@ -9,7 +9,8 @@ import Form from 'react-bootstrap/Form'
 import styles from '../styles/Rooms.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getFreeRooms } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
+import { getFreeRooms } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 import { getRoomOpenings } from '../lib/api-converter'
 

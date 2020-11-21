@@ -5,6 +5,7 @@ import LocalStorageCache from './localstorage-cache'
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
 
+const KEY_IS_ALIVE = 'isAlive'
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
 const KEY_GET_EXAMS = 'getExams'
@@ -22,36 +23,6 @@ if (typeof localStorage === 'undefined') {
     namespace: CACHE_NAMESPACE,
     ttl: CACHE_TTL
   })
-}
-
-export async function obtainSession (router) {
-  let session = localStorage.session
-  const age = parseInt(localStorage.sessionCreated)
-  const username = localStorage.username
-  const password = localStorage.password
-
-  if (session && age && age + 3 * 60 * 60 * 1000 < Date.now()) {
-    if (!await isAlive(session)) {
-      session = false
-    }
-  }
-
-  if (!session && username && password) {
-    try {
-      session = await login(username, password)
-      localStorage.session = session
-      localStorage.sessionCreated = Date.now()
-    } catch (e) {
-      router.push('/login')
-      throw e
-    }
-  }
-
-  if (!session) {
-    router.push('/login')
-  }
-
-  return session
 }
 
 export async function login (username, password) {
@@ -73,12 +44,17 @@ export async function login (username, password) {
 }
 
 export async function isAlive (session) {
-  const res = await thiApiRequest({
-    service: 'session',
-    method: 'isalive',
-    format: 'json',
-    session
-  })
+  let res = cache.get(KEY_IS_ALIVE)
+  if (!res) {
+    res = await thiApiRequest({
+      service: 'session',
+      method: 'isalive',
+      format: 'json',
+      session
+    })
+  }
+
+  cache.set(KEY_IS_ALIVE, res)
 
   return res.data === 'STATUS_OK'
 }

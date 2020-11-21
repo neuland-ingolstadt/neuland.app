@@ -13,7 +13,8 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/Timetable.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getMensaPlan } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
+import { getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDate } from '../lib/date-utils'
 
 import allergenMap from '../data/allergens.json'
@@ -73,11 +74,13 @@ export default function Timetable () {
 
   return (
     <Container>
-      <AppNavbar title="Mensa" />
-
-      <Button variant="secondary" onClick={() => setShowAllergenSelection(true)}>
-        Allergene auswählen
-      </Button>
+      <AppNavbar title="Mensa">
+        <Form inline>
+          <Button variant="link" onClick={() => setShowAllergenSelection(true)}>
+            Allergene auswählen
+          </Button>
+        </Form>
+      </AppNavbar>
 
       {mensaPlan && mensaPlan.map((day, idx) =>
         <ListGroup key={idx}>

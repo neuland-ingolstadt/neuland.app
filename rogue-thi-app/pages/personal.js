@@ -5,7 +5,8 @@ import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getPersonalData } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
+import { getPersonalData } from '../lib/thi-api-client'
 
 export default function Personal (props) {
   const [userdata, setUserdata] = useState({})

@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 import React, { useState, useEffect } from 'react'
@@ -13,8 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppNavbar from '../lib/AppNavbar'
+import { obtainSession } from '../lib/thi-session-handler'
 import {
-  obtainSession,
   getLibraryReservations,
   getAvailableLibrarySeats,
   addLibraryReservation,

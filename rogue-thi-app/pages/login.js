@@ -1,34 +1,27 @@
+import React, { useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import styles from '../styles/Common.module.css'
-import React, { useState } from 'react'
-import { login } from '../lib/thi-api-client'
+
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 
+import { createSession } from '../lib/thi-session-handler'
+
+import styles from '../styles/Common.module.css'
+
 export default function Login (props) {
+  const router = useRouter()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [saveCredentials, setSaveCredentials] = useState(false)
   const [failure, setFailure] = useState(false)
-  const router = useRouter()
 
-  async function attemptLogin () {
+  async function attemptLogin (e) {
     try {
-      const session = await login(username, password)
-      localStorage.session = session
-      localStorage.sessionCreated = Date.now()
-
-      if (saveCredentials) {
-        localStorage.username = username
-        localStorage.password = password
-      } else {
-        localStorage.username = ''
-        localStorage.password = ''
-      }
-
-      router.push('/')
+      e.preventDefault()
+      await createSession(router, username, password, saveCredentials)
     } catch (e) {
       setFailure(e.toString())
     }
@@ -37,18 +30,18 @@ export default function Login (props) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Rogue-THI Login</title>
+        <title>Rogue THI Login</title>
       </Head>
 
-      <Form className={styles.main}>
+      <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
         <h1 className={styles.title}>
-          Rogue-THI Login
+          Rogue THI Login
         </h1>
 
         { failure && <Alert variant="danger">{failure}</Alert>}
 
         <Form.Group>
-          <Form.Label>THI Nutzername</Form.Label>
+          <Form.Label>THI Benutzername</Form.Label>
           <Form.Control
             type="text"
             placeholder="abc1234"
@@ -67,23 +60,26 @@ export default function Login (props) {
             onChange={e => setPassword(e.target.value)}
           />
           <Form.Text className="text-muted">
-            <a href="https://github.com/M4GNV5/THI-App/blob/master/data-security.md">Is my data safe?</a>
+            <a href="https://github.com/M4GNV5/THI-App/blob/master/data-security.md">Sind meine Daten sicher?</a>
           </Form.Text>
         </Form.Group>
 
         <Form.Group>
           <Form.Check
             type="checkbox"
-            label="Stay logged in"
-            onChange={e => setSaveCredentials(e.target.value)}
+            label="Eingeloggt bleiben"
+            onChange={e => setSaveCredentials(e.target.checked)}
           />
         </Form.Group>
 
-        <Button onClick={attemptLogin}>Login</Button>
+        <Button type="submit">
+          Einloggen
+        </Button>
       </Form>
 
       <footer className={styles.footer}>
-        <strong>unofficial thi app</strong>
+        <strong>Inoffizielle </strong> THI App. <br />
+        Dies ist kein offizielles Angebot der Technischen Hochschule Ingolstadt.
       </footer>
     </div>
   )

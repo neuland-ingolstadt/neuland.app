@@ -17,7 +17,8 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/Home.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
+import { obtainSession, forgetSession } from '../lib/thi-session-handler'
+import { getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
 async function getPersonalDataPreview (session) {
@@ -99,7 +100,11 @@ export default function Home () {
 
   return (
     <Container>
-      <AppNavbar title="Übersicht" showBack={false} />
+      <AppNavbar title="Übersicht" showBack={false}>
+        <Button variant="link" onClick={() => forgetSession(router)}>
+          Logout
+        </Button>
+      </AppNavbar>
 
       <div className={styles.cardDeck}>
 

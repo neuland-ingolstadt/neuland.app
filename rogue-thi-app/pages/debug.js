@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
 import { thiApiRequest } from '../lib/thi-api-request'
 
 import Container from 'react-bootstrap/Container'

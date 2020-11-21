@@ -22,7 +22,7 @@ export default function AppNavbar ({ title, showBack, children }) {
   }
 
   return (
-    <Navbar sticky="top" className={styles.navbar}>
+    <Navbar sticky="top" className={styles.navbar + ' justify-content-between'}>
       <Navbar.Brand>
         {showBack && (
           <Button variant="link" onClick={() => goBack()} className={styles.back}>
@@ -30,11 +30,13 @@ export default function AppNavbar ({ title, showBack, children }) {
             {' Zurück'}
           </Button>
         )}
-
-        <Navbar.Brand className={styles.title}>
-          {title}
-        </Navbar.Brand>
       </Navbar.Brand>
+      <Navbar.Brand className={styles.title}>
+        {title}
+      </Navbar.Brand>
+      <div>
+        {children}
+      </div>
     </Navbar>
   )
 }

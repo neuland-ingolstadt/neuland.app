@@ -9,7 +9,8 @@ import Button from 'react-bootstrap/Button'
 import styles from '../styles/Timetable.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getExams, getGrades } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
+import { getExams, getGrades } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
 export default function Exams () {

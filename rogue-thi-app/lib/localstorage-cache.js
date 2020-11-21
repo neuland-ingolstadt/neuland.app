@@ -39,12 +39,8 @@ export default class LocalStorageCache {
   }
 
   flushAll () {
-    for(let i = 0; typeof localStorage.key(i) === 'string'; i++) {
-      let key = localStorage.key(i)
-      if (key.substr(0, this.namespace.length) !== this.namespace)
-        continue;
-
-      localStorage.removeItem(key)
-    }
+    Object.keys(localStorage)
+      .filter(x => x.startsWith(`${this.namespace}-`))
+      .forEach(x => delete localStorage[x])
   }
 }

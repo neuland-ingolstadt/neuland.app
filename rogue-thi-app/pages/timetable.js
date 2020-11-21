@@ -7,7 +7,8 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import styles from '../styles/Timetable.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession, getTimetable } from '../lib/thi-api-client'
+import { obtainSession } from '../lib/thi-session-handler'
+import { getTimetable } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable (router) {
