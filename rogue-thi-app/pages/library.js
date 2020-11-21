@@ -96,8 +96,10 @@ export default function Library (props) {
           <Form.Group>
             <Form.Label>Ort:</Form.Label>
             <Form.Control as="select" onChange={event => setReservationRoom(event.target.value)}>
-            {reservationTime && Object.entries(reservationTime.resources).map(([roomId, room]) =>
-              <option value={roomId.toString()}>{room.room_name}</option>
+            {reservationTime && Object.entries(reservationTime.resources).map(([roomId, room], idx) =>
+              <option key={idx} value={roomId.toString()}>
+                {room.room_name}
+              </option>
             )}
             </Form.Control>
           </Form.Group>
@@ -105,8 +107,10 @@ export default function Library (props) {
             <Form.Label>Sitz:</Form.Label>
             <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
               <option value={-1}>Egal</option>
-            {reservationTime && reservationRoom && reservationTime.resources[reservationRoom].seats.map(x =>
-              <option value={x}>{x}</option>
+            {reservationTime && reservationRoom && reservationTime.resources[reservationRoom].seats.map((x, idx) =>
+              <option key={idx} value={x}>
+                {x}
+              </option>
             )}
             </Form.Control>
           </Form.Group>
@@ -120,8 +124,6 @@ export default function Library (props) {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      <h1>Bibliothek</h1>
 
       <h4 className={styles.heading}>
         Deine Reservierungen
@@ -152,8 +154,11 @@ export default function Library (props) {
 
             <ListGroup.Item key={i + '-' + j}>
               <div className={styles.floatRight}>
-                {Object.entries(time.resources).map(([roomId, room]) =>
-                  <span>{room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}<br /></span>
+                {Object.entries(time.resources).map(([roomId, room], idx) =>
+                  <span key={idx}>
+                    {room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}
+                    <br />
+                  </span>
                 )}
               </div>
 

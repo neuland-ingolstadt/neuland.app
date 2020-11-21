@@ -118,7 +118,7 @@ export default function Rooms () {
     <Container>
       <AppNavbar title="Räume" />
 
-      <h1>Raumsuche</h1>
+      <h4>Raumsuche</h4>
       <Form>
         <div className={styles.searchForm}>
           <Form.Group>
@@ -184,7 +184,10 @@ export default function Rooms () {
           </ListGroup.Item>
         }
       </ListGroup>
-      <h1>Freie Räume</h1>
+
+      <br />
+
+      <h4>Freie Räume</h4>
       {freeRooms && freeRooms.map((day, i) =>
         Object.values(day.hours).map((hour, j) =>
           <ListGroup key={i + '-' + j}>

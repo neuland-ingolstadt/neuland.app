@@ -1,6 +1,4 @@
-import Head from 'next/head'
 import { useRouter } from 'next/router'
-import cstyles from '../styles/Common.module.css'
 import styles from '../styles/Personal.module.css'
 import React, { useState, useEffect } from 'react'
 import Container from 'react-bootstrap/Container'
@@ -24,10 +22,6 @@ export default function Personal (props) {
   return (
     <Container>
       <AppNavbar title="Konto" />
-
-      <h1 className={cstyles.title}>
-        Personal Data
-      </h1>
 
       <ListGroup>
         <ListGroup.Item>Matrikelnummer <span className={styles.personal_value}>{userdata.mtknr}</span></ListGroup.Item>

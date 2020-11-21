@@ -102,14 +102,6 @@ export default function Home () {
       <AppNavbar title="Übersicht" showBack={false} />
 
       <div className={styles.cardDeck}>
-        <HomeCard
-          title="Konto"
-          link="/personal"
-        >
-          <ReactPlaceholder type="text" rows={1} ready={personalData}>
-            Eingeloggt als {personalData}.
-          </ReactPlaceholder>
-        </HomeCard>
 
         <HomeCard
           title="Stundenplan"
@@ -147,13 +139,6 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
-          title="Noten und Prüfungen"
-          link="/exams"
-        >
-          Prüfungstermine und Ergebnisse
-        </HomeCard>
-
-        <HomeCard
           title="Räume"
           link="/rooms"
         >
@@ -165,6 +150,22 @@ export default function Home () {
           link="/library"
         >
           Einen Platz reservieren.
+        </HomeCard>
+
+        <HomeCard
+          title="Noten und Prüfungen"
+          link="/exams"
+        >
+          Prüfungstermine und Ergebnisse
+        </HomeCard>
+
+        <HomeCard
+          title="Konto"
+          link="/personal"
+        >
+          <ReactPlaceholder type="text" rows={1} ready={personalData}>
+            Eingeloggt als {personalData}.
+          </ReactPlaceholder>
         </HomeCard>
 
       </div>

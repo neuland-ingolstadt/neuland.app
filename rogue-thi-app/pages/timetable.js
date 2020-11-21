@@ -55,7 +55,6 @@ export default function Timetable () {
     <Container>
       <AppNavbar title="Stundenplan" />
 
-      <h1>Stundenplan</h1>
       {timetable && timetable.map((group, idx) =>
         <ListGroup key={idx}>
           <h4 className={styles.dateBoundary}>
