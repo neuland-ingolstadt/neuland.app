@@ -22,10 +22,10 @@ export default function AppNavbar ({ title, showBack, children }) {
   }
 
   return (
-    <Navbar sticky="top">
+    <Navbar sticky="top" className={styles.navbar}>
       <Navbar.Brand>
         {showBack && (
-          <Button variant="link" onClick={() => goBack()}>
+          <Button variant="link" onClick={() => goBack()} className={styles.back}>
             <FontAwesomeIcon icon={faChevronLeft} />
             {' Zurück'}
           </Button>

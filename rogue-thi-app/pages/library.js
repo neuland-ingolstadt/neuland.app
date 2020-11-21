@@ -83,7 +83,7 @@ export default function Library (props) {
 
   return (
     <Container>
-      <AppNavbar title="Noten und Prüfungen" />
+      <AppNavbar title="Bibliothek" />
 
       <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
         <Modal.Header closeButton>
