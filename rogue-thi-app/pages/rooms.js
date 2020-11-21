@@ -6,6 +6,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLinux } from '@fortawesome/free-brands-svg-icons'
+
 import styles from '../styles/Rooms.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
@@ -18,6 +21,7 @@ const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', '
 const BUILDING_PRESET = 'G'
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const DURATION_PRESET = '01:00'
+const TUX_ROOMS = ['G308']
 
 function getISODate (date) {
   return date.getFullYear().toString().padStart(4, '0') + '-' +
@@ -97,7 +101,7 @@ export default function Rooms () {
           }
         }
 
-        result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume
+        result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.split(', ')
       }))
 
       return result
@@ -203,7 +207,14 @@ export default function Rooms () {
                     {roomName}
                   </div>
                   <div className={styles.room}>
-                    {rooms}
+                    {rooms.map((room, idx) => 
+                      <>
+                        {TUX_ROOMS.includes(room)
+                          ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
+                          : <>{room}</>}
+                        {idx === rooms.length - 1 ? '' : ', '}
+                      </>
+                    )}
                   </div>
                 </div>
               </ListGroup.Item>
