@@ -16,6 +16,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Home.module.css'
 
+import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
@@ -98,6 +99,7 @@ export default function Home () {
 
   return (
     <Container>
+      <AppNavbar title="Übersicht" showBack={false} />
 
       <div className={styles.cardDeck}>
         <HomeCard

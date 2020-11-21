@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 
+import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-api-client'
 import { thiApiRequest } from '../lib/thi-api-request'
 
@@ -21,20 +22,20 @@ export default function Debug () {
     const initialParams = [
       {
         name: 'service',
-        value: 'thiapp',
+        value: 'thiapp'
       },
       {
         name: 'method',
-        value: 'persdata',
+        value: 'persdata'
       },
       {
         name: 'session',
-        value: await obtainSession(router),
+        value: await obtainSession(router)
       },
       {
         name: 'format',
-        value: 'json',
-      },
+        value: 'json'
+      }
     ]
 
     setParameters(initialParams)
@@ -51,7 +52,7 @@ export default function Debug () {
   function addParameter () {
     const newParams = parameters.concat([{
       name: '',
-      value: '',
+      value: ''
     }])
     setParameters(newParams)
   }
@@ -68,8 +69,7 @@ export default function Debug () {
       setResult('Loading...')
       const resp = await thiApiRequest(params)
       setResult(JSON.stringify(resp, null, 4))
-    }
-    catch(e) {
+    } catch (e) {
       console.error(e)
       setResult(e.toString())
     }
@@ -77,7 +77,7 @@ export default function Debug () {
 
   return (
     <Container>
-      <h1>Debug</h1>
+      <AppNavbar title="Debug" />
 
       <h3>Fields</h3>
       <ListGroup>

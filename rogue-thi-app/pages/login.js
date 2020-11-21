@@ -23,8 +23,7 @@ export default function Login (props) {
       if (saveCredentials) {
         localStorage.username = username
         localStorage.password = password
-      }
-      else {
+      } else {
         localStorage.username = ''
         localStorage.password = ''
       }

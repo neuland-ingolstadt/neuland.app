@@ -2,6 +2,17 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 import React, { useState, useEffect } from 'react'
+
+import ReactPlaceholder from 'react-placeholder'
+import Container from 'react-bootstrap/Container'
+import Button from 'react-bootstrap/Button'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
+import AppNavbar from '../lib/AppNavbar'
 import {
   obtainSession,
   getLibraryReservations,
@@ -15,32 +26,22 @@ import {
   formatFriendlyDateTime
 } from '../lib/date-utils'
 
-import ReactPlaceholder from 'react-placeholder'
-import Container from 'react-bootstrap/Container'
-import Button from 'react-bootstrap/Button'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-
 export default function Library (props) {
-  const [reservations, setReservations] = useState(null);
-  const [available, setAvailable] = useState([]);
-  const [reservationDay, setReservationDay] = useState(false);
-  const [reservationTime, setReservationTime] = useState(false);
-  const [reservationRoom, setReservationRoom] = useState(1);
-  const [reservationSeat, setReservationSeat] = useState(-1);
+  const [reservations, setReservations] = useState(null)
+  const [available, setAvailable] = useState([])
+  const [reservationDay, setReservationDay] = useState(false)
+  const [reservationTime, setReservationTime] = useState(false)
+  const [reservationRoom, setReservationRoom] = useState(1)
+  const [reservationSeat, setReservationSeat] = useState(-1)
   const router = useRouter()
 
   const shortNames = {
-    "Lesesaal Nord (alte Bibliothek)": "Nord",
-    "Lesesaal Süd (neue Bibliothek)": "Süd",
-    "Lesesaal Galerie": "Galerie",
+    'Lesesaal Nord (alte Bibliothek)': 'Nord',
+    'Lesesaal Süd (neue Bibliothek)': 'Süd',
+    'Lesesaal Galerie': 'Galerie'
   }
 
   async function refreshData (session) {
-
     const response = await getLibraryReservations(session)
     response.forEach(x => {
       x.start = new Date(x.reservation_begin.replace(' ', 'T'))
@@ -82,6 +83,8 @@ export default function Library (props) {
 
   return (
     <Container>
+      <AppNavbar title="Noten und Prüfungen" />
+
       <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
         <Modal.Header closeButton>
           <Modal.Title>Sitzplatz reservieren</Modal.Title>
@@ -146,8 +149,8 @@ export default function Library (props) {
       <ListGroup>
         {available && available.map((day, i) =>
           day.resource.map((time, j) =>
-            
-            <ListGroup.Item key={i + "-" + j}>
+
+            <ListGroup.Item key={i + '-' + j}>
               <div className={styles.floatRight}>
                 {Object.entries(time.resources).map(([roomId, room]) =>
                   <span>{room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}<br /></span>

@@ -3,12 +3,14 @@ import { useRouter } from 'next/router'
 import cstyles from '../styles/Common.module.css'
 import styles from '../styles/Personal.module.css'
 import React, { useState, useEffect } from 'react'
-import { obtainSession, getPersonalData } from '../lib/thi-api-client'
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 
+import AppNavbar from '../lib/AppNavbar'
+import { obtainSession, getPersonalData } from '../lib/thi-api-client'
+
 export default function Personal (props) {
-  const [userdata, setUserdata] = useState({});
+  const [userdata, setUserdata] = useState({})
   const router = useRouter()
 
   useEffect(async () => {
@@ -21,6 +23,8 @@ export default function Personal (props) {
 
   return (
     <Container>
+      <AppNavbar title="Konto" />
+
       <h1 className={cstyles.title}>
         Personal Data
       </h1>

@@ -6,6 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import styles from '../styles/Timetable.module.css'
 
+import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, getTimetable } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 
@@ -52,6 +53,8 @@ export default function Timetable () {
 
   return (
     <Container>
+      <AppNavbar title="Stundenplan" />
+
       <h1>Stundenplan</h1>
       {timetable && timetable.map((group, idx) =>
         <ListGroup key={idx}>

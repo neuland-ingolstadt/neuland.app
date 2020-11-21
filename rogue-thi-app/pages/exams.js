@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button'
 
 import styles from '../styles/Timetable.module.css'
 
+import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, getExams, getGrades } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
 
@@ -29,10 +30,7 @@ export default function Exams () {
 
     setExams(examList
       .map(x => {
-        if(x.exm_date && x.exam_time)
-          x.date = new Date(x.exm_date + 'T' + x.exam_time)
-        else
-          x.date = null
+        if (x.exm_date && x.exam_time) { x.date = new Date(x.exm_date + 'T' + x.exam_time) } else { x.date = null }
 
         x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
         x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
@@ -49,11 +47,12 @@ export default function Exams () {
     setMissingGrades(gradeList
       .filter(x => !x.note)
       .filter(x => !newGrades.some(y => x.titel.trim() === y.titel.trim())))
-
   }, [])
 
   return (
     <Container>
+      <AppNavbar title="Noten und Prüfungen" />
+
       <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
         <Modal.Header closeButton>
           <Modal.Title>{focusedExam && focusedExam.titel}</Modal.Title>

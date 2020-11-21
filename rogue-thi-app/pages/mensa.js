@@ -12,6 +12,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Timetable.module.css'
 
+import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDate } from '../lib/date-utils'
 
@@ -72,7 +73,7 @@ export default function Timetable () {
 
   return (
     <Container>
-      <h1>Mensa</h1>
+      <AppNavbar title="Mensa" />
 
       <Button variant="secondary" onClick={() => setShowAllergenSelection(true)}>
         Allergene auswählen
