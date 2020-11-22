@@ -6,7 +6,7 @@ import * as forge from 'node-forge/lib/index.all'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
-const USER_AGENT = 'Embarcadero RESTClient/1.0' //'Better THI-App https://github.com/M4GNV5/THI-App'
+const USER_AGENT = 'Rogue THI-App https://github.com/M4GNV5/THI-App'
 
 const PROXY_URL = 'wss://thi.hopfenspace.org/websocket'
 
