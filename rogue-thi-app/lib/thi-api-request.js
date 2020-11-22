@@ -39,7 +39,9 @@ const THI_CERTS = [
 ]
 
 export function thiApiRequest (params) {
-  console.log(params)
+  console.debug('Request:')
+  console.debug(params)
+
   function ab2str (buf) {
     return String.fromCharCode.apply(null, new Uint8Array(buf))
   }
@@ -106,9 +108,16 @@ export function thiApiRequest (params) {
           if (response.readBody(buffer)) {
             try {
               const data = JSON.parse(response.body)
+              console.debug('Response:')
+              console.debug(data)
               resolve(data)
             } catch (e) {
-              reject(e)
+              if (e instanceof SyntaxError) {
+                // e.g. 'Bad request'
+                reject(new Error(`Response is not valid JSON (${response.body})`))
+              } else {
+                reject(e)
+              }
             } finally {
               client.close()
             }
