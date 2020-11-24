@@ -12,7 +12,7 @@ import { getTimetable } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable (router) {
-  const today = new Date()
+  const [today] = new Date().toISOString().split('T')
 
   const session = await obtainSession(router)
   const { timetable } = await getTimetable(session, new Date())
@@ -20,7 +20,7 @@ async function getFriendlyTimetable (router) {
   // get all available dates
   const dates = timetable
     .map(x => x.datum)
-    .filter(x => new Date(x) > today)
+    .filter(x => x >= today)
     .filter((v, i, a) => a.indexOf(v) === i)
 
   // get events for each date
