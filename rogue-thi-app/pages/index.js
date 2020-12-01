@@ -57,14 +57,14 @@ function HomeCard ({ link, title, children }) {
         <Card.Body>
           <Card.Title>
             {title}
+            <Button variant="link" className={styles.cardButton}>
+              <FontAwesomeIcon icon={faChevronRight} />
+            </Button>
           </Card.Title>
           <Card.Text>
             {children}
           </Card.Text>
         </Card.Body>
-          <Button variant="link" className={styles.cardButton}>
-            <FontAwesomeIcon icon={faChevronRight} />
-          </Button>
       </Card>
     </Link>
   )
