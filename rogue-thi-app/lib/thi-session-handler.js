@@ -16,7 +16,7 @@ export async function createSession (router, username, password, stayLoggedIn) {
     delete localStorage.password
   }
 
-  router.push('/')
+  router.replace('/')
 }
 
 export async function obtainSession (router) {
