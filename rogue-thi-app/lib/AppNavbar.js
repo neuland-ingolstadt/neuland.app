@@ -4,9 +4,10 @@ import Head from 'next/head'
 
 import Button from 'react-bootstrap/Button'
 import Navbar from 'react-bootstrap/Navbar'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
 import styles from './AppNavbar.module.css'
@@ -40,7 +41,7 @@ export default function AppNavbar ({ title, showBack, children }) {
         <meta name="theme-color" content="#005a9b" />
       </Head>
       <Navbar sticky="top" className={styles.navbar + ' justify-content-between'}>
-        <Navbar.Brand>
+        <Navbar.Brand className={styles.left}>
           {showBack && (
             <Button variant="link" onClick={() => goBack()} className={styles.back}>
               <FontAwesomeIcon icon={faChevronLeft} />
@@ -51,9 +52,19 @@ export default function AppNavbar ({ title, showBack, children }) {
         <Navbar.Brand className={styles.title}>
           {title}
         </Navbar.Brand>
-        <div>
-          {children}
-        </div>
+        <Navbar.Brand className={styles.right}>
+          {children &&
+            <Dropdown align="right">
+              <Dropdown.Toggle variant="link" bsPrefix="dropdown">
+                <FontAwesomeIcon icon={faEllipsisH} />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu align="right">
+                {children}
+              </Dropdown.Menu>
+            </Dropdown>
+          }
+        </Navbar.Brand>
       </Navbar>
     </>
   )
