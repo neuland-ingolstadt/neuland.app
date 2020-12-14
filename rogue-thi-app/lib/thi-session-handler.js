@@ -3,6 +3,9 @@ import { isAlive, login } from './thi-api-client'
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
 export async function createSession (router, username, password, stayLoggedIn) {
+  // strip domain if user entered an email address
+  username = username.replace(/@thi\.de$/, '')
+
   const session = await login(username, password)
 
   localStorage.session = session
