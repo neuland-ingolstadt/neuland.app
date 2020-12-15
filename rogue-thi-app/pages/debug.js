@@ -12,6 +12,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Link from 'next/link'
 
 export default function Debug () {
   const [parameters, setParameters] = useState([])
@@ -77,9 +78,18 @@ export default function Debug () {
 
   return (
     <Container>
-      <AppNavbar title="Debug" />
+      <AppNavbar title="API Playground" />
 
-      <h3>Fields</h3>
+      <h3 className={styles.heading}>Documentation</h3>
+      You can find an inofficial API documentation{' '}
+      <Link href="https://github.com/M4GNV5/THI-App/blob/master/thi-rest-api.md">
+        here on Github
+      </Link>
+      <br />
+      Below you can experiment with the API. The session field is auto filled with
+      a valid session token for your user.
+
+      <h3 className={styles.heading}>Fields</h3>
       <ListGroup>
         {parameters && parameters.map((param, idx) =>
           <ListGroup.Item key={idx} className={styles.item}>
@@ -115,7 +125,7 @@ export default function Debug () {
       <Button variant="success" onClick={addParameter}>Add Field</Button>
 
       <br />
-      <h3>Result</h3>
+      <h3 className={styles.heading}>Result</h3>
       <pre>
         {result}
       </pre>

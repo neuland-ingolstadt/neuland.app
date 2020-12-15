@@ -104,6 +104,10 @@ export default function Home () {
         <Button variant="link" onClick={() => forgetSession(router)}>
           Logout
         </Button>
+        <br />
+        <Button variant="link" href="/debug">
+          API Playground
+        </Button>
       </AppNavbar>
 
       <div className={styles.cardDeck}>
