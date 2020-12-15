@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
+import ReactPlaceholder from 'react-placeholder'
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
@@ -85,22 +86,24 @@ export default function Exams () {
             Prüfungen
           </h4>
 
-          {exams && exams.map((item, idx) =>
-          <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
-              <div className={styles.left}>
-                <div className={styles.name}>
-                  <strong>{item.titel}</strong><br />
-                  <strong>{item.stg}</strong>; {item.pruefer_namen}
+          <ReactPlaceholder type="text" rows={2} ready={exams}>
+            {exams && exams.map((item, idx) =>
+            <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
+                <div className={styles.left}>
+                  <div className={styles.name}>
+                    <strong>{item.titel}</strong><br />
+                    <strong>{item.stg}</strong>; {item.pruefer_namen}
+                  </div>
+                  <div className={styles.room}>
+                    Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}
+                  </div>
                 </div>
-                <div className={styles.room}>
-                  Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}
+                <div className={styles.right}>
+                {item.date ? formatFriendlyDateTime(item.date) : 'Termin: TBD'}
                 </div>
-              </div>
-              <div className={styles.right}>
-              {item.date ? formatFriendlyDateTime(item.date) : 'Termin: TBD'}
-              </div>
-          </ListGroup.Item>
-          )}
+            </ListGroup.Item>
+            )}
+          </ReactPlaceholder>
       </ListGroup>
 
       <ListGroup>
@@ -108,22 +111,24 @@ export default function Exams () {
           Noten
         </h4>
 
-        {grades && grades.map((item, idx) =>
-        <ListGroup.Item key={idx} className={styles.item}>
-          <div className={styles.left}>
-            <div className={styles.name}>
-              <strong>{item.titel}</strong>
+        <ReactPlaceholder type="text" rows={4} ready={grades}>
+          {grades && grades.map((item, idx) =>
+          <ListGroup.Item key={idx} className={styles.item}>
+            <div className={styles.left}>
+              <div className={styles.name}>
+                <strong>{item.titel}</strong>
+              </div>
+              <div className={styles.room}>
+                {item.stg}
+              </div>
             </div>
-            <div className={styles.room}>
-              {item.stg}
+            <div className={styles.right}>
+              Note: {item.note.replace('*', ' (angerechnet)')}<br />
+              ECTS: {item.ects}
             </div>
-          </div>
-          <div className={styles.right}>
-            Note: {item.note.replace('*', ' (angerechnet)')}<br />
-            ECTS: {item.ects}
-          </div>
-        </ListGroup.Item>
-        )}
+          </ListGroup.Item>
+          )}
+        </ReactPlaceholder>
       </ListGroup>
 
       <ListGroup>
@@ -131,22 +136,24 @@ export default function Exams () {
           Ausstehende Fächer
         </h4>
 
-        {missingGrades && missingGrades.map((item, idx) =>
-        <ListGroup.Item key={idx} className={styles.item}>
-          <div className={styles.left}>
-            <div className={styles.name}>
-              <strong>{item.titel}</strong>
+        <ReactPlaceholder type="text" rows={4} ready={missingGrades}>
+          {missingGrades && missingGrades.map((item, idx) =>
+          <ListGroup.Item key={idx} className={styles.item}>
+            <div className={styles.left}>
+              <div className={styles.name}>
+                <strong>{item.titel}</strong>
+              </div>
+              <div className={styles.room}>
+                {item.stg}
+              </div>
             </div>
-            <div className={styles.room}>
-              {item.stg}
+            <div className={styles.right}>
+              Frist: {item.frist || '-'}<br />
+              ECTS: {item.ects || '-'}
             </div>
-          </div>
-          <div className={styles.right}>
-            Frist: {item.frist || '-'}<br />
-            ECTS: {item.ects || '-'}
-          </div>
-        </ListGroup.Item>
-        )}
+          </ListGroup.Item>
+          )}
+        </ReactPlaceholder>
       </ListGroup>
       <br />
     </Container>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
+import ReactPlaceholder from 'react-placeholder'
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
@@ -193,35 +194,37 @@ export default function Rooms () {
       <br />
 
       <h4>Freie Räume</h4>
-      {freeRooms && freeRooms.map((day, i) =>
-        Object.values(day.hours).map((hour, j) =>
-          <ListGroup key={i + '-' + j}>
-            <h4 className={styles.dateBoundary}>
-              {formatFriendlyDate(day.date)}, {formatFriendlyTime(hour.from)} - {formatFriendlyTime(hour.to)}
-            </h4>
+      <ReactPlaceholder type="text" rows={8} ready={freeRooms}>
+        {freeRooms && freeRooms.map((day, i) =>
+          Object.values(day.hours).map((hour, j) =>
+            <ListGroup key={i + '-' + j}>
+              <h4 className={styles.dateBoundary}>
+                {formatFriendlyDate(day.date)}, {formatFriendlyTime(hour.from)} - {formatFriendlyTime(hour.to)}
+              </h4>
 
-            {Object.entries(hour.roomTypes).map(([roomName, rooms], idx) =>
-              <ListGroup.Item key={idx} className={styles.item}>
-                <div className={styles.left}>
-                  <div className={styles.name}>
-                    {roomName}
+              {Object.entries(hour.roomTypes).map(([roomName, rooms], idx) =>
+                <ListGroup.Item key={idx} className={styles.item}>
+                  <div className={styles.left}>
+                    <div className={styles.name}>
+                      {roomName}
+                    </div>
+                    <div className={styles.room}>
+                      {rooms.map((room, idx) => 
+                        <>
+                          {TUX_ROOMS.includes(room)
+                            ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
+                            : <>{room}</>}
+                          {idx === rooms.length - 1 ? '' : ', '}
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className={styles.room}>
-                    {rooms.map((room, idx) => 
-                      <>
-                        {TUX_ROOMS.includes(room)
-                          ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
-                          : <>{room}</>}
-                        {idx === rooms.length - 1 ? '' : ', '}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </ListGroup.Item>
-            )}
-          </ListGroup>
-        )
-      )}
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          )
+        )}
+      </ReactPlaceholder>
       <br />
     </Container>
   )

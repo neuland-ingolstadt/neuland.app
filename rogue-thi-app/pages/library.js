@@ -147,31 +147,34 @@ export default function Library (props) {
       <h4 className={styles.heading}>
         Verfügbare Plätze
       </h4>
-      <ListGroup>
-        {available && available.map((day, i) =>
-          day.resource.map((time, j) =>
+      <ReactPlaceholder type="text" rows={6} ready={available && available.length > 0}>
+        <ListGroup>
+          {available && available.map((day, i) =>
+            day.resource.map((time, j) =>
 
-            <ListGroup.Item key={i + '-' + j}>
-              <div className={styles.floatRight}>
-                {Object.entries(time.resources).map(([roomId, room], idx) =>
-                  <span key={idx}>
-                    {room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}
-                    <br />
-                  </span>
-                )}
-              </div>
+              <ListGroup.Item key={i + '-' + j}>
+                <div className={styles.floatRight}>
+                  {Object.entries(time.resources).map(([roomId, room], idx) =>
+                    <span key={idx}>
+                      {room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}
+                      <br />
+                    </span>
+                  )}
+                </div>
 
-              {formatFriendlyDateTime(new Date(day.date + 'T' + time.from))}
-              {' '}- {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
-              <br />
-              <Button variant="primary" onClick={() => {
-                setReservationDay(day)
-                setReservationTime(time)
-              }}>Reservieren</Button>
-            </ListGroup.Item>
-          )
-        )}
-      </ListGroup>
+                {formatFriendlyDateTime(new Date(day.date + 'T' + time.from))}
+                {' '}- {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
+                <br />
+                <Button variant="primary" onClick={() => {
+                  setReservationDay(day)
+                  setReservationTime(time)
+                }}>Reservieren</Button>
+              </ListGroup.Item>
+            )
+          )}
+        </ListGroup>
+      </ReactPlaceholder>
+      
       <br />
     </Container>
   )
