@@ -27,11 +27,15 @@ export default function Exams () {
       getGrades(session)
     ])
 
-    const now = new Date()
-
     setExams(examList
       .map(x => {
-        if (x.exm_date && x.exam_time) { x.date = new Date(x.exm_date + 'T' + x.exam_time) } else { x.date = null }
+        if (x.exm_date && x.exam_time) {
+          const [_, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
+          x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
+        }
+        else {
+          x.date = null
+        }
 
         x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
         x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
@@ -39,7 +43,6 @@ export default function Exams () {
 
         return x
       })
-      .filter(x => x.date === null || x.date > now)
     )
 
     const newGrades = gradeList.filter(x => x.note && x.ects)
