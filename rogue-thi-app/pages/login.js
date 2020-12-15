@@ -78,8 +78,9 @@ export default function Login (props) {
       </Form>
 
       <footer className={styles.footer}>
-        <strong>Inoffizielle </strong> THI App. <br />
-        Dies ist kein offizielles Angebot der Technischen Hochschule Ingolstadt.
+        <a href="https://github.com/M4GNV5/THI-App">Quellcode auf GitHub</a><br />
+        Diese App wird von Studenten für Studenten entwickelt. <br />
+        Es ist <strong>kein offizielles Angebot</strong> der Technischen Hochschule Ingolstadt. <br />
       </footer>
     </div>
   )
