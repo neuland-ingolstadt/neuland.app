@@ -8,7 +8,7 @@ const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const USER_AGENT = 'Rogue THI-App https://github.com/M4GNV5/THI-App'
 
-const PROXY_URL = 'wss://thi.hopfenspace.org/websocket'
+const PROXY_URL = 'wss://proxy.neuland.app'
 
 // T-TeleSec GlobalRoot Class 2
 // valid until 02.10.2033, 1:59:59 CEST
