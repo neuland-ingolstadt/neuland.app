@@ -2,12 +2,12 @@
  * Client to interact with hiplan.thi.de via a websockify proxy.
  */
 
-import * as forge from 'node-forge/lib/index.all'
+import HttpsConnection from './https-connection'
+import HttpRequest from './http-request'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const USER_AGENT = 'Rogue THI-App https://github.com/M4GNV5/THI-App'
-
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 
 // T-TeleSec GlobalRoot Class 2
@@ -38,111 +38,46 @@ const THI_CERTS = [
   -----END CERTIFICATE-----`
 ]
 
+let connection = null
+
 export function thiApiRequest (params) {
-  console.debug('Request:')
-  console.debug(params)
-
-  function ab2str (buf) {
-    return String.fromCharCode.apply(null, new Uint8Array(buf))
-  }
-
-  function str2ab (str) {
-    const buf = new ArrayBuffer(str.length)
-    const bufView = new Uint8Array(buf)
-    for (let i = 0, strLen = str.length; i < strLen; i++) {
-      bufView[i] = str.charCodeAt(i)
-    }
-    return buf
-  }
-
-  const paramList = []
-  for (const key in params) { paramList.push(key + '=' + encodeURIComponent(params[key])) }
-
-  const options = {
-    method: 'POST',
-    path: ENDPOINT_URL,
-    body: paramList.join('&'),
-    headers: {
-      Host: ENDPOINT_HOST,
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'User-Agent': USER_AGENT
-    }
-  }
-
-  const request = forge.http.createRequest(options)
-  const buffer = forge.util.createBuffer()
-  const response = forge.http.createResponse()
-
   return new Promise((resolve, reject) => {
-    const client = forge.tls.createConnection({
-      server: false,
-      caStore: THI_CERTS,
-      virtualHost: ENDPOINT_HOST,
-      verify: function (connection, verified, depth, certs) {
-        if (certs[0].subject.getField('CN').value === ENDPOINT_HOST) {
-          return verified
-        } else {
-          return false
-        }
-      },
-      connected: function (connection) {
-        client.prepare(request.toString() + request.body)
-      },
-      tlsDataReady: function (connection) {
-        const data = connection.tlsData.getBytes()
-        socket.send(str2ab(data))
-      },
-      dataReady: function (connection) {
-        // clear data from the server is ready
-        const data = connection.data.getBytes()
-        if (response.bodyReceived) {
-          return
-        }
+    console.debug('Request:')
+    console.debug(params)
 
-        buffer.putBytes(data)
-        if (!response.headerReceived) {
-          response.readHeader(buffer)
-        }
+    const paramList = []
+    for (const key in params) { paramList.push(key + '=' + encodeURIComponent(params[key])) }
 
-        if (response.headerReceived) {
-          if (response.readBody(buffer)) {
-            try {
-              const data = JSON.parse(response.body)
-              console.debug('Response:')
-              console.debug(data)
-              resolve(data)
-            } catch (e) {
-              if (e instanceof SyntaxError) {
-                // e.g. 'Bad request'
-                reject(new Error(`Response is not valid JSON (${response.body})`))
-              } else {
-                reject(e)
-              }
-            } finally {
-              client.close()
-            }
-          }
+    if (!connection) {
+      connection = new HttpsConnection({
+        proxy: PROXY_URL,
+        certs: THI_CERTS,
+        host: ENDPOINT_HOST,
+        closed: () => {
+          connection = null
+        },
+        error: err => {
+          console.error(err)
+          connection = null
+        }
+      })
+    }
+
+    const request = new HttpRequest({
+      forge: {
+        method: 'POST',
+        path: ENDPOINT_URL,
+        body: paramList.join('&'),
+        headers: {
+          Host: ENDPOINT_HOST,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': USER_AGENT
         }
       },
-      closed: function () {
-        socket.close()
-      },
-      error: function (connection, error) {
-        reject(error)
-      }
+      response: data => resolve(data),
+      error: err => reject(err)
     })
 
-    const socket = new WebSocket(PROXY_URL)
-    socket.binaryType = 'arraybuffer'
-    socket.addEventListener('open', function (event) {
-      client.handshake()
-    })
-    socket.addEventListener('message', function (event) {
-      client.process(ab2str(event.data))
-    })
-    socket.addEventListener('error', function (event) {
-      console.log(event)
-      reject(new Error('WebSocket connection failed'))
-    })
+    connection.send(request)
   })
 }
