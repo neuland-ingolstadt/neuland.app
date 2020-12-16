@@ -128,20 +128,27 @@ export default function Library (props) {
         Deine Reservierungen
       </h4>
       <ReactPlaceholder type="text" rows={2} ready={reservations}>
-        <ListGroup>
-        {reservations && reservations.map((x, i) =>
-          <ListGroup.Item key={i}>
-            <div className={styles.floatRight}>
-              <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </Button>
-            </div>
+        {reservations && reservations.length === 0 &&
+          <p>
+            Du hast keine Reservierungen.
+          </p>
+        }
+        {reservations && reservations.length > 0 &&
+          <ListGroup>
+            {reservations.map((x, i) =>
+              <ListGroup.Item key={i}>
+                <div className={styles.floatRight}>
+                  <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </Button>
+                </div>
 
-            <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
-            {formatFriendlyDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
-          </ListGroup.Item>
-        )}
-        </ListGroup>
+                <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
+                {formatFriendlyDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
+              </ListGroup.Item>
+            )}
+          </ListGroup>
+        }
       </ReactPlaceholder>
 
       <h4 className={styles.heading}>
@@ -174,7 +181,7 @@ export default function Library (props) {
           )}
         </ListGroup>
       </ReactPlaceholder>
-      
+
       <br />
     </Container>
   )
