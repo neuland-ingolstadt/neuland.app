@@ -7,7 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-import styles from '../styles/Timetable.module.css'
+import styles from '../styles/Exams.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
@@ -31,10 +31,9 @@ export default function Exams () {
     setExams(examList
       .map(x => {
         if (x.exm_date && x.exam_time) {
-          const [_, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
+          const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
           x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
-        }
-        else {
+        } else {
           x.date = null
         }
 
@@ -82,76 +81,64 @@ export default function Exams () {
       </Modal>
 
       <ListGroup>
-          <h4 className={styles.dateBoundary}>
+          <h4 className={styles.heading}>
             Prüfungen
           </h4>
 
           <ReactPlaceholder type="text" rows={2} ready={exams}>
             {exams && exams.map((item, idx) =>
-            <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
+              <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
                 <div className={styles.left}>
-                  <div className={styles.name}>
-                    <strong>{item.titel}</strong><br />
-                    <strong>{item.stg}</strong>; {item.pruefer_namen}
-                  </div>
-                  <div className={styles.room}>
-                    Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}
+                  {item.titel} ({item.stg})<br />
+
+                  <div className={styles.details}>
+                    Termin: {item.date ? formatFriendlyDateTime(item.date) : 'TBD'}<br />
+                    Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}<br />
                   </div>
                 </div>
-                <div className={styles.right}>
-                {item.date ? formatFriendlyDateTime(item.date) : 'Termin: TBD'}
-                </div>
-            </ListGroup.Item>
+              </ListGroup.Item>
             )}
           </ReactPlaceholder>
       </ListGroup>
 
       <ListGroup>
-        <h4 className={styles.dateBoundary}>
+        <h4 className={styles.heading}>
           Noten
         </h4>
 
         <ReactPlaceholder type="text" rows={4} ready={grades}>
           {grades && grades.map((item, idx) =>
-          <ListGroup.Item key={idx} className={styles.item}>
-            <div className={styles.left}>
-              <div className={styles.name}>
-                <strong>{item.titel}</strong>
+            <ListGroup.Item key={idx} className={styles.item}>
+              <div className={styles.left}>
+                {item.titel} ({item.stg})<br />
+
+                <div className={styles.details}>
+                  Note: {item.note.replace('*', ' (angerechnet)')}<br />
+                  ECTS: {item.ects || '(keine)'}
+                </div>
               </div>
-              <div className={styles.room}>
-                {item.stg}
-              </div>
-            </div>
-            <div className={styles.right}>
-              Note: {item.note.replace('*', ' (angerechnet)')}<br />
-              ECTS: {item.ects}
-            </div>
-          </ListGroup.Item>
+            </ListGroup.Item>
           )}
         </ReactPlaceholder>
       </ListGroup>
 
       <ListGroup>
-        <h4 className={styles.dateBoundary}>
+        <h4 className={styles.heading}>
           Ausstehende Fächer
         </h4>
 
         <ReactPlaceholder type="text" rows={4} ready={missingGrades}>
           {missingGrades && missingGrades.map((item, idx) =>
-          <ListGroup.Item key={idx} className={styles.item}>
-            <div className={styles.left}>
-              <div className={styles.name}>
-                <strong>{item.titel}</strong>
+            <ListGroup.Item key={idx} className={styles.item}>
+              <div className={styles.left}>
+                {item.titel} ({item.stg}) <br />
+
+                <div className={styles.details}>
+                  Frist: {item.frist || '(keine)'}<br />
+                  ECTS: {item.ects || '(keine)'}
+                </div>
               </div>
-              <div className={styles.room}>
-                {item.stg}
-              </div>
-            </div>
-            <div className={styles.right}>
-              Frist: {item.frist || '-'}<br />
-              ECTS: {item.ects || '-'}
-            </div>
-          </ListGroup.Item>
+            </ListGroup.Item>
           )}
         </ReactPlaceholder>
       </ListGroup>

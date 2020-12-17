@@ -1,4 +1,4 @@
-.dateBoundary {
+.heading {
     margin-top: 20px;
 }
 
@@ -10,7 +10,7 @@
     flex: 1;
 }
 
-.room {
+.details {
     color: gray;
 }
 

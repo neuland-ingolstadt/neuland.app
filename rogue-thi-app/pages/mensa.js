@@ -15,7 +15,7 @@ import styles from '../styles/Timetable.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
 import { getMensaPlan } from '../lib/thi-api-client'
-import { formatFriendlyDate } from '../lib/date-utils'
+import { formatNearDate } from '../lib/date-utils'
 
 import allergenMap from '../data/allergens.json'
 
@@ -85,7 +85,7 @@ export default function Timetable () {
       {mensaPlan && mensaPlan.map((day, idx) =>
         <ListGroup key={idx}>
           <h4 className={styles.dateBoundary}>
-            {formatFriendlyDate(day.date)}
+            {formatNearDate(day.date)}
           </h4>
 
           {day.meals.map((meal, idx) =>

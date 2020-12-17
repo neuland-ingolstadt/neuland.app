@@ -8,10 +8,28 @@ export function formatFriendlyTime (datetime) {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: 'numeric' })
+  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
 }
 
 export function formatFriendlyDate (datetime) {
+  if (typeof datetime === 'string') {
+    datetime = new Date(datetime)
+  }
+
+  const today = new Date()
+  const tomorrow = new Date()
+  tomorrow.setDate(today.getDate() + 1)
+
+  if (datetime.toDateString() === today.toDateString()) {
+    return WORD_TODAY
+  } else if (datetime.toDateString() === tomorrow.toDateString()) {
+    return WORD_TOMORROW
+  } else {
+    return datetime.toLocaleString(DATE_LOCALE, { day: 'numeric', month: '2-digit', year: 'numeric' })
+  }
+}
+
+export function formatNearDate (datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }

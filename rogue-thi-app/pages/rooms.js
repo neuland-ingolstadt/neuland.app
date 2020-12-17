@@ -15,7 +15,7 @@ import styles from '../styles/Rooms.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
 import { getFreeRooms } from '../lib/thi-api-client'
-import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
+import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 import { getRoomOpenings } from '../lib/api-converter'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
@@ -207,7 +207,7 @@ export default function Rooms () {
           Object.values(day.hours).map((hour, j) =>
             <ListGroup key={i + '-' + j}>
               <h4 className={styles.dateBoundary}>
-                {formatFriendlyDate(day.date)}, {formatFriendlyTime(hour.from)} - {formatFriendlyTime(hour.to)}
+                {formatNearDate(day.date)}, {formatFriendlyTime(hour.from)} - {formatFriendlyTime(hour.to)}
               </h4>
 
               {Object.entries(hour.roomTypes).map(([roomName, rooms], idx) =>

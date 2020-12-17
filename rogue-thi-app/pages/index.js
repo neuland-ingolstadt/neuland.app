@@ -19,7 +19,7 @@ import styles from '../styles/Home.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, forgetSession } from '../lib/thi-session-handler'
 import { getTimetable, getMensaPlan } from '../lib/thi-api-client'
-import { formatFriendlyDateTime } from '../lib/date-utils'
+import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -119,7 +119,7 @@ export default function Home () {
                   {x.veranstaltung}, {x.raum}
                 </div>
                 <div className="text-muted">
-                  {formatFriendlyDateTime(x.start_date)}
+                  {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
                 </div>
               </ListGroup.Item>
             )}

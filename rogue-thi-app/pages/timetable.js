@@ -9,7 +9,7 @@ import styles from '../styles/Timetable.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
 import { getTimetable } from '../lib/thi-api-client'
-import { formatFriendlyDate, formatFriendlyTime } from '../lib/date-utils'
+import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable (router) {
   const [today] = new Date().toISOString().split('T')
@@ -54,7 +54,7 @@ export default function Timetable () {
       {timetable && timetable.map((group, idx) =>
         <ListGroup key={idx}>
           <h4 className={styles.dateBoundary}>
-            {formatFriendlyDate(group.date)}
+            {formatNearDate(group.date)}
           </h4>
 
           {group.items.map((item, idx) =>
