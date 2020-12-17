@@ -56,7 +56,7 @@ export default function Exams () {
 
   return (
     <Container>
-      <AppNavbar title="Noten und Prüfungen" />
+      <AppNavbar title="Prüfungen" />
 
       <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
         <Modal.Header closeButton>

@@ -124,7 +124,7 @@ export default function Rooms () {
     <Container>
       <AppNavbar title="Räume" />
 
-      <h4>Raumsuche</h4>
+      <h3>Raumsuche</h3>
       <Form>
         <div className={styles.searchForm}>
           <Form.Group>
@@ -141,13 +141,18 @@ export default function Rooms () {
           </Form.Group>
           <Form.Group>
             <Form.Label>
-              Zeit
+              Datum
             </Form.Label>
             <Form.Control
               type="date"
               value={date}
               onChange={e => setDate(e.target.value)}
             />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>
+              Zeit
+            </Form.Label>
             <Form.Control
               type="time"
               value={time}
@@ -171,6 +176,9 @@ export default function Rooms () {
           Suchen
         </Button>
       </Form>
+
+      <br />
+
       <ListGroup>
         {filterResults && filterResults.map((result, idx) =>
           <ListGroup.Item key={idx} className={styles.item}>
@@ -193,7 +201,7 @@ export default function Rooms () {
 
       <br />
 
-      <h4>Freie Räume</h4>
+      <h3>Freie Räume</h3>
       <ReactPlaceholder type="text" rows={8} ready={freeRooms}>
         {freeRooms && freeRooms.map((day, i) =>
           Object.values(day.hours).map((hour, j) =>
@@ -209,7 +217,7 @@ export default function Rooms () {
                       {roomName}
                     </div>
                     <div className={styles.room}>
-                      {rooms.map((room, idx) => 
+                      {rooms.map((room, idx) =>
                         <>
                           {TUX_ROOMS.includes(room)
                             ? <><FontAwesomeIcon icon={faLinux} /> {room}</>

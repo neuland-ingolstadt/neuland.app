@@ -1,6 +1,13 @@
 .searchForm {
   width: 100%;
   display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row;
+  }
 }
 
 .searchForm * {

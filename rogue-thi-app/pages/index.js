@@ -18,13 +18,8 @@ import styles from '../styles/Home.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession, forgetSession } from '../lib/thi-session-handler'
-import { getPersonalData, getTimetable, getMensaPlan } from '../lib/thi-api-client'
+import { getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatFriendlyDateTime } from '../lib/date-utils'
-
-async function getPersonalDataPreview (session) {
-  const resp = await getPersonalData(session)
-  return `${resp.persdata.vname} ${resp.persdata.name} (${resp.persdata.user})`
-}
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -76,7 +71,6 @@ HomeCard.propTypes = {
 }
 
 export default function Home () {
-  const [personalData, setPersonalData] = useState(null)
   const [timetable, setTimetable] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const router = useRouter()
@@ -85,8 +79,6 @@ export default function Home () {
     const session = await obtainSession(router)
 
     Promise.all([
-      getPersonalDataPreview(session)
-        .then(resp => setPersonalData(resp)),
       getTimetablePreview(session)
         .then(resp => setTimetable(resp)),
       getMensaPlanPreview(session)
@@ -133,7 +125,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
-          title="Speiseplan"
+          title="Mensa"
           link="/mensa"
         >
           <ReactPlaceholder type="text" rows={3} ready={mensaPlan}>
@@ -151,30 +143,28 @@ export default function Home () {
           title="Räume"
           link="/rooms"
         >
-          Einen freien Raum finden.
+          Freie Räume suchen.
         </HomeCard>
 
         <HomeCard
           title="Bibliothek"
           link="/library"
         >
-          Einen Platz reservieren.
+          Sitzplätze reservieren.
         </HomeCard>
 
         <HomeCard
-          title="Noten und Prüfungen"
+          title="Prüfungen"
           link="/exams"
         >
-          Prüfungstermine und Ergebnisse
+          Prüfungstermine und -ergebnisse einsehen.
         </HomeCard>
 
         <HomeCard
           title="Konto"
           link="/personal"
         >
-          <ReactPlaceholder type="text" rows={1} ready={personalData}>
-            Eingeloggt als {personalData}.
-          </ReactPlaceholder>
+          Persönliche Daten einsehen.
         </HomeCard>
 
       </div>
