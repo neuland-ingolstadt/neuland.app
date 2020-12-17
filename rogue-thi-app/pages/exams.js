@@ -12,7 +12,7 @@ import styles from '../styles/Exams.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
 import { getExams, getGrades } from '../lib/thi-api-client'
-import { formatFriendlyDateTime } from '../lib/date-utils'
+import { formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 
 export default function Exams () {
   const router = useRouter()
@@ -92,7 +92,7 @@ export default function Exams () {
                   {item.titel} ({item.stg})<br />
 
                   <div className={styles.details}>
-                    Termin: {item.date ? formatFriendlyDateTime(item.date) : 'TBD'}<br />
+                    Termin: {item.date ? formatFriendlyDateTime(item.date) + ' (in ' + formatFriendlyRelativeTime(item.date) + ')' : 'TBD'}<br />
                     Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}<br />
                   </div>
                 </div>
