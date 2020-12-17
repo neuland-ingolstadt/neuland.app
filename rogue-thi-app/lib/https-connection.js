@@ -27,7 +27,7 @@ export default class HttpsConnection {
     this.webSocket.addEventListener('open', () => this.tlsConnection.handshake())
     this.webSocket.addEventListener('close', () => this.close())
     this.webSocket.addEventListener('message', event => this.tlsConnection.process(ab2str(event.data)))
-    this.webSocket.addEventListener('error', event => options.error(new Error('WebSocket connection failed: ' + event)))
+    this.webSocket.addEventListener('error', event => this._onError(new Error('WebSocket connection failed: ' + event)))
 
     this.tlsConnection = forge.tls.createConnection({
       server: false,
@@ -38,13 +38,17 @@ export default class HttpsConnection {
       tlsDataReady: connection => this._onTlsDataReady(),
       dataReady: connection => this._onDataReady(),
       closed: () => this.close(),
-      error: (connection, error) => this.options.error(error)
+      error: (connection, error) => this._onError(error)
     })
 
     this._restartTimeout()
   }
 
   send (request) {
+    if (this.closed) {
+      throw new Error('Connection is closed')
+    }
+
     this.requests.push(request)
 
     if (!this.isConnected) {
@@ -62,6 +66,16 @@ export default class HttpsConnection {
   }
 
   close () {
+    if (this.closed) {
+      return
+    }
+    this.closed = true
+
+    this.requests.forEach(request => {
+      clearTimeout(request.timeout)
+      request.processError(new Error('Connection closed'))
+    })
+
     this.tlsConnection.close()
     this.webSocket.close()
     this.options.closed()
@@ -80,6 +94,10 @@ export default class HttpsConnection {
     if (this.requests.length > 0) {
       const request = this.requests[0]
       this.tlsConnection.prepare(request.getData())
+      request.timeout = setTimeout(() => {
+        this.requests.shift()
+        request.processError(new Error('Request timed out'))
+      }, 3000)
     }
   }
 
@@ -108,6 +126,7 @@ export default class HttpsConnection {
     const request = this.requests[0]
 
     if (request.processData(data)) {
+      clearTimeout(request.timeout)
       this.requests.shift()
       this._sendNextRequest()
     }
@@ -119,6 +138,11 @@ export default class HttpsConnection {
     console.info('Connection timed out')
 
     this.timeout = null
+    this.close()
+  }
+
+  _onError (error) {
+    this.options.error(error)
     this.close()
   }
 }

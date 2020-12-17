@@ -78,16 +78,8 @@ export default function Home () {
   useEffect(async () => {
     const session = await obtainSession(router)
 
-    Promise.all([
-      getTimetablePreview(session)
-        .then(resp => setTimetable(resp)),
-      getMensaPlanPreview(session)
-        .then(resp => setMensaPlan(resp))
-    ])
-      .catch(err => {
-        console.error(err)
-        router.push('/login')
-      })
+    setTimetable(await getTimetablePreview(session))
+    setMensaPlan(await getMensaPlanPreview(session))
   }, [])
 
   return (

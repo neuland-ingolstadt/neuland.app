@@ -31,8 +31,10 @@ export default class HttpRequest {
           if (e instanceof SyntaxError) {
             // e.g. 'Bad request'
             this.options.error(new Error(`Response is not valid JSON (${this.response.body})`))
+            return true
           } else {
             this.options.error(e)
+            return true
           }
         }
       } else {
@@ -41,5 +43,9 @@ export default class HttpRequest {
     } else {
       return false
     }
+  }
+
+  processError (error) {
+    this.options.error(error)
   }
 }
