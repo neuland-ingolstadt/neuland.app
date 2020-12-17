@@ -72,14 +72,25 @@ HomeCard.propTypes = {
 
 export default function Home () {
   const [timetable, setTimetable] = useState(null)
+  const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
+  const [mensaPlanError, setMensaPlanError] = useState(null)
   const router = useRouter()
 
   useEffect(async () => {
     const session = await obtainSession(router)
 
-    setTimetable(await getTimetablePreview(session))
-    setMensaPlan(await getMensaPlanPreview(session))
+    try {
+      setTimetable(await getTimetablePreview(session))
+    } catch (e) {
+      setTimetableError(e.toString())
+    }
+
+    try {
+      setMensaPlan(await getMensaPlanPreview(session))
+    } catch (e) {
+      setMensaPlanError(e.toString())
+    }
   }, [])
 
   return (
@@ -100,7 +111,7 @@ export default function Home () {
           title="Stundenplan"
           link="/timetable"
         >
-          <ReactPlaceholder type="text" rows={4} ready={timetable}>
+          <ReactPlaceholder type="text" rows={4} ready={timetable || timetableError}>
             <ListGroup variant="flush">
             {timetable && timetable.map((x, i) =>
               <ListGroup.Item key={i}>
@@ -112,6 +123,11 @@ export default function Home () {
                 </div>
               </ListGroup.Item>
             )}
+            {timetableError &&
+              <ListGroup.Item>
+                {timetableError}
+              </ListGroup.Item>
+            }
             </ListGroup>
           </ReactPlaceholder>
         </HomeCard>
@@ -120,13 +136,18 @@ export default function Home () {
           title="Mensa"
           link="/mensa"
         >
-          <ReactPlaceholder type="text" rows={3} ready={mensaPlan}>
+          <ReactPlaceholder type="text" rows={3} ready={mensaPlan || mensaPlanError}>
             <ListGroup variant="flush">
               {mensaPlan && mensaPlan.map((x, i) =>
                 <ListGroup.Item key={i}>
                   {x}
                 </ListGroup.Item>
               )}
+              {mensaPlanError &&
+                <ListGroup.Item>
+                  {mensaPlanError}
+                </ListGroup.Item>
+              }
             </ListGroup>
           </ReactPlaceholder>
         </HomeCard>

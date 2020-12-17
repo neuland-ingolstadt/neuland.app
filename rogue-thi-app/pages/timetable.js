@@ -43,13 +43,8 @@ export default function Timetable () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
 
-  useEffect(() => {
-    getFriendlyTimetable(router)
-      .then(resp => setTimetable(resp))
-      .catch(err => {
-        console.error(err)
-        router.push('/login')
-      })
+  useEffect(async () => {
+    setTimetable(await getFriendlyTimetable(router))
   }, [])
 
   return (

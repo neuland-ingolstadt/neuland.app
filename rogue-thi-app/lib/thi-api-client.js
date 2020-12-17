@@ -37,7 +37,7 @@ export async function login (username, password) {
   })
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   return res.data[0]
@@ -71,7 +71,7 @@ export async function getPersonalData (session) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(KEY_GET_PERSONAL_DATA, res)
@@ -97,7 +97,7 @@ export async function getTimetable (session, date) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(key, res)
@@ -122,7 +122,7 @@ export async function getExams (session) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(KEY_GET_EXAMS, res)
@@ -142,7 +142,7 @@ export async function getGrades (session) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(KEY_GET_GRADES, res)
@@ -162,7 +162,7 @@ export async function getMensaPlan (session) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(KEY_GET_MENSA_PLAN, res)
@@ -187,7 +187,7 @@ export async function getFreeRooms (session, date) {
   }
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   cache.set(key, res)
@@ -211,7 +211,7 @@ export async function getLibraryReservations (session) {
     return []
   }
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   return res.data[1]
@@ -230,7 +230,7 @@ export async function getAvailableLibrarySeats (session) {
   })
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   return res.data[1]
@@ -255,7 +255,7 @@ export async function addLibraryReservation (session, roomId, day, start, end, p
   })
 
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   return res.data[1][0]
@@ -277,7 +277,7 @@ export async function removeLibraryReservation (session, reservationId) {
     return true // dafuq THI API?
   }
   if (res.status !== 0) {
-    throw res.data
+    throw new Error(res.data)
   } // e.g. 'Wrong credentials'
 
   return true

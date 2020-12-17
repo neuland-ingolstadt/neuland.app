@@ -77,7 +77,7 @@ export default function Library (props) {
 
   useEffect(async () => {
     const session = await obtainSession(router)
-    refreshData(session)
+    await refreshData(session)
   }, [])
 
   return (
