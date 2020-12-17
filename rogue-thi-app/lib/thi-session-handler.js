@@ -59,7 +59,7 @@ export async function obtainSession (router) {
 }
 
 export async function forgetSession (router) {
-  delete localStorage.sesssion
+  delete localStorage.session
   delete localStorage.sessionCreated
   delete localStorage.username
   delete localStorage.password
