@@ -30,18 +30,14 @@ export default function Login (props) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Rogue THI Login</title>
+        <title>Login</title>
       </Head>
 
       <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
-        <h1 className={styles.title}>
-          Rogue THI Login
-        </h1>
-
         { failure && <Alert variant="danger">{failure}</Alert>}
 
         <Form.Group>
-          <Form.Label>THI Benutzername</Form.Label>
+          <Form.Label>THI-Benutzername</Form.Label>
           <Form.Control
             type="text"
             placeholder="abc1234"
@@ -77,11 +73,17 @@ export default function Login (props) {
         </Button>
       </Form>
 
-      <footer className={styles.footer}>
-        <a href="https://github.com/M4GNV5/THI-App">Quellcode auf GitHub</a><br />
-        Diese App wird von Studenten für Studenten entwickelt. <br />
-        Es ist <strong>kein offizielles Angebot</strong> der Technischen Hochschule Ingolstadt. <br />
-      </footer>
+      <div className={styles.footer}>
+        <p>
+          Dies ist eine inoffizielle App für Studierende der Technischen Hochschule Ingolstadt.
+        </p>
+        <p>
+          Sie wird von Studierenden entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
+        </p>
+        <p>
+          <a href="https://github.com/M4GNV5/THI-App" target="_blank" rel="noreferrer">Der Quellcode ist auf GitHub verfügbar.</a>
+        </p>
+      </div>
     </div>
   )
 }
