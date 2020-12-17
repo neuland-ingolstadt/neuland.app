@@ -1,6 +1,6 @@
 import * as forge from 'node-forge/lib/index.all'
 
-const DEFAULT_TIMEOUT = 10000
+const DEFAULT_TIMEOUT = 5000
 
 function ab2str (buf) {
   return String.fromCharCode.apply(null, new Uint8Array(buf))
@@ -72,7 +72,6 @@ export default class HttpsConnection {
     this.closed = true
 
     this.requests.forEach(request => {
-      clearTimeout(request.timeout)
       request.processError(new Error('Connection closed'))
     })
 
@@ -94,10 +93,6 @@ export default class HttpsConnection {
     if (this.requests.length > 0) {
       const request = this.requests[0]
       this.tlsConnection.prepare(request.getData())
-      request.timeout = setTimeout(() => {
-        this.requests.shift()
-        request.processError(new Error('Request timed out'))
-      }, 3000)
     }
   }
 
@@ -126,7 +121,6 @@ export default class HttpsConnection {
     const request = this.requests[0]
 
     if (request.processData(data)) {
-      clearTimeout(request.timeout)
       this.requests.shift()
       this._sendNextRequest()
     }
