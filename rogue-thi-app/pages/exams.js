@@ -45,12 +45,21 @@ export default function Exams () {
       })
     )
 
-    const newGrades = gradeList.filter(x => x.note && x.ects)
-    setGrades(newGrades)
+    gradeList.forEach(x => {
+      if(x.anrech === '*' && x.note === '')
+        x.note = 'E*';
+    })
 
-    setMissingGrades(gradeList
-      .filter(x => !x.note)
-      .filter(x => !newGrades.some(y => x.titel.trim() === y.titel.trim())))
+    const deduplicatedGrades = gradeList
+      .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+
+    const finishedGrades = deduplicatedGrades.filter(x => x.note)
+    setGrades(finishedGrades)
+
+    setMissingGrades(deduplicatedGrades
+      .filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+    )
+
   }, [])
 
   return (
