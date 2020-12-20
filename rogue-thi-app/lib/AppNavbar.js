@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -7,13 +7,18 @@ import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
+
+import { getOperatingSystem, OS_IOS, OS_OTHER } from './user-agent'
 
 import styles from './AppNavbar.module.css'
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
+  const [os, setOS] = useState(OS_OTHER)
+
+  useEffect(() => setOS(getOperatingSystem()), [])
 
   if (typeof showBack === 'undefined') {
     showBack = true
@@ -40,12 +45,12 @@ export default function AppNavbar ({ title, showBack, children }) {
         <link rel="apple-touch-icon" href="/favicon512.png"></link>
         <meta name="theme-color" content="#005a9b" />
       </Head>
-      <Navbar sticky="top" className={styles.navbar + ' justify-content-between'}>
+      <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBack && (
             <Button variant="link" onClick={() => goBack()} className={styles.back}>
               <FontAwesomeIcon icon={faChevronLeft} />
-              {' Zurück'}
+              {os === OS_IOS && ' Übersicht'}
             </Button>
           )}
         </Navbar.Brand>
@@ -56,7 +61,7 @@ export default function AppNavbar ({ title, showBack, children }) {
           {children &&
             <Dropdown align="right">
               <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-                <FontAwesomeIcon icon={faEllipsisH} />
+                <FontAwesomeIcon icon={os === OS_IOS ? faEllipsisH : faEllipsisV} />
               </Dropdown.Toggle>
 
               <Dropdown.Menu align="right">
