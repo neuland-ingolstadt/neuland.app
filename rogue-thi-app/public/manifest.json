@@ -1,6 +1,6 @@
 {
-  "name": "Rogue THI App",
-  "short_name": "Rogue THI",
+  "name": "neuland.app",
+  "short_name": "neuland.app",
   "theme_color": "#005a9b",
   "background_color": "#ffffff",
   "display": "fullscreen",
