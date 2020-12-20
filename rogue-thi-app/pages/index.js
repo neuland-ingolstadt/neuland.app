@@ -17,6 +17,7 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/Home.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
+import InstallPrompt from '../lib/InstallPrompt'
 import { obtainSession, forgetSession } from '../lib/thi-session-handler'
 import { getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
@@ -108,6 +109,8 @@ export default function Home () {
       </AppNavbar>
 
       <div className={styles.cardDeck}>
+
+        <InstallPrompt />
 
         <HomeCard
           title="Stundenplan"
