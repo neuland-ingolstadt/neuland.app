@@ -80,37 +80,41 @@ export default function Rooms () {
   const [filterResults, setFilterResults] = useState(null)
 
   useEffect(async () => {
-    const now = new Date()
+    try {
+      const now = new Date()
 
-    const session = await obtainSession(router)
-    const data = await getFreeRooms(session, now)
+      const session = await obtainSession(router)
+      const data = await getFreeRooms(session, now)
 
-    const days = data.rooms.map(day => {
-      const result = {}
-      result.date = new Date(day.datum)
-      result.hours = {}
+      const days = data.rooms.map(day => {
+        const result = {}
+        result.date = new Date(day.datum)
+        result.hours = {}
 
-      day.rtypes.forEach(roomType => Object.entries(roomType.stunden).forEach(([hIndex, hour]) => {
-        const to = new Date(day.datum + 'T' + hour.bis)
-        if (to < now) { return }
+        day.rtypes.forEach(roomType => Object.entries(roomType.stunden).forEach(([hIndex, hour]) => {
+          const to = new Date(day.datum + 'T' + hour.bis)
+          if (to < now) { return }
 
-        if (!result.hours[hIndex]) {
-          result.hours[hIndex] = {
-            from: new Date(day.datum + 'T' + hour.von),
-            to: new Date(day.datum + 'T' + hour.bis),
-            roomTypes: {}
+          if (!result.hours[hIndex]) {
+            result.hours[hIndex] = {
+              from: new Date(day.datum + 'T' + hour.von),
+              to: new Date(day.datum + 'T' + hour.bis),
+              roomTypes: {}
+            }
           }
-        }
 
-        result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.split(', ')
-      }))
+          result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.split(', ')
+        }))
 
-      return result
-    })
-      .filter(day => Object.entries(day.hours) !== 0)
+        return result
+      })
+        .filter(day => Object.entries(day.hours) !== 0)
 
-    console.log(0, days)
-    setFreeRooms(days)
+      setFreeRooms(days)
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
   }, [])
 
   async function filter () {

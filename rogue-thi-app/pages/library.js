@@ -55,11 +55,13 @@ export default function Library (props) {
     setReservationDay(null)
     setReservationTime(null)
   }
+
   async function deleteReservation (id) {
     const session = await obtainSession(router)
     await removeLibraryReservation(session, id)
     await refreshData(session)
   }
+
   async function addReservation () {
     const session = await obtainSession(router)
     await addLibraryReservation(
@@ -75,8 +77,13 @@ export default function Library (props) {
   }
 
   useEffect(async () => {
-    const session = await obtainSession(router)
-    await refreshData(session)
+    try {
+      const session = await obtainSession(router)
+      await refreshData(session)
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
   }, [])
 
   return (

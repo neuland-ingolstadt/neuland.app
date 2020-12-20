@@ -13,11 +13,16 @@ export default function Personal (props) {
   const router = useRouter()
 
   useEffect(async () => {
-    const session = await obtainSession(router)
-    const response = await getPersonalData(session)
-    const data = response.persdata
-    data.pcounter = response.pcounter
-    setUserdata(data)
+    try {
+      const session = await obtainSession(router)
+      const response = await getPersonalData(session)
+      const data = response.persdata
+      data.pcounter = response.pcounter
+      setUserdata(data)
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
   }, [])
 
   return (

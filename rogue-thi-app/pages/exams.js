@@ -22,44 +22,49 @@ export default function Exams () {
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
-    const session = await obtainSession(router)
-    const [examList, gradeList] = await Promise.all([
-      getExams(session),
-      getGrades(session)
-    ])
+    try {
+      const session = await obtainSession(router)
+      const [examList, gradeList] = await Promise.all([
+        getExams(session),
+        getGrades(session)
+      ])
 
-    setExams(examList
-      .map(x => {
-        if (x.exm_date && x.exam_time) {
-          const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
-          x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
-        } else {
-          x.date = null
+      setExams(examList
+        .map(x => {
+          if (x.exm_date && x.exam_time) {
+            const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
+            x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
+          } else {
+            x.date = null
+          }
+
+          x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
+          x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
+            .filter((v, i, a) => a.indexOf(v) === i)
+
+          return x
+        })
+      )
+
+      gradeList.forEach(x => {
+        if (x.anrech === '*' && x.note === '') {
+          x.note = 'E*'
         }
-
-        x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
-        x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
-          .filter((v, i, a) => a.indexOf(v) === i)
-
-        return x
       })
-    )
 
-    gradeList.forEach(x => {
-      if(x.anrech === '*' && x.note === '')
-        x.note = 'E*';
-    })
+      const deduplicatedGrades = gradeList
+        .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
 
-    const deduplicatedGrades = gradeList
-      .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+      const finishedGrades = deduplicatedGrades.filter(x => x.note)
+      setGrades(finishedGrades)
 
-    const finishedGrades = deduplicatedGrades.filter(x => x.note)
-    setGrades(finishedGrades)
-
-    setMissingGrades(deduplicatedGrades
-      .filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
-    )
-
+      setMissingGrades(
+        deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+      )
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
   }, [])
 
   return (

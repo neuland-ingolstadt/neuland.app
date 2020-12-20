@@ -42,19 +42,24 @@ export default function Timetable () {
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
 
   useEffect(async () => {
-    const session = await obtainSession(router)
-    const data = await getMensaPlan(session)
+    try {
+      const session = await obtainSession(router)
+      const data = await getMensaPlan(session)
 
-    const days = data.map(x => ({
-      date: parseGermanDate(x.tag),
-      meals: Object.values(x.gerichte).map(meal => ({
-        name: meal.name[1],
-        prices: meal.name.slice(2, 5),
-        supplements: meal.zusatz.split(',')
+      const days = data.map(x => ({
+        date: parseGermanDate(x.tag),
+        meals: Object.values(x.gerichte).map(meal => ({
+          name: meal.name[1],
+          prices: meal.name.slice(2, 5),
+          supplements: meal.zusatz.split(',')
+        }))
       }))
-    }))
 
-    setMensaPlan(days)
+      setMensaPlan(days)
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
   }, [])
 
   useEffect(() => {
