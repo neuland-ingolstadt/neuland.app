@@ -17,7 +17,7 @@ function str2ab (str) {
 
 export default class HttpsConnection {
   constructor (options) {
-    console.info('Creating new connection')
+    console.debug('Creating new connection')
 
     this.options = options
     this.requests = []
@@ -52,16 +52,16 @@ export default class HttpsConnection {
     this.requests.push(request)
 
     if (!this.isConnected) {
-      console.info('Not connected yet, delaying')
+      console.debug('Not connected yet, delaying')
       return
     }
 
     if (this.requests.length > 1) {
-      console.info('There is a running request, delaying')
+      console.debug('There is a running request, delaying')
       return
     }
 
-    console.info('This is the first request, starting immediately')
+    console.debug('No running requests, starting immediately')
     this._sendNextRequest()
   }
 
@@ -72,7 +72,7 @@ export default class HttpsConnection {
     this.closed = true
 
     this.requests.forEach(request => {
-      request.processError(new Error('Connection closed'))
+      request.processError(new Error('Connection was closed'))
     })
 
     this.tlsConnection.close()
@@ -129,7 +129,7 @@ export default class HttpsConnection {
   }
 
   _onTimeout () {
-    console.info('Connection timed out')
+    console.debug('Connection closed due to timeout')
 
     this.timeout = null
     this.close()

@@ -5,7 +5,6 @@ import LocalStorageCache from './localstorage-cache'
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
 
-const KEY_IS_ALIVE = 'isAlive'
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
 const KEY_GET_EXAMS = 'getExams'
@@ -44,17 +43,12 @@ export async function login (username, password) {
 }
 
 export async function isAlive (session) {
-  let res = cache.get(KEY_IS_ALIVE)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'session',
-      method: 'isalive',
-      format: 'json',
-      session
-    })
-  }
-
-  cache.set(KEY_IS_ALIVE, res)
+  const res = await thiApiRequest({
+    service: 'session',
+    method: 'isalive',
+    format: 'json',
+    session
+  })
 
   return res.data === 'STATUS_OK'
 }

@@ -9,17 +9,17 @@
   "start_url": "/",
   "icons": [
     {
-      "src": "public/favicon512.png",
+      "src": "/favicon512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "public/favicon64.png",
+      "src": "/favicon64.png",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "public/favicon32.png",
+      "src": "/favicon32.png",
       "sizes": "32x32",
       "type": "image/png"
     }

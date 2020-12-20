@@ -4,10 +4,11 @@
 
 import HttpsConnection from './https-connection'
 import HttpRequest from './http-request'
+import { version } from '../package.json'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
-const USER_AGENT = 'Rogue THI-App https://github.com/M4GNV5/THI-App'
+const USER_AGENT = `neuland.app/${version} (+https://github.com/M4GNV5/THI-App)`
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 
 // T-TeleSec GlobalRoot Class 2

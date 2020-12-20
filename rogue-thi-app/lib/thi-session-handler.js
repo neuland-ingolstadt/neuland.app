@@ -64,5 +64,5 @@ export async function forgetSession (router) {
   delete localStorage.username
   delete localStorage.password
 
-  router.push('/login')
+  router.replace('/login')
 }

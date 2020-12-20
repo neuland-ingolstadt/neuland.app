@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import ReactPlaceholder from 'react-placeholder'
 
@@ -99,13 +100,15 @@ export default function Home () {
   return (
     <Container>
       <AppNavbar title="Übersicht" showBack={false}>
-        <Button variant="link" onClick={() => forgetSession(router)}>
-          Logout
-        </Button>
-        <br />
-        <Button variant="link" href="/debug">
+        <Dropdown.Item variant="link" href="https://github.com/M4GNV5/THI-App/" target="_blank" rel="noreferrer">
+          Quellcode auf GitHub
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/debug">
           API Playground
-        </Button>
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+          Ausloggen
+        </Dropdown.Item>
       </AppNavbar>
 
       <div className={styles.cardDeck}>

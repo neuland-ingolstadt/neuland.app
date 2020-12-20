@@ -6,6 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
@@ -80,11 +81,9 @@ export default function Timetable () {
   return (
     <Container>
       <AppNavbar title="Mensa">
-        <Form inline>
-          <Button variant="link" onClick={() => setShowAllergenSelection(true)}>
-            Allergene auswählen
-          </Button>
-        </Form>
+        <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
+          Allergene auswählen
+        </Dropdown.Item>
       </AppNavbar>
 
       {mensaPlan && mensaPlan.map((day, idx) =>
