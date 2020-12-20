@@ -83,13 +83,15 @@ export default function Home () {
     try {
       setTimetable(await getTimetablePreview(session))
     } catch (e) {
-      setTimetableError(e.toString())
+      console.error(e)
+      setTimetableError(e)
     }
 
     try {
       setMensaPlan(await getMensaPlanPreview(session))
     } catch (e) {
-      setMensaPlanError(e.toString())
+      console.error(e)
+      setMensaPlanError(e)
     }
   }, [])
 
@@ -125,7 +127,7 @@ export default function Home () {
             )}
             {timetableError &&
               <ListGroup.Item>
-                {timetableError}
+                Fehler beim Abruf des Stundenplans.
               </ListGroup.Item>
             }
             </ListGroup>
@@ -145,7 +147,8 @@ export default function Home () {
               )}
               {mensaPlanError &&
                 <ListGroup.Item>
-                  {mensaPlanError}
+                  Fehler beim Abruf des Speiseplans.<br />
+                  Die Mensa mag gerade nicht. :(
                 </ListGroup.Item>
               }
             </ListGroup>
