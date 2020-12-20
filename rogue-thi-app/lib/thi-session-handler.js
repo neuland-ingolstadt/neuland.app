@@ -53,7 +53,7 @@ export async function obtainSession (router) {
   if (session) {
     return session
   } else {
-    router.push('/login')
+    router.replace('/login')
     return null
   }
 }
