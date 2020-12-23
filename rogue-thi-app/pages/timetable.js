@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
+import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -56,31 +57,32 @@ export default function Timetable () {
     <Container>
       <AppNavbar title="Stundenplan" />
 
-      {timetable && timetable.map((group, idx) =>
-        <ListGroup key={idx}>
-          <h4 className={styles.dateBoundary}>
-            {formatNearDate(group.date)}
-          </h4>
+      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
+        {timetable && timetable.map((group, idx) =>
+          <ListGroup key={idx}>
+            <h4 className={styles.dateBoundary}>
+              {formatNearDate(group.date)}
+            </h4>
 
-          {group.items.map((item, idx) =>
-            <ListGroup.Item key={idx} className={styles.item}>
-              <div className={styles.left}>
-                <div className={styles.name}>
-                  {item.veranstaltung}
+            {group.items.map((item, idx) =>
+              <ListGroup.Item key={idx} className={styles.item}>
+                <div className={styles.left}>
+                  <div className={styles.name}>
+                    {item.veranstaltung}
+                  </div>
+                  <div className={styles.room}>
+                    {item.raum}
+                  </div>
                 </div>
-                <div className={styles.room}>
-                  {item.raum}
+                <div className={styles.right}>
+                  {formatFriendlyTime(item.start_date)} <br />
+                  {formatFriendlyTime(item.end_date)}
                 </div>
-              </div>
-              <div className={styles.right}>
-                {formatFriendlyTime(item.start_date)} <br />
-                {formatFriendlyTime(item.end_date)}
-              </div>
-            </ListGroup.Item>
-          )}
-        </ListGroup>
-      )}
-      <br />
+              </ListGroup.Item>
+            )}
+          </ListGroup>
+        )}
+      </ReactPlaceholder>
     </Container>
   )
 }

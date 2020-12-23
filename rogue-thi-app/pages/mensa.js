@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Dropdown from 'react-bootstrap/Dropdown'
+import ReactPlaceholder from 'react-placeholder'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
@@ -86,49 +87,51 @@ export default function Timetable () {
         </Dropdown.Item>
       </AppNavbar>
 
-      {mensaPlan && mensaPlan.map((day, idx) =>
-        <ListGroup key={idx}>
-          <h4 className={styles.dateBoundary}>
-            {formatNearDate(day.date)}
-          </h4>
+      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={mensaPlan}>
+        {mensaPlan && mensaPlan.map((day, idx) =>
+          <ListGroup key={idx}>
+            <h4 className={styles.dateBoundary}>
+              {formatNearDate(day.date)}
+            </h4>
 
-          {day.meals.map((meal, idx) =>
-            <ListGroup.Item
-              key={idx}
-              className={styles.item}
-              onClick={() => setShowAllergenDetails(meal.supplements)}
-              action
-            >
-              <div className={styles.left}>
-                <div className={styles.name}>
-                  {meal.name}
-                </div>
-                <div className={styles.room}>
-                  <small style={{ color: containsSelectedAllergen(meal.supplements) && COLOR_WARN }}>
-                    {containsSelectedAllergen(meal.supplements) && (
-                      <span>
-                        <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
-                        {' '}
-                      </span>
-                    )}
-                    {meal.supplements.map((supplement, idx) => (
-                      <span key={idx}>
-                        {idx !== 0 && ', '}
+            {day.meals.map((meal, idx) =>
+              <ListGroup.Item
+                key={idx}
+                className={styles.item}
+                onClick={() => setShowAllergenDetails(meal.supplements)}
+                action
+              >
+                <div className={styles.left}>
+                  <div className={styles.name}>
+                    {meal.name}
+                  </div>
+                  <div className={styles.room}>
+                    <small style={{ color: containsSelectedAllergen(meal.supplements) && COLOR_WARN }}>
+                      {containsSelectedAllergen(meal.supplements) && (
                         <span>
-                          {supplement}
+                          <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
+                          {' '}
                         </span>
-                      </span>
-                    ))}
-                  </small>
+                      )}
+                      {meal.supplements.map((supplement, idx) => (
+                        <span key={idx}>
+                          {idx !== 0 && ', '}
+                          <span>
+                            {supplement}
+                          </span>
+                        </span>
+                      ))}
+                    </small>
+                  </div>
                 </div>
-              </div>
-              <div className={styles.right}>
-                {meal.prices.join(' / ')}
-              </div>
-            </ListGroup.Item>
-          )}
-        </ListGroup>
-      )}
+                <div className={styles.right}>
+                  {meal.prices.join(' / ')}
+                </div>
+              </ListGroup.Item>
+            )}
+          </ListGroup>
+        )}
+      </ReactPlaceholder>
 
       <br />
 

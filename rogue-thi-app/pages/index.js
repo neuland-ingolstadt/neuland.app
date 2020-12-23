@@ -119,7 +119,7 @@ export default function Home () {
           title="Stundenplan"
           link="/timetable"
         >
-          <ReactPlaceholder type="text" rows={4} ready={timetable || timetableError}>
+          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={timetable || timetableError}>
             <ListGroup variant="flush">
             {timetable && timetable.map((x, i) =>
               <ListGroup.Item key={i}>
@@ -131,6 +131,11 @@ export default function Home () {
                 </div>
               </ListGroup.Item>
             )}
+            {timetable && timetable.length === 0 &&
+              <ListGroup.Item>
+                Der Stundenplan ist leer.
+              </ListGroup.Item>
+            }
             {timetableError &&
               <ListGroup.Item>
                 Fehler beim Abruf des Stundenplans.
@@ -144,13 +149,18 @@ export default function Home () {
           title="Mensa"
           link="/mensa"
         >
-          <ReactPlaceholder type="text" rows={3} ready={mensaPlan || mensaPlanError}>
+          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={mensaPlan || mensaPlanError}>
             <ListGroup variant="flush">
               {mensaPlan && mensaPlan.map((x, i) =>
                 <ListGroup.Item key={i}>
                   {x}
                 </ListGroup.Item>
               )}
+              {mensaPlan && mensaPlan.length === 0 &&
+                <ListGroup.Item>
+                  Der Speiseplan ist leer.
+                </ListGroup.Item>
+              }
               {mensaPlanError &&
                 <ListGroup.Item>
                   Fehler beim Abruf des Speiseplans.<br />

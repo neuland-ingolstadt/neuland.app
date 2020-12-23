@@ -99,7 +99,7 @@ export default function Exams () {
             Prüfungen
           </h4>
 
-          <ReactPlaceholder type="text" rows={2} ready={exams}>
+          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
             {exams && exams.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
                 <div className={styles.left}>
@@ -120,7 +120,7 @@ export default function Exams () {
           Noten
         </h4>
 
-        <ReactPlaceholder type="text" rows={4} ready={grades}>
+        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={grades}>
           {grades && grades.map((item, idx) =>
             <ListGroup.Item key={idx} className={styles.item}>
               <div className={styles.left}>
@@ -141,7 +141,7 @@ export default function Exams () {
           Ausstehende Fächer
         </h4>
 
-        <ReactPlaceholder type="text" rows={4} ready={missingGrades}>
+        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={missingGrades}>
           {missingGrades && missingGrades.map((item, idx) =>
             <ListGroup.Item key={idx} className={styles.item}>
               <div className={styles.left}>

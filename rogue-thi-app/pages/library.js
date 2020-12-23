@@ -133,7 +133,7 @@ export default function Library (props) {
       <h4 className={styles.heading}>
         Deine Reservierungen
       </h4>
-      <ReactPlaceholder type="text" rows={2} ready={reservations}>
+      <ReactPlaceholder type="text" rows={3} color="#eeeeee" ready={reservations}>
         {reservations && reservations.length === 0 &&
           <p>
             Du hast keine Reservierungen.
@@ -160,7 +160,7 @@ export default function Library (props) {
       <h4 className={styles.heading}>
         Verfügbare Plätze
       </h4>
-      <ReactPlaceholder type="text" rows={6} ready={available && available.length > 0}>
+      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={available && available.length > 0}>
         <ListGroup>
           {available && available.map((day, i) =>
             day.resource.map((time, j) =>
