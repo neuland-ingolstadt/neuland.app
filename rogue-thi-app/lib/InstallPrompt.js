@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faDownload } from '@fortawesome/free-solid-svg-icons'
 
 import { getOperatingSystem, OS_IOS, OS_ANDROID } from './user-agent'
 
@@ -36,6 +36,8 @@ export default function InstallPrompt () {
       <Card className={styles.card}>
         <Card.Body>
           <Card.Title>
+            <FontAwesomeIcon icon={faDownload} fixedWidth />
+            {' '}
             Installation
             <Button variant="link" className={styles.cardButton} onClick={() => close()}>
               <FontAwesomeIcon icon={faTimes} />

@@ -13,7 +13,15 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import ReactPlaceholder from 'react-placeholder'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronRight,
+  faCalendar,
+  faUtensils,
+  faDoorOpen,
+  faBook,
+  faPen,
+  faUser
+} from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Home.module.css'
 
@@ -47,12 +55,14 @@ async function getMensaPlanPreview (session) {
     .map(x => x.name[1])
 }
 
-function HomeCard ({ link, title, children }) {
+function HomeCard ({ link, icon, title, children }) {
   return (
     <Link href={link}>
       <Card className={styles.card}>
         <Card.Body>
           <Card.Title>
+            <FontAwesomeIcon icon={icon} fixedWidth />
+            {' '}
             {title}
             <Button variant="link" className={styles.cardButton}>
               <FontAwesomeIcon icon={faChevronRight} />
@@ -68,6 +78,7 @@ function HomeCard ({ link, title, children }) {
 }
 HomeCard.propTypes = {
   link: PropTypes.string,
+  icon: PropTypes.object,
   title: PropTypes.string,
   children: PropTypes.any
 }
@@ -116,6 +127,7 @@ export default function Home () {
         <InstallPrompt />
 
         <HomeCard
+          icon={faCalendar}
           title="Stundenplan"
           link="/timetable"
         >
@@ -146,6 +158,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faUtensils}
           title="Mensa"
           link="/mensa"
         >
@@ -172,6 +185,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faDoorOpen}
           title="Räume"
           link="/rooms"
         >
@@ -179,6 +193,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faBook}
           title="Bibliothek"
           link="/library"
         >
@@ -186,6 +201,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faPen}
           title="Prüfungen"
           link="/exams"
         >
@@ -193,6 +209,7 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faUser}
           title="Konto"
           link="/personal"
         >
