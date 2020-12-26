@@ -40,6 +40,7 @@ export default function Login (props) {
           <Form.Label>THI-Benutzername</Form.Label>
           <Form.Control
             type="text"
+            autoComplete="username"
             placeholder="abc1234"
             className="form-control"
             value={username}
@@ -51,6 +52,7 @@ export default function Login (props) {
           <Form.Label>Passwort</Form.Label>
           <Form.Control
             type="password"
+            autoComplete="current-password"
             className="form-control"
             value={password}
             onChange={e => setPassword(e.target.value)}
