@@ -8,8 +8,9 @@ import { version } from '../package.json'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
-const USER_AGENT = `neuland.app/${version} (+https://github.com/M4GNV5/THI-App)`
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
+const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
+const USER_AGENT = `neuland.app/${version} (+${PROXY_URL})`
 
 // T-TeleSec GlobalRoot Class 2
 // valid until 02.10.2033, 1:59:59 CEST

@@ -11,6 +11,7 @@ import { createSession } from '../lib/thi-session-handler'
 import styles from '../styles/Common.module.css'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
+const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
 export default function Login (props) {
   const router = useRouter()
@@ -60,7 +61,7 @@ export default function Login (props) {
             onChange={e => setPassword(e.target.value)}
           />
           <Form.Text className="text-muted">
-            <a href="https://github.com/M4GNV5/THI-App/blob/master/data-security-de.md">Sind meine Daten sicher?</a>
+            <a href={`${GIT_URL}/blob/master/data-security-de.md`}>Sind meine Daten sicher?</a>
           </Form.Text>
         </Form.Group>
 
@@ -83,7 +84,7 @@ export default function Login (props) {
           Sie wird von Studierenden entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
         </p>
         <p>
-          <a href="https://github.com/M4GNV5/THI-App" target="_blank" rel="noreferrer">Der Quellcode ist auf GitHub verfügbar.</a>
+          <a href={GIT_URL} target="_blank" rel="noreferrer">Der Quellcode ist auf GitHub verfügbar.</a>
         </p>
         <p>
           <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum und Datenschutz</a>

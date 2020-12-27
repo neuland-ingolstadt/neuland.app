@@ -14,6 +14,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Link from 'next/link'
 
+const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
+
 export default function Debug () {
   const [parameters, setParameters] = useState([])
   const [result, setResult] = useState('')
@@ -82,7 +84,7 @@ export default function Debug () {
 
       <h3 className={styles.heading}>Documentation</h3>
       You can find an inofficial API documentation{' '}
-      <Link href="https://github.com/M4GNV5/THI-App/blob/master/thi-rest-api.md">
+      <Link href={`${GIT_URL}/blob/master/thi-rest-api.md`}>
         here on Github
       </Link>
       <br />
