@@ -112,7 +112,8 @@ export default function Library (props) {
             <Form.Label>Sitz:</Form.Label>
             <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
               <option value={-1}>Egal</option>
-            {reservationTime && reservationRoom && reservationTime.resources[reservationRoom].seats.map((x, idx) =>
+            {reservationTime && reservationRoom
+              && Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
               <option key={idx} value={x}>
                 {x}
               </option>
