@@ -39,8 +39,16 @@ export default function Exams () {
           }
 
           x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
-          x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
-            .filter((v, i, a) => a.indexOf(v) === i)
+
+          try
+          {
+            x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
+              .filter((v, i, a) => a.indexOf(v) === i)
+          }
+          catch(e)
+          {
+            x.allowed_helpers = x.hilfsmittel.slice(1, -1).split(",")
+          }
 
           return x
         })
