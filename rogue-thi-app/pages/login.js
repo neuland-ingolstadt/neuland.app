@@ -10,6 +10,8 @@ import { createSession } from '../lib/thi-session-handler'
 
 import styles from '../styles/Common.module.css'
 
+const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
+
 export default function Login (props) {
   const router = useRouter()
 
@@ -77,13 +79,14 @@ export default function Login (props) {
 
       <div className={styles.footer}>
         <p>
-          Dies ist eine inoffizielle App für Studierende der Technischen Hochschule Ingolstadt.
-        </p>
-        <p>
+          Dies ist eine inoffizielle App für Studierende der Technischen Hochschule Ingolstadt.<br />
           Sie wird von Studierenden entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
         </p>
         <p>
           <a href="https://github.com/M4GNV5/THI-App" target="_blank" rel="noreferrer">Der Quellcode ist auf GitHub verfügbar.</a>
+        </p>
+        <p>
+          <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum und Datenschutz</a>
         </p>
       </div>
     </div>

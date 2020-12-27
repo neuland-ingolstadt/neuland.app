@@ -31,6 +31,8 @@ import { obtainSession, forgetSession } from '../lib/thi-session-handler'
 import { getTimetable, getMensaPlan } from '../lib/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
+const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
+
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
   const now = new Date()
@@ -111,14 +113,17 @@ export default function Home () {
   return (
     <Container>
       <AppNavbar title="Übersicht" showBack={false}>
-        <Dropdown.Item variant="link" href="https://github.com/M4GNV5/THI-App/" target="_blank" rel="noreferrer">
-          Quellcode auf GitHub
-        </Dropdown.Item>
         <Dropdown.Item variant="link" href="/debug">
           API Playground
         </Dropdown.Item>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="https://github.com/M4GNV5/THI-App/" target="_blank" rel="noreferrer">
+          Quellcode auf GitHub
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
+          Impressum und Datenschutz
         </Dropdown.Item>
       </AppNavbar>
 
