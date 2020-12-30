@@ -7,3 +7,7 @@
 .mapContainer {
   flex: 1;
 }
+
+.searchForm {
+  margin-bottom: 20px;
+}
