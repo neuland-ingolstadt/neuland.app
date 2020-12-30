@@ -13,6 +13,7 @@ import AppNavbar from '../lib/AppNavbar'
 import { obtainSession } from '../lib/thi-session-handler'
 import { getExams, getGrades } from '../lib/thi-api-client'
 import { formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
+import { parse as parsePostgresArray } from 'postgres-array'
 
 export default function Exams () {
   const router = useRouter()
@@ -39,16 +40,8 @@ export default function Exams () {
           }
 
           x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
-
-          try
-          {
-            x.allowed_helpers = JSON.parse('[' + x.hilfsmittel.slice(1, -1) + ']')
-              .filter((v, i, a) => a.indexOf(v) === i)
-          }
-          catch(e)
-          {
-            x.allowed_helpers = x.hilfsmittel.slice(1, -1).split(",")
-          }
+          x.allowed_helpers = parsePostgresArray(x.hilfsmittel)
+            .filter((v, i, a) => a.indexOf(v) === i)
 
           return x
         })
