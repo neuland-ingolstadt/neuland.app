@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
@@ -7,22 +8,18 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
+import styles from '../../styles/Rooms.module.css'
 
-import styles from '../styles/Rooms.module.css'
-
-import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
-import { getFreeRooms } from '../lib/thi-api-client'
-import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
-import { getRoomOpenings } from '../lib/api-converter'
+import AppNavbar from '../../lib/AppNavbar'
+import { obtainSession } from '../../lib/thi-session-handler'
+import { getFreeRooms } from '../../lib/thi-api-client'
+import { formatFriendlyTime } from '../../lib/date-utils'
+import { getRoomOpenings } from '../../lib/api-converter'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
-const BUILDING_PRESET = 'G'
+const BUILDINGS_ALL = 'Alle'
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const DURATION_PRESET = '01:00'
-const TUX_ROOMS = ['G308']
 
 function getISODate (date) {
   return date.getFullYear().toString().padStart(4, '0') + '-' +
@@ -62,7 +59,7 @@ async function filterRooms (session, building, date, time, duration) {
       }))
     )
     .filter(opening =>
-      opening.room.toLowerCase().startsWith(building.toLowerCase()) &&
+      (building === BUILDINGS_ALL || opening.room.toLowerCase().startsWith(building.toLowerCase())) &&
       beginDate > opening.from &&
       endDate < opening.until
     )
@@ -71,64 +68,30 @@ async function filterRooms (session, building, date, time, duration) {
 
 export default function Rooms () {
   const router = useRouter()
-  const [freeRooms, setFreeRooms] = useState(null)
 
-  const [building, setBuilding] = useState(BUILDING_PRESET)
+  const [building, setBuilding] = useState(BUILDINGS_ALL)
   const [date, setDate] = useState(getISODate(new Date()))
   const [time, setTime] = useState(getISOTime(new Date()))
   const [duration, setDuration] = useState(DURATION_PRESET)
+
+  const [searching, setSearching] = useState(false)
   const [filterResults, setFilterResults] = useState(null)
 
-  useEffect(async () => {
-    try {
-      const now = new Date()
-
-      const session = await obtainSession(router)
-      const data = await getFreeRooms(session, now)
-
-      const days = data.rooms.map(day => {
-        const result = {}
-        result.date = new Date(day.datum)
-        result.hours = {}
-
-        day.rtypes.forEach(roomType => Object.entries(roomType.stunden).forEach(([hIndex, hour]) => {
-          const to = new Date(day.datum + 'T' + hour.bis)
-          if (to < now) { return }
-
-          if (!result.hours[hIndex]) {
-            result.hours[hIndex] = {
-              from: new Date(day.datum + 'T' + hour.von),
-              to: new Date(day.datum + 'T' + hour.bis),
-              roomTypes: {}
-            }
-          }
-
-          result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.split(', ')
-        }))
-
-        return result
-      })
-        .filter(day => Object.entries(day.hours) !== 0)
-
-      setFreeRooms(days)
-    } catch (e) {
-      console.error(e)
-      alert(e)
-    }
-  }, [])
-
   async function filter () {
+    setSearching(true)
+    setFilterResults(null)
+
     const session = await obtainSession(router)
     const rooms = await filterRooms(session, building, date, time, duration)
+
     console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)
   }
 
   return (
     <Container>
-      <AppNavbar title="Räume" />
+      <AppNavbar title="Raumsuche" />
 
-      <h3>Raumsuche</h3>
       <Form>
         <div className={styles.searchForm}>
           <Form.Group>
@@ -140,6 +103,7 @@ export default function Rooms () {
               value={building}
               onChange={e => setBuilding(e.target.value)}
             >
+              <option key={BUILDINGS_ALL}>{BUILDINGS_ALL}</option>
               {BUILDINGS.map(b => <option key={b}>{b}</option>)}
             </Form.Control>
           </Form.Group>
@@ -183,61 +147,41 @@ export default function Rooms () {
 
       <br />
 
-      <ListGroup>
-        {filterResults && filterResults.map((result, idx) =>
-          <ListGroup.Item key={idx} className={styles.item}>
-            <div className={styles.left}>
-              {result.room}<br />
-              {result.type}
-            </div>
-            <div className={styles.right}>
-              {formatFriendlyTime(result.from)}<br />
-              {formatFriendlyTime(result.until)}
-            </div>
-          </ListGroup.Item>
-        )}
-        {filterResults && filterResults.length === 0 &&
-          <ListGroup.Item className={styles.item}>
-            Keine Ergebnisse
-          </ListGroup.Item>
-        }
-      </ListGroup>
+      {searching &&
+        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={filterResults}>
+          <ListGroup variant="flush">
+            {filterResults && filterResults.map((result, idx) =>
+              <ListGroup.Item key={idx} className={styles.item}>
+                <div className={styles.left}>
+                  {result.room}<br />
+                  {result.type}
+                </div>
+                <div className={styles.right}>
+                  {formatFriendlyTime(result.from)}<br />
+                  {formatFriendlyTime(result.until)}
+                </div>
+              </ListGroup.Item>
+            )}
+            {filterResults && filterResults.length === 0 &&
+              <ListGroup.Item className={styles.item}>
+                Keine Ergebnisse
+              </ListGroup.Item>
+            }
+          </ListGroup>
+        </ReactPlaceholder>
+      }
 
       <br />
 
-      <h3>Freie Räume</h3>
-      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={freeRooms}>
-        {freeRooms && freeRooms.map((day, i) =>
-          Object.values(day.hours).map((hour, j) =>
-            <ListGroup key={i + '-' + j}>
-              <h4 className={styles.dateBoundary}>
-                {formatNearDate(day.date)}, {formatFriendlyTime(hour.from)} - {formatFriendlyTime(hour.to)}
-              </h4>
+      <Link href="/map">
+        <Button variant="link">Karte anzeigen</Button>
+      </Link>
 
-              {Object.entries(hour.roomTypes).map(([roomName, rooms], idx) =>
-                <ListGroup.Item key={idx} className={styles.item}>
-                  <div className={styles.left}>
-                    <div className={styles.name}>
-                      {roomName}
-                    </div>
-                    <div className={styles.room}>
-                      {rooms.map((room, idx) =>
-                        <>
-                          {TUX_ROOMS.includes(room)
-                            ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
-                            : <>{room}</>}
-                          {idx === rooms.length - 1 ? '' : ', '}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </ListGroup.Item>
-              )}
-            </ListGroup>
-          )
-        )}
-      </ReactPlaceholder>
       <br />
+
+      <Link href="/rooms/list">
+        <Button variant="link">Stündlichen Plan anzeigen</Button>
+      </Link>
     </Container>
   )
 }
