@@ -26,10 +26,14 @@
   flex: 1;
 }
 
+.details {
+  color: gray;
+}
+
 .room {
   color: gray;
 }
 
 .right {
-  color: gray;
+  text-align: right;
 }

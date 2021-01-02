@@ -8,6 +8,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLinux } from '@fortawesome/free-brands-svg-icons'
+
 import styles from '../../styles/Rooms.module.css'
 
 import AppNavbar from '../../lib/AppNavbar'
@@ -20,6 +23,7 @@ const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', '
 const BUILDINGS_ALL = 'Alle'
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const DURATION_PRESET = '01:00'
+const TUX_ROOMS = ['G308']
 
 function getISODate (date) {
   return date.getFullYear().toString().padStart(4, '0') + '-' +
@@ -153,12 +157,16 @@ export default function Rooms () {
             {filterResults && filterResults.map((result, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
-                  {result.room}<br />
-                  {result.type}
+                  {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
+                  {result.room}
+
+                  <div className={styles.details}>
+                    {result.type}
+                  </div>
                 </div>
                 <div className={styles.right}>
-                  {formatFriendlyTime(result.from)}<br />
-                  {formatFriendlyTime(result.until)}
+                  frei ab {formatFriendlyTime(result.from)}<br />
+                  bis {formatFriendlyTime(result.until)}
                 </div>
               </ListGroup.Item>
             )}
