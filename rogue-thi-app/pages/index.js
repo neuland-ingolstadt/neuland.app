@@ -33,6 +33,7 @@ import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
+const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -120,8 +121,12 @@ export default function Home () {
         <Dropdown.Item variant="link" href="/debug">
           API Playground
         </Dropdown.Item>
+        <hr />
+        <Dropdown.Item variant="link" href={FEEDBACK_URL} target="_blank" rel="noreferrer">
+          Feedback
+        </Dropdown.Item>
         <Dropdown.Item variant="link" href={GIT_URL} target="_blank" rel="noreferrer">
-          Quellcode auf GitHub
+          Quellcode
         </Dropdown.Item>
         <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
           Impressum und Datenschutz
