@@ -1,0 +1,31 @@
+.default {
+
+}
+
+
+/*
+ * DARK THEME
+ */
+.dark {
+}
+.dark * {
+  background-color: #121212;
+  color: white;
+}
+
+
+
+/*
+ * CYBERPUNK THEME
+ */
+.cyberpunk {
+
+}
+.cyberpunk * {
+    background-color: #121212;
+    color: white;
+}
+.cyberpunk :is(h1, h2, h3, h4, h5, h6) {
+    color: #EE6EFF;
+    font-family: 'Courier New', Courier, monospace
+}

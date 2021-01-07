@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
+import crypto from 'crypto'
 
 import Link from 'next/link'
 
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
+import Form from 'react-bootstrap/Form'
 
 import ReactPlaceholder from 'react-placeholder'
 
@@ -24,16 +27,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Home.module.css'
+import themes from '../styles/Themes.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
 import { obtainSession, forgetSession } from '../lib/thi-session-handler'
-import { getTimetable, getMensaPlan } from '../lib/thi-api-client'
+import { getTimetable, getMensaPlan, getPersonalData } from '../lib/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
+const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -58,6 +63,12 @@ async function getMensaPlanPreview (session) {
   return Object.values(days[0].gerichte)
     .map(x => x.name[1])
 }
+
+const allThemes = [
+  {name: 'Standard', style: themes.default, requirePremium: false},
+  {name: 'Dunkel (Premium-only)', style: themes.dark, requirePremium: true},
+  {name: 'Cyberpunk (Premium-only)', style: themes.cyberpunk, requirePremium: true},
+];
 
 function HomeCard ({ link, icon, title, children }) {
   return (
@@ -92,6 +103,9 @@ export default function Home () {
   const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
+  const [showThemeModal, setShowThemeModal] = useState(false)
+  const [userHash, setUserHash] = useState(null)
+  const [isPremiumUser, setIsPremiumUser] = useState(false)
   const router = useRouter()
 
   useEffect(async () => {
@@ -112,11 +126,35 @@ export default function Home () {
     }
   }, [])
 
+  useEffect(async () => {
+    if(userHash)
+      return
+
+    const session = await obtainSession(router)
+    const user = await getPersonalData(session)
+
+    const hash = crypto.createHash('sha256')
+    hash.update(user.persdata.bibnr, 'utf8')
+    hash.update(user.persdata.email, 'utf8')
+    setUserHash(hash.digest('base64'))
+
+  }, [showThemeModal])
+
+  function setTheme(className) {
+    console.log('changing theme to ', className)
+    const classes = document.body.classList
+    classes.forEach(x => classes.remove(x))
+    classes.add(className)
+  }
+
   return (
     <Container>
       <AppNavbar title="Übersicht" showBack={false}>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+          Dark Mode
         </Dropdown.Item>
         <Dropdown.Item variant="link" href="/debug">
           API Playground
@@ -136,6 +174,47 @@ export default function Home () {
       <div className={styles.cardDeck}>
 
         <InstallPrompt />
+
+        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Erscheinungsbild</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Wähle ein Erscheinungsbild</h4>
+            <Form>
+              {allThemes.map((theme, i) => (
+                <Form.Check
+                  name="theme-selection"
+                  key={i}
+                  type="radio"
+                  label={theme.name}
+                  disabled={false && theme.requirePremium && !isPremiumUser}
+                  onChange={() => setTheme(theme.style)}
+                />
+              ))}
+            </Form>
+
+            <br /><br />
+
+            <h4>Informationen</h4>
+            <ReactPlaceholder type="text" rows={2} color="#eeeeee" ready={!!userHash}>
+              <strong>Deine ID: </strong> {userHash}<br />
+              <strong>Dein Status: </strong> {isPremiumUser ? 'Premium' : 'Standard'}<br />
+            </ReactPlaceholder>
+            <br />
+            Mitglieder des Neuland Ingolstadt e.V. können Premium Erscheinungsbilder benutzen.
+            Wenn du bereits Mitglied bist aber hier Standard-User angezeigt wird
+            <a href={FEEDBACK_URL}> sende uns bitte deine ID</a> zusammen mit deiner
+            Mitgliedsnummer. <br />
+            Du bist noch kein Mitglied? <a href={WEBSITE_URL}>Hier</a> findest du weitere
+            Informationen über den Verein. Die Mitgliedschaft ist für Studierende kostenlos.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
+              OK
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
         <HomeCard
           icon={faCalendar}

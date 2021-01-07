@@ -17,3 +17,8 @@
   float: right;
   padding: 0;
 }
+
+.themeModal {
+  width: 700px;
+  max-width: 95vw;
+}
