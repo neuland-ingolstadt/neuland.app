@@ -145,7 +145,6 @@ export default function Home () {
   }, [showThemeModal])
 
   function setTheme(newTheme) {
-    console.log(`changing theme from ${currentTheme} to ${newTheme}`)
     document.body.classList.remove(currentTheme)
     document.body.classList.add(newTheme)
     localStorage.theme = newTheme
@@ -193,7 +192,7 @@ export default function Home () {
                   key={i}
                   type="radio"
                   label={theme.name}
-                  checked={(console.log(currentTheme, theme.style), currentTheme === theme.style)}
+                  checked={currentTheme === theme.style}
                   disabled={theme.requirePremium && !isPremiumUser}
                   onChange={() => setTheme(theme.style)}
                 />
