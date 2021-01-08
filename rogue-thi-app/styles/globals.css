@@ -9,3 +9,52 @@ body {
 * {
   box-sizing: border-box;
 }
+
+
+
+/*
+ * DEFAULT THEME
+ */
+.default {
+
+}
+
+
+/*
+ * DARK THEME
+ */
+.dark {
+  background-color: #121212;
+}
+.dark * {
+  background-color: #121212 !important;
+  color: white !important;
+  border-color: white !important;
+}
+
+
+
+/*
+ * CYBERPUNK THEME
+ */
+/* TODO: can we bundle this font? or might we run into legal issues?
+@font-face {
+  font-family: cyberpunk;
+  src: url(/Cyberpunk-Regular.ttf);
+}*/
+.cyberpunk {
+  background-color: #121212;
+}
+.cyberpunk * {
+  background-color: #121212 !important;
+  color: white !important;
+  border-color: #F3F315 !important;
+}
+.cyberpunk :is(h1, h2, h3, h4, h5, h6) {
+  color: #F3F315 !important;
+  /*font-family: cyberpunk;*/
+}
+.cyberpunk .card-title {
+  color: #F3F315 !important;
+  /*font-family: cyberpunk;*/
+}

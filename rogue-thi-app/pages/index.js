@@ -27,7 +27,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Home.module.css'
-import themes from '../styles/Themes.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
@@ -65,9 +64,9 @@ async function getMensaPlanPreview (session) {
 }
 
 const allThemes = [
-  {name: 'Standard', style: themes.default, requirePremium: false},
-  {name: 'Dunkel (Premium-only)', style: themes.dark, requirePremium: true},
-  {name: 'Cyberpunk (Premium-only)', style: themes.cyberpunk, requirePremium: true},
+  {name: 'Standard', style: 'default', requirePremium: false},
+  {name: 'Dunkel (Premium-only)', style: 'dark', requirePremium: true},
+  {name: 'Cyberpunk (Premium-only)', style: 'cyberpunk', requirePremium: true},
 ];
 
 function HomeCard ({ link, icon, title, children }) {
@@ -106,7 +105,7 @@ export default function Home () {
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [userHash, setUserHash] = useState(null)
   const [isPremiumUser, setIsPremiumUser] = useState(true)
-  const [currentTheme, setCurrentTheme] = useState(themes.default)
+  const [currentTheme, setCurrentTheme] = useState('default')
   const router = useRouter()
 
   useEffect(async () => {
