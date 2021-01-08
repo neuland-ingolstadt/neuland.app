@@ -1,3 +1,6 @@
+/*
+ * DEFAULT THEME
+ */
 .default {
 
 }
@@ -7,10 +10,12 @@
  * DARK THEME
  */
 .dark {
+  background-color: #121212;
 }
 .dark * {
   background-color: #121212;
   color: white;
+  border-color: white;
 }
 
 
@@ -18,14 +23,23 @@
 /*
  * CYBERPUNK THEME
  */
+ @font-face {
+   font-family: cyberpunk;
+   src: url(/Cyberpunk-Regular.ttf);
+ }
 .cyberpunk {
-
+  background-color: #121212;
 }
 .cyberpunk * {
-    background-color: #121212;
-    color: white;
+  background-color: #121212;
+  color: white;
+  border-color: #F3F315;
 }
 .cyberpunk :is(h1, h2, h3, h4, h5, h6) {
-    color: #EE6EFF;
-    font-family: 'Courier New', Courier, monospace
+  color: #F3F315;
+  font-family: cyberpunk;
+}
+.cyberpunk [class~="card-title"] {
+  color: #F3F315;
+  font-family: cyberpunk;
 }

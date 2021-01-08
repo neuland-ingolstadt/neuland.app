@@ -193,9 +193,7 @@ export default function Home () {
                 />
               ))}
             </Form>
-
-            <br /><br />
-
+            <br />
             <h4>Informationen</h4>
             <ReactPlaceholder type="text" rows={2} color="#eeeeee" ready={!!userHash}>
               <strong>Deine ID: </strong> {userHash}<br />
