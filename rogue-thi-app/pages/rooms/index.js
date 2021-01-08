@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -64,8 +64,8 @@ async function filterRooms (session, building, date, time, duration) {
     )
     .filter(opening =>
       (building === BUILDINGS_ALL || opening.room.toLowerCase().startsWith(building.toLowerCase())) &&
-      beginDate > opening.from &&
-      endDate < opening.until
+      beginDate >= opening.from &&
+      endDate <= opening.until
     )
     .sort((a, b) => a.room.localeCompare(b.room))
 }
@@ -73,9 +73,16 @@ async function filterRooms (session, building, date, time, duration) {
 export default function Rooms () {
   const router = useRouter()
 
+  const startDate = new Date()
+  if(startDate.getHours() > 17 || (startDate.getHours() == 17 && startDate.getMinutes() >= 20)) {
+    startDate.setDate(startDate.getDate() + 1)
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  }
+
   const [building, setBuilding] = useState(BUILDINGS_ALL)
-  const [date, setDate] = useState(getISODate(new Date()))
-  const [time, setTime] = useState(getISOTime(new Date()))
+  const [date, setDate] = useState(getISODate(startDate))
+  const [time, setTime] = useState(getISOTime(startDate))
   const [duration, setDuration] = useState(DURATION_PRESET)
 
   const [searching, setSearching] = useState(false)
@@ -91,6 +98,8 @@ export default function Rooms () {
     console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)
   }
+
+  useEffect(() => filter(), [])
 
   return (
     <Container>
@@ -147,6 +156,12 @@ export default function Rooms () {
         <Button onClick={() => filter()}>
           Suchen
         </Button>
+        <Link href="/map">
+          <Button variant="link">Karte anzeigen</Button>
+        </Link>
+        <Link href="/rooms/list">
+          <Button variant="link">Stündlichen Plan anzeigen</Button>
+        </Link>
       </Form>
 
       <br />
@@ -178,18 +193,6 @@ export default function Rooms () {
           </ListGroup>
         </ReactPlaceholder>
       }
-
-      <br />
-
-      <Link href="/map">
-        <Button variant="link">Karte anzeigen</Button>
-      </Link>
-
-      <br />
-
-      <Link href="/rooms/list">
-        <Button variant="link">Stündlichen Plan anzeigen</Button>
-      </Link>
     </Container>
   )
 }
