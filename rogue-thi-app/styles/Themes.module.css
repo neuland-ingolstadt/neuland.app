@@ -14,7 +14,7 @@
 }
 .dark * {
   background-color: #121212;
-  color: white;
+  color: white !important;
   border-color: white;
 }
 
@@ -23,23 +23,24 @@
 /*
  * CYBERPUNK THEME
  */
- @font-face {
-   font-family: cyberpunk;
-   src: url(/Cyberpunk-Regular.ttf);
- }
+/* TODO: can we bundle this font? or might we run into legal issues?
+@font-face {
+  font-family: cyberpunk;
+  src: url(/Cyberpunk-Regular.ttf);
+}*/
 .cyberpunk {
   background-color: #121212;
 }
 .cyberpunk * {
   background-color: #121212;
-  color: white;
+  color: white !important;
   border-color: #F3F315;
 }
 .cyberpunk :is(h1, h2, h3, h4, h5, h6) {
-  color: #F3F315;
-  font-family: cyberpunk;
+  color: #F3F315 !important;
+  /*font-family: cyberpunk;*/
 }
 .cyberpunk [class~="card-title"] {
-  color: #F3F315;
-  font-family: cyberpunk;
+  color: #F3F315 !important;
+  /*font-family: cyberpunk;*/
 }

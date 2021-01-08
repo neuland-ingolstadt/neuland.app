@@ -13,12 +13,14 @@ import { useRouter } from 'next/router'
 import { getOperatingSystem, OS_IOS, OS_OTHER } from './user-agent'
 
 import styles from './AppNavbar.module.css'
+import themes from '../styles/Themes.module.css'
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const [os, setOS] = useState(OS_OTHER)
 
   useEffect(() => setOS(getOperatingSystem()), [])
+  useEffect(() => document.body.classList.add(localStorage.theme), [])
 
   if (typeof showBack === 'undefined') {
     showBack = true
@@ -27,6 +29,7 @@ export default function AppNavbar ({ title, showBack, children }) {
   function goBack () {
     router.back()
   }
+
 
   return (
     <>

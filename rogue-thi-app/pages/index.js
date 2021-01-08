@@ -105,7 +105,8 @@ export default function Home () {
   const [mensaPlanError, setMensaPlanError] = useState(null)
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [userHash, setUserHash] = useState(null)
-  const [isPremiumUser, setIsPremiumUser] = useState(false)
+  const [isPremiumUser, setIsPremiumUser] = useState(true)
+  const [currentTheme, setCurrentTheme] = useState(themes.default)
   const router = useRouter()
 
   useEffect(async () => {
@@ -138,13 +139,17 @@ export default function Home () {
     hash.update(user.persdata.email, 'utf8')
     setUserHash(hash.digest('base64'))
 
+    if(localStorage.theme && localStorage.theme !== currentTheme)
+      setCurrentTheme(localStorage.theme);
+
   }, [showThemeModal])
 
-  function setTheme(className) {
-    console.log('changing theme to ', className)
-    const classes = document.body.classList
-    classes.forEach(x => classes.remove(x))
-    classes.add(className)
+  function setTheme(newTheme) {
+    console.log(`changing theme from ${currentTheme} to ${newTheme}`)
+    document.body.classList.remove(currentTheme)
+    document.body.classList.add(newTheme)
+    localStorage.theme = newTheme
+    setCurrentTheme(newTheme)
   }
 
   return (
@@ -154,7 +159,7 @@ export default function Home () {
           Ausloggen
         </Dropdown.Item>
         <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-          Dark Mode
+          Erscheinungsbild
         </Dropdown.Item>
         <Dropdown.Item variant="link" href="/debug">
           API Playground
@@ -188,7 +193,8 @@ export default function Home () {
                   key={i}
                   type="radio"
                   label={theme.name}
-                  disabled={false && theme.requirePremium && !isPremiumUser}
+                  checked={(console.log(currentTheme, theme.style), currentTheme === theme.style)}
+                  disabled={theme.requirePremium && !isPremiumUser}
                   onChange={() => setTheme(theme.style)}
                 />
               ))}
