@@ -10,7 +10,7 @@ const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const USER_AGENT = `neuland.app/${version} (+${PROXY_URL})`
+const USER_AGENT = `neuland.app/${version} (+${GIT_URL})`
 
 // T-TeleSec GlobalRoot Class 2
 // valid until 02.10.2033, 1:59:59 CEST
