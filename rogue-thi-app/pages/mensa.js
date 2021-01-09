@@ -15,8 +15,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import styles from '../styles/Timetable.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
-import { getMensaPlan } from '../lib/thi-api-client'
+import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate } from '../lib/date-utils'
 
 import allergenMap from '../data/allergens.json'
@@ -45,8 +44,7 @@ export default function Timetable () {
 
   useEffect(async () => {
     try {
-      const session = await obtainSession(router)
-      const data = await getMensaPlan(session)
+      const data = await getMensaPlan()
 
       const days = data.map(x => ({
         date: parseGermanDate(x.tag),

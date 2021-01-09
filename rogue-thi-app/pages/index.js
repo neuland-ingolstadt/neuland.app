@@ -31,7 +31,8 @@ import styles from '../styles/Home.module.css'
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
 import { obtainSession, forgetSession } from '../lib/thi-session-handler'
-import { getTimetable, getMensaPlan, getPersonalData } from '../lib/thi-api-client'
+import { getTimetable, getPersonalData } from '../lib/thi-api-client'
+import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
@@ -57,7 +58,7 @@ async function getTimetablePreview (session) {
 }
 
 async function getMensaPlanPreview (session) {
-  const days = await getMensaPlan(session)
+  const days = await getMensaPlan()
 
   return Object.values(days[0].gerichte)
     .map(x => x.name[1])
@@ -109,6 +110,13 @@ export default function Home () {
   const router = useRouter()
 
   useEffect(async () => {
+    try {
+      setMensaPlan(await getMensaPlanPreview())
+    } catch (e) {
+      console.error(e)
+      setMensaPlanError(e)
+    }
+
     const session = await obtainSession(router)
 
     try {
@@ -116,13 +124,6 @@ export default function Home () {
     } catch (e) {
       console.error(e)
       setTimetableError(e)
-    }
-
-    try {
-      setMensaPlan(await getMensaPlanPreview(session))
-    } catch (e) {
-      console.error(e)
-      setMensaPlanError(e)
     }
   }, [])
 
