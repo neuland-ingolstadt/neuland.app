@@ -20,6 +20,7 @@ body {
 }
 
 
+
 /*
  * DARK THEME
  */
@@ -29,6 +30,11 @@ body {
 .dark * {
   background-color: #121212 !important;
   color: white !important;
+}
+.dark .card,
+.dark .modal-content,
+.dark .list-group-item,
+.dark .list-group-item-action {
   border-color: white !important;
 }
 
@@ -37,6 +43,10 @@ body {
 /*
  * CYBERPUNK THEME
  */
+@font-face {
+  font-family: cyberpunk;
+  src: url(/Checkbook-1K2.ttf);
+}
 /* TODO: can we bundle this font? or might we run into legal issues?
 @font-face {
   font-family: cyberpunk;
@@ -48,13 +58,15 @@ body {
 .cyberpunk * {
   background-color: #121212 !important;
   color: white !important;
+}
+.cyberpunk .card,
+.cyberpunk .modal-content,
+.cyberpunk .list-group-item,
+.cyberpunk .list-group-item-action {
   border-color: #F3F315 !important;
 }
-.cyberpunk :is(h1, h2, h3, h4, h5, h6) {
-  color: #F3F315 !important;
-  /*font-family: cyberpunk;*/
-}
+.cyberpunk :is(strong, h1, h2, h3, h4, h5, h6),
 .cyberpunk .card-title {
   color: #F3F315 !important;
-  /*font-family: cyberpunk;*/
+  font-family: cyberpunk;
 }
