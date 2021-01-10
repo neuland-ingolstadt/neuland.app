@@ -15,7 +15,7 @@
     "bootstrap": "^4.5.3",
     "leaflet": "^1.7.1",
     "next": "^10.0.3",
-    "node-forge": "git+https://github.com/alexhorn/forge.git#no-jquery",
+    "node-forge": "git+https://github.com/neuland-ingolstadt/forge.git#no-jquery",
     "postgres-array": "^3.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
