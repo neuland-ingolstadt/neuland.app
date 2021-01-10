@@ -66,8 +66,8 @@ async function getMensaPlanPreview (session) {
 
 const allThemes = [
   {name: 'Standard', style: 'default', requirePremium: false},
-  {name: 'Dunkel (Premium-only)', style: 'dark', requirePremium: true},
-  {name: 'Cyberpunk (Premium-only)', style: 'cyberpunk', requirePremium: true},
+  {name: 'Dunkel', style: 'dark', requirePremium: true},
+  {name: 'Cyberpunk', style: 'cyberpunk', requirePremium: true},
 ];
 
 function HomeCard ({ link, icon, title, children }) {
@@ -198,6 +198,7 @@ export default function Home () {
                 />
               ))}
             </Form>
+            {/*
             <br />
             <h4>Informationen</h4>
             <ReactPlaceholder type="text" rows={2} color="#eeeeee" ready={!!userHash}>
@@ -211,6 +212,7 @@ export default function Home () {
             Mitgliedsnummer. <br />
             Du bist noch kein Mitglied? <a href={WEBSITE_URL}>Hier</a> findest du weitere
             Informationen über den Verein. Die Mitgliedschaft ist für Studierende kostenlos.
+            */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
