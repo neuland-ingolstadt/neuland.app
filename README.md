@@ -1,21 +1,18 @@
 # THI-App
 
-The official App of the Technische Hochschule Ingolstadt looks dated, and has a
-number of shortcomings. Such as frequent crashes, incompatability with some
-Android versions, unreadable texts with dark mode on iOS, ...
+This is a reverse engineered documentation for the REST API used by the official
+app of the Technische Hochschule Ingolstadt as well as an open source, web-based 
+replacement built on React and Next.js.
 
-This project aims at documenting the API used by the App and also includes
-a nextjs based replacement called "Rogue THI App".
+## App
 
-## Rogue THI App
+Rogue THI App aims at implementing all important features of the official
+app as free and open source software with a modern UI.
+It connects to the official backend via a WebSocket-to-TCP proxy. The HTTPS
+stack is implemented in JavaScript and runs in the browser, so that the proxy
+never comes in contact with unencrypted user data.
 
-The rogue THI App aims at implementing all important features of the official
-app, while using a modern UI and being free and open source software.
-The App connects to the THI REST API via a pure Websocket-TCP proxy. The HTTPS
-Layer is implemented in the browser and thus the Proxy server cannot access
-sensible user data.
-More info on this topic in [this document](data-security.md)
-
+You can find more information on this in [this document](data-security.md).
 
 ## API Documentation
 
