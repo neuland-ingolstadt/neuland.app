@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
+import { callWithSession } from '../lib/thi-session-handler'
 import {
   getLibraryReservations,
   getAvailableLibrarySeats,
@@ -40,14 +40,17 @@ export default function Library (props) {
   }
 
   async function refreshData (session) {
-    const response = await getLibraryReservations(session)
+    const [response, available] = await Promise.all([
+      getLibraryReservations(session),
+      getAvailableLibrarySeats(session)
+    ])
+
     response.forEach(x => {
       x.start = new Date(x.reservation_begin.replace(' ', 'T'))
       x.end = new Date(x.reservation_end.replace(' ', 'T'))
     })
     setReservations(response)
 
-    const available = await getAvailableLibrarySeats(session)
     setAvailable(available)
   }
 
@@ -57,29 +60,39 @@ export default function Library (props) {
   }
 
   async function deleteReservation (id) {
-    const session = await obtainSession(router)
-    await removeLibraryReservation(session, id)
-    await refreshData(session)
+    callWithSession(
+      () => router.push('/login'),
+      async session => {
+        await removeLibraryReservation(session, id)
+        await refreshData(session)
+      }
+    )
   }
 
   async function addReservation () {
-    const session = await obtainSession(router)
-    await addLibraryReservation(
-      session,
-      reservationRoom,
-      reservationDay.date,
-      reservationTime.from,
-      reservationTime.to,
-      reservationSeat
+    callWithSession(
+      () => router.push('/login'),
+      async session => {
+        await addLibraryReservation(
+          session,
+          reservationRoom,
+          reservationDay.date,
+          reservationTime.from,
+          reservationTime.to,
+          reservationSeat
+        )
+        await refreshData(session)
+        hideReservationModal()
+      }
     )
-    await refreshData(session)
-    hideReservationModal()
   }
 
   useEffect(async () => {
     try {
-      const session = await obtainSession(router)
-      await refreshData(session)
+      await callWithSession(
+        () => router.push('/login'),
+        refreshData
+      )
     } catch (e) {
       console.error(e)
       alert(e)

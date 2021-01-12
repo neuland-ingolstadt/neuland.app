@@ -36,7 +36,6 @@ function parseGermanDate (str) {
 }
 
 export default function Timetable () {
-  const router = useRouter()
   const [mensaPlan, setMensaPlan] = useState(null)
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
   const [allergenSelection, setAllergenSelection] = useState({})

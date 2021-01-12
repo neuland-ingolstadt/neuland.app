@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
 import styles from '../styles/Exams.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
+import { callWithSession } from '../lib/thi-session-handler'
 import { getExams, getGrades } from '../lib/thi-api-client'
 import { formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
@@ -24,11 +24,13 @@ export default function Exams () {
 
   useEffect(async () => {
     try {
-      const session = await obtainSession(router)
-      const [examList, gradeList] = await Promise.all([
-        getExams(session),
-        getGrades(session)
-      ])
+      const [examList, gradeList] = await callWithSession(
+        () => router.push('/login'),
+        session => Promise.all([
+          getExams(session),
+          getGrades(session)
+        ])
+      )
 
       setExams(examList
         .map(x => {

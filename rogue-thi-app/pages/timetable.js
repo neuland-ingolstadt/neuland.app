@@ -8,15 +8,17 @@ import ReactPlaceholder from 'react-placeholder'
 import styles from '../styles/Timetable.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
+import { callWithSession } from '../lib/thi-session-handler'
 import { getTimetable } from '../lib/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable (router) {
   const [today] = new Date().toISOString().split('T')
 
-  const session = await obtainSession(router)
-  const { timetable } = await getTimetable(session, new Date())
+  const { timetable } = await callWithSession(
+    () => router.push('/login'),
+    session => getTimetable(session, new Date())
+  )
 
   // get all available dates
   const dates = timetable

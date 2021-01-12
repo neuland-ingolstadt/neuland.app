@@ -11,7 +11,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import styles from '../../styles/Rooms.module.css'
 
 import AppNavbar from '../../lib/AppNavbar'
-import { obtainSession } from '../../lib/thi-session-handler'
+import { callWithSession } from '../../lib/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../../lib/date-utils'
 
@@ -24,9 +24,10 @@ export default function Rooms () {
   useEffect(async () => {
     try {
       const now = new Date()
-
-      const session = await obtainSession(router)
-      const data = await getFreeRooms(session, now)
+      const data = await callWithSession(
+        () => router.push('/login'),
+        session => getFreeRooms(session, now)
+      )
 
       const days = data.rooms.map(day => {
         const result = {}

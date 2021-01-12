@@ -22,6 +22,47 @@ export async function createSession (router, username, password, stayLoggedIn) {
   router.replace('/')
 }
 
+export async function callWithSession (onSessionFailure, callback) {
+  let session = localStorage.session
+  const username = localStorage.username
+  const password = localStorage.password
+
+  if (!session && username && password) {
+    try {
+      console.log('no session, logging in...')
+      session = await login(username, password)
+      localStorage.session = session
+      localStorage.sessionCreated = Date.now()
+    } catch (e) {
+      onSessionFailure(e)
+      return
+    }
+  }
+
+  let retVal
+  try {
+    retVal = await callback(session)
+  } catch (e) {
+    if (e.message === 'No Session' && username && password) {
+      console.log('seems to have received a session error trying to get a new session!')
+      try {
+        session = await login(username, password)
+        localStorage.session = session
+        localStorage.sessionCreated = Date.now()
+      } catch (e) {
+        onSessionFailure(e)
+        return
+      }
+
+      retVal = await callback(session)
+    } else {
+      throw e
+    }
+  }
+
+  return retVal
+}
+
 export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)

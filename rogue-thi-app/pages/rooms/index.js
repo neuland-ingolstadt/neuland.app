@@ -14,7 +14,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import styles from '../../styles/Rooms.module.css'
 
 import AppNavbar from '../../lib/AppNavbar'
-import { obtainSession } from '../../lib/thi-session-handler'
+import { callWithSession } from '../../lib/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-api-client'
 import { formatFriendlyTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/api-converter'
@@ -92,8 +92,10 @@ export default function Rooms () {
     setSearching(true)
     setFilterResults(null)
 
-    const session = await obtainSession(router)
-    const rooms = await filterRooms(session, building, date, time, duration)
+    const rooms = await callWithSession(
+      () => router.push('/login'),
+      session => filterRooms(session, building, date, time, duration)
+    )
 
     console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)

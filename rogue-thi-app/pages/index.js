@@ -30,7 +30,7 @@ import styles from '../styles/Home.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
-import { obtainSession, forgetSession } from '../lib/thi-session-handler'
+import { callWithSession, forgetSession } from '../lib/thi-session-handler'
 import { getTimetable, getPersonalData } from '../lib/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
@@ -117,10 +117,9 @@ export default function Home () {
       setMensaPlanError(e)
     }
 
-    const session = await obtainSession(router)
-
     try {
-      setTimetable(await getTimetablePreview(session))
+      const timetable = await callWithSession(() => router.push('/login'), getTimetablePreview)
+      setTimetable(timetable)
     } catch (e) {
       console.error(e)
       setTimetableError(e)
@@ -136,8 +135,7 @@ export default function Home () {
       return
     }
 
-    const session = await obtainSession(router)
-    const user = await getPersonalData(session)
+    const user = callWithSession(getPersonalData)
 
     const hash = crypto.createHash('sha256')
     hash.update(user.persdata.bibnr, 'utf8')
