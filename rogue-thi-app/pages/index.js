@@ -65,10 +65,10 @@ async function getMensaPlanPreview (session) {
 }
 
 const allThemes = [
-  {name: 'Standard', style: 'default', requirePremium: false},
-  {name: 'Dunkel', style: 'dark', requirePremium: true},
-  {name: 'Cyberpunk', style: 'cyberpunk', requirePremium: true},
-];
+  { name: 'Standard', style: 'default', requirePremium: false },
+  { name: 'Dunkel', style: 'dark', requirePremium: true },
+  { name: 'Cyberpunk', style: 'cyberpunk', requirePremium: true }
+]
 
 function HomeCard ({ link, icon, title, children }) {
   return (
@@ -128,8 +128,13 @@ export default function Home () {
   }, [])
 
   useEffect(async () => {
-    if(userHash)
+    if (localStorage.theme && localStorage.theme !== currentTheme) {
+      setCurrentTheme(localStorage.theme)
+    }
+
+    if (!showThemeModal || userHash !== null) {
       return
+    }
 
     const session = await obtainSession(router)
     const user = await getPersonalData(session)
@@ -138,13 +143,9 @@ export default function Home () {
     hash.update(user.persdata.bibnr, 'utf8')
     hash.update(user.persdata.email, 'utf8')
     setUserHash(hash.digest('base64'))
-
-    if(localStorage.theme && localStorage.theme !== currentTheme)
-      setCurrentTheme(localStorage.theme);
-
   }, [showThemeModal])
 
-  function setTheme(newTheme) {
+  function setTheme (newTheme) {
     document.body.classList.remove(currentTheme)
     document.body.classList.add(newTheme)
     localStorage.theme = newTheme
