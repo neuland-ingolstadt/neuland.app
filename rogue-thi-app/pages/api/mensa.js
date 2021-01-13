@@ -23,6 +23,8 @@ function dateToTHIFormat (date) {
   return `${pad2(date.getDate())}.${pad2(date.getMonth() + 1)}.${pad2(date.getFullYear())}`
 }
 function convertToTHIFormat (sourceData) {
+  const now = new Date()
+
   let sourceDays = sourceData.speiseplan.tag
   if (!Array.isArray(sourceDays)) {
     sourceDays = [sourceDays]
@@ -30,6 +32,10 @@ function convertToTHIFormat (sourceData) {
 
   const days = sourceDays.map(day => {
     const date = new Date(day._attributes.timestamp * 1000)
+
+    if (now - date > 24 * 60 * 60 * 1000) {
+      return null
+    }
 
     let sourceItems = day.item
     if (!Array.isArray(sourceItems)) {
@@ -67,9 +73,8 @@ function convertToTHIFormat (sourceData) {
     }
   })
 
-  const now = new Date()
   return {
-    data: days,
+    data: days.filter(x => x !== null),
     status: 0,
     date: dateToTHIFormat(now),
     time: `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`
