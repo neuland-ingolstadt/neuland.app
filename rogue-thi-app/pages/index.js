@@ -59,9 +59,16 @@ async function getTimetablePreview (session) {
 
 async function getMensaPlanPreview (session) {
   const days = await getMensaPlan()
+  const today = Object.values(days[0].gerichte)
 
-  return Object.values(days[0].gerichte)
-    .map(x => x.name[1])
+  if (today.length > 2) {
+    return [
+      today[0].name[1],
+      `und ${today.length - 1} weitere Gerichte`
+    ]
+  } else {
+    return today.map(x => x.name[1])
+  }
 }
 
 const allThemes = [
