@@ -74,8 +74,11 @@ export default function Rooms () {
   const router = useRouter()
 
   const startDate = new Date()
-  if(startDate.getHours() > 17 || (startDate.getHours() == 17 && startDate.getMinutes() >= 20)) {
+  if (startDate.getHours() > 17 || (startDate.getHours() === 17 && startDate.getMinutes() >= 20)) {
     startDate.setDate(startDate.getDate() + 1)
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  } else if (startDate.getHours() < 8 || (startDate.getHours() === 8 && startDate.getMinutes() < 15)) {
     startDate.setHours(8)
     startDate.setMinutes(15)
   }
