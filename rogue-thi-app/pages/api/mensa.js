@@ -14,32 +14,34 @@ const dayTexts = [
   'Mittwoch',
   'Donnerstag',
   'Freitag',
-  'Samstag',
+  'Samstag'
 ]
-function pad2(val) {
+function pad2 (val) {
   return val.toString().padStart(2, '0')
 }
-function dateToTHIFormat(date) {
-  return `${pad2(date.getDate())}.${pad2(date.getMonth() + 1)}.${pad2(date.getFullYear())}`;
+function dateToTHIFormat (date) {
+  return `${pad2(date.getDate())}.${pad2(date.getMonth() + 1)}.${pad2(date.getFullYear())}`
 }
 function convertToTHIFormat (sourceData) {
   let sourceDays = sourceData.speiseplan.tag
-  if(!Array.isArray(sourceDays))
+  if (!Array.isArray(sourceDays)) {
     sourceDays = [sourceDays]
-  
-  const days = sourceData.speiseplan.tag.map(day => {
+  }
+
+  const days = sourceDays.map(day => {
     const date = new Date(day._attributes.timestamp * 1000)
 
     let sourceItems = day.item
-    if(!Array.isArray(sourceItems))
+    if (!Array.isArray(sourceItems)) {
       sourceItems = [sourceItems]
-    
+    }
+
     const items = {}
     const addInReg = /\s*\((.*?)\)\s*/
     sourceItems.forEach((item, i) => {
       let text = item.title._text
-      let addIns = new Set()
-      while(addInReg.test(text)) {
+      const addIns = new Set()
+      while (addInReg.test(text)) {
         const [addInText, addIn] = text.match(addInReg)
         text = text.replace(addInText, ' ')
 
@@ -54,14 +56,14 @@ function convertToTHIFormat (sourceData) {
           text.trim(),
           item.preis1._text,
           item.preis2._text,
-          item.preis3._text,
+          item.preis3._text
         ]
       }
     })
 
     return {
       tag: `${dayTexts[date.getDay()]} ${dateToTHIFormat(date)}`,
-      gerichte: items,
+      gerichte: items
     }
   })
 
@@ -70,7 +72,7 @@ function convertToTHIFormat (sourceData) {
     data: days,
     status: 0,
     date: dateToTHIFormat(now),
-    time: `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`,
+    time: `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`
   }
 }
 
