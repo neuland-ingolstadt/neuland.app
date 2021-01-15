@@ -142,7 +142,7 @@ export default function Home () {
       return
     }
 
-    const user = callWithSession(getPersonalData)
+    const user = await callWithSession(() => router.push('/login'), getPersonalData)
 
     const hash = crypto.createHash('sha256')
     hash.update(user.persdata.bibnr, 'utf8')
