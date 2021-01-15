@@ -55,6 +55,9 @@ export async function callWithSession (onSessionFailure, callback) {
       }
 
       retVal = await callback(session)
+    } else if (e.message === 'No Session') {
+      onSessionFailure(e)
+      return
     } else {
       throw e
     }
