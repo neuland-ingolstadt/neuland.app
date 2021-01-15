@@ -44,20 +44,21 @@ body {
  * CYBERPUNK THEME
  */
 @font-face {
-  font-family: cyberpunk;
-  src: url(/Checkbook-1K2.ttf);
+  font-family: fasterone;
+  src: url(/FasterOne-Regular.ttf);
 }
-/* TODO: can we bundle this font? or might we run into legal issues?
 @font-face {
-  font-family: cyberpunk;
-  src: url(/Cyberpunk-Regular.ttf);
-}*/
+  font-family: pressstart;
+  src: url(/PressStart2P-Regular.ttf);
+}
 .cyberpunk {
   background-color: #121212;
+  font-family: pressstart;
 }
 .cyberpunk * {
   background-color: #121212 !important;
   color: white !important;
+  font-family: pressstart;
 }
 .cyberpunk .card,
 .cyberpunk .modal-content,
@@ -68,5 +69,5 @@ body {
 .cyberpunk :is(strong, h1, h2, h3, h4, h5, h6),
 .cyberpunk .card-title {
   color: #F3F315 !important;
-  font-family: cyberpunk;
+  font-family: fasterone;
 }
