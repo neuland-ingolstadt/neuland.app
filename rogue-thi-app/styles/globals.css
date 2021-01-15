@@ -41,7 +41,7 @@ body {
 
 
 /*
- * CYBERPUNK THEME
+ * RETRO THEME
  */
 @font-face {
   font-family: fasterone;
@@ -51,23 +51,23 @@ body {
   font-family: pressstart;
   src: url(/PressStart2P-Regular.ttf);
 }
-.cyberpunk {
+.retro {
   background-color: #121212;
   font-family: pressstart;
 }
-.cyberpunk * {
+.retro * {
   background-color: #121212 !important;
   color: white !important;
   font-family: pressstart;
 }
-.cyberpunk .card,
-.cyberpunk .modal-content,
-.cyberpunk .list-group-item,
-.cyberpunk .list-group-item-action {
+.retro .card,
+.retro .modal-content,
+.retro .list-group-item,
+.retro .list-group-item-action {
   border-color: #F3F315 !important;
 }
-.cyberpunk :is(strong, h1, h2, h3, h4, h5, h6),
-.cyberpunk .card-title {
+.retro :is(strong, h1, h2, h3, h4, h5, h6),
+.retro .card-title {
   color: #F3F315 !important;
   font-family: fasterone;
 }
