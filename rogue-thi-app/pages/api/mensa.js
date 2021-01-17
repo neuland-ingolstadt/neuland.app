@@ -1,4 +1,5 @@
 import xmljs from 'xml-js'
+import { formatISODate } from '../../lib/date-utils'
 import MemoryCache from '../../lib/memory-cache'
 
 const CACHE_TTL = 60 * 60 * 1000
@@ -31,13 +32,13 @@ function parseDataFromXml (xml) {
     const addInReg = /\s*\((.*?)\)\s*/
     const meals = sourceItems.map(item => {
       let text = item.title._text
-      const allergenes = new Set()
+      const allergens = new Set()
       while (addInReg.test(text)) {
         const [addInText, addIn] = text.match(addInReg)
         text = text.replace(addInText, ' ')
 
-        const newAllergenes = addIn.split(',')
-        newAllergenes.forEach(newAll => allergenes.add(newAll))
+        const newAllergens = addIn.split(',')
+        newAllergens.forEach(newAll => allergens.add(newAll))
       }
 
       const prices = [
@@ -50,12 +51,12 @@ function parseDataFromXml (xml) {
       return {
         name: text.trim(),
         prices,
-        allergenes: [...allergenes]
+        allergens: [...allergens]
       }
     })
 
     return {
-      timestamp: date.toISOString(),
+      timestamp: formatISODate(date),
       meals
     }
   })

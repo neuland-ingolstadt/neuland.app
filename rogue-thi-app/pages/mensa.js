@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -56,8 +55,8 @@ export default function Timetable () {
     setShowAllergenSelection(false)
   }
 
-  function containsSelectedAllergen (allergenes) {
-    return allergenes.some(x => allergenSelection[x])
+  function containsSelectedAllergen (allergens) {
+    return allergens.some(x => allergenSelection[x])
   }
 
   return (
@@ -79,7 +78,7 @@ export default function Timetable () {
               <ListGroup.Item
                 key={idx}
                 className={styles.item}
-                onClick={() => setShowAllergenDetails(meal.allergenes)}
+                onClick={() => setShowAllergenDetails(meal.allergens)}
                 action
               >
                 <div className={styles.left}>
@@ -87,14 +86,14 @@ export default function Timetable () {
                     {meal.name}
                   </div>
                   <div className={styles.room}>
-                    <small style={{ color: containsSelectedAllergen(meal.allergenes) && COLOR_WARN }}>
-                      {containsSelectedAllergen(meal.allergenes) && (
+                    <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+                      {containsSelectedAllergen(meal.allergens) && (
                         <span>
                           <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
                           {' '}
                         </span>
                       )}
-                      {meal.allergenes.map((supplement, idx) => (
+                      {meal.allergens.map((supplement, idx) => (
                         <span key={idx}>
                           {idx !== 0 && ', '}
                           <span>

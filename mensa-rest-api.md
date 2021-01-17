@@ -40,7 +40,7 @@ GET https://neuland.app/api/mensa
     <employees price>,
     <guest price>
   ],
-  "allergenes": [
+  "allergens": [
     "1",
     "4"
     ...
@@ -52,7 +52,7 @@ GET https://neuland.app/api/mensa
 ```json
 [
   {
-    "timestamp": "2021-01-17T23:00:00.000Z",
+    "timestamp": "2021-01-18",
     "meals": [
       {
         "name": "Puten Cordon Bleu mit Zitrone Pommes-Frites",
@@ -61,7 +61,7 @@ GET https://neuland.app/api/mensa
           4.39,
           6.78
         ],
-        "allergenes": [
+        "allergens": [
           "1",
           "4",
           "7",

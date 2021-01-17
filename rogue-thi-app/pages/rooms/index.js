@@ -16,7 +16,7 @@ import styles from '../../styles/Rooms.module.css'
 import AppNavbar from '../../lib/AppNavbar'
 import { callWithSession } from '../../lib/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-api-client'
-import { formatFriendlyTime } from '../../lib/date-utils'
+import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/api-converter'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
@@ -24,16 +24,6 @@ const BUILDINGS_ALL = 'Alle'
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const DURATION_PRESET = '01:00'
 const TUX_ROOMS = ['G308']
-
-function getISODate (date) {
-  return date.getFullYear().toString().padStart(4, '0') + '-' +
-    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
-    date.getDate().toString().padStart(2, '0')
-}
-
-function getISOTime (date) {
-  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
-}
 
 async function filterRooms (session, building, date, time, duration) {
   const beginDate = new Date(date + 'T' + time)
@@ -84,8 +74,8 @@ export default function Rooms () {
   }
 
   const [building, setBuilding] = useState(BUILDINGS_ALL)
-  const [date, setDate] = useState(getISODate(startDate))
-  const [time, setTime] = useState(getISOTime(startDate))
+  const [date, setDate] = useState(formatISODate(startDate))
+  const [time, setTime] = useState(formatISOTime(startDate))
   const [duration, setDuration] = useState(DURATION_PRESET)
 
   const [searching, setSearching] = useState(false)

@@ -96,3 +96,13 @@ export function formatFriendlyRelativeTime (date) {
 
   return WORD_NOW
 }
+
+export function formatISODate (date) {
+  return date.getFullYear().toString().padStart(4, '0') + '-' +
+    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+    date.getDate().toString().padStart(2, '0')
+}
+
+export function formatISOTime (date) {
+  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+}
