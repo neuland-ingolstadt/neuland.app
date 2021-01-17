@@ -26,5 +26,5 @@ export async function getMensaPlan () {
 
   cache.set(KEY_GET_MENSA_PLAN, res)
 
-  return res.data
+  return res
 }

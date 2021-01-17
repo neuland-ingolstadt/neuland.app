@@ -29,12 +29,6 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
-function parseGermanDate (str) {
-  const match = str.match(/^\w+ (\d{2}).(\d{2}).(\d{4})$/)
-  const [, day, month, year] = match
-  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-}
-
 export default function Timetable () {
   const [mensaPlan, setMensaPlan] = useState(null)
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
@@ -44,17 +38,7 @@ export default function Timetable () {
   useEffect(async () => {
     try {
       const data = await getMensaPlan()
-
-      const days = data.map(x => ({
-        date: parseGermanDate(x.tag),
-        meals: Object.values(x.gerichte).map(meal => ({
-          name: meal.name[1],
-          prices: meal.name.slice(2, 5),
-          supplements: meal.zusatz.split(',')
-        }))
-      }))
-
-      setMensaPlan(days)
+      setMensaPlan(data)
     } catch (e) {
       console.error(e)
       alert(e)
@@ -72,8 +56,8 @@ export default function Timetable () {
     setShowAllergenSelection(false)
   }
 
-  function containsSelectedAllergen (supplements) {
-    return supplements.some(x => allergenSelection[x])
+  function containsSelectedAllergen (allergenes) {
+    return allergenes.some(x => allergenSelection[x])
   }
 
   return (
@@ -88,14 +72,14 @@ export default function Timetable () {
         {mensaPlan && mensaPlan.map((day, idx) =>
           <ListGroup key={idx}>
             <h4 className={styles.dateBoundary}>
-              {formatNearDate(day.date)}
+              {formatNearDate(day.timestamp)}
             </h4>
 
             {day.meals.map((meal, idx) =>
               <ListGroup.Item
                 key={idx}
                 className={styles.item}
-                onClick={() => setShowAllergenDetails(meal.supplements)}
+                onClick={() => setShowAllergenDetails(meal.allergenes)}
                 action
               >
                 <div className={styles.left}>
@@ -103,14 +87,14 @@ export default function Timetable () {
                     {meal.name}
                   </div>
                   <div className={styles.room}>
-                    <small style={{ color: containsSelectedAllergen(meal.supplements) && COLOR_WARN }}>
-                      {containsSelectedAllergen(meal.supplements) && (
+                    <small style={{ color: containsSelectedAllergen(meal.allergenes) && COLOR_WARN }}>
+                      {containsSelectedAllergen(meal.allergenes) && (
                         <span>
                           <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
                           {' '}
                         </span>
                       )}
-                      {meal.supplements.map((supplement, idx) => (
+                      {meal.allergenes.map((supplement, idx) => (
                         <span key={idx}>
                           {idx !== 0 && ', '}
                           <span>

@@ -59,15 +59,15 @@ async function getTimetablePreview (session) {
 
 async function getMensaPlanPreview (session) {
   const days = await getMensaPlan()
-  const today = Object.values(days[0].gerichte)
+  const today = Object.values(days[0].meals)
 
   if (today.length > 2) {
     return [
-      today[0].name[1],
+      today[0].name,
       `und ${today.length - 1} weitere Gerichte`
     ]
   } else {
-    return today.map(x => x.name[1])
+    return today.map(x => x.name)
   }
 }
 

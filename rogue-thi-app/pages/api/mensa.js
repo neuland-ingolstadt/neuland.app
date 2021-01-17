@@ -7,22 +7,8 @@ const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xm
 
 const cache = new MemoryCache({ ttl: CACHE_TTL })
 
-const dayTexts = [
-  'Sonntag',
-  'Montag',
-  'Dienstag',
-  'Mittwoch',
-  'Donnerstag',
-  'Freitag',
-  'Samstag'
-]
-function pad2 (val) {
-  return val.toString().padStart(2, '0')
-}
-function dateToTHIFormat (date) {
-  return `${pad2(date.getDate())}.${pad2(date.getMonth() + 1)}.${pad2(date.getFullYear())}`
-}
-function convertToTHIFormat (sourceData) {
+function parseDataFromXml (xml) {
+  const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
 
   let sourceDays = sourceData.speiseplan.tag
@@ -42,43 +28,39 @@ function convertToTHIFormat (sourceData) {
       sourceItems = [sourceItems]
     }
 
-    const items = {}
     const addInReg = /\s*\((.*?)\)\s*/
-    sourceItems.forEach((item, i) => {
+    const meals = sourceItems.map(item => {
       let text = item.title._text
-      const addIns = new Set()
+      const allergenes = new Set()
       while (addInReg.test(text)) {
         const [addInText, addIn] = text.match(addInReg)
         text = text.replace(addInText, ' ')
 
-        const newAddins = addIn.split(',')
-        newAddins.forEach(newAddin => addIns.add(newAddin))
+        const newAllergenes = addIn.split(',')
+        newAllergenes.forEach(newAll => allergenes.add(newAll))
       }
 
-      items[i] = {
-        zusatz: [...addIns].join(','),
-        name: [
-          '',
-          text.trim(),
-          item.preis1._text,
-          item.preis2._text,
-          item.preis3._text
-        ]
+      const prices = [
+        item.preis1._text,
+        item.preis2._text,
+        item.preis3._text
+      ]
+        .map(x => parseFloat(x.replace(',', '.')))
+
+      return {
+        name: text.trim(),
+        prices,
+        allergenes: [...allergenes]
       }
     })
 
     return {
-      tag: `${dayTexts[date.getDay()]} ${dateToTHIFormat(date)}`,
-      gerichte: items
+      timestamp: date.toISOString(),
+      meals
     }
   })
 
-  return {
-    data: days.filter(x => x !== null),
-    status: 0,
-    date: dateToTHIFormat(now),
-    time: `${pad2(now.getHours())}:${pad2(now.getMinutes())}:${pad2(now.getSeconds())}`
-  }
+  return days.filter(x => x !== null)
 }
 
 async function fetchPlan (lang) {
@@ -88,8 +70,8 @@ async function fetchPlan (lang) {
 
   if (!plan) {
     const resp = await fetch(url)
-    plan = xmljs.xml2js(await resp.text(), { compact: true })
-    plan = convertToTHIFormat(plan)
+    const body = await resp.text()
+    plan = parseDataFromXml(body)
 
     cache.set(url, plan)
   }

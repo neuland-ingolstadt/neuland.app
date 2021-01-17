@@ -1,4 +1,5 @@
 import { thiApiRequest } from './thi-api-request'
+import { convertThiMensaPlan } from './thi-api-conversion'
 import MemoryCache from './memory-cache'
 import LocalStorageCache from './localstorage-cache'
 
@@ -161,7 +162,7 @@ export async function getMensaPlan (session) {
 
   cache.set(KEY_GET_MENSA_PLAN, res)
 
-  return res.data
+  return convertThiMensaPlan(res.data)
 }
 
 export async function getFreeRooms (session, date) {
