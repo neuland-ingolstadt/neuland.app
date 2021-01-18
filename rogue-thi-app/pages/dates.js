@@ -21,8 +21,6 @@ commonDates.forEach(x => {
   if (x.end) {
     x.end = new Date(x.end)
   }
-
-  console.log(x.name, x.begin, x.end)
 })
 
 const now = new Date()
