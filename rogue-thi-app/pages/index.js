@@ -313,7 +313,7 @@ export default function Home () {
         <HomeCard
           icon={faPen}
           title="Noten & Fächer"
-          link="/exams"
+          link="/grades"
         >
           Prüfungsergebnisse und ausstehende Fächer einsehen.
         </HomeCard>
