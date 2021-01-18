@@ -3,6 +3,9 @@ import { isAlive, login } from './thi-api-client'
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
 export async function createSession (router, username, password, stayLoggedIn) {
+  // convert to lowercase just to be safe
+  // (the API used to show weird behavior when using upper case usernames)
+  username = username.toLowerCase()
   // strip domain if user entered an email address
   username = username.replace(/@thi\.de$/, '')
 
