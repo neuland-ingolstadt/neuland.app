@@ -15,7 +15,7 @@ import { getExams } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
-import commonDates from '../data/dates.json'
+import commonDates from '../data/calendar.json'
 commonDates.forEach(x => {
   x.begin = new Date(x.begin)
   if (x.end) {

@@ -289,7 +289,7 @@ export default function Home () {
         <HomeCard
           icon={faCalendarAlt}
           title="Termine"
-          link="/dates"
+          link="/calendar"
         >
           Prüfungstermine, Rückmeldungen, Notenbekanntgaben und andere Termine
         </HomeCard>
