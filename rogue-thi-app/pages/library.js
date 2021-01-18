@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppNavbar from '../lib/AppNavbar'
-import { callWithSession } from '../lib/thi-session-handler'
+import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
 import {
   getLibraryReservations,
   getAvailableLibrarySeats,
@@ -61,7 +61,6 @@ export default function Library (props) {
 
   async function deleteReservation (id) {
     callWithSession(
-      () => router.push('/login'),
       async session => {
         await removeLibraryReservation(session, id)
         await refreshData(session)
@@ -71,7 +70,6 @@ export default function Library (props) {
 
   async function addReservation () {
     callWithSession(
-      () => router.push('/login'),
       async session => {
         await addLibraryReservation(
           session,
@@ -90,12 +88,15 @@ export default function Library (props) {
   useEffect(async () => {
     try {
       await callWithSession(
-        () => router.push('/login'),
         refreshData
       )
     } catch (e) {
-      console.error(e)
-      alert(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
     }
   }, [])
 
@@ -125,12 +126,13 @@ export default function Library (props) {
             <Form.Label>Sitz:</Form.Label>
             <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
               <option value={-1}>Egal</option>
-            {reservationTime && reservationRoom
-              && Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
+            {reservationTime && reservationRoom &&
+              Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
               <option key={idx} value={x}>
                 {x}
               </option>
-            )}
+              )
+            }
             </Form.Control>
           </Form.Group>
         </Modal.Body>

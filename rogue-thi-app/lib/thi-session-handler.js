@@ -2,6 +2,10 @@ import { isAlive, login } from './thi-api-client'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 
+export class NoSessionError extends Error {
+
+}
+
 export async function createSession (router, username, password, stayLoggedIn) {
   // convert to lowercase just to be safe
   // (the API used to show weird behavior when using upper case usernames)
@@ -25,7 +29,7 @@ export async function createSession (router, username, password, stayLoggedIn) {
   router.replace('/')
 }
 
-export async function callWithSession (onSessionFailure, callback) {
+export async function callWithSession (method) {
   let session = localStorage.session
   const username = localStorage.username
   const password = localStorage.password
@@ -37,36 +41,32 @@ export async function callWithSession (onSessionFailure, callback) {
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
     } catch (e) {
-      onSessionFailure(e)
-      return
+      throw new NoSessionError()
     }
   }
 
-  let retVal
   try {
-    retVal = await callback(session)
+    return await method(session)
   } catch (e) {
-    if (e.message === 'No Session' && username && password) {
-      console.log('seems to have received a session error trying to get a new session!')
-      try {
-        session = await login(username, password)
-        localStorage.session = session
-        localStorage.sessionCreated = Date.now()
-      } catch (e) {
-        onSessionFailure(e)
-        return
-      }
+    if (e.message === 'No Session') {
+      if (username && password) {
+        console.log('seems to have received a session error trying to get a new session!')
+        try {
+          session = await login(username, password)
+          localStorage.session = session
+          localStorage.sessionCreated = Date.now()
+        } catch (e) {
+          throw new NoSessionError()
+        }
 
-      retVal = await callback(session)
-    } else if (e.message === 'No Session') {
-      onSessionFailure(e)
-      return
+        return await method(session)
+      } else {
+        throw new NoSessionError()
+      }
     } else {
       throw e
     }
   }
-
-  return retVal
 }
 
 export async function obtainSession (router) {

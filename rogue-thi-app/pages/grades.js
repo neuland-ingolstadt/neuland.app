@@ -8,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import styles from '../styles/Exams.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { callWithSession } from '../lib/thi-session-handler'
+import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
 import { getGrades } from '../lib/thi-api-client'
 
 export default function Exams () {
@@ -18,10 +18,7 @@ export default function Exams () {
 
   useEffect(async () => {
     try {
-      const gradeList = await callWithSession(
-        () => router.push('/login'),
-        getGrades
-      )
+      const gradeList = await callWithSession(getGrades)
 
       gradeList.forEach(x => {
         if (x.anrech === '*' && x.note === '') {
@@ -39,8 +36,12 @@ export default function Exams () {
         deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
       )
     } catch (e) {
-      console.error(e)
-      alert(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
     }
   }, [])
 

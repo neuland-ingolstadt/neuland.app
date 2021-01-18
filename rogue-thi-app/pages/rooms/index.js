@@ -14,7 +14,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import styles from '../../styles/Rooms.module.css'
 
 import AppNavbar from '../../lib/AppNavbar'
-import { callWithSession } from '../../lib/thi-session-handler'
+import { callWithSession, NoSessionError } from '../../lib/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/api-converter'
@@ -86,7 +86,6 @@ export default function Rooms () {
     setFilterResults(null)
 
     const rooms = await callWithSession(
-      () => router.push('/login'),
       session => filterRooms(session, building, date, time, duration)
     )
 
@@ -94,7 +93,18 @@ export default function Rooms () {
     setFilterResults(rooms)
   }
 
-  useEffect(() => filter(), [])
+  useEffect(async () => {
+    try {
+      await filter()
+    } catch (e) {
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
+    }
+  }, [])
 
   return (
     <Container>

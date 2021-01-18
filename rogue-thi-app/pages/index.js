@@ -31,7 +31,7 @@ import styles from '../styles/Home.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
-import { callWithSession, forgetSession } from '../lib/thi-session-handler'
+import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-session-handler'
 import { getTimetable, getPersonalData } from '../lib/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
@@ -121,34 +121,51 @@ export default function Home () {
     try {
       setMensaPlan(await getMensaPlanPreview())
     } catch (e) {
-      console.error(e)
-      setMensaPlanError(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        setMensaPlanError(e)
+      }
     }
 
     try {
-      const timetable = await callWithSession(() => router.push('/login'), getTimetablePreview)
+      const timetable = await callWithSession(getTimetablePreview)
       setTimetable(timetable)
     } catch (e) {
-      console.error(e)
-      setTimetableError(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        setTimetableError(e)
+      }
     }
   }, [])
 
   useEffect(async () => {
-    if (localStorage.theme && localStorage.theme !== currentTheme) {
-      setCurrentTheme(localStorage.theme)
+    try {
+      if (localStorage.theme && localStorage.theme !== currentTheme) {
+        setCurrentTheme(localStorage.theme)
+      }
+
+      if (!showThemeModal || userHash !== null) {
+        return
+      }
+
+      const user = await callWithSession(getPersonalData)
+
+      const hash = crypto.createHash('sha256')
+      hash.update(user.persdata.bibnr, 'utf8')
+      hash.update(user.persdata.email, 'utf8')
+      setUserHash(hash.digest('base64'))
+    } catch (e) {
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
     }
-
-    if (!showThemeModal || userHash !== null) {
-      return
-    }
-
-    const user = await callWithSession(() => router.push('/login'), getPersonalData)
-
-    const hash = crypto.createHash('sha256')
-    hash.update(user.persdata.bibnr, 'utf8')
-    hash.update(user.persdata.email, 'utf8')
-    setUserHash(hash.digest('base64'))
   }, [showThemeModal])
 
   function setTheme (newTheme) {

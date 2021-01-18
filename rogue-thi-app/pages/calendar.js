@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button'
 import styles from '../styles/Exams.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { callWithSession } from '../lib/thi-session-handler'
+import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
 import { getExams } from '../lib/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
@@ -33,10 +33,7 @@ export default function Exams () {
 
   useEffect(async () => {
     try {
-      const examList = await callWithSession(
-        () => router.push('/login'),
-        getExams
-      )
+      const examList = await callWithSession(getExams)
 
       setExams(examList
         .map(x => {
@@ -55,8 +52,12 @@ export default function Exams () {
         })
       )
     } catch (e) {
-      console.error(e)
-      alert(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
     }
   }, [])
 

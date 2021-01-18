@@ -9,7 +9,7 @@ import ReactPlaceholder from 'react-placeholder'
 import styles from '../styles/Personal.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
-import { callWithSession } from '../lib/thi-session-handler'
+import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
 import { getPersonalData } from '../lib/thi-api-client'
 
 export default function Personal () {
@@ -19,15 +19,18 @@ export default function Personal () {
   useEffect(async () => {
     try {
       const response = await callWithSession(
-        () => router.push('/login'),
         getPersonalData
       )
       const data = response.persdata
       data.pcounter = response.pcounter
       setUserdata(data)
     } catch (e) {
-      console.error(e)
-      alert(e)
+      if (e instanceof NoSessionError) {
+        router.push('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
     }
   }, [])
 
