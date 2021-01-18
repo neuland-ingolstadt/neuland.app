@@ -18,11 +18,12 @@ import ReactPlaceholder from 'react-placeholder'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronRight,
-  faCalendar,
+  faCalendarMinus,
   faUtensils,
   faDoorOpen,
   faBook,
   faPen,
+  faCalendarAlt,
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -228,7 +229,7 @@ export default function Home () {
         </Modal>
 
         <HomeCard
-          icon={faCalendar}
+          icon={faCalendarMinus}
           title="Stundenplan"
           link="/timetable"
         >
@@ -286,6 +287,14 @@ export default function Home () {
         </HomeCard>
 
         <HomeCard
+          icon={faCalendarAlt}
+          title="Termine"
+          link="/dates"
+        >
+          Prüfungstermine, Rückmeldungen, Notenbekanntgaben und andere Termine
+        </HomeCard>
+
+        <HomeCard
           icon={faDoorOpen}
           title="Räume"
           link="/rooms"
@@ -303,10 +312,10 @@ export default function Home () {
 
         <HomeCard
           icon={faPen}
-          title="Prüfungen"
+          title="Noten & Fächer"
           link="/exams"
         >
-          Prüfungstermine und -ergebnisse einsehen.
+          Prüfungsergebnisse und ausstehende Fächer einsehen.
         </HomeCard>
 
         <HomeCard

@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Vorlesungsbeginn",
+    "begin": "2020-10-01T08:15:00",
+    "hasHours": true
+  },
+  {
+    "name": "Vorlesungsbeginn für Erstsemester",
+    "begin": "2020-10-19T10:00:00",
+    "hasHours": true
+  },
+  {
+    "name": "Prüfungsanmeldung",
+    "begin": "2020-11-04",
+    "end": "2020-11-13"
+  },
+  {
+    "name": "Prüfungsabmeldung",
+    "begin": "2020-11-04",
+    "end": "2021-01-11"
+  },
+  {
+    "name": "Vorlesungsfrei (Weihnachten)",
+    "begin": "2020-12-24",
+    "end": "2021-01-06"
+  },
+  {
+    "name": "Rückmeldung zum SS 2021",
+    "begin": "2021-01-14",
+    "end": "2021-01-31"
+  },
+  {
+    "name": "Erweiterter Prüfungszeitraum",
+    "begin": "2021-01-19",
+    "end": "2021-01-22"
+  },
+  {
+    "name": "Prüfungszeitraum",
+    "begin": "2021-01-23",
+    "end": "2021-02-04"
+  },
+  {
+    "name": "Notenbekanntgabe",
+    "begin": "2021-02-12T13:00:00",
+    "hasHours": true
+  },
+  {
+    "name": "Semesterferien",
+    "begin": "2021-02-15",
+    "end": "2021-03-14"
+  }
+]

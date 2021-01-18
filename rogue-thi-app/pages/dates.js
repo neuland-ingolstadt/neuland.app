@@ -11,25 +11,33 @@ import styles from '../styles/Exams.module.css'
 
 import AppNavbar from '../lib/AppNavbar'
 import { callWithSession } from '../lib/thi-session-handler'
-import { getExams, getGrades } from '../lib/thi-api-client'
-import { formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
+import { getExams } from '../lib/thi-api-client'
+import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
+
+import commonDates from '../data/dates.json'
+commonDates.forEach(x => {
+  x.begin = new Date(x.begin)
+  if (x.end) {
+    x.end = new Date(x.end)
+  }
+
+  console.log(x.name, x.begin, x.end)
+})
+
+const now = new Date()
+const upcomingDates = commonDates.filter(x => (x.end && x.end > now) || x.begin > now)
 
 export default function Exams () {
   const router = useRouter()
   const [exams, setExams] = useState(null)
-  const [grades, setGrades] = useState(null)
-  const [missingGrades, setMissingGrades] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
     try {
-      const [examList, gradeList] = await callWithSession(
+      const examList = await callWithSession(
         () => router.push('/login'),
-        session => Promise.all([
-          getExams(session),
-          getGrades(session)
-        ])
+        getExams
       )
 
       setExams(examList
@@ -48,22 +56,6 @@ export default function Exams () {
           return x
         })
       )
-
-      gradeList.forEach(x => {
-        if (x.anrech === '*' && x.note === '') {
-          x.note = 'E*'
-        }
-      })
-
-      const deduplicatedGrades = gradeList
-        .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
-
-      const finishedGrades = deduplicatedGrades.filter(x => x.note)
-      setGrades(finishedGrades)
-
-      setMissingGrades(
-        deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
-      )
     } catch (e) {
       console.error(e)
       alert(e)
@@ -72,7 +64,7 @@ export default function Exams () {
 
   return (
     <Container>
-      <AppNavbar title="Noten & Fächer" />
+      <AppNavbar title="Termine" />
 
       <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
         <Modal.Header closeButton>
@@ -98,41 +90,25 @@ export default function Exams () {
       </Modal>
 
       <ListGroup>
-          <h4 className={styles.heading}>
-            Prüfungen
-          </h4>
-
-          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
-            {exams && exams.map((item, idx) =>
-              <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
-                <div className={styles.left}>
-                  {item.titel} ({item.stg})<br />
-
-                  <div className={styles.details}>
-                    Termin: {item.date ? formatFriendlyDateTime(item.date) + ' (in ' + formatFriendlyRelativeTime(item.date) + ')' : 'TBD'}<br />
-                    Raum: {item.exam_rooms || 'TBD'} {item.exam_seat || ''}<br />
-                  </div>
-                </div>
-              </ListGroup.Item>
-            )}
-          </ReactPlaceholder>
-      </ListGroup>
-
-      <ListGroup>
         <h4 className={styles.heading}>
-          Noten
+          Prüfungen
         </h4>
 
-        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={grades}>
-          {grades && grades.map((item, idx) =>
-            <ListGroup.Item key={idx} className={styles.item}>
+        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
+          {exams && exams.map((item, idx) =>
+            <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
               <div className={styles.left}>
                 {item.titel} ({item.stg})<br />
 
                 <div className={styles.details}>
-                  Note: {item.note.replace('*', ' (angerechnet)')}<br />
-                  ECTS: {item.ects || '(keine)'}
+                  Termin: {item.date ? formatFriendlyDateTime(item.date) : 'TBD'}<br />
+                  Raum: {item.exam_rooms || 'TBD'}<br />
+                  {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
                 </div>
+              </div>
+
+              <div className={styles.details}>
+                In {formatFriendlyRelativeTime(item.date)}
               </div>
             </ListGroup.Item>
           )}
@@ -141,23 +117,31 @@ export default function Exams () {
 
       <ListGroup>
         <h4 className={styles.heading}>
-          Ausstehende Fächer
+          Termine
         </h4>
 
-        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={missingGrades}>
-          {missingGrades && missingGrades.map((item, idx) =>
-            <ListGroup.Item key={idx} className={styles.item}>
-              <div className={styles.left}>
-                {item.titel} ({item.stg}) <br />
+        {upcomingDates.map((item, idx) =>
+          <ListGroup.Item key={idx} className={styles.item}>
+            <div className={styles.left}>
+              {item.name}<br />
+              <div className={styles.details}>
 
-                <div className={styles.details}>
-                  Frist: {item.frist || '(keine)'}<br />
-                  ECTS: {item.ects || '(keine)'}
-                </div>
+                {item.hasHours
+                  ? formatFriendlyDateTime(item.begin)
+                  : formatFriendlyDate(item.begin)}
+                {item.end ? <br /> : <></>}
+                {item.end && (item.hasHours
+                  ? formatFriendlyDateTime(item.end)
+                  : formatFriendlyDate(item.end))}
               </div>
-            </ListGroup.Item>
-          )}
-        </ReactPlaceholder>
+            </div>
+            <div className={styles.details}>
+              {(item.end && item.begin < now)
+                ? 'Jetzt, bis in ' + formatFriendlyRelativeTime(item.end)
+                : 'In ' + formatFriendlyRelativeTime(item.begin)}
+            </div>
+          </ListGroup.Item>
+        )}
       </ListGroup>
       <br />
     </Container>
