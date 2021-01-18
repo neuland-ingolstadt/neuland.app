@@ -99,14 +99,14 @@ export default function Exams () {
                 {item.titel} ({item.stg})<br />
 
                 <div className={styles.details}>
-                  Termin: {item.date ? formatFriendlyDateTime(item.date) : 'TBD'}<br />
+                  {item.date && <>
+                    {formatFriendlyDateTime(item.date)}
+                    <> (in {formatFriendlyRelativeTime(item.date)})</>
+                    <br />
+                  </>}
                   Raum: {item.exam_rooms || 'TBD'}<br />
                   {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
                 </div>
-              </div>
-
-              <div className={styles.details}>
-                In {formatFriendlyRelativeTime(item.date)}
               </div>
             </ListGroup.Item>
           )}
@@ -123,20 +123,16 @@ export default function Exams () {
             <div className={styles.left}>
               {item.name}<br />
               <div className={styles.details}>
-
                 {item.hasHours
                   ? formatFriendlyDateTime(item.begin)
                   : formatFriendlyDate(item.begin)}
-                {item.end ? <br /> : <></>}
-                {item.end && (item.hasHours
-                  ? formatFriendlyDateTime(item.end)
-                  : formatFriendlyDate(item.end))}
+                {item.end && <>
+                  <> &ndash; </>
+                  {item.hasHours
+                    ? formatFriendlyDateTime(item.end)
+                    : formatFriendlyDate(item.end)}
+                </>}
               </div>
-            </div>
-            <div className={styles.details}>
-              {(item.end && item.begin < now)
-                ? 'Jetzt, bis in ' + formatFriendlyRelativeTime(item.end)
-                : 'In ' + formatFriendlyRelativeTime(item.begin)}
             </div>
           </ListGroup.Item>
         )}
