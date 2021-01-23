@@ -102,7 +102,7 @@ export default function Exams () {
                 <div className={styles.details}>
                   {item.date && <>
                     {formatFriendlyDateTime(item.date)}
-                    <> ({formatFriendlyRelativeTime(item.date)})</>
+                    {' '}({formatFriendlyRelativeTime(item.date)})
                     <br />
                   </>}
                   Raum: {item.exam_rooms || 'TBD'}<br />
@@ -128,12 +128,18 @@ export default function Exams () {
                   ? formatFriendlyDateTime(item.begin)
                   : formatFriendlyDate(item.begin)}
                 {item.end && <>
-                  <> &ndash; </>
+                  {' '}&ndash;{' '}
                   {item.hasHours
                     ? formatFriendlyDateTime(item.end)
                     : formatFriendlyDate(item.end)}
                 </>}
               </div>
+
+            </div>
+            <div className={styles.details}>
+              {(item.end && item.begin < now)
+                ? 'Bis ' + formatFriendlyRelativeTime(item.end)
+                : formatFriendlyRelativeTime(item.begin)}
             </div>
           </ListGroup.Item>
         )}
