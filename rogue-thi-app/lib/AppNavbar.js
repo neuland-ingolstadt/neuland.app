@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 
 import { getOperatingSystem, OS_IOS, OS_OTHER } from './user-agent'
 
-import styles from './AppNavbar.module.css'
+import styles from '../styles/AppNavbar.module.css'
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
@@ -28,7 +28,6 @@ export default function AppNavbar ({ title, showBack, children }) {
   function goBack () {
     router.back()
   }
-
 
   return (
     <>
