@@ -87,6 +87,13 @@ export default function Timetable () {
             )}
           </ListGroup>
         )}
+        {timetable && timetable.length === 0 &&
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              Der Stundenplan ist leer.
+            </ListGroup.Item>
+          </ListGroup>
+        }
       </ReactPlaceholder>
     </Container>
   )
