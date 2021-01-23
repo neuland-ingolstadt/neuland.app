@@ -111,6 +111,13 @@ export default function Timetable () {
             )}
           </ListGroup>
         )}
+        {mensaPlan && mensaPlan.length === 0 &&
+          <ListGroup variant="flush">
+            <ListGroup.Item>
+              Der Speiseplan ist leer.
+            </ListGroup.Item>
+          </ListGroup>
+        }
       </ReactPlaceholder>
 
       <br />
