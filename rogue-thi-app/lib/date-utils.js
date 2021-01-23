@@ -10,7 +10,8 @@ const WORD_MINUTE = 'Minute'
 const WORD_MINUTES = 'Minuten'
 const WORD_SECOND = 'Sekunde'
 const WORD_SECONDS = 'Sekunden'
-const WORD_NOW = 'Jetzt'
+const WORD_IN = 'in'
+const WORD_AGO = 'vor'
 
 export function formatFriendlyTime (datetime) {
   if (typeof datetime === 'string') {
@@ -63,8 +64,8 @@ export function formatFriendlyDateTime (datetime) {
   return `${date}, ${time}`
 }
 
-export function formatFriendlyRelativeTime (date) {
-  const delta = date - Date.now()
+function formatAbsoluteFriendlyRelativeTime (date) {
+  const delta = Math.abs(date - Date.now())
 
   const days = delta / 86400000 | 0
   if (days === 1) {
@@ -93,8 +94,14 @@ export function formatFriendlyRelativeTime (date) {
   } else if (seconds > 0) {
     return `${seconds} ${WORD_SECONDS}`
   }
+}
 
-  return WORD_NOW
+export function formatFriendlyRelativeTime (date) {
+  if (Date.now() < date) {
+    return `${WORD_IN} ${formatAbsoluteFriendlyRelativeTime(date)}`
+  } else {
+    return `${WORD_AGO} ${formatAbsoluteFriendlyRelativeTime(date)}`
+  }
 }
 
 export function formatISODate (date) {

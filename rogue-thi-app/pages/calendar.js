@@ -102,7 +102,7 @@ export default function Exams () {
                 <div className={styles.details}>
                   {item.date && <>
                     {formatFriendlyDateTime(item.date)}
-                    <> (in {formatFriendlyRelativeTime(item.date)})</>
+                    <> ({formatFriendlyRelativeTime(item.date)})</>
                     <br />
                   </>}
                   Raum: {item.exam_rooms || 'TBD'}<br />
