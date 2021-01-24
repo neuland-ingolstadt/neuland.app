@@ -13,7 +13,9 @@ function parseDataFromXml (xml) {
   const now = new Date()
 
   let sourceDays = sourceData.speiseplan.tag
-  if (!Array.isArray(sourceDays)) {
+  if (!sourceDays) {
+    return []
+  } else if (!Array.isArray(sourceDays)) {
     sourceDays = [sourceDays]
   }
 
