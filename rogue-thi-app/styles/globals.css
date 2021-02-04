@@ -25,17 +25,17 @@ body {
  * DARK THEME
  */
 .dark {
-  background-color: #121212;
+  background-color: #202020;
 }
 .dark * {
-  background-color: #121212 !important;
-  color: white !important;
+  background-color: #202020 !important;
+  color: #ffffff !important;
 }
 .dark .card,
 .dark .modal-content,
 .dark .list-group-item,
 .dark .list-group-item-action {
-  border-color: white !important;
+  border-color: #404040 !important;
 }
 
 

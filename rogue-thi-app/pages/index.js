@@ -222,12 +222,12 @@ export default function Home () {
             <Modal.Title>Erscheinungsbild</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Wähle ein Erscheinungsbild</h4>
             <Form>
               {allThemes.map((theme, i) => (
                 <Form.Check
                   name="theme-selection"
                   key={i}
+                  id={`theme-${i}`}
                   type="radio"
                   label={theme.name}
                   checked={currentTheme === theme.style}
