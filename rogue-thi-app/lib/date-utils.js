@@ -8,8 +8,6 @@ const WORD_HOUR = 'Stunde'
 const WORD_HOURS = 'Stunden'
 const WORD_MINUTE = 'Minute'
 const WORD_MINUTES = 'Minuten'
-const WORD_SECOND = 'Sekunde'
-const WORD_SECONDS = 'Sekunden'
 const WORD_IN = 'in'
 const WORD_AGO = 'vor'
 
@@ -84,15 +82,8 @@ function formatAbsoluteFriendlyRelativeTime (date) {
   const minutes = delta / 60000 | 0
   if (minutes === 1) {
     return `1 ${WORD_MINUTE}`
-  } else if (minutes > 1) {
+  } else {
     return `${minutes} ${WORD_MINUTES}`
-  }
-
-  const seconds = delta / 1000 | 0
-  if (seconds === 1) {
-    return `1 ${WORD_SECOND}`
-  } else if (seconds > 0) {
-    return `${seconds} ${WORD_SECONDS}`
   }
 }
 
@@ -102,6 +93,15 @@ export function formatFriendlyRelativeTime (date) {
   } else {
     return `${WORD_AGO} ${formatAbsoluteFriendlyRelativeTime(date)}`
   }
+}
+
+export function formatRelativeMinutes (datetime) {
+  if (typeof datetime === 'string') {
+    datetime = new Date(datetime)
+  }
+
+  const minutes = Math.max(Math.floor((datetime.getTime() - Date.now()) / 60000), 0)
+  return `${minutes} min`
 }
 
 export function formatISODate (date) {

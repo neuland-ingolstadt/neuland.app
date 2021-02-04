@@ -26,7 +26,7 @@ commonDates.forEach(x => {
 const now = new Date()
 const upcomingDates = commonDates.filter(x => (x.end && x.end > now) || x.begin > now)
 
-export default function Exams () {
+export default function Calendar () {
   const router = useRouter()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)

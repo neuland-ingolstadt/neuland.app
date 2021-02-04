@@ -20,6 +20,7 @@ import {
   faChevronRight,
   faCalendarMinus,
   faUtensils,
+  faBus,
   faDoorOpen,
   faBook,
   faPen,
@@ -33,8 +34,9 @@ import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-session-handler'
 import { getTimetable, getPersonalData } from '../lib/thi-api-client'
-import { getMensaPlan } from '../lib/reimplemented-api-client'
-import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
+import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
+import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../lib/date-utils'
+import { useTime } from '../lib/time-hook'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
@@ -110,26 +112,26 @@ HomeCard.propTypes = {
 }
 
 export default function Home () {
+  const router = useRouter()
+  const time = useTime()
+
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
+  const [busPlan, setBusPlan] = useState(null)
+  const [busPlanError, setBusPlanError] = useState(null)
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [userHash, setUserHash] = useState(null)
   const [isPremiumUser, setIsPremiumUser] = useState(true)
   const [currentTheme, setCurrentTheme] = useState('default')
-  const router = useRouter()
 
   useEffect(async () => {
     try {
       setMensaPlan(await getMensaPlanPreview())
     } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.push('/login')
-      } else {
-        console.error(e)
-        setMensaPlanError(e)
-      }
+      console.error(e)
+      setMensaPlanError(e)
     }
 
     try {
@@ -144,6 +146,15 @@ export default function Home () {
       }
     }
   }, [])
+
+  useEffect(async () => {
+    try {
+      setBusPlan(await getBusPlan('zob'))
+    } catch (e) {
+      console.error(e)
+      setBusPlanError(e)
+    }
+  }, [time])
 
   useEffect(async () => {
     try {
@@ -300,6 +311,35 @@ export default function Home () {
                 <ListGroup.Item>
                   Fehler beim Abruf des Speiseplans.<br />
                   Die Mensa mag gerade nicht. :(
+                </ListGroup.Item>
+              }
+            </ListGroup>
+          </ReactPlaceholder>
+        </HomeCard>
+
+        <HomeCard
+          icon={faBus}
+          title="Bus"
+          link="/bus"
+        >
+          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={busPlan || busPlanError}>
+            <ListGroup variant="flush">
+              {busPlan && busPlan.slice(0, 5).map((x, i) =>
+                <ListGroup.Item key={i} className={styles.busItem}>
+                  <div className={styles.busRoute}>
+                    {x.route}
+                  </div>
+                  <div className={styles.busDestination}>
+                    {x.destination}
+                  </div>
+                  <div className={styles.busTime}>
+                    {formatRelativeMinutes(x.time)}
+                  </div>
+                </ListGroup.Item>
+              )}
+              {busPlanError &&
+                <ListGroup.Item>
+                  Fehler beim Abruf des Busplans.
                 </ListGroup.Item>
               }
             </ListGroup>

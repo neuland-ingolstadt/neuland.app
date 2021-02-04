@@ -21,3 +21,26 @@
   width: 700px;
   max-width: 95vw;
 }
+
+.busItem {
+  padding: .25rem 1.25rem;
+  border: 0;
+}
+
+.busRoute {
+  padding: 0px 3px;
+  margin-right: 6px;
+  float: left;
+  background: #eeeeee;
+  border-radius: 2px;
+  color: black;
+  font-weight: bold;
+}
+
+.busDestination {
+  float: left;
+}
+
+.busTime {
+  float: right;
+}
