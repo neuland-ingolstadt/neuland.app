@@ -31,10 +31,12 @@ export async function createSession (router, username, password, stayLoggedIn) {
 
 export async function callWithSession (method) {
   let session = localStorage.session
+  const sessionCreated = parseInt(localStorage.sessionCreated)
   const username = localStorage.username
   const password = localStorage.password
 
-  if (!session && username && password) {
+  // log in if there is no session or the session is older than SESSION_EXPIRES
+  if ((!session || sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
       session = await login(username, password)
@@ -45,10 +47,12 @@ export async function callWithSession (method) {
     }
   }
 
+  // otherwise attempt to call the method and see if it throws a session error
   try {
     return await method(session)
   } catch (e) {
-    if (e.message === 'No Session') {
+    // the backend can throw different errors such as 'No Session' or 'Session Is Over'
+    if (/session/i.test(e.message)) {
       if (username && password) {
         console.log('seems to have received a session error trying to get a new session!')
         try {
