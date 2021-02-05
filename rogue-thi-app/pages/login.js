@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 
+import AppNavbar from '../lib/AppNavbar'
 import { createSession } from '../lib/thi-session-handler'
 
-import styles from '../styles/Common.module.css'
+import styles from '../styles/Login.module.css'
+
+const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
+const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind ungültig.'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
@@ -26,70 +30,89 @@ export default function Login (props) {
       e.preventDefault()
       await createSession(router, username, password, saveCredentials)
     } catch (e) {
-      setFailure(e.toString())
+      if (e.message === ORIGINAL_ERROR_WRONG_CREDENTIALS) {
+        setFailure(FRIENDLY_ERROR_WRONG_CREDENTIALS)
+      } else {
+        setFailure(e.toString())
+      }
     }
   }
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Login</title>
-      </Head>
+    <Container>
+      <AppNavbar title="neuland.app" showBack={false} />
 
-      <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
-        { failure && <Alert variant="danger">{failure}</Alert>}
+      <div className={styles.container}>
+        <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
+          {failure &&
+            <Alert variant="danger">
+              {failure}
+            </Alert>
+          }
 
-        <Form.Group>
-          <Form.Label>THI-Benutzername</Form.Label>
-          <Form.Control
-            type="text"
-            autoComplete="username"
-            placeholder="abc1234"
-            className="form-control"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-          />
-        </Form.Group>
+          <Form.Group>
+            <Form.Label>THI-Benutzername</Form.Label>
+            <Form.Control
+              type="text"
+              autoComplete="username"
+              placeholder="abc1234"
+              className="form-control"
+              value={username}
+              isInvalid={!!failure}
+              onChange={e => setUsername(e.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Passwort</Form.Label>
-          <Form.Control
-            type="password"
-            autoComplete="current-password"
-            className="form-control"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-          <Form.Text className="text-muted">
-            <a href={`${GIT_URL}/blob/master/data-security-de.md`}>Sind meine Daten sicher?</a>
-          </Form.Text>
-        </Form.Group>
+          <Form.Group>
+            <Form.Label>Passwort</Form.Label>
+            <Form.Control
+              type="password"
+              autoComplete="current-password"
+              className="form-control"
+              value={password}
+              isInvalid={!!failure}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group>
-          <Form.Check
-            type="checkbox"
-            label="Eingeloggt bleiben"
-            onChange={e => setSaveCredentials(e.target.checked)}
-          />
-        </Form.Group>
+          <Form.Group>
+            <Form.Check
+              type="checkbox"
+              id="stay-logged-in"
+              label="Eingeloggt bleiben"
+              onChange={e => setSaveCredentials(e.target.checked)}
+            />
+          </Form.Group>
 
-        <Button type="submit">
-          Einloggen
-        </Button>
-      </Form>
+          <Form.Group>
+            <Button type="submit" className={styles.loginButton}>
+              Einloggen
+            </Button>
+          </Form.Group>
+        </Form>
 
-      <div className={styles.footer}>
-        <p>
-          Dies ist eine inoffizielle App für Studierende der Technischen Hochschule Ingolstadt.<br />
-          Sie wird von Studierenden entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
-        </p>
-        <p>
-          <a href={GIT_URL} target="_blank" rel="noreferrer">Der Quellcode ist auf GitHub verfügbar.</a>
-        </p>
-        <p>
-          <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum und Datenschutz</a>
-        </p>
+        <div className={styles.disclaimer}>
+          <h6>Was ist das?</h6>
+          <p>
+            Das ist eine inoffizielle Alternative zur THI-App.
+            Sie wird von Studierenden für Studierende entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
+          </p>
+          <h6>Sind meine Daten sicher?</h6>
+          <p>
+            <strong>Ja. </strong>
+            <>Deine Daten werden direkt auf deinem Gerät verschlüsselt, in verschlüsselter Form über unseren Proxy an die THI übermittelt und erst dort wieder entschlüsselt. </>
+            <>Nur die THI hat Zugriff auf deine Zugangsdaten und deine persönlichen Daten. </>
+          </p>
+          <p>
+            <a href={`${GIT_URL}/blob/master/data-security-de.md`}>Hier findest du weitere Informationen zur Sicherheit.</a>
+          </p>
+          <p>
+            <a href={GIT_URL} target="_blank" rel="noreferrer">Quellcode auf GitHub</a>
+            <> &ndash; </>
+            <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum und Datenschutz</a>
+          </p>
+        </div>
       </div>
-    </div>
+    </Container>
   )
 }
