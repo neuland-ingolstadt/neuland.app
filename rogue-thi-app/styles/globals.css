@@ -66,7 +66,7 @@ body {
 .retro .list-group-item-action {
   border-color: #F3F315 !important;
 }
-.retro :is(strong, h1, h2, h3, h4, h5, h6),
+.retro :is(h1, h2, h3, h4, h5, h6),
 .retro .card-title {
   color: #F3F315 !important;
   font-family: fasterone;
