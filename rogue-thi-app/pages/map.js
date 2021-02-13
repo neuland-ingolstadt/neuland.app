@@ -2,11 +2,7 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 
 import Container from 'react-bootstrap/Container'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 
 import AppNavbar from '../lib/AppNavbar'
 import roomData from '../data/rooms.json'
@@ -29,10 +25,10 @@ const searchedProperties = [
   'Funktion',
 ]
 const floorSubstitutes = {
-  'OG': '1', // floor 1 in H (Carissma)
-  'AG': '1.5', // floor 1.5 in A
-  'G': '1.5', // floor 1.5 in H (Reimanns)
-  'null': '4', // floor 4 in Z (Arbeitsamt)
+  OG: '1', // floor 1 in H (Carissma)
+  AG: '1.5', // floor 1.5 in A
+  G: '1.5', // floor 1.5 in H (Reimanns)
+  null: '4', // floor 4 in Z (Arbeitsamt)
 }
 const floorOrder = [
   'EG',
@@ -45,30 +41,30 @@ const floorOrder = [
 
 const floors = {};
 roomData.features.forEach(feature => {
-
   const { properties, geometry } = feature
 
-  if(!geometry || !geometry.coordinates || geometry.type !== 'Polygon')
+  if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
     return
+  }
 
-  if(floorSubstitutes.hasOwnProperty(properties.Etage))
+  if (floorSubstitutes.hasOwnProperty(properties.Etage)) {
     properties.Etage = floorSubstitutes[properties.Etage]
+  }
 
-  if(floorOrder.indexOf(properties.Etage) === -1)
+  if (floorOrder.indexOf(properties.Etage) === -1) {
     floorOrder.push(properties.Etage)
-  if(!floors.hasOwnProperty(properties.Etage))
+  }
+  if (!floors.hasOwnProperty(properties.Etage)) {
     floors[properties.Etage] = []
+  }
 
   geometry.coordinates.forEach(points => {
-
     floors[properties.Etage].push({
       properties,
       coordinates: points.map(([lon, lat]) => [lat, lon]),
       options: { color: '#005a9b' },
     })
-
   })
-
 })
 
 export default function Room () {
@@ -76,8 +72,8 @@ export default function Room () {
   const [searchText, setSearchText] = useState('')
 
   let filteredFloors = {}
-  let filteredFloorOrder = floorOrder.slice(0)
-  if(!searchText) {
+  const filteredFloorOrder = floorOrder.slice(0)
+  if (!searchText) {
     filteredFloors = floors
   }
   else {
@@ -85,18 +81,16 @@ export default function Room () {
 
     const invalidFloorIndices = []
     floorOrder.forEach((floor, i) => {
-
       filteredFloors[floor] = filteredFloors[floor].filter(entry =>
         searchedProperties.some(x => entry.properties[x].indexOf(searchText) !== -1)
       )
 
-      if(filteredFloors[floor].length === 0)
-      invalidFloorIndices.unshift(i)
-
+      if(filteredFloors[floor].length === 0) {
+        invalidFloorIndices.unshift(i)
+      }
     })
 
     invalidFloorIndices.forEach(i => filteredFloorOrder.splice(i, 1))
-
   }
 
   return (
