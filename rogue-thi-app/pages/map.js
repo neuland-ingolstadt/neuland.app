@@ -106,7 +106,7 @@ export default function Room () {
         />
       </Form>
 
-      <MapContainer center={[48.76677, 11.43322]} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
+      <MapContainer center={[48.76677, 11.43322]} zoom={19} maxZoom={21} scrollWheelZoom={true} className={styles.mapContainer}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
