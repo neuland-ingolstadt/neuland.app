@@ -1,8 +1,8 @@
+import crypto from 'crypto'
+
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import crypto from 'crypto'
-
 import Link from 'next/link'
 
 import Container from 'react-bootstrap/Container'
@@ -12,7 +12,6 @@ import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
-
 import ReactPlaceholder from 'react-placeholder'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -28,8 +27,6 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
-import styles from '../styles/Home.module.css'
-
 import AppNavbar from '../lib/AppNavbar'
 import InstallPrompt from '../lib/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-session-handler'
@@ -39,10 +36,11 @@ import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../li
 import { useTime } from '../lib/time-hook'
 import { stations, defaultStation } from '../data/bus.json'
 
+import styles from '../styles/Home.module.css'
+
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
-const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL
 
 const MAX_STATION_LENGTH = 20
 
@@ -140,7 +138,9 @@ export default function Home () {
       console.error(e)
       setMensaPlanError(e)
     }
+  }, [])
 
+  useEffect(async () => {
     try {
       const timetable = await callWithSession(getTimetablePreview)
       setTimetable(timetable)
@@ -228,7 +228,6 @@ export default function Home () {
       </AppNavbar>
 
       <div className={styles.cardDeck}>
-
         <InstallPrompt />
 
         <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
@@ -250,21 +249,6 @@ export default function Home () {
                 />
               ))}
             </Form>
-            {/*
-            <br />
-            <h4>Informationen</h4>
-            <ReactPlaceholder type="text" rows={2} color="#eeeeee" ready={!!userHash}>
-              <strong>Deine ID: </strong> {userHash}<br />
-              <strong>Dein Status: </strong> {isPremiumUser ? 'Premium' : 'Standard'}<br />
-            </ReactPlaceholder>
-            <br />
-            Mitglieder des Neuland Ingolstadt e.V. können Premium Erscheinungsbilder benutzen.
-            Wenn du bereits Mitglied bist aber hier Standard-User angezeigt wird
-            <a href={FEEDBACK_URL}> sende uns bitte deine ID</a> zusammen mit deiner
-            Mitgliedsnummer. <br />
-            Du bist noch kein Mitglied? <a href={WEBSITE_URL}>Hier</a> findest du weitere
-            Informationen über den Verein. Die Mitgliedschaft ist für Studierende kostenlos.
-            */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
@@ -373,7 +357,7 @@ export default function Home () {
           title="Termine"
           link="/calendar"
         >
-          Prüfungstermine, Rückmeldungen, Notenbekanntgaben und andere Termine
+          Prüfungs- und Semestertermine anzeigen.
         </HomeCard>
 
         <HomeCard
@@ -407,9 +391,7 @@ export default function Home () {
         >
           Persönliche Daten einsehen.
         </HomeCard>
-
       </div>
-
     </Container>
   )
 }
