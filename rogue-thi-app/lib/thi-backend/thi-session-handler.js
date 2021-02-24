@@ -6,6 +6,9 @@ export class NoSessionError extends Error {
 
 }
 
+/**
+ * Logs in the user and persists the session to localStorage
+ */
 export async function createSession (router, username, password, stayLoggedIn) {
   // convert to lowercase just to be safe
   // (the API used to show weird behavior when using upper case usernames)
@@ -29,6 +32,12 @@ export async function createSession (router, username, password, stayLoggedIn) {
   router.replace('/')
 }
 
+/**
+ * Calls a method with a session. If the session turns out to be invalid,
+ * it attempts to fetch a new session and calls the method again.
+ *
+ * If a session can not be obtained, a NoSessionError is thrown.
+ */
 export async function callWithSession (method) {
   let session = localStorage.session
   const sessionCreated = parseInt(localStorage.sessionCreated)
@@ -78,6 +87,12 @@ export async function callWithSession (method) {
   }
 }
 
+/**
+ * Obtains a session, either directly from localStorage or by logging in
+ * using saved credentials.
+ *
+ * If a session can not be obtained, the user is redirected to /login.
+ */
 export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)
@@ -114,6 +129,9 @@ export async function obtainSession (router) {
   }
 }
 
+/**
+ * Logs out the user by deleting the session from localStorage.
+ */
 export async function forgetSession (router) {
   delete localStorage.session
   delete localStorage.sessionCreated

@@ -42,6 +42,9 @@ const THI_CERTS = [
 
 let connection = null
 
+/**
+ * Submits an API request to the THI backend using a WebSocket proxy
+ */
 export function thiApiRequest (params) {
   return new Promise((resolve, reject) => {
     console.debug('Request:')

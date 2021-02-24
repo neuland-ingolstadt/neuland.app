@@ -1,5 +1,8 @@
 const CHECK_INTERVAL = 10000
 
+/**
+ * A simple cache that deletes entries after a certain amount of time
+ */
 export default class MemoryCache {
   constructor ({ ttl }) {
     this.ttl = ttl

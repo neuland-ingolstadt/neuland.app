@@ -15,6 +15,9 @@ function str2ab (str) {
   return buf
 }
 
+/**
+ * A wrapper around node-forge that allows you to open a HTTPS connection proxied via WebSocket
+ */
 export default class HttpsConnection {
   constructor (options) {
     console.debug('Creating new connection')

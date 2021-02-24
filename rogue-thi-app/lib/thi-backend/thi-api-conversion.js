@@ -26,6 +26,9 @@ function parseGermanDate (str) {
   return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
 }
 
+/**
+ * Converts an original THI mensa plan to the format used by /api/mensa
+ */
 export function convertThiMensaPlan (plan) {
   return plan.map(x => ({
     timestamp: parseGermanDate(x.tag).toISOString(),

@@ -1,5 +1,8 @@
 import MemoryCache from './memory-cache'
 
+/**
+ * A MemoryCache that can populate itself from an asynchronous function (such as a network request)
+ */
 export default class AsyncMemoryCache extends MemoryCache {
   constructor ({ ttl }) {
     super({ ttl })

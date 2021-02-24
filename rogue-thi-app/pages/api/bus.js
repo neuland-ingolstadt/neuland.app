@@ -15,7 +15,7 @@ const URLS = {
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
 /**
- * Parses relative timestamps such as '0' or '5 min'.
+ * Parses a relative timestamp such as '0' or '5 min'
  */
 function parseDepartureTime (str) {
   let delta

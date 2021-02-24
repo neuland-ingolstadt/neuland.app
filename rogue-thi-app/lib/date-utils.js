@@ -11,6 +11,9 @@ const WORD_MINUTES = 'Minuten'
 const WORD_IN = 'in'
 const WORD_AGO = 'vor'
 
+/**
+ * Formats a time like "8:15"
+ */
 export function formatFriendlyTime (datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
@@ -19,6 +22,9 @@ export function formatFriendlyTime (datetime) {
   return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
 }
 
+/**
+ * Formats a date like "1.10.2020"
+ */
 export function formatFriendlyDate (datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
@@ -37,6 +43,9 @@ export function formatFriendlyDate (datetime) {
   }
 }
 
+/**
+ * Formats a day like "Morgen" or "Montag, 1. Oktober"
+ */
 export function formatNearDate (datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
@@ -55,6 +64,9 @@ export function formatNearDate (datetime) {
   }
 }
 
+/**
+ * Formats a date and time like "1. Oktober, 8:15"
+ */
 export function formatFriendlyDateTime (datetime) {
   const date = formatFriendlyDate(datetime)
   const time = formatFriendlyTime(datetime)
@@ -87,6 +99,9 @@ function formatAbsoluteFriendlyRelativeTime (date) {
   }
 }
 
+/**
+ * Formats a relative date and time like "in 5 Minuten" or "vor 10 Minuten"
+ */
 export function formatFriendlyRelativeTime (date) {
   if (Date.now() < date) {
     return `${WORD_IN} ${formatAbsoluteFriendlyRelativeTime(date)}`
@@ -95,6 +110,9 @@ export function formatFriendlyRelativeTime (date) {
   }
 }
 
+/**
+ * Formats a relative date and time like "5 min"
+ */
 export function formatRelativeMinutes (datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
@@ -104,12 +122,18 @@ export function formatRelativeMinutes (datetime) {
   return `${minutes} min`
 }
 
+/**
+ * Formats a date like "2020-10-01"
+ */
 export function formatISODate (date) {
   return date.getFullYear().toString().padStart(4, '0') + '-' +
     (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
     date.getDate().toString().padStart(2, '0')
 }
 
+/**
+ * Formats a time like "08:15"
+ */
 export function formatISOTime (date) {
   return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
 }

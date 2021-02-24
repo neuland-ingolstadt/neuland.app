@@ -1,5 +1,8 @@
 import * as forge from 'node-forge/lib/index.all'
 
+/**
+ * A helper class that can be used to dispatch an HTTP request using an HttpsConnection
+ */
 export default class HttpRequest {
   constructor (options) {
     this.options = options
