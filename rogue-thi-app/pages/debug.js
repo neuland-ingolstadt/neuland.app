@@ -4,7 +4,7 @@ import styles from '../styles/Common.module.css'
 
 import AppNavbar from '../components/AppNavbar'
 import { obtainSession } from '../lib/thi-backend/thi-session-handler'
-import { thiApiRequest } from '../lib/thi-api-request'
+import { thiApiRequest } from '../lib/thi-backend/thi-api-request'
 
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
