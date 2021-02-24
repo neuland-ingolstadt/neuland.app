@@ -1,5 +1,7 @@
 .stationSelect {
-  margin: 0px 35px;
+  /* margin doesn't work properly for some reason */
+  width: calc(100% - 50px);
+  margin: 0px auto;
 }
 
 .item {
