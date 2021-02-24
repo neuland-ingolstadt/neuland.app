@@ -35,8 +35,13 @@ export async function callWithSession (method) {
   const username = localStorage.username
   const password = localStorage.password
 
-  // log in if there is no session or the session is older than SESSION_EXPIRES
-  if ((!session || sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
+  // redirect user if there is no session and no saved credentials
+  if (!session) {
+    throw new NoSessionError()
+  }
+
+  // log in if there the session is older than SESSION_EXPIRES
+  if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
       session = await login(username, password)
