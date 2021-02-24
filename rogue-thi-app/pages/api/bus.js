@@ -3,7 +3,12 @@ import MemoryCache from '../../lib/memory-cache'
 const CACHE_TTL = 60 * 1000
 const MIN_REGEX = /(\d+) min/
 const URLS = {
-  zob: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439'
+  zob: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439',
+  rathausplatz: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Ratha&sid=337',
+  stadttheater: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-SThea&sid=397',
+  heydeckstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Heyde&sid=247',
+  fruehlingstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Fr__ue__hl&sid=211',
+  rechbergstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Rechb&sid=339'
 }
 
 const cache = new MemoryCache({ ttl: CACHE_TTL })
@@ -47,5 +52,6 @@ export default async function handler (req, res) {
 
   res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
+  res.setHeader('Cache-Control', 'max-age=60') // allow browser to cache this data for 60 seconds
   res.end(JSON.stringify(data))
 }

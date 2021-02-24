@@ -37,11 +37,14 @@ import { getTimetable, getPersonalData } from '../lib/thi-api-client'
 import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
+import { stations, defaultStation } from '../data/bus.json'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
 const WEBSITE_URL = process.env.NEXT_PUBLIC_WEBSITE_URL
+
+const MAX_STATION_LENGTH = 20
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -115,12 +118,16 @@ export default function Home () {
   const router = useRouter()
   const time = useTime()
 
+  // dynamic widget data
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
   const [busPlan, setBusPlan] = useState(null)
   const [busPlanError, setBusPlanError] = useState(null)
+  const [stationName, setStationName] = useState(null)
+
+  // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [userHash, setUserHash] = useState(null)
   const [isPremiumUser, setIsPremiumUser] = useState(true)
@@ -148,8 +155,15 @@ export default function Home () {
   }, [])
 
   useEffect(async () => {
+    setBusPlan(null)
+
+    const stationId = localStorage.station || defaultStation
+    const stationName = stations.find(s => s.id === stationId).name
+
+    setStationName(stationName)
+
     try {
-      setBusPlan(await getBusPlan('zob'))
+      setBusPlan(await getBusPlan(stationId))
     } catch (e) {
       console.error(e)
       setBusPlanError(e)
@@ -319,24 +333,32 @@ export default function Home () {
 
         <HomeCard
           icon={faBus}
-          title="Bus"
+          title={stationName ? `Bus (${stationName})` : 'Bus'}
           link="/bus"
         >
           <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={busPlan || busPlanError}>
             <ListGroup variant="flush">
-              {busPlan && busPlan.slice(0, 5).map((x, i) =>
+              {busPlan && busPlan.slice(0, 4).map((x, i) =>
                 <ListGroup.Item key={i} className={styles.busItem}>
                   <div className={styles.busRoute}>
                     {x.route}
                   </div>
                   <div className={styles.busDestination}>
-                    {x.destination}
+                    {x.destination.length > MAX_STATION_LENGTH
+                      ? x.destination.substr(0, MAX_STATION_LENGTH) + '…'
+                      : x.destination
+                    }
                   </div>
                   <div className={styles.busTime}>
                     {formatRelativeMinutes(x.time)}
                   </div>
                 </ListGroup.Item>
               )}
+              {busPlan && busPlan.length === 0 &&
+                <ListGroup.Item>
+                  In nächster Zeit kommen keine Busse.
+                </ListGroup.Item>
+              }
               {busPlanError &&
                 <ListGroup.Item>
                   Fehler beim Abruf des Busplans.

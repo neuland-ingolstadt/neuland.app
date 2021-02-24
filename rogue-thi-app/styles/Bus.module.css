@@ -1,3 +1,7 @@
+.stationSelect {
+  margin: 0px 35px;
+}
+
 .item {
   display: flex;
   flex-direction: row;
