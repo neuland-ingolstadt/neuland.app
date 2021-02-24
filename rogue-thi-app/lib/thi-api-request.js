@@ -2,8 +2,8 @@
  * Client to interact with hiplan.thi.de via a websockify proxy.
  */
 
-import HttpsConnection from './https-connection'
-import HttpRequest from './http-request'
+import HttpsConnection from './forge/https-connection'
+import HttpRequest from './forge/http-request'
 import { version } from '../package.json'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'

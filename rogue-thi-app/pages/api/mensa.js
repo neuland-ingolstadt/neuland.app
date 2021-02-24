@@ -1,12 +1,13 @@
 import xmljs from 'xml-js'
+import CachedHttpClient from '../../lib/cached-http-client'
 import { formatISODate } from '../../lib/date-utils'
-import MemoryCache from '../../lib/memory-cache'
 
 const CACHE_TTL = 60 * 60 * 1000
+const CACHE_HEADER = 'max-age=3600'
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
 const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
 
-const cache = new MemoryCache({ ttl: CACHE_TTL })
+const http = new CachedHttpClient({ ttl: CACHE_TTL })
 
 function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
@@ -69,17 +70,7 @@ function parseDataFromXml (xml) {
 async function fetchPlan (lang) {
   const url = (lang || 'de') === 'de' ? URL_DE : URL_EN
 
-  let plan = cache.get(url)
-
-  if (!plan) {
-    const resp = await fetch(url)
-    const body = await resp.text()
-    plan = parseDataFromXml(body)
-
-    cache.set(url, plan)
-  }
-
-  return plan
+  return parseDataFromXml(await http.fetchText(url))
 }
 
 export default async function handler (req, res) {
@@ -87,5 +78,6 @@ export default async function handler (req, res) {
 
   res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
+  res.setHeader('Cache-Control', CACHE_HEADER)
   res.end(JSON.stringify(plan))
 }

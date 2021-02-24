@@ -1,7 +1,7 @@
 import { thiApiRequest } from './thi-api-request'
 import { convertThiMensaPlan } from './thi-api-conversion'
-import MemoryCache from './memory-cache'
-import LocalStorageCache from './localstorage-cache'
+import MemoryCache from './cache/memory-cache'
+import LocalStorageCache from './cache/localstorage-cache'
 
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
