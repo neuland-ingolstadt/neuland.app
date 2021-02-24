@@ -13,7 +13,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Timetable.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate } from '../lib/date-utils'
 

@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form'
 
 import styles from '../styles/Bus.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { getBusPlan } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatFriendlyRelativeTime } from '../lib/date-utils'

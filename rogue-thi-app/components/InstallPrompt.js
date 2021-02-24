@@ -4,7 +4,7 @@ import Card from 'react-bootstrap/Card'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faDownload } from '@fortawesome/free-solid-svg-icons'
 
-import { getOperatingSystem, OS_IOS, OS_ANDROID } from './user-agent'
+import { getOperatingSystem, OS_IOS, OS_ANDROID } from '../lib/user-agent'
 
 import styles from '../styles/Home.module.css'
 

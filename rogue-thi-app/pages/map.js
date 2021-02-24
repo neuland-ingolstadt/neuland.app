@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar from '../lib/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import roomData from '../data/rooms.json'
 
 import styles from '../styles/Map.module.css'

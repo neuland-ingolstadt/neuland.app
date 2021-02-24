@@ -13,11 +13,11 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import styles from '../../styles/Rooms.module.css'
 
-import AppNavbar from '../../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../../lib/thi-session-handler'
-import { getFreeRooms } from '../../lib/thi-api-client'
+import AppNavbar from '../../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
+import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
-import { getRoomOpenings } from '../../lib/api-converter'
+import { getRoomOpenings } from '../../lib/thi-backend/thi-api-conversion'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
 const BUILDINGS_ALL = 'Alle'

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
-import { obtainSession } from '../lib/thi-session-handler'
+import AppNavbar from '../components/AppNavbar'
+import { obtainSession } from '../lib/thi-backend/thi-session-handler'
 import { thiApiRequest } from '../lib/thi-api-request'
 
 import Container from 'react-bootstrap/Container'

@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar from '../lib/AppNavbar'
-import { createSession } from '../lib/thi-session-handler'
+import AppNavbar from '../components/AppNavbar'
+import { createSession } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Login.module.css'
 

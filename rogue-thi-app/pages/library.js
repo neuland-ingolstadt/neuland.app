@@ -11,14 +11,14 @@ import Form from 'react-bootstrap/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar from '../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
+import AppNavbar from '../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import {
   getLibraryReservations,
   getAvailableLibrarySeats,
   addLibraryReservation,
   removeLibraryReservation
-} from '../lib/thi-api-client'
+} from '../lib/thi-backend/thi-api-client'
 import {
   formatNearDate,
   formatFriendlyTime

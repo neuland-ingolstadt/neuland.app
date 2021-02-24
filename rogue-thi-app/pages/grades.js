@@ -7,9 +7,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import styles from '../styles/Exams.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
-import { getGrades } from '../lib/thi-api-client'
+import AppNavbar from '../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getGrades } from '../lib/thi-backend/thi-api-client'
 
 export default function Exams () {
   const router = useRouter()

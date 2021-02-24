@@ -27,10 +27,10 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar from '../lib/AppNavbar'
-import InstallPrompt from '../lib/InstallPrompt'
-import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-session-handler'
-import { getTimetable, getPersonalData } from '../lib/thi-api-client'
+import AppNavbar from '../components/AppNavbar'
+import InstallPrompt from '../components/InstallPrompt'
+import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getTimetable, getPersonalData } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'

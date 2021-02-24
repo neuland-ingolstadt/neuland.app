@@ -8,9 +8,9 @@ import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Personal.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
-import { getPersonalData } from '../lib/thi-api-client'
+import AppNavbar from '../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getPersonalData } from '../lib/thi-backend/thi-api-client'
 
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)

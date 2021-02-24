@@ -9,9 +9,9 @@ import Button from 'react-bootstrap/Button'
 
 import styles from '../styles/Exams.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
-import { getExams } from '../lib/thi-api-client'
+import AppNavbar from '../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getExams } from '../lib/thi-backend/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 

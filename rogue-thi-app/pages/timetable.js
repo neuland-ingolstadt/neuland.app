@@ -7,9 +7,9 @@ import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Timetable.module.css'
 
-import AppNavbar from '../lib/AppNavbar'
-import { callWithSession, NoSessionError } from '../lib/thi-session-handler'
-import { getTimetable } from '../lib/thi-api-client'
+import AppNavbar from '../components/AppNavbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 async function getFriendlyTimetable () {

@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
-import { getOperatingSystem, OS_IOS, OS_OTHER } from './user-agent'
+import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 
 import styles from '../styles/AppNavbar.module.css'
 
