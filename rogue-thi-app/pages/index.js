@@ -146,7 +146,7 @@ export default function Home () {
       setTimetable(timetable)
     } catch (e) {
       if (e instanceof NoSessionError) {
-        router.push('/login')
+        router.replace('/login')
       } else {
         console.error(e)
         setTimetableError(e)
@@ -188,7 +188,7 @@ export default function Home () {
       setUserHash(hash.digest('base64'))
     } catch (e) {
       if (e instanceof NoSessionError) {
-        router.push('/login')
+        router.replace('/login')
       } else {
         console.error(e)
         alert(e)

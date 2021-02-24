@@ -50,7 +50,7 @@ export default function Timetable () {
       setTimetable(await getFriendlyTimetable(router))
     } catch (e) {
       if (e instanceof NoSessionError) {
-        router.push('/login')
+        router.replace('/login')
       } else {
         console.error(e)
         alert(e)
