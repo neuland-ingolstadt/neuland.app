@@ -26,7 +26,8 @@ function parseDepartureTime (str) {
     delta = parseInt(minutes) * 60000
   }
 
-  const date = new Date(Date.now() + delta)
+  // round up by adding one minute and then rounding down
+  const date = new Date(Date.now() + delta + 60000)
   date.setSeconds(0)
   date.setMilliseconds(0)
   return date
