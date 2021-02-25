@@ -4,6 +4,6 @@ export async function getMensaPlan () {
 }
 
 export async function getBusPlan (station) {
-  return fetch('/api/bus?station=' + encodeURIComponent(station))
+  return fetch('/api/bus/' + encodeURIComponent(station))
     .then(res => res.json())
 }
