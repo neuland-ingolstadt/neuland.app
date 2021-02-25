@@ -7,24 +7,25 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-import styles from '../styles/Exams.module.css'
-
 import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
-import commonDates from '../data/calendar.json'
-commonDates.forEach(x => {
-  x.begin = new Date(x.begin)
-  if (x.end) {
-    x.end = new Date(x.end)
-  }
-})
+import rawCalendar from '../data/calendar.json'
+
+import styles from '../styles/Exams.module.css'
 
 const now = new Date()
-const upcomingDates = commonDates.filter(x => (x.end && x.end > now) || x.begin > now)
+const calendar = rawCalendar.map(x => ({
+  ...x,
+  begin: new Date(x.begin),
+  end: x.end && new Date(x.end)
+}))
+  .filter(x => (x.end && x.end > now) || x.begin > now)
+  .sort((a, b) => a.end - b.end)
+  .sort((a, b) => a.begin - b.begin)
 
 export default function Calendar () {
   const router = useRouter()
@@ -119,7 +120,7 @@ export default function Calendar () {
           Termine
         </h4>
 
-        {upcomingDates.map((item, idx) =>
+        {calendar.map((item, idx) =>
           <ListGroup.Item key={idx} className={styles.item}>
             <div className={styles.left}>
               {item.name}<br />

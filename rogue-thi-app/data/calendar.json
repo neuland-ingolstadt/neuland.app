@@ -1,52 +1,66 @@
 [
   {
-    "name": "Vorlesungsbeginn",
-    "begin": "2020-10-01T08:15:00",
+    "name": "Vorlesungsbeginn für Erstsemester",
+    "begin": "2021-03-15T09:00",
     "hasHours": true
   },
   {
-    "name": "Vorlesungsbeginn für Erstsemester",
-    "begin": "2020-10-19T10:00:00",
+    "name": "Vorlesungsbeginn für höhere Semester",
+    "begin": "2021-03-15T08:15",
     "hasHours": true
+  },
+  {
+    "name": "Vorlesungsfrei (Ostern)",
+    "begin": "2021-04-01",
+    "end": "2021-04-06"
   },
   {
     "name": "Prüfungsanmeldung",
-    "begin": "2020-11-04",
-    "end": "2020-11-13"
+    "begin": "2021-05-03",
+    "end": "2021-05-14"
   },
   {
     "name": "Prüfungsabmeldung",
-    "begin": "2020-11-04",
-    "end": "2021-01-11"
+    "begin": "2021-05-03",
+    "end": "2021-06-26"
   },
   {
-    "name": "Vorlesungsfrei (Weihnachten)",
-    "begin": "2020-12-24",
-    "end": "2021-01-06"
+    "name": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
+    "begin": "2021-05-13",
+    "end": "2021-05-14"
   },
   {
-    "name": "Rückmeldung zum SS 2021",
-    "begin": "2021-01-14",
-    "end": "2021-01-31"
+    "name": "Vorlesungsfrei (Pfingsten)",
+    "begin": "2021-05-21",
+    "end": "2021-05-25"
+  },
+  {
+    "name": "Vorlesungsfrei (Fronleichnam)",
+    "begin": "2021-06-03"
+  },
+  {
+    "name": "Rückmeldung zum WS 2021/2022",
+    "begin": "2021-07-02",
+    "end": "2021-08-07"
   },
   {
     "name": "Erweiterter Prüfungszeitraum",
-    "begin": "2021-01-19",
-    "end": "2021-01-22"
+    "begin": "2021-07-03",
+    "end": "2021-07-09"
   },
   {
     "name": "Prüfungszeitraum",
-    "begin": "2021-01-23",
-    "end": "2021-02-04"
+    "begin": "2021-07-10",
+    "end": "2021-07-20"
   },
   {
     "name": "Notenbekanntgabe",
-    "begin": "2021-02-12T13:00:00",
+    "begin": "2021-07-30T13:00",
     "hasHours": true
   },
   {
     "name": "Semesterferien",
-    "begin": "2021-02-15",
-    "end": "2021-03-14"
+    "begin": "2021-08-01",
+    "end": "2021-09-30"
   }
 ]
