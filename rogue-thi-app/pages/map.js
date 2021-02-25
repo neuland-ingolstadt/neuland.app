@@ -22,13 +22,13 @@ const Polygon = dynamic(() => import('react-leaflet').then(x => x.Polygon), { ss
 const searchedProperties = [
   'Gebaeude',
   'Raum',
-  'Funktion'
+  'Funktion',
 ]
 const floorSubstitutes = {
   OG: '1', // floor 1 in H (Carissma)
   AG: '1.5', // floor 1.5 in A
   G: '1.5', // floor 1.5 in H (Reimanns)
-  null: '4' // floor 4 in Z (Arbeitsamt)
+  null: '4', // floor 4 in Z (Arbeitsamt)
 }
 const floorOrder = [
   'EG',
@@ -36,10 +36,10 @@ const floorOrder = [
   '1.5',
   '2',
   '3',
-  '4'
+  '4',
 ]
 
-const floors = {}
+const floors = {};
 roomData.features.forEach(feature => {
   const { properties, geometry } = feature
 
@@ -62,19 +62,21 @@ roomData.features.forEach(feature => {
     floors[properties.Etage].push({
       properties,
       coordinates: points.map(([lon, lat]) => [lat, lon]),
-      options: { color: '#005a9b' }
+      options: { color: '#005a9b' },
     })
   })
 })
 
 export default function Room () {
+
   const [searchText, setSearchText] = useState('')
 
   let filteredFloors = {}
   const filteredFloorOrder = floorOrder.slice(0)
   if (!searchText) {
     filteredFloors = floors
-  } else {
+  }
+  else {
     Object.assign(filteredFloors, floors)
 
     const invalidFloorIndices = []
@@ -83,7 +85,7 @@ export default function Room () {
         searchedProperties.some(x => entry.properties[x].indexOf(searchText) !== -1)
       )
 
-      if (filteredFloors[floor].length === 0) {
+      if(filteredFloors[floor].length === 0) {
         invalidFloorIndices.unshift(i)
       }
     })
@@ -104,7 +106,7 @@ export default function Room () {
         />
       </Form>
 
-      <MapContainer center={[48.76677, 11.43322]} zoom={17} maxZoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
+      <MapContainer center={[48.76677, 11.43322]} zoom={18} maxZoom={21} scrollWheelZoom={true} className={styles.mapContainer}>
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
