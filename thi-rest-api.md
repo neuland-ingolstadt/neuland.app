@@ -387,6 +387,87 @@ session: <session token>
 }
 ```
 
+## Imprint
+```
+service: thiapp
+method:  impressum
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": [
+        "1",
+        "<html snippet>"
+    ],
+    "date": "02.03.2021",
+    "status": 0,
+    "time": "00:00:28"
+}
+```
+
+## Jobs
+
+### categories
+```
+service: thiapp
+method:  jobs
+query:   categories
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": [
+        0,
+        {
+            "areas": [
+                "Alle",
+                "Informatik",
+                "Ingenieurwissenschaften & Technik",
+                "Kommunikation & Design",
+                "Mathematik",
+                "Naturwissenschaften",
+                "Wirtschaftswissenschaften"
+            ],
+            "classes": [
+                "Alle",
+                "Betreute Abschlussarbeit",
+                "Einstiegsposition",
+                "Fachposition",
+                "Praktikum",
+                "Studentenjob",
+                "Trainee"
+            ]
+        }
+    ],
+    "date": "02.03.2021",
+    "status": 0,
+    "time": "00:02:07"
+}
+```
+
+### offers
+```
+service: thiapp
+method:  jobs
+query:   offers
+days:    10
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": "Service not available",
+    "date": "02.03.2021",
+    "status": -112,
+    "time": "00:02:29"
+}
+```
+
 ## Reservations (library)
 
 ### getreservation
