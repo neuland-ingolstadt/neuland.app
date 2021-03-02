@@ -38,6 +38,13 @@ export default function Exams () {
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
+      } else if (e.message === 'Query not possible') {
+        // according to the original developers,
+        // { status: -102, data: "Query not possible" }
+        // means that the transcripts are currently being updated
+
+        console.error(e)
+        alert('Noten sind vorübergehend nicht verfügbar. Eventuell werden die Notenblätter gerade aktualisiert.')
       } else {
         console.error(e)
         alert(e)
