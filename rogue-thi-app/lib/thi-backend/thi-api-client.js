@@ -277,3 +277,18 @@ export async function removeLibraryReservation (session, reservationId) {
 
   return true
 }
+
+export async function getImprint (session) {
+  const res = await thiApiRequest({
+    service: 'thiapp',
+    method: 'impressum',
+    format: 'json',
+    session
+  })
+
+  if (res.status !== 0) {
+    throw new Error(res.data)
+  } // e.g. 'Wrong credentials'
+
+  return res.data[1]
+}

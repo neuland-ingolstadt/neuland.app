@@ -225,6 +225,9 @@ export default function Home () {
         <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
           Impressum und Datenschutz
         </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/legal">
+          Rechtliche Hinweise der THI
+        </Dropdown.Item>
       </AppNavbar>
 
       <div className={styles.cardDeck}>
