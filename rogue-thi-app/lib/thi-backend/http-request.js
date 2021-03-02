@@ -1,4 +1,5 @@
-import * as forge from 'node-forge/lib/index.all'
+import { util } from 'node-forge/lib/index'
+import http from 'node-forge/lib/http'
 
 /**
  * A helper class that can be used to dispatch an HTTP request using an HttpsConnection
@@ -7,9 +8,9 @@ export default class HttpRequest {
   constructor (options) {
     this.options = options
 
-    this.request = forge.http.createRequest(this.options.forge)
-    this.response = forge.http.createResponse()
-    this.buffer = forge.util.createBuffer()
+    this.request = http.createRequest(this.options.forge)
+    this.response = http.createResponse()
+    this.buffer = util.createBuffer()
   }
 
   getData () {

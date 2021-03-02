@@ -1,4 +1,4 @@
-import * as forge from 'node-forge/lib/index.all'
+import { tls } from 'node-forge/lib/index'
 
 const DEFAULT_TIMEOUT = 5000
 
@@ -32,7 +32,7 @@ export default class HttpsConnection {
     this.webSocket.addEventListener('message', event => this.tlsConnection.process(ab2str(event.data)))
     this.webSocket.addEventListener('error', event => this._onError(new Error('WebSocket connection failed: ' + event)))
 
-    this.tlsConnection = forge.tls.createConnection({
+    this.tlsConnection = tls.createConnection({
       server: false,
       caStore: options.certs,
       virtualHost: options.host,
