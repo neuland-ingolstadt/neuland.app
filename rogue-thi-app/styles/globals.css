@@ -67,7 +67,39 @@ body {
   border-color: #F3F315 !important;
 }
 .retro :is(h1, h2, h3, h4, h5, h6),
+.retro .h1, .retro .h2, .retro .h3, .retro .h4,
 .retro .card-title {
   color: #F3F315 !important;
   font-family: fasterone;
+}
+
+
+
+/*
+ * BARBIE THEME
+ */
+@font-face {
+  font-family: sacramento;
+  src: url(/Sacramento-Regular.ttf);
+}
+.barbie {
+  background-color: #FF2BE8;
+  font-family: sacramento;
+  font-weight: bolder;
+}
+.barbie * {
+  background-color: #FF2BE8 !important;
+  font-family: sacramento;
+  font-weight: bolder;
+}
+.barbie .card,
+.barbie .modal-content,
+.barbie .list-group-item,
+.barbie .list-group-item-action {
+  border-color: #03F7FF !important;
+}
+.barbie :is(h1, h2, h3, h4, h5, h6),
+.barbie .h1, .barbie .h2, .barbie .h3, .barbie .h4,
+.barbie .card-title {
+  color: #03F7FF !important;
 }

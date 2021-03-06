@@ -81,7 +81,8 @@ async function getMensaPlanPreview (session) {
 const allThemes = [
   { name: 'Standard', style: 'default', requirePremium: false },
   { name: 'Dunkel', style: 'dark', requirePremium: true },
-  { name: 'Retro', style: 'retro', requirePremium: true }
+  { name: 'Retro', style: 'retro', requirePremium: true },
+  { name: 'Barbie & Ken', style: 'barbie', requirePremium: true }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
