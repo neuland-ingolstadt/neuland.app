@@ -25,6 +25,21 @@ if (typeof localStorage === 'undefined') {
   })
 }
 
+async function cachedThiApiRequest (cacheKey, options) {
+  const cached = cache.get(cacheKey)
+  if (cached) {
+    return cached
+  }
+
+  const res = await thiApiRequest(options)
+  if (res.status !== 0) {
+    throw new Error(res.data)
+  }
+
+  cache.set(cacheKey, res)
+  return res
+}
+
 export async function login (username, password) {
   cache.flushAll()
 
@@ -55,47 +70,28 @@ export async function isAlive (session) {
 }
 
 export async function getPersonalData (session) {
-  let res = cache.get(KEY_GET_PERSONAL_DATA)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'persdata',
-      format: 'json',
-      session
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(KEY_GET_PERSONAL_DATA, res)
+  const res = await cachedThiApiRequest(KEY_GET_PERSONAL_DATA, {
+    service: 'thiapp',
+    method: 'persdata',
+    format: 'json',
+    session
+  })
 
   return res.data[1]
 }
 
 export async function getTimetable (session, date) {
   const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}`
-
-  let res = cache.get(key)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'stpl',
-      format: 'json',
-      session,
-      day: date.getDate(),
-      month: date.getMonth() + 1,
-      year: 1900 + date.getYear(),
-      details: 0
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(key, res)
+  const res = await cachedThiApiRequest(key, {
+    service: 'thiapp',
+    method: 'stpl',
+    format: 'json',
+    session,
+    day: date.getDate(),
+    month: date.getMonth() + 1,
+    year: 1900 + date.getYear(),
+    details: 0
+  })
 
   return {
     semester: res.data[1],
@@ -106,86 +102,49 @@ export async function getTimetable (session, date) {
 }
 
 export async function getExams (session) {
-  let res = cache.get(KEY_GET_EXAMS)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'exams',
-      format: 'json',
-      session
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(KEY_GET_EXAMS, res)
+  const res = await cachedThiApiRequest(KEY_GET_EXAMS, {
+    service: 'thiapp',
+    method: 'exams',
+    format: 'json',
+    session
+  })
 
   return res.data[1]
 }
 
 export async function getGrades (session) {
-  let res = cache.get(KEY_GET_GRADES)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'grades',
-      format: 'json',
-      session
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(KEY_GET_GRADES, res)
+  const res = await cachedThiApiRequest(KEY_GET_GRADES, {
+    service: 'thiapp',
+    method: 'grades',
+    format: 'json',
+    session
+  })
 
   return res.data[1]
 }
 
 export async function getMensaPlan (session) {
-  let res = cache.get(KEY_GET_MENSA_PLAN)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'mensa',
-      format: 'json',
-      session
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(KEY_GET_MENSA_PLAN, res)
+  const res = await cachedThiApiRequest(KEY_GET_MENSA_PLAN, {
+    service: 'thiapp',
+    method: 'mensa',
+    format: 'json',
+    session
+  })
 
   return convertThiMensaPlan(res.data)
 }
 
 export async function getFreeRooms (session, date) {
   const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
-
-  let res = cache.get(key)
-  if (!res) {
-    res = await thiApiRequest({
-      service: 'thiapp',
-      method: 'rooms',
-      format: 'json',
-      session,
-      day: date.getDate(),
-      month: date.getMonth() + 1,
-      year: 1900 + date.getYear()
-    })
-  }
-
-  if (res.status !== 0) {
-    throw new Error(res.data)
-  } // e.g. 'Wrong credentials'
-
-  cache.set(key, res)
+  const res = await cachedThiApiRequest(key, {
+    service: 'thiapp',
+    method: 'rooms',
+    format: 'json',
+    session,
+    day: date.getDate(),
+    month: date.getMonth() + 1,
+    year: 1900 + date.getYear()
+  })
 
   return res.data[1]
 }
