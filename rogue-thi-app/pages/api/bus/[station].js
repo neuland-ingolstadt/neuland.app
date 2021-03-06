@@ -40,13 +40,18 @@ export default async function handler (req, res) {
     const resp = await fetch(URLS[station], {
       headers: { Accept: 'application/json' } // required so that the backend returns proper utf-8
     })
-    const { departures } = await resp.json()
 
-    return departures.map(departure => ({
-      route: departure.route,
-      destination: departure.destination,
-      time: parseDepartureTime(departure.strTime)
-    }))
+    if (resp.status === 200) {
+      const { departures } = await resp.json()
+
+      return departures.map(departure => ({
+        route: departure.route,
+        destination: departure.destination,
+        time: parseDepartureTime(departure.strTime)
+      }))
+    } else {
+      throw new Error('Data source returned an error: ' + await resp.text())
+    }
   })
 
   res.statusCode = 200

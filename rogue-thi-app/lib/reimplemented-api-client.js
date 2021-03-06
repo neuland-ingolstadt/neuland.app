@@ -1,9 +1,19 @@
 export async function getMensaPlan () {
-  return fetch('/api/mensa')
-    .then(res => res.json())
+  const resp = await fetch('/api/mensa')
+
+  if (resp.status === 200) {
+    return await resp.json()
+  } else {
+    throw new Error('API returned an error: ' + await resp.text())
+  }
 }
 
 export async function getBusPlan (station) {
-  return fetch('/api/bus/' + encodeURIComponent(station))
-    .then(res => res.json())
+  const resp = await fetch('/api/bus/' + encodeURIComponent(station))
+
+  if (resp.status === 200) {
+    return await resp.json()
+  } else {
+    throw new Error('API returned an error: ' + await resp.text())
+  }
 }

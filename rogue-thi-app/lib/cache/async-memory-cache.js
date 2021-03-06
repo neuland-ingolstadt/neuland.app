@@ -24,12 +24,14 @@ export default class AsyncMemoryCache extends MemoryCache {
       return await promise
     }
 
-    const result = await (this.promises[key] = producer(key))
+    try {
+      const result = await (this.promises[key] = producer(key))
 
-    super.set(key, result)
+      super.set(key, result)
 
-    delete this.promises[key]
-
-    return result
+      return result
+    } finally {
+      delete this.promises[key]
+    }
   }
 }

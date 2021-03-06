@@ -72,7 +72,12 @@ async function fetchPlan (lang) {
 
   const plan = await cache.get(lang, async () => {
     const resp = await fetch(url)
-    return parseDataFromXml(await resp.text())
+
+    if (resp.status === 200) {
+      return parseDataFromXml(await resp.text())
+    } else {
+      throw new Error('Data source returned an error: ' + await resp.text())
+    }
   })
 
   return plan
