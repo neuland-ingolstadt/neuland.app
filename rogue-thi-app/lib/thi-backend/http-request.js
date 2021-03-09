@@ -27,8 +27,6 @@ export default class HttpRequest {
       if (this.response.readBody(this.buffer)) {
         try {
           const data = JSON.parse(this.response.body)
-          console.debug('Response:')
-          console.debug(data)
           this.options.response(data)
           return true
         } catch (e) {

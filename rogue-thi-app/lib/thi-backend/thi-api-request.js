@@ -47,9 +47,6 @@ let connection = null
  */
 export function thiApiRequest (params) {
   return new Promise((resolve, reject) => {
-    console.debug('Request:')
-    console.debug(params)
-
     const paramList = []
     for (const key in params) { paramList.push(key + '=' + encodeURIComponent(params[key])) }
 
