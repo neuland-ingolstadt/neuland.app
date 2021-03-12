@@ -90,7 +90,11 @@ export default function Timetable () {
         {timetable && timetable.length === 0 &&
           <ListGroup variant="flush">
             <ListGroup.Item>
-              Der Stundenplan ist leer.
+              Dein persönlicher Stundenplan ist aktuell leer.<br />
+              Du kannst deinen persönlichen Stundenplan im{' '}
+              <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
+              Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
+              deine gewählten Fächer.
             </ListGroup.Item>
           </ListGroup>
         }

@@ -280,7 +280,7 @@ export default function Home () {
             )}
             {timetable && timetable.length === 0 &&
               <ListGroup.Item>
-                Der Stundenplan ist leer.
+                Dein Stundenplan ist leer.
               </ListGroup.Item>
             }
             {timetableError &&
