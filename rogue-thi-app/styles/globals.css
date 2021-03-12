@@ -67,6 +67,9 @@ body {
   color: white !important;
   font-family: pressstart;
 }
+.retro .dropdown-item {
+  font-size: x-small;
+}
 .retro .card,
 .retro .modal-content,
 .retro .list-group-item,
