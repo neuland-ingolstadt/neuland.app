@@ -161,7 +161,7 @@ export default function Rooms () {
         <Button onClick={() => filter()}>
           Suchen
         </Button>
-        <Link href="/map">
+        <Link href="/rooms/map">
           <Button variant="link">Karte anzeigen</Button>
         </Link>
         <Link href="/rooms/list">
@@ -178,7 +178,9 @@ export default function Rooms () {
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
                   {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
-                  {result.room}
+                  <Button variant="link" onClick={() => router.push(`/rooms/map?highlight=${result.room}`)}>
+                    {result.room}
+                  </Button>
 
                   <div className={styles.details}>
                     {result.type}

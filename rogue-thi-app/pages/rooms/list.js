@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import ReactPlaceholder from 'react-placeholder'
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Button from 'react-bootstrap/Button'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -84,9 +85,11 @@ export default function Rooms () {
                     <div className={styles.room}>
                       {rooms.map((room, idx) =>
                         <>
-                          {TUX_ROOMS.includes(room)
-                            ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
-                            : <>{room}</>}
+                          <Button variant="link" onClick={() => router.push(`/rooms/map?highlight=${room}`)}>
+                            {TUX_ROOMS.includes(room)
+                              ? <><FontAwesomeIcon icon={faLinux} /> {room}</>
+                              : <>{room}</>}
+                          </Button>
                           {idx === rooms.length - 1 ? '' : ', '}
                         </>
                       )}

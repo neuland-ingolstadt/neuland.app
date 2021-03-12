@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar from '../components/AppNavbar'
-import roomData from '../data/rooms.json'
+import AppNavbar from '../../components/AppNavbar'
+import roomData from '../../data/rooms.json'
 
-import styles from '../styles/Map.module.css'
+import styles from '../../styles/Map.module.css'
 import 'leaflet/dist/leaflet.css'
 
 const MapContainer = dynamic(() => import('react-leaflet').then(x => x.MapContainer), { ssr: false })
@@ -47,14 +48,14 @@ roomData.features.forEach(feature => {
     return
   }
 
-  if (typeof properties.Etage !== 'string') {
+  if (properties.Etage in floorSubstitutes) {
     properties.Etage = floorSubstitutes[properties.Etage]
   }
 
   if (floorOrder.indexOf(properties.Etage) === -1) {
     floorOrder.push(properties.Etage)
   }
-  if (!Array.isArray(properties.Etage)) {
+  if (!(properties.Etage in floors)) {
     floors[properties.Etage] = []
   }
 
@@ -68,7 +69,9 @@ roomData.features.forEach(feature => {
 })
 
 export default function Room () {
-  const [searchText, setSearchText] = useState('')
+  const router = useRouter()
+  const { highlight } = router.query
+  const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
 
   let filteredFloors = {}
   const filteredFloorOrder = floorOrder.slice(0)
@@ -80,7 +83,7 @@ export default function Room () {
     const invalidFloorIndices = []
     floorOrder.forEach((floor, i) => {
       filteredFloors[floor] = filteredFloors[floor].filter(entry =>
-        searchedProperties.some(x => entry.properties[x].toLowerCase().indexOf(searchText) !== -1)
+        searchedProperties.some(x => entry.properties[x].toUpperCase().indexOf(searchText) !== -1)
       )
 
       if (filteredFloors[floor].length === 0) {
@@ -100,7 +103,7 @@ export default function Room () {
           as="input"
           placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
           value={searchText}
-          onChange={e => setSearchText(e.target.value.toLowerCase())}
+          onChange={e => setSearchText(e.target.value.toUpperCase())}
         />
       </Form>
 
