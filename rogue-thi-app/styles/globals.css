@@ -37,6 +37,13 @@ body {
 .dark .list-group-item-action {
   border-color: #404040 !important;
 }
+.dark .text-row {
+  background-color: #404040 !important;
+}
+.dark a,
+.dark .btn-link {
+  color: #62c4ff !important;
+}
 
 
 
@@ -72,6 +79,13 @@ body {
   color: #F3F315 !important;
   font-family: fasterone;
 }
+.retro .text-row {
+  background-color: #404040 !important;
+}
+.retro a,
+.retro .btn-link {
+  color: #F3F315 !important;
+}
 
 
 
@@ -103,3 +117,11 @@ body {
 .barbie .card-title {
   color: #03F7FF !important;
 }
+.barbie .text-row {
+  background-color: #03F7FF !important;
+}
+.barbie a,
+.barbie .btn-link {
+  color: #03F7FF !important;
+}
+
