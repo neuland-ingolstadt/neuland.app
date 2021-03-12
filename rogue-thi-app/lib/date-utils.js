@@ -2,6 +2,7 @@
 const DATE_LOCALE = 'de-DE'
 const WORD_TODAY = 'Heute'
 const WORD_TOMORROW = 'Morgen'
+const WORD_WEEKS = 'Wochen'
 const WORD_DAY = 'Tag'
 const WORD_DAYS = 'Tagen'
 const WORD_HOUR = 'Stunde'
@@ -77,21 +78,26 @@ export function formatFriendlyDateTime (datetime) {
 function formatAbsoluteFriendlyRelativeTime (date) {
   const delta = Math.abs(date - Date.now())
 
-  const days = delta / 86400000 | 0
+  const weeks = delta / (7 * 24 * 60 * 60 * 1000) | 0
+  if (weeks > 2) {
+    return `${weeks} ${WORD_WEEKS}`
+  }
+
+  const days = delta / (24 * 60 * 60 * 1000) | 0
   if (days === 1) {
     return `1 ${WORD_DAY}`
   } else if (days > 0) {
     return `${days} ${WORD_DAYS}`
   }
 
-  const hours = delta / 3600000 | 0
+  const hours = delta / (60 * 60 * 1000) | 0
   if (hours === 1) {
     return `1 ${WORD_HOUR}`
   } else if (hours > 1) {
     return `${hours} ${WORD_HOURS}`
   }
 
-  const minutes = delta / 60000 | 0
+  const minutes = delta / (60 * 1000) | 0
   if (minutes === 1) {
     return `1 ${WORD_MINUTE}`
   } else {
