@@ -22,13 +22,13 @@ const Polygon = dynamic(() => import('react-leaflet').then(x => x.Polygon), { ss
 const searchedProperties = [
   'Gebaeude',
   'Raum',
-  'Funktion',
+  'Funktion'
 ]
 const floorSubstitutes = {
   OG: '1', // floor 1 in H (Carissma)
   AG: '1.5', // floor 1.5 in A
   G: '1.5', // floor 1.5 in H (Reimanns)
-  null: '4', // floor 4 in Z (Arbeitsamt)
+  null: '4' // floor 4 in Z (Arbeitsamt)
 }
 const floorOrder = [
   'EG',
@@ -36,10 +36,10 @@ const floorOrder = [
   '1.5',
   '2',
   '3',
-  '4',
+  '4'
 ]
 
-const floors = {};
+const floors = {}
 roomData.features.forEach(feature => {
   const { properties, geometry } = feature
 
@@ -47,14 +47,14 @@ roomData.features.forEach(feature => {
     return
   }
 
-  if (floorSubstitutes.hasOwnProperty(properties.Etage)) {
+  if (typeof properties.Etage !== 'string') {
     properties.Etage = floorSubstitutes[properties.Etage]
   }
 
   if (floorOrder.indexOf(properties.Etage) === -1) {
     floorOrder.push(properties.Etage)
   }
-  if (!floors.hasOwnProperty(properties.Etage)) {
+  if (!Array.isArray(properties.Etage)) {
     floors[properties.Etage] = []
   }
 
@@ -62,30 +62,28 @@ roomData.features.forEach(feature => {
     floors[properties.Etage].push({
       properties,
       coordinates: points.map(([lon, lat]) => [lat, lon]),
-      options: { color: '#005a9b' },
+      options: { color: '#005a9b' }
     })
   })
 })
 
 export default function Room () {
-
   const [searchText, setSearchText] = useState('')
 
   let filteredFloors = {}
   const filteredFloorOrder = floorOrder.slice(0)
   if (!searchText) {
     filteredFloors = floors
-  }
-  else {
+  } else {
     Object.assign(filteredFloors, floors)
 
     const invalidFloorIndices = []
     floorOrder.forEach((floor, i) => {
       filteredFloors[floor] = filteredFloors[floor].filter(entry =>
-        searchedProperties.some(x => entry.properties[x].indexOf(searchText) !== -1)
+        searchedProperties.some(x => entry.properties[x].toLowerCase().indexOf(searchText) !== -1)
       )
 
-      if(filteredFloors[floor].length === 0) {
+      if (filteredFloors[floor].length === 0) {
         invalidFloorIndices.unshift(i)
       }
     })
@@ -102,7 +100,7 @@ export default function Room () {
           as="input"
           placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
           value={searchText}
-          onChange={e => setSearchText(e.target.value)}
+          onChange={e => setSearchText(e.target.value.toLowerCase())}
         />
       </Form>
 
