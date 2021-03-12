@@ -55,6 +55,8 @@ export default function Calendar () {
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
+      } else if (e.message === 'Query not possible') {
+        setExams([])
       } else {
         console.error(e)
         alert(e)
@@ -95,6 +97,13 @@ export default function Calendar () {
         </h4>
 
         <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
+          {exams && exams.length === 0 && (
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                Es sind derzeit keine Prüfungstermine verfügbar.
+              </ListGroup.Item>
+            </ListGroup>
+          )}
           {exams && exams.map((item, idx) =>
             <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
               <div className={styles.left}>
