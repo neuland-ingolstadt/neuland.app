@@ -178,9 +178,9 @@ export default function Rooms () {
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
                   {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
-                  <Button variant="link" onClick={() => router.push(`/rooms/map?highlight=${result.room}`)}>
+                  <Link href={`/rooms/map?highlight=${result.room}`}>
                     {result.room}
-                  </Button>
+                  </Link>
 
                   <div className={styles.details}>
                     {result.type}
