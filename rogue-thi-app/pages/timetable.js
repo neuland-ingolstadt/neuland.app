@@ -73,7 +73,9 @@ export default function Timetable () {
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
                   <div className={styles.name}>
-                    {item.fach}
+                    {item.veranstaltung.indexOf(item.fach) !== -1
+                      ? item.veranstaltung
+                      : `${item.veranstaltung} - ${item.fach}`}
                   </div>
                   <div className={styles.room}>
                     {item.raum}
