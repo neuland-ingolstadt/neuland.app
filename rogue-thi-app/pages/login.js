@@ -97,6 +97,11 @@ export default function Login (props) {
             Das ist eine inoffizielle Alternative zur THI-App.
             Sie wird von Studierenden für Studierende entwickelt und ist <strong>kein</strong> offizielles Angebot der THI.
           </p>
+          <h6>Wer hat das entwickelt?</h6>
+          <p>
+            Die App wird von Neuland Ingolstadt, dem studentischen Verein für alle Informatik-Begeisterten, entwickelt.
+            Mehr Informationen findest du auf unserer Webseite unter <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">neuland-ingolstadt.de</a>.
+          </p>
           <h6>Sind meine Daten sicher?</h6>
           <p>
             <strong>Ja. </strong>
