@@ -36,10 +36,13 @@ export default function AppNavbar ({ title, showBack, children }) {
 
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
         <meta name="description" content="Eine inoffizielle App für die Technische Hochschule Ingolstadt" />
         <meta name="keywords" content="THI, Technische Hochschule Ingolstadt, App" />
         <meta name="theme-color" content="#005a9b" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/favicon512.png"></link>
