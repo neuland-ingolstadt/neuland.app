@@ -33,8 +33,19 @@ function parseDepartureTime (str) {
   return date
 }
 
+function sendJson (res, code, value) {
+  res.statusCode = code
+  res.setHeader('Content-Type', 'application/json')
+  res.setHeader('Cache-Control', CACHE_HEADER)
+  res.end(JSON.stringify(value))
+}
+
 export default async function handler (req, res) {
   const station = req.query.station
+  if (!URLS.hasOwnProperty(station)) {
+    sendJson(res, 400, { error: 'unknown/unsupported station' })
+    return
+  }
 
   const departures = await cache.get(station, async () => {
     const resp = await fetch(URLS[station], {
@@ -54,8 +65,5 @@ export default async function handler (req, res) {
     }
   })
 
-  res.statusCode = 200
-  res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Cache-Control', CACHE_HEADER)
-  res.end(JSON.stringify(departures))
+  sendJson(res, 200, departures)
 }

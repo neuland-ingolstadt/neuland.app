@@ -21,6 +21,10 @@ export default class MemoryCache {
   }
 
   get (key) {
+    if (!this.cache.hasOwnProperty(key)) {
+      return undefined
+    }
+
     const json = this.cache[key]
     if (!json) {
       return undefined

@@ -19,9 +19,8 @@ export default class AsyncMemoryCache extends MemoryCache {
       return cachedResult
     }
 
-    const promise = this.promises[key]
-    if (promise) {
-      return await promise
+    if (this.promises.hasOwnProperty(key)) {
+      return await this.promises[key]
     }
 
     try {
