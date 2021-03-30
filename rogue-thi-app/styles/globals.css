@@ -34,6 +34,9 @@ body {
 .dark .leaflet-pane * {
   background-color: #00000000 !important;
 }
+.dark .leaflet-popup-content-wrapper {
+  background-color: #404040 !important;
+}
 .dark .card,
 .dark .modal-content,
 .dark .list-group-item,
@@ -72,6 +75,9 @@ body {
 }
 .retro .leaflet-pane * {
   background-color: #00000000 !important;
+}
+.retro .leaflet-popup-content-wrapper {
+  background-color: #404040 !important;
 }
 .retro .dropdown-item {
   font-size: x-small;
@@ -117,6 +123,9 @@ body {
 }
 .barbie .leaflet-pane * {
   background-color: #00000000 !important;
+}
+.barbie .leaflet-popup-content-wrapper {
+  background-color: #FF2BE8 !important;
 }
 .barbie .card,
 .barbie .modal-content,
