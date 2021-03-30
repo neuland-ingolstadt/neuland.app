@@ -468,6 +468,83 @@ session: <session token>
 }
 ```
 
+## Lecturers
+
+### Personal Lecturers
+```
+service: thiapp
+format:  json
+session: <session token>
+method:  stpllecturers
+```
+
+```
+{
+    "data": [
+        0,
+        [
+            {
+                "einsichtnahme": "14. März um 10.30 Uhr UND 31. März 12 Uhr; Raum: H-666 (geändert am: 16.02.2021)",
+                "email": "max.mustermann@thi.de",
+                "funktion": "Professor(in)",
+                "id": "1337",
+                "ist_intern": "t",
+                "name": "Mustermann",
+                "organisation": "Fakultät Elektro- und Informationstechnik",
+                "raum": "H666",
+                "sprechstunde": "SS 2021: Montag (Monday) 14.00 - 10.00 Uhr (geändert am: 07.03.2021)",
+                "tel_dienst": "0841/ 9348-1234",
+                "titel": "Prof. Dr.",
+                "vorname": "Max"
+            },
+            // more ...
+        ]
+    ],
+    "date": "30.03.2021",
+    "status": 0,
+    "time": "19:49:07"
+}
+```
+
+### All lecturers (from A to Z)
+```
+service: thiapp
+method:  lecturers
+format:  json
+session: <session token>
+from:    a
+to:      c
+```
+
+
+```json
+{
+    "date": "30.03.2021",
+    "time": "19:37:23",
+    "data": [
+        0,
+        [
+            {
+                "id": "1337",
+                "name": "Doe",
+                "vorname": "Jane",
+                "titel": "",
+                "raum": "",
+                "email": "Kontaktinformationen bitte der Dozentenseite in Moodle entnehmen",
+                "tel_dienst": " ",
+                "sprechstunde": "Bitte im Dekanat Ihrer Fakultät erfragen.",
+                "einsichtnahme": "Bitte die Angaben aus Moodle entnehmen.",
+                "ist_intern": "f",
+                "organisation": "Sprachenzentrum or Professor(in)",
+                "funktion": "Lehrbeauftragte(r)"
+            }
+            // more profs / teachers / etc.
+        ],
+    ],
+    "status": 0,
+}
+```
+
 ## Reservations (library)
 
 ### getreservation
