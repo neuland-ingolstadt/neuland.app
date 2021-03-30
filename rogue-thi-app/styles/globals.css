@@ -112,12 +112,12 @@ body {
   src: url(/Sacramento-Regular.ttf);
 }
 .barbie {
-  background-color: #FF2BE8;
+  background-color: #FACDE5;
   font-family: sacramento;
   font-weight: bolder;
 }
 .barbie * {
-  background-color: #FF2BE8 !important;
+  background-color: #FACDE5 !important;
   font-family: sacramento;
   font-weight: bolder;
 }
@@ -125,24 +125,24 @@ body {
   background-color: #00000000 !important;
 }
 .barbie .leaflet-popup-content-wrapper {
-  background-color: #FF2BE8 !important;
+  background-color: #FACDE5 !important;
 }
 .barbie .card,
 .barbie .modal-content,
 .barbie .list-group-item,
 .barbie .list-group-item-action {
-  border-color: #03F7FF !important;
+  border-color: #21A8C5 !important;
 }
 .barbie :is(h1, h2, h3, h4, h5, h6),
 .barbie .h1, .barbie .h2, .barbie .h3, .barbie .h4,
 .barbie .card-title {
-  color: #03F7FF !important;
+  color: #21A8C5 !important;
 }
 .barbie .text-row {
-  background-color: #03F7FF !important;
+  background-color: #21A8C5 !important;
 }
 .barbie a,
 .barbie .btn-link {
-  color: #03F7FF !important;
+  color: #21A8C5 !important;
 }
 
