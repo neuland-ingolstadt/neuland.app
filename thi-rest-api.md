@@ -213,7 +213,7 @@ details: 0
             {
                 "bis": "09:45:00",
                 "datum": "2020-10-26",
-                "dozent": "Schiele, T.",
+                "dozent": "Mustermann, M.",
                 "ectspoints": "5",
                 "fach": "Technische Mechanik 1",
                 "inhalt": null,
@@ -231,7 +231,7 @@ details: 0
             {
                 "bis": "11:25:00",
                 "datum": "2020-10-27",
-                "dozent": "Endisch, C.",
+                "dozent": "Doe, J.",
                 "ectspoints": "5",
                 "fach": "Elektrotechnik",
                 "inhalt": null,
