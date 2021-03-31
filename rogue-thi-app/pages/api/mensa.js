@@ -68,11 +68,11 @@ function parseDataFromXml (xml) {
 }
 
 async function fetchPlan (lang) {
-  if (lang !== 'de' && lang !== 'en') {
-    return { error: 'unknown/unsupported language' }
+  if (lang && lang !== 'de' && lang !== 'en') {
+    throw new Error('unknown/unsupported language')
   }
 
-  const url = (lang || 'de') === 'de' ? URL_DE : URL_EN
+  const url = lang && lang === 'en' ? URL_EN : URL_DE
 
   const plan = await cache.get(lang, async () => {
     const resp = await fetch(url)
