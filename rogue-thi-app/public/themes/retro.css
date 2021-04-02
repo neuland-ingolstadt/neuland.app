@@ -1,0 +1,45 @@
+@font-face {
+  font-family: fasterone;
+  src: url(/FasterOne-Regular.ttf);
+}
+@font-face {
+  font-family: pressstart;
+  src: url(/PressStart2P-Regular.ttf);
+}
+body {
+  background-color: #121212;
+  font-family: pressstart;
+}
+* {
+  background-color: #121212 !important;
+  color: white !important;
+  font-family: pressstart;
+}
+.leaflet-pane * {
+  background-color: #00000000 !important;
+}
+.leaflet-popup-content-wrapper {
+  background-color: #404040 !important;
+}
+.dropdown-item {
+  font-size: x-small;
+}
+.card,
+.modal-content,
+.list-group-item,
+.list-group-item-action {
+  border-color: #F3F315 !important;
+}
+:is(h1, h2, h3, h4, h5, h6),
+.h1, .h2, .h3, .h4,
+.card-title {
+  color: #F3F315 !important;
+  font-family: fasterone;
+}
+.text-row {
+  background-color: #404040 !important;
+}
+a,
+.btn-link {
+  color: #F3F315 !important;
+}

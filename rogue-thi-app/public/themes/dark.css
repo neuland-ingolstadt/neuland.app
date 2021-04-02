@@ -1,0 +1,29 @@
+/*
+ * DARK THEME
+ */
+body {
+  background-color: #202020;
+}
+* {
+  background-color: #202020 !important;
+  color: #ffffff !important;
+}
+.leaflet-pane * {
+  background-color: #00000000 !important;
+}
+.leaflet-popup-content-wrapper {
+  background-color: #404040 !important;
+}
+.card,
+.modal-content,
+.list-group-item,
+.list-group-item-action {
+  border-color: #404040 !important;
+}
+.text-row {
+  background-color: #404040 !important;
+}
+a,
+.btn-link {
+  color: #62c4ff !important;
+}

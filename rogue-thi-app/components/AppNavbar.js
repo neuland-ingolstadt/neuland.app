@@ -14,12 +14,13 @@ import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 
 import styles from '../styles/AppNavbar.module.css'
 
-export default function AppNavbar ({ title, showBack, children }) {
+export default function AppNavbar ({ title, showBack, children, themeState }) {
   const router = useRouter()
   const [os, setOS] = useState(OS_OTHER)
+  const [theme, setTheme] = themeState || useState('default')
 
   useEffect(() => setOS(getOperatingSystem()), [])
-  useEffect(() => document.body.classList.add(localStorage.theme), [])
+  useEffect(() => localStorage.theme && setTheme(localStorage.theme), [])
 
   if (typeof showBack === 'undefined') {
     showBack = true
@@ -49,6 +50,10 @@ export default function AppNavbar ({ title, showBack, children }) {
         <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
         <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
         <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
+
+        {theme !== 'default' && (
+          <link rel="stylesheet" href={`/themes/${theme}.css`} />
+        )}
       </Head>
       <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
@@ -82,5 +87,6 @@ export default function AppNavbar ({ title, showBack, children }) {
 AppNavbar.propTypes = {
   title: PropTypes.string,
   showBack: PropTypes.bool,
-  children: PropTypes.array
+  children: PropTypes.array,
+  themeState: PropTypes.array
 }

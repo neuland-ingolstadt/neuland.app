@@ -1,5 +1,3 @@
-import crypto from 'crypto'
-
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -30,7 +28,7 @@ import {
 import AppNavbar from '../components/AppNavbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getTimetable, getPersonalData } from '../lib/thi-backend/thi-api-client'
+import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
@@ -79,10 +77,10 @@ async function getMensaPlanPreview (session) {
 }
 
 const allThemes = [
-  { name: 'Standard', style: 'default', requirePremium: false },
-  { name: 'Dunkel', style: 'dark', requirePremium: true },
-  { name: 'Retro', style: 'retro', requirePremium: true },
-  { name: 'Barbie & Ken', style: 'barbie', requirePremium: true }
+  { name: 'Standard', style: 'default' },
+  { name: 'Dunkel', style: 'dark' },
+  { name: 'Retro', style: 'retro' },
+  { name: 'Barbie & Ken', style: 'barbie' }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
@@ -128,8 +126,6 @@ export default function Home () {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const [userHash, setUserHash] = useState(null)
-  const [isPremiumUser, setIsPremiumUser] = useState(true)
   const [currentTheme, setCurrentTheme] = useState('default')
 
   useEffect(async () => {
@@ -172,41 +168,19 @@ export default function Home () {
   }, [time])
 
   useEffect(async () => {
-    try {
-      if (localStorage.theme && localStorage.theme !== currentTheme) {
-        setCurrentTheme(localStorage.theme)
-      }
-
-      if (!showThemeModal || userHash !== null) {
-        return
-      }
-
-      const user = await callWithSession(getPersonalData)
-
-      const hash = crypto.createHash('sha256')
-      hash.update(user.persdata.bibnr, 'utf8')
-      hash.update(user.persdata.email, 'utf8')
-      setUserHash(hash.digest('base64'))
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
-      }
+    if (localStorage.theme && localStorage.theme !== currentTheme) {
+      setCurrentTheme(localStorage.theme)
     }
-  }, [showThemeModal])
+  }, [])
 
   function setTheme (newTheme) {
-    document.body.classList.remove(currentTheme)
-    document.body.classList.add(newTheme)
     localStorage.theme = newTheme
     setCurrentTheme(newTheme)
   }
 
   return (
     <Container>
-      <AppNavbar title="Übersicht" showBack={false}>
+      <AppNavbar title="Übersicht" showBack={false} themeState={[currentTheme, setCurrentTheme]}>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
         </Dropdown.Item>
@@ -248,7 +222,6 @@ export default function Home () {
                   type="radio"
                   label={theme.name}
                   checked={currentTheme === theme.style}
-                  disabled={theme.requirePremium && !isPremiumUser}
                   onChange={() => setTheme(theme.style)}
                 />
               ))}
