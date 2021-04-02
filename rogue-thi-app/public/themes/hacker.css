@@ -11,9 +11,13 @@
 .h1, .h2, .h3, .h4,
 .card-title {
   color: #00FF00 !important;
-  font-family: fasterone;
 }
 a,
 .btn-link {
   color: #00FF00 !important;
+}
+
+form, h1, h2, h3, h4, h5, h6, p {
+  position: relative;
+  z-index: 10;
 }
