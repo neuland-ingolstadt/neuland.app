@@ -51,9 +51,7 @@ export default function AppNavbar ({ title, showBack, children, themeState }) {
         <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
         <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
 
-        {theme !== 'default' && (
-          <link rel="stylesheet" href={`/themes/${theme}.css`} />
-        )}
+        <link rel="stylesheet" href={`/themes/${theme}.css`} />
       </Head>
       <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
