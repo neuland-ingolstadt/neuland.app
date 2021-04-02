@@ -1,0 +1,19 @@
+/* TODO: add cooler custom hacker CSS? */
+@import url("/themes/retro.css");
+
+.card,
+.modal-content,
+.list-group-item,
+.list-group-item-action {
+  border-color: #00FF00 !important;
+}
+:is(h1, h2, h3, h4, h5, h6),
+.h1, .h2, .h3, .h4,
+.card-title {
+  color: #00FF00 !important;
+  font-family: fasterone;
+}
+a,
+.btn-link {
+  color: #00FF00 !important;
+}

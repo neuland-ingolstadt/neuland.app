@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
+import TheMatrixAnimation from './TheMatrixAnimation'
 import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 
 import styles from '../styles/AppNavbar.module.css'
@@ -53,6 +54,11 @@ export default function AppNavbar ({ title, showBack, children, themeState }) {
 
         <link rel="stylesheet" href={`/themes/${theme}.css`} />
       </Head>
+      {theme === 'hacker' && (
+        <div className={styles.matrixBackground}>
+          <TheMatrixAnimation />
+        </div>
+      )}
       <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBack && (
