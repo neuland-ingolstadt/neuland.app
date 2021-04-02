@@ -2,7 +2,8 @@ import { React } from 'react'
 import PropTypes from 'prop-types'
 
 // bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css'
+// included by the themes CSS files when desired
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 // fontawesome
 import '@fortawesome/fontawesome-svg-core/styles.css'

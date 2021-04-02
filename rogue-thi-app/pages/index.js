@@ -80,6 +80,7 @@ const allThemes = [
   { name: 'Standard', style: 'default' },
   { name: 'Dunkel', style: 'dark' },
   { name: 'Retro', style: 'retro' },
+  { name: 'Windows 98 (very broken!)', style: '98' },
   { name: 'Barbie & Ken', style: 'barbie' }
 ]
 

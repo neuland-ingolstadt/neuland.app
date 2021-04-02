@@ -1,3 +1,5 @@
+@import url("/bootstrap.min.css");
+
 @font-face {
   font-family: fasterone;
   src: url(/FasterOne-Regular.ttf);
