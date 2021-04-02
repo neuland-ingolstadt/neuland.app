@@ -17,6 +17,9 @@ body {
   color: white !important;
   font-family: pressstart;
 }
+.modal {
+  background-color: #12121288 !important;
+}
 .leaflet-pane * {
   background-color: #00000000 !important;
 }

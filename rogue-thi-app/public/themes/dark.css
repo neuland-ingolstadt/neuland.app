@@ -10,6 +10,9 @@ body {
   background-color: #202020 !important;
   color: #ffffff !important;
 }
+.modal {
+  background-color: #20202088 !important;
+}
 .leaflet-pane * {
   background-color: #00000000 !important;
 }

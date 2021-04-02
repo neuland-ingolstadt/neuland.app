@@ -14,6 +14,9 @@ body {
   font-family: sacramento;
   font-weight: bolder;
 }
+.modal {
+  background-color: #FACDE588 !important;
+}
 .leaflet-pane * {
   background-color: #00000000 !important;
 }
