@@ -150,27 +150,25 @@ export default function Library (props) {
         Deine Reservierungen
       </h4>
       <ReactPlaceholder type="text" rows={3} color="#eeeeee" ready={reservations}>
-        {reservations && reservations.length === 0 &&
-          <p>
-            Du hast keine Reservierungen.
-          </p>
-        }
-        {reservations && reservations.length > 0 &&
-          <ListGroup>
-            {reservations.map((x, i) =>
-              <ListGroup.Item key={i}>
-                <div className={styles.floatRight}>
-                  <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                  </Button>
-                </div>
+        <ListGroup>
+          {reservations && reservations.length === 0 &&
+            <ListGroup.Item>
+              Du hast keine Reservierungen.
+            </ListGroup.Item>
+          }
+          {reservations && reservations.map((x, i) =>
+            <ListGroup.Item key={i}>
+              <div className={styles.floatRight}>
+                <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </Button>
+              </div>
 
-                <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
-                {formatNearDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
-              </ListGroup.Item>
-            )}
-          </ListGroup>
-        }
+              <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
+              {formatNearDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
+            </ListGroup.Item>
+          )}
+        </ListGroup>
       </ReactPlaceholder>
 
       <h4 className={styles.heading}>

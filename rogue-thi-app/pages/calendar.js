@@ -98,7 +98,7 @@ export default function Calendar () {
 
         <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
           {exams && exams.length === 0 && (
-            <ListGroup variant="flush">
+            <ListGroup>
               <ListGroup.Item>
                 Es sind derzeit keine Prüfungstermine verfügbar.
               </ListGroup.Item>

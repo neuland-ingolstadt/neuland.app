@@ -173,7 +173,7 @@ export default function Rooms () {
 
       {searching &&
         <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={filterResults}>
-          <ListGroup variant="flush">
+          <ListGroup>
             {filterResults && filterResults.map((result, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>

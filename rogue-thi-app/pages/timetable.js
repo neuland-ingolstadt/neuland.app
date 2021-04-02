@@ -90,7 +90,7 @@ export default function Timetable () {
           </ListGroup>
         )}
         {timetable && timetable.length === 0 &&
-          <ListGroup variant="flush">
+          <ListGroup>
             <ListGroup.Item>
               Dein persönlicher Stundenplan ist aktuell leer.<br />
               Du kannst deinen persönlichen Stundenplan im{' '}
