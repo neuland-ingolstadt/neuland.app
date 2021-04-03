@@ -39,6 +39,7 @@ import styles from '../styles/Home.module.css'
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
+const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
 const MAX_STATION_LENGTH = 20
 
@@ -79,10 +80,10 @@ async function getMensaPlanPreview (session) {
 const allThemes = [
   { name: 'Standard', style: 'default' },
   { name: 'Dunkel', style: 'dark' },
-  { name: 'Retro', style: 'retro' },
-  { name: 'Windows 98 (very broken!)', style: '98' },
   { name: 'Barbie & Ken', style: 'barbie' },
-  { name: 'Hackerman', style: 'hacker' }
+  { name: 'Retro', style: 'retro' },
+  { name: 'Windows 98 (Achtung: Unbenutzbar!)', style: '98' },
+  { name: 'Hackerman (siehe unten)', style: 'hacker', requiresToken: true }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
@@ -129,6 +130,7 @@ export default function Home () {
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [currentTheme, setCurrentTheme] = useState('default')
+  const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
     try {
@@ -172,6 +174,10 @@ export default function Home () {
   useEffect(async () => {
     if (localStorage.theme && localStorage.theme !== currentTheme) {
       setCurrentTheme(localStorage.theme)
+    }
+
+    if (localStorage.unlockedThemes) {
+      setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
     }
   }, [])
 
@@ -225,9 +231,18 @@ export default function Home () {
                   label={theme.name}
                   checked={currentTheme === theme.style}
                   onChange={() => setTheme(theme.style)}
+                  disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
                 />
               ))}
             </Form>
+            <br />
+            <p>
+              Für die Verwendung des mit Abstand coolsten Erscheinungsbild <i>Hackerman</i> musst
+              du mindestens vier Aufgaben unseres{' '}
+              <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTF</a> lösen.
+              <br />
+              Sobald du das erreicht hast <a href="/become-hackerman">Klicke hier!</a>
+            </p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
