@@ -37,7 +37,7 @@ export default function Personal ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Konto" />
+      <AppNavbar title="Konto" theme={theme} />
 
       <ReactPlaceholder type="text" rows={12} color="#eeeeee" ready={userdata}>
         {userdata &&

@@ -28,7 +28,7 @@ const calendar = rawCalendar.map(x => ({
   .sort((a, b) => a.end - b.end)
   .sort((a, b) => a.begin - b.begin)
 
-export default function Calendar () {
+export default function Calendar ({ theme }) {
   const router = useRouter()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
@@ -67,7 +67,7 @@ export default function Calendar () {
 
   return (
     <Container>
-      <AppNavbar title="Termine" />
+      <AppNavbar title="Termine" theme={theme} />
 
       <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
         <Modal.Header closeButton>
