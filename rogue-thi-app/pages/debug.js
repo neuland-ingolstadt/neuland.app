@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { obtainSession } from '../lib/thi-backend/thi-session-handler'
 import { thiApiRequest } from '../lib/thi-backend/thi-api-request'
 
@@ -16,7 +17,7 @@ import Link from 'next/link'
 
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
-export default function Debug () {
+export default function Debug ({ theme }) {
   const [parameters, setParameters] = useState([])
   const [result, setResult] = useState('')
   const router = useRouter()
@@ -80,7 +81,7 @@ export default function Debug () {
 
   return (
     <Container>
-      <AppNavbar title="API Playground" />
+      <AppNavbar title="API Playground" theme={theme} />
 
       <h3 className={styles.heading}>Documentation</h3>
       You can find an inofficial API documentation{' '}
@@ -133,4 +134,14 @@ export default function Debug () {
       </pre>
     </Container>
   )
+}
+
+Debug.propTypes = {
+  theme: PropTypes.string
+}
+
+Debug.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

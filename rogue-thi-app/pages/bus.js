@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 import ReactPlaceholder from 'react-placeholder'
 import Container from 'react-bootstrap/Container'
@@ -7,13 +8,13 @@ import Form from 'react-bootstrap/Form'
 
 import styles from '../styles/Bus.module.css'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { getBusPlan } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatFriendlyRelativeTime } from '../lib/date-utils'
 import { stations, defaultStation } from '../data/bus.json'
 
-export default function Bus () {
+export default function Bus ({ theme }) {
   const time = useTime()
   const [station, setStation] = useState(null)
   const [departures, setDepartures] = useState(null)
@@ -40,7 +41,7 @@ export default function Bus () {
 
   return (
     <Container>
-      <AppNavbar title="Bus" />
+      <AppNavbar title="Bus" theme={theme} />
 
       <Form.Group controlId="stationSelect">
         <Form.Control
@@ -76,4 +77,14 @@ export default function Bus () {
       <br />
     </Container>
   )
+}
+
+Bus.propTypes = {
+  theme: PropTypes.string
+}
+
+Bus.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

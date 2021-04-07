@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -13,7 +14,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import styles from '../../styles/Rooms.module.css'
 
-import AppNavbar from '../../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
@@ -60,7 +61,7 @@ async function filterRooms (session, building, date, time, duration) {
     .sort((a, b) => a.room.localeCompare(b.room))
 }
 
-export default function Rooms () {
+export default function Rooms ({ theme }) {
   const router = useRouter()
 
   const startDate = new Date()
@@ -108,7 +109,7 @@ export default function Rooms () {
 
   return (
     <Container>
-      <AppNavbar title="Raumsuche" />
+      <AppNavbar title="Raumsuche" theme={theme} />
 
       <Form>
         <div className={styles.searchForm}>
@@ -202,4 +203,14 @@ export default function Rooms () {
       }
     </Container>
   )
+}
+
+Rooms.propTypes = {
+  theme: PropTypes.string
+}
+
+Rooms.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

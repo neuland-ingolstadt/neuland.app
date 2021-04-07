@@ -25,7 +25,7 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
@@ -114,7 +114,7 @@ HomeCard.propTypes = {
   children: PropTypes.any
 }
 
-export default function Home () {
+export default function Home ({ theme }) {
   const router = useRouter()
   const time = useTime()
 
@@ -129,7 +129,7 @@ export default function Home () {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState('default')
+  const [currentTheme, setCurrentTheme] = useState(theme)
   const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
@@ -172,23 +172,20 @@ export default function Home () {
   }, [time])
 
   useEffect(async () => {
-    if (localStorage.theme && localStorage.theme !== currentTheme) {
-      setCurrentTheme(localStorage.theme)
-    }
-
     if (localStorage.unlockedThemes) {
       setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
     }
   }, [])
 
   function setTheme (newTheme) {
-    localStorage.theme = newTheme
+    const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
+    document.cookie = `theme=${newTheme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
     setCurrentTheme(newTheme)
   }
 
   return (
     <Container>
-      <AppNavbar title="Übersicht" showBack={false} themeState={[currentTheme, setCurrentTheme]}>
+      <AppNavbar title="Übersicht" showBack={false} theme={currentTheme}>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
         </Dropdown.Item>
@@ -388,4 +385,14 @@ export default function Home () {
       </div>
     </Container>
   )
+}
+
+Home.propTypes = {
+  theme: PropTypes.string
+}
+
+Home.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

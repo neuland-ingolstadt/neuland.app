@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
@@ -8,11 +9,11 @@ import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Personal.module.css'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getPersonalData } from '../lib/thi-backend/thi-api-client'
 
-export default function Personal () {
+export default function Personal ({ theme }) {
   const [userdata, setUserdata] = useState(null)
   const router = useRouter()
 
@@ -65,4 +66,14 @@ export default function Personal () {
       </ReactPlaceholder>
     </Container>
   )
+}
+
+Personal.propTypes = {
+  theme: PropTypes.string
+}
+
+Personal.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

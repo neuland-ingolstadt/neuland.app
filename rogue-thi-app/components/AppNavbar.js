@@ -15,13 +15,25 @@ import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 
 import styles from '../styles/AppNavbar.module.css'
 
-export default function AppNavbar ({ title, showBack, children, themeState }) {
+export function extractThemeFromCookie (req = null) {
+  const cookie = req ? req.headers.cookie : document.cookie
+  if (!cookie) {
+    return 'default'
+  }
+
+  const entry = cookie.split(';').find(x => x.trim().startsWith('theme='))
+  if (!entry) {
+    return 'default'
+  }
+
+  return entry.split('=')[1]
+}
+
+export default function AppNavbar ({ title, showBack, children, theme }) {
   const router = useRouter()
   const [os, setOS] = useState(OS_OTHER)
-  const [theme, setTheme] = themeState || useState('default')
 
   useEffect(() => setOS(getOperatingSystem()), [])
-  useEffect(() => localStorage.theme && setTheme(localStorage.theme), [])
 
   if (typeof showBack === 'undefined') {
     showBack = true
@@ -92,5 +104,5 @@ AppNavbar.propTypes = {
   title: PropTypes.string,
   showBack: PropTypes.bool,
   children: PropTypes.array,
-  themeState: PropTypes.array
+  theme: PropTypes.string
 }

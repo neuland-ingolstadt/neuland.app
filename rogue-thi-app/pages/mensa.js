@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -13,7 +14,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Timetable.module.css'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate } from '../lib/date-utils'
 
@@ -28,7 +29,7 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
-export default function Timetable () {
+export default function Mensa ({ theme }) {
   const [mensaPlan, setMensaPlan] = useState(null)
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
   const [allergenSelection, setAllergenSelection] = useState({})
@@ -61,7 +62,7 @@ export default function Timetable () {
 
   return (
     <Container>
-      <AppNavbar title="Mensa">
+      <AppNavbar title="Mensa" theme={theme}>
         <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
           Allergene auswählen
         </Dropdown.Item>
@@ -185,4 +186,14 @@ export default function Timetable () {
 
     </Container>
   )
+}
+
+Mensa.propTypes = {
+  theme: PropTypes.string
+}
+
+Mensa.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

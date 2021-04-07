@@ -12,12 +12,8 @@ const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
 
 export default function Imprint () {
   const router = useRouter()
-  const [theme, setTheme] = useState('hacker')
   const [flags, setFlags] = useState(['', '', '', ''])
   const [flagError, setFlagError] = useState(null)
-
-  // give the user a preview of what to expect
-  useEffect(() => theme === 'hacker' || setTheme('hacker'), [theme])
 
   function setFlag (i, value) {
     const dup = [...flags]
@@ -73,7 +69,7 @@ export default function Imprint () {
 
   return (
     <Container>
-      <AppNavbar title="Become Hackerman" themeState={[theme, setTheme]} />
+      <AppNavbar title="Become Hackerman" theme={'hacker'} />
       <h4>Enter 4 Flags:</h4>
       <Form>
         <ListGroup>

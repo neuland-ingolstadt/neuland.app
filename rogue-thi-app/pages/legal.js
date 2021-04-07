@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
 
 import DOMPurify from 'dompurify'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getImprint } from '../lib/thi-backend/thi-api-client'
 
-export default function Imprint () {
+export default function Imprint ({ theme }) {
   const router = useRouter()
   const [imprint, setImprint] = useState({ __html: '' })
 
@@ -30,10 +31,20 @@ export default function Imprint () {
   return (
     <Container>
 
-      <AppNavbar title="Rechtliche Hinweise der THI" />
+      <AppNavbar title="Rechtliche Hinweise der THI" theme={theme} />
 
       <div dangerouslySetInnerHTML={imprint} />
 
     </Container>
   )
+}
+
+Imprint.propTypes = {
+  theme: PropTypes.string
+}
+
+Imprint.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

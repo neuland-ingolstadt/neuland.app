@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar from '../../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../../components/AppNavbar'
 import roomData from '../../data/rooms.json'
 
 import styles from '../../styles/Map.module.css'
@@ -68,7 +69,7 @@ roomData.features.forEach(feature => {
   })
 })
 
-export default function Room () {
+export default function RoomMap ({ theme }) {
   const router = useRouter()
   const { highlight } = router.query
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
@@ -96,7 +97,7 @@ export default function Room () {
 
   return (
     <Container className={styles.container}>
-      <AppNavbar title="Raumplan" />
+      <AppNavbar title="Raumplan" theme={theme} />
 
       <Form className={styles.searchForm}>
         <Form.Control
@@ -139,4 +140,14 @@ export default function Room () {
       </MapContainer>
     </Container>
   )
+}
+
+RoomMap.propTypes = {
+  theme: PropTypes.string
+}
+
+RoomMap.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }

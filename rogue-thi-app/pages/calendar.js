@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
@@ -7,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
@@ -157,4 +158,14 @@ export default function Calendar () {
       <br />
     </Container>
   )
+}
+
+Calendar.propTypes = {
+  theme: PropTypes.string
+}
+
+Calendar.getInitialProps = function ({ req }) {
+  return {
+    theme: extractThemeFromCookie(req)
+  }
 }
