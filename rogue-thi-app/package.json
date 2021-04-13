@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "yarn prebuild",
+    "predev": "npm run prebuild",
     "dev": "next dev",
-    "prebuild": "yarn compile-scss",
+    "prebuild": "npm run compile-scss",
     "compile-scss": "sass --no-source-map --style compressed scss/themes/:public/themes/",
     "build": "next build",
     "start": "next start"
