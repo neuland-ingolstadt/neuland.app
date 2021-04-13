@@ -7,8 +7,6 @@ import TheMatrixAnimation from './TheMatrixAnimation'
 import styles from '../styles/ThemeLoader.module.css'
 
 export function extractThemeFromCookie (req) {
-  console.log(req)
-
   let cookie
   if (typeof req !== 'undefined') {
     cookie = req.headers.cookie
