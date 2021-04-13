@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
@@ -10,7 +10,7 @@ import AppNavbar from '../components/AppNavbar'
 
 const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
 
-export default function Imprint () {
+export default function BecomeHackerman () {
   const router = useRouter()
   const [flags, setFlags] = useState(['', '', '', ''])
   const [flagError, setFlagError] = useState(null)
@@ -69,7 +69,7 @@ export default function Imprint () {
 
   return (
     <Container>
-      <AppNavbar title="Become Hackerman" theme={'hacker'} />
+      <AppNavbar title="Become Hackerman" />
       <h4>Enter 4 Flags:</h4>
       <Form>
         <ListGroup>

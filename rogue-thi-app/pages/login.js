@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
@@ -7,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { createSession } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Login.module.css'
@@ -18,7 +17,7 @@ const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind ungültig.'
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
-export default function Login ({ theme }) {
+export default function Login () {
   const router = useRouter()
 
   const [username, setUsername] = useState('')
@@ -41,7 +40,7 @@ export default function Login ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="neuland.app" showBack={false} theme={theme} />
+      <AppNavbar title="neuland.app" showBack={false} />
 
       <div className={styles.container}>
         <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
@@ -123,14 +122,4 @@ export default function Login ({ theme }) {
       </div>
     </Container>
   )
-}
-
-Login.propTypes = {
-  theme: PropTypes.string
-}
-
-Login.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

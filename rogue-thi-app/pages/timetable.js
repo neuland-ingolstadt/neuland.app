@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import Container from 'react-bootstrap/Container'
@@ -8,7 +7,7 @@ import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Timetable.module.css'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
@@ -42,7 +41,7 @@ async function getFriendlyTimetable () {
   return groups
 }
 
-export default function Timetable ({ theme }) {
+export default function Timetable () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
 
@@ -61,7 +60,7 @@ export default function Timetable ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Stundenplan" theme={theme} />
+      <AppNavbar title="Stundenplan" />
 
       <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
         {timetable && timetable.map((group, idx) =>
@@ -104,14 +103,4 @@ export default function Timetable ({ theme }) {
       </ReactPlaceholder>
     </Container>
   )
-}
-
-Timetable.propTypes = {
-  theme: PropTypes.string
-}
-
-Timetable.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

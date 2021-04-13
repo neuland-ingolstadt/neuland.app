@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
@@ -8,11 +7,11 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import styles from '../styles/Exams.module.css'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getGrades } from '../lib/thi-backend/thi-api-client'
 
-export default function Exams ({ theme }) {
+export default function Exams () {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
@@ -55,7 +54,7 @@ export default function Exams ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Noten & Fächer" theme={theme} />
+      <AppNavbar title="Noten & Fächer" />
 
       <ListGroup>
         <h4 className={styles.heading}>
@@ -101,14 +100,4 @@ export default function Exams ({ theme }) {
       <br />
     </Container>
   )
-}
-
-Exams.propTypes = {
-  theme: PropTypes.string
-}
-
-Exams.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

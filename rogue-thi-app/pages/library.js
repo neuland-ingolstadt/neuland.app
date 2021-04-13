@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
 import styles from '../styles/Common.module.css'
 import React, { useState, useEffect } from 'react'
 
@@ -12,7 +11,7 @@ import Form from 'react-bootstrap/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import {
   getLibraryReservations,
@@ -25,7 +24,7 @@ import {
   formatFriendlyTime
 } from '../lib/date-utils'
 
-export default function Library ({ theme }) {
+export default function Library () {
   const [reservations, setReservations] = useState(null)
   const [available, setAvailable] = useState([])
   const [reservationDay, setReservationDay] = useState(false)
@@ -103,7 +102,7 @@ export default function Library ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Bibliothek" theme={theme} />
+      <AppNavbar title="Bibliothek" />
 
       <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
         <Modal.Header closeButton>
@@ -209,14 +208,4 @@ export default function Library ({ theme }) {
       <br />
     </Container>
   )
-}
-
-Library.propTypes = {
-  theme: PropTypes.string
-}
-
-Library.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

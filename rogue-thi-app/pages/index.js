@@ -25,7 +25,8 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
+import { extractThemeFromCookie } from '../components/ThemeLoader'
 import InstallPrompt from '../components/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
@@ -114,7 +115,7 @@ HomeCard.propTypes = {
   children: PropTypes.any
 }
 
-export default function Home ({ theme }) {
+export default function Home () {
   const router = useRouter()
   const time = useTime()
 
@@ -129,7 +130,7 @@ export default function Home ({ theme }) {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState(theme)
+  const [currentTheme, setCurrentTheme] = useState(extractThemeFromCookie())
   const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
@@ -177,15 +178,15 @@ export default function Home ({ theme }) {
     }
   }, [])
 
-  function setTheme (newTheme) {
+  function saveTheme () {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
-    document.cookie = `theme=${newTheme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
-    setCurrentTheme(newTheme)
+    document.cookie = `theme=${currentTheme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
+    router.reload()
   }
 
   return (
     <Container>
-      <AppNavbar title="Übersicht" showBack={false} theme={currentTheme}>
+      <AppNavbar title="Übersicht" showBack={false}>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
         </Dropdown.Item>
@@ -213,7 +214,7 @@ export default function Home ({ theme }) {
       <div className={styles.cardDeck}>
         <InstallPrompt />
 
-        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
+        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => saveTheme()}>
           <Modal.Header closeButton>
             <Modal.Title>Erscheinungsbild</Modal.Title>
           </Modal.Header>
@@ -227,7 +228,7 @@ export default function Home ({ theme }) {
                   type="radio"
                   label={theme.name}
                   checked={currentTheme === theme.style}
-                  onChange={() => setTheme(theme.style)}
+                  onChange={() => setCurrentTheme(theme.style)}
                   disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
                 />
               ))}
@@ -238,11 +239,11 @@ export default function Home ({ theme }) {
               du mindestens vier Aufgaben unseres{' '}
               <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTF</a> lösen.
               <br />
-              Sobald du das erreicht hast <a href="/become-hackerman">Klicke hier!</a>
+              Sobald du das erreicht hast <Link href="/become-hackerman">Klicke hier!</Link>
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
+            <Button variant="secondary" onClick={() => saveTheme()}>
               OK
             </Button>
           </Modal.Footer>
@@ -385,14 +386,4 @@ export default function Home ({ theme }) {
       </div>
     </Container>
   )
-}
-
-Home.propTypes = {
-  theme: PropTypes.string
-}
-
-Home.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

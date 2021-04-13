@@ -10,26 +10,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
-import TheMatrixAnimation from './TheMatrixAnimation'
 import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 
 import styles from '../styles/AppNavbar.module.css'
 
-export function extractThemeFromCookie (req = null) {
-  const cookie = req ? req.headers.cookie : document.cookie
-  if (!cookie) {
-    return 'default'
-  }
-
-  const entry = cookie.split(';').find(x => x.trim().startsWith('theme='))
-  if (!entry) {
-    return 'default'
-  }
-
-  return entry.split('=')[1]
-}
-
-export default function AppNavbar ({ title, showBack, children, theme }) {
+export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const [os, setOS] = useState(OS_OTHER)
 
@@ -63,14 +48,7 @@ export default function AppNavbar ({ title, showBack, children, theme }) {
         <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
         <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
         <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
-
-        <link rel="stylesheet" href={`/themes/${theme}.css`} />
       </Head>
-      {theme === 'hacker' && (
-        <div className={styles.matrixBackground}>
-          <TheMatrixAnimation />
-        </div>
-      )}
       <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBack && (
@@ -103,6 +81,5 @@ export default function AppNavbar ({ title, showBack, children, theme }) {
 AppNavbar.propTypes = {
   title: PropTypes.string,
   showBack: PropTypes.bool,
-  children: PropTypes.array,
-  theme: PropTypes.string
+  children: PropTypes.array
 }

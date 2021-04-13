@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
@@ -8,7 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 
-import AppNavbar, { extractThemeFromCookie } from '../components/AppNavbar'
+import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
@@ -28,7 +27,7 @@ const calendar = rawCalendar.map(x => ({
   .sort((a, b) => a.end - b.end)
   .sort((a, b) => a.begin - b.begin)
 
-export default function Calendar ({ theme }) {
+export default function Calendar () {
   const router = useRouter()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
@@ -67,7 +66,7 @@ export default function Calendar ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Termine" theme={theme} />
+      <AppNavbar title="Termine" />
 
       <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
         <Modal.Header closeButton>
@@ -158,14 +157,4 @@ export default function Calendar ({ theme }) {
       <br />
     </Container>
   )
-}
-
-Calendar.propTypes = {
-  theme: PropTypes.string
-}
-
-Calendar.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -12,14 +11,14 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import styles from '../../styles/Rooms.module.css'
 
-import AppNavbar, { extractThemeFromCookie } from '../../components/AppNavbar'
+import AppNavbar from '../../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../../lib/date-utils'
 
 const TUX_ROOMS = ['G308']
 
-export default function RoomList ({ theme }) {
+export default function RoomList () {
   const router = useRouter()
   const [freeRooms, setFreeRooms] = useState(null)
 
@@ -67,7 +66,7 @@ export default function RoomList ({ theme }) {
 
   return (
     <Container>
-      <AppNavbar title="Stündlicher Raumplan" theme={theme} />
+      <AppNavbar title="Stündlicher Raumplan" />
 
       <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={freeRooms}>
         {freeRooms && freeRooms.map((day, i) =>
@@ -104,14 +103,4 @@ export default function RoomList ({ theme }) {
       <br />
     </Container>
   )
-}
-
-RoomList.propTypes = {
-  theme: PropTypes.string
-}
-
-RoomList.getInitialProps = function ({ req }) {
-  return {
-    theme: extractThemeFromCookie(req)
-  }
 }
