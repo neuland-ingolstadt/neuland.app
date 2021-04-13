@@ -43,27 +43,36 @@ function sendJson (res, code, value) {
 export default async function handler (req, res) {
   const station = req.query.station
   if (!URLS.hasOwnProperty(station)) {
-    sendJson(res, 400, { error: 'unknown/unsupported station' })
+    sendJson(res, 400, 'Unknown station')
     return
   }
 
-  const departures = await cache.get(station, async () => {
-    const resp = await fetch(URLS[station], {
-      headers: { Accept: 'application/json' } // required so that the backend returns proper utf-8
+  try {
+    const departures = await cache.get(station, async () => {
+      const resp = await fetch(URLS[station], {
+        headers: { Accept: 'application/json' } // required so that the backend returns proper utf-8
+      })
+      const body = await resp.text()
+
+      if (resp.status === 200) {
+        // sometimes, the API will return malformed JSON that can not be parsed by node
+        if (body === '{ error: true }') {
+          throw new Error('Departure times not available')
+        }
+
+        const { departures } = JSON.parse(body)
+        return departures.map(departure => ({
+          route: departure.route,
+          destination: departure.destination,
+          time: parseDepartureTime(departure.strTime)
+        }))
+      } else {
+        throw new Error('Data source returned an error: ' + body)
+      }
     })
 
-    if (resp.status === 200) {
-      const { departures } = await resp.json()
-
-      return departures.map(departure => ({
-        route: departure.route,
-        destination: departure.destination,
-        time: parseDepartureTime(departure.strTime)
-      }))
-    } else {
-      throw new Error('Data source returned an error: ' + await resp.text())
-    }
-  })
-
-  sendJson(res, 200, departures)
+    sendJson(res, 200, departures)
+  } catch (e) {
+    sendJson(res, 500, e.message)
+  }
 }
