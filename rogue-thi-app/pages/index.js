@@ -83,8 +83,8 @@ const allThemes = [
   { name: 'Dunkel', style: 'dark' },
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
-  { name: 'Windows 98 (Achtung: Unbenutzbar!)', style: '98' },
-  { name: 'Hackerman (siehe unten)', style: 'hacker', requiresToken: true }
+  { name: 'Windows 98 (unbenutzbar)', style: '98' },
+  { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
@@ -235,11 +235,8 @@ export default function Home () {
             </Form>
             <br />
             <p>
-              Für die Verwendung des mit Abstand coolsten Erscheinungsbild <i>Hackerman</i> musst
-              du mindestens vier Aufgaben unseres{' '}
-              <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTF</a> lösen.
-              <br />
-              Sobald du das erreicht hast <Link href="/become-hackerman">Klicke hier!</Link>
+              Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
+              Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
             </p>
           </Modal.Body>
           <Modal.Footer>
