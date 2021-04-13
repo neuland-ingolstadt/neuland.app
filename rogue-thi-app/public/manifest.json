@@ -3,7 +3,7 @@
   "short_name": "neuland.app",
   "theme_color": "#005a9b",
   "background_color": "#ffffff",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
