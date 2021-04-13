@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default function TheMatrixAnimation () {
-  const [canvasId, setCanvasId] = useState(null)
+  const canvas = useRef()
 
   function getRandomChar () {
     return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
   }
-  function matrixAnimationFrame (canvas, ctx, ypos) {
+
+  function renderFrame (canvas, ctx, ypos) {
     // Draw a semitransparent black rectangle on top of previous drawing
     ctx.fillStyle = '#0001'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -33,50 +34,40 @@ export default function TheMatrixAnimation () {
   }
 
   useEffect(() => {
-    const id = Math.random().toString(36).substr(2, 8)
-    setCanvasId(id)
+    if (!canvas.current) {
+      return
+    }
 
-    let canvas = null
-    let ctx = null
-    let ypos = null
-    setInterval(() => {
-      // the following code is mostly taken from
-      // https://dev.to/gnsp/making-the-matrix-effect-in-javascript-din
+    // the following code is mostly taken from
+    // https://dev.to/gnsp/making-the-matrix-effect-in-javascript-din
 
-      if (!canvas) {
-        canvas = document.getElementById(id)
-        if (!canvas) {
-          return
-        }
+    canvas.current.width = window.innerWidth
+    canvas.current.height = window.innerHeight
 
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
+    const ctx = canvas.current.getContext('2d')
+    ctx.fillStyle = '#000'
+    ctx.fillRect(0, 0, canvas.current.width, canvas.current.height)
 
-        ctx = canvas.getContext('2d')
-        ctx.fillStyle = '#000'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
+    const cols = Math.floor(canvas.current.width / 20) + 1
+    const ypos = Array(cols).fill(0)
 
-        const cols = Math.floor(canvas.width / 20) + 1
-        ypos = Array(cols).fill(0)
-
-        ctx.font = '15pt monospace'
-        ypos.forEach((y, i) => {
-          const x = i * 20
-          const startY = Math.floor(Math.random() * (canvas.height - 16 * 20))
-          for (let j = 1; j < 16; j++) {
-            ctx.fillStyle = `rgb(0, ${j * 16}, 0)`
-            ctx.fillText(getRandomChar(), x, startY + j * 20)
-          }
-
-          ypos[i] = startY + 16 * 20
-        })
+    ctx.font = '15pt monospace'
+    ypos.forEach((y, i) => {
+      const x = i * 20
+      const startY = Math.floor(Math.random() * (canvas.current.height - 16 * 20))
+      for (let j = 1; j < 16; j++) {
+        ctx.fillStyle = `rgb(0, ${j * 16}, 0)`
+        ctx.fillText(getRandomChar(), x, startY + j * 20)
       }
 
-      matrixAnimationFrame(canvas, ctx, ypos)
-    }, 50)
-  }, [])
+      ypos[i] = startY + 16 * 20
+    })
+
+    const interval = setInterval(() => renderFrame(canvas.current, ctx, ypos), 50)
+    return () => clearInterval(interval)
+  }, [canvas])
 
   return (
-    <canvas id={canvasId} />
+    <canvas ref={canvas} />
   )
 }
