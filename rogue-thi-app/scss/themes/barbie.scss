@@ -1,0 +1,43 @@
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+@font-face {
+    font-family: sacramento;
+    src: url(/Sacramento-Regular.ttf);
+}
+body {
+    background-color: #FACDE5;
+    font-family: sacramento;
+    font-weight: bolder;
+}
+* {
+    background-color: #FACDE5 !important;
+    font-family: sacramento;
+    font-weight: bolder;
+}
+.modal {
+    background-color: #FACDE588 !important;
+}
+.leaflet-pane * {
+    background-color: #00000000 !important;
+}
+.leaflet-popup-content-wrapper {
+    background-color: #FACDE5 !important;
+}
+.card,
+.modal-content,
+.list-group-item,
+.list-group-item-action {
+    border-color: #21A8C5 !important;
+}
+:is(h1, h2, h3, h4, h5, h6),
+.h1, .h2, .h3, .h4,
+.card-title {
+    color: #21A8C5 !important;
+}
+.text-row {
+    background-color: #21A8C5 !important;
+}
+a,
+.btn-link {
+    color: #21A8C5 !important;
+}

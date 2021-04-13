@@ -84,7 +84,8 @@ const allThemes = [
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
   { name: 'Windows 98 (unbenutzbar)', style: '98' },
-  { name: 'Hackerman', style: 'hacker', requiresToken: true }
+  { name: 'Hackerman', style: 'hacker', requiresToken: true },
+  { name: 'Bootstrap-Default', style: 'bootstrap-default' }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
