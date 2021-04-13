@@ -186,7 +186,7 @@ export default function Home () {
 
   return (
     <Container>
-      <AppNavbar title="Übersicht" showBack={false}>
+      <AppNavbar title="neuland.app" showBack={false}>
         <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
           Ausloggen
         </Dropdown.Item>
