@@ -2,10 +2,6 @@
   padding: 0;
   height: 50px;
   background-color: var(--navbar-background, white);
-  border-bottom: 1px solid var(--navbar-border, #eeeeee);
-  box-shadow: 0px 0px 3px var(--navbar-shadow, #00000020);
-
-  margin-bottom: 5px;
 }
 
 .navbar :global(.btn-link) {
@@ -22,13 +18,6 @@
 
 .titleText:first-child {
   padding: 0px 20px;
-}
-
-.titleIcon {
-  width: 32px;
-  margin-top: -5px;
-  margin-right: 5px;
-  filter: grayscale(100%);
 }
 
 .right {
