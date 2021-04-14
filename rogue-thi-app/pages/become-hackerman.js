@@ -6,7 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
-import AppNavbar from '../components/AppNavbar'
+import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 
 const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
 
@@ -69,7 +69,9 @@ export default function BecomeHackerman () {
 
   return (
     <Container>
-      <AppNavbar title="Become Hackerman" />
+      <ThemeContext.Provider value={'hacker'}>
+        <AppNavbar title="Become Hackerman" />
+      </ThemeContext.Provider>
       <h4>Enter 4 Flags:</h4>
       <Form>
         <ListGroup>

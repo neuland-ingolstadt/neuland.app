@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -25,8 +25,7 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
-import AppNavbar from '../components/AppNavbar'
-import { extractThemeFromCookie } from '../components/ThemeLoader'
+import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
@@ -83,9 +82,9 @@ const allThemes = [
   { name: 'Dunkel', style: 'dark' },
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
+  { name: 'Bootstrap', style: 'bootstrap-default' },
   { name: 'Windows 98 (unbenutzbar)', style: '98' },
-  { name: 'Hackerman', style: 'hacker', requiresToken: true },
-  { name: 'Bootstrap-Default', style: 'bootstrap-default' }
+  { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
 function HomeCard ({ link, icon, title, children }) {
@@ -131,7 +130,8 @@ export default function Home () {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState(extractThemeFromCookie())
+  const startTheme = useContext(ThemeContext)
+  const [currentTheme, setCurrentTheme] = useState(startTheme)
   const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
@@ -179,43 +179,46 @@ export default function Home () {
     }
   }, [])
 
-  function saveTheme () {
+  function setTheme (theme) {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
-    document.cookie = `theme=${currentTheme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
-    router.reload()
+    document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
+
+    setCurrentTheme(theme)
   }
 
   return (
     <Container>
-      <AppNavbar title="neuland.app" showBack={false}>
-        <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
-          Ausloggen
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-          Erscheinungsbild
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href="/debug">
-          API Playground
-        </Dropdown.Item>
-        <hr />
-        <Dropdown.Item variant="link" href={FEEDBACK_URL} target="_blank" rel="noreferrer">
-          Feedback
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href={GIT_URL} target="_blank" rel="noreferrer">
-          Quellcode
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
-          Impressum und Datenschutz
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href="/legal">
-          Rechtliche Hinweise der THI
-        </Dropdown.Item>
-      </AppNavbar>
+      <ThemeContext.Provider value={currentTheme}>
+        <AppNavbar title="neuland.app" showBack={false}>
+          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+            Ausloggen
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+            Erscheinungsbild
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href="/debug">
+            API Playground
+          </Dropdown.Item>
+          <hr />
+          <Dropdown.Item variant="link" href={FEEDBACK_URL} target="_blank" rel="noreferrer">
+            Feedback
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href={GIT_URL} target="_blank" rel="noreferrer">
+            Quellcode
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
+            Impressum und Datenschutz
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href="/legal">
+            Rechtliche Hinweise der THI
+          </Dropdown.Item>
+        </AppNavbar>
+      </ThemeContext.Provider>
 
       <div className={styles.cardDeck}>
         <InstallPrompt />
 
-        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => saveTheme()}>
+        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Erscheinungsbild</Modal.Title>
           </Modal.Header>
@@ -229,19 +232,20 @@ export default function Home () {
                   type="radio"
                   label={theme.name}
                   checked={currentTheme === theme.style}
-                  onChange={() => setCurrentTheme(theme.style)}
+                  onChange={() => setTheme(theme.style)}
                   disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
                 />
               ))}
             </Form>
             <br />
             <p>
-              Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
+              Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben
+              unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
               Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => saveTheme()}>
+            <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
               OK
             </Button>
           </Modal.Footer>

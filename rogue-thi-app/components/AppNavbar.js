@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -11,12 +11,16 @@ import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid
 import { useRouter } from 'next/router'
 
 import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
+import TheMatrixAnimation from './TheMatrixAnimation'
 
 import styles from '../styles/AppNavbar.module.css'
+
+export const ThemeContext = createContext('default')
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const [os, setOS] = useState(OS_OTHER)
+  const theme = useContext(ThemeContext)
 
   useEffect(() => setOS(getOperatingSystem()), [])
 
@@ -48,7 +52,16 @@ export default function AppNavbar ({ title, showBack, children }) {
         <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
         <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
         <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
+
+        <link rel="stylesheet" href={`/themes/${theme}.css`} />
       </Head>
+
+      {theme === 'hacker' && (
+        <div className={styles.matrixBackground}>
+          <TheMatrixAnimation />
+        </div>
+      )}
+
       <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBack && (

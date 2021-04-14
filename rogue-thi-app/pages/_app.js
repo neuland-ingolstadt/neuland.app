@@ -1,8 +1,7 @@
-import { React, useMemo } from 'react'
+import { React } from 'react'
 import PropTypes from 'prop-types'
-import { useRouter } from 'next/router'
 import App from 'next/app'
-import ThemeLoader, { extractThemeFromCookie } from '../components/ThemeLoader'
+import { ThemeContext } from '../components/AppNavbar'
 
 // fontawesome
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -13,20 +12,31 @@ import styles from '../styles/Home.module.css'
 
 config.autoAddCss = false
 
-function MyApp ({ Component, pageProps, theme }) {
-  const router = useRouter()
-  const actualTheme = useMemo(() => {
-    if (router.pathname.startsWith('/become-hackerman')) {
-      return 'hacker'
-    } else {
-      return theme
-    }
-  }, [theme, router])
+function extractThemeFromCookie (req) {
+  let cookie
+  if (typeof req !== 'undefined') {
+    cookie = req.headers.cookie
+  } else if (typeof document !== 'undefined') {
+    cookie = document.cookie
+  }
 
+  if (!cookie) {
+    return 'default'
+  }
+
+  const entry = cookie.split(';').find(x => x.trim().startsWith('theme='))
+  if (!entry) {
+    return 'default'
+  }
+
+  return entry.split('=')[1]
+}
+
+function MyApp ({ Component, pageProps, theme }) {
   return (
-    <ThemeLoader theme={actualTheme}>
+    <ThemeContext.Provider value={theme}>
       <Component className={styles.themeDefault} {...pageProps} />
-    </ThemeLoader>
+    </ThemeContext.Provider>
   )
 }
 
