@@ -237,7 +237,6 @@ export default function Home () {
             icon={faCalendarMinus}
             title="Stundenplan"
             link="/timetable"
-            className="desktop-only"
           >
             <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={timetable || timetableError}>
               <ListGroup variant="flush">
