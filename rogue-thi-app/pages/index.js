@@ -83,7 +83,7 @@ const allThemes = [
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
   { name: 'Bootstrap', style: 'bootstrap-default' },
-  { name: 'Windows 98 (unbenutzbar)', style: '98' },
+  { name: 'Windows 95', style: '95' },
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
