@@ -180,6 +180,9 @@ $navbar-brand-color: $body-color;
 .text-block > .text-row {
   background-color: $gray-500 !important;
 }
+pre {
+  color: white !important;
+}
 
 // use our CI color
 $theme-colors: (
