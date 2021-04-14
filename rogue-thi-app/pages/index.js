@@ -130,7 +130,7 @@ export default function Home () {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const currentTheme = useContext(ThemeContext)
+  const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
   const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
@@ -178,25 +178,29 @@ export default function Home () {
     }
   }, [])
 
-  function setCurrentTheme (theme) {
+  function changeTheme (theme) {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
     document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
-    router.reload()
+
+    setCurrentTheme(theme)
+    setShowThemeModal(false)
   }
 
   return (
     <>
-      <AppNavbar title="neuland.app" showBack={false}>
-        <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-          Design
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href="/imprint">
-          Rechtliches und Informationen
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
-          Ausloggen
-        </Dropdown.Item>
-      </AppNavbar>
+      <ThemeContext.Provider value={currentTheme}>
+        <AppNavbar title="neuland.app" showBack={false}>
+          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+            Design
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href="/imprint">
+            Rechtliches und Informationen
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+            Ausloggen
+          </Dropdown.Item>
+        </AppNavbar>
+      </ThemeContext.Provider>
 
       <AppBody>
         <div className={styles.cardDeck}>
@@ -214,7 +218,7 @@ export default function Home () {
                     id={`theme-${i}`}
                     className={styles.themeButton}
                     variant={currentTheme === theme.style ? 'primary' : 'secondary'}
-                    onClick={() => setCurrentTheme(theme.style)}
+                    onClick={() => changeTheme(theme.style)}
                     disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
                   >
                     {theme.name}
