@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
-import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -13,7 +12,9 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import styles from '../../styles/Rooms.module.css'
 
+import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
+import AppTabbar from '../../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
@@ -107,101 +108,103 @@ export default function Rooms () {
   }, [])
 
   return (
-    <Container>
-      <AppNavbar title="Raumsuche" />
+    <>
+      <AppNavbar title="Raumsuche" showBack={false} />
 
-      <Form>
-        <div className={styles.searchForm}>
-          <Form.Group>
-            <Form.Label>
-              Gebäude
-            </Form.Label>
-            <Form.Control
-              as="select"
-              value={building}
-              onChange={e => setBuilding(e.target.value)}
-            >
-              <option key={BUILDINGS_ALL}>{BUILDINGS_ALL}</option>
-              {BUILDINGS.map(b => <option key={b}>{b}</option>)}
-            </Form.Control>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>
-              Datum
-            </Form.Label>
-            <Form.Control
-              type="date"
-              value={date}
-              onChange={e => setDate(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>
-              Zeit
-            </Form.Label>
-            <Form.Control
-              type="time"
-              value={time}
-              onChange={e => setTime(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>
-              Dauer
-            </Form.Label>
-            <Form.Control
-              as="select"
-              value={duration}
-              onChange={e => setDuration(e.target.value)}
-            >
-              {DURATIONS.map(d => <option key={d}>{d}</option>)}
-            </Form.Control>
-          </Form.Group>
-        </div>
-        <Button onClick={() => filter()}>
-          Suchen
-        </Button>
-        <Link href="/rooms/map">
-          <Button variant="link">Karte anzeigen</Button>
-        </Link>
-        <Link href="/rooms/list">
-          <Button variant="link">Stündlichen Plan anzeigen</Button>
-        </Link>
-      </Form>
+      <AppBody>
+        <Form>
+          <div className={styles.searchForm}>
+            <Form.Group>
+              <Form.Label>
+                Gebäude
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={building}
+                onChange={e => setBuilding(e.target.value)}
+              >
+                <option key={BUILDINGS_ALL}>{BUILDINGS_ALL}</option>
+                {BUILDINGS.map(b => <option key={b}>{b}</option>)}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>
+                Datum
+              </Form.Label>
+              <Form.Control
+                type="date"
+                value={date}
+                onChange={e => setDate(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>
+                Zeit
+              </Form.Label>
+              <Form.Control
+                type="time"
+                value={time}
+                onChange={e => setTime(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>
+                Dauer
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={duration}
+                onChange={e => setDuration(e.target.value)}
+              >
+                {DURATIONS.map(d => <option key={d}>{d}</option>)}
+              </Form.Control>
+            </Form.Group>
+          </div>
+          <Button onClick={() => filter()}>
+            Suchen
+          </Button>
+          <Link href="/rooms/map">
+            <Button variant="link">Karte anzeigen</Button>
+          </Link>
+          <Link href="/rooms/list">
+            <Button variant="link">Stündlichen Plan anzeigen</Button>
+          </Link>
+        </Form>
 
-      <br />
+        <br />
 
-      {searching &&
-        <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={filterResults}>
-          <ListGroup>
-            {filterResults && filterResults.map((result, idx) =>
-              <ListGroup.Item key={idx} className={styles.item}>
-                <div className={styles.left}>
-                  {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
-                  <Link href={`/rooms/map?highlight=${result.room}`}>
-                    {result.room}
-                  </Link>
+        {searching &&
+          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={filterResults}>
+            <ListGroup>
+              {filterResults && filterResults.map((result, idx) =>
+                <ListGroup.Item key={idx} className={styles.item}>
+                  <div className={styles.left}>
+                    {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
+                    <Link href={`/rooms/map?highlight=${result.room}`}>
+                      {result.room}
+                    </Link>
 
-                  <div className={styles.details}>
-                    {result.type}
+                    <div className={styles.details}>
+                      {result.type}
+                    </div>
                   </div>
-                </div>
-                <div className={styles.right}>
-                  frei ab {formatFriendlyTime(result.from)}<br />
-                  bis {formatFriendlyTime(result.until)}
-                </div>
-              </ListGroup.Item>
-            )}
-            {filterResults && filterResults.length === 0 &&
-              <ListGroup.Item className={styles.item}>
-                Keine Ergebnisse
-              </ListGroup.Item>
-            }
-          </ListGroup>
-        </ReactPlaceholder>
-      }
-    </Container>
+                  <div className={styles.right}>
+                    frei ab {formatFriendlyTime(result.from)}<br />
+                    bis {formatFriendlyTime(result.until)}
+                  </div>
+                </ListGroup.Item>
+              )}
+              {filterResults && filterResults.length === 0 &&
+                <ListGroup.Item className={styles.item}>
+                  Keine Ergebnisse
+                </ListGroup.Item>
+              }
+            </ListGroup>
+          </ReactPlaceholder>
+        }
+      </AppBody>
+
+      <AppTabbar />
+    </>
   )
 }
-
-

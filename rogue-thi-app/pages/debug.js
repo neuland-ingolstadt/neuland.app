@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import styles from '../styles/Common.module.css'
 
+import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { obtainSession } from '../lib/thi-backend/thi-session-handler'
 import { thiApiRequest } from '../lib/thi-backend/thi-api-request'
 
-import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -79,58 +79,60 @@ export default function Debug () {
   }
 
   return (
-    <Container>
+    <>
       <AppNavbar title="API Playground" />
 
-      <h3 className={styles.heading}>Documentation</h3>
-      You can find an inofficial API documentation{' '}
-      <Link href={`${GIT_URL}/blob/master/thi-rest-api.md`}>
-        here on Github
-      </Link>
-      <br />
-      Below you can experiment with the API. The session field is auto filled with
-      a valid session token for your user.
+      <AppBody>
+        <h3 className={styles.heading}>Documentation</h3>
+        You can find an inofficial API documentation{' '}
+        <Link href={`${GIT_URL}/blob/master/thi-rest-api.md`}>
+          here on Github
+        </Link>
+        <br />
+        Below you can experiment with the API. The session field is auto filled with
+        a valid session token for your user.
 
-      <h3 className={styles.heading}>Fields</h3>
-      <ListGroup>
-        {parameters && parameters.map((param, idx) =>
-          <ListGroup.Item key={idx} className={styles.item}>
-            <Row>
-              <Col>
-                <Form.Control
-                  type="text"
-                  placeholder="name"
-                  value={param.name}
-                  onChange={e => changeParameterName(idx, e.target.value)}
-                />
-              </Col>
-              <Col>
-                <Form.Control
-                  type="text"
-                  placeholder="value"
-                  value={param.value}
-                  onChange={e => changeParameterValue(idx, e.target.value)}
-                />
-              </Col>
-              <Col>
-                <Button variant="danger" onClick={() => removeParameter(idx)}>
-                  Remove
-                </Button>
-              </Col>
-            </Row>
-          </ListGroup.Item>
-        )}
-      </ListGroup>
-      <br />
-      <Button variant="primary" onClick={submit}>Submit</Button>
-      {' '}
-      <Button variant="success" onClick={addParameter}>Add Field</Button>
+        <h3 className={styles.heading}>Fields</h3>
+        <ListGroup>
+          {parameters && parameters.map((param, idx) =>
+            <ListGroup.Item key={idx} className={styles.item}>
+              <Row>
+                <Col>
+                  <Form.Control
+                    type="text"
+                    placeholder="name"
+                    value={param.name}
+                    onChange={e => changeParameterName(idx, e.target.value)}
+                  />
+                </Col>
+                <Col>
+                  <Form.Control
+                    type="text"
+                    placeholder="value"
+                    value={param.value}
+                    onChange={e => changeParameterValue(idx, e.target.value)}
+                  />
+                </Col>
+                <Col>
+                  <Button variant="danger" onClick={() => removeParameter(idx)}>
+                    Remove
+                  </Button>
+                </Col>
+              </Row>
+            </ListGroup.Item>
+          )}
+        </ListGroup>
+        <br />
+        <Button variant="primary" onClick={submit}>Submit</Button>
+        {' '}
+        <Button variant="success" onClick={addParameter}>Add Field</Button>
 
-      <br />
-      <h3 className={styles.heading}>Result</h3>
-      <pre>
-        {result}
-      </pre>
-    </Container>
+        <br />
+        <h3 className={styles.heading}>Result</h3>
+        <pre>
+          {result}
+        </pre>
+      </AppBody>
+    </>
   )
 }

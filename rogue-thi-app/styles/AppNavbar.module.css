@@ -1,13 +1,30 @@
 .navbar {
   padding: 0;
   height: 50px;
+  background: white;
+}
+
+.navbar :global(.btn-link) {
+  margin: 0px 10px;
 }
 
 .title {
-  font-size: 14pt;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  font-size: 15pt;
+}
+
+.titleText {
+  display: inline;
+}
+
+.titleText:first-child {
+  padding: 0px 20px;
+}
+
+.titleIcon {
+  width: 32px;
+  margin-top: -5px;
+  margin-right: 5px;
+  filter: grayscale(100%);
 }
 
 .right {

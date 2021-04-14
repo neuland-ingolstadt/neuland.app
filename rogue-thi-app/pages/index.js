@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 
-import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Card from 'react-bootstrap/Card'
@@ -25,7 +24,9 @@ import {
   faUser
 } from '@fortawesome/free-solid-svg-icons'
 
+import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
@@ -36,11 +37,7 @@ import { stations, defaultStation } from '../data/bus.json'
 
 import styles from '../styles/Home.module.css'
 
-const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
-const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const FEEDBACK_URL = process.env.NEXT_PUBLIC_FEEDBACK_URL
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
-
 const MAX_STATION_LENGTH = 20
 
 async function getTimetablePreview (session) {
@@ -87,10 +84,10 @@ const allThemes = [
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
-function HomeCard ({ link, icon, title, children }) {
+function HomeCard ({ link, icon, title, className, children }) {
   return (
     <Link href={link}>
-      <Card className={styles.card}>
+      <Card className={[styles.card, className]}>
         <Card.Body>
           <Card.Title>
             <FontAwesomeIcon icon={icon} fixedWidth />
@@ -100,9 +97,11 @@ function HomeCard ({ link, icon, title, children }) {
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
           </Card.Title>
-          <Card.Text>
-            {children}
-          </Card.Text>
+          {children &&
+            <Card.Text>
+              {children}
+            </Card.Text>
+          }
         </Card.Body>
       </Card>
     </Link>
@@ -112,6 +111,7 @@ HomeCard.propTypes = {
   link: PropTypes.string,
   icon: PropTypes.object,
   title: PropTypes.string,
+  className: PropTypes.string,
   children: PropTypes.any
 }
 
@@ -130,8 +130,7 @@ export default function Home () {
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const startTheme = useContext(ThemeContext)
-  const [currentTheme, setCurrentTheme] = useState(startTheme)
+  const currentTheme = useContext(ThemeContext)
   const [unlockedThemes, setUnlockedThemes] = useState([])
 
   useEffect(async () => {
@@ -179,213 +178,190 @@ export default function Home () {
     }
   }, [])
 
-  function setTheme (theme) {
+  function setCurrentTheme (theme) {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
     document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
-
-    setCurrentTheme(theme)
+    router.reload()
   }
 
   return (
-    <Container>
-      <ThemeContext.Provider value={currentTheme}>
-        <AppNavbar title="neuland.app" showBack={false}>
-          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
-            Ausloggen
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            Erscheinungsbild
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href="/debug">
-            API Playground
-          </Dropdown.Item>
-          <hr />
-          <Dropdown.Item variant="link" href={FEEDBACK_URL} target="_blank" rel="noreferrer">
-            Feedback
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href={GIT_URL} target="_blank" rel="noreferrer">
-            Quellcode
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href={IMPRINT_URL} target="_blank" rel="noreferrer">
-            Impressum und Datenschutz
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href="/legal">
-            Rechtliche Hinweise der THI
-          </Dropdown.Item>
-        </AppNavbar>
-      </ThemeContext.Provider>
+    <>
+      <AppNavbar title="neuland.app" showBack={false}>
+        <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+          Design
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/imprint">
+          Rechtliches und Informationen
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+          Ausloggen
+        </Dropdown.Item>
+      </AppNavbar>
 
-      <div className={styles.cardDeck}>
-        <InstallPrompt />
+      <AppBody>
+        <div className={styles.cardDeck}>
+          <InstallPrompt />
 
-        <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Erscheinungsbild</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              {allThemes.map((theme, i) => (
-                <Form.Check
-                  name="theme-selection"
+          <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Design</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                {allThemes.map((theme, i) => (
+                  <Button
                   key={i}
-                  id={`theme-${i}`}
-                  type="radio"
-                  label={theme.name}
-                  checked={currentTheme === theme.style}
-                  onChange={() => setTheme(theme.style)}
-                  disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
-                />
-              ))}
-            </Form>
-            <br />
-            <p>
-              Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben
-              unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
-              Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
-            </p>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowThemeModal(false)}>
-              OK
-            </Button>
-          </Modal.Footer>
-        </Modal>
+                    id={`theme-${i}`}
+                    className={styles.themeButton}
+                    variant={currentTheme === theme.style ? 'primary' : 'secondary'}
+                    onClick={() => setCurrentTheme(theme.style)}
+                    disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
+                  >
+                    {theme.name}
+                  </Button>
+                ))}
+              </Form>
+              <br />
+              <p>
+                Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
+                Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
+              </p>
+            </Modal.Body>
+          </Modal>
 
-        <HomeCard
-          icon={faCalendarMinus}
-          title="Stundenplan"
-          link="/timetable"
-        >
-          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={timetable || timetableError}>
-            <ListGroup variant="flush">
-            {timetable && timetable.map((x, i) =>
-              <ListGroup.Item key={i}>
-                <div>
-                  {x.veranstaltung}, {x.raum}
-                </div>
-                <div className="text-muted">
-                  {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
-                </div>
-              </ListGroup.Item>
-            )}
-            {timetable && timetable.length === 0 &&
-              <ListGroup.Item>
-                Dein Stundenplan ist leer.
-              </ListGroup.Item>
-            }
-            {timetableError &&
-              <ListGroup.Item>
-                Fehler beim Abruf des Stundenplans.
-              </ListGroup.Item>
-            }
-            </ListGroup>
-          </ReactPlaceholder>
-        </HomeCard>
-
-        <HomeCard
-          icon={faUtensils}
-          title="Mensa"
-          link="/mensa"
-        >
-          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={mensaPlan || mensaPlanError}>
-            <ListGroup variant="flush">
-              {mensaPlan && mensaPlan.map((x, i) =>
+          <HomeCard
+            icon={faCalendarMinus}
+            title="Stundenplan"
+            link="/timetable"
+            className="desktop-only"
+          >
+            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={timetable || timetableError}>
+              <ListGroup variant="flush">
+              {timetable && timetable.map((x, i) =>
                 <ListGroup.Item key={i}>
-                  {x}
-                </ListGroup.Item>
-              )}
-              {mensaPlan && mensaPlan.length === 0 &&
-                <ListGroup.Item>
-                  Der Speiseplan ist leer.
-                </ListGroup.Item>
-              }
-              {mensaPlanError &&
-                <ListGroup.Item>
-                  Fehler beim Abruf des Speiseplans.<br />
-                  Die Mensa mag gerade nicht. :(
-                </ListGroup.Item>
-              }
-            </ListGroup>
-          </ReactPlaceholder>
-        </HomeCard>
-
-        <HomeCard
-          icon={faBus}
-          title={stationName ? `Bus (${stationName})` : 'Bus'}
-          link="/bus"
-        >
-          <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={busPlan || busPlanError}>
-            <ListGroup variant="flush">
-              {busPlan && busPlan.slice(0, 4).map((x, i) =>
-                <ListGroup.Item key={i} className={styles.busItem}>
-                  <div className={styles.busRoute}>
-                    {x.route}
+                  <div>
+                    {x.veranstaltung}, {x.raum}
                   </div>
-                  <div className={styles.busDestination}>
-                    {x.destination.length > MAX_STATION_LENGTH
-                      ? x.destination.substr(0, MAX_STATION_LENGTH) + '…'
-                      : x.destination
-                    }
-                  </div>
-                  <div className={styles.busTime}>
-                    {formatRelativeMinutes(x.time)}
+                  <div className="text-muted">
+                    {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
                   </div>
                 </ListGroup.Item>
               )}
-              {busPlan && busPlan.length === 0 &&
+              {timetable && timetable.length === 0 &&
                 <ListGroup.Item>
-                  In nächster Zeit kommen keine Busse.
+                  Dein Stundenplan ist leer.
                 </ListGroup.Item>
               }
-              {busPlanError &&
+              {timetableError &&
                 <ListGroup.Item>
-                  Fehler beim Abruf des Busplans.
+                  Fehler beim Abruf des Stundenplans.
                 </ListGroup.Item>
               }
-            </ListGroup>
-          </ReactPlaceholder>
-        </HomeCard>
+              </ListGroup>
+            </ReactPlaceholder>
+          </HomeCard>
 
-        <HomeCard
-          icon={faCalendarAlt}
-          title="Termine"
-          link="/calendar"
-        >
-          Prüfungs- und Semestertermine anzeigen.
-        </HomeCard>
+          <HomeCard
+            icon={faUtensils}
+            title="Mensa"
+            link="/mensa"
+            className="desktop-only"
+          >
+            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={mensaPlan || mensaPlanError}>
+              <ListGroup variant="flush">
+                {mensaPlan && mensaPlan.map((x, i) =>
+                  <ListGroup.Item key={i}>
+                    {x}
+                  </ListGroup.Item>
+                )}
+                {mensaPlan && mensaPlan.length === 0 &&
+                  <ListGroup.Item>
+                    Der Speiseplan ist leer.
+                  </ListGroup.Item>
+                }
+                {mensaPlanError &&
+                  <ListGroup.Item>
+                    Fehler beim Abruf des Speiseplans.<br />
+                    Die Mensa mag gerade nicht. :(
+                  </ListGroup.Item>
+                }
+              </ListGroup>
+            </ReactPlaceholder>
+          </HomeCard>
 
-        <HomeCard
-          icon={faDoorOpen}
-          title="Räume"
-          link="/rooms"
-        >
-          Freie Räume suchen.
-        </HomeCard>
+          <HomeCard
+            icon={faBus}
+            title={stationName ? `Bus (${stationName})` : 'Bus'}
+            link="/bus"
+          >
+            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={busPlan || busPlanError}>
+              <ListGroup variant="flush">
+                {busPlan && busPlan.slice(0, 4).map((x, i) =>
+                  <ListGroup.Item key={i} className={styles.busItem}>
+                    <div className={styles.busRoute}>
+                      <div>
+                        {x.route}
+                      </div>
+                    </div>
+                    <div className={styles.busDestination}>
+                      {x.destination.length > MAX_STATION_LENGTH
+                        ? x.destination.substr(0, MAX_STATION_LENGTH) + '…'
+                        : x.destination
+                      }
+                    </div>
+                    <div className={styles.busTime}>
+                      {formatRelativeMinutes(x.time)}
+                    </div>
+                  </ListGroup.Item>
+                )}
+                {busPlan && busPlan.length === 0 &&
+                  <ListGroup.Item>
+                    In nächster Zeit kommen keine Busse.
+                  </ListGroup.Item>
+                }
+                {busPlanError &&
+                  <ListGroup.Item>
+                    Fehler beim Abruf des Busplans.
+                  </ListGroup.Item>
+                }
+              </ListGroup>
+            </ReactPlaceholder>
+          </HomeCard>
 
-        <HomeCard
-          icon={faBook}
-          title="Bibliothek"
-          link="/library"
-        >
-          Sitzplätze reservieren.
-        </HomeCard>
+          <HomeCard
+            icon={faCalendarAlt}
+            title="Termine"
+            link="/calendar"
+          />
 
-        <HomeCard
-          icon={faPen}
-          title="Noten & Fächer"
-          link="/grades"
-        >
-          Prüfungsergebnisse und ausstehende Fächer einsehen.
-        </HomeCard>
+          <HomeCard
+            icon={faDoorOpen}
+            title="Räume"
+            link="/rooms"
+            className="desktop-only"
+          />
 
-        <HomeCard
-          icon={faUser}
-          title="Konto"
-          link="/personal"
-        >
-          Persönliche Daten einsehen.
-        </HomeCard>
-      </div>
-    </Container>
+          <HomeCard
+            icon={faBook}
+            title="Bibliothek"
+            link="/library"
+          />
+
+          <HomeCard
+            icon={faPen}
+            title="Noten & Fächer"
+            link="/grades"
+          />
+
+          <HomeCard
+            icon={faUser}
+            title="Konto"
+            link="/personal"
+          />
+        </div>
+      </AppBody>
+
+      <AppTabbar />
+    </>
   )
 }

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
 import styles from '../styles/Timetable.module.css'
 
+import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
@@ -59,48 +60,52 @@ export default function Timetable () {
   }, [])
 
   return (
-    <Container>
-      <AppNavbar title="Stundenplan" />
+    <>
+      <AppNavbar title="Stundenplan" showBack={false} />
 
-      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
-        {timetable && timetable.map((group, idx) =>
-          <ListGroup key={idx}>
-            <h4 className={styles.dateBoundary}>
-              {formatNearDate(group.date)}
-            </h4>
+      <AppBody>
+        <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
+          {timetable && timetable.map((group, idx) =>
+            <ListGroup key={idx}>
+              <h4 className={styles.dateBoundary}>
+                {formatNearDate(group.date)}
+              </h4>
 
-            {group.items.map((item, idx) =>
-              <ListGroup.Item key={idx} className={styles.item}>
-                <div className={styles.left}>
-                  <div className={styles.name}>
-                    {item.veranstaltung.indexOf(item.fach) !== -1
-                      ? item.veranstaltung
-                      : `${item.veranstaltung} - ${item.fach}`}
+              {group.items.map((item, idx) =>
+                <ListGroup.Item key={idx} className={styles.item}>
+                  <div className={styles.left}>
+                    <div className={styles.name}>
+                      {item.veranstaltung.indexOf(item.fach) !== -1
+                        ? item.veranstaltung
+                        : `${item.veranstaltung} - ${item.fach}`}
+                    </div>
+                    <div className={styles.room}>
+                      {item.raum}
+                    </div>
                   </div>
-                  <div className={styles.room}>
-                    {item.raum}
+                  <div className={styles.right}>
+                    {formatFriendlyTime(item.start_date)} <br />
+                    {formatFriendlyTime(item.end_date)}
                   </div>
-                </div>
-                <div className={styles.right}>
-                  {formatFriendlyTime(item.start_date)} <br />
-                  {formatFriendlyTime(item.end_date)}
-                </div>
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          )}
+          {timetable && timetable.length === 0 &&
+            <ListGroup>
+              <ListGroup.Item>
+                Dein persönlicher Stundenplan ist aktuell leer.<br />
+                Du kannst deinen persönlichen Stundenplan im{' '}
+                <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
+                Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
+                deine gewählten Fächer.
               </ListGroup.Item>
-            )}
-          </ListGroup>
-        )}
-        {timetable && timetable.length === 0 &&
-          <ListGroup>
-            <ListGroup.Item>
-              Dein persönlicher Stundenplan ist aktuell leer.<br />
-              Du kannst deinen persönlichen Stundenplan im{' '}
-              <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
-              Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
-              deine gewählten Fächer.
-            </ListGroup.Item>
-          </ListGroup>
-        }
-      </ReactPlaceholder>
-    </Container>
+            </ListGroup>
+          }
+        </ReactPlaceholder>
+      </AppBody>
+
+      <AppTabbar />
+    </>
   )
 }

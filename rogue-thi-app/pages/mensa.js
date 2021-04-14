@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -13,7 +12,9 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../styles/Timetable.module.css'
 
+import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate } from '../lib/date-utils'
 
@@ -60,129 +61,132 @@ export default function Mensa () {
   }
 
   return (
-    <Container>
-      <AppNavbar title="Mensa">
+    <>
+      <AppNavbar title="Mensa" showBack={false}>
         <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
           Allergene auswählen
         </Dropdown.Item>
       </AppNavbar>
 
-      <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={mensaPlan}>
-        {mensaPlan && mensaPlan.map((day, idx) =>
-          <ListGroup key={idx}>
-            <h4 className={styles.dateBoundary}>
-              {formatNearDate(day.timestamp)}
-            </h4>
+      <AppBody>
+        <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={mensaPlan}>
+          {mensaPlan && mensaPlan.map((day, idx) =>
+            <ListGroup key={idx}>
+              <h4 className={styles.dateBoundary}>
+                {formatNearDate(day.timestamp)}
+              </h4>
 
-            {day.meals.map((meal, idx) =>
-              <ListGroup.Item
-                key={idx}
-                className={styles.item}
-                onClick={() => setShowAllergenDetails(meal.allergens)}
-                action
-              >
-                <div className={styles.left}>
-                  <div className={styles.name}>
-                    {meal.name}
-                  </div>
-                  <div className={styles.room}>
-                    <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-                      {containsSelectedAllergen(meal.allergens) && (
-                        <span>
-                          <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
-                          {' '}
-                        </span>
-                      )}
-                      {meal.allergens.map((supplement, idx) => (
-                        <span key={idx}>
-                          {idx !== 0 && ', '}
+              {day.meals.map((meal, idx) =>
+                <ListGroup.Item
+                  key={idx}
+                  className={styles.item}
+                  onClick={() => setShowAllergenDetails(meal.allergens)}
+                  action
+                >
+                  <div className={styles.left}>
+                    <div className={styles.name}>
+                      {meal.name}
+                    </div>
+                    <div className={styles.room}>
+                      <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+                        {containsSelectedAllergen(meal.allergens) && (
                           <span>
-                            {supplement}
+                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
+                            {' '}
                           </span>
-                        </span>
-                      ))}
-                    </small>
+                        )}
+                        {meal.allergens.map((supplement, idx) => (
+                          <span key={idx}>
+                            {idx !== 0 && ', '}
+                            <span>
+                              {supplement}
+                            </span>
+                          </span>
+                        ))}
+                      </small>
+                    </div>
                   </div>
-                </div>
-                <div className={styles.right}>
-                  {meal.prices.join(' / ')}
-                </div>
+                  <div className={styles.right}>
+                    {meal.prices.join(' / ')}
+                  </div>
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          )}
+          {mensaPlan && mensaPlan.length === 0 &&
+            <ListGroup>
+              <ListGroup.Item>
+                Der Speiseplan ist leer.
               </ListGroup.Item>
-            )}
-          </ListGroup>
-        )}
-        {mensaPlan && mensaPlan.length === 0 &&
-          <ListGroup>
-            <ListGroup.Item>
-              Der Speiseplan ist leer.
-            </ListGroup.Item>
-          </ListGroup>
-        }
-      </ReactPlaceholder>
+            </ListGroup>
+          }
+        </ReactPlaceholder>
 
-      <br />
+        <br />
 
-      <Modal show={showAllergenDetails} onHide={() => setShowAllergenDetails(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Erläuterung</Modal.Title>
-        </Modal.Header>
+        <Modal show={showAllergenDetails} onHide={() => setShowAllergenDetails(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Erläuterung</Modal.Title>
+          </Modal.Header>
 
-        <Modal.Body>
-          <ul>
-            {showAllergenDetails && showAllergenDetails.map(key => (
-              <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
-                {containsSelectedAllergen([key]) && (
-                  <span>
-                    <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
-                    {' '}
-                  </span>
-                )}
-                {' '}
-                <strong>{key}</strong>
-                {' – '}
-                {allergenMap[key] || FALLBACK_ALLERGEN}
-              </li>
-            ))}
-          </ul>
-          <p>
-            <strong>Angaben ohne Gewähr. </strong>
-            Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
-          </p>
-        </Modal.Body>
+          <Modal.Body>
+            <ul>
+              {showAllergenDetails && showAllergenDetails.map(key => (
+                <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
+                  {containsSelectedAllergen([key]) && (
+                    <span>
+                      <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
+                      {' '}
+                    </span>
+                  )}
+                  {' '}
+                  <strong>{key}</strong>
+                  {' – '}
+                  {allergenMap[key] || FALLBACK_ALLERGEN}
+                </li>
+              ))}
+            </ul>
+            <p>
+              <strong>Angaben ohne Gewähr. </strong>
+              Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
+            </p>
+          </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowAllergenDetails(false)}>OK</Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => setShowAllergenDetails(false)}>OK</Button>
+          </Modal.Footer>
+        </Modal>
 
-      <Modal show={showAllergenSelection} onHide={() => setShowAllergenSelection(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Allergene auswählen</Modal.Title>
-        </Modal.Header>
+        <Modal show={showAllergenSelection} onHide={() => setShowAllergenSelection(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Allergene auswählen</Modal.Title>
+          </Modal.Header>
 
-        <Modal.Body>
-          <p>
-            Wähle die Allergene aus, bei denen du gesondert gewarnt werden möchtest. Deine Angaben werden nur lokal auf deinem Gerät gespeichert und nicht übermittelt. (Auch nicht an die THI.)
-          </p>
+          <Modal.Body>
+            <p>
+              Wähle die Allergene aus, bei denen du gesondert gewarnt werden möchtest. Deine Angaben werden nur lokal auf deinem Gerät gespeichert und nicht übermittelt. (Auch nicht an die THI.)
+            </p>
 
-          <Form>
-            {Object.entries(allergenMap).map(([key, value]) => (
-              <Form.Check
-                key={key}
-                id={'allergen-checkbox-' + key}
-                label={<span><strong>{key}</strong>{' – '}{value}</span>}
-                checked={allergenSelection[key] || false}
-                onChange={e => setAllergenSelection({ ...allergenSelection, [key]: e.target.checked })}
-              />
-            ))}
-          </Form>
-        </Modal.Body>
+            <Form>
+              {Object.entries(allergenMap).map(([key, value]) => (
+                <Form.Check
+                  key={key}
+                  id={'allergen-checkbox-' + key}
+                  label={<span><strong>{key}</strong>{' – '}{value}</span>}
+                  checked={allergenSelection[key] || false}
+                  onChange={e => setAllergenSelection({ ...allergenSelection, [key]: e.target.checked })}
+                />
+              ))}
+            </Form>
+          </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => saveAllergenSelection()}>OK</Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => saveAllergenSelection()}>OK</Button>
+          </Modal.Footer>
+        </Modal>
+      </AppBody>
 
-    </Container>
+      <AppTabbar />
+    </>
   )
 }

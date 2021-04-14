@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -7,10 +7,9 @@ import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faEllipsisH, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
-import { getOperatingSystem, OS_IOS, OS_OTHER } from '../lib/user-agent'
 import TheMatrixAnimation from './TheMatrixAnimation'
 
 import styles from '../styles/AppNavbar.module.css'
@@ -19,10 +18,7 @@ export const ThemeContext = createContext('default')
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
-  const [os, setOS] = useState(OS_OTHER)
   const theme = useContext(ThemeContext)
-
-  useEffect(() => setOS(getOperatingSystem()), [])
 
   if (typeof showBack === 'undefined') {
     showBack = true
@@ -67,18 +63,17 @@ export default function AppNavbar ({ title, showBack, children }) {
           {showBack && (
             <Button variant="link" onClick={() => goBack()} className={styles.back}>
               <FontAwesomeIcon icon={faChevronLeft} />
-              {os === OS_IOS && ' Übersicht'}
             </Button>
           )}
-        </Navbar.Brand>
-        <Navbar.Brand className={styles.title}>
-          {title}
+          <div className={styles.titleText}>
+            {title}
+          </div>
         </Navbar.Brand>
         <Navbar.Brand className={styles.right}>
           {children &&
             <Dropdown align="right">
               <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-                <FontAwesomeIcon icon={os === OS_IOS ? faEllipsisH : faEllipsisV} />
+                <FontAwesomeIcon icon={faEllipsisV} />
               </Dropdown.Toggle>
 
               <Dropdown.Menu align="right">

@@ -9,3 +9,21 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.btn-primary {
+  border: #8845EF;
+  background: #8845EF;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-only {
+    display: unset;
+  }
+  .desktop-only {
+    display: none;
+  }
+}

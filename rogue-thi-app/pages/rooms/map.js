@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
-import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 
+import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import roomData from '../../data/rooms.json'
 
@@ -95,48 +95,50 @@ export default function RoomMap () {
   }
 
   return (
-    <Container className={styles.container}>
+    <>
       <AppNavbar title="Raumplan" />
 
-      <Form className={styles.searchForm}>
-        <Form.Control
-          as="input"
-          placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
-          value={searchText}
-          onChange={e => setSearchText(e.target.value.toUpperCase())}
-        />
-      </Form>
+      <AppBody className={styles.container}>
+        <Form className={styles.searchForm}>
+          <Form.Control
+            as="input"
+            placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
+            value={searchText}
+            onChange={e => setSearchText(e.target.value.toUpperCase())}
+          />
+        </Form>
 
-      <MapContainer center={[48.76677, 11.43322]} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
-        <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maxNativeZoom={19}
-          maxZoom={21}
-        />
+        <MapContainer center={[48.76677, 11.43322]} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxNativeZoom={19}
+            maxZoom={21}
+          />
 
-        <LayersControl position="topleft" collapsed={false}>
-          {filteredFloorOrder.map((floorName, i) => (
-            <BaseLayersControl name={floorName} key={floorName} checked={i === 0}>
-              <LayerGroup>
-                {filteredFloors[floorName].map((entry, j) => (
-                  <FeatureGroup key={j}>
-                    <Popup>
-                      <strong>{entry.properties.Raum}</strong>,{' '}
-                      {entry.properties.Funktion}{' '}
-                      (Campus {entry.properties.Standort} Gebäude {entry.properties.Gebaeude})
-                    </Popup>
-                    <Polygon
-                      positions={entry.coordinates}
-                      pathOptions={entry.options}
-                    />
-                  </FeatureGroup>
-                ))}
-              </LayerGroup>
-            </BaseLayersControl>
-          ))}
-        </LayersControl>
-      </MapContainer>
-    </Container>
+          <LayersControl position="topleft" collapsed={false}>
+            {filteredFloorOrder.map((floorName, i) => (
+              <BaseLayersControl name={floorName} key={floorName} checked={i === 0}>
+                <LayerGroup>
+                  {filteredFloors[floorName].map((entry, j) => (
+                    <FeatureGroup key={j}>
+                      <Popup>
+                        <strong>{entry.properties.Raum}</strong>,{' '}
+                        {entry.properties.Funktion}{' '}
+                        (Campus {entry.properties.Standort} Gebäude {entry.properties.Gebaeude})
+                      </Popup>
+                      <Polygon
+                        positions={entry.coordinates}
+                        pathOptions={entry.options}
+                      />
+                    </FeatureGroup>
+                  ))}
+                </LayerGroup>
+              </BaseLayersControl>
+            ))}
+          </LayersControl>
+        </MapContainer>
+      </AppBody>
+    </>
   )
 }

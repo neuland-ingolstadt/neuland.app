@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
-import Container from 'react-bootstrap/Container'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
+import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 
 const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
@@ -68,54 +68,57 @@ export default function BecomeHackerman () {
   }
 
   return (
-    <Container>
+    <>
       <ThemeContext.Provider value={'hacker'}>
         <AppNavbar title="Become Hackerman" />
       </ThemeContext.Provider>
-      <h4>Enter 4 Flags:</h4>
-      <Form>
-        <ListGroup>
-          <ListGroup.Item>
-            <Form.Control
-              as="input"
-              placeholder="Flag 0"
-              value={flags[0]}
-              onChange={e => setFlag(0, e.target.value)}
-            />
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Control
-              as="input"
-              placeholder="Flag 1"
-              value={flags[1]}
-              onChange={e => setFlag(1, e.target.value)}
-            />
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Control
-              as="input"
-              placeholder="Flag 2"
-              value={flags[2]}
-              onChange={e => setFlag(2, e.target.value)}
-            />
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Form.Control
-              as="input"
-              placeholder="Flag 3"
-              value={flags[3]}
-              onChange={e => setFlag(3, e.target.value)}
-            />
-          </ListGroup.Item>
-          <ListGroup.Item>
-            <Button variant="primary" onClick={checkFlags}>
-              Check Flags!
-            </Button>
-            {' '}
-            {flagError}
-          </ListGroup.Item>
-        </ListGroup>
-      </Form>
-    </Container>
+
+      <AppBody>
+        <h4>Enter 4 Flags:</h4>
+        <Form>
+          <ListGroup>
+            <ListGroup.Item>
+              <Form.Control
+                as="input"
+                placeholder="Flag 0"
+                value={flags[0]}
+                onChange={e => setFlag(0, e.target.value)}
+              />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Control
+                as="input"
+                placeholder="Flag 1"
+                value={flags[1]}
+                onChange={e => setFlag(1, e.target.value)}
+              />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Control
+                as="input"
+                placeholder="Flag 2"
+                value={flags[2]}
+                onChange={e => setFlag(2, e.target.value)}
+              />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Form.Control
+                as="input"
+                placeholder="Flag 3"
+                value={flags[3]}
+                onChange={e => setFlag(3, e.target.value)}
+              />
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <Button variant="primary" onClick={checkFlags}>
+                Check Flags!
+              </Button>
+              {' '}
+              {flagError}
+            </ListGroup.Item>
+          </ListGroup>
+        </Form>
+      </AppBody>
+    </>
   )
 }
