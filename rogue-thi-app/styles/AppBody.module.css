@@ -1,3 +1,4 @@
 .container {
-  margin-bottom: 75px;
+  /* 56px footer height + 10px padding + iOS home bar height */
+  margin-bottom: calc(56px + 10px + env(safe-area-inset-bottom, 0px));
 }
