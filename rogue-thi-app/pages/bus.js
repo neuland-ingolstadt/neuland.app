@@ -4,14 +4,14 @@ import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 
-import styles from '../styles/Bus.module.css'
-
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { getBusPlan } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatFriendlyRelativeTime } from '../lib/date-utils'
 import { stations, defaultStation } from '../data/bus.json'
+
+import styles from '../styles/Bus.module.css'
 
 export default function Bus () {
   const time = useTime()

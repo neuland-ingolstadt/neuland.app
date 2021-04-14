@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router'
-import styles from '../styles/Common.module.css'
 import React, { useState, useEffect } from 'react'
 
 import ReactPlaceholder from 'react-placeholder'
@@ -23,6 +22,8 @@ import {
   formatNearDate,
   formatFriendlyTime
 } from '../lib/date-utils'
+
+import styles from '../styles/Common.module.css'
 
 export default function Library () {
   const [reservations, setReservations] = useState(null)

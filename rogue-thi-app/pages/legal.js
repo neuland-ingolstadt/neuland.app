@@ -4,9 +4,9 @@ import { useRouter } from 'next/router'
 import DOMPurify from 'dompurify'
 
 import AppNavbar from '../components/AppNavbar'
+import AppBody from '../components/AppBody'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getImprint } from '../lib/thi-backend/thi-api-client'
-import AppBody from '../components/AppBody'
 
 export default function Imprint () {
   const router = useRouter()

@@ -4,14 +4,14 @@ import { useRouter } from 'next/router'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import styles from '../styles/Timetable.module.css'
-
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
+
+import styles from '../styles/Timetable.module.css'
 
 async function getFriendlyTimetable () {
   const [today] = new Date().toISOString().split('T')

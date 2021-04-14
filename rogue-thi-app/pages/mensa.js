@@ -10,13 +10,13 @@ import ReactPlaceholder from 'react-placeholder'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
-import styles from '../styles/Timetable.module.css'
-
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate } from '../lib/date-utils'
+
+import styles from '../styles/Mensa.module.css'
 
 import allergenMap from '../data/allergens.json'
 

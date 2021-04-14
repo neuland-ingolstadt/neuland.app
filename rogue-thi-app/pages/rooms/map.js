@@ -8,7 +8,7 @@ import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import roomData from '../../data/rooms.json'
 
-import styles from '../../styles/Map.module.css'
+import styles from '../../styles/RoomsMap.module.css'
 import 'leaflet/dist/leaflet.css'
 
 const MapContainer = dynamic(() => import('react-leaflet').then(x => x.MapContainer), { ssr: false })

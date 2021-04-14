@@ -10,11 +10,6 @@ body {
   box-sizing: border-box;
 }
 
-.btn-primary {
-  border: #8845EF;
-  background: #8845EF;
-}
-
 .mobile-only {
   display: none;
 }

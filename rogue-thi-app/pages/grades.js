@@ -4,14 +4,14 @@ import { useRouter } from 'next/router'
 import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-import styles from '../styles/Exams.module.css'
-
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getGrades } from '../lib/thi-backend/thi-api-client'
 
-export default function Exams () {
+import styles from '../styles/Grades.module.css'
+
+export default function Grades () {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)

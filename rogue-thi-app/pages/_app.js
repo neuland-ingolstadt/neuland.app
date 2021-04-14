@@ -8,7 +8,6 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
 import '../styles/globals.css'
-import styles from '../styles/Home.module.css'
 
 config.autoAddCss = false
 
@@ -35,7 +34,7 @@ function extractThemeFromCookie (req) {
 function MyApp ({ Component, pageProps, theme }) {
   return (
     <ThemeContext.Provider value={theme}>
-      <Component className={styles.themeDefault} {...pageProps} />
+      <Component {...pageProps} />
     </ThemeContext.Provider>
   )
 }

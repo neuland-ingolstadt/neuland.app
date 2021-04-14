@@ -5,12 +5,12 @@ import { useRouter } from 'next/router'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import styles from '../styles/Personal.module.css'
-
 import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getPersonalData } from '../lib/thi-backend/thi-api-client'
+
+import styles from '../styles/Personal.module.css'
 
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)

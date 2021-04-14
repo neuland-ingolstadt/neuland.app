@@ -10,8 +10,6 @@ import Form from 'react-bootstrap/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
-import styles from '../../styles/Rooms.module.css'
-
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
@@ -19,6 +17,8 @@ import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-sessi
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/thi-backend/thi-api-conversion'
+
+import styles from '../../styles/Rooms.module.css'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
 const BUILDINGS_ALL = 'Alle'

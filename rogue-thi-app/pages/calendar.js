@@ -15,7 +15,7 @@ import { parse as parsePostgresArray } from 'postgres-array'
 
 import rawCalendar from '../data/calendar.json'
 
-import styles from '../styles/Exams.module.css'
+import styles from '../styles/Calendar.module.css'
 
 const now = new Date()
 const calendar = rawCalendar.map(x => ({
