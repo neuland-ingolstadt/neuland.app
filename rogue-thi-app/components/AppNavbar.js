@@ -58,7 +58,7 @@ export default function AppNavbar ({ title, showBack, children }) {
         </div>
       )}
 
-      <Navbar sticky="top" className={[styles.navbar, 'justify-content-between']}>
+      <Navbar sticky="top" className={[styles.navbar, 'container', 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBack && (
             <Button variant="link" onClick={() => goBack()} className={styles.back}>
