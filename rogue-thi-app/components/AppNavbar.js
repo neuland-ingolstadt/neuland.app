@@ -89,5 +89,5 @@ export default function AppNavbar ({ title, showBack, children }) {
 AppNavbar.propTypes = {
   title: PropTypes.string,
   showBack: PropTypes.bool,
-  children: PropTypes.array
+  children: PropTypes.any
 }

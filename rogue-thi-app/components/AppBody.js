@@ -15,5 +15,5 @@ export default function AppBody ({ className, children }) {
 }
 AppBody.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.array
+  children: PropTypes.any
 }
