@@ -1,7 +1,11 @@
 .navbar {
   padding: 0;
   height: 50px;
-  background: white;
+  background-color: var(--navbar-background, white);
+  border-bottom: 1px solid var(--navbar-border, #eeeeee);
+  box-shadow: 0px 0px 3px var(--navbar-shadow, #00000020);
+
+  margin-bottom: 5px;
 }
 
 .navbar :global(.btn-link) {

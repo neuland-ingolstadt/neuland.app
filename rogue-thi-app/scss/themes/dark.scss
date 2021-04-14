@@ -61,7 +61,7 @@ $border-color: $dark;
 $card-border-color: rgba($white, .125);
 $card-cap-bg: rgba($white, .03);
 $card-color: $gray-200;
-$card-bg: $gray-900; //$body-bg ?
+$card-bg: $body-bg;
 $nav-tabs-border-color: rgba($white, .125);
 $nav-tabs-link-hover-border-color: $gray-700 $gray-700 $nav-tabs-border-color;
 $nav-tabs-link-active-color: $gray-100;
@@ -181,7 +181,19 @@ $navbar-brand-color: $body-color;
   background-color: $gray-500 !important;
 }
 pre {
-  color: white !important;
+  color: $body-color !important;
+}
+
+:root {
+  --navbar-background: #{$body-bg};
+  --navbar-border: #{$gray-700};
+  --navbar-shadow: rgba(white, .8);
+
+  --tabbar-background: #{$body-bg};
+  --tabbar-border: #{$gray-700};
+  --tabbar-shadow: rgba(white, .8);
+  --tabbar-tab: #{$body-color};
+  --tabbar-tab-active: #{$primary};
 }
 
 // use our CI color

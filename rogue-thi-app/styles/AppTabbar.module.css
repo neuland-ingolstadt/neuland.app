@@ -1,9 +1,9 @@
 .navbar {
   /* prevent iOS home bar from overlapping tab bar */
   padding: 0 0 env(safe-area-inset-bottom, 0px) 0;
-  background: white;
-  border-top: 1px solid #eeeeee;
-  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.1);
+  background: var(--tabbar-background, white);
+  border-top: 1px solid var(--tabbar-border, #eeeeee);
+  box-shadow: 0px 0px 3px var(--tabbar-shadow, #00000020);
 }
 
 .nav {
@@ -17,11 +17,11 @@
   flex-direction: column;
   align-items: center;
   font-size: 8pt;
-  color: #444444 !important;
+  color: var(--tabbar-tab, #444444) !important;
 }
 
 .tabActive {
-  color: #8845EF !important;
+  color: var(--tabbar-tab-active, #8845EF) !important;
 }
 
 .icon {
