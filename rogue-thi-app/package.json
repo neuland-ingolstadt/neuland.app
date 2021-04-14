@@ -11,7 +11,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "98.css": "^0.1.16",
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-brands-svg-icons": "^5.15.1",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
@@ -28,6 +27,7 @@
     "react-dom": "^17.0.1",
     "react-leaflet": "^3.0.5",
     "react-placeholder": "^4.0.3",
+    "win95.css": "git+https://github.com/neuland-ingolstadt/win95.css.git",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
