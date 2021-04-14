@@ -62,7 +62,7 @@ export default function Mensa () {
 
   return (
     <>
-      <AppNavbar title="Mensa" showBack={false}>
+      <AppNavbar title="Mensa" showBack={'desktop-only'}>
         <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
           Allergene auswählen
         </Dropdown.Item>

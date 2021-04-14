@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { useState, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -19,14 +19,13 @@ export const ThemeContext = createContext('default')
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const theme = useContext(ThemeContext)
+  const [showBackButton, setShowBackButton] = useState(typeof showBack === 'undefined')
 
-  if (typeof showBack === 'undefined') {
-    showBack = true
-  }
-
-  function goBack () {
-    router.back()
-  }
+  useState(() => {
+    if (showBack === 'desktop-only' && window.innerWidth > 768) {
+      setShowBackButton(true)
+    }
+  }, [showBack])
 
   return (
     <>
@@ -60,8 +59,8 @@ export default function AppNavbar ({ title, showBack, children }) {
 
       <Navbar sticky="top" className={[styles.navbar, 'container', 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
-          {showBack && (
-            <Button variant="link" onClick={() => goBack()} className={styles.back}>
+          {showBackButton && (
+            <Button variant="link" onClick={() => router.back()} className={styles.back}>
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
           )}
@@ -88,6 +87,6 @@ export default function AppNavbar ({ title, showBack, children }) {
 }
 AppNavbar.propTypes = {
   title: PropTypes.string,
-  showBack: PropTypes.bool,
+  showBack: PropTypes.any,
   children: PropTypes.any
 }

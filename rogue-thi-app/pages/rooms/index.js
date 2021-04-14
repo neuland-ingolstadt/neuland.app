@@ -109,7 +109,7 @@ export default function Rooms () {
 
   return (
     <>
-      <AppNavbar title="Raumsuche" showBack={false} />
+      <AppNavbar title="Raumsuche" showBack={'desktop-only'} />
 
       <AppBody>
         <Form>

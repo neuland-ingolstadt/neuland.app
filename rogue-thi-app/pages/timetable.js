@@ -61,7 +61,7 @@ export default function Timetable () {
 
   return (
     <>
-      <AppNavbar title="Stundenplan" showBack={false} />
+      <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
