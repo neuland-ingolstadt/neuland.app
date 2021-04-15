@@ -51,7 +51,7 @@ export default class CredentialStorage {
       false,
       ['encrypt', 'decrypt']
     )
-    const iv = crypto.getRandomValues(new Int8Array(16))
+    const iv = crypto.getRandomValues(new Uint8Array(16))
 
     const encrypted = await crypto.subtle.encrypt(
       {
