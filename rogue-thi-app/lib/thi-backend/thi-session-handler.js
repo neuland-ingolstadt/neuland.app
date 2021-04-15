@@ -1,6 +1,27 @@
+import CredentialStorage from '../credential-storage'
 import { isAlive, login } from './thi-api-client'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
+const CRED_NAME = 'credentials'
+const CRED_ID = 'thi.de'
+
+/**
+ * Moves credentials from localStorage to new CredentialStorage.
+ *
+ * Added April 2021, can be removed after a couple months.
+ */
+async function upgradeCredentialStorage () {
+  const username = localStorage.username
+  const password = localStorage.password
+
+  if (username && password) {
+    const credStore = new CredentialStorage(CRED_NAME)
+    credStore.write(CRED_ID, { username, password })
+  }
+
+  delete localStorage.username
+  delete localStorage.password
+}
 
 export class NoSessionError extends Error {
 
@@ -21,12 +42,11 @@ export async function createSession (router, username, password, stayLoggedIn) {
   localStorage.session = session
   localStorage.sessionCreated = Date.now()
 
+  const credStore = new CredentialStorage(CRED_NAME)
   if (stayLoggedIn) {
-    localStorage.username = username
-    localStorage.password = password
+    credStore.write(CRED_ID, { username, password })
   } else {
-    delete localStorage.username
-    delete localStorage.password
+    credStore.delete(CRED_ID)
   }
 
   router.replace('/')
@@ -41,8 +61,11 @@ export async function createSession (router, username, password, stayLoggedIn) {
 export async function callWithSession (method) {
   let session = localStorage.session
   const sessionCreated = parseInt(localStorage.sessionCreated)
-  const username = localStorage.username
-  const password = localStorage.password
+
+  await upgradeCredentialStorage()
+
+  const credStore = new CredentialStorage(CRED_NAME)
+  const { username, password } = await credStore.read(CRED_ID) || {}
 
   // redirect user if there is no session and no saved credentials
   if (!session) {
@@ -96,8 +119,11 @@ export async function callWithSession (method) {
 export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)
-  const username = localStorage.username
-  const password = localStorage.password
+
+  await upgradeCredentialStorage()
+
+  const credStore = new CredentialStorage(CRED_NAME)
+  const { username, password } = await credStore.read(CRED_ID) || {}
 
   // invalidate expired session
   if (age + SESSION_EXPIRES < Date.now() || !await isAlive(session)) {
@@ -135,8 +161,9 @@ export async function obtainSession (router) {
 export async function forgetSession (router) {
   delete localStorage.session
   delete localStorage.sessionCreated
-  delete localStorage.username
-  delete localStorage.password
+
+  const credStore = new CredentialStorage(CRED_NAME)
+  await credStore.delete(CRED_ID)
 
   router.replace('/login')
 }
