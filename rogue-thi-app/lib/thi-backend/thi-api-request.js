@@ -3,7 +3,6 @@
  */
 
 import HttpsConnection from './https-connection'
-import HttpRequest from './http-request'
 import { version } from '../../package.json'
 
 const ENDPOINT_HOST = 'hiplan.thi.de'
@@ -45,41 +44,33 @@ let connection = null
 /**
  * Submits an API request to the THI backend using a WebSocket proxy
  */
-export function thiApiRequest (params) {
-  return new Promise((resolve, reject) => {
-    const paramList = []
-    for (const key in params) { paramList.push(key + '=' + encodeURIComponent(params[key])) }
+export async function thiApiRequest (params) {
+  const paramList = []
+  for (const key in params) { paramList.push(key + '=' + encodeURIComponent(params[key])) }
 
-    if (!connection) {
-      connection = new HttpsConnection({
-        proxy: PROXY_URL,
-        certs: THI_CERTS,
-        host: ENDPOINT_HOST,
-        closed: () => {
-          connection = null
-        },
-        error: err => {
-          console.error(err)
-          connection = null
-        }
-      })
-    }
-
-    const request = new HttpRequest({
-      forge: {
-        method: 'POST',
-        path: ENDPOINT_URL,
-        body: paramList.join('&'),
-        headers: {
-          Host: ENDPOINT_HOST,
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'User-Agent': USER_AGENT
-        }
+  if (!connection) {
+    connection = new HttpsConnection({
+      proxy: PROXY_URL,
+      certs: THI_CERTS,
+      host: ENDPOINT_HOST,
+      closed: () => {
+        connection = null
       },
-      response: data => resolve(data),
-      error: err => reject(err)
+      error: err => {
+        console.error(err)
+        connection = null
+      }
     })
+  }
 
-    connection.send(request)
+  const resp = await connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
+    method: 'POST',
+    body: paramList.join('&'),
+    headers: {
+      Host: ENDPOINT_HOST,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'User-Agent': USER_AGENT
+    }
   })
+  return await resp.json()
 }
