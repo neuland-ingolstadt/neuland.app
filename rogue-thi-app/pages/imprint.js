@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 
 import DOMPurify from 'dompurify'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -10,19 +11,12 @@ import { getImprint } from '../lib/thi-backend/thi-api-client'
 
 import styles from '../styles/Imprint.module.css'
 
-export default function Imprint () {
+export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [thiImprint, setThiImprint] = useState('Lädt...')
 
-  useEffect(async () => {
-    try {
-      const res = await fetch('https://neuland-ingolstadt.de/impressum.htm')
-      const html = await res.text()
-      setNeulandImprint(DOMPurify.sanitize(html))
-    } catch (e) {
-      console.error(e)
-      setNeulandImprint('Laden fehlgeschlagen! <a href="https://neuland-ingolstadt.de/impressum.htm">Bitte hier klicken</a>')
-    }
+  useEffect(() => {
+    setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
   }, [])
 
   useEffect(async () => {
@@ -76,4 +70,23 @@ export default function Imprint () {
       </AppBody>
     </>
   )
+}
+
+Imprint.propTypes = {
+  neulandImprint: PropTypes.string
+}
+
+Imprint.getInitialProps = async () => {
+  try {
+    const res = await fetch('https://neuland-ingolstadt.de/impressum.htm')
+    const html = await res.text()
+    return {
+      neulandImprint: html
+    }
+  } catch (e) {
+    console.error(e)
+    return {
+      neulandImprint: 'Laden fehlgeschlagen! <a href="https://neuland-ingolstadt.de/impressum.htm">Bitte hier klicken</a>'
+    }
+  }
 }
