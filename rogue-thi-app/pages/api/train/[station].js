@@ -59,7 +59,6 @@ export default async function handler (req, res) {
         throw new Error('Train data not available')
       }
 
-      console.log(body)
       const $ = cheerio.load(body)
       const departures = $('.sqdetailsDep').map((i, el) => {
         const spans = $(el).find('span')
