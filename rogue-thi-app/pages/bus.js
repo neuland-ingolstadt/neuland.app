@@ -57,7 +57,7 @@ export default function Bus () {
         </Form.Group>
 
         <ListGroup>
-          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={departures}>
+          <ReactPlaceholder type="text" rows={10} ready={departures}>
             {departures && departures.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.route}>

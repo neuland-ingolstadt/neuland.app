@@ -69,7 +69,7 @@ export default function Mensa () {
       </AppNavbar>
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={mensaPlan}>
+        <ReactPlaceholder type="text" rows={20} ready={mensaPlan}>
           {mensaPlan && mensaPlan.map((day, idx) =>
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>

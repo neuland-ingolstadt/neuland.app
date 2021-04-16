@@ -97,7 +97,7 @@ export default function Calendar () {
             Prüfungen
           </h4>
 
-          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={exams}>
+          <ReactPlaceholder type="text" rows={10} ready={exams}>
             {exams && exams.length === 0 && (
               <ListGroup>
                 <ListGroup.Item>

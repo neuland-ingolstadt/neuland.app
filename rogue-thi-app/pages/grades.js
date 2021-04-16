@@ -62,7 +62,7 @@ export default function Grades () {
             Noten
           </h4>
 
-          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={grades}>
+          <ReactPlaceholder type="text" rows={10} ready={grades}>
             {grades && grades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
@@ -83,7 +83,7 @@ export default function Grades () {
             Ausstehende Fächer
           </h4>
 
-          <ReactPlaceholder type="text" rows={10} color="#eeeeee" ready={missingGrades}>
+          <ReactPlaceholder type="text" rows={10} ready={missingGrades}>
             {missingGrades && missingGrades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>

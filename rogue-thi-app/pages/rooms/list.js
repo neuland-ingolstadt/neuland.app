@@ -69,7 +69,7 @@ export default function RoomList () {
       <AppNavbar title="Stündlicher Raumplan" />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={freeRooms}>
+        <ReactPlaceholder type="text" rows={20} ready={freeRooms}>
           {freeRooms && freeRooms.map((day, i) =>
             Object.values(day.hours).map((hour, j) =>
               <ListGroup key={i + '-' + j}>

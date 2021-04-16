@@ -39,7 +39,7 @@ export default function Personal () {
       <AppNavbar title="Konto" />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={12} color="#eeeeee" ready={userdata}>
+        <ReactPlaceholder type="text" rows={12} ready={userdata}>
           {userdata &&
             <ListGroup>
               <ListGroup.Item>Matrikelnummer <span className={styles.personal_value}>{userdata.mtknr}</span></ListGroup.Item>

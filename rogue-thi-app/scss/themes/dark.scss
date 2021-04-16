@@ -176,10 +176,12 @@ $navbar-light-color: $body-color;
 $navbar-light-brand-color: $body-color;
 $navbar-brand-color: $body-color;
 
-// adjust react-placeholder bar color
-.text-block > .text-row {
-  background-color: $gray-500 !important;
+// react-placeholder
+.text-row, .rect-shape, .round-shape {
+  background-color: $gray-800 !important;
 }
+
+// API playground
 pre {
   color: $body-color !important;
 }

@@ -236,7 +236,7 @@ export default function Home () {
             title="Stundenplan"
             link="/timetable"
           >
-            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={timetable || timetableError}>
+            <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
               <ListGroup variant="flush">
               {timetable && timetable.map((x, i) =>
                 <ListGroup.Item key={i}>
@@ -268,7 +268,7 @@ export default function Home () {
             link="/mensa"
             className="desktop-only"
           >
-            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={mensaPlan || mensaPlanError}>
+            <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
               <ListGroup variant="flush">
                 {mensaPlan && mensaPlan.map((x, i) =>
                   <ListGroup.Item key={i}>
@@ -295,7 +295,7 @@ export default function Home () {
             title={stationName ? `Bus (${stationName})` : 'Bus'}
             link="/bus"
           >
-            <ReactPlaceholder type="text" rows={5} color="#eeeeee" ready={busPlan || busPlanError}>
+            <ReactPlaceholder type="text" rows={5} ready={busPlan || busPlanError}>
               <ListGroup variant="flush">
                 {busPlan && busPlan.slice(0, 4).map((x, i) =>
                   <ListGroup.Item key={i} className={styles.busItem}>

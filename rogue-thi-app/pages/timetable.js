@@ -64,7 +64,7 @@ export default function Timetable () {
       <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} color="#eeeeee" ready={timetable}>
+        <ReactPlaceholder type="text" rows={20} ready={timetable}>
           {timetable && timetable.map((group, idx) =>
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
