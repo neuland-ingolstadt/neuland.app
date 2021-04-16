@@ -221,19 +221,8 @@ class HttpRequest {
 
     if (this.response.headerReceived) {
       if (this.response.readBody(this.buffer)) {
-        try {
-          this.options.response(this.response.body)
-          return true
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            // e.g. 'Bad request'
-            this.options.error(new Error(`Response is not valid JSON (${this.response.body})`))
-            return true
-          } else {
-            this.options.error(e)
-            return true
-          }
-        }
+        this.options.response(this.response.body)
+        return true
       } else {
         return false
       }
@@ -256,6 +245,10 @@ class HttpRequest {
 class HttpResponse {
   constructor (data) {
     this.data = data
+  }
+
+  async text () {
+    return this.data
   }
 
   async json () {

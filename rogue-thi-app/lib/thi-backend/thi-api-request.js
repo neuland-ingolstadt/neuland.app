@@ -72,5 +72,9 @@ export async function thiApiRequest (params) {
       'User-Agent': USER_AGENT
     }
   })
-  return await resp.json()
+  try {
+    return await resp.json()
+  } catch (e) {
+    throw new Error(`Response is not valid JSON (${await resp.text()})`)
+  }
 }
