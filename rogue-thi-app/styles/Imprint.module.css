@@ -1,0 +1,15 @@
+.imprint h1,
+.imprint h2,
+.imprint h3,
+.imprint h4,
+.imprint h5 {
+	font-size: 1.8em;
+}
+
+.imprint {
+	font-size: 0.9em;
+}
+
+.imprintTitle {
+	margin-top: 15px;
+}

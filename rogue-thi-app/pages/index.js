@@ -194,7 +194,7 @@ export default function Home () {
             Design
           </Dropdown.Item>
           <Dropdown.Item variant="link" href="/imprint">
-            Rechtliches und Informationen
+            Impressum & Datenschutz
           </Dropdown.Item>
           <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
             Ausloggen
