@@ -6,11 +6,9 @@ import styles from '../styles/AppBody.module.css'
 
 export default function AppBody ({ className, children }) {
   return (
-    <>
-      <Container className={[className, styles.container]}>
-        {children}
-      </Container>
-    </>
+    <Container className={[className, styles.container]}>
+      {children}
+    </Container>
   )
 }
 AppBody.propTypes = {

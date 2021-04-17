@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
+import Container from 'react-bootstrap/Container'
 
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
@@ -95,10 +96,10 @@ export default function RoomMap () {
   }
 
   return (
-    <>
+    <Container className={styles.container}>
       <AppNavbar title="Raumplan" />
 
-      <AppBody className={styles.container}>
+      <AppBody className={styles.body}>
         <Form className={styles.searchForm}>
           <Form.Control
             as="input"
@@ -110,7 +111,7 @@ export default function RoomMap () {
 
         <MapContainer center={[48.76677, 11.43322]} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
           <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>-Mitwirkende'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxNativeZoom={19}
             maxZoom={21}
@@ -139,6 +140,6 @@ export default function RoomMap () {
           </LayersControl>
         </MapContainer>
       </AppBody>
-    </>
+    </Container>
   )
 }
