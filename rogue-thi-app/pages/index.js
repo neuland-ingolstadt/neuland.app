@@ -75,7 +75,9 @@ async function getMensaPlanPreview (session) {
 }
 
 const allThemes = [
-  { name: 'Standard', style: 'default' },
+  { name: 'Automatisch', style: 'default' },
+  { name: 'Hell', style: 'light' },
+  { name: 'Dunkel', style: 'dark' },
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
   { name: 'Windows 95', style: '95' },
