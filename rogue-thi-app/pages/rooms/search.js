@@ -179,7 +179,7 @@ export default function Rooms () {
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
                     {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
-                    <Link href={`/rooms/map?highlight=${result.room}`}>
+                    <Link href={`/rooms?highlight=${result.room}`}>
                       {result.room}
                     </Link>
 
