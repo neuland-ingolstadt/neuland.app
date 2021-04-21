@@ -108,7 +108,7 @@ export default function Debug () {
                 </Col>
                 <Col>
                   <Form.Control
-                    type="text"
+                    type={parameters[idx].name === 'session' ? 'password' : 'text'}
                     placeholder="value"
                     value={param.value}
                     onChange={e => changeParameterValue(idx, e.target.value)}
