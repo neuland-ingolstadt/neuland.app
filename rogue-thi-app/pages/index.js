@@ -134,6 +134,7 @@ export default function Home () {
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
   const [unlockedThemes, setUnlockedThemes] = useState([])
+  const [showDebug, setShowDebug] = useState(false)
 
   useEffect(async () => {
     try {
@@ -197,6 +198,9 @@ export default function Home () {
     if (localStorage.unlockedThemes) {
       setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
     }
+    if (localStorage.debugUnlocked) {
+      setShowDebug(true)
+    }
   }, [])
 
   function changeTheme (theme) {
@@ -214,6 +218,11 @@ export default function Home () {
           <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
             Design
           </Dropdown.Item>
+          {showDebug && (
+            <Dropdown.Item variant="link" href="/debug">
+              API Spielwiese
+            </Dropdown.Item>
+          )}
           <Dropdown.Item variant="link" href="/imprint">
             Impressum & Datenschutz
           </Dropdown.Item>

@@ -14,6 +14,7 @@ import styles from '../styles/Imprint.module.css'
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [thiImprint, setThiImprint] = useState('Lädt...')
+  const [debugUnlockProgress, setDebugUnlockProgress] = useState(0)
 
   useEffect(() => {
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
@@ -29,13 +30,32 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
     }
   }, [])
 
+  function debugUnlockClicked () {
+    if (debugUnlockProgress < 4) {
+      setDebugUnlockProgress(debugUnlockProgress + 1)
+      return
+    }
+
+    if (localStorage.debugUnlocked) {
+      localStorage.removeItem('debugUnlocked')
+      alert('Debug tools are no longer available!')
+    } else {
+      localStorage.debugUnlocked = true
+      alert('Debug tools are now available!')
+    }
+    setDebugUnlockProgress(0)
+  }
+
   return (
     <>
       <AppNavbar title="Impressum und Datenschutz" />
 
       <AppBody>
         <ListGroup>
-          <h1 className={styles.imprintTitle}>Wir würden uns über euer Feedback freuen. :)</h1>
+          <h1 className={styles.imprintTitle}>
+            Wir würden uns über euer Feedback freuen.{' '}
+            <span onClick={debugUnlockClicked}>:)</span>
+          </h1>
           <ListGroup.Item>
             E-Mail:{' '}
             <a href="mailto:app-feedback@informatik.sexy">
