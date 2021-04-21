@@ -187,6 +187,8 @@ session: <session token>
 ```
 
 ## Personal Timetable
+Setting `details` to `1` results in the fields `inhalt`, `literatur` and `ziel` to be filled with HTML code with further information.
+
 ```
 service: thiapp
 method:  stpl

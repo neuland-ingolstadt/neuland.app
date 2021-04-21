@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext } from 'react'
+import React, { useState, useEffect, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -21,7 +21,7 @@ export default function AppNavbar ({ title, showBack, children }) {
   const theme = useContext(ThemeContext)
   const [showBackButton, setShowBackButton] = useState(typeof showBack === 'undefined')
 
-  useState(() => {
+  useEffect(() => {
     if (showBack === 'desktop-only' && window.innerWidth > 768) {
       setShowBackButton(true)
     }

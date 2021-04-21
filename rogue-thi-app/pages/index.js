@@ -146,13 +146,21 @@ export default function Home () {
 
   useEffect(async () => {
     try {
-      const [timetable, examList] = await callWithSession(session => Promise.all([
-        getTimetablePreview(session),
-        loadExamList(session)
-      ]))
-
+      const timetable = await callWithSession(getTimetablePreview)
       setTimetable(timetable)
+    } catch (e) {
+      if (e instanceof NoSessionError) {
+        router.replace('/login')
+      } else {
+        console.error(e)
+        setTimetableError(e)
+      }
+    }
+  }, [])
 
+  useEffect(async () => {
+    try {
+      const examList = await callWithSession(loadExamList)
       const examEntries = examList.map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
       const combined = [...calendar, ...examEntries]
       combined.sort((a, b) => a.begin - b.begin)
@@ -160,9 +168,11 @@ export default function Home () {
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
+      } else if (e.message === 'Query not possible') {
+        setMixedCalendar(calendar)
       } else {
         console.error(e)
-        setTimetableError(e)
+        alert(e)
       }
     }
   }, [])
