@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
@@ -17,41 +18,45 @@ import rawCalendar from '../data/calendar.json'
 
 import styles from '../styles/Calendar.module.css'
 
-const now = new Date()
-const calendar = rawCalendar.map(x => ({
+const compileTime = new Date()
+export const calendar = rawCalendar.map(x => ({
   ...x,
   begin: new Date(x.begin),
   end: x.end && new Date(x.end)
 }))
-  .filter(x => (x.end && x.end > now) || x.begin > now)
+  .filter(x => (x.end && x.end > compileTime) || x.begin > compileTime)
   .sort((a, b) => a.end - b.end)
   .sort((a, b) => a.begin - b.begin)
 
+export async function loadExamList (session) {
+  const examList = await getExams(session)
+  return examList
+    .map(x => {
+      if (x.exm_date && x.exam_time) {
+        const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
+        x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
+      } else {
+        x.date = null
+      }
+
+      x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
+      x.allowed_helpers = parsePostgresArray(x.hilfsmittel)
+        .filter((v, i, a) => a.indexOf(v) === i)
+
+      return x
+    })
+}
+
 export default function Calendar () {
   const router = useRouter()
+  const now = useTime()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
     try {
-      const examList = await callWithSession(getExams)
-
-      setExams(examList
-        .map(x => {
-          if (x.exm_date && x.exam_time) {
-            const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
-            x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
-          } else {
-            x.date = null
-          }
-
-          x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
-          x.allowed_helpers = parsePostgresArray(x.hilfsmittel)
-            .filter((v, i, a) => a.indexOf(v) === i)
-
-          return x
-        })
-      )
+      const examList = await callWithSession(loadExamList)
+      setExams(examList)
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')

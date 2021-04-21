@@ -28,10 +28,11 @@ import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
+import { calendar, loadExamList } from './calendar.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
-import { formatNearDate, formatFriendlyTime, formatRelativeMinutes } from '../lib/date-utils'
+import { formatNearDate, formatFriendlyTime, formatRelativeMinutes, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
 import { stations, defaultStation } from '../data/bus.json'
 
@@ -127,6 +128,7 @@ export default function Home () {
   const [busPlan, setBusPlan] = useState(null)
   const [busPlanError, setBusPlanError] = useState(null)
   const [stationName, setStationName] = useState(null)
+  const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
@@ -144,8 +146,17 @@ export default function Home () {
 
   useEffect(async () => {
     try {
-      const timetable = await callWithSession(getTimetablePreview)
+      const [timetable, examList] = await callWithSession(session => Promise.all([
+        getTimetablePreview(session),
+        loadExamList(session)
+      ]))
+
       setTimetable(timetable)
+
+      const examEntries = examList.map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
+      const combined = [...calendar, ...examEntries]
+      combined.sort((a, b) => a.begin - b.begin)
+      setMixedCalendar(combined)
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
@@ -335,7 +346,22 @@ export default function Home () {
             icon={faCalendarAlt}
             title="Termine"
             link="/calendar"
-          />
+          >
+            <ListGroup variant="flush">
+              {mixedCalendar && mixedCalendar.slice(0, 2).map((x, i) => (
+                <ListGroup.Item key={i}>
+                  <div>
+                    {x.name}
+                  </div>
+                  <div className="text-muted">
+                    {(x.end && x.begin < time)
+                      ? 'bis ' + formatFriendlyRelativeTime(x.end)
+                      : formatFriendlyRelativeTime(x.begin)}
+                  </div>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </HomeCard>
 
           <HomeCard
             icon={faDoorOpen}
