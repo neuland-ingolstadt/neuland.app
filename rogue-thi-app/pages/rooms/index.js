@@ -150,10 +150,9 @@ export default function RoomMap () {
             {TUX_ROOMS.includes(entry.properties.Raum) && <><FontAwesomeIcon icon={faLinux} /> </>}
             {entry.properties.Raum}
           </strong>
-          ,{' '}
-          {entry.properties.Funktion}{' '}
-          (Campus {entry.properties.Standort} Gebäude {entry.properties.Gebaeude})
-          <br />
+          {`, ${entry.properties.Funktion}`} <br />
+          Gebäude {entry.properties.Gebaeude} <br />
+          Campus {entry.properties.Standort} <br />
           {avail && (
             <>
               <strong>Frei</strong>
