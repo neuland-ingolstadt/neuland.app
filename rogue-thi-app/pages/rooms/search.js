@@ -12,7 +12,6 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
-import AppTabbar from '../../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
@@ -26,7 +25,21 @@ const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45'
 const DURATION_PRESET = '01:00'
 const TUX_ROOMS = ['G308']
 
-async function filterRooms (session, building, date, time, duration) {
+export function getNextValidDate () {
+  const startDate = new Date()
+  if (startDate.getHours() > 17 || (startDate.getHours() === 17 && startDate.getMinutes() >= 20)) {
+    startDate.setDate(startDate.getDate() + 1)
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  } else if (startDate.getHours() < 8 || (startDate.getHours() === 8 && startDate.getMinutes() < 15)) {
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  }
+
+  return startDate
+}
+
+export async function filterRooms (session, date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
 
   const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
@@ -39,8 +52,6 @@ async function filterRooms (session, building, date, time, duration) {
     beginDate.getSeconds(),
     beginDate.getMilliseconds()
   )
-
-  console.log(`Filtering from ${beginDate} until ${endDate}`)
 
   const data = await getFreeRooms(session, beginDate)
   const openings = getRoomOpenings(data.rooms, date)
@@ -63,16 +74,7 @@ async function filterRooms (session, building, date, time, duration) {
 
 export default function Rooms () {
   const router = useRouter()
-
-  const startDate = new Date()
-  if (startDate.getHours() > 17 || (startDate.getHours() === 17 && startDate.getMinutes() >= 20)) {
-    startDate.setDate(startDate.getDate() + 1)
-    startDate.setHours(8)
-    startDate.setMinutes(15)
-  } else if (startDate.getHours() < 8 || (startDate.getHours() === 8 && startDate.getMinutes() < 15)) {
-    startDate.setHours(8)
-    startDate.setMinutes(15)
-  }
+  const startDate = getNextValidDate()
 
   const [building, setBuilding] = useState(BUILDINGS_ALL)
   const [date, setDate] = useState(formatISODate(startDate))
@@ -87,7 +89,7 @@ export default function Rooms () {
     setFilterResults(null)
 
     const rooms = await callWithSession(
-      session => filterRooms(session, building, date, time, duration)
+      session => filterRooms(session, date, time, building, duration)
     )
 
     console.log(`Found ${rooms.length} results`)
@@ -109,7 +111,7 @@ export default function Rooms () {
 
   return (
     <>
-      <AppNavbar title="Raumsuche" showBack={'desktop-only'} />
+      <AppNavbar title="Raumsuche" />
 
       <AppBody>
         <Form>
@@ -163,9 +165,6 @@ export default function Rooms () {
           <Button onClick={() => filter()}>
             Suchen
           </Button>
-          <Link href="/rooms/map">
-            <Button variant="link">Karte anzeigen</Button>
-          </Link>
           <Link href="/rooms/list">
             <Button variant="link">Stündlichen Plan anzeigen</Button>
           </Link>
@@ -203,8 +202,6 @@ export default function Rooms () {
           </ReactPlaceholder>
         }
       </AppBody>
-
-      <AppTabbar />
     </>
   )
 }

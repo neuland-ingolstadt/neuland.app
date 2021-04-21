@@ -87,7 +87,7 @@ export default function RoomList () {
                         {rooms.map((room, idx) =>
                           <>
                             {TUX_ROOMS.includes(room) && <><FontAwesomeIcon icon={faLinux} /> </>}
-                            <Link href={`/rooms/map?highlight=${room}`}>
+                            <Link href={`/rooms?highlight=${room}`}>
                               {room}
                             </Link>
                             {idx === rooms.length - 1 ? '' : ', '}

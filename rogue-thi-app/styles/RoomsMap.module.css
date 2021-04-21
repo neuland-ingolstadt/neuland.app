@@ -24,3 +24,32 @@
 .mapContainer :global(.leaflet-control-attribution) {
   margin-bottom: env(safe-area-inset-bottom, 0px) !important;
 }
+
+.coloredBall {
+  margin-top: 0.2em;
+
+  display: inline-block;
+  min-width: 1em;
+  min-height: 1em;
+  border-radius: 0.5em;
+  background-color: #8845ef;
+}
+.grayBall {
+  margin-left: 5px;
+  margin-top: 0.2em;
+
+  display: inline-block;
+  min-width: 1em;
+  min-height: 1em;
+  border-radius: 0.5em;
+  background-color: #6c757d;
+}
+
+.ballText {
+  margin-top: 0.2em;
+}
+
+.linkToSearch {
+  float: right;
+  margin-top: 0.2em;
+}

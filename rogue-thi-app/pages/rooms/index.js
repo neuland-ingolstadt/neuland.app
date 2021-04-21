@@ -1,13 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import Form from 'react-bootstrap/Form'
 import Container from 'react-bootstrap/Container'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLinux } from '@fortawesome/free-brands-svg-icons'
+
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
+import AppTabbar from '../../components/AppTabbar'
 import roomData from '../../data/rooms.json'
+
+import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
+import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
+import { getNextValidDate, filterRooms } from './search'
 
 import styles from '../../styles/RoomsMap.module.css'
 import 'leaflet/dist/leaflet.css'
@@ -20,6 +29,8 @@ const LayerGroup = dynamic(() => import('react-leaflet').then(x => x.LayerGroup)
 const FeatureGroup = dynamic(() => import('react-leaflet').then(x => x.FeatureGroup), { ssr: false })
 const Popup = dynamic(() => import('react-leaflet').then(x => x.Popup), { ssr: false })
 const Polygon = dynamic(() => import('react-leaflet').then(x => x.Polygon), { ssr: false })
+
+const TUX_ROOMS = ['G308']
 
 const searchedProperties = [
   'Gebaeude',
@@ -64,7 +75,7 @@ roomData.features.forEach(feature => {
     floors[properties.Etage].push({
       properties,
       coordinates: points.map(([lon, lat]) => [lat, lon]),
-      options: { color: '#005a9b' }
+      options: { }
     })
   })
 })
@@ -73,8 +84,11 @@ export default function RoomMap () {
   const router = useRouter()
   const { highlight } = router.query
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
+  const [availableRooms, setAvailableRooms] = useState([])
 
+  let center = [48.76677, 11.43322]
   let filteredFloors = {}
+
   const filteredFloorOrder = floorOrder.slice(0)
   if (!searchText) {
     filteredFloors = floors
@@ -93,11 +107,77 @@ export default function RoomMap () {
     })
 
     invalidFloorIndices.forEach(i => filteredFloorOrder.splice(i, 1))
+
+    let lon = 0
+    let lat = 0
+    let count = 0
+    Object.values(filteredFloors).forEach(floor => floor.forEach(x => {
+      lon += x.coordinates[0][0]
+      lat += x.coordinates[0][1]
+      count += 1
+    }))
+
+    center = [lon / count, lat / count]
+  }
+
+  useEffect(async () => {
+    try {
+      const dateObj = getNextValidDate()
+      const date = formatISODate(dateObj)
+      const time = formatISOTime(dateObj)
+      const rooms = await callWithSession(session => filterRooms(session, date, time))
+      setAvailableRooms(rooms)
+    } catch (e) {
+      if (e instanceof NoSessionError) {
+        router.replace('/login')
+      } else {
+        console.error(e)
+        alert(e)
+      }
+    }
+  }, [])
+
+  function renderRoom (entry, key, onlyAvailable) {
+    const avail = availableRooms.find(x => x.room === entry.properties.Raum)
+    if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
+      return null
+    }
+
+    return (
+      <FeatureGroup key={key}>
+        <Popup>
+          <strong>
+            {TUX_ROOMS.includes(entry.properties.Raum) && <><FontAwesomeIcon icon={faLinux} /> </>}
+            {entry.properties.Raum}
+          </strong>
+          ,{' '}
+          {entry.properties.Funktion}{' '}
+          (Campus {entry.properties.Standort} Gebäude {entry.properties.Gebaeude})
+          <br />
+          {avail && (
+            <>
+              <strong>Frei</strong>
+              {' '}von {formatFriendlyTime(avail.from)}
+              {' '}bis {formatFriendlyTime(avail.until)}
+            </>
+          )}
+        </Popup>
+        <Polygon
+          positions={entry.coordinates}
+          pathOptions={{
+            ...entry.options,
+            color: avail
+              ? '#8845ef'
+              : '#6c757d'
+          }}
+        />
+      </FeatureGroup>
+    )
   }
 
   return (
     <Container className={styles.container}>
-      <AppNavbar title="Raumplan" />
+      <AppNavbar title="Raumplan" showBack={'desktop-only'} />
 
       <AppBody className={styles.body}>
         <Form className={styles.searchForm}>
@@ -107,9 +187,17 @@ export default function RoomMap () {
             value={searchText}
             onChange={e => setSearchText(e.target.value.toUpperCase())}
           />
+
+          <span className={styles.coloredBall}></span>
+          <span className={styles.ballText}> Freie Räume</span>
+          <span className={styles.grayBall}></span>
+          <span className={styles.ballText}> Belegte Räume</span>
+          <div className={styles.linkToSearch}>
+            <Link href="/rooms/search">Textansicht</Link>
+          </div>
         </Form>
 
-        <MapContainer center={[48.76677, 11.43322]} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
+        <MapContainer center={center} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>-Mitwirkende'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -122,17 +210,12 @@ export default function RoomMap () {
               <BaseLayersControl name={floorName} key={floorName} checked={i === 0}>
                 <LayerGroup>
                   {filteredFloors[floorName].map((entry, j) => (
-                    <FeatureGroup key={j}>
-                      <Popup>
-                        <strong>{entry.properties.Raum}</strong>,{' '}
-                        {entry.properties.Funktion}{' '}
-                        (Campus {entry.properties.Standort} Gebäude {entry.properties.Gebaeude})
-                      </Popup>
-                      <Polygon
-                        positions={entry.coordinates}
-                        pathOptions={entry.options}
-                      />
-                    </FeatureGroup>
+                    renderRoom(entry, j, false)
+                  ))}
+                  {/* we first render all gray rooms and then the colored ones to make
+                      sure the colored border overlapthe gray ones */}
+                  {filteredFloors[floorName].map((entry, j) => (
+                    renderRoom(entry, j, true)
                   ))}
                 </LayerGroup>
               </BaseLayersControl>
@@ -140,6 +223,8 @@ export default function RoomMap () {
           </LayersControl>
         </MapContainer>
       </AppBody>
+
+      <AppTabbar />
     </Container>
   )
 }
