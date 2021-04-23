@@ -29,7 +29,7 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { calendar, loadExamList } from './calendar.js'
-import { getMobilityLabel, getMobilityEntries, renderMobilityEntry } from './bus.js'
+import { getMobilityLabel, getMobilityEntries, renderMobilityEntry } from './mobility.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
@@ -320,7 +320,7 @@ export default function Home () {
           <HomeCard
             icon={faBus}
             title={mobilityEntries ? getMobilityLabel() : 'Mobilität'}
-            link="/bus"
+            link="/mobility"
           >
             <ReactPlaceholder type="text" rows={5} ready={mobilityEntries || mobilityError}>
               <ListGroup variant="flush">
