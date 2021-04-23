@@ -1,28 +1,39 @@
-.stationSelect {
-  /* margin doesn't work properly for some reason */
-  width: calc(100% - 50px);
-  margin: 0px auto;
+.stationForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.item {
+@media (min-width: 768px) {
+  .stationForm {
+    flex-direction: row;
+  }
+}
+
+.stationForm * {
+  margin-right: 20px;
+}
+
+.mobilityItem {
   display: flex;
   flex-direction: row;
 }
 
-.route {
-  height: min-content;
+.mobilityRoute {
   padding: 0px 3px;
   margin-right: 6px;
   border-radius: 2px;
+  min-width: 2.5em;
+  text-align: center;
   background: #eeeeee;
   color: black;
   font-weight: bold;
 }
 
-.destination {
+.mobilityDestination {
   flex: 1;
 }
 
-.time {
+.mobilityTime {
   text-align: right;
 }

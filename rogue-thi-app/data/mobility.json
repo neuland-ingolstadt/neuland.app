@@ -1,0 +1,35 @@
+{
+	"bus": {
+		"defaultStation": "zob",
+		"stations": [
+			{ "id": "fruehlingstrasse", "name": "Frühlingstraße" },
+			{ "id": "heydeckstrasse", "name": "Heydeckstraße" },
+			{ "id": "rathausplatz", "name": "Rathausplatz" },
+			{ "id": "rechbergstrasse", "name": "Rechbergstraße" },
+			{ "id": "stadttheater", "name": "Stadttheater" },
+			{ "id": "zob", "name": "ZOB" }
+		]
+	},
+	"train": {
+		"defaultStation": "nord",
+		"stations": [
+			{ "id": "nord", "name": "Nordbahnhof" },
+			{ "id": "hbf", "name": "Hauptbahnhof" },
+			{ "id": "audi", "name": "Audi" }
+		]
+	},
+	"parking": [
+		{ "name": "Saturn Arena", "priceLevel": -1 },
+		{ "name": "Schloss", "priceLevel": 3 },
+		{ "name": "Congressgarage", "priceLevel": 3 },
+		{ "name": "Festplatz", "priceLevel": 1 },
+		{ "name": "Nordbahnhof", "priceLevel": 1 },
+		{ "name": "Theater-Ost", "priceLevel": 3 },
+		{ "name": "Theater-West", "priceLevel": 3 },
+		{ "name": "Reduit Tilly", "priceLevel": 2 },
+		{ "name": "Münster", "priceLevel": 3 },
+		{ "name": "Hallenbad", "priceLevel": 2 },
+		{ "name": "Hauptbahnhof Ost", "priceLevel": 1 },
+		{ "name": "Hauptbahnhof West", "priceLevel": 1 }
+	]
+}

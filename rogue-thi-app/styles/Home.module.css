@@ -51,16 +51,16 @@
   text-align: left;
 }
 
-.busTable {
+.mobilityTable {
   width: 100%;
 }
 
-.busItem {
+.mobilityItem {
   padding: .25rem;
   border: 0;
 }
 
-.busRoute {
+.mobilityRoute {
   padding: 0px 3px;
   margin-right: 6px;
   min-width: 2.5em;
@@ -72,10 +72,10 @@
   font-weight: bold;
 }
 
-.busDestination {
+.mobilityDestination {
   float: left;
 }
 
-.busTime {
+.mobilityTime {
   float: right;
 }

@@ -29,12 +29,12 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { calendar, loadExamList } from './calendar.js'
+import { getMobilityLabel, getMobilityEntries, renderMobilityEntry } from './bus.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
-import { getMensaPlan, getBusPlan } from '../lib/reimplemented-api-client'
-import { formatNearDate, formatFriendlyTime, formatRelativeMinutes, formatFriendlyRelativeTime } from '../lib/date-utils'
+import { getMensaPlan } from '../lib/reimplemented-api-client'
+import { formatNearDate, formatFriendlyTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
-import { stations, defaultStation } from '../data/bus.json'
 
 import styles from '../styles/Home.module.css'
 
@@ -125,9 +125,8 @@ export default function Home () {
   const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
-  const [busPlan, setBusPlan] = useState(null)
-  const [busPlanError, setBusPlanError] = useState(null)
-  const [stationName, setStationName] = useState(null)
+  const [mobilityEntries, setMobilityEntries] = useState(null)
+  const [mobilityError, setMobilityError] = useState(null)
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
   // page state
@@ -179,18 +178,14 @@ export default function Home () {
   }, [])
 
   useEffect(async () => {
-    setBusPlan(null)
-
-    const stationId = localStorage.station || defaultStation
-    const stationName = stations.find(s => s.id === stationId).name
-
-    setStationName(stationName)
+    setMobilityEntries(null)
 
     try {
-      setBusPlan(await getBusPlan(stationId))
+      setMobilityEntries(await getMobilityEntries())
+      setMobilityError(null)
     } catch (e) {
       console.error(e)
-      setBusPlanError(e)
+      setMobilityError(e)
     }
   }, [time])
 
@@ -324,37 +319,24 @@ export default function Home () {
 
           <HomeCard
             icon={faBus}
-            title={stationName ? `Bus (${stationName})` : 'Bus'}
+            title={mobilityEntries ? getMobilityLabel() : 'Mobilität'}
             link="/bus"
           >
-            <ReactPlaceholder type="text" rows={5} ready={busPlan || busPlanError}>
+            <ReactPlaceholder type="text" rows={5} ready={mobilityEntries || mobilityError}>
               <ListGroup variant="flush">
-                {busPlan && busPlan.slice(0, 4).map((x, i) =>
-                  <ListGroup.Item key={i} className={styles.busItem}>
-                    <div className={styles.busRoute}>
-                      <div>
-                        {x.route}
-                      </div>
-                    </div>
-                    <div className={styles.busDestination}>
-                      {x.destination.length > MAX_STATION_LENGTH
-                        ? x.destination.substr(0, MAX_STATION_LENGTH) + '…'
-                        : x.destination
-                      }
-                    </div>
-                    <div className={styles.busTime}>
-                      {formatRelativeMinutes(x.time)}
-                    </div>
+                {mobilityEntries && mobilityEntries.slice(0, 4).map((x, i) =>
+                  <ListGroup.Item key={i} className={styles.mobilityItem}>
+                    {renderMobilityEntry(x, MAX_STATION_LENGTH, styles)}
                   </ListGroup.Item>
                 )}
-                {busPlan && busPlan.length === 0 &&
+                {mobilityEntries && mobilityEntries.length === 0 &&
                   <ListGroup.Item>
                     In nächster Zeit kommen keine Busse.
                   </ListGroup.Item>
                 }
-                {busPlanError &&
+                {mobilityError &&
                   <ListGroup.Item>
-                    Fehler beim Abruf des Busplans.
+                    Fehler beim Abruf.
                   </ListGroup.Item>
                 }
               </ListGroup>

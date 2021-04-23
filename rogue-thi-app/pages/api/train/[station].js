@@ -13,6 +13,22 @@ const STATIONS = {
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
+function dateFromTimestring (str) {
+  const [, hourStr, minuteStr] = str.match(/(\d\d):(\d\d)/)
+  const hour = parseInt(hourStr)
+  const minute = parseInt(minuteStr)
+  const now = new Date()
+
+  if (now.getHours() > hour || (now.getHours() === hour && now.getMinutes() > minute)) {
+    console.log(now.getHours(), hour, now.getMinutes(), minute)
+    now.setDate(now.getDate() + 1)
+  }
+
+  now.setHours(hour)
+  now.setMinutes(minute)
+  return now
+}
+
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
@@ -63,12 +79,13 @@ export default async function handler (req, res) {
       const departures = $('.sqdetailsDep').map((i, el) => {
         const spans = $(el).find('span')
         const planned = $(spans[1]).text().trim()
+        const actual = $(spans[2]).text().trim() || planned
         const text = $(el).text().trim()
         return {
           name: $(spans[0]).text().trim().replace(/\s+/g, ' '),
           destination: text.match(/>>\n(.*)/)[1],
-          plannedTime: planned,
-          actualTime: $(spans[2]).text().trim() || planned,
+          plannedTime: dateFromTimestring(planned),
+          actualTime: dateFromTimestring(actual),
           plattform: parseInt(text.substr(text.length - 2)),
           url: $(el).find('a').attr('href')
         }
