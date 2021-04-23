@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -11,6 +11,7 @@ import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
 import TheMatrixAnimation from './TheMatrixAnimation'
+import { useMediaQuery } from '../lib/media-query-hook'
 
 import styles from '../styles/AppNavbar.module.css'
 
@@ -19,13 +20,7 @@ export const ThemeContext = createContext('default')
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const theme = useContext(ThemeContext)
-  const [showBackButton, setShowBackButton] = useState(typeof showBack === 'undefined')
-
-  useEffect(() => {
-    if (showBack === 'desktop-only' && window.innerWidth > 768) {
-      setShowBackButton(true)
-    }
-  }, [showBack])
+  const showBackButton = useMediaQuery('(min-width: 768px)')
 
   return (
     <>
