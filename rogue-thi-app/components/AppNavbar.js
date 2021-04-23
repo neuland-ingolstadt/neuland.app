@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
@@ -20,7 +20,14 @@ export const ThemeContext = createContext('default')
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const theme = useContext(ThemeContext)
-  const showBackButton = useMediaQuery('(min-width: 768px)')
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+  const showBackEffective = useMemo(() => {
+    if (showBack === 'desktop-only') {
+      return isDesktop
+    } else {
+      return showBack
+    }
+  }, [showBack, isDesktop])
 
   return (
     <>
@@ -54,7 +61,7 @@ export default function AppNavbar ({ title, showBack, children }) {
 
       <Navbar sticky="top" className={[styles.navbar, 'container', 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
-          {showBackButton && (
+          {showBackEffective && (
             <Button variant="link" onClick={() => router.back()} className={styles.back}>
               <FontAwesomeIcon icon={faChevronLeft} />
             </Button>
