@@ -1,39 +1,66 @@
-.searchForm {
-  width: 100%;
+.container {
+  /* fill entire viewport height since we don't need scrolling on this page */
+  height: 100vh;
+  /* fix for iOS since Safari would otherwise include the status bar in the viewport height */
+  max-height: stretch;
+
   display: flex;
   flex-direction: column;
+  padding: 0;
 }
 
-@media (min-width: 768px) {
-  .searchForm {
-    flex-direction: row;
-  }
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
 }
 
-.searchForm * {
-  margin-right: 20px;
-}
-
-.dateBoundary {
-  margin-top: 20px;
-}
-
-.item {
+.legend {
   display: flex;
 }
 
-.left {
+.legend .left {
+  display: flex;
+  padding: 0px 5px;
+  align-items: center;
+}
+
+.legend .middle {
   flex: 1;
 }
 
-.details {
-  color: gray;
-}
-
-.room {
-  color: gray;
-}
-
-.right {
+.legend .right {
   text-align: right;
+}
+
+.mapContainer {
+  flex: 1;
+}
+
+.legendFree, .legendTaken {
+  margin: 0.2em;
+}
+
+.legendFree::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background-color: #8845ef;
+}
+
+.legendTaken::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background-color: #6c757d;
+}
+
+.linkToSearch {
+  float: right;
+  margin-top: 0.2em;
 }

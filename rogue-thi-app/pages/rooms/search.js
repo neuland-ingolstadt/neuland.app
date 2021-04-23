@@ -17,7 +17,7 @@ import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/thi-backend/thi-api-conversion'
 
-import styles from '../../styles/Rooms.module.css'
+import styles from '../../styles/RoomsList.module.css'
 
 const BUILDINGS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'M', 'P', 'W', 'Z']
 const BUILDINGS_ALL = 'Alle'

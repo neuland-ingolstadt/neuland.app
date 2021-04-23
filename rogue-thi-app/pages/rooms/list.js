@@ -14,7 +14,7 @@ import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-sessi
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatNearDate, formatFriendlyTime } from '../../lib/date-utils'
 
-import styles from '../../styles/Rooms.module.css'
+import styles from '../../styles/RoomsList.module.css'
 
 const TUX_ROOMS = ['G308']
 

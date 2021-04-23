@@ -3,8 +3,9 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-import Form from 'react-bootstrap/Form'
 import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -18,7 +19,7 @@ import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-sessi
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getNextValidDate, filterRooms } from './search'
 
-import styles from '../../styles/RoomsMap.module.css'
+import styles from '../../styles/Rooms.module.css'
 import 'leaflet/dist/leaflet.css'
 
 const MapContainer = dynamic(() => import('react-leaflet').then(x => x.MapContainer), { ssr: false })
@@ -186,15 +187,20 @@ export default function RoomMap () {
             value={searchText}
             onChange={e => setSearchText(e.target.value.toUpperCase())}
           />
-
-          <span className={styles.coloredBall}></span>
-          <span className={styles.ballText}> Freie Räume</span>
-          <span className={styles.grayBall}></span>
-          <span className={styles.ballText}> Belegte Räume</span>
-          <div className={styles.linkToSearch}>
-            <Link href="/rooms/search">Textansicht</Link>
-          </div>
         </Form>
+
+        <div className={styles.legend}>
+          <div className={styles.left}>
+            <span className={styles.legendFree}> Freie Räume</span>
+            <span className={styles.legendTaken}> Belegte Räume</span>
+          </div>
+          <div className={styles.middle} />
+          <Link href="/rooms/search" className={styles.right}>
+            <Button variant="link" className={styles.linkToSearch}>
+              Erweiterte Suche
+            </Button>
+          </Link>
+        </div>
 
         <MapContainer center={center} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
           <TileLayer
