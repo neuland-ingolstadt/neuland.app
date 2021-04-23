@@ -22,7 +22,9 @@ export default function AppNavbar ({ title, showBack, children }) {
   const theme = useContext(ThemeContext)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const showBackEffective = useMemo(() => {
-    if (showBack === 'desktop-only') {
+    if (typeof showBack === 'undefined') {
+      return true
+    } else if (showBack === 'desktop-only') {
       return isDesktop
     } else {
       return showBack
