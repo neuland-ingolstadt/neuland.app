@@ -20,7 +20,6 @@ function dateFromTimestring (str) {
   const now = new Date()
 
   if (now.getHours() > hour || (now.getHours() === hour && now.getMinutes() > minute)) {
-    console.log(now.getHours(), hour, now.getMinutes(), minute)
     now.setDate(now.getDate() + 1)
   }
 
