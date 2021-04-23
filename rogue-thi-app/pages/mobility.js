@@ -54,16 +54,28 @@ export function useMobilityData () {
   const time = useTime()
 
   useEffect(async () => {
+    let currentKind = kind
+    let currentStation = station
     if (!isInitialized && localStorage.mobilityKind && localStorage.mobilityStation) {
-      setKind(localStorage.mobilityKind)
-      setStation(localStorage.mobilityStation)
+      currentKind = localStorage.mobilityKind
+      currentStation = localStorage.mobilityStation
+
+      setData(null)
+      setKind(currentKind)
+      setStation(currentStation)
       setIsInitialized(true)
-      return
     }
 
-    setIcon(mobilityIcons[kind])
-    setLabel(getMobilityLabel(kind, station))
-    setData(await getMobilityEntries(kind, station))
+    setLabel(getMobilityLabel(currentKind, currentStation))
+    setIcon(mobilityIcons[currentKind])
+
+    try {
+      setData(await getMobilityEntries(currentKind, currentStation))
+    } catch (e) {
+      setData(null)
+      console.error(e)
+      alert(e)
+    }
   }, [time, kind, station])
 
   return {
