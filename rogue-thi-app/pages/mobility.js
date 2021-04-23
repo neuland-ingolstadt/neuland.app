@@ -6,7 +6,10 @@ import Form from 'react-bootstrap/Form'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faEuroSign
+  faEuroSign,
+  faBus,
+  faTrain,
+  faCar
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faCreativeCommonsNcEu
@@ -20,6 +23,17 @@ import { formatFriendlyRelativeTime } from '../lib/date-utils'
 import { bus, train, parking } from '../data/mobility.json'
 
 import styles from '../styles/Bus.module.css'
+
+export function getMobilityIcon () {
+  const icons = {
+    bus: faBus,
+    train: faTrain,
+    parking: faCar
+  }
+
+  const { mobilityKind } = localStorage
+  return icons[mobilityKind]
+}
 
 export function getMobilityLabel () {
   const { mobilityKind, mobilityStation } = localStorage

@@ -16,12 +16,12 @@ import {
   faChevronRight,
   faCalendarMinus,
   faUtensils,
-  faBus,
   faDoorOpen,
   faBook,
   faPen,
   faCalendarAlt,
-  faUser
+  faUser,
+  faTrain
 } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
@@ -29,7 +29,7 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { calendar, loadExamList } from './calendar.js'
-import { getMobilityLabel, getMobilityEntries, renderMobilityEntry } from './mobility.js'
+import { getMobilityLabel, getMobilityEntries, renderMobilityEntry, getMobilityIcon } from './mobility.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
@@ -318,7 +318,7 @@ export default function Home () {
           </HomeCard>
 
           <HomeCard
-            icon={faBus}
+            icon={mobilityEntries ? getMobilityIcon() : faTrain}
             title={mobilityEntries ? getMobilityLabel() : 'Mobilität'}
             link="/mobility"
           >
@@ -331,7 +331,7 @@ export default function Home () {
                 )}
                 {mobilityEntries && mobilityEntries.length === 0 &&
                   <ListGroup.Item>
-                    In nächster Zeit kommen keine Busse.
+                    Keine Abfahrten in nächster Zeit.
                   </ListGroup.Item>
                 }
                 {mobilityError &&
