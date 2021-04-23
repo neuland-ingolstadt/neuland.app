@@ -24,59 +24,74 @@ import { bus, train, parking } from '../data/mobility.json'
 
 import styles from '../styles/Bus.module.css'
 
-function getMobilitySettings () {
-  if (typeof localStorage === 'undefined') {
-    // server side
-    return {
-      mobilityKind: 'train',
-      mobilityStation: 'nord'
-    }
-  }
-
-  let { mobilityKind, mobilityStation } = localStorage
-  if (!mobilityKind || !mobilityStation) {
-    mobilityKind = 'train'
-    mobilityStation = train.defaultStation
-  }
-
-  return { mobilityKind, mobilityStation }
+const mobilityIcons = {
+  bus: faBus,
+  train: faTrain,
+  parking: faCar
 }
 
-export function getMobilityIcon () {
-  const icons = {
-    bus: faBus,
-    train: faTrain,
-    parking: faCar
-  }
-
-  const { mobilityKind } = getMobilitySettings()
-  return icons[mobilityKind]
-}
-
-export function getMobilityLabel () {
-  const { mobilityKind, mobilityStation } = getMobilitySettings()
-
-  if (mobilityKind === 'bus') {
-    const entry = bus.stations.find(x => x.id === mobilityStation)
+function getMobilityLabel (kind, station) {
+  if (kind === 'bus') {
+    const entry = bus.stations.find(x => x.id === station)
     return `Bus (${entry ? entry.name : '?'})`
-  } else if (mobilityKind === 'train') {
-    const entry = train.stations.find(x => x.id === mobilityStation)
+  } else if (kind === 'train') {
+    const entry = train.stations.find(x => x.id === station)
     return `Zug (${entry ? entry.name : '?'})`
-  } else if (mobilityKind === 'parking') {
+  } else if (kind === 'parking') {
     return 'Freie Parkplätze'
   } else {
     return 'Mobilität'
   }
 }
 
-export async function getMobilityEntries () {
-  const { mobilityKind, mobilityStation } = getMobilitySettings()
+export function useMobilityData () {
+  const [kind, setKind] = useState('train')
+  const [station, setStation] = useState(train.defaultStation)
+  const [data, setData] = useState(null)
+  const [icon, setIcon] = useState(faTrain)
+  const [label, setLabel] = useState('Mobilität')
+  const time = useTime()
 
-  if (mobilityKind === 'bus') {
-    return getBusPlan(mobilityStation)
-  } else if (mobilityKind === 'train') {
-    return getTrainPlan(mobilityStation)
-  } else if (mobilityKind === 'parking') {
+  useEffect(() => {
+    if (localStorage.mobilityKind && localStorage.mobilityStation) {
+      setKind(localStorage.mobilityKind)
+      setStation(localStorage.mobilityStation)
+    }
+  }, [])
+
+  useEffect(async () => {
+    setIcon(mobilityIcons[kind])
+    setLabel(getMobilityLabel(kind, station))
+    setData(await getMobilityEntries(kind, station))
+  }, [time, kind, station])
+
+  return {
+    data,
+    icon,
+    label,
+
+    kind,
+    setKind: value => {
+      localStorage.mobilityKind = value
+      setData(null)
+      setKind(value)
+    },
+
+    station,
+    setStation: value => {
+      localStorage.mobilityStation = value
+      setData(null)
+      setStation(value)
+    }
+  }
+}
+
+async function getMobilityEntries (kind, station) {
+  if (kind === 'bus') {
+    return getBusPlan(station)
+  } else if (kind === 'train') {
+    return getTrainPlan(station)
+  } else if (kind === 'parking') {
     const data = await getParkingData()
     return [
       ...parking.map(x => {
@@ -90,14 +105,12 @@ export async function getMobilityEntries () {
       ...data.filter(x => !parking.find(y => x.name === y.name))
     ]
   } else {
-    throw new Error('Invalid mobility kind')
+    throw new Error('Invalid mobility kind ' + kind)
   }
 }
 
-export function renderMobilityEntry (item, maxLen, styles) {
-  const { mobilityKind } = getMobilitySettings()
-
-  if (mobilityKind === 'bus') {
+export function renderMobilityEntry (data, item, maxLen, styles) {
+  if (data.kind === 'bus') {
     return (
       <>
         <div className={styles.mobilityRoute}>
@@ -111,7 +124,7 @@ export function renderMobilityEntry (item, maxLen, styles) {
         </div>
       </>
     )
-  } else if (mobilityKind === 'train') {
+  } else if (data.kind === 'train') {
     return (
       <>
         <div className={styles.mobilityRoute}>
@@ -125,7 +138,7 @@ export function renderMobilityEntry (item, maxLen, styles) {
         </div>
       </>
     )
-  } else if (mobilityKind === 'parking') {
+  } else if (data.kind === 'parking') {
     return (
       <>
         {item.priceLevel && (
@@ -157,51 +170,21 @@ export function renderMobilityEntry (item, maxLen, styles) {
 }
 
 export default function Bus () {
-  const time = useTime()
-  const [mobilityKind, setMobilityKind] = useState('')
-  const [station, setStation] = useState('')
-  const [entries, setEntries] = useState(null)
-
-  useEffect(() => {
-    if (localStorage.mobilityKind && localStorage.mobilityStation) {
-      setMobilityKind(localStorage.mobilityKind)
-      setStation(localStorage.mobilityStation)
-    } else {
-      setMobilityKind('train')
-      setStation(train.defaultStation)
-    }
-  }, [])
-
-  useEffect(async () => {
-    setEntries(null)
-    if (!mobilityKind || !station) {
-      return
-    }
-
-    localStorage.mobilityKind = mobilityKind
-    localStorage.mobilityStation = station
-
-    try {
-      setEntries(await getMobilityEntries())
-    } catch (e) {
-      console.error(e)
-      alert(e)
-    }
-  }, [time, mobilityKind, station])
+  const data = useMobilityData()
 
   function changeMobilityKind (newKind) {
     if (newKind === 'bus') {
-      setStation(bus.defaultStation)
+      data.setStation(bus.defaultStation)
     } else if (newKind === 'train') {
-      setStation(train.defaultStation)
+      data.setStation(train.defaultStation)
     }
 
-    setMobilityKind(newKind)
+    data.setKind(newKind)
   }
 
   return (
     <>
-      <AppNavbar title={mobilityKind ? getMobilityLabel() : 'Mobilität'} />
+      <AppNavbar title={data.label} />
 
       <AppBody>
         <Form className={styles.stationForm}>
@@ -211,7 +194,7 @@ export default function Bus () {
             </Form.Label>
             <Form.Control
               as="select"
-              value={mobilityKind}
+              value={data.kind}
               onChange={e => changeMobilityKind(e.target.value)}
             >
               <option value="bus">Bus</option>
@@ -219,17 +202,17 @@ export default function Bus () {
               <option value="parking">Auto</option>
             </Form.Control>
           </Form.Group>
-          {mobilityKind !== 'parking' && (
+          {data.kind !== 'parking' && (
             <Form.Group>
               <Form.Label>
                 Station
               </Form.Label>
               <Form.Control
                 as="select"
-                value={station || ''}
-                onChange={e => setStation(e.target.value)}
+                value={data.station || ''}
+                onChange={e => data.setStation(e.target.value)}
               >
-                {(mobilityKind === 'bus' ? bus.stations : train.stations).map(station =>
+                {(data.kind === 'bus' ? bus.stations : train.stations).map(station =>
                   <option key={station.id} value={station.id}>{station.name}</option>
                 )}
               </Form.Control>
@@ -238,10 +221,10 @@ export default function Bus () {
         </Form>
 
         <ListGroup>
-          <ReactPlaceholder type="text" rows={10} ready={entries}>
-            {entries && entries.map((item, idx) => (
+          <ReactPlaceholder type="text" rows={10} ready={data.data}>
+            {data.data && data.data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                {renderMobilityEntry(item, 200, styles)}
+                {renderMobilityEntry(data, item, 200, styles)}
               </ListGroup.Item>
             ))}
           </ReactPlaceholder>

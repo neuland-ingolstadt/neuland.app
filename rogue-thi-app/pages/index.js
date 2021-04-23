@@ -20,8 +20,7 @@ import {
   faBook,
   faPen,
   faCalendarAlt,
-  faUser,
-  faTrain
+  faUser
 } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
@@ -29,7 +28,7 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { calendar, loadExamList } from './calendar.js'
-import { getMobilityLabel, getMobilityEntries, renderMobilityEntry, getMobilityIcon } from './mobility.js'
+import { useMobilityData, renderMobilityEntry } from './mobility.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
@@ -125,9 +124,8 @@ export default function Home () {
   const [timetableError, setTimetableError] = useState(null)
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
-  const [mobilityEntries, setMobilityEntries] = useState(null)
-  const [mobilityError, setMobilityError] = useState(null)
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
+  const mobility = useMobilityData()
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
@@ -176,18 +174,6 @@ export default function Home () {
       }
     }
   }, [])
-
-  useEffect(async () => {
-    setMobilityEntries(null)
-
-    try {
-      setMobilityEntries(await getMobilityEntries())
-      setMobilityError(null)
-    } catch (e) {
-      console.error(e)
-      setMobilityError(e)
-    }
-  }, [time])
 
   useEffect(async () => {
     if (localStorage.unlockedThemes) {
@@ -318,23 +304,23 @@ export default function Home () {
           </HomeCard>
 
           <HomeCard
-            icon={getMobilityIcon()}
-            title={getMobilityLabel()}
+            icon={mobility.icon}
+            title={mobility.label}
             link="/mobility"
           >
-            <ReactPlaceholder type="text" rows={5} ready={mobilityEntries || mobilityError}>
+            <ReactPlaceholder type="text" rows={5} ready={mobility.data || mobility.error}>
               <ListGroup variant="flush">
-                {mobilityEntries && mobilityEntries.slice(0, 4).map((x, i) =>
+                {mobility.data && mobility.data.slice(0, 4).map((x, i) =>
                   <ListGroup.Item key={i} className={styles.mobilityItem}>
-                    {renderMobilityEntry(x, MAX_STATION_LENGTH, styles)}
+                    {renderMobilityEntry(mobility, x, MAX_STATION_LENGTH, styles)}
                   </ListGroup.Item>
                 )}
-                {mobilityEntries && mobilityEntries.length === 0 &&
+                {mobility.data && mobility.data.length === 0 &&
                   <ListGroup.Item>
                     Keine Abfahrten in nächster Zeit.
                   </ListGroup.Item>
                 }
-                {mobilityError &&
+                {mobility.error &&
                   <ListGroup.Item>
                     Fehler beim Abruf.
                   </ListGroup.Item>
