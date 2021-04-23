@@ -43,7 +43,7 @@ $dark: $gray-800;
 //$body-bg: $gray-900; //#1E1E1E;
 //$body-bg: #191d21;
 $body-bg: #202020;
-$body-color: #d3d3d3; //$gray-200; //#D4D4D4;
+$body-color: #DFE5F2; // #d3d3d3; //$gray-200; //#D4D4D4;
 
 $yiq-text-dark: $gray-900;
 $yiq-text-light: $gray-400;
@@ -58,15 +58,15 @@ $link-hover-color: $neuland-color;
 $border-color: $dark;
 
 // Cards
-$card-border-color: rgba($white, .125);
+$card-border-color: $gray-700;
 $card-cap-bg: rgba($white, .03);
 $card-color: $gray-200;
 $card-bg: $body-bg;
-$nav-tabs-border-color: rgba($white, .125);
-$nav-tabs-link-hover-border-color: $gray-700 $gray-700 $nav-tabs-border-color;
-$nav-tabs-link-active-color: $gray-100;
-$nav-tabs-link-active-bg: $body-bg;
-$nav-tabs-link-active-border-color: $gray-700 $gray-700 $nav-tabs-link-active-bg;
+$nav-tabs-border-color: $gray-700;
+//$nav-tabs-link-hover-border-color: $gray-700 $gray-700 $nav-tabs-border-color;
+//$nav-tabs-link-active-color: $gray-100;
+//$nav-tabs-link-active-bg: $body-bg;
+//$nav-tabs-link-active-border-color: $gray-700 $gray-700 $nav-tabs-link-active-bg;
 $component-active-color: $black;
 $component-active-bg: $primary;
 
@@ -174,6 +174,7 @@ $pagination-disabled-border-color: $gray-700;
 // Navbar
 $navbar-light-color: $body-color;
 $navbar-light-brand-color: $body-color;
+$navbar-light-brand-hover-color: $body-color;
 $navbar-brand-color: $body-color;
 
 // react-placeholder
@@ -196,6 +197,8 @@ pre {
   --tabbar-shadow: rgba(white, .8);
   --tabbar-tab: #{$body-color};
   --tabbar-tab-active: #{$primary};
+
+  --home-card-mobile-border: #{$gray-700};
 }
 
 // use our CI color
