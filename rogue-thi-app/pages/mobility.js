@@ -45,6 +45,7 @@ function getMobilityLabel (kind, station) {
 }
 
 export function useMobilityData () {
+  const [isInitialized, setIsInitialized] = useState(false)
   const [kind, setKind] = useState('train')
   const [station, setStation] = useState(train.defaultStation)
   const [data, setData] = useState(null)
@@ -52,14 +53,14 @@ export function useMobilityData () {
   const [label, setLabel] = useState('Mobilität')
   const time = useTime()
 
-  useEffect(() => {
-    if (localStorage.mobilityKind && localStorage.mobilityStation) {
+  useEffect(async () => {
+    if (!isInitialized && localStorage.mobilityKind && localStorage.mobilityStation) {
       setKind(localStorage.mobilityKind)
       setStation(localStorage.mobilityStation)
+      setIsInitialized(true)
+      return
     }
-  }, [])
 
-  useEffect(async () => {
     setIcon(mobilityIcons[kind])
     setLabel(getMobilityLabel(kind, station))
     setData(await getMobilityEntries(kind, station))
