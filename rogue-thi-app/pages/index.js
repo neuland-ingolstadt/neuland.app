@@ -318,8 +318,8 @@ export default function Home () {
           </HomeCard>
 
           <HomeCard
-            icon={mobilityEntries ? getMobilityIcon() : faTrain}
-            title={mobilityEntries ? getMobilityLabel() : 'Mobilität'}
+            icon={getMobilityIcon()}
+            title={getMobilityLabel()}
             link="/mobility"
           >
             <ReactPlaceholder type="text" rows={5} ready={mobilityEntries || mobilityError}>

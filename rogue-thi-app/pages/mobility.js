@@ -24,6 +24,24 @@ import { bus, train, parking } from '../data/mobility.json'
 
 import styles from '../styles/Bus.module.css'
 
+function getMobilitySettings () {
+  if (typeof localStorage === 'undefined') {
+    // server side
+    return {
+      mobilityKind: 'train',
+      mobilityStation: 'nord'
+    }
+  }
+
+  let { mobilityKind, mobilityStation } = localStorage
+  if (!mobilityKind || !mobilityStation) {
+    mobilityKind = 'train'
+    mobilityStation = train.defaultStation
+  }
+
+  return { mobilityKind, mobilityStation }
+}
+
 export function getMobilityIcon () {
   const icons = {
     bus: faBus,
@@ -31,19 +49,19 @@ export function getMobilityIcon () {
     parking: faCar
   }
 
-  const { mobilityKind } = localStorage
+  const { mobilityKind } = getMobilitySettings()
   return icons[mobilityKind]
 }
 
 export function getMobilityLabel () {
-  const { mobilityKind, mobilityStation } = localStorage
+  const { mobilityKind, mobilityStation } = getMobilitySettings()
 
   if (mobilityKind === 'bus') {
-    const name = bus.stations.find(x => x.id === mobilityStation).name
-    return `Bus (${name})`
+    const entry = bus.stations.find(x => x.id === mobilityStation)
+    return `Bus (${entry ? entry.name : '?'})`
   } else if (mobilityKind === 'train') {
-    const name = train.stations.find(x => x.id === mobilityStation).name
-    return `Zug (${name})`
+    const entry = train.stations.find(x => x.id === mobilityStation)
+    return `Zug (${entry ? entry.name : '?'})`
   } else if (mobilityKind === 'parking') {
     return 'Freie Parkplätze'
   } else {
@@ -52,10 +70,7 @@ export function getMobilityLabel () {
 }
 
 export async function getMobilityEntries () {
-  const { mobilityKind, mobilityStation } = localStorage
-  if (!mobilityKind || !mobilityStation) {
-    return []
-  }
+  const { mobilityKind, mobilityStation } = getMobilitySettings()
 
   if (mobilityKind === 'bus') {
     return getBusPlan(mobilityStation)
@@ -80,10 +95,7 @@ export async function getMobilityEntries () {
 }
 
 export function renderMobilityEntry (item, maxLen, styles) {
-  const { mobilityKind } = localStorage
-  if (!mobilityKind) {
-    return null
-  }
+  const { mobilityKind } = getMobilitySettings()
 
   if (mobilityKind === 'bus') {
     return (
