@@ -1,9 +1,10 @@
 {
 	"bus": {
-		"defaultStation": "zob",
+		"defaultStation": "hochschule",
 		"stations": [
 			{ "id": "fruehlingstrasse", "name": "Frühlingstraße" },
 			{ "id": "heydeckstrasse", "name": "Heydeckstraße" },
+			{ "id": "hochschule", "name": "Hochschule" },
 			{ "id": "rathausplatz", "name": "Rathausplatz" },
 			{ "id": "rechbergstrasse", "name": "Rechbergstraße" },
 			{ "id": "stadttheater", "name": "Stadttheater" },

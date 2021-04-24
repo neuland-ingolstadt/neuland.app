@@ -4,6 +4,7 @@ const CACHE_TTL = 60 * 1000
 const CACHE_HEADER = 'max-age=60'
 const MIN_REGEX = /(\d+) min/
 const URLS = {
+  hochschule: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-THoScu&sid=413',
   zob: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439',
   rathausplatz: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Ratha&sid=337',
   stadttheater: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-SThea&sid=397',

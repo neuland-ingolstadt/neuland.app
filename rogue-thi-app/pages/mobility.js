@@ -46,10 +46,10 @@ function getMobilityLabel (kind, station) {
 
 export function useMobilityData () {
   const [isInitialized, setIsInitialized] = useState(false)
-  const [kind, setKind] = useState('train')
-  const [station, setStation] = useState(train.defaultStation)
+  const [kind, setKind] = useState('bus')
+  const [station, setStation] = useState(bus.defaultStation)
   const [data, setData] = useState(null)
-  const [icon, setIcon] = useState(faTrain)
+  const [icon, setIcon] = useState(faBus)
   const [label, setLabel] = useState('Mobilität')
   const time = useTime()
 
