@@ -167,6 +167,12 @@ export default function Bus () {
     }
   }, [kind])
 
+  function changeKind (kind) {
+    setKind(kind)
+    setStation(stations[kind].defaultStation)
+    setData(null)
+  }
+
   return (
     <>
       <AppNavbar title={getMobilityLabel(kind, station)} />
@@ -180,7 +186,7 @@ export default function Bus () {
             <Form.Control
               as="select"
               value={kind}
-              onChange={e => { setKind(e.target.value); setStation(stations[e.target.value].defaultStation) }}
+              onChange={e => changeKind(e.target.value)}
             >
               <option value="bus">Bus</option>
               <option value="train">Zug</option>
