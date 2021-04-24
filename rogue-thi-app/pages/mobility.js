@@ -6,10 +6,7 @@ import Form from 'react-bootstrap/Form'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faEuroSign,
-  faBus,
-  faTrain,
-  faCar
+  faEuroSign
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faCreativeCommonsNcEu
@@ -20,22 +17,23 @@ import AppNavbar from '../components/AppNavbar'
 import { getBusPlan, getTrainPlan, getParkingData } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatFriendlyRelativeTime } from '../lib/date-utils'
-import { bus, train, parking } from '../data/mobility.json'
+import stations from '../data/mobility.json'
 
 import styles from '../styles/Bus.module.css'
 
-const mobilityIcons = {
-  bus: faBus,
-  train: faTrain,
-  parking: faCar
+export function getMobilitySettings () {
+  return {
+    kind: localStorage.mobilityKind || 'bus',
+    station: localStorage.mobilityStation || stations.bus.defaultStation
+  }
 }
 
-function getMobilityLabel (kind, station) {
+export function getMobilityLabel (kind, station) {
   if (kind === 'bus') {
-    const entry = bus.stations.find(x => x.id === station)
+    const entry = stations.bus.stations.find(x => x.id === station)
     return `Bus (${entry ? entry.name : '?'})`
   } else if (kind === 'train') {
-    const entry = train.stations.find(x => x.id === station)
+    const entry = stations.train.stations.find(x => x.id === station)
     return `Zug (${entry ? entry.name : '?'})`
   } else if (kind === 'parking') {
     return 'Freie Parkplätze'
@@ -44,62 +42,7 @@ function getMobilityLabel (kind, station) {
   }
 }
 
-export function useMobilityData () {
-  const [isInitialized, setIsInitialized] = useState(false)
-  const [kind, setKind] = useState('bus')
-  const [station, setStation] = useState(bus.defaultStation)
-  const [data, setData] = useState(null)
-  const [icon, setIcon] = useState(faBus)
-  const [label, setLabel] = useState('Mobilität')
-  const time = useTime()
-
-  useEffect(async () => {
-    let currentKind = kind
-    let currentStation = station
-    if (!isInitialized && localStorage.mobilityKind && localStorage.mobilityStation) {
-      currentKind = localStorage.mobilityKind
-      currentStation = localStorage.mobilityStation
-
-      setData(null)
-      setKind(currentKind)
-      setStation(currentStation)
-      setIsInitialized(true)
-    }
-
-    setLabel(getMobilityLabel(currentKind, currentStation))
-    setIcon(mobilityIcons[currentKind])
-
-    try {
-      setData(await getMobilityEntries(currentKind, currentStation))
-    } catch (e) {
-      setData(null)
-      console.error(e)
-      alert(e)
-    }
-  }, [time, kind, station])
-
-  return {
-    data,
-    icon,
-    label,
-
-    kind,
-    setKind: value => {
-      localStorage.mobilityKind = value
-      setData(null)
-      setKind(value)
-    },
-
-    station,
-    setStation: value => {
-      localStorage.mobilityStation = value
-      setData(null)
-      setStation(value)
-    }
-  }
-}
-
-async function getMobilityEntries (kind, station) {
+export async function getMobilityEntries (kind, station) {
   if (kind === 'bus') {
     return getBusPlan(station)
   } else if (kind === 'train') {
@@ -107,7 +50,7 @@ async function getMobilityEntries (kind, station) {
   } else if (kind === 'parking') {
     const data = await getParkingData()
     return [
-      ...parking.map(x => {
+      ...stations.parking.map(x => {
         const entry = data.find(y => x.name === y.name)
         return {
           name: x.name,
@@ -115,15 +58,15 @@ async function getMobilityEntries (kind, station) {
           available: entry ? entry.available : null
         }
       }),
-      ...data.filter(x => !parking.find(y => x.name === y.name))
+      ...data.filter(x => !stations.parking.find(y => x.name === y.name))
     ]
   } else {
     throw new Error('Invalid mobility kind ' + kind)
   }
 }
 
-export function renderMobilityEntry (data, item, maxLen, styles) {
-  if (data.kind === 'bus') {
+export function renderMobilityEntry (kind, item, maxLen, styles) {
+  if (kind === 'bus') {
     return (
       <>
         <div className={styles.mobilityRoute}>
@@ -137,7 +80,7 @@ export function renderMobilityEntry (data, item, maxLen, styles) {
         </div>
       </>
     )
-  } else if (data.kind === 'train') {
+  } else if (kind === 'train') {
     return (
       <>
         <div className={styles.mobilityRoute}>
@@ -151,7 +94,7 @@ export function renderMobilityEntry (data, item, maxLen, styles) {
         </div>
       </>
     )
-  } else if (data.kind === 'parking') {
+  } else if (kind === 'parking') {
     return (
       <>
         {item.priceLevel && (
@@ -183,21 +126,50 @@ export function renderMobilityEntry (data, item, maxLen, styles) {
 }
 
 export default function Bus () {
-  const data = useMobilityData()
+  const time = useTime()
+  const [kind, setKind] = useState(null)
+  const [station, setStation] = useState(null)
+  const [data, setData] = useState(null)
 
-  function changeMobilityKind (newKind) {
-    if (newKind === 'bus') {
-      data.setStation(bus.defaultStation)
-    } else if (newKind === 'train') {
-      data.setStation(train.defaultStation)
+  useEffect(() => {
+    const { kind, station } = getMobilitySettings()
+    setKind(kind)
+    setStation(station)
+  }, [])
+
+  useEffect(async () => {
+    try {
+      if (kind) {
+        localStorage.mobilityKind = kind
+        setData(null)
+        setData(await getMobilityEntries(kind, station))
+      } else {
+        delete localStorage.mobilityKind
+      }
+      if (station) {
+        localStorage.mobilityStation = station
+      } else {
+        delete localStorage.mobilityStation
+      }
+    } catch (e) {
+      alert(e.message)
     }
+  }, [kind, station, time])
 
-    data.setKind(newKind)
-  }
+  useEffect(() => {
+    switch (kind) {
+      case 'bus':
+        setStation(station || stations.bus.defaultStation)
+        break
+      case 'train':
+        setStation(station || stations.train.defaultStation)
+        break
+    }
+  }, [kind])
 
   return (
     <>
-      <AppNavbar title={data.label} />
+      <AppNavbar title={getMobilityLabel(kind, station)} />
 
       <AppBody>
         <Form className={styles.stationForm}>
@@ -207,25 +179,25 @@ export default function Bus () {
             </Form.Label>
             <Form.Control
               as="select"
-              value={data.kind}
-              onChange={e => changeMobilityKind(e.target.value)}
+              value={kind}
+              onChange={e => { setKind(e.target.value); setStation(stations[e.target.value].defaultStation) }}
             >
               <option value="bus">Bus</option>
               <option value="train">Zug</option>
               <option value="parking">Auto</option>
             </Form.Control>
           </Form.Group>
-          {data.kind !== 'parking' && (
+          {kind !== 'parking' && (
             <Form.Group>
               <Form.Label>
                 Station
               </Form.Label>
               <Form.Control
                 as="select"
-                value={data.station || ''}
-                onChange={e => data.setStation(e.target.value)}
+                value={station || ''}
+                onChange={e => setStation(e.target.value)}
               >
-                {(data.kind === 'bus' ? bus.stations : train.stations).map(station =>
+                {kind && stations[kind].stations.map(station =>
                   <option key={station.id} value={station.id}>{station.name}</option>
                 )}
               </Form.Control>
@@ -234,10 +206,10 @@ export default function Bus () {
         </Form>
 
         <ListGroup>
-          <ReactPlaceholder type="text" rows={10} ready={data.data}>
-            {data.data && data.data.map((item, idx) => (
+          <ReactPlaceholder type="text" rows={10} ready={data}>
+            {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                {renderMobilityEntry(data, item, 200, styles)}
+                {renderMobilityEntry(kind, item, 200, styles)}
               </ListGroup.Item>
             ))}
           </ReactPlaceholder>

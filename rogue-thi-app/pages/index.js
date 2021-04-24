@@ -20,7 +20,10 @@ import {
   faBook,
   faPen,
   faCalendarAlt,
-  faUser
+  faUser,
+  faBus,
+  faTrain,
+  faCar
 } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
@@ -28,7 +31,7 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 import { calendar, loadExamList } from './calendar.js'
-import { useMobilityData, renderMobilityEntry } from './mobility.js'
+import { getMobilitySettings, renderMobilityEntry, getMobilityLabel, getMobilityEntries } from './mobility.js'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
@@ -39,6 +42,12 @@ import styles from '../styles/Home.module.css'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 const MAX_STATION_LENGTH = 20
+
+const MOBILITY_ICONS = {
+  bus: faBus,
+  train: faTrain,
+  parking: faCar
+}
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -125,7 +134,9 @@ export default function Home () {
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
-  const mobility = useMobilityData()
+  const [mobility, setMobility] = useState()
+  const [mobilityError, setMobilityError] = useState(null)
+  const [mobilitySettings, setMobilitySettings] = useState({ kind: 'bus', station: 'hochschule' })
 
   // page state
   const [showThemeModal, setShowThemeModal] = useState(false)
@@ -174,6 +185,19 @@ export default function Home () {
       }
     }
   }, [])
+
+  useEffect(() => {
+    setMobilitySettings(getMobilitySettings())
+  }, [])
+
+  useEffect(async () => {
+    try {
+      setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
+    } catch (e) {
+      console.error(e)
+      setMobilityError('Fehler beim Abruf.')
+    }
+  }, [mobilitySettings])
 
   useEffect(async () => {
     if (localStorage.unlockedThemes) {
@@ -304,23 +328,23 @@ export default function Home () {
           </HomeCard>
 
           <HomeCard
-            icon={mobility.icon}
-            title={mobility.label}
+            icon={MOBILITY_ICONS[mobilitySettings.kind]}
+            title={getMobilityLabel(mobilitySettings.kind, mobilitySettings.station)}
             link="/mobility"
           >
-            <ReactPlaceholder type="text" rows={5} ready={mobility.data || mobility.error}>
+            <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
               <ListGroup variant="flush">
-                {mobility.data && mobility.data.slice(0, 4).map((x, i) =>
+                {mobility && mobility.slice(0, 4).map((entry, i) =>
                   <ListGroup.Item key={i} className={styles.mobilityItem}>
-                    {renderMobilityEntry(mobility, x, MAX_STATION_LENGTH, styles)}
+                    {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
                   </ListGroup.Item>
                 )}
-                {mobility.data && mobility.data.length === 0 &&
+                {mobility && mobility.length === 0 &&
                   <ListGroup.Item>
                     Keine Abfahrten in nächster Zeit.
                   </ListGroup.Item>
                 }
-                {mobility.error &&
+                {mobilityError &&
                   <ListGroup.Item>
                     Fehler beim Abruf.
                   </ListGroup.Item>
