@@ -1,7 +1,6 @@
 import AsyncMemoryCache from '../../../lib/cache/async-memory-cache'
 
 const CACHE_TTL = 60 * 1000
-const CACHE_HEADER = 'max-age=60'
 const MIN_REGEX = /(\d+) min/
 const URLS = {
   hochschule: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-THoScu&sid=413',
@@ -37,7 +36,6 @@ function parseDepartureTime (str) {
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Cache-Control', CACHE_HEADER)
   res.end(JSON.stringify(value))
 }
 

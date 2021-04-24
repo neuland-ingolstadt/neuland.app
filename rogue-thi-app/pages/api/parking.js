@@ -1,8 +1,7 @@
 import cheerio from 'cheerio'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 
-const CACHE_TTL = 60 * 1000
-const CACHE_HEADER = 'max-age=60'
+const CACHE_TTL = 10 * 60 * 1000 // 10m
 const URL = 'https://www.ingolstadt.de/parken'
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
@@ -10,7 +9,6 @@ const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Cache-Control', CACHE_HEADER)
   res.end(JSON.stringify(value))
 }
 

@@ -9,12 +9,12 @@ import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 
 const MONTHS = { Januar: 1, Februar: 2, März: 3, April: 4, Mai: 5, Juni: 6, Juli: 7, August: 8, September: 9, Oktober: 10, November: 11, Dezember: 12 }
 
-const TTL = 24 * 60 * 60 * 1000 // 24h
+const CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
 const LOGIN_URL = 'https://moodle.thi.de/login/index.php'
 const EVENT_LIST_URL = 'https://moodle.thi.de/mod/dataform/view.php?id=162869'
 const EVENT_DETAILS_PREFIX = 'https://moodle.thi.de/mod/dataform/view.php'
 
-const cache = new AsyncMemoryCache({ ttl: TTL })
+const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
 function parseLocalDateTime (str) {
   const [, day, month, year, hour, minute] = str.match(/, (\d+). (\w+) (\d+), (\d+):(\d+)$/)

@@ -3,7 +3,6 @@ import { URLSearchParams } from 'url'
 import AsyncMemoryCache from '../../../lib/cache/async-memory-cache'
 
 const CACHE_TTL = 60 * 1000
-const CACHE_HEADER = 'max-age=60'
 const URL = 'https://mobile.bahn.de/bin/mobil/bhftafel.exe/dox?ld=43120&protocol=https:&rt=1&use_realtime_filter=1&'
 const STATIONS = {
   nord: 'Ingolstadt Nord#008003076',
@@ -31,7 +30,6 @@ function dateFromTimestring (str) {
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Cache-Control', CACHE_HEADER)
   res.end(JSON.stringify(value))
 }
 

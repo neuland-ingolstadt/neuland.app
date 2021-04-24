@@ -2,8 +2,7 @@ import xmljs from 'xml-js'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 
-const CACHE_TTL = 60 * 60 * 1000
-const CACHE_HEADER = 'max-age=3600'
+const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
 const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
 
@@ -92,6 +91,5 @@ export default async function handler (req, res) {
 
   res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
-  res.setHeader('Cache-Control', CACHE_HEADER)
   res.end(JSON.stringify(plan))
 }
