@@ -111,8 +111,8 @@ export async function getAllEventDetails (username, password) {
     events.push({
       organizer: details.Verein,
       title: details.Event,
-      begin: parseLocalDateTime(details.Start),
-      end: parseLocalDateTime(details.Ende)
+      begin: details.Start ? parseLocalDateTime(details.Start) : null,
+      end: details.Ende ? parseLocalDateTime(details.Ende) : null
     })
   }
   return events
@@ -136,6 +136,7 @@ export default async function handler (req, res) {
       sendJson(res, 500, 'Moodle credentials not configured')
     }
   } catch (e) {
+    console.error(e)
     sendJson(res, 500, e.message)
   }
 }
