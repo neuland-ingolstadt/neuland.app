@@ -16,10 +16,10 @@ import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { getBusPlan, getTrainPlan, getParkingData } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
-import { formatFriendlyRelativeTime } from '../lib/date-utils'
+import { formatRelativeMinutes } from '../lib/date-utils'
 import stations from '../data/mobility.json'
 
-import styles from '../styles/Bus.module.css'
+import styles from '../styles/Mobility.module.css'
 
 export function getMobilitySettings () {
   return {
@@ -73,10 +73,10 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.route}
         </div>
         <div className={styles.mobilityDestination}>
-          {item.destination.substr(0, maxLen)}
+          {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…' }
         </div>
         <div className={styles.mobilityTime}>
-          {formatFriendlyRelativeTime(new Date(item.time))}
+          {formatRelativeMinutes(new Date(item.time))}
         </div>
       </>
     )
@@ -87,10 +87,10 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.name}
         </div>
         <div className={styles.mobilityDestination}>
-          {item.destination.substr(0, maxLen)}
+          {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…' }
         </div>
         <div className={styles.mobilityTime}>
-          {formatFriendlyRelativeTime(new Date(item.actualTime))}
+          {formatRelativeMinutes(new Date(item.actualTime))}
         </div>
       </>
     )
