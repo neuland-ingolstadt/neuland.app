@@ -42,12 +42,20 @@ import styles from '../styles/Home.module.css'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 const MAX_STATION_LENGTH = 20
-
 const MOBILITY_ICONS = {
   bus: faBus,
   train: faTrain,
   parking: faCar
 }
+const ALL_THEMES = [
+  { name: 'Automatisch', style: 'default' },
+  { name: 'Hell', style: 'light' },
+  { name: 'Dunkel', style: 'dark' },
+  { name: 'Barbie & Ken', style: 'barbie' },
+  { name: 'Retro', style: 'retro' },
+  { name: 'Windows 95', style: '95' },
+  { name: 'Hackerman', style: 'hacker', requiresToken: true }
+]
 
 async function getTimetablePreview (session) {
   const resp = await getTimetable(session, new Date())
@@ -83,16 +91,6 @@ async function getMensaPlanPreview (session) {
   }
 }
 
-const allThemes = [
-  { name: 'Automatisch', style: 'default' },
-  { name: 'Hell', style: 'light' },
-  { name: 'Dunkel', style: 'dark' },
-  { name: 'Barbie & Ken', style: 'barbie' },
-  { name: 'Retro', style: 'retro' },
-  { name: 'Windows 95', style: '95' },
-  { name: 'Hackerman', style: 'hacker', requiresToken: true }
-]
-
 function HomeCard ({ link, icon, title, className, children }) {
   return (
     <Link href={link}>
@@ -124,34 +122,10 @@ HomeCard.propTypes = {
   children: PropTypes.any
 }
 
-export default function Home () {
+function TimetableCard () {
   const router = useRouter()
-  const time = useTime()
-
-  // dynamic widget data
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
-  const [mensaPlan, setMensaPlan] = useState(null)
-  const [mensaPlanError, setMensaPlanError] = useState(null)
-  const [mixedCalendar, setMixedCalendar] = useState(calendar)
-  const [mobility, setMobility] = useState()
-  const [mobilityError, setMobilityError] = useState(null)
-  const [mobilitySettings, setMobilitySettings] = useState({ kind: 'bus', station: 'hochschule' })
-
-  // page state
-  const [showThemeModal, setShowThemeModal] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
-  const [unlockedThemes, setUnlockedThemes] = useState([])
-  const [showDebug, setShowDebug] = useState(false)
-
-  useEffect(async () => {
-    try {
-      setMensaPlan(await getMensaPlanPreview())
-    } catch (e) {
-      console.error(e)
-      setMensaPlanError(e)
-    }
-  }, [])
 
   useEffect(async () => {
     try {
@@ -166,6 +140,138 @@ export default function Home () {
       }
     }
   }, [])
+
+  return (
+    <HomeCard
+      icon={faCalendarMinus}
+      title="Stundenplan"
+      link="/timetable"
+    >
+      <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
+        <ListGroup variant="flush">
+        {timetable && timetable.map((x, i) =>
+          <ListGroup.Item key={i}>
+            <div>
+              {x.veranstaltung}, {x.raum}
+            </div>
+            <div className="text-muted">
+              {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
+            </div>
+          </ListGroup.Item>
+        )}
+        {timetable && timetable.length === 0 &&
+          <ListGroup.Item>
+            Dein Stundenplan ist leer.
+          </ListGroup.Item>
+        }
+        {timetableError &&
+          <ListGroup.Item>
+            Fehler beim Abruf des Stundenplans.
+          </ListGroup.Item>
+        }
+        </ListGroup>
+      </ReactPlaceholder>
+    </HomeCard>
+  )
+}
+
+function MensaCard () {
+  const [mensaPlan, setMensaPlan] = useState(null)
+  const [mensaPlanError, setMensaPlanError] = useState(null)
+
+  useEffect(async () => {
+    try {
+      setMensaPlan(await getMensaPlanPreview())
+    } catch (e) {
+      console.error(e)
+      setMensaPlanError(e)
+    }
+  }, [])
+
+  return (
+    <HomeCard
+      icon={faUtensils}
+      title="Mensa"
+      link="/mensa"
+      className="desktop-only"
+    >
+      <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
+        <ListGroup variant="flush">
+          {mensaPlan && mensaPlan.map((x, i) =>
+            <ListGroup.Item key={i}>
+              {x}
+            </ListGroup.Item>
+          )}
+          {mensaPlan && mensaPlan.length === 0 &&
+            <ListGroup.Item>
+              Der Speiseplan ist leer.
+            </ListGroup.Item>
+          }
+          {mensaPlanError &&
+            <ListGroup.Item>
+              Fehler beim Abruf des Speiseplans.<br />
+              Die Mensa mag gerade nicht. :(
+            </ListGroup.Item>
+          }
+        </ListGroup>
+      </ReactPlaceholder>
+    </HomeCard>
+
+  )
+}
+
+function MobilityCard () {
+  const time = useTime()
+  const [mobility, setMobility] = useState()
+  const [mobilityError, setMobilityError] = useState(null)
+  const [mobilitySettings, setMobilitySettings] = useState({ kind: 'bus', station: 'hochschule' })
+
+  useEffect(() => {
+    setMobilitySettings(getMobilitySettings())
+  }, [])
+
+  useEffect(async () => {
+    try {
+      setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
+    } catch (e) {
+      console.error(e)
+      setMobilityError('Fehler beim Abruf.')
+    }
+  }, [mobilitySettings, time])
+
+  return (
+    <HomeCard
+      icon={MOBILITY_ICONS[mobilitySettings.kind]}
+      title={getMobilityLabel(mobilitySettings.kind, mobilitySettings.station)}
+      link="/mobility"
+    >
+      <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
+        <ListGroup variant="flush">
+          {mobility && mobility.slice(0, 4).map((entry, i) =>
+            <ListGroup.Item key={i} className={styles.mobilityItem}>
+              {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
+            </ListGroup.Item>
+          )}
+          {mobility && mobility.length === 0 &&
+            <ListGroup.Item>
+              Keine Abfahrten in nächster Zeit.
+            </ListGroup.Item>
+          }
+          {mobilityError &&
+            <ListGroup.Item>
+              Fehler beim Abruf.
+            </ListGroup.Item>
+          }
+        </ListGroup>
+      </ReactPlaceholder>
+    </HomeCard>
+  )
+}
+
+function CalendarCard () {
+  const router = useRouter()
+  const time = useTime()
+  const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
   useEffect(async () => {
     try {
@@ -186,18 +292,38 @@ export default function Home () {
     }
   }, [])
 
-  useEffect(() => {
-    setMobilitySettings(getMobilitySettings())
-  }, [])
+  return (
+    <HomeCard
+      icon={faCalendarAlt}
+      title="Termine"
+      link="/calendar"
+    >
+      <ListGroup variant="flush">
+        {mixedCalendar && mixedCalendar.slice(0, 2).map((x, i) => (
+          <ListGroup.Item key={i}>
+            <div>
+              {x.name}
+            </div>
+            <div className="text-muted">
+              {(x.end && x.begin < time)
+                ? 'bis ' + formatFriendlyRelativeTime(x.end)
+                : formatFriendlyRelativeTime(x.begin)}
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </HomeCard>
+  )
+}
 
-  useEffect(async () => {
-    try {
-      setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
-    } catch (e) {
-      console.error(e)
-      setMobilityError('Fehler beim Abruf.')
-    }
-  }, [mobilitySettings])
+export default function Home () {
+  const router = useRouter()
+
+  // page state
+  const [showThemeModal, setShowThemeModal] = useState(false)
+  const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
+  const [unlockedThemes, setUnlockedThemes] = useState([])
+  const [showDebug, setShowDebug] = useState(false)
 
   useEffect(async () => {
     if (localStorage.unlockedThemes) {
@@ -247,7 +373,7 @@ export default function Home () {
             </Modal.Header>
             <Modal.Body>
               <Form>
-                {allThemes.map((theme, i) => (
+                {ALL_THEMES.map((theme, i) => (
                   <Button
                   key={i}
                     id={`theme-${i}`}
@@ -268,111 +394,13 @@ export default function Home () {
             </Modal.Body>
           </Modal>
 
-          <HomeCard
-            icon={faCalendarMinus}
-            title="Stundenplan"
-            link="/timetable"
-          >
-            <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
-              <ListGroup variant="flush">
-              {timetable && timetable.map((x, i) =>
-                <ListGroup.Item key={i}>
-                  <div>
-                    {x.veranstaltung}, {x.raum}
-                  </div>
-                  <div className="text-muted">
-                    {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
-                  </div>
-                </ListGroup.Item>
-              )}
-              {timetable && timetable.length === 0 &&
-                <ListGroup.Item>
-                  Dein Stundenplan ist leer.
-                </ListGroup.Item>
-              }
-              {timetableError &&
-                <ListGroup.Item>
-                  Fehler beim Abruf des Stundenplans.
-                </ListGroup.Item>
-              }
-              </ListGroup>
-            </ReactPlaceholder>
-          </HomeCard>
+          <TimetableCard />
 
-          <HomeCard
-            icon={faUtensils}
-            title="Mensa"
-            link="/mensa"
-            className="desktop-only"
-          >
-            <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
-              <ListGroup variant="flush">
-                {mensaPlan && mensaPlan.map((x, i) =>
-                  <ListGroup.Item key={i}>
-                    {x}
-                  </ListGroup.Item>
-                )}
-                {mensaPlan && mensaPlan.length === 0 &&
-                  <ListGroup.Item>
-                    Der Speiseplan ist leer.
-                  </ListGroup.Item>
-                }
-                {mensaPlanError &&
-                  <ListGroup.Item>
-                    Fehler beim Abruf des Speiseplans.<br />
-                    Die Mensa mag gerade nicht. :(
-                  </ListGroup.Item>
-                }
-              </ListGroup>
-            </ReactPlaceholder>
-          </HomeCard>
+          <MensaCard />
 
-          <HomeCard
-            icon={MOBILITY_ICONS[mobilitySettings.kind]}
-            title={getMobilityLabel(mobilitySettings.kind, mobilitySettings.station)}
-            link="/mobility"
-          >
-            <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
-              <ListGroup variant="flush">
-                {mobility && mobility.slice(0, 4).map((entry, i) =>
-                  <ListGroup.Item key={i} className={styles.mobilityItem}>
-                    {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
-                  </ListGroup.Item>
-                )}
-                {mobility && mobility.length === 0 &&
-                  <ListGroup.Item>
-                    Keine Abfahrten in nächster Zeit.
-                  </ListGroup.Item>
-                }
-                {mobilityError &&
-                  <ListGroup.Item>
-                    Fehler beim Abruf.
-                  </ListGroup.Item>
-                }
-              </ListGroup>
-            </ReactPlaceholder>
-          </HomeCard>
+          <MobilityCard />
 
-          <HomeCard
-            icon={faCalendarAlt}
-            title="Termine"
-            link="/calendar"
-          >
-            <ListGroup variant="flush">
-              {mixedCalendar && mixedCalendar.slice(0, 2).map((x, i) => (
-                <ListGroup.Item key={i}>
-                  <div>
-                    {x.name}
-                  </div>
-                  <div className="text-muted">
-                    {(x.end && x.begin < time)
-                      ? 'bis ' + formatFriendlyRelativeTime(x.end)
-                      : formatFriendlyRelativeTime(x.begin)}
-                  </div>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </HomeCard>
+          <CalendarCard />
 
           <HomeCard
             icon={faDoorOpen}
