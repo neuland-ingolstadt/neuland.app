@@ -34,9 +34,9 @@ export function getMobilityLabel (kind, station) {
     return `Bus (${entry ? entry.name : '?'})`
   } else if (kind === 'train') {
     const entry = stations.train.stations.find(x => x.id === station)
-    return `Zug (${entry ? entry.name : '?'})`
+    return `Bahn (${entry ? entry.name : '?'})`
   } else if (kind === 'parking') {
-    return 'Freie Parkplätze'
+    return 'Parkplätze'
   } else {
     return 'Mobilität'
   }
@@ -181,7 +181,7 @@ export default function Bus () {
         <Form className={styles.stationForm}>
           <Form.Group>
             <Form.Label>
-              Transportmittel
+              Verkehrsmittel
             </Form.Label>
             <Form.Control
               as="select"
@@ -189,14 +189,14 @@ export default function Bus () {
               onChange={e => changeKind(e.target.value)}
             >
               <option value="bus">Bus</option>
-              <option value="train">Zug</option>
+              <option value="train">Bahn</option>
               <option value="parking">Auto</option>
             </Form.Control>
           </Form.Group>
           {kind !== 'parking' && (
             <Form.Group>
               <Form.Label>
-                Station
+                Bahnhof / Haltestelle
               </Form.Label>
               <Form.Control
                 as="select"
