@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -222,15 +222,26 @@ function MensaCard () {
 
 function MobilityCard () {
   const time = useTime()
-  const [mobility, setMobility] = useState()
+  const [mobility, setMobility] = useState(null)
   const [mobilityError, setMobilityError] = useState(null)
-  const [mobilitySettings, setMobilitySettings] = useState({ kind: 'bus', station: 'hochschule' })
+  const [mobilitySettings, setMobilitySettings] = useState(null)
+
+  const mobilityIcon = useMemo(() => {
+    return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
+  }, [mobilitySettings])
+  const mobilityLabel = useMemo(() => {
+    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station) : 'Mobilität'
+  }, [mobilitySettings])
 
   useEffect(() => {
     setMobilitySettings(getMobilitySettings())
   }, [])
 
   useEffect(async () => {
+    if (!mobilitySettings) {
+      return
+    }
+
     try {
       setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
     } catch (e) {
@@ -241,8 +252,8 @@ function MobilityCard () {
 
   return (
     <HomeCard
-      icon={MOBILITY_ICONS[mobilitySettings.kind]}
-      title={getMobilityLabel(mobilitySettings.kind, mobilitySettings.station)}
+      icon={mobilityIcon}
+      title={mobilityLabel}
       link="/mobility"
     >
       <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
