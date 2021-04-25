@@ -60,7 +60,6 @@ export default function BecomeHackerman () {
       unlocked.push('hacker')
       localStorage.unlockedThemes = JSON.stringify(unlocked)
 
-      localStorage.theme = 'hacker'
       router.push('/')
     } catch (e) {
       setFlagError(e.message)

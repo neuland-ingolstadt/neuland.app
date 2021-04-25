@@ -18,3 +18,8 @@
   color: gray;
   text-align: right;
 }
+
+.wideModal {
+  width: 60vw;
+  max-width: none !important;
+}

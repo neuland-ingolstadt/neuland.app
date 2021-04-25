@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import DOMPurify from 'dompurify'
 
 import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
@@ -16,9 +19,7 @@ import styles from '../styles/Timetable.module.css'
 async function getFriendlyTimetable () {
   const [today] = new Date().toISOString().split('T')
 
-  const { timetable } = await callWithSession(
-    async session => await getTimetable(session, new Date())
-  )
+  const { timetable } = await callWithSession(session => getTimetable(session, new Date(), true))
 
   // get all available dates
   const dates = timetable
@@ -45,6 +46,7 @@ async function getFriendlyTimetable () {
 export default function Timetable () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
+  const [focusedEntry, setFocusedEntry] = useState(null)
 
   useEffect(async () => {
     try {
@@ -59,11 +61,67 @@ export default function Timetable () {
     }
   }, [])
 
+  function getEntryName (item) {
+    if (/[A-Z -]+/.test(item.veranstaltung.replace(item.fach, ''))) {
+      return item.fach
+    } else if (item.veranstaltung.indexOf(item.fach) !== -1) {
+      return item.veranstaltung
+    } else {
+      return `${item.veranstaltung} - ${item.fach}`
+    }
+  }
+
   return (
     <>
       <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
 
       <AppBody>
+        <Modal dialogClassName={styles.wideModal} show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
+          <Modal.Header closeButton>
+            <Modal.Title>{focusedEntry && getEntryName(focusedEntry)}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h3>Allgemein</h3>
+            <p>
+              <strong>Dozent</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>Prüfung</strong>: {focusedEntry && focusedEntry.pruefung}<br />
+              <strong>Studiengang</strong>: {focusedEntry && focusedEntry.stg}<br />
+              <strong>Studiengruppe</strong>: {focusedEntry && focusedEntry.stgru}<br />
+              <strong>Semesterwochenstunden</strong>: {focusedEntry && focusedEntry.sws}<br />
+              <strong>ECTS</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
+            </p>
+
+            <h3>Ziel</h3>
+            {focusedEntry && focusedEntry.ziel && (
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
+            )}
+            {focusedEntry && !focusedEntry.ziel && (
+              <p>Keine Angabe</p>
+            )}
+
+            <h3>Inhalt</h3>
+            {focusedEntry && focusedEntry.inhalt && (
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
+            )}
+            {focusedEntry && !focusedEntry.inhalt && (
+              <p>Keine Angabe</p>
+            )}
+
+            <h3>Literatur</h3>
+            {focusedEntry && focusedEntry.literatur && (
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
+            )}
+            {focusedEntry && !focusedEntry.literatur && (
+              <p>Keine Angabe</p>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
+              Schließen
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
           {timetable && timetable.map((group, idx) =>
             <ListGroup key={idx}>
@@ -72,12 +130,10 @@ export default function Timetable () {
               </h4>
 
               {group.items.map((item, idx) =>
-                <ListGroup.Item key={idx} className={styles.item}>
+                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)}>
                   <div className={styles.left}>
                     <div className={styles.name}>
-                      {item.veranstaltung.indexOf(item.fach) !== -1
-                        ? item.veranstaltung
-                        : `${item.veranstaltung} - ${item.fach}`}
+                      {getEntryName(item)}
                     </div>
                     <div className={styles.room}>
                       {item.raum}
