@@ -76,12 +76,12 @@ export default function Timetable () {
       <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
 
       <AppBody>
-        <Modal dialogClassName={styles.wideModal} show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
+        <Modal size="lg" show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
           <Modal.Header closeButton>
             <Modal.Title>{focusedEntry && getEntryName(focusedEntry)}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h3>Allgemein</h3>
+            <h5>Allgemein</h5>
             <p>
               <strong>Dozent</strong>: {focusedEntry && focusedEntry.dozent}<br />
               <strong>Prüfung</strong>: {focusedEntry && focusedEntry.pruefung}<br />
@@ -91,7 +91,7 @@ export default function Timetable () {
               <strong>ECTS</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
             </p>
 
-            <h3>Ziel</h3>
+            <h5>Ziel</h5>
             {focusedEntry && focusedEntry.ziel && (
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
             )}
@@ -99,7 +99,7 @@ export default function Timetable () {
               <p>Keine Angabe</p>
             )}
 
-            <h3>Inhalt</h3>
+            <h5>Inhalt</h5>
             {focusedEntry && focusedEntry.inhalt && (
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
             )}
@@ -107,7 +107,7 @@ export default function Timetable () {
               <p>Keine Angabe</p>
             )}
 
-            <h3>Literatur</h3>
+            <h5>Literatur</h5>
             {focusedEntry && focusedEntry.literatur && (
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
             )}
@@ -130,7 +130,7 @@ export default function Timetable () {
               </h4>
 
               {group.items.map((item, idx) =>
-                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)}>
+                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
                   <div className={styles.left}>
                     <div className={styles.name}>
                       {getEntryName(item)}
