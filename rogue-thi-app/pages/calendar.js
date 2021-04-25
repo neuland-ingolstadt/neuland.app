@@ -12,7 +12,7 @@ import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
 import { getCampusliveEvents } from '../lib/reimplemented-api-client'
-import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
+import { formatFriendlyDateTime, formatFriendlyRelativeTime, formatFriendlyDateRange, formatFriendlyDateTimeRange } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
 import rawCalendar from '../data/calendar.json'
@@ -159,11 +159,7 @@ export default function Calendar () {
                   {item.title}<br />
                   <div className={styles.details}>
                     {item.organizer} <br />
-                    {item.begin && formatFriendlyDateTime(item.begin)}
-                    {item.end && <>
-                      {' '}&ndash;{' '}
-                      {formatFriendlyDateTime(item.end)}
-                    </>}
+                    {item.begin && formatFriendlyDateTimeRange(item.begin, item.end)}
                   </div>
 
                 </div>
@@ -188,14 +184,8 @@ export default function Calendar () {
                 {item.name}<br />
                 <div className={styles.details}>
                   {item.hasHours
-                    ? formatFriendlyDateTime(item.begin)
-                    : formatFriendlyDate(item.begin)}
-                  {item.end && <>
-                    {' '}&ndash;{' '}
-                    {item.hasHours
-                      ? formatFriendlyDateTime(item.end)
-                      : formatFriendlyDate(item.end)}
-                  </>}
+                    ? formatFriendlyDateTimeRange(item.begin, item.end)
+                    : formatFriendlyDateRange(item.begin, item.end)}
                 </div>
 
               </div>

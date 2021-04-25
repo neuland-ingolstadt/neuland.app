@@ -129,6 +129,32 @@ export function formatRelativeMinutes (datetime) {
 }
 
 /**
+ * Formats a date range like "1.10.2021 - 2.10.2021"
+ */
+export function formatFriendlyDateRange (begin, end) {
+  let str = formatFriendlyDate(begin)
+  if (end && begin.toDateString() !== end.toDateString()) {
+    str += ' – ' + formatFriendlyDate(end)
+  }
+  return str
+}
+
+/**
+ * Formats a date range like "1.10.2021 08:00 – 12:00" or "1.10.2021 08:00 – 2.10.2021 08:00"
+ */
+export function formatFriendlyDateTimeRange (begin, end) {
+  let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
+  if (end) {
+    if (begin.toDateString() === end.toDateString()) {
+      str += ' – ' + formatFriendlyTime(end)
+    } else {
+      str += ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
+    }
+  }
+  return str
+}
+
+/**
  * Formats a date like "2020-10-01"
  */
 export function formatISODate (date) {
