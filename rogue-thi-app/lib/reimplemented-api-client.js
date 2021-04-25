@@ -37,3 +37,13 @@ export async function getParkingData () {
     throw new Error('API returned an error: ' + await resp.text())
   }
 }
+
+export async function getCampusliveEvents () {
+  const resp = await fetch('/api/events')
+
+  if (resp.status === 200) {
+    return await resp.json()
+  } else {
+    throw new Error('API returned an error: ' + await resp.text())
+  }
+}

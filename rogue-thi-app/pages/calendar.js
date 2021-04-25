@@ -11,6 +11,7 @@ import AppNavbar from '../components/AppNavbar'
 import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
+import { getCampusliveEvents } from '../lib/reimplemented-api-client'
 import { formatFriendlyDate, formatFriendlyDateTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
@@ -51,6 +52,7 @@ export default function Calendar () {
   const router = useRouter()
   const now = useTime()
   const [exams, setExams] = useState(null)
+  const [events, setEvents] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
   useEffect(async () => {
@@ -67,6 +69,21 @@ export default function Calendar () {
         alert(e)
       }
     }
+  }, [])
+
+  useEffect(async () => {
+    const campusliveEvents = await getCampusliveEvents()
+
+    const newEvents = campusliveEvents
+      .map(x => ({
+        ...x,
+        begin: x.begin ? new Date(x.begin) : null,
+        end: x.end ? new Date(x.end) : null
+      }))
+      .sort((a, b) => a.end - b.end)
+      .sort((a, b) => a.begin - b.begin)
+
+    setEvents(newEvents)
   }, [])
 
   return (
@@ -102,7 +119,7 @@ export default function Calendar () {
             Prüfungen
           </h4>
 
-          <ReactPlaceholder type="text" rows={10} ready={exams}>
+          <ReactPlaceholder type="text" rows={4} ready={exams}>
             {exams && exams.length === 0 && (
               <ListGroup>
                 <ListGroup.Item>
@@ -132,7 +149,37 @@ export default function Calendar () {
 
         <ListGroup>
           <h4 className={styles.heading}>
-            Termine
+            Veranstaltungen
+          </h4>
+
+          <ReactPlaceholder type="text" rows={10} ready={events}>
+            {events && events.map((item, idx) =>
+              <ListGroup.Item key={idx} className={styles.item}>
+                <div className={styles.left}>
+                  {item.title}<br />
+                  <div className={styles.details}>
+                    {item.organizer} <br />
+                    {item.begin && formatFriendlyDateTime(item.begin)}
+                    {item.end && <>
+                      {' '}&ndash;{' '}
+                      {formatFriendlyDateTime(item.end)}
+                    </>}
+                  </div>
+
+                </div>
+                <div className={styles.details}>
+                  {(item.end && item.begin < now)
+                    ? 'Bis ' + formatFriendlyRelativeTime(item.end)
+                    : formatFriendlyRelativeTime(item.begin)}
+                </div>
+              </ListGroup.Item>
+            )}
+          </ReactPlaceholder>
+        </ListGroup>
+
+        <ListGroup>
+          <h4 className={styles.heading}>
+            Semestertermine
           </h4>
 
           {calendar.map((item, idx) =>

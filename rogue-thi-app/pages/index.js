@@ -285,22 +285,24 @@ function CalendarCard () {
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
   useEffect(async () => {
+    let examList = []
     try {
-      const examList = await callWithSession(loadExamList)
-      const examEntries = examList.map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
-      const combined = [...calendar, ...examEntries]
-      combined.sort((a, b) => a.begin - b.begin)
-      setMixedCalendar(combined)
+      examList = await callWithSession(loadExamList)
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
       } else if (e.message === 'Query not possible') {
-        setMixedCalendar(calendar)
+        // ignore, leaving examList empty
       } else {
         console.error(e)
         alert(e)
       }
     }
+
+    const examEntries = examList.map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
+    const combined = [...calendar, ...examEntries]
+    combined.sort((a, b) => a.begin - b.begin)
+    setMixedCalendar(combined)
   }, [])
 
   return (
