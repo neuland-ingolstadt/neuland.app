@@ -81,7 +81,7 @@ export async function getPersonalData (session) {
 }
 
 export async function getTimetable (session, date, detailed = false) {
-  const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}`
+  const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${detailed}`
   const res = await cachedThiApiRequest(key, {
     service: 'thiapp',
     method: 'stpl',

@@ -16,10 +16,10 @@ import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 import styles from '../styles/Timetable.module.css'
 
-async function getFriendlyTimetable () {
+async function getFriendlyTimetable (detailed) {
   const [today] = new Date().toISOString().split('T')
 
-  const { timetable } = await callWithSession(session => getTimetable(session, new Date(), true))
+  const { timetable } = await callWithSession(session => getTimetable(session, new Date(), detailed))
 
   // get all available dates
   const dates = timetable
@@ -47,10 +47,37 @@ export default function Timetable () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
+  const [isDetailedData, setIsDetailedData] = useState(false)
 
   useEffect(async () => {
+    // we need to load data only if we have not done it yet or if we have no
+    // detailed data but want to display an entry in detail
+    if (timetable && (!focusedEntry || isDetailedData)) {
+      return
+    }
+
     try {
-      setTimetable(await getFriendlyTimetable(router))
+      const detailed = !!focusedEntry
+      const data = await getFriendlyTimetable(detailed)
+      setTimetable(data)
+      setIsDetailedData(detailed)
+
+      if (focusedEntry) {
+        // find the focused entry in the new data
+        const detailedEntry = data
+          .map(group => group.items.find(x =>
+            x.datum === focusedEntry.datum &&
+            x.veranstaltung === focusedEntry.veranstaltung)
+          )
+          .find(x => x)
+
+        if (detailedEntry) {
+          setFocusedEntry(detailedEntry)
+        } else {
+          // just keep the old entry. The user wont see goals, content or literature
+          console.error('could not find the focused timetable entry in new detailed data')
+        }
+      }
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
@@ -59,7 +86,7 @@ export default function Timetable () {
         alert(e)
       }
     }
-  }, [])
+  }, [focusedEntry])
 
   function getEntryName (item) {
     if (/[A-Z -]+/.test(item.veranstaltung.replace(item.fach, ''))) {
@@ -92,28 +119,34 @@ export default function Timetable () {
             </p>
 
             <h5>Ziel</h5>
-            {focusedEntry && focusedEntry.ziel && (
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
-            )}
-            {focusedEntry && !focusedEntry.ziel && (
-              <p>Keine Angabe</p>
-            )}
+            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+              {focusedEntry && focusedEntry.ziel && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
+              )}
+              {focusedEntry && !focusedEntry.ziel && (
+                <p>Keine Angabe</p>
+              )}
+            </ReactPlaceholder>
 
             <h5>Inhalt</h5>
-            {focusedEntry && focusedEntry.inhalt && (
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
-            )}
-            {focusedEntry && !focusedEntry.inhalt && (
-              <p>Keine Angabe</p>
-            )}
+            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+              {focusedEntry && focusedEntry.inhalt && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
+              )}
+              {focusedEntry && !focusedEntry.inhalt && (
+                <p>Keine Angabe</p>
+              )}
+            </ReactPlaceholder>
 
             <h5>Literatur</h5>
-            {focusedEntry && focusedEntry.literatur && (
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
-            )}
-            {focusedEntry && !focusedEntry.literatur && (
-              <p>Keine Angabe</p>
-            )}
+            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+              {focusedEntry && focusedEntry.literatur && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
+              )}
+              {focusedEntry && !focusedEntry.literatur && (
+                <p>Keine Angabe</p>
+              )}
+            </ReactPlaceholder>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
