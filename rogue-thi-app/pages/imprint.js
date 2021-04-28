@@ -63,7 +63,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
             </a>
             <br />
             Instagram:{' '}
-            <a href="https://www.instagram.com/neuland_ingolstadt/">
+            <a href="https://www.instagram.com/neuland_ingolstadt/" target="_blank" rel="noreferrer">
               @neuland_ingolstadt
             </a>
             <br />
