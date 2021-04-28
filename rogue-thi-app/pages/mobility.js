@@ -37,9 +37,9 @@ export function getMobilityLabel (kind, station) {
     const entry = stations.train.stations.find(x => x.id === station)
     return `Bahn (${entry ? entry.name : '?'})`
   } else if (kind === 'parking') {
-    return 'Parkplätze'
+    return 'Freie Parkplätze'
   } else if (kind === 'charging') {
-    return 'Ladestationen'
+    return 'Freie Ladestationen'
   } else {
     return 'Mobilität'
   }
