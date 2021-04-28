@@ -179,20 +179,14 @@ export default function Bus () {
     }
   }, [kind, station, time])
 
-  useEffect(() => {
-    if (kind === 'bus') {
-      setStation(station || stations.bus.defaultStation)
-    } else if (kind === 'train') {
-      setStation(station || stations.train.defaultStation)
+  function changeKind (kind) {
+    setKind(kind)
+    setData(null)
+    if (kind === 'bus' || kind === 'train') {
+      setStation(stations[kind].defaultStation)
     } else {
       setStation(null)
     }
-  }, [kind])
-
-  function changeKind (kind) {
-    setKind(kind)
-    setStation(stations[kind].defaultStation)
-    setData(null)
   }
 
   return (
