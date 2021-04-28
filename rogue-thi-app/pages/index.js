@@ -23,7 +23,8 @@ import {
   faUser,
   faBus,
   faTrain,
-  faCar
+  faCar,
+  faChargingStation
 } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
@@ -45,7 +46,8 @@ const MAX_STATION_LENGTH = 20
 const MOBILITY_ICONS = {
   bus: faBus,
   train: faTrain,
-  parking: faCar
+  parking: faCar,
+  charging: faChargingStation
 }
 const ALL_THEMES = [
   { name: 'Automatisch', style: 'default' },
