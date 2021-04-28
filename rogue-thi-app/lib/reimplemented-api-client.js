@@ -38,6 +38,16 @@ export async function getParkingData () {
   }
 }
 
+export async function getCharingStationData () {
+  const resp = await fetch('/api/charging-stations')
+
+  if (resp.status === 200) {
+    return await resp.json()
+  } else {
+    throw new Error('API returned an error: ' + await resp.text())
+  }
+}
+
 export async function getCampusliveEvents () {
   const resp = await fetch('/api/events')
 

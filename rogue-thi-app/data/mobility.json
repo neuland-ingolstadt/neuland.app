@@ -32,5 +32,13 @@
 		{ "name": "Hallenbad", "priceLevel": 2 },
 		{ "name": "Hauptbahnhof Ost", "priceLevel": 1 },
 		{ "name": "Hauptbahnhof West", "priceLevel": 1 }
+	],
+	"charging": [
+		{ "id": "59362", "freeParking": true },
+		{ "id": "59340", "freeParking": true },
+		{ "id": "59360", "freeParking": true },
+		{ "id": "59358", "freeParking": false },
+		{ "id": "59356", "freeParking": false },
+		{ "id": "59200", "freeParking": false }
 	]
 }

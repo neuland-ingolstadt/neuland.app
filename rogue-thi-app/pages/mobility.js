@@ -6,7 +6,8 @@ import Form from 'react-bootstrap/Form'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faEuroSign
+  faEuroSign,
+  faChargingStation
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faCreativeCommonsNcEu
@@ -14,7 +15,7 @@ import {
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
-import { getBusPlan, getTrainPlan, getParkingData } from '../lib/reimplemented-api-client'
+import { getBusPlan, getTrainPlan, getParkingData, getCharingStationData } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatRelativeMinutes } from '../lib/date-utils'
 import stations from '../data/mobility.json'
@@ -37,6 +38,8 @@ export function getMobilityLabel (kind, station) {
     return `Bahn (${entry ? entry.name : '?'})`
   } else if (kind === 'parking') {
     return 'Parkplätze'
+  } else if (kind === 'charging') {
+    return 'Ladestationen'
   } else {
     return 'Mobilität'
   }
@@ -59,6 +62,14 @@ export async function getMobilityEntries (kind, station) {
         }
       }),
       ...data.filter(x => !stations.parking.find(y => x.name === y.name))
+    ]
+  } else if (kind === 'charging') {
+    const data = await getCharingStationData()
+    return [
+      ...stations.charging
+        .map(x => data.find(y => x.id === y.id))
+        .filter(x => !!x),
+      ...data.filter(x => !stations.charging.find(y => x.id === y.id))
     ]
   } else {
     throw new Error('Invalid mobility kind ' + kind)
@@ -120,6 +131,18 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
         </div>
       </>
     )
+  } else if (kind === 'charging') {
+    return (
+      <>
+        <div className={styles.mobilityDestination}>
+          {item.name}
+        </div>
+        <div className={styles.mobilityTime}>
+          {item.available} / {item.total}
+          {' '}<FontAwesomeIcon icon={faChargingStation} />
+        </div>
+      </>
+    )
   } else {
     throw new Error('Invalid mobility kind')
   }
@@ -157,13 +180,12 @@ export default function Bus () {
   }, [kind, station, time])
 
   useEffect(() => {
-    switch (kind) {
-      case 'bus':
-        setStation(station || stations.bus.defaultStation)
-        break
-      case 'train':
-        setStation(station || stations.train.defaultStation)
-        break
+    if (kind === 'bus') {
+      setStation(station || stations.bus.defaultStation)
+    } else if (kind === 'train') {
+      setStation(station || stations.train.defaultStation)
+    } else {
+      setStation(null)
     }
   }, [kind])
 
@@ -191,9 +213,10 @@ export default function Bus () {
               <option value="bus">Bus</option>
               <option value="train">Bahn</option>
               <option value="parking">Auto</option>
+              <option value="charging">E-Auto</option>
             </Form.Control>
           </Form.Group>
-          {kind !== 'parking' && (
+          {(kind === 'bus' || kind === 'train') && (
             <Form.Group>
               <Form.Label>
                 Bahnhof / Haltestelle
