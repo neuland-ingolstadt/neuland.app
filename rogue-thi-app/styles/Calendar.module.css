@@ -1,5 +1,6 @@
-.heading {
-  margin-top: 20px;
+.container :global(.nav-pills) :global(.nav-item) {
+  flex: 1;
+  text-align: center;
 }
 
 .item {
@@ -17,4 +18,8 @@
 .right {
   color: gray;
   text-align: right;
+}
+
+.tab {
+  padding: 5px 10px;
 }

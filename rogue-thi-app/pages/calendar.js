@@ -5,13 +5,15 @@ import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
-import { getCampusliveEvents } from '../lib/reimplemented-api-client'
+import { getCampusLifeEvents } from '../lib/reimplemented-api-client'
 import { formatFriendlyDateTime, formatFriendlyRelativeTime, formatFriendlyDateRange, formatFriendlyDateTimeRange } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
@@ -72,9 +74,9 @@ export default function Calendar () {
   }, [])
 
   useEffect(async () => {
-    const campusliveEvents = await getCampusliveEvents()
+    const campusLifeEvents = await getCampusLifeEvents()
 
-    const newEvents = campusliveEvents
+    const newEvents = campusLifeEvents
       .map(x => ({
         ...x,
         begin: x.begin ? new Date(x.begin) : null,
@@ -90,7 +92,7 @@ export default function Calendar () {
     <>
       <AppNavbar title="Termine" />
 
-      <AppBody>
+      <AppBody className={styles.container}>
         <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
           <Modal.Header closeButton>
             <Modal.Title>{focusedExam && focusedExam.titel}</Modal.Title>
@@ -114,90 +116,86 @@ export default function Calendar () {
           </Modal.Footer>
         </Modal>
 
-        <ListGroup>
-          <h4 className={styles.heading}>
-            Prüfungen
-          </h4>
+        <Tabs
+          defaultActiveKey="semester"
+          variant="pills"
+        >
+          <Tab tabClassName={styles.tab} eventKey="semester" title="Semester">
+            <ListGroup variant="flush">
+              {calendar.map((item, idx) =>
+                <ListGroup.Item key={idx} className={styles.item}>
+                  <div className={styles.left}>
+                    {item.name}<br />
+                    <div className={styles.details}>
+                      {item.hasHours
+                        ? formatFriendlyDateTimeRange(item.begin, item.end)
+                        : formatFriendlyDateRange(item.begin, item.end)}
+                    </div>
 
-          <ReactPlaceholder type="text" rows={4} ready={exams}>
-            {exams && exams.length === 0 && (
-              <ListGroup>
-                <ListGroup.Item>
-                  Es sind derzeit keine Prüfungstermine verfügbar.
+                  </div>
+                  <div className={styles.details}>
+                    {(item.end && item.begin < now)
+                      ? 'bis ' + formatFriendlyRelativeTime(item.end)
+                      : formatFriendlyRelativeTime(item.begin)}
+                  </div>
                 </ListGroup.Item>
-              </ListGroup>
-            )}
-            {exams && exams.map((item, idx) =>
-              <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
-                <div className={styles.left}>
-                  {item.titel} ({item.stg})<br />
+              )}
+            </ListGroup>
+          </Tab>
 
-                  <div className={styles.details}>
-                    {item.date && <>
-                      {formatFriendlyDateTime(item.date)}
-                      {' '}({formatFriendlyRelativeTime(item.date)})
-                      <br />
-                    </>}
-                    Raum: {item.exam_rooms || 'TBD'}<br />
-                    {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
-                  </div>
-                </div>
-              </ListGroup.Item>
-            )}
-          </ReactPlaceholder>
-        </ListGroup>
+          <Tab tabClassName={styles.tab} eventKey="exams" title="Prüfungen">
+            <ListGroup variant="flush">
+              <ReactPlaceholder type="text" rows={4} ready={exams}>
+                {exams && exams.length === 0 && (
+                  <ListGroup.Item>
+                    Es sind derzeit keine Prüfungstermine verfügbar.
+                  </ListGroup.Item>
+                )}
+                {exams && exams.map((item, idx) =>
+                  <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
+                    <div className={styles.left}>
+                      {item.titel} ({item.stg})<br />
 
-        <ListGroup>
-          <h4 className={styles.heading}>
-            Veranstaltungen
-          </h4>
+                      <div className={styles.details}>
+                        {item.date && <>
+                          {formatFriendlyDateTime(item.date)}
+                          {' '}({formatFriendlyRelativeTime(item.date)})
+                          <br />
+                        </>}
+                        Raum: {item.exam_rooms || 'TBD'}<br />
+                        {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
+                      </div>
+                    </div>
+                  </ListGroup.Item>
+                )}
+              </ReactPlaceholder>
+            </ListGroup>
+          </Tab>
 
-          <ReactPlaceholder type="text" rows={10} ready={events}>
-            {events && events.map((item, idx) =>
-              <ListGroup.Item key={idx} className={styles.item}>
-                <div className={styles.left}>
-                  {item.title}<br />
-                  <div className={styles.details}>
-                    {item.organizer} <br />
-                    {item.begin && formatFriendlyDateTimeRange(item.begin, item.end)}
-                  </div>
+          <Tab tabClassName={styles.tab} eventKey="events" title="Veranstaltungen">
+            <ListGroup variant="flush">
+              <ReactPlaceholder type="text" rows={10} ready={events}>
+                {events && events.map((item, idx) =>
+                  <ListGroup.Item key={idx} className={styles.item}>
+                    <div className={styles.left}>
+                      {item.title}<br />
+                      <div className={styles.details}>
+                        {item.organizer} <br />
+                        {item.begin && formatFriendlyDateTimeRange(item.begin, item.end)}
+                      </div>
 
-                </div>
-                <div className={styles.details}>
-                  {(item.end && item.begin < now)
-                    ? 'Bis ' + formatFriendlyRelativeTime(item.end)
-                    : formatFriendlyRelativeTime(item.begin)}
-                </div>
-              </ListGroup.Item>
-            )}
-          </ReactPlaceholder>
-        </ListGroup>
-
-        <ListGroup>
-          <h4 className={styles.heading}>
-            Semestertermine
-          </h4>
-
-          {calendar.map((item, idx) =>
-            <ListGroup.Item key={idx} className={styles.item}>
-              <div className={styles.left}>
-                {item.name}<br />
-                <div className={styles.details}>
-                  {item.hasHours
-                    ? formatFriendlyDateTimeRange(item.begin, item.end)
-                    : formatFriendlyDateRange(item.begin, item.end)}
-                </div>
-
-              </div>
-              <div className={styles.details}>
-                {(item.end && item.begin < now)
-                  ? 'Bis ' + formatFriendlyRelativeTime(item.end)
-                  : formatFriendlyRelativeTime(item.begin)}
-              </div>
-            </ListGroup.Item>
-          )}
-        </ListGroup>
-        <br />
+                    </div>
+                    <div className={styles.details}>
+                      {(item.end && item.begin < now)
+                        ? 'bis ' + formatFriendlyRelativeTime(item.end)
+                        : formatFriendlyRelativeTime(item.begin)}
+                    </div>
+                  </ListGroup.Item>
+                )}
+              </ReactPlaceholder>
+            </ListGroup>
+          </Tab>
+        </Tabs>
       </AppBody>
     </>
   )
