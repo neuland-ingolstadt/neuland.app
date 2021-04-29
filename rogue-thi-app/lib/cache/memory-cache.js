@@ -6,14 +6,14 @@ const CHECK_INTERVAL = 10000
 export default class MemoryCache {
   constructor ({ ttl }) {
     this.ttl = ttl
-    this.cache = {}
+    this.cache = new Map()
     this.interval = setInterval(() => this.checkExpiry(), CHECK_INTERVAL)
   }
 
   checkExpiry () {
     Object.keys(this.cache)
-      .filter(x => this.cache[x].expiry < Date.now())
-      .forEach(x => delete this.cache[x])
+      .filter(x => this.cache.get(x).expiry < Date.now())
+      .forEach(x => this.cache.delete(x))
   }
 
   close () {
@@ -21,11 +21,7 @@ export default class MemoryCache {
   }
 
   get (key) {
-    if (!this.cache.hasOwnProperty(key)) {
-      return undefined
-    }
-
-    const json = this.cache[key]
+    const json = this.cache.get(key)
     if (!json) {
       return undefined
     }
@@ -39,13 +35,13 @@ export default class MemoryCache {
   }
 
   set (key, value) {
-    this.cache[key] = JSON.stringify({
+    this.cache.set(key, JSON.stringify({
       value,
       expiry: Date.now() + this.ttl
-    })
+    }))
   }
 
   flushAll () {
-    this.cache = {}
+    this.cache.clear()
   }
 }
