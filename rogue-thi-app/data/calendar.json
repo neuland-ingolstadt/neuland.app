@@ -15,6 +15,11 @@
     "end": "2021-04-06"
   },
   {
+    "name": "Beantragung Briefwahlunterlagen",
+    "begin": "2021-04-29",
+    "end": "2021-06-01"
+  },
+  {
     "name": "Prüfungsanmeldung",
     "begin": "2021-05-03",
     "end": "2021-05-14"
@@ -37,6 +42,10 @@
   {
     "name": "Vorlesungsfrei (Fronleichnam)",
     "begin": "2021-06-03"
+  },
+  {
+    "name": "Hochschulwahlen",
+    "begin": "2021-06-15"
   },
   {
     "name": "Rückmeldung zum WS 2021/2022",
