@@ -1,4 +1,11 @@
-.container :global(.nav-pills) :global(.nav-item) {
+/* tab bar */
+.container :global(.nav) {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+/* tab bar items */
+.container :global(.nav .nav-item) {
   flex: 1;
   text-align: center;
 }
