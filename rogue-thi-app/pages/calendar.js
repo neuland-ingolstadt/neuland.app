@@ -8,6 +8,9 @@ import Button from 'react-bootstrap/Button'
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import { useTime } from '../lib/time-hook'
@@ -125,13 +128,21 @@ export default function Calendar () {
               {calendar.map((item, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
-                    {item.name}<br />
+                    {item.name}
+                    {item.url &&
+                      <>
+                        {' '}
+                        <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
+                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        </a>
+                      </>
+                    }
+                    <br />
                     <div className={styles.details}>
                       {item.hasHours
                         ? formatFriendlyDateTimeRange(item.begin, item.end)
                         : formatFriendlyDateRange(item.begin, item.end)}
                     </div>
-
                   </div>
                   <div className={styles.details}>
                     {(item.end && item.begin < now)

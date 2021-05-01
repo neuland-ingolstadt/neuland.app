@@ -17,12 +17,14 @@
   {
     "name": "Beantragung Briefwahlunterlagen",
     "begin": "2021-04-29",
-    "end": "2021-06-01"
+    "end": "2021-06-01",
+    "url": "https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin"
   },
   {
     "name": "Prüfungsanmeldung",
     "begin": "2021-05-03",
-    "end": "2021-05-14"
+    "end": "2021-05-14",
+    "url": "https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin"
   },
   {
     "name": "Prüfungsabmeldung",
