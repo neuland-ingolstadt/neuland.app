@@ -128,15 +128,14 @@ export default function Calendar () {
               {calendar.map((item, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
-                    {item.name}
-                    {item.url &&
-                      <>
+                    {!item.url && item.name}
+                    {item.url && (
+                      <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
+                        {item.name}
                         {' '}
-                        <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
-                          <FontAwesomeIcon icon={faExternalLinkAlt} />
-                        </a>
-                      </>
-                    }
+                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                      </a>
+                    )}
                     <br />
                     <div className={styles.details}>
                       {item.hasHours
