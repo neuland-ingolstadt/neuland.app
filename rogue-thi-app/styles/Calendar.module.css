@@ -30,3 +30,7 @@
 .tab {
   padding: 5px 10px;
 }
+
+.eventUrl {
+  color: unset;
+}

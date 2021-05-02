@@ -134,7 +134,7 @@ export default function Calendar () {
                   <div className={styles.left}>
                     {!item.url && item.name}
                     {item.url && (
-                      <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
+                      <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
                         {item.name}
                         {' '}
                         <FontAwesomeIcon icon={faExternalLinkAlt} />
@@ -194,7 +194,7 @@ export default function Calendar () {
                     <div className={styles.left}>
                       {!item.url && item.title}
                       {item.url && (
-                        <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
+                        <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
                           {item.title}
                           {' '}
                           <FontAwesomeIcon icon={faExternalLinkAlt} />
