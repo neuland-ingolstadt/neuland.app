@@ -57,3 +57,13 @@ export async function getCampusLifeEvents () {
     throw new Error('API returned an error: ' + await resp.text())
   }
 }
+
+export async function getThiEvents () {
+  const resp = await fetch('/api/thi-events')
+
+  if (resp.status === 200) {
+    return await resp.json()
+  } else {
+    throw new Error('API returned an error: ' + await resp.text())
+  }
+}

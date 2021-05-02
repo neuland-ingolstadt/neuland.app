@@ -16,7 +16,7 @@ import AppNavbar from '../components/AppNavbar'
 import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
-import { getCampusLifeEvents } from '../lib/reimplemented-api-client'
+import { getCampusLifeEvents, getThiEvents } from '../lib/reimplemented-api-client'
 import { formatFriendlyDateTime, formatFriendlyRelativeTime, formatFriendlyDateRange, formatFriendlyDateTimeRange } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
@@ -77,9 +77,13 @@ export default function Calendar () {
   }, [])
 
   useEffect(async () => {
-    const campusLifeEvents = await getCampusLifeEvents()
+    const [campusLifeEvents, thiEvents] = await Promise.all([
+      getCampusLifeEvents(),
+      getThiEvents()
+    ])
 
     const newEvents = campusLifeEvents
+      .concat(thiEvents)
       .map(x => ({
         ...x,
         begin: x.begin ? new Date(x.begin) : null,
@@ -188,7 +192,14 @@ export default function Calendar () {
                 {events && events.map((item, idx) =>
                   <ListGroup.Item key={idx} className={styles.item}>
                     <div className={styles.left}>
-                      {item.title}<br />
+                      {!item.url && item.title}
+                      {item.url && (
+                        <a href={item.url} className="text-muted" target="_blank" rel="noreferrer">
+                          {item.title}
+                          {' '}
+                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        </a>
+                      )}
                       <div className={styles.details}>
                         {item.organizer} <br />
                         {item.begin && formatFriendlyDateTimeRange(item.begin, item.end)}
