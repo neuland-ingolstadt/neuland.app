@@ -92,8 +92,9 @@ export default function Timetable () {
 
     try {
       const detailed = !!focusedEntry
-      const data = await getFriendlyTimetable(detailed)
-      setTimetable(groupTimetableEntries(data))
+      const ungroupedData = await getFriendlyTimetable(detailed)
+      const data = groupTimetableEntries(ungroupedData)
+      setTimetable(data)
       setIsDetailedData(detailed)
 
       if (focusedEntry) {
