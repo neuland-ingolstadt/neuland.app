@@ -16,10 +16,51 @@ import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
 
 import styles from '../styles/Timetable.module.css'
 
-async function getFriendlyTimetable (detailed) {
-  const [today] = new Date().toISOString().split('T')
+export function getTimetableEntryName (item) {
+  const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
+  if (match) {
+    const [shortName] = match
+    return {
+      name: item.fach,
+      shortName: shortName,
+      fullName: `${shortName} - ${item.fach}`
+    }
+  } else {
+    // fallback for weird entries like
+    //    "veranstaltung": "„Richtige Studienorganisation und Prüfungsplanung“_durchgeführt von CSS und SCS",
+    //    "fach": "fiktiv für Raumbelegung der Verwaltung E",
+    const name = `${item.veranstaltung} - ${item.fach}`
+    const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
+    return {
+      name,
+      shortName,
+      fullName: name
+    }
+  }
+}
 
+export async function getFriendlyTimetable (detailed) {
   const { timetable } = await callWithSession(session => getTimetable(session, new Date(), detailed))
+
+  return timetable
+    .map(x => {
+      // parse dates
+      x.startDate = new Date(`${x.datum}T${x.von}`)
+      x.endDate = new Date(`${x.datum}T${x.bis}`)
+
+      // normalize room order
+      x.raum = x.raum
+        .split(',')
+        .map(x => x.trim().toUpperCase())
+        .sort()
+        .join(', ')
+
+      return x
+    })
+}
+
+function groupTimetableEntries (timetable) {
+  const [today] = new Date().toISOString().split('T')
 
   // get all available dates
   const dates = timetable
@@ -30,14 +71,7 @@ async function getFriendlyTimetable (detailed) {
   // get events for each date
   const groups = dates.map(date => ({
     date: date,
-    items: timetable
-      .filter(x => x.datum === date)
-      .map(x => {
-        // parse dates
-        x.start_date = new Date(`${x.datum}T${x.von}`)
-        x.end_date = new Date(`${x.datum}T${x.bis}`)
-        return x
-      })
+    items: timetable.filter(x => x.datum === date)
   }))
 
   return groups
@@ -59,7 +93,7 @@ export default function Timetable () {
     try {
       const detailed = !!focusedEntry
       const data = await getFriendlyTimetable(detailed)
-      setTimetable(data)
+      setTimetable(groupTimetableEntries(data))
       setIsDetailedData(detailed)
 
       if (focusedEntry) {
@@ -88,16 +122,6 @@ export default function Timetable () {
     }
   }, [focusedEntry])
 
-  function getEntryName (item) {
-    if (/[A-Z -]+/.test(item.veranstaltung.replace(item.fach, ''))) {
-      return item.fach
-    } else if (item.veranstaltung.indexOf(item.fach) !== -1) {
-      return item.veranstaltung
-    } else {
-      return `${item.veranstaltung} - ${item.fach}`
-    }
-  }
-
   return (
     <>
       <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
@@ -105,7 +129,7 @@ export default function Timetable () {
       <AppBody>
         <Modal size="lg" show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
           <Modal.Header closeButton>
-            <Modal.Title>{focusedEntry && getEntryName(focusedEntry)}</Modal.Title>
+            <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <h5>Allgemein</h5>
@@ -166,15 +190,15 @@ export default function Timetable () {
                 <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
                   <div className={styles.left}>
                     <div className={styles.name}>
-                      {getEntryName(item)}
+                      {getTimetableEntryName(item).fullName}
                     </div>
                     <div className={styles.room}>
                       {item.raum}
                     </div>
                   </div>
                   <div className={styles.right}>
-                    {formatFriendlyTime(item.start_date)} <br />
-                    {formatFriendlyTime(item.end_date)}
+                    {formatFriendlyTime(item.startDate)} <br />
+                    {formatFriendlyTime(item.endDate)}
                   </div>
                 </ListGroup.Item>
               )}

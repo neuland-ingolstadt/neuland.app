@@ -31,10 +31,10 @@ import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
-import { calendar, loadExamList } from './calendar.js'
-import { getMobilitySettings, renderMobilityEntry, getMobilityLabel, getMobilityEntries } from './mobility.js'
+import { getTimetableEntryName, getFriendlyTimetable } from './timetable'
+import { calendar, loadExamList } from './calendar'
+import { getMobilitySettings, renderMobilityEntry, getMobilityLabel, getMobilityEntries } from './mobility'
 import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { getMensaPlan } from '../lib/reimplemented-api-client'
 import { formatNearDate, formatFriendlyTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
@@ -58,23 +58,6 @@ const ALL_THEMES = [
   { name: 'Windows 95', style: '95' },
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
-
-async function getTimetablePreview (session) {
-  const resp = await getTimetable(session, new Date())
-  const now = new Date()
-
-  const nextItems = resp.timetable
-    .map(x => {
-      // parse dates
-      x.start_date = new Date(`${x.datum}T${x.von}`)
-      x.end_date = new Date(`${x.datum}T${x.bis}`)
-      return x
-    })
-    .filter(x => x.end_date > now)
-    .sort((a, b) => a.start_date - b.start_date)
-
-  return nextItems.slice(0, 2)
-}
 
 async function getMensaPlanPreview (session) {
   const days = await getMensaPlan()
@@ -131,8 +114,7 @@ function TimetableCard () {
 
   useEffect(async () => {
     try {
-      const timetable = await callWithSession(getTimetablePreview)
-      setTimetable(timetable)
+      setTimetable(await getFriendlyTimetable())
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
@@ -151,13 +133,13 @@ function TimetableCard () {
     >
       <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
         <ListGroup variant="flush">
-        {timetable && timetable.map((x, i) =>
+        {timetable && timetable.slice(0, 2).map((x, i) =>
           <ListGroup.Item key={i}>
             <div>
-              {x.veranstaltung}, {x.raum}
+              {getTimetableEntryName(x).shortName} in {x.raum}
             </div>
             <div className="text-muted">
-              {formatNearDate(x.start_date)} um {formatFriendlyTime(x.start_date)}
+              {formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}
             </div>
           </ListGroup.Item>
         )}
