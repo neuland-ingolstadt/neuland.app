@@ -22,3 +22,12 @@ body {
     display: none;
   }
 }
+
+/* prevent modals from being bigger than the screen */
+.modal-content {
+  max-height: calc(90vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+.modal-body {
+  flex: unset;
+  overflow-y: scroll;
+}
