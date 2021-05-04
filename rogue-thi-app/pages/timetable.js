@@ -40,6 +40,7 @@ export function getTimetableEntryName (item) {
 }
 
 export async function getFriendlyTimetable (detailed) {
+  const [today] = new Date().toISOString().split('T')
   const { timetable } = await callWithSession(session => getTimetable(session, new Date(), detailed))
 
   return timetable
@@ -57,15 +58,14 @@ export async function getFriendlyTimetable (detailed) {
 
       return x
     })
+    .filter(x => x.datum >= today)
+    .sort((a, b) => a.startDate - b.startDate)
 }
 
 function groupTimetableEntries (timetable) {
-  const [today] = new Date().toISOString().split('T')
-
-  // get all available dates
+  // get all available dates and remove duplicates
   const dates = timetable
     .map(x => x.datum)
-    .filter(x => x >= today)
     .filter((v, i, a) => a.indexOf(v) === i)
 
   // get events for each date
