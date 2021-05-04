@@ -39,6 +39,8 @@
 
 .mapContainer :global(.leaflet-control) {
   overflow: hidden;
+  background-color: var(--rooms-controls-background, #ffffff);
+  border-color: var(--rooms-controls-border, #00000033);
 }
 
 /* restyle the layers control without modifying the html */
@@ -62,7 +64,7 @@
   cursor: pointer;
 }
 .mapContainer :global(.leaflet-control-layers input:checked + span) {
-  background: var(--primary-color, #8845ef);
+  background-color: var(--primary-color, #8845ef);
   color: var(--inverted-font-color, #ffffff);
 }
 
