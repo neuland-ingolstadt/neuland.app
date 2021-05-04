@@ -19,11 +19,12 @@ import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-sessi
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getNextValidDate, filterRooms } from './search'
 
-import styles from '../../styles/Rooms.module.css'
 import 'leaflet/dist/leaflet.css'
+import styles from '../../styles/Rooms.module.css'
 
 const MapContainer = dynamic(() => import('react-leaflet').then(x => x.MapContainer), { ssr: false })
 const TileLayer = dynamic(() => import('react-leaflet').then(x => x.TileLayer), { ssr: false })
+const AttributionControl = dynamic(() => import('react-leaflet').then(x => x.AttributionControl), { ssr: false })
 const LayersControl = dynamic(() => import('react-leaflet').then(x => x.LayersControl), { ssr: false })
 const BaseLayersControl = dynamic(() => import('react-leaflet').then(x => x.LayersControl.BaseLayer), { ssr: false })
 const LayerGroup = dynamic(() => import('react-leaflet').then(x => x.LayerGroup), { ssr: false })
@@ -190,10 +191,6 @@ export default function RoomMap () {
         </Form>
 
         <div className={styles.legend}>
-          <div className={styles.left}>
-            <span className={styles.legendFree}> Freie Räume</span>
-            <span className={styles.legendTaken}> Belegte Räume</span>
-          </div>
           <div className={styles.middle} />
           <Link href="/rooms/search" className={styles.right}>
             <Button variant="link" className={styles.linkToSearch}>
@@ -202,7 +199,17 @@ export default function RoomMap () {
           </Link>
         </div>
 
-        <MapContainer center={center} zoom={18} scrollWheelZoom={true} className={styles.mapContainer}>
+        <MapContainer
+          center={center}
+          zoom={18}
+          scrollWheelZoom={true}
+          zoomControl={false}
+          attributionControl={false}
+          className={styles.mapContainer}
+          // set tap=false to work around weird popup behavior on iOS
+          // https://github.com/Leaflet/Leaflet/issues/3184
+          tap={false}
+        >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>-Mitwirkende'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -210,7 +217,16 @@ export default function RoomMap () {
             maxZoom={21}
           />
 
-          <LayersControl position="topleft" collapsed={false}>
+          <AttributionControl position="bottomleft" />
+
+          <div className="leaflet-bottom leaflet-right">
+            <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
+              <div className={styles.legendFree}> Freie Räume</div>
+              <div className={styles.legendTaken}> Belegte Räume</div>
+            </div>
+          </div>
+
+          <LayersControl position="topright" collapsed={false}>
             {filteredFloorOrder.map((floorName, i) => (
               <BaseLayersControl name={floorName} key={floorName} checked={i === 0}>
                 <LayerGroup>

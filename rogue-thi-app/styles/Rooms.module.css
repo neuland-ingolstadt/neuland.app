@@ -20,12 +20,6 @@
   display: flex;
 }
 
-.legend .left {
-  display: flex;
-  padding: 0px 5px;
-  align-items: center;
-}
-
 .legend .middle {
   flex: 1;
 }
@@ -34,8 +28,42 @@
   text-align: right;
 }
 
+.legendControl {
+  background: white;
+  padding: 6px;
+}
+
 .mapContainer {
   flex: 1;
+}
+
+.mapContainer :global(.leaflet-control) {
+  overflow: hidden;
+}
+
+/* restyle the layers control without modifying the html */
+.mapContainer :global(.leaflet-control-layers) {
+  padding: 0;
+}
+.mapContainer :global(.leaflet-control-layers label) {
+  margin: 0;
+}
+/* hide the input control and style the neighboring span instead */
+.mapContainer :global(.leaflet-control-layers input) {
+  display: none;
+}
+.mapContainer :global(.leaflet-control-layers input + span) {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 1rem;
+  color: var(--muted-font-color, #6c757d);
+  text-align: center;
+  cursor: pointer;
+}
+.mapContainer :global(.leaflet-control-layers input:checked + span) {
+  background: var(--primary-color, #8845ef);
+  color: var(--inverted-font-color, #ffffff);
 }
 
 .legendFree, .legendTaken {
