@@ -1,13 +1,47 @@
-.dateBoundary {
-  margin-top: 20px;
+.day {
+  display: flex;
+  flex-direction: row;
+}
+
+.day .heading {
+  min-width: 10vw;
+  text-align: center;
+  margin: 25px 0px;
+}
+
+.today .heading {
+  color: var(--primary-color, #8845ef) !important;
+}
+
+.day .heading .date {
+  font-size: 24pt;
+  line-height: 1em;
+}
+
+.day .heading .weekday {
+  font-size: 12pt;
+  text-transform: uppercase;
+}
+
+.items {
+  flex: 1;
+  justify-content: center;
+  padding: 15px 0px;
 }
 
 .item {
   display: flex;
+  border: 0;
+  padding: .75rem;
+  color: unset;
 }
 
 .left {
   flex: 1;
+}
+
+.name {
+  font-weight: 600;
 }
 
 .room {
@@ -17,4 +51,5 @@
 .right {
   color: gray;
   text-align: right;
+  margin-left: 0.25rem;
 }

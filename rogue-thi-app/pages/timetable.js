@@ -5,6 +5,7 @@ import DOMPurify from 'dompurify'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
 import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
@@ -12,7 +13,7 @@ import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
-import { formatNearDate, formatFriendlyTime } from '../lib/date-utils'
+import { DATE_LOCALE, formatFriendlyTime } from '../lib/date-utils'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -77,6 +78,18 @@ function groupTimetableEntries (timetable) {
   return groups
 }
 
+function isToday (date) {
+  return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
+}
+
+function getDay (date) {
+  return new Date(date).toLocaleDateString(DATE_LOCALE, { day: 'numeric' })
+}
+
+function getWeekday (date) {
+  return new Date(date).toLocaleDateString(DATE_LOCALE, { weekday: 'short' })
+}
+
 export default function Timetable () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
@@ -125,7 +138,11 @@ export default function Timetable () {
 
   return (
     <>
-      <AppNavbar title="Stundenplan" showBack={'desktop-only'} />
+      <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
+        <Dropdown.Item variant="link" href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
+          Fächer bearbeiten (extern)
+        </Dropdown.Item>
+      </AppNavbar>
 
       <AppBody>
         <Modal size="lg" show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
@@ -182,28 +199,35 @@ export default function Timetable () {
 
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
           {timetable && timetable.map((group, idx) =>
-            <ListGroup key={idx}>
-              <h4 className={styles.dateBoundary}>
-                {formatNearDate(group.date)}
-              </h4>
+            <div key={idx} className={`${styles.day} ${isToday(group.date) && styles.today}`}>
+              <div className={`text-muted ${styles.heading}`}>
+                <div className={styles.date}>
+                  {getDay(group.date)}
+                </div>
+                <div className={styles.weekday}>
+                  {getWeekday(group.date)}
+                </div>
+              </div>
 
-              {group.items.map((item, idx) =>
-                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
-                  <div className={styles.left}>
-                    <div className={styles.name}>
-                      {getTimetableEntryName(item).fullName}
+              <ListGroup className={styles.items} variant="flush">
+                {group.items.map((item, idx) =>
+                  <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
+                    <div className={styles.left}>
+                      <div className={styles.name}>
+                        {getTimetableEntryName(item).fullName}
+                      </div>
+                      <div className={styles.room}>
+                        {item.raum}
+                      </div>
                     </div>
-                    <div className={styles.room}>
-                      {item.raum}
+                    <div className={styles.right}>
+                      {formatFriendlyTime(item.startDate)} <br />
+                      {formatFriendlyTime(item.endDate)}
                     </div>
-                  </div>
-                  <div className={styles.right}>
-                    {formatFriendlyTime(item.startDate)} <br />
-                    {formatFriendlyTime(item.endDate)}
-                  </div>
-                </ListGroup.Item>
-              )}
-            </ListGroup>
+                  </ListGroup.Item>
+                )}
+              </ListGroup>
+            </div>
           )}
           {timetable && timetable.length === 0 &&
             <ListGroup>

@@ -1,5 +1,4 @@
 
-const DATE_LOCALE = 'de-DE'
 const WORD_TODAY = 'Heute'
 const WORD_TOMORROW = 'Morgen'
 const WORD_WEEKS = 'Wochen'
@@ -11,6 +10,8 @@ const WORD_MINUTE = 'Minute'
 const WORD_MINUTES = 'Minuten'
 const WORD_IN = 'in'
 const WORD_AGO = 'vor'
+
+export const DATE_LOCALE = 'de-DE'
 
 /**
  * Formats a time like "8:15"
