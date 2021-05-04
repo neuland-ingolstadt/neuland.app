@@ -4,7 +4,7 @@
 }
 
 .day .heading {
-  min-width: 10vw;
+  min-width: min(15%, 100px);
   text-align: center;
   margin: 25px 0px;
 }
