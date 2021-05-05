@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { obtainSession } from '../lib/thi-backend/thi-session-handler'
 import { thiApiRequest } from '../lib/thi-backend/thi-api-request'
 
@@ -134,6 +135,8 @@ export default function Debug () {
           {result}
         </pre>
       </AppBody>
+
+      <AppTabbar />
     </>
   )
 }

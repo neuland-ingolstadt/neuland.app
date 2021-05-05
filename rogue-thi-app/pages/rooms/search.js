@@ -12,6 +12,7 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
+import AppTabbar from '../../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
@@ -202,6 +203,8 @@ export default function Rooms () {
           </ReactPlaceholder>
         }
       </AppBody>
+
+      <AppTabbar />
     </>
   )
 }

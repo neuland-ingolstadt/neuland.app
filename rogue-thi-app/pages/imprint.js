@@ -10,6 +10,7 @@ import { callWithSession } from '../lib/thi-backend/thi-session-handler'
 import { getImprint } from '../lib/thi-backend/thi-api-client'
 
 import styles from '../styles/Imprint.module.css'
+import AppTabbar from '../components/AppTabbar'
 
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
@@ -88,6 +89,8 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
           </ListGroup.Item>
         </ListGroup>
       </AppBody>
+
+      <AppTabbar />
     </>
   )
 }

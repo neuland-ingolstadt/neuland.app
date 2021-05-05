@@ -11,6 +11,7 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import {
   getLibraryReservations,
@@ -207,7 +208,7 @@ export default function Library () {
           </ListGroup>
         </ReactPlaceholder>
 
-        <br />
+        <AppTabbar />
       </AppBody>
     </>
   )

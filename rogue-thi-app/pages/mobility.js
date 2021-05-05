@@ -15,6 +15,7 @@ import {
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { getBusPlan, getTrainPlan, getParkingData, getCharingStationData } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatRelativeMinutes } from '../lib/date-utils'
@@ -238,7 +239,7 @@ export default function Bus () {
           </ReactPlaceholder>
         </ListGroup>
 
-        <br />
+        <AppTabbar />
       </AppBody>
     </>
   )

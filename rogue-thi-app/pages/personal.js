@@ -7,6 +7,7 @@ import ReactPlaceholder from 'react-placeholder'
 
 import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
+import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getPersonalData } from '../lib/thi-backend/thi-api-client'
 
@@ -64,6 +65,8 @@ export default function Personal () {
             </ListGroup>
           }
         </ReactPlaceholder>
+
+        <AppTabbar />
       </AppBody>
     </>
   )

@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button'
 
 import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 
 const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
 
@@ -118,6 +119,8 @@ export default function BecomeHackerman () {
           </ListGroup>
         </Form>
       </AppBody>
+
+      <AppTabbar />
     </>
   )
 }

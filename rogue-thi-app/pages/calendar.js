@@ -13,6 +13,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
 import { useTime } from '../lib/time-hook'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getExams } from '../lib/thi-backend/thi-api-client'
@@ -218,6 +219,8 @@ export default function Calendar () {
           </Tab>
         </Tabs>
       </AppBody>
+
+      <AppTabbar />
     </>
   )
 }
