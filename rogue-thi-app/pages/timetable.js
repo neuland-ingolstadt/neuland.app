@@ -41,8 +41,8 @@ export function getTimetableEntryName (item) {
 }
 
 export async function getFriendlyTimetable (detailed) {
-  const [today] = new Date().toISOString().split('T')
-  const { timetable } = await callWithSession(session => getTimetable(session, new Date(), detailed))
+  const now = new Date()
+  const { timetable } = await callWithSession(session => getTimetable(session, now, detailed))
 
   return timetable
     .map(x => {
@@ -59,7 +59,7 @@ export async function getFriendlyTimetable (detailed) {
 
       return x
     })
-    .filter(x => x.datum >= today)
+    .filter(x => x.endDate > now)
     .sort((a, b) => a.startDate - b.startDate)
 }
 
