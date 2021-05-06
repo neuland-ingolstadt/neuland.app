@@ -12,6 +12,7 @@ const KEY_GET_EXAMS = 'getExams'
 const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_MENSA_PLAN = 'getMensaPlan'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
+const KEY_GET_PARKING_DATA = 'getCampusParkingData'
 
 let cache
 if (typeof localStorage === 'undefined') {
@@ -147,6 +148,17 @@ export async function getFreeRooms (session, date) {
   })
 
   return res.data[1]
+}
+
+export async function getCampusParkingData (session) {
+  const res = await cachedThiApiRequest(KEY_GET_PARKING_DATA, {
+    service: 'thiapp',
+    method: 'parking',
+    format: 'json',
+    session
+  })
+
+  return res.data
 }
 
 export async function getLibraryReservations (session) {

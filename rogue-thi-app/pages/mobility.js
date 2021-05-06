@@ -7,7 +7,8 @@ import Form from 'react-bootstrap/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEuroSign,
-  faChargingStation
+  faChargingStation,
+  faKey
 } from '@fortawesome/free-solid-svg-icons'
 import {
   faCreativeCommonsNcEu
@@ -16,6 +17,8 @@ import {
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
+import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { getCampusParkingData } from '../lib/thi-backend/thi-api-client'
 import { getBusPlan, getTrainPlan, getParkingData, getCharingStationData } from '../lib/reimplemented-api-client'
 import { useTime } from '../lib/time-hook'
 import { formatRelativeMinutes } from '../lib/date-utils'
@@ -46,13 +49,37 @@ export function getMobilityLabel (kind, station) {
   }
 }
 
+async function getAndConvertCampusParkingData () {
+  let available = null
+  try {
+    const entries = await callWithSession(getCampusParkingData)
+    available = entries.find(x => x.name === 'TG Gießerei Hochschule')?.free
+    console.log(0, entries, available)
+    available = parseInt(available)
+  } catch (e) {
+    if (!(e instanceof NoSessionError)) {
+      throw e
+    }
+  }
+
+  return {
+    name: 'THI Campusgelände',
+    available
+  }
+}
+
 export async function getMobilityEntries (kind, station) {
   if (kind === 'bus') {
     return getBusPlan(station)
   } else if (kind === 'train') {
     return getTrainPlan(station)
   } else if (kind === 'parking') {
-    const data = await getParkingData()
+    const [data, campusEntry] = await Promise.all([
+      getParkingData(),
+      getAndConvertCampusParkingData()
+    ])
+    data.push(campusEntry)
+
     return [
       ...stations.parking.map(x => {
         const entry = data.find(y => x.name === y.name)
@@ -111,8 +138,11 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
       <>
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
-            {item.priceLevel < 0 && (
+            {item.priceLevel === 'free' && (
               <FontAwesomeIcon icon={faCreativeCommonsNcEu} />
+            )}
+            {item.priceLevel === 'restricted' && (
+              <FontAwesomeIcon icon={faKey} />
             )}
             {item.priceLevel > 0 && new Array(item.priceLevel)
               .fill(0)
