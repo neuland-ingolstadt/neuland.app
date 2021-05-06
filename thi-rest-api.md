@@ -369,6 +369,43 @@ session: <session token>
 }
 ```
 
+## Parking
+In the official app the UI using this request is hidden from all users except employees.
+The area `TG Gießerei Hochschule` refers to the area of the THI itself, guarded by
+barries and only accesible to employees and some mebers of the students council.
+
+```
+service: thiapp
+method:  parking
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": [
+        "timestamp:2021-05-06 23:34:34.427",
+        {
+            "name": "Congressgarage",
+            "max": "352",
+            "free": "171",
+            "availstatus": "0",
+            "tendency": "3"
+        },
+        {
+            "name": "TG Gießerei Hochschule",
+            "max": "89",
+            "free": "80",
+            "availstatus": "0",
+            "tendency": "3"
+        }
+    ],
+    "date": "06.05.2021",
+    "time": "23:35:02",
+    "status": 0
+}
+```
+
 ## News
 ```
 service: thiapp
