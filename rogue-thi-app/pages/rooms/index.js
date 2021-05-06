@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -46,41 +46,36 @@ const floorSubstitutes = {
   null: '4' // floor 4 in Z (Arbeitsamt)
 }
 const floorOrder = [
-  'EG',
-  '1',
-  '1.5',
-  '2',
+  '4',
   '3',
-  '4'
+  '2',
+  '1.5',
+  '1',
+  'EG'
 ]
 
-const floors = {}
-roomData.features.forEach(feature => {
-  const { properties, geometry } = feature
+const allRooms = roomData.features
+  .map(feature => {
+    const { properties, geometry } = feature
 
-  if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
-    return
-  }
+    if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
+      return []
+    }
 
-  if (properties.Etage in floorSubstitutes) {
-    properties.Etage = floorSubstitutes[properties.Etage]
-  }
+    if (properties.Etage in floorSubstitutes) {
+      properties.Etage = floorSubstitutes[properties.Etage]
+    }
+    if (floorOrder.indexOf(properties.Etage) === -1) {
+      floorOrder.push(properties.Etage)
+    }
 
-  if (floorOrder.indexOf(properties.Etage) === -1) {
-    floorOrder.push(properties.Etage)
-  }
-  if (!(properties.Etage in floors)) {
-    floors[properties.Etage] = []
-  }
-
-  geometry.coordinates.forEach(points => {
-    floors[properties.Etage].push({
+    return geometry.coordinates.map(points => ({
       properties,
       coordinates: points.map(([lon, lat]) => [lat, lon]),
       options: { }
-    })
+    }))
   })
-})
+  .flat()
 
 export default function RoomMap () {
   const router = useRouter()
@@ -88,39 +83,27 @@ export default function RoomMap () {
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState([])
 
-  let center = [48.76677, 11.43322]
-  let filteredFloors = {}
+  const [filteredRooms, center] = useMemo(() => {
+    if (!searchText) {
+      return [allRooms, [48.76677, 11.43322]]
+    }
 
-  const filteredFloorOrder = floorOrder.slice(0)
-  if (!searchText) {
-    filteredFloors = floors
-  } else {
-    Object.assign(filteredFloors, floors)
-
-    const invalidFloorIndices = []
-    floorOrder.forEach((floor, i) => {
-      filteredFloors[floor] = filteredFloors[floor].filter(entry =>
-        searchedProperties.some(x => entry.properties[x].toUpperCase().indexOf(searchText) !== -1)
-      )
-
-      if (filteredFloors[floor].length === 0) {
-        invalidFloorIndices.unshift(i)
-      }
-    })
-
-    invalidFloorIndices.forEach(i => filteredFloorOrder.splice(i, 1))
+    const getProp = (room, prop) => room.properties[prop].toUpperCase()
+    const filtered = allRooms
+      .filter(room => searchedProperties.some(x => getProp(room, x).indexOf(searchText) !== -1))
 
     let lon = 0
     let lat = 0
     let count = 0
-    Object.values(filteredFloors).forEach(floor => floor.forEach(x => {
+    filtered.forEach(x => {
       lon += x.coordinates[0][0]
       lat += x.coordinates[0][1]
       count += 1
-    }))
+    })
+    const filteredCenter = [lon / count, lat / count]
 
-    center = [lon / count, lat / count]
-  }
+    return [filtered, filteredCenter]
+  }, [searchText])
 
   useEffect(async () => {
     try {
@@ -176,6 +159,20 @@ export default function RoomMap () {
     )
   }
 
+  function renderFloor (floorName) {
+    const floorRooms = filteredRooms
+      .filter(x => x.properties.Etage === floorName)
+
+    return (
+      <LayerGroup>
+        <>{floorRooms.map((entry, j) => renderRoom(entry, j, false))}</>
+        {/* we first render all gray rooms and then the colored ones to make
+            sure the colored border overlapthe gray ones */}
+        <>{floorRooms.map((entry, j) => renderRoom(entry, j, true))}</>
+      </LayerGroup>
+    )
+  }
+
   return (
     <Container className={styles.container}>
       <AppNavbar title="Raumplan" showBack={'desktop-only'} />
@@ -221,26 +218,25 @@ export default function RoomMap () {
 
           <div className="leaflet-bottom leaflet-right">
             <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
-              <div className={styles.legendFree}> Freie Räume</div>
-              <div className={styles.legendTaken}> Belegte Räume</div>
+            <div className={styles.legendFree}> Freie Räume</div>
+            <div className={styles.legendTaken}> Belegte Räume</div>
             </div>
           </div>
 
           <LayersControl position="topright" collapsed={false}>
-            {filteredFloorOrder.map((floorName, i) => (
-              <BaseLayersControl name={floorName} key={floorName} checked={i === 0}>
-                <LayerGroup>
-                  {filteredFloors[floorName].map((entry, j) => (
-                    renderRoom(entry, j, false)
-                  ))}
-                  {/* we first render all gray rooms and then the colored ones to make
-                      sure the colored border overlapthe gray ones */}
-                  {filteredFloors[floorName].map((entry, j) => (
-                    renderRoom(entry, j, true)
-                  ))}
-                </LayerGroup>
-              </BaseLayersControl>
-            ))}
+            {floorOrder
+              .filter(name => filteredRooms.some(x => x.properties.Etage === name))
+              .map((floorName, i, filteredFloorOrder) => (
+                <BaseLayersControl
+                  key={searchText + floorName}
+                  name={floorName}
+                  checked={i === filteredFloorOrder.length - 1}
+                >
+                  <LayerGroup>
+                    {renderFloor(floorName)}
+                  </LayerGroup>
+                </BaseLayersControl>
+              ))}
           </LayersControl>
         </MapContainer>
       </AppBody>
