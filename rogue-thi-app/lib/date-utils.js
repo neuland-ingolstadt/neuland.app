@@ -10,6 +10,8 @@ const WORD_MINUTE = 'Minute'
 const WORD_MINUTES = 'Minuten'
 const WORD_IN = 'in'
 const WORD_AGO = 'vor'
+const WORD_THIS_WEEK = 'Diese Woche'
+const WORD_NEXT_WEEK = 'Nächste Woche'
 
 export const DATE_LOCALE = 'de-DE'
 
@@ -169,4 +171,55 @@ export function formatISODate (date) {
  */
 export function formatISOTime (date) {
   return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+}
+
+/**
+ * Returns the start of the week
+ * https://stackoverflow.com/a/4156516
+ */
+export function getMonday (date) {
+  date = new Date(date)
+  const day = date.getDay()
+  date.setHours(0, 0, 0, 0)
+  date.setDate(date.getDate() - day + (day === 0 ? -6 : 1))
+  return date
+}
+
+/**
+ * Returns the start end the end of the week
+ */
+export function getWeek (date) {
+  const start = getMonday(date)
+  const end = getMonday(date)
+  end.setDate(end.getDate() + 7)
+  return [start, end]
+}
+
+/**
+ * Adds weeks to a date
+ */
+export function addWeek (date, delta) {
+  date = new Date(date)
+  date.setDate(date.getDate() + delta * 7)
+  return date
+}
+
+/**
+ * Formats a date like 'Nächste Woche' or '17.5. – 23.5.'
+ */
+export function getFriendlyWeek (date) {
+  const [currStart, currEnd] = getWeek(new Date())
+  const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
+  if (date >= currStart && date < currEnd) {
+    return WORD_THIS_WEEK
+  } else if (date >= nextStart && date < nextEnd) {
+    return WORD_NEXT_WEEK
+  } else {
+    const monday = getMonday(date)
+    const sunday = new Date(monday)
+    sunday.setDate(sunday.getDate() + 6)
+
+    return monday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' }) +
+      ' – ' + sunday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+  }
 }

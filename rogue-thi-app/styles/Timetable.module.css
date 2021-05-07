@@ -1,3 +1,13 @@
+.weekSelector {
+  display: flex;
+  align-items: center;
+}
+
+.weekSelector .currentWeek {
+  flex: 1;
+  text-align: center;
+}
+
 .day {
   display: flex;
   flex-direction: row;
@@ -52,4 +62,9 @@
   color: gray;
   text-align: right;
   margin-left: 0.25rem;
+}
+
+.notice {
+  text-align: center;
+  margin: 0.5rem;
 }

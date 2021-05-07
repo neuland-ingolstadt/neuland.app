@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import DOMPurify from 'dompurify'
 
@@ -8,12 +8,15 @@ import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import ReactPlaceholder from 'react-placeholder'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
-import { DATE_LOCALE, formatFriendlyTime } from '../lib/date-utils'
+import { addWeek, DATE_LOCALE, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -82,6 +85,11 @@ function isToday (date) {
   return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
 }
 
+function isInWeek (date, start, end) {
+  date = new Date(date)
+  return date > start && date < end
+}
+
 function getDay (date) {
   return new Date(date).toLocaleDateString(DATE_LOCALE, { day: 'numeric' })
 }
@@ -95,6 +103,12 @@ export default function Timetable () {
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
   const [isDetailedData, setIsDetailedData] = useState(false)
+  const [week, setWeek] = useState(getWeek(new Date()))
+
+  // only this weeks timetable
+  const timetableCurrent = useMemo(() => {
+    return timetable && timetable.filter(group => isInWeek(group.date, ...week))
+  }, [timetable, week])
 
   useEffect(async () => {
     // we need to load data only if we have not done it yet or if we have no
@@ -106,13 +120,13 @@ export default function Timetable () {
     try {
       const detailed = !!focusedEntry
       const ungroupedData = await getFriendlyTimetable(detailed)
-      const data = groupTimetableEntries(ungroupedData)
-      setTimetable(data)
+      const groupedData = groupTimetableEntries(ungroupedData)
+      setTimetable(groupedData)
       setIsDetailedData(detailed)
 
       if (focusedEntry) {
         // find the focused entry in the new data
-        const detailedEntry = data
+        const detailedEntry = groupedData
           .map(group => group.items.find(x =>
             x.datum === focusedEntry.datum &&
             x.veranstaltung === focusedEntry.veranstaltung)
@@ -135,6 +149,16 @@ export default function Timetable () {
       }
     }
   }, [focusedEntry])
+
+  function prevWeek () {
+    const [start, end] = week
+    setWeek([addWeek(start, -1), addWeek(end, -1)])
+  }
+
+  function nextWeek () {
+    const [start, end] = week
+    setWeek([addWeek(start, +1), addWeek(end, +1)])
+  }
 
   return (
     <>
@@ -197,8 +221,20 @@ export default function Timetable () {
           </Modal.Footer>
         </Modal>
 
+        <div className={styles.weekSelector}>
+          <Button className={styles.prevWeek} variant="link" onClick={() => prevWeek()}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </Button>
+          <div className={styles.currentWeek}>
+            {getFriendlyWeek(week[0])}
+          </div>
+          <Button className={styles.nextWeek} variant="link" onClick={() => nextWeek()}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </Button>
+        </div>
+
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
-          {timetable && timetable.map((group, idx) =>
+          {timetableCurrent && timetableCurrent.map((group, idx) =>
             <div key={idx} className={`${styles.day} ${isToday(group.date) && styles.today}`}>
               <div className={`text-muted ${styles.heading}`}>
                 <div className={styles.date}>
@@ -229,16 +265,23 @@ export default function Timetable () {
               </ListGroup>
             </div>
           )}
+          {timetableCurrent && timetableCurrent.length === 0 &&
+            <div className={`text-muted ${styles.notice}`}>
+              Keine Veranstaltungen. 🎉
+            </div>
+          }
           {timetable && timetable.length === 0 &&
-            <ListGroup>
-              <ListGroup.Item>
-                Dein persönlicher Stundenplan ist aktuell leer.<br />
-                Du kannst deinen persönlichen Stundenplan im{' '}
+            <div className={`text-muted ${styles.notice}`}>
+              <p>
+                Dein Stundenplan ist aktuell leer.
+              </p>
+              <p>
+                Du kannst deinen Stundenplan im{' '}
                 <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
                 Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
-                deine gewählten Fächer.
-              </ListGroup.Item>
-            </ListGroup>
+                die gewählten Fächer.
+              </p>
+            </div>
           }
         </ReactPlaceholder>
       </AppBody>
