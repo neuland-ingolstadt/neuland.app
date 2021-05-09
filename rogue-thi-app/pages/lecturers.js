@@ -24,13 +24,13 @@ function normalizeLecturers (entries) {
       // try to reformat phone numbers to DIN 5008 International
       tel_dienst: x.tel_dienst
         .trim()
-        .toLowerCase()
-        .replace(/(?<=\d|\/|\))(\s|-|\/)+(?=\d|\/|\()/g, '')
+        .replace(/\(\d+\)/g, '')
+        .replace(/(?<=\d|\/)(\s|-|\/)+(?=\d|\/)/g, '')
         .replace(/^49/g, '+49')
-        .replace('(', '')
-        .replace(')', '')
         .replace(/^\+49841/, '+49 841 ')
-        .replace(/^0841/, '+49 841 ')
+        .replace(/^0841/, '+49 841 '),
+      room_short: ((x.raum || '').match(/[A-Z]\s*\d+/g) || [''])[0]
+        .replace(/\s+/g, '') || null
     }))
     .sort((a, b) => a.name.localeCompare(b.name))
 }
@@ -122,12 +122,12 @@ export default function RoomList () {
                 <strong>Funktion</strong>: {focusedLecturer.funktion}<br />
 
                 <strong>Raum</strong>:{' '}
-                {focusedLecturer.raum && (
-                  <Link href={`/rooms?highlight=${focusedLecturer.raum}`}>
+                {focusedLecturer.room_short && (
+                  <Link href={`/rooms?highlight=${focusedLecturer.room_short}`}>
                     {focusedLecturer.raum}
                   </Link>
                 )}
-                {!focusedLecturer.raum && 'N/A'}
+                {focusedLecturer.room_short ? '' : (focusedLecturer.raum || 'N/A')}
                 <br />
 
                 <strong>E-Mail</strong>:{' '}
@@ -194,9 +194,12 @@ export default function RoomList () {
                     {x.raum && (
                       <>
                         Raum:{' '}
-                        <Link href={`/rooms?highlight=${x.raum}`}>
-                          {x.raum}
-                        </Link>
+                        {x.room_short && (
+                          <Link href={`/rooms?highlight=${x.room_short}`}>
+                            {x.raum}
+                          </Link>
+                        )}
+                        {!x.room_short && x.raum}
                       </>
                     )}
                     {x.raum && x.tel_dienst && (<br />)}
