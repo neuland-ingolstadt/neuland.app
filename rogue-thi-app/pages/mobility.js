@@ -54,7 +54,7 @@ async function getAndConvertCampusParkingData () {
   try {
     const entries = await callWithSession(getCampusParkingData)
     available = entries.find(x => x.name === 'TG Gießerei Hochschule')?.free
-    available = parseInt(available)
+    available = typeof available === 'string' ? parseInt(available) : null
   } catch (e) {
     if (!(e instanceof NoSessionError)) {
       throw e

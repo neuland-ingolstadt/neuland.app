@@ -35,36 +35,44 @@ export default function Personal () {
     }
   }, [])
 
+  function renderPersonalEntry (label, name, render) {
+    return (
+      <ListGroup.Item>
+        {label}
+        <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
+          <ReactPlaceholder type="text" rows={1} ready={userdata}>
+            {userdata && render && render()}
+            {userdata && !render && userdata[name]}
+          </ReactPlaceholder>
+        </span>
+      </ListGroup.Item>
+    )
+  }
+
   return (
     <>
       <AppNavbar title="Konto" />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={12} ready={userdata}>
-          {userdata &&
-            <ListGroup>
-              <ListGroup.Item>Matrikelnummer <span className={styles.personal_value}>{userdata.mtknr}</span></ListGroup.Item>
-              <ListGroup.Item>Bibliotheksnummer <span className={styles.personal_value}>{userdata.bibnr}</span></ListGroup.Item>
-              <ListGroup.Item>Druckguthaben <span className={styles.personal_value}>{userdata.pcounter}</span></ListGroup.Item>
-              <ListGroup.Item>Studiengang <span className={styles.personal_value}>{userdata.fachrich}</span></ListGroup.Item>
-              <ListGroup.Item>Fachsemester <span className={styles.personal_value}>{userdata.stgru}</span></ListGroup.Item>
-              <ListGroup.Item>
-                Prüfungsordnung
-                <span className={styles.personal_value}>
-                  <a href={userdata.po_url}>{userdata.pvers}</a>
-                  </span>
-              </ListGroup.Item>
-              {/* TODO Schwerpunkt "swpkt": "{NULL,NULL,NULL}", */}
-              <ListGroup.Item>E-Mail <span className={styles.personal_value}>{userdata.email}</span></ListGroup.Item>
-              <ListGroup.Item>THI E-Mail <span className={styles.personal_value}>{userdata.fhmail}</span></ListGroup.Item>
-              {userdata.telefon ? <ListGroup.Item>Phone <span className={styles.personal_value}>{userdata.telefon}</span></ListGroup.Item> : ''}
-              <ListGroup.Item>Vorname <span className={styles.personal_value}>{userdata.vname}</span></ListGroup.Item>
-              <ListGroup.Item>Nachname <span className={styles.personal_value}>{userdata.name}</span></ListGroup.Item>
-              <ListGroup.Item>Straße <span className={styles.personal_value}>{userdata.str}</span></ListGroup.Item>
-              <ListGroup.Item>Ort <span className={styles.personal_value}>{userdata.plz} {userdata.ort}</span></ListGroup.Item>
-            </ListGroup>
-          }
-        </ReactPlaceholder>
+        <ListGroup>
+          {renderPersonalEntry('Matrikelnummer', 'mtknr')}
+          {renderPersonalEntry('Bibliotheksnummer', 'bibnr')}
+          {renderPersonalEntry('Druckguthaben', 'pcounter')}
+          {renderPersonalEntry('Studiengang', 'fachrich')}
+          {renderPersonalEntry('Fachsemester', 'stgru')}
+          {renderPersonalEntry('Prüfungsordnung', null, () => (
+            <a href={userdata.po_url} target="_blank" rel="noreferrer">
+              {userdata.pvers}
+            </a>
+          ))}
+          {renderPersonalEntry('E-Mail', 'email')}
+          {renderPersonalEntry('THI E-Mail', 'fhmail')}
+          {renderPersonalEntry('Telefon', null, () => userdata.telefon || 'N/A')}
+          {renderPersonalEntry('Vorname', 'vname')}
+          {renderPersonalEntry('Nachname', 'name')}
+          {renderPersonalEntry('Straße', 'str')}
+          {renderPersonalEntry('Ort', null, () => `${userdata.plz} ${userdata.ort}`)}
+        </ListGroup>
 
         <AppTabbar />
       </AppBody>

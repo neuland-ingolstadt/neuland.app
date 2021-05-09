@@ -5,4 +5,7 @@
 .personal_value {
   float: right;
 }
-  
+.personal_value_loading {
+  width: 30vw;
+  float: right;
+}
