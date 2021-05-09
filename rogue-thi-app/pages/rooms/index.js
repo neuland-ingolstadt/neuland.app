@@ -84,8 +84,9 @@ export default function RoomMap () {
   const [availableRooms, setAvailableRooms] = useState([])
 
   const [filteredRooms, center] = useMemo(() => {
+    const defaultCenter = [48.76677, 11.43322]
     if (!searchText) {
-      return [allRooms, [48.76677, 11.43322]]
+      return [allRooms, defaultCenter]
     }
 
     const getProp = (room, prop) => room.properties[prop].toUpperCase()
@@ -100,7 +101,7 @@ export default function RoomMap () {
       lat += x.coordinates[0][1]
       count += 1
     })
-    const filteredCenter = [lon / count, lat / count]
+    const filteredCenter = count > 0 ? [lon / count, lat / count] : defaultCenter
 
     return [filtered, filteredCenter]
   }, [searchText])
@@ -184,6 +185,7 @@ export default function RoomMap () {
             placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
             value={searchText}
             onChange={e => setSearchText(e.target.value.toUpperCase())}
+            isInvalid={filteredRooms.length === 0}
           />
         </Form>
 
@@ -198,7 +200,7 @@ export default function RoomMap () {
 
         <MapContainer
           center={center}
-          zoom={18}
+          zoom={filteredRooms.length === 1 ? 19 : 18}
           scrollWheelZoom={true}
           zoomControl={false}
           attributionControl={false}
