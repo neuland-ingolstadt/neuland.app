@@ -25,7 +25,7 @@ function normalizeLecturers (entries) {
       tel_dienst: x.tel_dienst
         .trim()
         .replace(/\(\d+\)/g, '')
-        .replace(/(?<=\d|\/)(\s|-|\/)+(?=\d|\/)/g, '')
+        .replace(/(\d|\/)(\s|-|\/)+(?=\d|\/)/g, '$1')
         .replace(/^49/g, '+49')
         .replace(/^\+49841/, '+49 841 ')
         .replace(/^0841/, '+49 841 '),
