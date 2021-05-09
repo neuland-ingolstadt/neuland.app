@@ -13,6 +13,8 @@ const KEY_GET_GRADES = 'getGrades'
 const KEY_GET_MENSA_PLAN = 'getMensaPlan'
 const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PARKING_DATA = 'getCampusParkingData'
+const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
+const KEY_GET_LECTURERS = 'getLecturers'
 
 let cache
 if (typeof localStorage === 'undefined') {
@@ -159,6 +161,31 @@ export async function getCampusParkingData (session) {
   })
 
   return res.data
+}
+
+export async function getPersonalLecturers (session) {
+  const res = await cachedThiApiRequest(KEY_GET_PERSONAL_LECTURERS, {
+    service: 'thiapp',
+    method: 'stpllecturers',
+    format: 'json',
+    session
+  })
+
+  return res.data[1]
+}
+
+export async function getLecturers (session, from, to) {
+  const key = `${KEY_GET_LECTURERS}-${from}-${to}`
+  const res = await cachedThiApiRequest(key, {
+    service: 'thiapp',
+    method: 'lecturers',
+    format: 'json',
+    from,
+    to,
+    session
+  })
+
+  return res.data[1]
 }
 
 export async function getLibraryReservations (session) {

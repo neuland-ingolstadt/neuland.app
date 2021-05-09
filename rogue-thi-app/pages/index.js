@@ -20,7 +20,6 @@ import {
   faBook,
   faPen,
   faCalendarAlt,
-  faUser,
   faBus,
   faTrain,
   faCar,
@@ -343,8 +342,11 @@ export default function Home () {
     <>
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
-          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            Design
+          <Dropdown.Item variant="link" href="/lecturers">
+            Dozenten
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href="/personal">
+            Nutzerdaten
           </Dropdown.Item>
           {showDebug && (
             <Dropdown.Item variant="link" href="/debug">
@@ -353,6 +355,10 @@ export default function Home () {
           )}
           <Dropdown.Item variant="link" href="/imprint">
             Impressum & Datenschutz
+          </Dropdown.Item>
+          <Dropdown.Divider />
+          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+            Design
           </Dropdown.Item>
           <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
             Ausloggen
@@ -416,12 +422,6 @@ export default function Home () {
             icon={faPen}
             title="Noten & Fächer"
             link="/grades"
-          />
-
-          <HomeCard
-            icon={faUser}
-            title="Konto"
-            link="/personal"
           />
         </div>
       </AppBody>
