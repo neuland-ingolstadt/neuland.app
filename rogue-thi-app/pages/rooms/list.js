@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -67,7 +68,14 @@ export default function RoomList () {
 
   return (
     <>
-      <AppNavbar title="Stündlicher Raumplan" />
+      <AppNavbar title="Stündlicher Raumplan">
+        <Dropdown.Item variant="link" href="/rooms">
+          Kartenansicht
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/rooms/search">
+          Erweiterte Suche
+        </Dropdown.Item>
+      </AppNavbar>
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={freeRooms}>

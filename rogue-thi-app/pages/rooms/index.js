@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -176,7 +175,14 @@ export default function RoomMap () {
 
   return (
     <Container className={styles.container}>
-      <AppNavbar title="Raumplan" showBack={'desktop-only'} />
+      <AppNavbar title="Raumplan" showBack={'desktop-only'}>
+        <Dropdown.Item variant="link" href="/rooms/search">
+          Erweiterte Suche
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/rooms/list">
+          Listenansicht
+        </Dropdown.Item>
+      </AppNavbar>
 
       <AppBody className={styles.body}>
         <Form className={styles.searchForm}>
@@ -188,15 +194,6 @@ export default function RoomMap () {
             isInvalid={filteredRooms.length === 0}
           />
         </Form>
-
-        <div className={styles.legend}>
-          <div className={styles.middle} />
-          <Link href="/rooms/search" className={styles.right}>
-            <Button variant="link" className={styles.linkToSearch}>
-              Erweiterte Suche
-            </Button>
-          </Link>
-        </div>
 
         <MapContainer
           center={center}
@@ -230,7 +227,7 @@ export default function RoomMap () {
               .filter(name => filteredRooms.some(x => x.properties.Etage === name))
               .map((floorName, i, filteredFloorOrder) => (
                 <BaseLayersControl
-                  key={searchText + floorName}
+                  key={floorName + (searchText || 'empty-search')}
                   name={floorName}
                   checked={i === filteredFloorOrder.length - 1}
                 >

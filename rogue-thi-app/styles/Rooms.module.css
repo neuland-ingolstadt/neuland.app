@@ -35,12 +35,14 @@
 
 .mapContainer {
   flex: 1;
+  margin-top: 5px;
 }
 
 .mapContainer :global(.leaflet-control) {
   overflow: hidden;
   background-color: var(--rooms-controls-background, #ffffff);
   border-color: var(--rooms-controls-border, #00000033);
+  color: unset;
 }
 
 /* restyle the layers control without modifying the html */

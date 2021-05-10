@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Dropdown from 'react-bootstrap/Dropdown'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
@@ -112,7 +113,14 @@ export default function Rooms () {
 
   return (
     <>
-      <AppNavbar title="Raumsuche" />
+      <AppNavbar title="Raumsuche">
+        <Dropdown.Item variant="link" href="/rooms">
+          Kartenansicht
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" href="/rooms/list">
+          Listenansicht
+        </Dropdown.Item>
+      </AppNavbar>
 
       <AppBody>
         <Form>
@@ -166,9 +174,6 @@ export default function Rooms () {
           <Button onClick={() => filter()}>
             Suchen
           </Button>
-          <Link href="/rooms/list">
-            <Button variant="link">Stündlichen Plan anzeigen</Button>
-          </Link>
         </Form>
 
         <br />
