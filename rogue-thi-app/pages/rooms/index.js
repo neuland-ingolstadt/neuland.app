@@ -81,6 +81,7 @@ export default function RoomMap () {
   const { highlight } = router.query
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState([])
+  const [noSsrFloorOrder, setNoSsrFloorOrder] = useState([])
 
   const [filteredRooms, center] = useMemo(() => {
     const defaultCenter = [48.76677, 11.43322]
@@ -120,6 +121,8 @@ export default function RoomMap () {
         alert(e)
       }
     }
+
+    setNoSsrFloorOrder(floorOrder)
   }, [])
 
   function renderRoom (entry, key, onlyAvailable) {
@@ -223,11 +226,11 @@ export default function RoomMap () {
           </div>
 
           <LayersControl position="topright" collapsed={false}>
-            {floorOrder
+            {noSsrFloorOrder
               .filter(name => filteredRooms.some(x => x.properties.Etage === name))
               .map((floorName, i, filteredFloorOrder) => (
                 <BaseLayersControl
-                  key={floorName + (searchText || 'empty-search')}
+                  key={floorName + searchText}
                   name={floorName}
                   checked={i === filteredFloorOrder.length - 1}
                 >
