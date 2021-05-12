@@ -95,10 +95,10 @@ export default function RoomList () {
                       <div className={styles.room}>
                         {rooms.map((room, idx) =>
                           <>
-                            {TUX_ROOMS.includes(room) && <><FontAwesomeIcon icon={faLinux} /> </>}
                             <Link href={`/rooms?highlight=${room}`}>
                               {room}
                             </Link>
+                            {TUX_ROOMS.includes(room) && <> <FontAwesomeIcon icon={faLinux} /></>}
                             {idx === rooms.length - 1 ? '' : ', '}
                           </>
                         )}
