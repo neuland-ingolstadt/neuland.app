@@ -184,11 +184,10 @@ export default function Rooms () {
               {filterResults && filterResults.map((result, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
-                    {TUX_ROOMS.includes(result.room) && <><FontAwesomeIcon icon={faLinux} /> </>}
                     <Link href={`/rooms?highlight=${result.room}`}>
                       {result.room}
                     </Link>
-
+                    {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon icon={faLinux} /></>}
                     <div className={styles.details}>
                       {result.type}
                     </div>
