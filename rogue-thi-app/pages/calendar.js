@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import SwipeableViews from 'react-swipeable-views'
 
 import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
+import Nav from 'react-bootstrap/Nav'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
@@ -57,6 +57,7 @@ export async function loadExamList (session) {
 export default function Calendar () {
   const router = useRouter()
   const now = useTime()
+  const [page, setPage] = useState(0)
   const [exams, setExams] = useState(null)
   const [events, setEvents] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
@@ -124,11 +125,27 @@ export default function Calendar () {
           </Modal.Footer>
         </Modal>
 
-        <Tabs
-          defaultActiveKey="semester"
-          variant="pills"
-        >
-          <Tab tabClassName={styles.tab} eventKey="semester" title="Semester">
+        <Nav variant="pills" activeKey={page.toString()} onSelect={key => setPage(parseInt(key))}>
+          <Nav.Item>
+            {/* use numbers as event keys since SwipableViews works with indices */}
+            <Nav.Link eventKey="0">
+              Semester
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="1">
+              Prüfungen
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="2">
+              Veranstaltungen
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+
+        <SwipeableViews index={page} onChangeIndex={idx => setPage(idx)}>
+          <div className={styles.tab}>
             <ListGroup variant="flush">
               {calendar.map((item, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
@@ -156,9 +173,9 @@ export default function Calendar () {
                 </ListGroup.Item>
               )}
             </ListGroup>
-          </Tab>
+          </div>
 
-          <Tab tabClassName={styles.tab} eventKey="exams" title="Prüfungen">
+          <div className={styles.tab}>
             <ListGroup variant="flush">
               <ReactPlaceholder type="text" rows={4} ready={exams}>
                 {exams && exams.length === 0 && (
@@ -185,9 +202,9 @@ export default function Calendar () {
                 )}
               </ReactPlaceholder>
             </ListGroup>
-          </Tab>
+          </div>
 
-          <Tab tabClassName={styles.tab} eventKey="events" title="Veranstaltungen">
+          <div className={styles.tab}>
             <ListGroup variant="flush">
               <ReactPlaceholder type="text" rows={10} ready={events}>
                 {events && events.map((item, idx) =>
@@ -216,8 +233,8 @@ export default function Calendar () {
                 )}
               </ReactPlaceholder>
             </ListGroup>
-          </Tab>
-        </Tabs>
+          </div>
+        </SwipeableViews>
       </AppBody>
 
       <AppTabbar />

@@ -9,6 +9,9 @@
   flex: 1;
   text-align: center;
 }
+.container :global(.nav .nav-link) {
+  padding: 5px 10px;
+}
 
 .item {
   display: flex;
@@ -25,10 +28,6 @@
 .right {
   color: gray;
   text-align: right;
-}
-
-.tab {
-  padding: 5px 10px;
 }
 
 .eventUrl {
