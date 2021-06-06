@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import DOMPurify from 'dompurify'
+import SwipeableViews from 'react-swipeable-views'
+import { virtualize } from 'react-swipeable-views-utils'
 
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
@@ -19,6 +21,8 @@ import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { addWeek, DATE_LOCALE, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 
 import styles from '../styles/Timetable.module.css'
+
+const VirtualizeSwipeableViews = virtualize(SwipeableViews)
 
 export function getTimetableEntryName (item) {
   const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
@@ -103,12 +107,15 @@ export default function Timetable () {
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
   const [isDetailedData, setIsDetailedData] = useState(false)
-  const [week, setWeek] = useState(getWeek(new Date()))
 
-  // only this weeks timetable
-  const timetableCurrent = useMemo(() => {
-    return timetable && timetable.filter(group => isInWeek(group.date, ...week))
-  }, [timetable, week])
+  // page (0 = current week)
+  const [page, setPage] = useState(0)
+
+  // week for the caption
+  const week = useMemo(() => {
+    const [currStart, currEnd] = getWeek(new Date())
+    return [addWeek(currStart, page), addWeek(currEnd, page)]
+  }, [page])
 
   useEffect(async () => {
     // we need to load data only if we have not done it yet or if we have no
@@ -150,14 +157,50 @@ export default function Timetable () {
     }
   }, [focusedEntry])
 
-  function prevWeek () {
-    const [start, end] = week
-    setWeek([addWeek(start, -1), addWeek(end, -1)])
-  }
+  function timetableRenderer ({ key, index }) {
+    const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))
+    const current = timetable && timetable.filter(group => isInWeek(group.date, start, end))
 
-  function nextWeek () {
-    const [start, end] = week
-    setWeek([addWeek(start, +1), addWeek(end, +1)])
+    return (
+      <div key={key}>
+        {current && current.map((group, idx) =>
+          <div key={idx} className={`${styles.day} ${isToday(group.date) && styles.today}`}>
+            <div className={`text-muted ${styles.heading}`}>
+              <div className={styles.date}>
+                {getDay(group.date)}
+              </div>
+              <div className={styles.weekday}>
+                {getWeekday(group.date)}
+              </div>
+            </div>
+
+            <ListGroup className={styles.items} variant="flush">
+              {group.items.map((item, idx) =>
+                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
+                  <div className={styles.left}>
+                    <div className={styles.name}>
+                      {getTimetableEntryName(item).fullName}
+                    </div>
+                    <div className={styles.room}>
+                      {item.raum}
+                    </div>
+                  </div>
+                  <div className={styles.right}>
+                    {formatFriendlyTime(item.startDate)} <br />
+                    {formatFriendlyTime(item.endDate)}
+                  </div>
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          </div>
+        )}
+        {current && current.length === 0 &&
+          <div className={`text-muted ${styles.notice}`}>
+            Keine Veranstaltungen. 🎉
+          </div>
+        }
+      </div>
+    )
   }
 
   return (
@@ -222,53 +265,20 @@ export default function Timetable () {
         </Modal>
 
         <div className={styles.weekSelector}>
-          <Button className={styles.prevWeek} variant="link" onClick={() => prevWeek()}>
+          <Button className={styles.prevWeek} variant="link" onClick={() => setPage(idx => idx - 1)}>
             <FontAwesomeIcon icon={faChevronLeft} />
           </Button>
           <div className={styles.currentWeek}>
             {getFriendlyWeek(week[0])}
           </div>
-          <Button className={styles.nextWeek} variant="link" onClick={() => nextWeek()}>
+          <Button className={styles.nextWeek} variant="link" onClick={() => setPage(idx => idx + 1)}>
             <FontAwesomeIcon icon={faChevronRight} />
           </Button>
         </div>
 
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
-          {timetableCurrent && timetableCurrent.map((group, idx) =>
-            <div key={idx} className={`${styles.day} ${isToday(group.date) && styles.today}`}>
-              <div className={`text-muted ${styles.heading}`}>
-                <div className={styles.date}>
-                  {getDay(group.date)}
-                </div>
-                <div className={styles.weekday}>
-                  {getWeekday(group.date)}
-                </div>
-              </div>
-
-              <ListGroup className={styles.items} variant="flush">
-                {group.items.map((item, idx) =>
-                  <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
-                    <div className={styles.left}>
-                      <div className={styles.name}>
-                        {getTimetableEntryName(item).fullName}
-                      </div>
-                      <div className={styles.room}>
-                        {item.raum}
-                      </div>
-                    </div>
-                    <div className={styles.right}>
-                      {formatFriendlyTime(item.startDate)} <br />
-                      {formatFriendlyTime(item.endDate)}
-                    </div>
-                  </ListGroup.Item>
-                )}
-              </ListGroup>
-            </div>
-          )}
-          {timetableCurrent && timetableCurrent.length === 0 &&
-            <div className={`text-muted ${styles.notice}`}>
-              Keine Veranstaltungen. 🎉
-            </div>
+          {timetable && timetable.length > 0 &&
+            <VirtualizeSwipeableViews slideRenderer={timetableRenderer} index={page} onChangeIndex={idx => setPage(idx)} />
           }
           {timetable && timetable.length === 0 &&
             <div className={`text-muted ${styles.notice}`}>
