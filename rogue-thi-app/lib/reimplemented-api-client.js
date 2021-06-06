@@ -49,7 +49,7 @@ export async function getCharingStationData () {
 }
 
 export async function getCampusLifeEvents () {
-  const resp = await fetch('/api/events')
+  const resp = await fetch('/api/cl-events')
 
   if (resp.status === 200) {
     return await resp.json()
