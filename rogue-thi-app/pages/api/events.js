@@ -137,6 +137,6 @@ export default async function handler (req, res) {
     }
   } catch (e) {
     console.error(e)
-    sendJson(res, 500, e.message)
+    sendJson(res, 500, 'Unexpected/Malformed response from Moodle!')
   }
 }

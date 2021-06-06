@@ -87,9 +87,15 @@ async function fetchPlan (lang) {
 }
 
 export default async function handler (req, res) {
-  const plan = await fetchPlan(req.query.lang)
-
-  res.statusCode = 200
   res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify(plan))
+
+  try {
+    res.statusCode = 200
+    const plan = await fetchPlan(req.query.lang)
+    res.end(JSON.stringify(plan))
+  } catch (e) {
+    console.error(e)
+    res.statusCode = 500
+    res.end(JSON.stringify('Unexpected/Malformed response from the Mensa backend!'))
+  }
 }

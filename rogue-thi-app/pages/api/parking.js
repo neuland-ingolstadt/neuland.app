@@ -32,6 +32,7 @@ export default async function handler (req, res) {
 
     sendJson(res, 200, data)
   } catch (e) {
-    sendJson(res, 500, e.message)
+    console.error(e)
+    sendJson(res, 500, 'Unexpected/Malformed response from the Stadt Ingolstadt website!')
   }
 }
