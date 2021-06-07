@@ -61,7 +61,7 @@ export default function AppNavbar ({ title, showBack, children }) {
         </div>
       )}
 
-      <Navbar sticky="top" className={[styles.navbar, 'container', 'justify-content-between']}>
+      <Navbar fixed="top" className={[styles.navbar, 'container', 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>
           {showBackEffective && (
             <Button variant="link" onClick={() => router.back()} className={styles.back}>
@@ -86,6 +86,8 @@ export default function AppNavbar ({ title, showBack, children }) {
           }
         </Navbar.Brand>
       </Navbar>
+
+      <div className={styles.spacer} />
     </>
   )
 }
