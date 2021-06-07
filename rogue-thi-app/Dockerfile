@@ -1,6 +1,8 @@
 FROM node:14
 
 WORKDIR /opt/next
+ENV NODE_ENV production
+
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
