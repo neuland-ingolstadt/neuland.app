@@ -5,24 +5,6 @@ const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 const CRED_NAME = 'credentials'
 const CRED_ID = 'thi.de'
 
-/**
- * Moves credentials from localStorage to new CredentialStorage.
- *
- * Added April 2021, can be removed after a couple months.
- */
-async function upgradeCredentialStorage () {
-  const username = localStorage.username
-  const password = localStorage.password
-
-  if (username && password) {
-    const credStore = new CredentialStorage(CRED_NAME)
-    credStore.write(CRED_ID, { username, password })
-  }
-
-  delete localStorage.username
-  delete localStorage.password
-}
-
 export class NoSessionError extends Error {
 
 }
@@ -62,17 +44,15 @@ export async function callWithSession (method) {
   let session = localStorage.session
   const sessionCreated = parseInt(localStorage.sessionCreated)
 
-  await upgradeCredentialStorage()
-
-  const credStore = new CredentialStorage(CRED_NAME)
-  const { username, password } = await credStore.read(CRED_ID) || {}
-
-  // redirect user if there is no session and no saved credentials
+  // redirect user if he never had a session
   if (!session) {
     throw new NoSessionError()
   }
 
-  // log in if there the session is older than SESSION_EXPIRES
+  const credStore = new CredentialStorage(CRED_NAME)
+  const { username, password } = await credStore.read(CRED_ID) || {}
+
+  // log in if the session is older than SESSION_EXPIRES
   if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
