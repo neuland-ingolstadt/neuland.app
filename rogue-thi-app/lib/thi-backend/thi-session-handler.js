@@ -26,9 +26,9 @@ export async function createSession (router, username, password, stayLoggedIn) {
 
   const credStore = new CredentialStorage(CRED_NAME)
   if (stayLoggedIn) {
-    credStore.write(CRED_ID, { username, password })
+    await credStore.write(CRED_ID, { username, password })
   } else {
-    credStore.delete(CRED_ID)
+    await credStore.delete(CRED_ID)
   }
 
   router.replace('/')
@@ -99,8 +99,6 @@ export async function callWithSession (method) {
 export async function obtainSession (router) {
   let session = localStorage.session
   const age = parseInt(localStorage.sessionCreated)
-
-  await upgradeCredentialStorage()
 
   const credStore = new CredentialStorage(CRED_NAME)
   const { username, password } = await credStore.read(CRED_ID) || {}
