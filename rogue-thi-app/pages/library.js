@@ -45,20 +45,12 @@ export default function Library () {
     const available = await getAvailableLibrarySeats(session)
     setAvailable(available)
 
-    try {
-      const response = await getLibraryReservations(session)
-      response.forEach(x => {
-        x.start = new Date(x.reservation_begin.replace(' ', 'T'))
-        x.end = new Date(x.reservation_end.replace(' ', 'T'))
-      })
-
-      setReservations(response)
-    } catch (e) {
-      // XXX: as of 2021-06 the API returns "Service not available" when the user has no reservations
-      // thus we dont alert the error here, but just silently set the reservations to none
-      console.error(e)
-      setReservations([])
-    }
+    const response = await getLibraryReservations(session)
+    response.forEach(x => {
+      x.start = new Date(x.reservation_begin.replace(' ', 'T'))
+      x.end = new Date(x.reservation_end.replace(' ', 'T'))
+    })
+    setReservations(response)
   }
 
   function hideReservationModal () {

@@ -200,7 +200,9 @@ export async function getLibraryReservations (session) {
     session
   })
 
-  if (res.data === 'No reservation data') {
+  // as of 2021-06 the API returns "Service not available" when the user has no reservations
+  // thus we dont alert the error here, but just silently set the reservations to none
+  if (res.data === 'No reservation data' || res.status === -112) {
     return []
   }
   if (res.status !== 0) {
@@ -266,8 +268,10 @@ export async function removeLibraryReservation (session, reservationId) {
     session
   })
 
-  if (res.data === 'No reservation data') {
-    return true // dafuq THI API?
+  // as of 2021-06 the API returns "Service not available" when the user has no reservations
+  // thus we dont alert the error here, but just silently set the reservations to none
+  if (res.data === 'No reservation data' || res.status === -112) {
+    return true
   }
   if (res.status !== 0) {
     throw new Error(res.data)
