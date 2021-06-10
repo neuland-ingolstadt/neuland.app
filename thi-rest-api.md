@@ -599,6 +599,17 @@ cmd:     getreservation
 data:   
 ```
 
+As of 2021-06 the API returns "Service not available" when no reservations are available
+```json
+{
+    "data": "Service not available",
+    "date": "10.06.2021",
+    "time": "14:23:27",
+    "status": -112
+}
+```
+
+Old response:
 ```json
 {
     "data": "No reservation data",
