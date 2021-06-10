@@ -202,7 +202,7 @@ export async function getLibraryReservations (session) {
 
   // as of 2021-06 the API returns "Service not available" when the user has no reservations
   // thus we dont alert the error here, but just silently set the reservations to none
-  if (res.data === 'No reservation data' || res.status === -112) {
+  if (res.data === 'No reservation data' || res.data === 'Service not available') {
     return []
   }
   if (res.status !== 0) {
@@ -270,7 +270,7 @@ export async function removeLibraryReservation (session, reservationId) {
 
   // as of 2021-06 the API returns "Service not available" when the user has no reservations
   // thus we dont alert the error here, but just silently set the reservations to none
-  if (res.data === 'No reservation data' || res.status === -112) {
+  if (res.data === 'No reservation data' || res.data === 'Service not available') {
     return true
   }
   if (res.status !== 0) {
