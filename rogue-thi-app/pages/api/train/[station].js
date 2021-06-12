@@ -74,12 +74,12 @@ export default async function handler (req, res) {
 
       const $ = cheerio.load(body)
       const departures = $('.sqdetailsDep').map((i, el) => {
-        const spans = $(el).find('span')
-        const planned = $(spans[1]).text().trim()
-        const actual = $(spans[2]).text().trim() || planned
+        const name = $(el).find('.bold').eq(0).text().trim().replace(/\s+/g, ' ')
+        const planned = $(el).find('.bold').eq(1).text().trim()
+        const actual = $(el).find('.delayOnTime').text().trim() || planned
         const text = $(el).text().trim()
         return {
-          name: $(spans[0]).text().trim().replace(/\s+/g, ' '),
+          name,
           destination: text.match(/>>\n(.*)/)[1],
           plannedTime: dateFromTimestring(planned),
           actualTime: dateFromTimestring(actual),
