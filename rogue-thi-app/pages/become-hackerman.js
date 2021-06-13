@@ -38,22 +38,28 @@ export default function BecomeHackerman () {
       .catch(() => false)
   }
   async function checkFlags () {
-    let hasDuplicates = false
+    let hasError = false
     flags.forEach((x, i) => {
-      if (flags.indexOf(x, i + 1) !== -1) {
-        hasDuplicates = true
+      if (!hasError && x.trim() === '') {
+        setFlagError(`Flag ${i} is empty`)
+        hasError = true
+      }
+    })
+    flags.forEach((x, i) => {
+      if (!hasError && flags.indexOf(x, i + 1) !== -1) {
+        setFlagError('Cannot use the same flag more than once!')
+        hasError = true
       }
     })
 
-    if (hasDuplicates) {
-      setFlagError('Cannot use the same flag more than once!')
+    if (hasError) {
       return
     }
 
     try {
       for (let i = 0; i < flags.length; i++) {
         if (!await checkFlag(flags[i])) {
-          throw new Error(`flag ${i} seems to be invalid`)
+          throw new Error(`Flag ${i} seems to be invalid`)
         }
       }
 
