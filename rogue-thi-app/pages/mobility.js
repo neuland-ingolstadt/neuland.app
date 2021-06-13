@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEuroSign,
-  faChargingStation,
   faKey
 } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -41,9 +40,9 @@ export function getMobilityLabel (kind, station) {
     const entry = stations.train.stations.find(x => x.id === station)
     return `Bahn (${entry ? entry.name : '?'})`
   } else if (kind === 'parking') {
-    return 'Freie Parkplätze'
+    return 'Parkplätze'
   } else if (kind === 'charging') {
-    return 'Freie Ladestationen'
+    return 'Ladestationen'
   } else {
     return 'Mobilität'
   }
@@ -156,8 +155,9 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
         </div>
         <div className={styles.mobilityTime}>
           {typeof item.available === 'number'
-            ? item.available
-            : 'N/A'}
+            ? item.available + ' frei'
+            : 'n/a'
+          }
         </div>
       </>
     )
@@ -168,8 +168,7 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.name}
         </div>
         <div className={styles.mobilityTime}>
-          {item.available} / {item.total}
-          {' '}<FontAwesomeIcon icon={faChargingStation} />
+          {item.available} von {item.total} frei
         </div>
       </>
     )
