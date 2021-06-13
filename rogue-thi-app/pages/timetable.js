@@ -107,6 +107,8 @@ export default function Timetable () {
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
   const [isDetailedData, setIsDetailedData] = useState(false)
+  const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
+  const [showICalExplanation, setShowICalExplanation] = useState(false)
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
@@ -206,12 +208,73 @@ export default function Timetable () {
   return (
     <>
       <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
-        <Dropdown.Item variant="link" href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
-          Fächer bearbeiten (extern)
+        <Dropdown.Item variant="link" onClick={() => setShowTimetableExplanation(true)}>
+          Fächer bearbeiten
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => setShowICalExplanation(true)}>
+          Kalender Integration (iCal)
         </Dropdown.Item>
       </AppNavbar>
 
       <AppBody>
+        <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Fächer bearbeiten</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:
+            <ul>
+              <li>In &quot;myStundenplan&quot; einloggen</li>
+              <li>Links auf &quot;Fächerauswahl&quot; klicken</li>
+              <li>Studiengang auswählen und unten abspeichern</li>
+              <li>Oben auf &quot;Studiengruppen&quot; klicken</li>
+              <li>Semestergruppe auswählen und unten abspeichern</li>
+              <li>Oben auf den Studiengang klicken</li>
+              <li>Fächer auswählen und unten abspeichern</li>
+            </ul>
+
+            {/* TODO: Video? */}
+          </Modal.Body>
+          <Modal.Footer>
+            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
+              <Button variant="primary">
+                Zu &quot;myStundenplan&quot;
+              </Button>
+            </a>
+            <Button variant="secondary" onClick={() => setShowTimetableExplanation(false)}>
+              Schließen
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+        <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>iCal Integration</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Der persönliche Stundenplan kann per iCal URL in eine bestehende Kalender App integriert werden.
+            Die iCal URL findest du aktuell nur in Primuss:
+            <ul>
+              <li>In &quot;myStundenplan&quot; einloggen</li>
+              <li>Links auf &quot;Aktueller Stundenplan&quot; klicken</li>
+              <li>Oben auf &quot;Extern&quot; klicken</li>
+              <li>Unter &quot;Termine Abonnieren&quot; auf &quot;Link anzeigen&quot; klicken</li>
+            </ul>
+
+            {/* TODO: Video? */}
+          </Modal.Body>
+          <Modal.Footer>
+            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
+              <Button variant="primary">
+                Zu &quot;myStundenplan&quot;
+              </Button>
+            </a>
+            <Button variant="secondary" onClick={() => setShowICalExplanation(false)}>
+              Schließen
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
         <Modal size="lg" show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
           <Modal.Header closeButton>
             <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
