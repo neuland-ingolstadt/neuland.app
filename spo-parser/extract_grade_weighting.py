@@ -18,9 +18,6 @@ def find_col(data, needle):
 
 tables = camelot.read_pdf(sys.argv[1], pages="all")
 
-# ignore the last table, which is usually just the summary 
-tables = tables[0 : -1]
-
 entries = []
 unfinished_table = False
 for table in tables:
@@ -34,11 +31,11 @@ for table in tables:
 		data = data[0 : -1]
 
 	if not unfinished_table:
-		num_col = find_col(data, "lfdnr")
-		name_col = find_col(data, "modul")
+		num_col = find_col(data, "lfdnr") or find_col(data, "nummer") or find_col(data, "lfd")
+		name_col = find_col(data, "modul") or find_col(data, "fächer") or find_col(data, "fach")
 		sws_col = find_col(data, "sws")
 		weight_col = find_col(data, "gewichtung")
-		ects_col = find_col(data, "punkte")
+		ects_col = find_col(data, "punkte") or find_col(data, "ects")
 
 	if any(x is None for x in [num_col, name_col, sws_col, weight_col, ects_col]):
 		# ignore tables which dont list modules
@@ -49,8 +46,11 @@ for table in tables:
 		data = data[1 : ]
 
 	for row in data:
+		if num_col >= len(row):
+			continue
+
 		apo_num = row[num_col].strip()
-		if re.match(r"^\d+(\.\d+)*\.?$", apo_num) is None:
+		if weight_col >= len(row) or re.match(r"^\d+(\.\d+)*\.?$", apo_num) is None:
 			continue
 
 		weight = row[weight_col]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 mkdir -p SPOs
-#python3 download_spo_pdfs.py
+python3 download_spo_pdfs.py
 
 mkdir -p weightings
 for filename in SPOs/*.pdf; do
