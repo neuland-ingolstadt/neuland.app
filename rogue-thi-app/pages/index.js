@@ -268,9 +268,11 @@ function CalendarCard () {
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
   useEffect(async () => {
-    let examList = []
+    let exams = []
     try {
-      examList = await callWithSession(loadExamList)
+      exams = (await callWithSession(loadExamList))
+        .filter(x => !!x.date) // remove exams without a date
+        .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')
@@ -282,8 +284,7 @@ function CalendarCard () {
       }
     }
 
-    const examEntries = examList.map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
-    const combined = [...calendar, ...examEntries]
+    const combined = [...calendar, ...exams]
     combined.sort((a, b) => a.begin - b.begin)
     setMixedCalendar(combined)
   }, [])
