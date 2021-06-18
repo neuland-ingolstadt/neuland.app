@@ -58,20 +58,20 @@ const ALL_THEMES = [
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
-async function getMensaPlanPreview (session) {
-  const days = await getMensaPlan()
-  if (!days[0]) {
-    return []
-  }
+async function getMensaPlanPreview () {
+  const plan = await getMensaPlan()
+  const isoDate = new Date().toISOString().substring(0, 10)
 
-  const today = Object.values(days[0].meals)
-  if (today.length > 2) {
-    return [
-      today[0].name,
-      `und ${today.length - 1} weitere Gerichte`
-    ]
+  const todaysPlan = plan.find(x => x.timestamp === isoDate)?.meals
+  if (!todaysPlan) {
+    return []
+  } else if (todaysPlan.length <= 2) {
+    return todaysPlan.map(x => x.name)
   } else {
-    return today.map(x => x.name)
+    return [
+      todaysPlan[0].name,
+      `und ${todaysPlan.length - 1} weitere Gerichte`
+    ]
   }
 }
 
