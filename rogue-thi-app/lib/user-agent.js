@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 export const OS_ANDROID = 'android'
 export const OS_IOS = 'ios'
 export const OS_OTHER = 'other'
@@ -10,4 +12,12 @@ export function getOperatingSystem () {
   } else {
     return OS_OTHER
   }
+}
+
+export function useOperatingSystem () {
+  const [os, setOS] = useState(OS_OTHER)
+  useEffect(() => {
+    setOS(getOperatingSystem())
+  }, [])
+  return os
 }

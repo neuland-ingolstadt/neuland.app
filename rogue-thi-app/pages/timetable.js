@@ -19,6 +19,7 @@ import AppTabbar from '../components/AppTabbar'
 import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { getTimetable } from '../lib/thi-backend/thi-api-client'
 import { addWeek, DATE_LOCALE, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
+import { useOperatingSystem, OS_IOS } from '../lib/user-agent'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -104,6 +105,7 @@ function getWeekday (date) {
 
 export default function Timetable () {
   const router = useRouter()
+  const os = useOperatingSystem()
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
   const [isDetailedData, setIsDetailedData] = useState(false)
@@ -212,7 +214,7 @@ export default function Timetable () {
           Fächer bearbeiten
         </Dropdown.Item>
         <Dropdown.Item variant="link" onClick={() => setShowICalExplanation(true)}>
-          Kalender Integration (iCal)
+          Kalender abonnieren
         </Dropdown.Item>
       </AppNavbar>
 
@@ -224,10 +226,10 @@ export default function Timetable () {
           <Modal.Body>
             Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:
             <ul>
-              <li>In &quot;myStundenplan&quot; einloggen</li>
-              <li>Links auf &quot;Fächerauswahl&quot; klicken</li>
+              <li>In <em>myStundenplan</em> einloggen</li>
+              <li>Links auf <em>Fächerauswahl</em> klicken</li>
               <li>Studiengang auswählen und unten abspeichern</li>
-              <li>Oben auf &quot;Studiengruppen&quot; klicken</li>
+              <li>Oben auf <em>Studiengruppen</em> klicken</li>
               <li>Semestergruppe auswählen und unten abspeichern</li>
               <li>Oben auf den Studiengang klicken</li>
               <li>Fächer auswählen und unten abspeichern</li>
@@ -249,19 +251,32 @@ export default function Timetable () {
 
         <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>iCal Integration</Modal.Title>
+            <Modal.Title>Kalender abonnieren</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Der persönliche Stundenplan kann per iCal URL in eine bestehende Kalender App integriert werden.
-            Die iCal URL findest du aktuell nur in Primuss:
-            <ul>
-              <li>In &quot;myStundenplan&quot; einloggen</li>
-              <li>Links auf &quot;Aktueller Stundenplan&quot; klicken</li>
-              <li>Oben auf &quot;Extern&quot; klicken</li>
-              <li>Unter &quot;Termine Abonnieren&quot; auf &quot;Link anzeigen&quot; klicken</li>
-            </ul>
-
-            {/* TODO: Video? */}
+            <p>
+              Dein Stundenplan kann als Abonnement in eine Kalender-App integriert werden.
+            </p>
+            <p>
+              Die URL findest du aktuell nur in Primuss:
+              <ul>
+                <li>In <em>myStundenplan</em> einloggen</li>
+                <li>Links auf <em>Aktueller Stundenplan</em> klicken</li>
+                <li>Oben auf <em>Extern</em> klicken</li>
+                <li>Unter <em>Termine Abonnieren</em> auf <em>Link anzeigen</em> klicken</li>
+              </ul>
+            </p>
+            {os === OS_IOS &&
+              <p>
+                Die URL kannst du unter iOS wie folgt importieren:
+                <ul>
+                  <li>Einstellungen-App öffnen</li>
+                  <li>Auf <em>Kalender</em> &gt; <em>Accounts</em> &gt; <em>Account hinzufügen</em> &gt; <em>Kalenderabo hinzufügen</em> drücken</li>
+                  <li>Aus Primuss kopierten Link einfügen</li>
+                  <li>Auf <em>Weiter</em> &gt; <em>Sichern</em> drücken</li>
+                </ul>
+              </p>
+            }
           </Modal.Body>
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
