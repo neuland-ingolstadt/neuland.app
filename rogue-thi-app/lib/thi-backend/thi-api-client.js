@@ -105,19 +105,23 @@ export async function getTimetable (session, date, detailed = false) {
 }
 
 export async function getExams (session) {
-  const res = await cachedThiApiRequest(KEY_GET_EXAMS, {
-    service: 'thiapp',
-    method: 'exams',
-    format: 'json',
-    session
-  })
+  try {
+    const res = await cachedThiApiRequest(KEY_GET_EXAMS, {
+      service: 'thiapp',
+      method: 'exams',
+      format: 'json',
+      session
+    })
 
-  // when you have no exams the API sometimes returns "No exam data available"
-  if (res.data === 'No exam data available') {
-    return []
+    return res.data[1]
+  } catch (e) {
+    // when you have no exams the API sometimes returns "No exam data available"
+    if (e.message === 'No exam data available') {
+      return []
+    } else {
+      throw e
+    }
   }
-
-  return res.data[1]
 }
 
 export async function getGrades (session) {
