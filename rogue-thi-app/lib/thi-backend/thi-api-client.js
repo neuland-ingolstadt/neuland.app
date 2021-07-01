@@ -112,6 +112,11 @@ export async function getExams (session) {
     session
   })
 
+  // when you have no exams the API sometimes returns "No exam data available"
+  if (res.data === 'No exam data available') {
+    return []
+  }
+
   return res.data[1]
 }
 
