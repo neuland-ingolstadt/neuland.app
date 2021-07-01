@@ -186,6 +186,11 @@ export default function Calendar () {
           <SwipeableTab className={styles.tab} title="Veranstaltungen">
             <ListGroup variant="flush">
               <ReactPlaceholder type="text" rows={10} ready={events}>
+                {events && events.length === 0 && (
+                  <ListGroup.Item className={styles.item}>
+                    Es sind derzeit keine Veranstaltungstermine verfügbar.
+                  </ListGroup.Item>
+                )}
                 {events && events.map((item, idx) =>
                   <ListGroup.Item key={idx} className={styles.item}>
                     <div className={styles.left}>
