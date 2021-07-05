@@ -182,6 +182,7 @@ export default function Bus () {
   const [kind, setKind] = useState(null)
   const [station, setStation] = useState(null)
   const [data, setData] = useState(null)
+  const [dataError, setDataError] = useState(null)
 
   useEffect(() => {
     const { kind, station } = getMobilitySettings()
@@ -204,7 +205,7 @@ export default function Bus () {
         delete localStorage.mobilityStation
       }
     } catch (e) {
-      alert(e.message)
+      setDataError(e.message)
     }
   }, [kind, station, time])
 
@@ -258,7 +259,13 @@ export default function Bus () {
         </Form>
 
         <ListGroup>
-          <ReactPlaceholder type="text" rows={10} ready={data}>
+          <ReactPlaceholder type="text" rows={10} ready={data || dataError}>
+            {dataError && (
+              <ListGroup.Item className={styles.mobilityItem}>
+                Fehler beim Abruf!<br />
+                {dataError}
+              </ListGroup.Item>
+            )}
             {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
                 {renderMobilityEntry(kind, item, 200, styles)}
