@@ -4,14 +4,14 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
-import { MapContainer, TileLayer, AttributionControl, LayersControl, LayerGroup, FeatureGroup, Popup, Polygon } from 'react-leaflet'
+import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { filterRooms, getNextValidDate } from '../pages/rooms/search'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
-import { getNextValidDate, filterRooms } from '../pages/rooms/search'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
 import roomData from '../data/rooms.json'
 

@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import Container from 'react-bootstrap/Container'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import styles from '../styles/AppBody.module.css'
 

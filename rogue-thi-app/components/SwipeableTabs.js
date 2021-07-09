@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import SwipeableViews from 'react-swipeable-views'
+
 import Nav from 'react-bootstrap/Nav'
+import SwipeableViews from 'react-swipeable-views'
 
 /**
  * A `Tabs`-like component that is swipable on mobile.

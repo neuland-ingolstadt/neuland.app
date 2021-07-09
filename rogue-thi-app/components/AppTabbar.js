@@ -1,15 +1,16 @@
 import React from 'react'
 import { useRouter } from 'next/router'
+
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faHome,
   faCalendar,
+  faHome,
   faMap,
   faUtensils
 } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../styles/AppTabbar.module.css'
 

@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useMemo } from 'react'
-import PropTypes from 'prop-types'
 import Head from 'next/head'
+import PropTypes from 'prop-types'
 
 import Button from 'react-bootstrap/Button'
-import Navbar from 'react-bootstrap/Navbar'
 import Dropdown from 'react-bootstrap/Dropdown'
+import Navbar from 'react-bootstrap/Navbar'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
 
 import TheMatrixAnimation from './TheMatrixAnimation'
