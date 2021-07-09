@@ -1,6 +1,6 @@
 import HttpsConnection from './https-connection'
-import MemoryCache from '../cache/memory-cache'
 import LocalStorageCache from '../cache/localstorage-cache'
+import MemoryCache from '../cache/memory-cache'
 import { version } from '../../package.json'
 
 const CACHE_NAMESPACE = 'thi-api-client'

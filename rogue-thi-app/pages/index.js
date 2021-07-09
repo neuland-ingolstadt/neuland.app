@@ -1,41 +1,42 @@
-import React, { useEffect, useState, useContext, useMemo } from 'react'
-import { useRouter } from 'next/router'
-import PropTypes from 'prop-types'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 
 import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
 import Card from 'react-bootstrap/Card'
-import ListGroup from 'react-bootstrap/ListGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faChevronRight,
-  faCalendarMinus,
-  faUtensils,
-  faDoorOpen,
   faBook,
-  faPen,
-  faCalendarAlt,
   faBus,
-  faTrain,
+  faCalendarAlt,
+  faCalendarMinus,
   faCar,
-  faChargingStation
+  faChargingStation,
+  faChevronRight,
+  faDoorOpen,
+  faPen,
+  faTrain,
+  faUtensils
 } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import AppBody from '../components/AppBody'
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
+import AppBody from '../components/AppBody'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
-import { getTimetableEntryName, getFriendlyTimetable } from './timetable'
+
+import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
 import { calendar, loadExamList } from './calendar'
-import { getMobilitySettings, renderMobilityEntry, getMobilityLabel, getMobilityEntries } from './mobility'
-import { forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { formatFriendlyRelativeTime, formatFriendlyTime, formatNearDate } from '../lib/date-utils'
+import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
+import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
 import NeulandAPI from '../lib/neuland-api'
-import { formatNearDate, formatFriendlyTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
 
 import styles from '../styles/Home.module.css'

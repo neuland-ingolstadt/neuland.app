@@ -1,5 +1,5 @@
-import CredentialStorage from '../credential-storage'
 import API from './anonymous-api'
+import CredentialStorage from '../credential-storage'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 const CRED_NAME = 'credentials'

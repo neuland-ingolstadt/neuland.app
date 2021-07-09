@@ -1,5 +1,6 @@
-import cheerio from 'cheerio'
 import { URLSearchParams } from 'url'
+import cheerio from 'cheerio'
+
 import AsyncMemoryCache from '../../../lib/cache/async-memory-cache'
 
 const CACHE_TTL = 60 * 1000

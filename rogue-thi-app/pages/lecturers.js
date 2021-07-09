@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-import ReactPlaceholder from 'react-placeholder'
-import ListGroup from 'react-bootstrap/ListGroup'
-import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from 'react-bootstrap/Modal'
+import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+
 import API from '../lib/thi-backend/authenticated-api'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Lecturers.module.css'
 

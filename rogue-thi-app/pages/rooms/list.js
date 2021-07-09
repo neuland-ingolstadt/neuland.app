@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
-import ReactPlaceholder from 'react-placeholder'
-import ListGroup from 'react-bootstrap/ListGroup'
 import Dropdown from 'react-bootstrap/Dropdown'
+import ListGroup from 'react-bootstrap/ListGroup'
+import ReactPlaceholder from 'react-placeholder'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -12,9 +12,10 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
-import { NoSessionError } from '../../lib/thi-backend/thi-session-handler'
+
+import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import API from '../../lib/thi-backend/authenticated-api'
-import { formatNearDate, formatFriendlyTime } from '../../lib/date-utils'
+import { NoSessionError } from '../../lib/thi-backend/thi-session-handler'
 
 import styles from '../../styles/RoomsList.module.css'
 

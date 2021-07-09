@@ -6,10 +6,11 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
+import AppTabbar from '../components/AppTabbar'
+
 import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Imprint.module.css'
-import AppTabbar from '../components/AppTabbar'
 
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')

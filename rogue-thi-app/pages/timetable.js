@@ -1,25 +1,27 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/router'
 import DOMPurify from 'dompurify'
+import { useRouter } from 'next/router'
+
 import SwipeableViews from 'react-swipeable-views'
 import { virtualize } from 'react-swipeable-views-utils'
 
-import ListGroup from 'react-bootstrap/ListGroup'
-import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
+import ListGroup from 'react-bootstrap/ListGroup'
+import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+
+import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
+import { OS_IOS, useOperatingSystem } from '../lib/user-agent'
 import API from '../lib/thi-backend/authenticated-api'
-import { addWeek, DATE_LOCALE, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
-import { useOperatingSystem, OS_IOS } from '../lib/user-agent'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Timetable.module.css'
 

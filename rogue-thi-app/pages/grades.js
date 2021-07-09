@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import ReactPlaceholder from 'react-placeholder'
 import ListGroup from 'react-bootstrap/ListGroup'
+import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+
 import API from '../lib/thi-backend/authenticated-api'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Grades.module.css'
 

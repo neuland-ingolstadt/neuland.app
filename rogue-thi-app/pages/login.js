@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
-import Button from 'react-bootstrap/Button'
 import Alert from 'react-bootstrap/Alert'
+import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
+import AppNavbar from '../components/AppNavbar'
 import { createSession } from '../lib/thi-backend/thi-session-handler'
 
 import styles from '../styles/Login.module.css'

@@ -18,6 +18,9 @@
         "react"
     ],
     "rules": {
-        "no-prototype-builtins": 0
+        "no-prototype-builtins": "off",
+        "sort-imports": ["warn", {
+            "allowSeparatedGroups": true
+        }]
     }
 }

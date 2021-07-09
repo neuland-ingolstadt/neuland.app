@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
-import ReactPlaceholder from 'react-placeholder'
+import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
-import Button from 'react-bootstrap/Button'
+import ReactPlaceholder from 'react-placeholder'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
+import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
-import { useTime } from '../lib/time-hook'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+
+import { formatFriendlyDateRange, formatFriendlyDateTime, formatFriendlyDateTimeRange, formatFriendlyRelativeTime } from '../lib/date-utils'
 import API from '../lib/thi-backend/authenticated-api'
 import NeulandAPI from '../lib/neuland-api'
-import { formatFriendlyDateTime, formatFriendlyRelativeTime, formatFriendlyDateRange, formatFriendlyDateTimeRange } from '../lib/date-utils'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { parse as parsePostgresArray } from 'postgres-array'
+import { useTime } from '../lib/time-hook'
 
 import rawCalendar from '../data/calendar.json'
 

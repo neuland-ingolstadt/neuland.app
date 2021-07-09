@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from 'react'
 
-import ReactPlaceholder from 'react-placeholder'
-import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
+import ListGroup from 'react-bootstrap/ListGroup'
+import ReactPlaceholder from 'react-placeholder'
 
+import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faEuroSign,
-  faKey
-} from '@fortawesome/free-solid-svg-icons'
-import {
-  faCreativeCommonsNcEu
-} from '@fortawesome/free-brands-svg-icons'
+import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+
 import API from '../lib/thi-backend/authenticated-api'
 import NeulandAPI from '../lib/neuland-api'
-import { useTime } from '../lib/time-hook'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { formatRelativeMinutes } from '../lib/date-utils'
 import stations from '../data/mobility.json'
+import { useTime } from '../lib/time-hook'
 
 import styles from '../styles/Mobility.module.css'
 
