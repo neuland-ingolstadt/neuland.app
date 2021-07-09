@@ -19,7 +19,7 @@ import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
 import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
-import { OS_IOS, useOperatingSystem } from '../lib/user-agent'
+import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
 import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 

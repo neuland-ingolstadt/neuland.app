@@ -5,19 +5,18 @@ import Card from 'react-bootstrap/Card'
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { OS_ANDROID, OS_IOS, getOperatingSystem } from '../lib/user-agent'
+import { OS_ANDROID, OS_IOS, useOperatingSystem } from '../lib/os-hook'
 
 import styles from '../styles/Home.module.css'
 
 export default function InstallPrompt () {
   const [showPrompt, setShowPrompt] = useState(false)
+  const os = useOperatingSystem()
 
   useEffect(() => {
     if (localStorage.closedInstallPrompt) {
       return
     }
-
-    const os = getOperatingSystem()
 
     if (os === OS_IOS) {
       const isInstalled = navigator.standalone
@@ -26,7 +25,7 @@ export default function InstallPrompt () {
       const isInstalled = window.matchMedia('(display-mode: standalone)').matches
       setShowPrompt(!isInstalled && OS_ANDROID)
     }
-  }, [])
+  }, [os])
 
   function close () {
     setShowPrompt(false)
