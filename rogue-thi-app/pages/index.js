@@ -285,7 +285,8 @@ function CalendarCard () {
     }
 
     const combined = [...calendar, ...exams]
-    combined.sort((a, b) => a.begin - b.begin)
+      .sort((a, b) => a.begin - b.begin)
+      .filter(x => x.begin > Date.now() || x.end > Date.now())
     setMixedCalendar(combined)
   }, [])
 
