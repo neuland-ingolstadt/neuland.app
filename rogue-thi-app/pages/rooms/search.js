@@ -14,8 +14,8 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
-import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../../lib/thi-backend/thi-session-handler'
+import API from '../../lib/thi-backend/authenticated-api'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 import { getRoomOpenings } from '../../lib/thi-backend/thi-api-conversion'
 
@@ -41,7 +41,7 @@ export function getNextValidDate () {
   return startDate
 }
 
-export async function filterRooms (session, date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
+export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
 
   const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
@@ -55,7 +55,7 @@ export async function filterRooms (session, date, time, building = BUILDINGS_ALL
     beginDate.getMilliseconds()
   )
 
-  const data = await getFreeRooms(session, beginDate)
+  const data = await API.getFreeRooms(beginDate)
   const openings = getRoomOpenings(data.rooms, date)
   return Object.keys(openings)
     .flatMap(room =>
@@ -90,9 +90,7 @@ export default function Rooms () {
     setSearching(true)
     setFilterResults(null)
 
-    const rooms = await callWithSession(
-      session => filterRooms(session, date, time, building, duration)
-    )
+    const rooms = await filterRooms(date, time, building, duration)
 
     console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)

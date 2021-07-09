@@ -14,9 +14,9 @@ import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import { useTime } from '../lib/time-hook'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getExams } from '../lib/thi-backend/thi-api-client'
-import { getCampusLifeEvents, getThiEvents } from '../lib/reimplemented-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
+import NeulandAPI from '../lib/neuland-api'
 import { formatFriendlyDateTime, formatFriendlyRelativeTime, formatFriendlyDateRange, formatFriendlyDateTimeRange } from '../lib/date-utils'
 import { parse as parsePostgresArray } from 'postgres-array'
 
@@ -34,8 +34,8 @@ export const calendar = rawCalendar.map(x => ({
   .sort((a, b) => a.end - b.end)
   .sort((a, b) => a.begin - b.begin)
 
-export async function loadExamList (session) {
-  const examList = await getExams(session)
+export async function loadExamList () {
+  const examList = await API.getExams()
   return examList
     .map(x => {
       if (x.exm_date && x.exam_time) {
@@ -62,7 +62,7 @@ export default function Calendar () {
 
   useEffect(async () => {
     try {
-      const examList = await callWithSession(loadExamList)
+      const examList = await loadExamList()
       setExams(examList)
     } catch (e) {
       if (e instanceof NoSessionError) {
@@ -78,8 +78,8 @@ export default function Calendar () {
 
   useEffect(async () => {
     const [campusLifeEvents, thiEvents] = await Promise.all([
-      getCampusLifeEvents(),
-      getThiEvents()
+      NeulandAPI.getCampusLifeEvents(),
+      NeulandAPI.getThiEvents()
     ])
 
     const newEvents = campusLifeEvents

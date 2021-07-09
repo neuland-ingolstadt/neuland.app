@@ -8,8 +8,8 @@ import ReactPlaceholder from 'react-placeholder'
 import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getPersonalData } from '../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
 
@@ -19,9 +19,7 @@ export default function Personal () {
 
   useEffect(async () => {
     try {
-      const response = await callWithSession(
-        getPersonalData
-      )
+      const response = await API.getPersonalData()
       const data = response.persdata
       data.pcounter = response.pcounter
       setUserdata(data)

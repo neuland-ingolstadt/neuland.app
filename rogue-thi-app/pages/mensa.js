@@ -13,7 +13,7 @@ import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { getMensaPlan } from '../lib/reimplemented-api-client'
+import NeulandAPI from '../lib/neuland-api'
 import { formatNearDate } from '../lib/date-utils'
 
 import styles from '../styles/Mensa.module.css'
@@ -37,7 +37,7 @@ export default function Mensa () {
 
   useEffect(async () => {
     try {
-      const data = await getMensaPlan()
+      const data = await NeulandAPI.getMensaPlan()
       setMensaPlan(data)
     } catch (e) {
       console.error(e)

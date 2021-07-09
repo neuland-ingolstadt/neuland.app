@@ -9,7 +9,7 @@ import { MapContainer, TileLayer, AttributionControl, LayersControl, LayerGroup,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { getNextValidDate, filterRooms } from '../pages/rooms/search'
 
@@ -97,7 +97,7 @@ export default function RoomMap ({ highlight }) {
       const dateObj = getNextValidDate()
       const date = formatISODate(dateObj)
       const time = formatISOTime(dateObj)
-      const rooms = await callWithSession(session => filterRooms(session, date, time))
+      const rooms = await filterRooms(date, time)
       setAvailableRooms(rooms)
     } catch (e) {
       if (e instanceof NoSessionError) {

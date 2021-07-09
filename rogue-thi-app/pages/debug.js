@@ -5,7 +5,7 @@ import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import { obtainSession } from '../lib/thi-backend/thi-session-handler'
-import { thiApiRequest } from '../lib/thi-backend/thi-api-request'
+import API from '../lib/thi-backend/anonymous-api'
 
 import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
@@ -72,7 +72,7 @@ export default function Debug () {
     parameters.forEach(entry => params[entry.name] = entry.value)
     try {
       setResult('Loading...')
-      const resp = await thiApiRequest(params)
+      const resp = await API.request(params)
       setResult(JSON.stringify(resp, null, 4))
     } catch (e) {
       console.error(e)

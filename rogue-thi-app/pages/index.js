@@ -33,8 +33,8 @@ import InstallPrompt from '../components/InstallPrompt'
 import { getTimetableEntryName, getFriendlyTimetable } from './timetable'
 import { calendar, loadExamList } from './calendar'
 import { getMobilitySettings, renderMobilityEntry, getMobilityLabel, getMobilityEntries } from './mobility'
-import { callWithSession, forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getMensaPlan } from '../lib/reimplemented-api-client'
+import { forgetSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import NeulandAPI from '../lib/neuland-api'
 import { formatNearDate, formatFriendlyTime, formatFriendlyRelativeTime } from '../lib/date-utils'
 import { useTime } from '../lib/time-hook'
 
@@ -59,7 +59,7 @@ const ALL_THEMES = [
 ]
 
 async function getMensaPlanPreview () {
-  const plan = await getMensaPlan()
+  const plan = await NeulandAPI.getMensaPlan()
   const isoDate = new Date().toISOString().substring(0, 10)
 
   const todaysPlan = plan.find(x => x.timestamp === isoDate)?.meals
@@ -270,7 +270,7 @@ function CalendarCard () {
   useEffect(async () => {
     let exams = []
     try {
-      exams = (await callWithSession(loadExamList))
+      exams = (await loadExamList())
         .filter(x => !!x.date) // remove exams without a date
         .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
     } catch (e) {

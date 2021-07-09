@@ -11,8 +11,8 @@ import Form from 'react-bootstrap/Form'
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getPersonalLecturers, getLecturers } from '../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Lecturers.module.css'
 
@@ -47,7 +47,7 @@ export default function RoomList () {
 
   useEffect(async () => {
     try {
-      const rawData = await callWithSession(getPersonalLecturers)
+      const rawData = await API.getPersonalLecturers()
       const data = normalizeLecturers(rawData)
       setPersonalLecturers(data)
       setFilteredLecturers(data)
@@ -75,7 +75,7 @@ export default function RoomList () {
       setDidFetch(true)
       setFilteredLecturers(null)
       try {
-        const rawData = await callWithSession(session => getLecturers(session, '0', 'z'))
+        const rawData = await API.getLecturers('0', 'z')
         const data = normalizeLecturers(rawData)
         setAllLecturers(data)
         return

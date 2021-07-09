@@ -7,8 +7,8 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getGrades } from '../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Grades.module.css'
 
@@ -19,7 +19,7 @@ export default function Grades () {
 
   useEffect(async () => {
     try {
-      const gradeList = await callWithSession(getGrades)
+      const gradeList = await API.getGrades()
 
       gradeList.forEach(x => {
         if (x.anrech === '*' && x.note === '') {

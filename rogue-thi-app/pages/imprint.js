@@ -6,8 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
-import { callWithSession } from '../lib/thi-backend/thi-session-handler'
-import { getImprint } from '../lib/thi-backend/thi-api-client'
+import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Imprint.module.css'
 import AppTabbar from '../components/AppTabbar'
@@ -23,7 +22,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
   useEffect(async () => {
     try {
-      const html = await callWithSession(getImprint)
+      const html = await API.getImprint()
       setThiImprint(DOMPurify.sanitize(html))
     } catch (e) {
       console.error(e)

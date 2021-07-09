@@ -12,8 +12,8 @@ import { faLinux } from '@fortawesome/free-brands-svg-icons'
 import AppBody from '../../components/AppBody'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../../lib/thi-backend/thi-session-handler'
-import { getFreeRooms } from '../../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../../lib/thi-backend/thi-session-handler'
+import API from '../../lib/thi-backend/authenticated-api'
 import { formatNearDate, formatFriendlyTime } from '../../lib/date-utils'
 
 import styles from '../../styles/RoomsList.module.css'
@@ -27,9 +27,7 @@ export default function RoomList () {
   useEffect(async () => {
     try {
       const now = new Date()
-      const data = await callWithSession(
-        session => getFreeRooms(session, now)
-      )
+      const data = await API.getFreeRooms(now)
 
       const days = data.rooms.map(day => {
         const result = {}

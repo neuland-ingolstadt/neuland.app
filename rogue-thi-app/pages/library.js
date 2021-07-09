@@ -12,13 +12,8 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import {
-  getLibraryReservations,
-  getAvailableLibrarySeats,
-  addLibraryReservation,
-  removeLibraryReservation
-} from '../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
 import {
   formatNearDate,
   formatFriendlyTime
@@ -41,11 +36,11 @@ export default function Library () {
     'Lesesaal Galerie': 'Galerie'
   }
 
-  async function refreshData (session) {
-    const available = await getAvailableLibrarySeats(session)
+  async function refreshData () {
+    const available = await API.getAvailableLibrarySeats()
     setAvailable(available)
 
-    const response = await getLibraryReservations(session)
+    const response = await API.getLibraryReservations()
     response.forEach(x => {
       x.start = new Date(x.reservation_begin.replace(' ', 'T'))
       x.end = new Date(x.reservation_end.replace(' ', 'T'))
@@ -59,34 +54,25 @@ export default function Library () {
   }
 
   async function deleteReservation (id) {
-    callWithSession(
-      async session => {
-        await removeLibraryReservation(session, id)
-        await refreshData(session)
-      }
-    )
+    await API.removeLibraryReservation(id)
+    await refreshData()
   }
 
   async function addReservation () {
-    callWithSession(
-      async session => {
-        await addLibraryReservation(
-          session,
-          reservationRoom,
-          reservationDay.date,
-          reservationTime.from,
-          reservationTime.to,
-          reservationSeat
-        )
-        await refreshData(session)
-        hideReservationModal()
-      }
+    await API.addLibraryReservation(
+      reservationRoom,
+      reservationDay.date,
+      reservationTime.from,
+      reservationTime.to,
+      reservationSeat
     )
+    await refreshData()
+    hideReservationModal()
   }
 
   useEffect(async () => {
     try {
-      await callWithSession(refreshData)
+      await refreshData()
     } catch (e) {
       if (e instanceof NoSessionError) {
         router.replace('/login')

@@ -16,9 +16,9 @@ import {
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getCampusParkingData } from '../lib/thi-backend/thi-api-client'
-import { getBusPlan, getTrainPlan, getParkingData, getCharingStationData } from '../lib/reimplemented-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
+import NeulandAPI from '../lib/neuland-api'
 import { useTime } from '../lib/time-hook'
 import { formatRelativeMinutes } from '../lib/date-utils'
 import stations from '../data/mobility.json'
@@ -51,7 +51,7 @@ export function getMobilityLabel (kind, station) {
 async function getAndConvertCampusParkingData () {
   let available = null
   try {
-    const entries = await callWithSession(getCampusParkingData)
+    const entries = await API.getCampusParkingData()
     available = entries.find(x => x.name === 'TG Gießerei Hochschule')?.free
     available = typeof available === 'string' ? parseInt(available) : null
   } catch (e) {
@@ -68,12 +68,12 @@ async function getAndConvertCampusParkingData () {
 
 export async function getMobilityEntries (kind, station) {
   if (kind === 'bus') {
-    return getBusPlan(station)
+    return NeulandAPI.getBusPlan(station)
   } else if (kind === 'train') {
-    return getTrainPlan(station)
+    return NeulandAPI.getTrainPlan(station)
   } else if (kind === 'parking') {
     const [data, campusEntry] = await Promise.all([
-      getParkingData(),
+      NeulandAPI.getParkingData(),
       getAndConvertCampusParkingData()
     ])
     data.push(campusEntry)
@@ -90,7 +90,7 @@ export async function getMobilityEntries (kind, station) {
       ...data.filter(x => !stations.parking.find(y => x.name === y.name))
     ]
   } else if (kind === 'charging') {
-    const data = await getCharingStationData()
+    const data = await NeulandAPI.getCharingStationData()
     return [
       ...stations.charging
         .map(x => data.find(y => x.id === y.id))

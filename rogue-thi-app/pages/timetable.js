@@ -16,8 +16,8 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import AppBody from '../components/AppBody'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
-import { callWithSession, NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { getTimetable } from '../lib/thi-backend/thi-api-client'
+import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/thi-backend/authenticated-api'
 import { addWeek, DATE_LOCALE, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 import { useOperatingSystem, OS_IOS } from '../lib/user-agent'
 
@@ -50,7 +50,7 @@ export function getTimetableEntryName (item) {
 
 export async function getFriendlyTimetable (detailed) {
   const now = new Date()
-  const { timetable } = await callWithSession(session => getTimetable(session, now, detailed))
+  const { timetable } = await API.getTimetable(now, detailed)
 
   return timetable
     .map(x => {

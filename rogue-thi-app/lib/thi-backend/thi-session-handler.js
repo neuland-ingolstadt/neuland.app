@@ -1,5 +1,5 @@
 import CredentialStorage from '../credential-storage'
-import { isAlive, login } from './thi-api-client'
+import API from './anonymous-api'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 const CRED_NAME = 'credentials'
@@ -19,7 +19,7 @@ export async function createSession (router, username, password, stayLoggedIn) {
   // strip domain if user entered an email address
   username = username.replace(/@thi\.de$/, '')
 
-  const session = await login(username, password)
+  const session = await API.login(username, password)
 
   localStorage.session = session
   localStorage.sessionCreated = Date.now()
@@ -56,7 +56,7 @@ export async function callWithSession (method) {
   if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
-      session = await login(username, password)
+      session = await API.login(username, password)
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
     } catch (e) {
@@ -73,7 +73,7 @@ export async function callWithSession (method) {
       if (username && password) {
         console.log('seems to have received a session error trying to get a new session!')
         try {
-          session = await login(username, password)
+          session = await API.login(username, password)
           localStorage.session = session
           localStorage.sessionCreated = Date.now()
         } catch (e) {
@@ -104,7 +104,7 @@ export async function obtainSession (router) {
   const { username, password } = await credStore.read(CRED_ID) || {}
 
   // invalidate expired session
-  if (age + SESSION_EXPIRES < Date.now() || !await isAlive(session)) {
+  if (age + SESSION_EXPIRES < Date.now() || !await API.isAlive(session)) {
     console.log('Invalidating session')
 
     session = null
@@ -115,7 +115,7 @@ export async function obtainSession (router) {
     try {
       console.log('Logging in again')
 
-      session = await login(username, password)
+      session = await API.login(username, password)
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
     } catch (e) {
