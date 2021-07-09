@@ -28,6 +28,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
 
@@ -342,7 +343,7 @@ export default function Home () {
   }
 
   return (
-    <>
+    <AppContainer>
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
           <Dropdown.Item variant="link" href="/lecturers">
@@ -430,6 +431,6 @@ export default function Home () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

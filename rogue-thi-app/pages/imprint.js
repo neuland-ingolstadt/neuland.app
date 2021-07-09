@@ -5,6 +5,7 @@ import DOMPurify from 'dompurify'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -48,7 +49,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Impressum und Datenschutz" />
 
       <AppBody>
@@ -91,7 +92,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }
 

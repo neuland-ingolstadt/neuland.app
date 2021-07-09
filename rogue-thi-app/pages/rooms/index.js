@@ -1,10 +1,10 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 
-import Container from 'react-bootstrap/Container'
 import Dropdown from 'react-bootstrap/Dropdown'
 
 import AppBody from '../../components/AppBody'
+import AppContainer from '../../components/AppContainer'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
 
@@ -20,7 +20,7 @@ export default function Rooms () {
   const { highlight } = router.query
 
   return (
-    <Container className={styles.container}>
+    <AppContainer className={styles.container}>
       <AppNavbar title="Raumplan" showBack={'desktop-only'}>
         <Dropdown.Item variant="link" href="/rooms/search">
           Erweiterte Suche
@@ -35,6 +35,6 @@ export default function Rooms () {
       </AppBody>
 
       <AppTabbar />
-    </Container>
+    </AppContainer>
   )
 }

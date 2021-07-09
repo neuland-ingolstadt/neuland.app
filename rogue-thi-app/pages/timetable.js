@@ -15,6 +15,7 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -210,7 +211,7 @@ export default function Timetable () {
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
         <Dropdown.Item variant="link" onClick={() => setShowTimetableExplanation(true)}>
           Fächer bearbeiten
@@ -377,6 +378,6 @@ export default function Timetable () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

@@ -7,6 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppTabbar from '../components/AppTabbar'
 
 const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
@@ -74,7 +75,7 @@ export default function BecomeHackerman () {
   }
 
   return (
-    <>
+    <AppContainer>
       <ThemeContext.Provider value={'hacker'}>
         <AppNavbar title="Become Hackerman" />
       </ThemeContext.Provider>
@@ -127,6 +128,6 @@ export default function BecomeHackerman () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

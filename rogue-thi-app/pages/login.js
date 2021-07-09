@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import { createSession } from '../lib/thi-backend/thi-session-handler'
 
@@ -39,7 +40,7 @@ export default function Login () {
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="neuland.app" showBack={false} />
 
       <AppBody>
@@ -122,6 +123,6 @@ export default function Login () {
           </div>
         </div>
       </AppBody>
-    </>
+    </AppContainer>
   )
 }

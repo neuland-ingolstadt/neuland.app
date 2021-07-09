@@ -11,6 +11,7 @@ import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -97,7 +98,7 @@ export default function Calendar () {
   }, [])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Termine" />
 
       <AppBody className={styles.container}>
@@ -223,6 +224,6 @@ export default function Calendar () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

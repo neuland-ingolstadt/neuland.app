@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../../components/AppBody'
+import AppContainer from '../../components/AppContainer'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
 
@@ -66,7 +67,7 @@ export default function RoomList () {
   }, [])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Stündlicher Raumplan">
         <Dropdown.Item variant="link" href="/rooms">
           Kartenansicht
@@ -112,6 +113,6 @@ export default function RoomList () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

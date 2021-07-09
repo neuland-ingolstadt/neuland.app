@@ -9,6 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Row from 'react-bootstrap/Row'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -82,7 +83,7 @@ export default function Debug () {
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="API Playground" />
 
       <AppBody>
@@ -138,6 +139,6 @@ export default function Debug () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

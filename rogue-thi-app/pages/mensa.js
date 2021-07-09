@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -62,7 +63,7 @@ export default function Mensa () {
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Mensa" showBack={'desktop-only'}>
         <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
           Allergene auswählen
@@ -188,6 +189,6 @@ export default function Mensa () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

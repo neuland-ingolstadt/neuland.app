@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -106,7 +107,7 @@ export default function RoomList () {
   }, [search, allLecturers])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Dozenten" />
 
       <AppBody>
@@ -218,6 +219,6 @@ export default function RoomList () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

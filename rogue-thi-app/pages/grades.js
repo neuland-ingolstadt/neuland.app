@@ -5,6 +5,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -55,7 +56,7 @@ export default function Grades () {
   }, [])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Noten & Fächer" />
 
       <AppBody>
@@ -103,6 +104,6 @@ export default function Grades () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

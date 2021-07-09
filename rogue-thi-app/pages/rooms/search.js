@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../../components/AppBody'
+import AppContainer from '../../components/AppContainer'
 import AppNavbar from '../../components/AppNavbar'
 import AppTabbar from '../../components/AppTabbar'
 
@@ -111,7 +112,7 @@ export default function Rooms () {
   }, [])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Raumsuche">
         <Dropdown.Item variant="link" href="/rooms">
           Kartenansicht
@@ -208,6 +209,6 @@ export default function Rooms () {
       </AppBody>
 
       <AppTabbar />
-    </>
+    </AppContainer>
   )
 }

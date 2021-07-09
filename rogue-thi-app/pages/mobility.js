@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -216,7 +217,7 @@ export default function Bus () {
   }
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title={getMobilityLabel(kind, station)} />
 
       <AppBody>
@@ -272,6 +273,6 @@ export default function Bus () {
 
         <AppTabbar />
       </AppBody>
-    </>
+    </AppContainer>
   )
 }

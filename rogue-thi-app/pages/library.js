@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
+import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
@@ -83,7 +84,7 @@ export default function Library () {
   }, [])
 
   return (
-    <>
+    <AppContainer>
       <AppNavbar title="Bibliothek" />
 
       <AppBody>
@@ -190,6 +191,6 @@ export default function Library () {
 
         <AppTabbar />
       </AppBody>
-    </>
+    </AppContainer>
   )
 }
