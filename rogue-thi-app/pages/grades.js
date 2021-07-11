@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import ReactPlaceholder from 'react-placeholder'
 import { useRouter } from 'next/router'
 
+import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
-import ReactPlaceholder from 'react-placeholder'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
+
+import { faQuestion, faQuestionCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
@@ -12,18 +18,61 @@ import AppTabbar from '../components/AppTabbar'
 import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
+import courseSPOs from '../data/spo-grade-weights.json'
+import courseShorts from '../data/course-short-names.json'
+
 import styles from '../styles/Grades.module.css'
 
 export default function Grades () {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
+  const [gradeAverages, setGradeAverages] = useState(null)
+
+  const hasMultipleCourses = gradeAverages && Object.keys(gradeAverages).length > 1
+  const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
 
   useEffect(async () => {
     try {
       const gradeList = await API.getGrades()
+      const averages = {}
 
       gradeList.forEach(x => {
+        if (!averages[x.stg]) {
+          averages[x.stg] = {
+            result: -1,
+            entries: []
+          }
+        }
+        const average = averages[x.stg]
+
+        const spoName = courseShorts[x.stg]
+        const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
+        if (grade && spoName && courseSPOs[spoName]) {
+          const spo = courseSPOs[spoName]
+          const apoNum = x.pon.replace(/^0+/, '')
+          const entry = spo.find(y => y.apo_number === apoNum)
+          const other = average.entries.find(y => apoNum === y.spoNum)
+
+          if (other) {
+            other.grade = other.grade || grade
+          } else if (entry) {
+            average.entries.push({
+              apoNum,
+              name: entry.name,
+              weight: entry.weight,
+              grade
+            })
+          } else {
+            average.entries.push({
+              apoNum,
+              name: x.titel,
+              weight: null,
+              grade
+            })
+          }
+        }
+
         if (x.anrech === '*' && x.note === '') {
           x.note = 'E*'
         }
@@ -31,6 +80,15 @@ export default function Grades () {
           x.note = 'E'
         }
       })
+
+      Object.keys(averages).forEach(stg => {
+        const entries = averages[stg].entries
+        entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
+        const result = entries.reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
+        const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
+        averages[stg].result = result / weight
+      })
+      setGradeAverages(averages)
 
       const deduplicatedGrades = gradeList
         .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
@@ -63,6 +121,52 @@ export default function Grades () {
       <AppNavbar title="Noten & Fächer" />
 
       <AppBody>
+        <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
+          {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
+            <ListGroup key={idx}>
+            <h4 className={styles.heading}>
+              Notenschnitt{hasMultipleCourses && ` (${stg})`}
+            </h4>
+
+              <ListGroup.Item>
+                <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
+                {average.entries.map((entry, jdx) =>
+                  <>
+                    {jdx !== 0 && <>
+                      <span className={styles.spacer}></span>
+                      {'+'}
+                      <span className={styles.spacer}></span>
+                    </>}
+                    <OverlayTrigger
+                      key={jdx}
+                      placement="top"
+                      overlay={
+                        <Tooltip id={`${stg}-${jdx}`}>
+                          {entry.name}
+                        </Tooltip>
+                      }
+                    >
+                      <Button variant="text">
+                        {entry.weight
+                          ? <b>{formatNum(entry.weight)}</b>
+                          : <FontAwesomeIcon icon={faQuestionCircle} />
+                        }
+                        {' '}
+                        <FontAwesomeIcon icon={faTimes} />
+                        {' '}
+                        {entry.grade
+                          ? <b>{formatNum(entry.grade)}</b>
+                          : <FontAwesomeIcon icon={faQuestion} />
+                        }
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          )}
+        </ReactPlaceholder>
+
         <ListGroup>
           <h4 className={styles.heading}>
             Noten
@@ -72,7 +176,7 @@ export default function Grades () {
             {grades && grades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
-                  {item.titel} ({item.stg})<br />
+                  {item.titel}{hasMultipleCourses && ` (${item.stg})`}<br />
 
                   <div className={styles.details}>
                     Note: {item.note.replace('*', ' (angerechnet)')}<br />
