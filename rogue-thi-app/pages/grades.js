@@ -27,6 +27,9 @@ export default function Grades () {
         if (x.anrech === '*' && x.note === '') {
           x.note = 'E*'
         }
+        if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
+          x.note = 'E'
+        }
       })
 
       const deduplicatedGrades = gradeList
