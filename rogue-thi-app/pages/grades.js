@@ -32,6 +32,10 @@ export default function Grades () {
   const hasMultipleCourses = gradeAverages && Object.keys(gradeAverages).length > 1
   const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
 
+  function simplifyName (x) {
+    return x.replace(/\W/g, '').toLowerCase()
+  }
+
   useEffect(async () => {
     try {
       const gradeList = await API.getGrades()
@@ -50,22 +54,22 @@ export default function Grades () {
         const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
         if (grade && spoName && courseSPOs[spoName]) {
           const spo = courseSPOs[spoName]
-          const apoNum = x.pon.replace(/^0+/, '')
-          const entry = spo.find(y => y.apo_number === apoNum)
-          const other = average.entries.find(y => apoNum === y.spoNum)
+          const name = simplifyName(x.titel)
+          const entry = spo.find(y => simplifyName(y.name) === name)
+          const other = average.entries.find(y => y.simpleName === name)
 
           if (other) {
             other.grade = other.grade || grade
           } else if (entry) {
             average.entries.push({
-              apoNum,
+              simpleName: name,
               name: entry.name,
-              weight: entry.weight,
+              weight: typeof entry.weight === 'number' ? entry.weight : null,
               grade
             })
           } else {
             average.entries.push({
-              apoNum,
+              simpleName: name,
               name: x.titel,
               weight: null,
               grade
