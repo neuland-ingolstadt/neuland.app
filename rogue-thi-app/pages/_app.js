@@ -1,6 +1,6 @@
-import { React } from 'react'
-import PropTypes from 'prop-types'
 import App from 'next/app'
+import PropTypes from 'prop-types'
+import { React } from 'react'
 import { ThemeContext } from '../components/AppNavbar'
 
 // fontawesome

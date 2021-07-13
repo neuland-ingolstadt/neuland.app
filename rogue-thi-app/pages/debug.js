@@ -71,7 +71,9 @@ export default function Debug () {
 
   async function submit () {
     const params = {}
-    parameters.forEach(entry => params[entry.name] = entry.value)
+    for (const entry of parameters) {
+      params[entry.name] = entry.value
+    }
     try {
       setResult('Loading...')
       const resp = await API.request(params)
