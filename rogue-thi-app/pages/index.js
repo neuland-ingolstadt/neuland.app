@@ -306,8 +306,8 @@ function CalendarCard () {
             </div>
             <div className="text-muted">
               {(x.end && x.begin < time)
-                ? 'bis ' + formatFriendlyRelativeTime(x.end)
-                : formatFriendlyRelativeTime(x.begin)}
+                ? 'endet ' + formatFriendlyRelativeTime(x.end)
+                : 'beginnt ' + formatFriendlyRelativeTime(x.begin)}
             </div>
           </ListGroup.Item>
         ))}
