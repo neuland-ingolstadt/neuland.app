@@ -78,8 +78,8 @@ export function formatFriendlyDateTime (datetime) {
   return `${date}, ${time}`
 }
 
-function formatAbsoluteFriendlyRelativeTime (date) {
-  const delta = Math.abs(date - Date.now())
+function formatFriendlyTimeDelta (delta) {
+  delta = Math.abs(delta)
 
   const weeks = delta / (7 * 24 * 60 * 60 * 1000) | 0
   if (weeks > 2) {
@@ -112,10 +112,29 @@ function formatAbsoluteFriendlyRelativeTime (date) {
  * Formats a relative date and time like "in 5 Minuten" or "vor 10 Minuten"
  */
 export function formatFriendlyRelativeTime (date) {
-  if (Date.now() < date) {
-    return `${WORD_IN} ${formatAbsoluteFriendlyRelativeTime(date)}`
+  const startOfDay = new Date()
+  startOfDay.setHours(0)
+  startOfDay.setMinutes(0)
+  startOfDay.setSeconds(0)
+  startOfDay.setMilliseconds(0)
+
+  const deltaFromNow = date.getTime() - Date.now()
+  const deltaFromStartOfDay = date.getTime() - startOfDay.getTime()
+
+  if (deltaFromNow > 0) {
+    // when the event is more than 24h away, use the start of the day as a reference
+    // (because that is how humans measure time, apparently)
+    if (Math.abs(deltaFromNow) < 86400000) {
+      return `${WORD_IN} ${formatFriendlyTimeDelta(deltaFromNow)}`
+    } else {
+      return `${WORD_IN} ${formatFriendlyTimeDelta(deltaFromStartOfDay)}`
+    }
   } else {
-    return `${WORD_AGO} ${formatAbsoluteFriendlyRelativeTime(date)}`
+    if (Math.abs(deltaFromNow) < 86400000) {
+      return `${WORD_AGO} ${formatFriendlyTimeDelta(deltaFromNow)}`
+    } else {
+      return `${WORD_AGO} ${formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000)}`
+    }
   }
 }
 
