@@ -270,9 +270,9 @@ export default function Bus () {
             ))}
           </ReactPlaceholder>
         </ListGroup>
-
-        <AppTabbar />
       </AppBody>
+
+      <AppTabbar />
     </AppContainer>
   )
 }

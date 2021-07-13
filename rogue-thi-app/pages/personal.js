@@ -73,9 +73,9 @@ export default function Personal () {
           {renderPersonalEntry('Straße', 'str')}
           {renderPersonalEntry('Ort', null, () => `${userdata.plz} ${userdata.ort}`)}
         </ListGroup>
-
-        <AppTabbar />
       </AppBody>
+
+      <AppTabbar />
     </AppContainer>
   )
 }

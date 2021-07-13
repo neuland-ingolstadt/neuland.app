@@ -27,12 +27,3 @@
 .icon {
   font-size: 18pt;
 }
-
-/*
- * this spacer is placed directly under the app body and provides
- * clerance to ensure nothing is displayed under the tab bar
- */
-.spacer {
-  /* 56px footer height + iOS home bar height */
-  height: calc(56px + env(safe-area-inset-bottom, 0px));
-}

@@ -188,9 +188,9 @@ export default function Library () {
             )}
           </ListGroup>
         </ReactPlaceholder>
-
-        <AppTabbar />
       </AppBody>
+
+      <AppTabbar />
     </AppContainer>
   )
 }

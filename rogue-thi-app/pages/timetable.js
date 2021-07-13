@@ -221,7 +221,7 @@ export default function Timetable () {
         </Dropdown.Item>
       </AppNavbar>
 
-      <AppBody>
+      <AppBody className={styles.container}>
         <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Fächer bearbeiten</Modal.Title>
@@ -359,7 +359,12 @@ export default function Timetable () {
 
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
           {timetable && timetable.length > 0 &&
-            <VirtualizeSwipeableViews slideRenderer={timetableRenderer} index={page} onChangeIndex={idx => setPage(idx)} />
+            <VirtualizeSwipeableViews
+              className={styles.swipeable}
+              slideRenderer={timetableRenderer}
+              index={page}
+              onChangeIndex={idx => setPage(idx)}
+            />
           }
           {timetable && timetable.length === 0 &&
             <div className={`text-muted ${styles.notice}`}>

@@ -33,12 +33,3 @@
   height: 100vh;
   z-index: 0;
 }
-
-/*
- * this spacer is placed directly above the app body and provides
- * clerance to ensure nothing is displayed under the navbar
- */
-.spacer {
-  /* 50px header height + iOS home bar height */
-  height: calc(50px + env(safe-area-inset-top, 0px));
-}

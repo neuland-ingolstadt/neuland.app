@@ -1,3 +1,8 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 .weekSelector {
   display: flex;
   align-items: center;
@@ -6,6 +11,10 @@
 .weekSelector .currentWeek {
   flex: 1;
   text-align: center;
+}
+
+.swipeable {
+  flex: 1;
 }
 
 .day {
