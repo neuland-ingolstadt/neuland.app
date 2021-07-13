@@ -16,8 +16,8 @@ $gray-900: #212529;
 $black: #000;
 
 $color-darker-percent-full: 20%;
-$color-darker-percent-half: $color-darker-percent-full / 2;
-$color-darker-percent-quarter: $color-darker-percent-half / 2;
+$color-darker-percent-half: $color-darker-percent-full * 0.5;
+$color-darker-percent-quarter: $color-darker-percent-half * 0.5;
 $color-darker-percent-none: 0;
 
 $blue: lighten(#007bff, $color-darker-percent-half);
