@@ -26,23 +26,6 @@ created manually by using the official app and logging requests with mitmproxy.
 The app also includes a [debugging tool](https://neuland.app/debug) which handles session generation
 and API communication.
 
-## Development
-
-Requires [Node.js 14](https://nodejs.org/en/).
-
-### Setup
-```
-cd rogue-thi-app
-npm install
-```
-
-### Starting
-```
-npm run dev
-```
-
-The application will then be available under http://localhost:3000.
-
 ## Attribution
 
 Even though some developers of this project are part of the StudVer (student council)
