@@ -16,18 +16,7 @@ const WORD_NEXT_WEEK = 'Nächste Woche'
 export const DATE_LOCALE = 'de-DE'
 
 /**
- * Formats a time like "8:15"
- */
-export function formatFriendlyTime (datetime) {
-  if (typeof datetime === 'string') {
-    datetime = new Date(datetime)
-  }
-
-  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
-}
-
-/**
- * Formats a date like "1.10.2020"
+ * Formats a date like "Mo., 1.10.2020"
  */
 export function formatFriendlyDate (datetime) {
   if (typeof datetime === 'string') {
@@ -43,8 +32,55 @@ export function formatFriendlyDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return WORD_TOMORROW
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { day: 'numeric', month: '2-digit', year: 'numeric' })
+    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
+}
+
+/**
+ * Formats a date range like "Mo., 1.10.2021 - Di., 2.10.2021"
+ */
+export function formatFriendlyDateRange (begin, end) {
+  let str = formatFriendlyDate(begin)
+  if (end && begin.toDateString() !== end.toDateString()) {
+    str += ' – ' + formatFriendlyDate(end)
+  }
+  return str
+}
+
+/**
+ * Formats a time like "8:15"
+ */
+export function formatFriendlyTime (datetime) {
+  if (typeof datetime === 'string') {
+    datetime = new Date(datetime)
+  }
+
+  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
+}
+
+/**
+ * Formats a date range like "Mo., 1.10.2021 08:00 – 12:00" or "Mo., 1.10.2021 08:00 – Do., 2.10.2021 08:00"
+ */
+export function formatFriendlyDateTimeRange (begin, end) {
+  let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
+  if (end) {
+    if (begin.toDateString() === end.toDateString()) {
+      str += ' – ' + formatFriendlyTime(end)
+    } else {
+      str += ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
+    }
+  }
+  return str
+}
+
+/**
+ * Formats a date and time like "Mo., 1.10.2020, 08:15"
+ */
+export function formatFriendlyDateTime (datetime) {
+  const date = formatFriendlyDate(datetime)
+  const time = formatFriendlyTime(datetime)
+
+  return `${date}, ${time}`
 }
 
 /**
@@ -66,16 +102,6 @@ export function formatNearDate (datetime) {
   } else {
     return datetime.toLocaleString(DATE_LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })
   }
-}
-
-/**
- * Formats a date and time like "1. Oktober, 8:15"
- */
-export function formatFriendlyDateTime (datetime) {
-  const date = formatFriendlyDate(datetime)
-  const time = formatFriendlyTime(datetime)
-
-  return `${date}, ${time}`
 }
 
 function formatFriendlyTimeDelta (delta) {
@@ -148,32 +174,6 @@ export function formatRelativeMinutes (datetime) {
 
   const minutes = Math.max(Math.floor((datetime.getTime() - Date.now()) / 60000), 0)
   return `${minutes} min`
-}
-
-/**
- * Formats a date range like "1.10.2021 - 2.10.2021"
- */
-export function formatFriendlyDateRange (begin, end) {
-  let str = formatFriendlyDate(begin)
-  if (end && begin.toDateString() !== end.toDateString()) {
-    str += ' – ' + formatFriendlyDate(end)
-  }
-  return str
-}
-
-/**
- * Formats a date range like "1.10.2021 08:00 – 12:00" or "1.10.2021 08:00 – 2.10.2021 08:00"
- */
-export function formatFriendlyDateTimeRange (begin, end) {
-  let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
-  if (end) {
-    if (begin.toDateString() === end.toDateString()) {
-      str += ' – ' + formatFriendlyTime(end)
-    } else {
-      str += ' – ' + formatFriendlyDate(end) + ', ' + formatFriendlyTime(end)
-    }
-  }
-  return str
 }
 
 /**
