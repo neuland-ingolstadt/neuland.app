@@ -1,7 +1,7 @@
 import HttpsConnection from './https-connection'
 import LocalStorageCache from '../cache/localstorage-cache'
 import MemoryCache from '../cache/memory-cache'
-import { version } from '../../package.json'
+import packageInfo from '../../package.json'
 
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
@@ -10,7 +10,7 @@ const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const USER_AGENT = `neuland.app/${version} (+${GIT_URL})`
+const USER_AGENT = `neuland.app/${packageInfo.version} (+${GIT_URL})`
 
 // T-TeleSec GlobalRoot Class 2
 // valid until 02.10.2033, 1:59:59 CEST

@@ -19,21 +19,24 @@ export default function Personal () {
   const [userdata, setUserdata] = useState(null)
   const router = useRouter()
 
-  useEffect(async () => {
-    try {
-      const response = await API.getPersonalData()
-      const data = response.persdata
-      data.pcounter = response.pcounter
-      setUserdata(data)
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        const response = await API.getPersonalData()
+        const data = response.persdata
+        data.pcounter = response.pcounter
+        setUserdata(data)
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [router])
 
   function renderPersonalEntry (label, name, render) {
     return (

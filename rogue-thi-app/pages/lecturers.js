@@ -47,40 +47,13 @@ export default function RoomList () {
   const [search, setSearch] = useState('')
   const [focusedLecturer, setFocusedLecturer] = useState(null)
 
-  useEffect(async () => {
-    try {
-      const rawData = await API.getPersonalLecturers()
-      const data = normalizeLecturers(rawData)
-      setPersonalLecturers(data)
-      setFilteredLecturers(data)
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
-      }
-    }
-  }, [])
-
-  useEffect(async () => {
-    if (!search) {
-      setFilteredLecturers(personalLecturers)
-      return
-    }
-
-    if (!allLecturers) {
-      if (didFetch) {
-        return
-      }
-
-      setDidFetch(true)
-      setFilteredLecturers(null)
+  useEffect(() => {
+    async function load () {
       try {
-        const rawData = await API.getLecturers('0', 'z')
+        const rawData = await API.getPersonalLecturers()
         const data = normalizeLecturers(rawData)
-        setAllLecturers(data)
-        return
+        setPersonalLecturers(data)
+        setFilteredLecturers(data)
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login')
@@ -88,23 +61,56 @@ export default function RoomList () {
           console.error(e)
           alert(e)
         }
-        return
       }
     }
+    load()
+  }, [router])
 
-    const normalizedSearch = search.toLowerCase()
-    const checkField = value => value && value.toString().toLowerCase().includes(normalizedSearch)
-    const filtered = allLecturers
-      .filter(x => checkField(x.name) ||
-        checkField(x.vorname) ||
-        checkField(x.email) ||
-        checkField(x.tel_dienst) ||
-        checkField(x.raum)
-      )
-      .slice(0, 20)
+  useEffect(() => {
+    async function load () {
+      if (!search) {
+        setFilteredLecturers(personalLecturers)
+        return
+      }
 
-    setFilteredLecturers(filtered)
-  }, [search, allLecturers])
+      if (!allLecturers) {
+        if (didFetch) {
+          return
+        }
+
+        setDidFetch(true)
+        setFilteredLecturers(null)
+        try {
+          const rawData = await API.getLecturers('0', 'z')
+          const data = normalizeLecturers(rawData)
+          setAllLecturers(data)
+          return
+        } catch (e) {
+          if (e instanceof NoSessionError) {
+            router.replace('/login')
+          } else {
+            console.error(e)
+            alert(e)
+          }
+          return
+        }
+      }
+
+      const normalizedSearch = search.toLowerCase()
+      const checkField = value => value && value.toString().toLowerCase().includes(normalizedSearch)
+      const filtered = allLecturers
+        .filter(x => checkField(x.name) ||
+          checkField(x.vorname) ||
+          checkField(x.email) ||
+          checkField(x.tel_dienst) ||
+          checkField(x.raum)
+        )
+        .slice(0, 20)
+
+      setFilteredLecturers(filtered)
+    }
+    load()
+  }, [router, didFetch, search, personalLecturers, allLecturers])
 
   return (
     <AppContainer>

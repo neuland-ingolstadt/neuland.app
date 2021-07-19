@@ -1,11 +1,14 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true
     },
     "extends": [
         "plugin:react/recommended",
-        "standard"
+        "standard",
+        "next",
+        "next/core-web-vitals"
     ],
     "parserOptions": {
         "ecmaFeatures": {

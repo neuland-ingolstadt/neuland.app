@@ -79,6 +79,7 @@ async function getMensaPlanPreview () {
 
 function HomeCard ({ link, icon, title, className, children }) {
   return (
+    // eslint-disable-next-line @next/next/link-passhref
     <Link href={link}>
       <Card className={[styles.card, className]}>
         <Card.Body>
@@ -113,18 +114,21 @@ function TimetableCard () {
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
 
-  useEffect(async () => {
-    try {
-      setTimetable(await getFriendlyTimetable())
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        setTimetableError(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        setTimetable(await getFriendlyTimetable())
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else {
+          console.error(e)
+          setTimetableError(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [router])
 
   return (
     <HomeCard
@@ -164,13 +168,16 @@ function MensaCard () {
   const [mensaPlan, setMensaPlan] = useState(null)
   const [mensaPlanError, setMensaPlanError] = useState(null)
 
-  useEffect(async () => {
-    try {
-      setMensaPlan(await getMensaPlanPreview())
-    } catch (e) {
-      console.error(e)
-      setMensaPlanError(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        setMensaPlan(await getMensaPlanPreview())
+      } catch (e) {
+        console.error(e)
+        setMensaPlanError(e)
+      }
     }
+    load()
   }, [])
 
   return (
@@ -222,17 +229,20 @@ function MobilityCard () {
     setMobilitySettings(getMobilitySettings())
   }, [])
 
-  useEffect(async () => {
-    if (!mobilitySettings) {
-      return
-    }
+  useEffect(() => {
+    async function load () {
+      if (!mobilitySettings) {
+        return
+      }
 
-    try {
-      setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
-    } catch (e) {
-      console.error(e)
-      setMobilityError('Fehler beim Abruf.')
+      try {
+        setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
+      } catch (e) {
+        console.error(e)
+        setMobilityError('Fehler beim Abruf.')
+      }
     }
+    load()
   }, [mobilitySettings, time])
 
   return (
@@ -269,28 +279,31 @@ function CalendarCard () {
   const time = useTime()
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
 
-  useEffect(async () => {
-    let exams = []
-    try {
-      exams = (await loadExamList())
-        .filter(x => !!x.date) // remove exams without a date
-        .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else if (e.message === 'Query not possible') {
-        // ignore, leaving examList empty
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      let exams = []
+      try {
+        exams = (await loadExamList())
+          .filter(x => !!x.date) // remove exams without a date
+          .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else if (e.message === 'Query not possible') {
+          // ignore, leaving examList empty
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
-    }
 
-    const combined = [...calendar, ...exams]
-      .sort((a, b) => a.begin - b.begin)
-      .filter(x => x.begin > Date.now() || x.end > Date.now())
-    setMixedCalendar(combined)
-  }, [])
+      const combined = [...calendar, ...exams]
+        .sort((a, b) => a.begin - b.begin)
+        .filter(x => x.begin > Date.now() || x.end > Date.now())
+      setMixedCalendar(combined)
+    }
+    load()
+  }, [router])
 
   return (
     <HomeCard
@@ -325,13 +338,16 @@ export default function Home () {
   const [unlockedThemes, setUnlockedThemes] = useState([])
   const [showDebug, setShowDebug] = useState(false)
 
-  useEffect(async () => {
-    if (localStorage.unlockedThemes) {
-      setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
+  useEffect(() => {
+    async function load () {
+      if (localStorage.unlockedThemes) {
+        setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
+      }
+      if (localStorage.debugUnlocked) {
+        setShowDebug(true)
+      }
     }
-    if (localStorage.debugUnlocked) {
-      setShowDebug(true)
-    }
+    load()
   }, [])
 
   function changeTheme (theme) {

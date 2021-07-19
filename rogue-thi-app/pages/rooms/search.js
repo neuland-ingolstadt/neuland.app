@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -88,7 +88,7 @@ export default function Rooms () {
   const [searching, setSearching] = useState(false)
   const [filterResults, setFilterResults] = useState(null)
 
-  async function filter () {
+  const filter = useCallback(async () => {
     setSearching(true)
     setFilterResults(null)
 
@@ -96,20 +96,23 @@ export default function Rooms () {
 
     console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)
-  }
+  }, [building, date, duration, time])
 
-  useEffect(async () => {
-    try {
-      await filter()
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        await filter()
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [filter, router])
 
   return (
     <AppContainer>

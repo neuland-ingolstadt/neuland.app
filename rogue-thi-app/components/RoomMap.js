@@ -92,22 +92,25 @@ export default function RoomMap ({ highlight }) {
     return [filtered, filteredCenter]
   }, [searchText])
 
-  useEffect(async () => {
-    try {
-      const dateObj = getNextValidDate()
-      const date = formatISODate(dateObj)
-      const time = formatISOTime(dateObj)
-      const rooms = await filterRooms(date, time)
-      setAvailableRooms(rooms)
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        const dateObj = getNextValidDate()
+        const date = formatISODate(dateObj)
+        const time = formatISOTime(dateObj)
+        const rooms = await filterRooms(date, time)
+        setAvailableRooms(rooms)
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [router])
 
   function renderRoom (entry, key, onlyAvailable) {
     const avail = availableRooms.find(x => x.room === entry.properties.Raum)

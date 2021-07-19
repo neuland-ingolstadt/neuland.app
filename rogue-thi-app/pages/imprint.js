@@ -20,16 +20,19 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
   useEffect(() => {
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
-  }, [])
+  }, [unsanitizedNeulandImprint])
 
-  useEffect(async () => {
-    try {
-      const html = await API.getImprint()
-      setThiImprint(DOMPurify.sanitize(html))
-    } catch (e) {
-      console.error(e)
-      setThiImprint('Laden fehlgeschlagen! <a href="https://www.thi.de/sonstiges/impressum">Bitte hier klicken</a>')
+  useEffect(() => {
+    async function load () {
+      try {
+        const html = await API.getImprint()
+        setThiImprint(DOMPurify.sanitize(html))
+      } catch (e) {
+        console.error(e)
+        setThiImprint('Laden fehlgeschlagen! <a href="https://www.thi.de/sonstiges/impressum">Bitte hier klicken</a>')
+      }
     }
+    load()
   }, [])
 
   function debugUnlockClicked () {

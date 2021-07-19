@@ -187,23 +187,26 @@ export default function Bus () {
     setStation(station)
   }, [])
 
-  useEffect(async () => {
-    try {
-      if (kind) {
-        localStorage.mobilityKind = kind
-        setData(null)
-        setData(await getMobilityEntries(kind, station))
-      } else {
-        delete localStorage.mobilityKind
+  useEffect(() => {
+    async function load () {
+      try {
+        if (kind) {
+          localStorage.mobilityKind = kind
+          setData(null)
+          setData(await getMobilityEntries(kind, station))
+        } else {
+          delete localStorage.mobilityKind
+        }
+        if (station) {
+          localStorage.mobilityStation = station
+        } else {
+          delete localStorage.mobilityStation
+        }
+      } catch (e) {
+        setDataError(e.message)
       }
-      if (station) {
-        localStorage.mobilityStation = station
-      } else {
-        delete localStorage.mobilityStation
-      }
-    } catch (e) {
-      setDataError(e.message)
     }
+    load()
   }, [kind, station, time])
 
   function changeKind (kind) {

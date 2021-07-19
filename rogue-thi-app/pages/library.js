@@ -70,18 +70,21 @@ export default function Library () {
     hideReservationModal()
   }
 
-  useEffect(async () => {
-    try {
-      await refreshData()
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        await refreshData()
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [router])
 
   return (
     <AppContainer>

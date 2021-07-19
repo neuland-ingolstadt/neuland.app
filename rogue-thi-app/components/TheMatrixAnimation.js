@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
+
+function getRandomChar () {
+  return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
+}
 
 export default function TheMatrixAnimation () {
   const canvas = useRef()
 
-  function getRandomChar () {
-    return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
-  }
-
-  function renderFrame (canvas, ctx, ypos) {
+  const renderFrame = useCallback(async (canvas, ctx, ypos) => {
     // Draw a semitransparent black rectangle on top of previous drawing
     ctx.fillStyle = '#0001'
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -31,7 +31,7 @@ export default function TheMatrixAnimation () {
         ypos[ind] = y + 20
       }
     })
-  }
+  }, [])
 
   useEffect(() => {
     if (!canvas.current) {
@@ -65,7 +65,7 @@ export default function TheMatrixAnimation () {
 
     const interval = setInterval(() => renderFrame(canvas.current, ctx, ypos), 50)
     return () => clearInterval(interval)
-  }, [canvas])
+  }, [canvas, renderFrame])
 
   return (
     <canvas ref={canvas} />

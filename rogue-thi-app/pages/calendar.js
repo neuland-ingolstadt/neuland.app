@@ -62,39 +62,45 @@ export default function Calendar () {
   const [events, setEvents] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
 
-  useEffect(async () => {
-    try {
-      const examList = await loadExamList()
-      setExams(examList)
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else if (e.message === 'Query not possible') {
-        setExams([])
-      } else {
-        console.error(e)
-        alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        const examList = await loadExamList()
+        setExams(examList)
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else if (e.message === 'Query not possible') {
+          setExams([])
+        } else {
+          console.error(e)
+          alert(e)
+        }
       }
     }
-  }, [])
+    load()
+  }, [router])
 
-  useEffect(async () => {
-    const [campusLifeEvents, thiEvents] = await Promise.all([
-      NeulandAPI.getCampusLifeEvents(),
-      NeulandAPI.getThiEvents()
-    ])
+  useEffect(() => {
+    async function load () {
+      const [campusLifeEvents, thiEvents] = await Promise.all([
+        NeulandAPI.getCampusLifeEvents(),
+        NeulandAPI.getThiEvents()
+      ])
 
-    const newEvents = campusLifeEvents
-      .concat(thiEvents)
-      .map(x => ({
-        ...x,
-        begin: x.begin ? new Date(x.begin) : null,
-        end: x.end ? new Date(x.end) : null
-      }))
-      .sort((a, b) => a.end - b.end)
-      .sort((a, b) => a.begin - b.begin)
+      const newEvents = campusLifeEvents
+        .concat(thiEvents)
+        .map(x => ({
+          ...x,
+          begin: x.begin ? new Date(x.begin) : null,
+          end: x.end ? new Date(x.end) : null
+        }))
+        .sort((a, b) => a.end - b.end)
+        .sort((a, b) => a.begin - b.begin)
 
-    setEvents(newEvents)
+      setEvents(newEvents)
+    }
+    load()
   }, [])
 
   return (

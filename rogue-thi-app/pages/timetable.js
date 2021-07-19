@@ -124,45 +124,48 @@ export default function Timetable () {
     return [addWeek(currStart, page), addWeek(currEnd, page)]
   }, [page])
 
-  useEffect(async () => {
-    // we need to load data only if we have not done it yet or if we have no
-    // detailed data but want to display an entry in detail
-    if (timetable && (!focusedEntry || isDetailedData)) {
-      return
-    }
+  useEffect(() => {
+    async function load () {
+      // we need to load data only if we have not done it yet or if we have no
+      // detailed data but want to display an entry in detail
+      if (timetable && (!focusedEntry || isDetailedData)) {
+        return
+      }
 
-    try {
-      const detailed = !!focusedEntry
-      const ungroupedData = await getFriendlyTimetable(detailed)
-      const groupedData = groupTimetableEntries(ungroupedData)
-      setTimetable(groupedData)
-      setIsDetailedData(detailed)
+      try {
+        const detailed = !!focusedEntry
+        const ungroupedData = await getFriendlyTimetable(detailed)
+        const groupedData = groupTimetableEntries(ungroupedData)
+        setTimetable(groupedData)
+        setIsDetailedData(detailed)
 
-      if (focusedEntry) {
-        // find the focused entry in the new data
-        const detailedEntry = groupedData
-          .map(group => group.items.find(x =>
-            x.datum === focusedEntry.datum &&
-            x.veranstaltung === focusedEntry.veranstaltung)
-          )
-          .find(x => x)
+        if (focusedEntry) {
+          // find the focused entry in the new data
+          const detailedEntry = groupedData
+            .map(group => group.items.find(x =>
+              x.datum === focusedEntry.datum &&
+              x.veranstaltung === focusedEntry.veranstaltung)
+            )
+            .find(x => x)
 
-        if (detailedEntry) {
-          setFocusedEntry(detailedEntry)
+          if (detailedEntry) {
+            setFocusedEntry(detailedEntry)
+          } else {
+            // just keep the old entry. The user wont see goals, content or literature
+            console.error('could not find the focused timetable entry in new detailed data')
+          }
+        }
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
         } else {
-          // just keep the old entry. The user wont see goals, content or literature
-          console.error('could not find the focused timetable entry in new detailed data')
+          console.error(e)
+          alert(e)
         }
       }
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else {
-        console.error(e)
-        alert(e)
-      }
     }
-  }, [focusedEntry])
+    load()
+  }, [router, timetable, focusedEntry, isDetailedData])
 
   function timetableRenderer ({ key, index }) {
     const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))

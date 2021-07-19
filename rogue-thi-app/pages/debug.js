@@ -25,28 +25,31 @@ export default function Debug () {
   const [result, setResult] = useState('')
   const router = useRouter()
 
-  useEffect(async () => {
-    const initialParams = [
-      {
-        name: 'service',
-        value: 'thiapp'
-      },
-      {
-        name: 'method',
-        value: 'persdata'
-      },
-      {
-        name: 'session',
-        value: await obtainSession(router)
-      },
-      {
-        name: 'format',
-        value: 'json'
-      }
-    ]
+  useEffect(() => {
+    async function load () {
+      const initialParams = [
+        {
+          name: 'service',
+          value: 'thiapp'
+        },
+        {
+          name: 'method',
+          value: 'persdata'
+        },
+        {
+          name: 'session',
+          value: await obtainSession(router)
+        },
+        {
+          name: 'format',
+          value: 'json'
+        }
+      ]
 
-    setParameters(initialParams)
-  }, [])
+      setParameters(initialParams)
+    }
+    load()
+  }, [router])
 
   function changeParameterName (i, name) {
     parameters[i].name = name

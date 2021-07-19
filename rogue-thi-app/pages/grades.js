@@ -36,89 +36,92 @@ export default function Grades () {
     return x.replace(/\W/g, '').toLowerCase()
   }
 
-  useEffect(async () => {
-    try {
-      const gradeList = await API.getGrades()
-      const averages = {}
+  useEffect(() => {
+    async function load () {
+      try {
+        const gradeList = await API.getGrades()
+        const averages = {}
 
-      gradeList.forEach(x => {
-        if (!averages[x.stg]) {
-          averages[x.stg] = {
-            result: -1,
-            entries: []
+        gradeList.forEach(x => {
+          if (!averages[x.stg]) {
+            averages[x.stg] = {
+              result: -1,
+              entries: []
+            }
           }
-        }
-        const average = averages[x.stg]
+          const average = averages[x.stg]
 
-        const spoName = courseShorts[x.stg]
-        const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
-        if (grade && spoName && courseSPOs[spoName]) {
-          const spo = courseSPOs[spoName]
-          const name = simplifyName(x.titel)
-          const entry = spo.find(y => simplifyName(y.name) === name)
-          const other = average.entries.find(y => y.simpleName === name)
+          const spoName = courseShorts[x.stg]
+          const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
+          if (grade && spoName && courseSPOs[spoName]) {
+            const spo = courseSPOs[spoName]
+            const name = simplifyName(x.titel)
+            const entry = spo.find(y => simplifyName(y.name) === name)
+            const other = average.entries.find(y => y.simpleName === name)
 
-          if (other) {
-            other.grade = other.grade || grade
-          } else if (entry) {
-            average.entries.push({
-              simpleName: name,
-              name: entry.name,
-              weight: typeof entry.weight === 'number' ? entry.weight : null,
-              grade
-            })
-          } else {
-            average.entries.push({
-              simpleName: name,
-              name: x.titel,
-              weight: null,
-              grade
-            })
+            if (other) {
+              other.grade = other.grade || grade
+            } else if (entry) {
+              average.entries.push({
+                simpleName: name,
+                name: entry.name,
+                weight: typeof entry.weight === 'number' ? entry.weight : null,
+                grade
+              })
+            } else {
+              average.entries.push({
+                simpleName: name,
+                name: x.titel,
+                weight: null,
+                grade
+              })
+            }
           }
+
+          if (x.anrech === '*' && x.note === '') {
+            x.note = 'E*'
+          }
+          if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
+            x.note = 'E'
+          }
+        })
+
+        Object.keys(averages).forEach(stg => {
+          const entries = averages[stg].entries
+          entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
+          const result = entries.reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
+          const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
+          averages[stg].result = result / weight
+        })
+        setGradeAverages(averages)
+
+        const deduplicatedGrades = gradeList
+          .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+
+        const finishedGrades = deduplicatedGrades.filter(x => x.note)
+        setGrades(finishedGrades)
+
+        setMissingGrades(
+          deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+        )
+      } catch (e) {
+        if (e instanceof NoSessionError) {
+          router.replace('/login')
+        } else if (e.message === 'Query not possible') {
+          // according to the original developers,
+          // { status: -102, data: "Query not possible" }
+          // means that the transcripts are currently being updated
+
+          console.error(e)
+          alert('Noten sind vorübergehend nicht verfügbar. Eventuell werden die Notenblätter gerade aktualisiert.')
+        } else {
+          console.error(e)
+          alert(e)
         }
-
-        if (x.anrech === '*' && x.note === '') {
-          x.note = 'E*'
-        }
-        if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
-          x.note = 'E'
-        }
-      })
-
-      Object.keys(averages).forEach(stg => {
-        const entries = averages[stg].entries
-        entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
-        const result = entries.reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
-        const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
-        averages[stg].result = result / weight
-      })
-      setGradeAverages(averages)
-
-      const deduplicatedGrades = gradeList
-        .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
-
-      const finishedGrades = deduplicatedGrades.filter(x => x.note)
-      setGrades(finishedGrades)
-
-      setMissingGrades(
-        deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
-      )
-    } catch (e) {
-      if (e instanceof NoSessionError) {
-        router.replace('/login')
-      } else if (e.message === 'Query not possible') {
-        // according to the original developers,
-        // { status: -102, data: "Query not possible" }
-        // means that the transcripts are currently being updated
-
-        console.error(e)
-        alert('Noten sind vorübergehend nicht verfügbar. Eventuell werden die Notenblätter gerade aktualisiert.')
-      } else {
-        console.error(e)
-        alert(e)
       }
     }
-  }, [])
+    load()
+  }, [router])
 
   return (
     <AppContainer>

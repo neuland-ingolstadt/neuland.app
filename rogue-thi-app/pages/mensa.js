@@ -37,14 +37,17 @@ export default function Mensa () {
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
 
-  useEffect(async () => {
-    try {
-      const data = await NeulandAPI.getMensaPlan()
-      setMensaPlan(data)
-    } catch (e) {
-      console.error(e)
-      alert(e)
+  useEffect(() => {
+    async function load () {
+      try {
+        const data = await NeulandAPI.getMensaPlan()
+        setMensaPlan(data)
+      } catch (e) {
+        console.error(e)
+        alert(e)
+      }
     }
+    load()
   }, [])
 
   useEffect(() => {
