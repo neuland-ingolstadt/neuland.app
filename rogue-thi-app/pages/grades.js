@@ -23,6 +23,9 @@ import courseShorts from '../data/course-short-names.json'
 
 import styles from '../styles/Grades.module.css'
 
+// flag to temporarily disable averages until they are finished
+const ENABLE_AVERAGES = !!process.env.NEXT_PUBLIC_ENABLE_AVERAGES
+
 export default function Grades () {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
@@ -128,51 +131,53 @@ export default function Grades () {
       <AppNavbar title="Noten & Fächer" />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
-          {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
-            <ListGroup key={idx}>
-            <h4 className={styles.heading}>
-              Notenschnitt{hasMultipleCourses && ` (${stg})`}
-            </h4>
+        {ENABLE_AVERAGES &&
+          <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
+            {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
+              <ListGroup key={idx}>
+              <h4 className={styles.heading}>
+                Notenschnitt{hasMultipleCourses && ` (${stg})`}
+              </h4>
 
-              <ListGroup.Item>
-                <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
-                {average.entries.map((entry, jdx) =>
-                  <>
-                    {jdx !== 0 && <>
-                      <span className={styles.spacer}></span>
-                      {'+'}
-                      <span className={styles.spacer}></span>
-                    </>}
-                    <OverlayTrigger
-                      key={jdx}
-                      placement="top"
-                      overlay={
-                        <Tooltip id={`${stg}-${jdx}`}>
-                          {entry.name}
-                        </Tooltip>
-                      }
-                    >
-                      <Button variant="text">
-                        {entry.weight
-                          ? <b>{formatNum(entry.weight)}</b>
-                          : <FontAwesomeIcon icon={faQuestionCircle} />
+                <ListGroup.Item>
+                  <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
+                  {average.entries.map((entry, jdx) =>
+                    <>
+                      {jdx !== 0 && <>
+                        <span className={styles.spacer}></span>
+                        {'+'}
+                        <span className={styles.spacer}></span>
+                      </>}
+                      <OverlayTrigger
+                        key={jdx}
+                        placement="top"
+                        overlay={
+                          <Tooltip id={`${stg}-${jdx}`}>
+                            {entry.name}
+                          </Tooltip>
                         }
-                        {' '}
-                        <FontAwesomeIcon icon={faTimes} />
-                        {' '}
-                        {entry.grade
-                          ? <b>{formatNum(entry.grade)}</b>
-                          : <FontAwesomeIcon icon={faQuestion} />
-                        }
-                      </Button>
-                    </OverlayTrigger>
-                  </>
-                )}
-              </ListGroup.Item>
-            </ListGroup>
-          )}
-        </ReactPlaceholder>
+                      >
+                        <Button variant="text">
+                          {entry.weight
+                            ? <b>{formatNum(entry.weight)}</b>
+                            : <FontAwesomeIcon icon={faQuestionCircle} />
+                          }
+                          {' '}
+                          <FontAwesomeIcon icon={faTimes} />
+                          {' '}
+                          {entry.grade
+                            ? <b>{formatNum(entry.grade)}</b>
+                            : <FontAwesomeIcon icon={faQuestion} />
+                          }
+                        </Button>
+                      </OverlayTrigger>
+                    </>
+                  )}
+                </ListGroup.Item>
+              </ListGroup>
+            )}
+          </ReactPlaceholder>
+        }
 
         <ListGroup>
           <h4 className={styles.heading}>
