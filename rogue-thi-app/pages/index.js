@@ -339,6 +339,11 @@ export default function Home () {
   const [unlockedThemes, setUnlockedThemes] = useState([])
   const [showDebug, setShowDebug] = useState(false)
 
+  const {hideInstallation, hideDiscord} = useMemo(() => ({
+    hideInstallation: typeof localStorage !== 'undefined' ? localStorage.closedInstallPrompt : false,
+    hideDiscord: typeof localStorage !== 'undefined' ? localStorage.closedDiscordPrompt : false,
+  }))
+
   useEffect(() => {
     async function load () {
       if (localStorage.unlockedThemes) {
@@ -357,6 +362,15 @@ export default function Home () {
 
     setCurrentTheme(theme)
     setShowThemeModal(false)
+  }
+
+  function changePromptSetting (name) {
+    if (localStorage[name])
+      localStorage.removeItem(name)
+    else
+      localStorage[name] = true
+
+    router.reload()
   }
 
   return (
@@ -416,6 +430,18 @@ export default function Home () {
                 Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
                 Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
               </p>
+              <Form>
+                <Form.Check
+                  label="Installationsanleitung anzeigen"
+                  checked={!hideInstallation}
+                  onChange={() => changePromptSetting('closedInstallPrompt')}
+                  />
+                <Form.Check
+                  label="Fakultäts Discord anzeigen"
+                  checked={!hideDiscord}
+                  onChange={() => changePromptSetting('closedDiscordPrompt')}
+                  />
+              </Form>
             </Modal.Body>
           </Modal>
 
