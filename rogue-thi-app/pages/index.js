@@ -31,6 +31,7 @@ import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
 import AppTabbar from '../components/AppTabbar'
 import InstallPrompt from '../components/InstallPrompt'
+import DiscordPrompt from '../components/DiscordPrompt'
 
 import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
 import { calendar, loadExamList } from './calendar'
@@ -389,6 +390,7 @@ export default function Home () {
       <AppBody>
         <div className={styles.cardDeck}>
           <InstallPrompt />
+          <DiscordPrompt />
 
           <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
             <Modal.Header closeButton>
