@@ -67,5 +67,63 @@
     "name": "Semesterferien",
     "begin": "2022-02-15",
     "end": "2022-03-14"
+  },
+  {
+    "name": "Vorlesungsbeginn und Semesterstart",
+    "begin": "2022-03-15"
+  },
+  {
+    "name": "Vorlesungsfrei (Ostern)",
+    "begin": "2022-04-14",
+    "end": "2022-04-19"
+  },
+  {
+    "name": "Prüfungsanmeldung",
+    "begin": "2022-05-02",
+    "end": "2022-05-22"
+  },
+  {
+    "name": "Prüfungsabmeldung",
+    "begin": "2022-05-02",
+    "end": "2022-06-24"
+  },
+  {
+    "name": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
+    "begin": "2022-05-26",
+    "end": "2022-05-27"
+  },
+  {
+    "name": "Vorlesungsfrei (Pfingsten)",
+    "begin": "2022-06-03",
+    "end": "2022-06-07"
+  },
+  {
+    "name": "Vorlesungsfrei (Fronleichnam)",
+    "begin": "2022-06-16"
+  },
+  {
+    "name": "Rückmeldung",
+    "begin": "2022-07-02",
+    "end": "2022-08-07"
+  },
+  {
+    "name": "Erweiterter Prüfungszeitraum",
+    "begin": "2022-07-02",
+    "end": "2022-07-08"
+  },
+  {
+    "name": "Prüfungszeitraum",
+    "begin": "2022-07-09",
+    "end": "2022-07-19"
+  },
+  {
+    "name": "Notenbekanntgabe",
+    "begin": "2022-07-29T13:00",
+    "hasHours": true
+  },
+  {
+    "name": "Semesterferien",
+    "begin": "2022-07-30",
+    "end": "2022-09-30"
   }
 ]
