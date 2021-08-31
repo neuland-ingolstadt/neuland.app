@@ -54,7 +54,8 @@ export default function Grades () {
           }
           const average = averages[x.stg]
 
-          const spoName = courseShorts[x.stg]
+          const faculty = Object.keys(courseShorts).find(faculty => courseShorts[faculty][x.stg])
+          const spoName = courseShorts[faculty][x.stg]
           const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
           if (grade && spoName && courseSPOs[spoName]) {
             const spo = courseSPOs[spoName]
