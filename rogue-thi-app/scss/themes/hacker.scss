@@ -1,62 +1,17 @@
-@import "../../node_modules/bootstrap/scss/bootstrap";
+// stylelint-disable
+$bg-color: #404040BB;
+$primary: #00FF00;
+$gray-700: #BBBBBB;
+$body-color: white;
+
+@import "../common.scss";
 
 @font-face {
   font-family: fasterone;
   src: url(/FasterOne-Regular.ttf);
 }
-
-* {
-  color: white !important;
-  background-color: #00000000 !important;
-}
-
-nav,
-.dropdown-menu,
-.container > div,
-.container > div > div,
-.modal-content,
-.modal,
-.form-control,
-button,
-a {
-  background-color: #404040E0 !important;
-}
-
-select,
-.list-group > div {
-  /* fix background-color not working on these elements */
-  position: relative;
-}
-
-.modal {
-  background-color: #404040BB !important;
-}
-.leaflet-pane * {
-  background-color: #00000000 !important;
-}
-.leaflet-popup-content-wrapper {
-  background-color: #404040 !important;
-}
-
 :is(h1, h2, h3, h4, h5, h6),
 .h1, .h2, .h3, .h4,
 .card-title {
-  color: #00FF00 !important;
   font-family: fasterone;
-}
-a,
-.btn-link {
-  color: #00FF00 !important;
-}
-
-.card,
-.modal-content,
-.list-group-item,
-.list-group-item-action {
-  border-color: #00FF00 !important;
-}
-
-form, h1, h2, h3, h4, h5, h6, p {
-  position: relative;
-  z-index: 10;
 }

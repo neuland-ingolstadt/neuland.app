@@ -1,4 +1,10 @@
-@import "../../node_modules/bootstrap/scss/bootstrap";
+// stylelint-disable
+$bg-color: #121212;
+$primary: #F3F315;
+$gray-700: #BBBBBB;
+$body-color: white;
+
+@import "../common.scss";
 
 @font-face {
   font-family: fasterone;
@@ -9,42 +15,15 @@
   src: url(/PressStart2P-Regular.ttf);
 }
 body {
-  background-color: #121212;
-  font-family: pressstart;
+    font-family: pressstart;
+    font-weight: bolder;
 }
 * {
-  background-color: #121212 !important;
-  color: white !important;
-  font-family: pressstart;
-}
-.modal {
-  background-color: #12121288 !important;
-}
-.leaflet-pane * {
-  background-color: #00000000 !important;
-}
-.leaflet-popup-content-wrapper {
-  background-color: #404040 !important;
-}
-.dropdown-item {
-  font-size: x-small;
-}
-.card,
-.modal-content,
-.list-group-item,
-.list-group-item-action {
-  border-color: #F3F315 !important;
+    font-family: pressstart;
+    font-weight: bolder;
 }
 :is(h1, h2, h3, h4, h5, h6),
 .h1, .h2, .h3, .h4,
 .card-title {
-  color: #F3F315 !important;
   font-family: fasterone;
-}
-.text-row {
-  background-color: #404040 !important;
-}
-a,
-.btn-link {
-  color: #F3F315 !important;
 }
