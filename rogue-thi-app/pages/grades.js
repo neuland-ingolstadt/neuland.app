@@ -127,7 +127,7 @@ export default function Grades () {
     load()
   }, [router])
 
-  async function copyFormula(entries) {
+  async function copyFormula (entries) {
     const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
     const inner = entries
       .map(entry => entry.weight && entry.weight !== 1
@@ -145,52 +145,54 @@ export default function Grades () {
       <AppNavbar title="Noten & Fächer" />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
-          {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
-            <ListGroup key={idx}>
-            <h4 className={styles.heading}>
-              Notenschnitt{hasMultipleCourses && ` (${stg})`}
-            </h4>
+        {ENABLE_AVERAGES && (
+          <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
+            {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
+              <ListGroup key={idx}>
+              <h4 className={styles.heading}>
+                Notenschnitt{hasMultipleCourses && ` (${stg})`}
+              </h4>
 
-              <ListGroup.Item>
-                <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
-                {average.entries.map((entry, jdx) =>
-                  <>
-                    {jdx !== 0 && <>
-                      <span className={styles.spacer}></span>
-                      {'+'}
-                      <span className={styles.spacer}></span>
-                    </>}
-                    <OverlayTrigger
-                      key={jdx}
-                      placement="top"
-                      overlay={
-                        <Tooltip id={`${stg}-${jdx}`}>
-                          {entry.name}
-                        </Tooltip>
-                      }
-                    >
-                      <Button variant="text">
-                        {entry.weight
-                          ? <b>{formatNum(entry.weight)}</b>
-                          : <FontAwesomeIcon icon={faQuestionCircle} />
+                <ListGroup.Item>
+                  <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
+                  {average.entries.map((entry, jdx) =>
+                    <>
+                      {jdx !== 0 && <>
+                        <span className={styles.spacer}></span>
+                        {'+'}
+                        <span className={styles.spacer}></span>
+                      </>}
+                      <OverlayTrigger
+                        key={jdx}
+                        placement="top"
+                        overlay={
+                          <Tooltip id={`${stg}-${jdx}`}>
+                            {entry.name}
+                          </Tooltip>
                         }
-                        {' '}
-                        <FontAwesomeIcon icon={faTimes} />
-                        {' '}
-                        {entry.grade
-                          ? <b>{formatNum(entry.grade)}</b>
-                          : <FontAwesomeIcon icon={faQuestion} />
-                        }
-                      </Button>
-                    </OverlayTrigger>
-                  </>
-                )}
-                <Button variant="link" onClick={() => copyFormula(average.entries)}>Formel kopieren</Button>
-              </ListGroup.Item>
-            </ListGroup>
-          )}
-        </ReactPlaceholder>
+                      >
+                        <Button variant="text">
+                          {entry.weight
+                            ? <b>{formatNum(entry.weight)}</b>
+                            : <FontAwesomeIcon icon={faQuestionCircle} />
+                          }
+                          {' '}
+                          <FontAwesomeIcon icon={faTimes} />
+                          {' '}
+                          {entry.grade
+                            ? <b>{formatNum(entry.grade)}</b>
+                            : <FontAwesomeIcon icon={faQuestion} />
+                          }
+                        </Button>
+                      </OverlayTrigger>
+                    </>
+                  )}
+                  <Button variant="link" onClick={() => copyFormula(average.entries)}>Formel kopieren</Button>
+                </ListGroup.Item>
+              </ListGroup>
+            )}
+          </ReactPlaceholder>
+        )}
 
         <ListGroup>
           <h4 className={styles.heading}>

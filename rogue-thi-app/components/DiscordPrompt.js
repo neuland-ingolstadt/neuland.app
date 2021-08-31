@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faDiscord } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faDiscord } from '@fortawesome/free-brands-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
 import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
@@ -16,6 +18,7 @@ import styles from '../styles/Home.module.css'
 const discordUrls = JSON.parse(process.env.NEXT_PUBLIC_DISCORD_URLS || '{}')
 
 export default function DiscordPrompt () {
+  const router = useRouter()
   const [faculty, setFaculty] = useState(null)
   const [discordUrl, setDiscordUrl] = useState(null)
 
@@ -42,7 +45,7 @@ export default function DiscordPrompt () {
     if (!localStorage.closedDiscordPrompt) {
       load()
     }
-  }, [])
+  }, [router])
 
   function close () {
     setFaculty(null)
@@ -64,7 +67,7 @@ export default function DiscordPrompt () {
         <Card.Text>
           <p>
             Von der Studierendenvertretung deiner Fakultät {faculty} gibt es einen offiziellen Discord Server.
-            Du kannst ihm hier beitreten: <a href={discordUrl} target="_blank" rel="noopener">{discordUrl}</a>
+            Du kannst ihm hier beitreten: <a href={discordUrl} target="_blank" rel="noreferrer">{discordUrl}</a>
           </p>
         </Card.Text>
       </Card.Body>

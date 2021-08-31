@@ -30,8 +30,8 @@ import AppNavbar, { ThemeContext } from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
 import AppTabbar from '../components/AppTabbar'
-import InstallPrompt from '../components/InstallPrompt'
 import DiscordPrompt from '../components/DiscordPrompt'
+import InstallPrompt from '../components/InstallPrompt'
 
 import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
 import { calendar, loadExamList } from './calendar'
@@ -339,10 +339,10 @@ export default function Home () {
   const [unlockedThemes, setUnlockedThemes] = useState([])
   const [showDebug, setShowDebug] = useState(false)
 
-  const {hideInstallation, hideDiscord} = useMemo(() => ({
+  const { hideInstallation, hideDiscord } = useMemo(() => ({
     hideInstallation: typeof localStorage !== 'undefined' ? localStorage.closedInstallPrompt : false,
-    hideDiscord: typeof localStorage !== 'undefined' ? localStorage.closedDiscordPrompt : false,
-  }))
+    hideDiscord: typeof localStorage !== 'undefined' ? localStorage.closedDiscordPrompt : false
+  }), [])
 
   useEffect(() => {
     async function load () {
@@ -365,10 +365,11 @@ export default function Home () {
   }
 
   function changePromptSetting (name) {
-    if (localStorage[name])
+    if (localStorage[name]) {
       localStorage.removeItem(name)
-    else
+    } else {
       localStorage[name] = true
+    }
 
     router.reload()
   }
