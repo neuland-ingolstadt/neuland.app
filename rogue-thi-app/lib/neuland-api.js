@@ -1,72 +1,40 @@
 class NeulandAPIClient {
-  async getMensaPlan () {
-    const resp = await fetch('/api/mensa')
+  async performRequest (url) {
+    const resp = await fetch(url)
 
     if (resp.status === 200) {
       return await resp.json()
     } else {
       throw new Error('API returned an error: ' + await resp.text())
     }
+  }
+
+  async getMensaPlan () {
+    return this.performRequest('/api/mensa')
   }
 
   async getBusPlan (station) {
-    const resp = await fetch('/api/bus/' + encodeURIComponent(station))
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/bus/' + encodeURIComponent(station))
   }
 
   async getTrainPlan (station) {
-    const resp = await fetch('/api/train/' + encodeURIComponent(station))
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/train/' + encodeURIComponent(station))
   }
 
   async getParkingData () {
-    const resp = await fetch('/api/parking')
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/parking')
   }
 
   async getCharingStationData () {
-    const resp = await fetch('/api/charging-stations')
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/charging-stations')
   }
 
   async getCampusLifeEvents () {
-    const resp = await fetch('/api/cl-events')
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/cl-events')
   }
 
   async getThiEvents () {
-    const resp = await fetch('/api/thi-events')
-
-    if (resp.status === 200) {
-      return await resp.json()
-    } else {
-      throw new Error('API returned an error: ' + await resp.text())
-    }
+    return this.performRequest('/api/thi-events')
   }
 }
 
