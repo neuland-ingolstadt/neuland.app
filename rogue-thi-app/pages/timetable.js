@@ -51,9 +51,8 @@ export function getTimetableEntryName (item) {
   }
 }
 
-export async function getFriendlyTimetable (detailed) {
-  const now = new Date()
-  const { timetable } = await API.getTimetable(now, detailed)
+export async function getFriendlyTimetable (date, detailed) {
+  const { timetable } = await API.getTimetable(date, detailed)
 
   return timetable
     .map(x => {
@@ -70,7 +69,7 @@ export async function getFriendlyTimetable (detailed) {
 
       return x
     })
-    .filter(x => x.endDate > now)
+    .filter(x => x.endDate > date)
     .sort((a, b) => a.startDate - b.startDate)
 }
 
@@ -117,6 +116,7 @@ export default function Timetable () {
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
+  const [fetchedWeek, setFetchedWeek] = useState(null)
 
   // week for the caption
   const week = useMemo(() => {
@@ -125,17 +125,18 @@ export default function Timetable () {
   }, [page])
 
   useEffect(() => {
-    async function load () {
+    async function load (currWeek) {
       // we need to load data only if we have not done it yet or if we have no
       // detailed data but want to display an entry in detail
-      if (timetable && (!focusedEntry || isDetailedData)) {
+      if (currWeek === fetchedWeek && (!focusedEntry || isDetailedData)) {
         return
       }
 
       try {
         const detailed = !!focusedEntry
-        const ungroupedData = await getFriendlyTimetable(detailed)
+        const ungroupedData = await getFriendlyTimetable(currWeek, detailed)
         const groupedData = groupTimetableEntries(ungroupedData)
+        setFetchedWeek(currWeek)
         setTimetable(groupedData)
         setIsDetailedData(detailed)
 
@@ -164,8 +165,8 @@ export default function Timetable () {
         }
       }
     }
-    load()
-  }, [router, timetable, focusedEntry, isDetailedData])
+    load(week[0])
+  }, [router, timetable, focusedEntry, isDetailedData, week, fetchedWeek])
 
   function timetableRenderer ({ key, index }) {
     const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))
@@ -206,7 +207,15 @@ export default function Timetable () {
         )}
         {current && current.length === 0 &&
           <div className={`text-muted ${styles.notice}`}>
+          <p>
             Keine Veranstaltungen. 🎉
+          </p>
+          <p>
+            Du kannst deinen Stundenplan im{' '}
+            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
+            Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
+            die gewählten Fächer.
+          </p>
           </div>
         }
       </div>
@@ -361,22 +370,7 @@ export default function Timetable () {
         </div>
 
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
-          {timetable && timetable.length > 0 &&
-            <VirtualizeSwipeableViews slideRenderer={timetableRenderer} index={page} onChangeIndex={idx => setPage(idx)} />
-          }
-          {timetable && timetable.length === 0 &&
-            <div className={`text-muted ${styles.notice}`}>
-              <p>
-                Dein Stundenplan ist aktuell leer.
-              </p>
-              <p>
-                Du kannst deinen Stundenplan im{' '}
-                <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
-                Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
-                die gewählten Fächer.
-              </p>
-            </div>
-          }
+          <VirtualizeSwipeableViews slideRenderer={timetableRenderer} index={page} onChangeIndex={idx => setPage(idx)} />
         </ReactPlaceholder>
       </AppBody>
 

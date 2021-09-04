@@ -118,7 +118,7 @@ function TimetableCard () {
   useEffect(() => {
     async function load () {
       try {
-        setTimetable(await getFriendlyTimetable())
+        setTimetable(await getFriendlyTimetable(new Date(), false))
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login')
