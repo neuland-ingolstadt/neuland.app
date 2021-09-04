@@ -8,7 +8,8 @@
     "prebuild": "npm run compile-scss",
     "compile-scss": "sass --no-source-map --style compressed scss/themes/:public/themes/",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build-mobile": "next build && next export && rm -rf android/ && npx cap add android && npx cap sync"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -37,6 +38,9 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@capacitor/android": "^3.2.2",
+    "@capacitor/cli": "^3.2.2",
+    "@capacitor/core": "^3.2.2",
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.0.1",
     "eslint-config-standard": "^16.0.3",
