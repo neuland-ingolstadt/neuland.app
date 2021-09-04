@@ -1,5 +1,8 @@
 # Mensa Booking API
-The Studentenwerk Erlangen Nürnberg
+The Studentenwerk Erlangen Nürnberg added a mensa seat reservation system during the COVID-19 pandemic.
+It is embedded on https://www.werkswelt.de/mensareservierung using an iframe.
+The real URL is https://togo.my-mensa.de/5ecb878c-9f58-4aa0-bb1b/erl77vB3r/reservations/formular/
+Below is a short reference of the API requests used by the reservation system.
 
 ## Request Verification E-Mail
 POST https://togo.my-mensa.de/5ecb878c-9f58-4aa0-bb1b/erl77vB3r/reservations/request_access_code
