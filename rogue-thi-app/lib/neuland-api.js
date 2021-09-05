@@ -1,6 +1,16 @@
+import obtainFetchImplementation from './fetch-implementations'
+
+const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'direct'
+const ENDPOINT_HOST = process.env.NEXT_PUBLIC_NEULAND_API_HOST || ''
+
 class NeulandAPIClient {
+  constructor() {
+    // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
+    this.connection = obtainFetchImplementation(ENDPOINT_MODE, {})
+  }
+
   async performRequest (url) {
-    const resp = await fetch(url)
+    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
 
     if (resp.status === 200) {
       return await resp.json()

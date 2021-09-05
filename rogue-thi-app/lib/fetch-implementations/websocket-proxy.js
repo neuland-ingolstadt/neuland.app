@@ -1,6 +1,8 @@
 import { tls, util } from 'node-forge/lib/index'
 import http from 'node-forge/lib/http'
 
+import { HttpResponse } from './index'
+
 const DEFAULT_TIMEOUT = 5000
 
 function ab2str (buf) {
@@ -18,7 +20,7 @@ function str2ab (str) {
 /**
  * A wrapper around node-forge that allows you to open a HTTPS connection proxied via WebSocket
  */
-export default class HttpsConnection {
+export default class WebSocketProxyConnection {
   constructor (options) {
     console.debug('Creating new connection')
 
@@ -70,7 +72,7 @@ export default class HttpsConnection {
           body: init.body,
           headers: init.headers
         },
-        response: data => resolve(new HttpResponse(data)),
+        response: data => resolve(new HttpResponse(200, data)),
         error: err => reject(err)
       }))
 
@@ -236,22 +238,5 @@ class HttpRequest {
    */
   processError (error) {
     this.options.error(error)
-  }
-}
-
-/**
- * Helper class that mimics a `fetch` response.
- */
-class HttpResponse {
-  constructor (data) {
-    this.data = data
-  }
-
-  async text () {
-    return this.data
-  }
-
-  async json () {
-    return JSON.parse(this.data)
   }
 }

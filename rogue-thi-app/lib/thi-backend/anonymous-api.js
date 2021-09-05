@@ -1,4 +1,4 @@
-import HttpsConnection from './https-connection'
+import obtainFetchImplementation from '../fetch-implementations'
 import LocalStorageCache from '../cache/localstorage-cache'
 import MemoryCache from '../cache/memory-cache'
 import packageInfo from '../../package.json'
@@ -6,6 +6,7 @@ import packageInfo from '../../package.json'
 const CACHE_NAMESPACE = 'thi-api-client'
 const CACHE_TTL = 10 * 60 * 1000
 
+const ENDPOINT_MODE = process.env.NEXT_PUBLIC_THI_API_MODE || 'websocket-proxy'
 const ENDPOINT_HOST = 'hiplan.thi.de'
 const ENDPOINT_URL = '/webservice/production2/index.php'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
@@ -67,7 +68,7 @@ export class AnonymousAPIClient {
    */
   async request (params) {
     if (!this.connection) {
-      this.connection = new HttpsConnection({
+      this.connection = obtainFetchImplementation(ENDPOINT_MODE, {
         proxy: PROXY_URL,
         certs: THI_CERTS,
         host: ENDPOINT_HOST,

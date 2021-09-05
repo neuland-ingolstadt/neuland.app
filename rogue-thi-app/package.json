@@ -12,6 +12,7 @@
     "build-mobile": "next build && next export && rm -rf android/ && npx cap add android && npx cap sync"
   },
   "dependencies": {
+    "@capacitor-community/http": "^1.2.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
