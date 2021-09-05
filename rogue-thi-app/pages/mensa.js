@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -15,6 +16,8 @@ import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
+import API from '../lib/thi-backend/authenticated-api'
+import MensaAPI from '../lib/mensa-booking-api'
 import NeulandAPI from '../lib/neuland-api'
 import { formatNearDate } from '../lib/date-utils'
 
@@ -32,10 +35,28 @@ Object.keys(allergenMap)
   .forEach(key => delete allergenMap[key])
 
 export default function Mensa () {
+  const router = useRouter()
+  const { reserve } = router.query
+
   const [mensaPlan, setMensaPlan] = useState(null)
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
+
+  // seat reservation related states
+  let initialReservationDate = null
+  if (reserve === 'today') {
+    initialReservationDate = new Date()
+  } else if (reserve) {
+    initialReservationDate = new Date(reserve)
+  }
+  const [reservationDate, setReservationDate] = useState(initialReservationDate)
+  const [reservationTime, setReservationTime] = useState(null)
+  const [reservationParams, setReservationParams] = useState({})
+  const [verificationEmail, setVerificationEmail] = useState('')
+  const [verificationCode, setVerificationCode] = useState(null)
+  const [verificationError, setVerificationError] = useState(null)
+  const [verificationCorrect, setVerificationCorrect] = useState(false)
 
   useEffect(() => {
     async function load () {
@@ -56,6 +77,54 @@ export default function Mensa () {
     }
   }, [])
 
+  useEffect(() => {
+    async function load () {
+      try {
+        const data = await API.getPersonalData()
+        const {
+          name: lastName,
+          vname: firstName,
+          plz: postcode,
+          ort: city,
+          str: address,
+          fhmail: email
+        } = data.persdata
+
+        setVerificationEmail(email)
+        setReservationParams({
+          firstName,
+          lastName,
+          address,
+          postcode,
+          city,
+          email
+        })
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    if (reservationTime && !verificationEmail) {
+      load()
+    }
+  }, [reservationTime, verificationEmail])
+
+  useEffect(() => {
+    async function check () {
+      try {
+        const success = await MensaAPI.checkVerificationCode(verificationEmail, verificationCode)
+        setVerificationCorrect(success)
+        setVerificationError(success ? null : 'Ungültiger Verifizierungscode')
+      } catch (e) {
+        setVerificationError(e.toString())
+      }
+    }
+
+    if (verificationCode && verificationCode.length === 5 && verificationEmail) {
+      check()
+    }
+  }, [verificationEmail, verificationCode])
+
   function saveAllergenSelection () {
     localStorage[LOCALSTORAGE_SELECTED_ALLERGENS] = JSON.stringify(allergenSelection)
     setShowAllergenSelection(false)
@@ -63,6 +132,26 @@ export default function Mensa () {
 
   function containsSelectedAllergen (allergens) {
     return allergens.some(x => allergenSelection[x])
+  }
+
+  function resetReservationEntries () {
+    setReservationDate(null)
+    setReservationTime(null)
+    setReservationParams({})
+    setVerificationCorrect(false)
+  }
+
+  async function sendVerificationMail () {
+    try {
+      await MensaAPI.requestVerificationEmail(verificationEmail)
+      setVerificationCode('')
+    } catch (e) {
+      setVerificationError(e.toString())
+    }
+  }
+
+  async function createSeatReservation () {
+    alert('not yet implemented')
   }
 
   return (
@@ -188,6 +277,86 @@ export default function Mensa () {
           <Modal.Footer>
             <Button variant="primary" onClick={() => saveAllergenSelection()}>OK</Button>
           </Modal.Footer>
+        </Modal>
+
+        <Modal show={!!reservationDate} onHide={() => resetReservationEntries()}>
+          <Modal.Header closeButton>
+            <Modal.Title>Sitzplatz Reservieren</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Form>
+              {!reservationTime && (
+                <>
+                  <h4>Wähle eine Uhrzeit</h4>
+                  {[
+                    '11:00',
+                    '11:10',
+                    '11:20',
+                    '11:30',
+                    '11:40',
+                    '11:50',
+                    null,
+                    '12:00',
+                    '12:10',
+                    '12:20',
+                    '12:30',
+                    '12:40',
+                    '12:50',
+                    null,
+                    '13:00',
+                    '13:10',
+                    '13:20'
+                  ].map((time, i) => time
+                    ? <>
+                        <Button key={i} variant="primary" onClick={() => setReservationTime(time)}>
+                          {time}
+                        </Button>
+                        {' '}
+                      </>
+                    : <br />
+                  )}
+                </>
+              )}
+              {reservationTime && verificationCode === null && !verificationCorrect && (
+                <>
+                  <Form.Label>E-Mail:</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={verificationEmail}
+                    onChange={event => setVerificationEmail(event.target.value)}
+                    />
+
+                  <Button variant="primary" onClick={sendVerificationMail}>
+                    Verifizierungs E-Mail versenden
+                  </Button>
+
+                  {verificationError && <br />}
+                  {verificationError}
+
+                  {/* TODO: display all other fields from reservationParams which will be sent to the server */}
+                </>
+              )}
+              {reservationTime && verificationEmail && verificationCode !== null && !verificationCorrect && (
+                <>
+                  <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={verificationCode}
+                    onChange={event => setVerificationCode(event.target.value)}
+                    />
+
+                  {verificationError && <br />}
+                  {verificationError}
+                </>
+              )}
+              {reservationTime && verificationCorrect && (
+                <Button variant="primary" onClick={createSeatReservation}>
+                  Sitzplatz verbindlich reservieren
+                </Button>
+              )}
+            </Form>
+          </Modal.Body>
         </Modal>
       </AppBody>
 

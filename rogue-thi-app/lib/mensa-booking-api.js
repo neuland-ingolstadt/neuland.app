@@ -1,5 +1,5 @@
 import obtainFetchImplementation from './fetch-implementations'
-import packageInfo from '../../package.json'
+import packageInfo from '../package.json'
 
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'websocket-proxy'
 const ENDPOINT_HOST = 'togo.my-mensa.de'
@@ -62,7 +62,7 @@ class MensaBookingApiClient {
       })
     }
 
-    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${ENDPOINT_URL}${path}`, {
+    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}${path}`, {
       method: 'POST',
       body: new URLSearchParams(params).toString(),
       headers: {
@@ -170,4 +170,4 @@ class MensaBookingApiClient {
   }
 }
 
-export default new NeulandAPIClient()
+export default new MensaBookingApiClient()
