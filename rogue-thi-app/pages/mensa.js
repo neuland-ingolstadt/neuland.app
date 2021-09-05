@@ -337,7 +337,7 @@ export default function Mensa () {
                   {/* TODO: display all other fields from reservationParams which will be sent to the server */}
                 </>
               )}
-              {reservationTime && verificationEmail && verificationCode !== null && !verificationCorrect && (
+              {reservationTime && verificationEmail && verificationCode !== null && (
                 <>
                   <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
                   <Form.Control
@@ -348,12 +348,13 @@ export default function Mensa () {
 
                   {verificationError && <br />}
                   {verificationError}
+
+                  {verificationCorrect && (
+                    <Button variant="primary" onClick={createSeatReservation}>
+                      Sitzplatz verbindlich reservieren
+                    </Button>
+                  )}
                 </>
-              )}
-              {reservationTime && verificationCorrect && (
-                <Button variant="primary" onClick={createSeatReservation}>
-                  Sitzplatz verbindlich reservieren
-                </Button>
               )}
             </Form>
           </Modal.Body>
