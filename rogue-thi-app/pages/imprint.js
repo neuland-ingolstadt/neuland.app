@@ -67,6 +67,11 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
               app-feedback@informatik.sexy
             </a>
             <br />
+            Webseite:{' '}
+            <a href="https://neuland-infolstadt.de" target="_blank" rel="noreferrer">
+              https://neuland-infolstadt.de
+            </a>
+            <br />
             Instagram:{' '}
             <a href="https://www.instagram.com/neuland_ingolstadt/" target="_blank" rel="noreferrer">
               @neuland_ingolstadt
@@ -75,6 +80,11 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
             Quellcode auf GitHub:{' '}
             <a href="https://github.com/neuland-ingolstadt/THI-App" target="_blank" rel="noreferrer">
               neuland-ingolstadt/THI-App
+            </a>
+            <br />
+            <br />
+            <a href="https://join.neuland-ingolstadt.de" target="_blank" rel="noreferrer">
+              Jetzt Mitglied werden und die Entwicklung unterstützen!
             </a>
           </ListGroup.Item>
         </ListGroup>
