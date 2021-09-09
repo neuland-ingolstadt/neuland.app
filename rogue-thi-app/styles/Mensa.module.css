@@ -18,3 +18,8 @@
   color: gray;
   text-align: right;
 }
+
+.verificationError {
+  font-weight: bold;
+  color: red;
+}

@@ -30,6 +30,11 @@ email=REDACTED&accesscode=REDACTED
 
 Response is a number `0` for failure and `3` for success.
 
+## Cancel Reservation
+GET https://togo.my-mensa.de/5ecb878c-9f58-4aa0-bb1b/erl77vB3r/reservations/cancelcommit?k=REDACTED&i=REDACTED
+
+With `i=${reservation.id}` and `k=${reservation.krz}`
+
 ## Reserve Seat
 POST https://togo.my-mensa.de/5ecb878c-9f58-4aa0-bb1b/erl77vB3r/reservations/add_by_client
 

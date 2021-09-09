@@ -53,6 +53,7 @@ export default function Mensa () {
   const [reservationDate, setReservationDate] = useState(initialReservationDate)
   const [reservationTime, setReservationTime] = useState(null)
   const [reservationParams, setReservationParams] = useState({})
+  const [reservationResult, setReservationResult] = useState(null)
   const [verificationEmail, setVerificationEmail] = useState('')
   const [verificationCode, setVerificationCode] = useState(null)
   const [verificationError, setVerificationError] = useState(null)
@@ -96,8 +97,7 @@ export default function Mensa () {
           lastName,
           address,
           postcode,
-          city,
-          email
+          city
         })
       } catch (e) {
         // ignore
@@ -138,6 +138,7 @@ export default function Mensa () {
     setReservationDate(null)
     setReservationTime(null)
     setReservationParams({})
+    setReservationResult(null)
     setVerificationCorrect(false)
   }
 
@@ -151,7 +152,24 @@ export default function Mensa () {
   }
 
   async function createSeatReservation () {
-    alert('not yet implemented')
+    try {
+      const dateStr = reservationDate.toISOString().substr(0, 10)
+      const timestamp = new Date(`${dateStr}T${reservationTime}Z`)
+
+      const result = await MensaAPI.reserveSeat({
+        ...reservationParams,
+        email: verificationEmail,
+        code: verificationCode,
+        timestamp
+      })
+
+      setReservationResult(result)
+      // TODO store the reservation in localStorage
+    } catch (e) {
+      console.error(e)
+      alert(e)
+      resetReservationEntries()
+    }
   }
 
   return (
@@ -291,22 +309,25 @@ export default function Mensa () {
                   <h4>Wähle eine Uhrzeit</h4>
                   {[
                     '11:00',
-                    '11:10',
-                    '11:20',
-                    '11:30',
-                    '11:40',
-                    '11:50',
-                    null,
                     '12:00',
-                    '12:10',
-                    '12:20',
-                    '12:30',
-                    '12:40',
-                    '12:50',
-                    null,
                     '13:00',
+                    null,
+                    '11:10',
+                    '12:10',
                     '13:10',
-                    '13:20'
+                    null,
+                    '11:20',
+                    '12:20',
+                    '13:20',
+                    null,
+                    '11:30',
+                    '12:30',
+                    null,
+                    '11:40',
+                    '12:40',
+                    null,
+                    '11:50',
+                    '12:50'
                   ].map((time, i) => time
                     ? <>
                         <Button key={i} variant="primary" onClick={() => setReservationTime(time)}>
@@ -320,12 +341,14 @@ export default function Mensa () {
               )}
               {reservationTime && verificationCode === null && !verificationCorrect && (
                 <>
-                  <Form.Label>E-Mail:</Form.Label>
-                  <Form.Control
-                    as="input"
-                    value={verificationEmail}
-                    onChange={event => setVerificationEmail(event.target.value)}
-                    />
+                  <Form.Group>
+                    <Form.Label>E-Mail:</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={verificationEmail}
+                      onChange={event => setVerificationEmail(event.target.value)}
+                      />
+                  </Form.Group>
 
                   <Button variant="primary" onClick={sendVerificationMail}>
                     Verifizierungs E-Mail versenden
@@ -333,28 +356,89 @@ export default function Mensa () {
 
                   {verificationError && <br />}
                   {verificationError}
-
-                  {/* TODO: display all other fields from reservationParams which will be sent to the server */}
                 </>
               )}
-              {reservationTime && verificationEmail && verificationCode !== null && (
+              {reservationTime && verificationEmail && verificationCode !== null && !verificationCorrect && (
                 <>
-                  <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
-                  <Form.Control
-                    as="input"
-                    value={verificationCode}
-                    onChange={event => setVerificationCode(event.target.value)}
-                    />
+                  <Form.Group>
+                    <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={verificationCode}
+                      onChange={event => setVerificationCode(event.target.value)}
+                      />
+                  </Form.Group>
 
-                  {verificationError && <br />}
-                  {verificationError}
-
-                  {verificationCorrect && (
-                    <Button variant="primary" onClick={createSeatReservation}>
-                      Sitzplatz verbindlich reservieren
-                    </Button>
-                  )}
+                  {verificationError && <span className={styles.verificationError}>{verificationError}</span>}
                 </>
+              )}
+              {reservationTime && verificationCorrect && !reservationResult && (
+                <>
+                  <Form.Group>
+                    <Form.Label>Vorname</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={reservationParams.firstName}
+                      onChange={event => setReservationParams({ ...reservationParams, firstName: event.target.value })}
+                      />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Nachname</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={reservationParams.lastName}
+                      onChange={event => setReservationParams({ ...reservationParams, lastName: event.target.value })}
+                      />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>E-Mail</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={verificationEmail}
+                      disabled
+                      />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Adresse</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={reservationParams.address}
+                      onChange={event => setReservationParams({ ...reservationParams, address: event.target.value })}
+                      />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Postleitzahl</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={reservationParams.postcode}
+                      onChange={event => setReservationParams({ ...reservationParams, postcode: event.target.value })}
+                      />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Ort</Form.Label>
+                    <Form.Control
+                      as="input"
+                      value={reservationParams.city}
+                      onChange={event => setReservationParams({ ...reservationParams, city: event.target.value })}
+                      />
+                  </Form.Group>
+
+                  <Button variant="primary" onClick={createSeatReservation}>
+                    Sitzplatz reservieren
+                  </Button>
+                </>
+              )}
+              {reservationResult && (
+                <p>
+                  {reservationResult.message}<br />
+                  <br />
+                  Reservierungsnummer: {reservationResult.code}<br />
+                  Tisch: {reservationResult.table}<br />
+                  <br />
+                  <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
+                    Zur Wallet hinzufügen
+                  </a>
+                </p>
               )}
             </Form>
           </Modal.Body>

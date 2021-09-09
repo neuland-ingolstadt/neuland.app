@@ -99,7 +99,7 @@ class MensaBookingApiClient {
   async reserveSeat(params) {
     const time = params.timestamp.toISOString()
 
-    const data = await this.performRequest('/', {
+    const data = await this.performRequest('/add_by_client', {
       dauer: 30,
       gruppe: 1,
       vorname: params.firstName,
@@ -113,8 +113,8 @@ class MensaBookingApiClient {
       // save_allowed: 'on',
       nutzungsbedingungen: 'on',
       drei_g: 'on',
-      date_val: 'on',
       date: '',
+      date_val: 0,
       einrichtung_val: '7',
       einrichtung: 'Mensa Ingolstadt',
       zeitpunkt: time.substr(11, 5),
@@ -123,17 +123,18 @@ class MensaBookingApiClient {
     })
 
     if (data.message.status !== 'success') {
-      throw new Error(data.message.text)
+      throw new Error(data.message.info)
     }
 
     const {
       tag: day,
       uhrzeit_start: startTime,
       uhrzeit_ende: endTime,
+      id,
       krz: code,
       tischgruppe: tableGroup,
       tischnr: table
-    } = data.reservation
+    } = data.reservation.Reservation
 
     const start = new Date(`${day}T${startTime}`)
     const end = new Date(`${day}T${endTime}`)
@@ -144,6 +145,7 @@ class MensaBookingApiClient {
       end,
       tableGroup,
       table,
+      id,
       code,
       walletUrl: `https://togo.my-mensa.de/wallet/?c=erl77vB3r&order_id=${code}`
     }
