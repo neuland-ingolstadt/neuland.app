@@ -95,7 +95,7 @@ export default function Grades () {
           entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
           const result = entries.reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
           const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
-          averages[stg].result = result / weight
+          averages[stg].result = Math.floor(result / weight * 10) / 10 // truncate after first decimal place
         })
         setGradeAverages(averages)
 
