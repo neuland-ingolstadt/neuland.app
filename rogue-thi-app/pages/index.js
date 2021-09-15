@@ -294,7 +294,6 @@ function CalendarCard () {
           // ignore, leaving examList empty
         } else {
           console.error(e)
-          alert(e)
         }
       }
 
