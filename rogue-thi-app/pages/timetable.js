@@ -62,7 +62,7 @@ export async function getFriendlyTimetable (date, detailed) {
 
       // normalize room order
       x.raum = x.raum
-        .split(',')
+        ?.split(',')
         .map(x => x.trim().toUpperCase())
         .sort()
         .join(', ')
