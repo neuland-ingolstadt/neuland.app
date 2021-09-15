@@ -37,3 +37,7 @@
 .mobilityTime {
   text-align: right;
 }
+
+.mobilityCanceled {
+  text-decoration: line-through;
+}

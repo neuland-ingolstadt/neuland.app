@@ -79,11 +79,13 @@ export default async function handler (req, res) {
         const planned = $(el).find('.bold').eq(1).text().trim()
         const actual = $(el).find('.delayOnTime').text().trim() || planned
         const text = $(el).text().trim()
+        const canceled = $(el).find('.red').length > 0
         return {
           name,
           destination: text.match(/>>\n(.*)/)[1],
           plannedTime: dateFromTimestring(planned),
           actualTime: dateFromTimestring(actual),
+          canceled,
           plattform: parseInt(text.substr(text.length - 2)),
           url: $(el).find('a').attr('href')
         }

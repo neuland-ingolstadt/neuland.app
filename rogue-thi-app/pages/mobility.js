@@ -120,10 +120,10 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
         <div className={styles.mobilityRoute}>
           {item.name}
         </div>
-        <div className={styles.mobilityDestination}>
+        <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
           {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…' }
         </div>
-        <div className={styles.mobilityTime}>
+        <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
           {formatRelativeMinutes(new Date(item.actualTime))}
         </div>
       </>
