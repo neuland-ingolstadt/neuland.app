@@ -1,15 +1,6 @@
 
 const WORD_TODAY = 'Heute'
 const WORD_TOMORROW = 'Morgen'
-const WORD_WEEKS = 'Wochen'
-const WORD_DAY = 'Tag'
-const WORD_DAYS = 'Tagen'
-const WORD_HOUR = 'Stunde'
-const WORD_HOURS = 'Stunden'
-const WORD_MINUTE = 'Minute'
-const WORD_MINUTES = 'Minuten'
-const WORD_IN = 'in'
-const WORD_AGO = 'vor'
 const WORD_THIS_WEEK = 'Diese Woche'
 const WORD_NEXT_WEEK = 'Nächste Woche'
 
@@ -26,11 +17,15 @@ export function formatFriendlyDate (datetime) {
   const today = new Date()
   const tomorrow = new Date()
   tomorrow.setDate(today.getDate() + 1)
+  const rtl = new Intl.RelativeTimeFormat('de', {
+    numeric: "auto",
+    style: "long",
+  })
 
   if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY
+    return rtl.format(0, 'day')
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW
+    return rtl.format(1, 'day')
   } else {
     return datetime.toLocaleString(DATE_LOCALE, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
@@ -105,33 +100,29 @@ export function formatNearDate (datetime) {
 }
 
 function formatFriendlyTimeDelta (delta) {
+  const rtl = new Intl.RelativeTimeFormat('de', {
+    numeric: "auto",
+    style: "long",
+  })
   delta = Math.abs(delta)
 
   const weeks = delta / (7 * 24 * 60 * 60 * 1000) | 0
   if (weeks > 2) {
-    return `${weeks} ${WORD_WEEKS}`
+    return rtl.format(weeks, 'week')
   }
 
   const days = delta / (24 * 60 * 60 * 1000) | 0
-  if (days === 1) {
-    return `1 ${WORD_DAY}`
-  } else if (days > 0) {
-    return `${days} ${WORD_DAYS}`
+  if (days > 0) {
+    return rtl.format(days, 'day')
   }
 
   const hours = delta / (60 * 60 * 1000) | 0
-  if (hours === 1) {
-    return `1 ${WORD_HOUR}`
-  } else if (hours > 1) {
-    return `${hours} ${WORD_HOURS}`
+  if (hours > 0) {
+    return rtl.format(hours, 'hour')
   }
 
   const minutes = delta / (60 * 1000) | 0
-  if (minutes === 1) {
-    return `1 ${WORD_MINUTE}`
-  } else {
-    return `${minutes} ${WORD_MINUTES}`
-  }
+  return rtl.format(minutes, 'minute')
 }
 
 /**
@@ -147,20 +138,14 @@ export function formatFriendlyRelativeTime (date) {
   const deltaFromNow = date.getTime() - Date.now()
   const deltaFromStartOfDay = date.getTime() - startOfDay.getTime()
 
-  if (deltaFromNow > 0) {
-    // when the event is more than 24h away, use the start of the day as a reference
-    // (because that is how humans measure time, apparently)
-    if (Math.abs(deltaFromNow) < 86400000) {
-      return `${WORD_IN} ${formatFriendlyTimeDelta(deltaFromNow)}`
-    } else {
-      return `${WORD_IN} ${formatFriendlyTimeDelta(deltaFromStartOfDay)}`
-    }
+  // when the event is more than 24h away, use the start of the day as a reference
+  // (because that is how humans measure time, apparently)
+  if (Math.abs(deltaFromNow) < 86400000) {
+    return formatFriendlyTimeDelta(deltaFromNow)
+  } else if (deltaFromNow > 0) {
+    return formatFriendlyTimeDelta(deltaFromStartOfDay)
   } else {
-    if (Math.abs(deltaFromNow) < 86400000) {
-      return `${WORD_AGO} ${formatFriendlyTimeDelta(deltaFromNow)}`
-    } else {
-      return `${WORD_AGO} ${formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000)}`
-    }
+    return formatFriendlyTimeDelta(deltaFromStartOfDay - 86400000)
   }
 }
 
