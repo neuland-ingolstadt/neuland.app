@@ -92,7 +92,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       return res.data[1]
     } catch (e) {
       // when you have no exams the API sometimes returns "No exam data available"
-      if (e.data === 'No exam data available') {
+      if (e.data === 'No exam data available' || e.data === 'Query not possible') {
         return []
       } else {
         throw e

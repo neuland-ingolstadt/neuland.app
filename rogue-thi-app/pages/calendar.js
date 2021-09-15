@@ -70,8 +70,6 @@ export default function Calendar () {
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login')
-        } else if (e.message === 'Query not possible') {
-          setExams([])
         } else {
           console.error(e)
           alert(e)
