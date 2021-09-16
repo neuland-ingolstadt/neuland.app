@@ -11,8 +11,6 @@ COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
 
-RUN wget -O data/rooms.json 'https://map.thi.de/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&outputFormat=application%2Fjson&typeName=mythi%3ATHI_Raeume'
-
 RUN npm run build
 
 USER node

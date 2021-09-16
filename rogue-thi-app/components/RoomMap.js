@@ -13,8 +13,6 @@ import { filterRooms, getNextValidDate } from '../pages/rooms/search'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
-import roomData from '../data/rooms.json'
-
 import styles from '../styles/RoomMap.module.css'
 
 const TUX_ROOMS = [
@@ -41,33 +39,35 @@ const FLOOR_ORDER = [
 ]
 const DEFAULT_CENTER = [48.76677, 11.43322]
 
-const allRooms = roomData.features
-  .map(feature => {
-    const { properties, geometry } = feature
-
-    if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
-      return []
-    }
-
-    if (properties.Etage in FLOOR_SUBSTITUTES) {
-      properties.Etage = FLOOR_SUBSTITUTES[properties.Etage]
-    }
-    if (FLOOR_ORDER.indexOf(properties.Etage) === -1) {
-      FLOOR_ORDER.push(properties.Etage)
-    }
-
-    return geometry.coordinates.map(points => ({
-      properties,
-      coordinates: points.map(([lon, lat]) => [lat, lon]),
-      options: { }
-    }))
-  })
-  .flat()
-
-export default function RoomMap ({ highlight }) {
+export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState([])
+
+  const allRooms = useMemo(() => {
+    return roomData.features
+      .map(feature => {
+        const { properties, geometry } = feature
+
+        if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
+          return []
+        }
+
+        if (properties.Etage in FLOOR_SUBSTITUTES) {
+          properties.Etage = FLOOR_SUBSTITUTES[properties.Etage]
+        }
+        if (FLOOR_ORDER.indexOf(properties.Etage) === -1) {
+          FLOOR_ORDER.push(properties.Etage)
+        }
+
+        return geometry.coordinates.map(points => ({
+          properties,
+          coordinates: points.map(([lon, lat]) => [lat, lon]),
+          options: { }
+        }))
+      })
+      .flat()
+  }, [roomData])
 
   const [filteredRooms, center] = useMemo(() => {
     if (!searchText) {

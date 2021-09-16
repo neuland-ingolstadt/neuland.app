@@ -13,6 +13,25 @@ import API from '../lib/thi-backend/authenticated-api'
 
 import styles from '../styles/Imprint.module.css'
 
+export async function getStaticProps () {
+  try {
+    const res = await fetch('https://neuland-ingolstadt.de/impressum.htm')
+    const html = await res.text()
+    return {
+      props: {
+        neulandImprint: html
+      }
+    }
+  } catch (e) {
+    console.error(e)
+    return {
+      props: {
+        neulandImprint: 'Laden fehlgeschlagen! <a href="https://neuland-ingolstadt.de/impressum.htm">Bitte hier klicken</a>'
+      }
+    }
+  }
+}
+
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [thiImprint, setThiImprint] = useState('Lädt...')
@@ -111,19 +130,4 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
 Imprint.propTypes = {
   neulandImprint: PropTypes.string
-}
-
-Imprint.getInitialProps = async () => {
-  try {
-    const res = await fetch('https://neuland-ingolstadt.de/impressum.htm')
-    const html = await res.text()
-    return {
-      neulandImprint: html
-    }
-  } catch (e) {
-    console.error(e)
-    return {
-      neulandImprint: 'Laden fehlgeschlagen! <a href="https://neuland-ingolstadt.de/impressum.htm">Bitte hier klicken</a>'
-    }
-  }
 }
