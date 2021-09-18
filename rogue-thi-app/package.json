@@ -9,7 +9,9 @@
     "compile-scss": "sass --no-source-map --style compressed scss/themes/:public/themes/",
     "build": "next build",
     "start": "next start",
-    "build-mobile": "next build && next export && rm -rf android/ && npx cap add android && npx cap sync"
+    "android-add": "rm -rf android/ && npx cap add android",
+    "android-open": "next build && next export && npx cap sync android && npx cap open android",
+    "android-run": "next build && next export && npx cap sync android && npx cap run android"
   },
   "dependencies": {
     "@capacitor-community/http": "^1.2.0",
