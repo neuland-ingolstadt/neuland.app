@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import { Capacitor } from '@capacitor/core'
 import Card from 'react-bootstrap/Card'
 
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +15,7 @@ export default function InstallPrompt () {
   const os = useOperatingSystem()
 
   useEffect(() => {
-    if (localStorage.closedInstallPrompt) {
+    if (Capacitor.isNativePlatform() || localStorage.closedInstallPrompt) {
       return
     }
 
