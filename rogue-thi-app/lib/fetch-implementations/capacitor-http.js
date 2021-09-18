@@ -2,12 +2,21 @@ import { Http } from '@capacitor-community/http'
 
 import { HttpResponse } from './index'
 
+function getHeaderValue (headers, header) {
+  const value = Object.entries(headers).find(([key]) => key.toLowerCase() === header.toLowerCase())
+  return value ? value[1] : null
+}
+
+function getContentType (headers) {
+  const value = getHeaderValue(headers, 'Content-Type')
+  return value ? value.split(';')[0] : null
+}
+
 export default class CapacitorFetchConnection {
   async fetch (url, options) {
-    const ctHeader = options && options.headers && Object.entries(options.headers).find(([key]) => key.toLowerCase() === 'content-type')
-    const mime = ctHeader ? ctHeader[1].split(';')[0] : null
 
     // parse body because capacitor expects a non-serialized data object
+    const mime = options && options.headers && getContentType(options.headers)
     let data = undefined
     if (!options || !options.body) {
       // mimimi
@@ -19,12 +28,19 @@ export default class CapacitorFetchConnection {
       throw new Error(`Unsupported mime type: ${mime}`)
     }
 
-    const response = await Http.request({
+    const resp = await Http.request({
+      method: 'GET',
+      ...options,
       url,
-      data: data,
-      ...options
+      data
     })
-    const body = typeof response.data === 'string' ? response.data : JSON.stringify(response.data)
-    return new HttpResponse(response.status, body)
+    const respMime = getContentType(resp.headers)
+    let respData
+    if (respMime === 'application/json') {
+      respData = JSON.stringify(resp.data)
+    } else {
+      respData = resp.data
+    }
+    return new HttpResponse(resp.status, respData)
   }
 }
