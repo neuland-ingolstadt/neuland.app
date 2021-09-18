@@ -45,20 +45,18 @@ export default function InstallPrompt () {
             </Button>
           </Card.Title>
           <Card.Text>
-            <p>
-              Möchtest du diese App auf deinem Smartphone installieren?
-            </p>
-            {showPrompt === OS_IOS &&
-              <p>
-                Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.
-              </p>
-            }
-            {showPrompt === OS_ANDROID &&
-              <p>
-                Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>.
-              </p>
-            }
+            Möchtest du diese App auf deinem Smartphone installieren?
           </Card.Text>
+          {showPrompt === OS_IOS &&
+            <Card.Text>
+              Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.
+            </Card.Text>
+          }
+          {showPrompt === OS_ANDROID &&
+            <Card.Text>
+              Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>.
+            </Card.Text>
+          }
         </Card.Body>
       </Card>
   )

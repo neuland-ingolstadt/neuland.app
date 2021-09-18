@@ -328,14 +328,14 @@ export default function Mensa () {
                     null,
                     '11:50',
                     '12:50'
-                  ].map((time, i) => time
-                    ? <>
-                        <Button key={i} variant="primary" onClick={() => setReservationTime(time)}>
+                  ].map((time, idx) => time
+                    ? <span key={idx}>
+                        <Button variant="primary" onClick={() => setReservationTime(time)}>
                           {time}
                         </Button>
                         {' '}
-                      </>
-                    : <br />
+                      </span>
+                    : <br key={idx} />
                   )}
                 </>
               )}

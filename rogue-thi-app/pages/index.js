@@ -92,11 +92,7 @@ function HomeCard ({ link, icon, title, className, children }) {
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
           </Card.Title>
-          {children &&
-            <Card.Text>
-              {children}
-            </Card.Text>
-          }
+          {children}
         </Card.Body>
       </Card>
     </Link>

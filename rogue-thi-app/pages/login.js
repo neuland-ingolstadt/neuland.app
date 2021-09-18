@@ -45,7 +45,7 @@ export default function Login () {
 
       <AppBody>
         <div className={styles.container}>
-          <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete={true}>
+          <Form className={styles.main} onSubmit={e => attemptLogin(e)} autoComplete="on">
             {failure &&
               <Alert variant="danger">
                 {failure}

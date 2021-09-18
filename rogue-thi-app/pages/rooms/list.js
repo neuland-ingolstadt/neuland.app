@@ -97,13 +97,13 @@ export default function RoomList () {
                       </div>
                       <div className={styles.room}>
                         {rooms.map((room, idx) =>
-                          <>
+                          <span key={idx}>
                             <Link href={`/rooms?highlight=${room}`}>
                               {room}
                             </Link>
                             {TUX_ROOMS.includes(room) && <> <FontAwesomeIcon icon={faLinux} /></>}
                             {idx === rooms.length - 1 ? '' : ', '}
-                          </>
+                          </span>
                         )}
                       </div>
                     </div>

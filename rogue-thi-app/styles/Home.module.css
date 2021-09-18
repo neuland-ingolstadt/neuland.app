@@ -29,7 +29,7 @@
   font-weight: normal;
 }
 
-.card :global(.card-text) {
+.card :global(.card-title) + * {
   margin-top: 10px;
 }
 
