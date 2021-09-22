@@ -10,12 +10,12 @@ import { OS_ANDROID, OS_IOS, useOperatingSystem } from '../lib/os-hook'
 
 import styles from '../styles/Home.module.css'
 
-export default function InstallPrompt () {
+export default function InstallPrompt ({ onHide }) {
   const [showPrompt, setShowPrompt] = useState(false)
   const os = useOperatingSystem()
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform() || localStorage.closedInstallPrompt) {
+    if (Capacitor.isNativePlatform()) {
       return
     }
 
@@ -30,7 +30,7 @@ export default function InstallPrompt () {
 
   function close () {
     setShowPrompt(false)
-    localStorage.closedInstallPrompt = true
+    onHide()
   }
 
   return showPrompt && (

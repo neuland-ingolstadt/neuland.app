@@ -17,7 +17,7 @@ import styles from '../styles/Home.module.css'
 
 const discordUrls = JSON.parse(process.env.NEXT_PUBLIC_DISCORD_URLS || '{}')
 
-export default function DiscordPrompt () {
+export default function DiscordPrompt ({ onHide }) {
   const router = useRouter()
   const [faculty, setFaculty] = useState(null)
   const [discordUrl, setDiscordUrl] = useState(null)
@@ -42,15 +42,13 @@ export default function DiscordPrompt () {
       }
     }
 
-    if (!localStorage.closedDiscordPrompt) {
-      load()
-    }
+    load()
   }, [router])
 
   function close () {
     setFaculty(null)
     setDiscordUrl(null)
-    localStorage.closedDiscordPrompt = true
+    onHide()
   }
 
   return faculty && discordUrl && (

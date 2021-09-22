@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useRef, useContext, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
+import DraggableList from 'react-draggable-list'
 
 import {
   faBook,
@@ -20,6 +21,7 @@ import {
   faChargingStation,
   faChevronRight,
   faDoorOpen,
+  faGripVertical,
   faPen,
   faTrain,
   faUtensils
@@ -60,6 +62,111 @@ const ALL_THEMES = [
   { name: 'Windows 95', style: '95' },
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
+
+const ALL_DASHBOARD_CARDS = [
+  {
+    key: 'install',
+    label: 'Installation',
+    card: hidePromptCard => (
+      <InstallPrompt
+        key="install"
+        onHide={() => hidePromptCard('install')}
+        />
+    )
+  },
+  {
+    key: 'discord',
+    label: 'Fakultäts Discord',
+    card: hidePromptCard => (
+      <DiscordPrompt
+        key="discord"
+        onHide={() => hidePromptCard('discord')}
+        />
+    )
+  },
+  {
+    key: 'timetable',
+    label: 'Stundenplan',
+    card: () => <TimetableCard key="timetable" />
+  },
+  {
+    key: 'mensa',
+    label: 'Mensa Speiseplan',
+    card: () => <MensaCard key="mensa" />
+  },
+  {
+    key: 'mobility',
+    label: 'Mobilität',
+    card: () => <MobilityCard key="mobility" />
+  },
+  {
+    key: 'calendar',
+    label: 'Termine',
+    card: () => <CalendarCard key="calendar" />
+  },
+  {
+    key: 'rooms',
+    label: 'Raumplan',
+    card: () => (
+      <HomeCard
+        key="rooms"
+        icon={faDoorOpen}
+        title="Räume"
+        link="/rooms"
+        className="desktop-only"
+        />
+    )
+  },
+  {
+    key: 'library',
+    label: 'Bibliothek',
+    card: () => (
+      <HomeCard
+        key="library"
+        icon={faBook}
+        title="Bibliothek"
+        link="/library"
+        />
+    )
+  },
+  {
+    key: 'grades',
+    label: 'Noten & Fächer',
+    card: () => (
+      <HomeCard
+        key="grades"
+        icon={faPen}
+        title="Noten & Fächer"
+        link="/grades"
+        />
+    )
+  },
+  {
+    key: 'hidden-below',
+    label: '',
+    card: () => ''
+  },
+]
+
+// required to be a class based component
+// see https://github.com/StreakYC/react-draggable-list/issues/35
+class DraggableCardListEntry extends React.Component {
+  render() {
+    const { item, dragHandleProps } = this.props
+    if(item.key === 'hidden-below') {
+      return (
+        <h5 className={styles.hiddenCardsHeading}>Ausgeblendete Karten:</h5>
+      )
+    }
+
+    return (
+      <ListGroup.Item action {...dragHandleProps}>
+        <FontAwesomeIcon icon={faGripVertical} fixedWidth />
+        {item.label}
+      </ListGroup.Item>
+    )
+  }
+}
 
 async function getMensaPlanPreview () {
   const plan = await NeulandAPI.getMensaPlan()
@@ -329,18 +436,29 @@ export default function Home () {
   const router = useRouter()
 
   // page state
+  const [dashboardEntries, setDashboardEntries] = useState(ALL_DASHBOARD_CARDS)
+  const [shownDashboardEntries, setShownDashboardEntries] = useState(ALL_DASHBOARD_CARDS)
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
   const [unlockedThemes, setUnlockedThemes] = useState([])
   const [showDebug, setShowDebug] = useState(false)
-
-  const { hideInstallation, hideDiscord } = useMemo(() => ({
-    hideInstallation: typeof localStorage !== 'undefined' ? localStorage.closedInstallPrompt : false,
-    hideDiscord: typeof localStorage !== 'undefined' ? localStorage.closedDiscordPrompt : false
-  }), [])
+  const themeModalBody = useRef()
 
   useEffect(() => {
     async function load () {
+      if(localStorage.personalizedDashboard) {
+        const entries = JSON.parse(localStorage.personalizedDashboard)
+          .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
+          .filter(x => !!x)
+
+        ALL_DASHBOARD_CARDS.forEach(card => {
+          if(!entries.find(x => x.key === card.key)) {
+            // new (previosly unknown) card
+            entries.push(card)
+          }
+        })
+        setDashboardEntries(entries)
+      }
       if (localStorage.unlockedThemes) {
         setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
       }
@@ -351,22 +469,36 @@ export default function Home () {
     load()
   }, [])
 
+  useEffect(() => {
+    const hiddenFrom = dashboardEntries.findIndex(x => x.key === 'hidden-below')
+    setShownDashboardEntries(dashboardEntries.slice(0, hiddenFrom))
+  }, [dashboardEntries])
+
+  function changeDashboardEntries (entries) {
+    localStorage.personalizedDashboard = JSON.stringify(entries.map(x => x.key))
+    setDashboardEntries(entries)
+  }
+
+  function hidePromptCard (key) {
+    const entries = dashboardEntries.slice(0)
+
+    const index = entries.findIndex(x => x.key === key)
+    if (index >= 0) {
+      // move entry to the back where it is behind 'hidden-below'
+      const entry = entries[index]
+      entries.splice(index, 1)
+      entries.push(entry)
+    }
+
+    changeDashboardEntries(entries)
+  }
+
   function changeTheme (theme) {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
     document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
 
     setCurrentTheme(theme)
     setShowThemeModal(false)
-  }
-
-  function changePromptSetting (name) {
-    if (localStorage[name]) {
-      localStorage.removeItem(name)
-    } else {
-      localStorage[name] = true
-    }
-
-    router.reload()
   }
 
   return (
@@ -389,7 +521,7 @@ export default function Home () {
           </Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            Design
+            App personalisieren
           </Dropdown.Item>
           <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
             Ausloggen
@@ -399,18 +531,16 @@ export default function Home () {
 
       <AppBody>
         <div className={styles.cardDeck}>
-          <InstallPrompt />
-          <DiscordPrompt />
-
           <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>Design</Modal.Title>
+              <Modal.Title>App Personalisieren</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body ref={themeModalBody}>
+              <h3 className={styles.themeHeader}>Design</h3>
               <Form>
                 {ALL_THEMES.map((theme, i) => (
                   <Button
-                  key={i}
+                    key={i}
                     id={`theme-${i}`}
                     className={styles.themeButton}
                     variant={currentTheme === theme.style ? 'primary' : 'secondary'}
@@ -421,52 +551,36 @@ export default function Home () {
                   </Button>
                 ))}
               </Form>
-              <br />
               <p>
                 Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL} target="_blank" rel="noreferrer">Übungs-CTFs</a> lösen.
                 Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
               </p>
-              <Form>
-                <Form.Check
-                  label="Installationsanleitung anzeigen"
-                  checked={!hideInstallation}
-                  onChange={() => changePromptSetting('closedInstallPrompt')}
+
+              <h3 className={styles.themeHeader}>Dashboard Karten</h3>
+              <p>
+                Hier kannst du die Reihenfolge der auf der 'Home' Seite angezeigten Karten durch halten und ziehen verändern.
+                <Button
+                  variant="link"
+                  onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS)}
+                >
+                  Klicke hier zum zurücksetzten
+                </Button>
+              </p>
+              <ListGroup>
+                <DraggableList
+                  itemKey="key"
+                  template={DraggableCardListEntry}
+                  list={dashboardEntries}
+                  onMoveEnd={changeDashboardEntries}
+                  container={() => themeModalBody.current}
+                  padding={-1}
                   />
-                <Form.Check
-                  label="Fakultäts Discord anzeigen"
-                  checked={!hideDiscord}
-                  onChange={() => changePromptSetting('closedDiscordPrompt')}
-                  />
-              </Form>
+              </ListGroup>
+              <br />
             </Modal.Body>
           </Modal>
 
-          <TimetableCard />
-
-          <MensaCard />
-
-          <MobilityCard />
-
-          <CalendarCard />
-
-          <HomeCard
-            icon={faDoorOpen}
-            title="Räume"
-            link="/rooms"
-            className="desktop-only"
-          />
-
-          <HomeCard
-            icon={faBook}
-            title="Bibliothek"
-            link="/library"
-          />
-
-          <HomeCard
-            icon={faPen}
-            title="Noten & Fächer"
-            link="/grades"
-          />
+          {shownDashboardEntries.map(entry => entry.card(hidePromptCard))}
         </div>
       </AppBody>
 

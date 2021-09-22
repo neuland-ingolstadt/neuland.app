@@ -44,11 +44,19 @@
   max-width: 95vw;
 }
 
+.themeHeader {
+  margin-top: 10px;
+}
+
 .themeButton {
   margin: 10px 0px;
   display: block;
   width: 100%;
   text-align: left;
+}
+
+.hiddenCardsHeading {
+  margin-top: 10px;
 }
 
 .mobilityItem {
