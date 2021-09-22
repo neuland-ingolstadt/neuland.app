@@ -87,11 +87,13 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'timetable',
     label: 'Stundenplan',
+    desktopOnly: true,
     card: () => <TimetableCard key="timetable" />
   },
   {
     key: 'mensa',
     label: 'Mensa Speiseplan',
+    desktopOnly: true,
     card: () => <MensaCard key="mensa" />
   },
   {
@@ -107,13 +109,13 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'rooms',
     label: 'Raumplan',
+    desktopOnly: true,
     card: () => (
       <HomeCard
         key="rooms"
         icon={faDoorOpen}
         title="Räume"
         link="/rooms"
-        className="desktop-only"
         />
     )
   },
@@ -289,7 +291,6 @@ function MensaCard () {
       icon={faUtensils}
       title="Mensa"
       link="/mensa"
-      className="desktop-only"
     >
       <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
         <ListGroup variant="flush">
@@ -446,7 +447,7 @@ export default function Home () {
 
   useEffect(() => {
     async function load () {
-      if(localStorage.personalizedDashboard) {
+      if (localStorage.personalizedDashboard) {
         const entries = JSON.parse(localStorage.personalizedDashboard)
           .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
           .filter(x => !!x)
@@ -458,7 +459,14 @@ export default function Home () {
           }
         })
         setDashboardEntries(entries)
+      } else if (window.matchMedia('(max-width: 768px)').matches) {
+        const entries = [
+          ...ALL_DASHBOARD_CARDS.filter(x => !x.desktopOnly),
+          ...ALL_DASHBOARD_CARDS.filter(x => x.desktopOnly)
+        ]
+        setDashboardEntries(entries)
       }
+
       if (localStorage.unlockedThemes) {
         setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
       }
