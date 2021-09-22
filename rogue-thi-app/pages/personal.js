@@ -64,7 +64,11 @@ export default function Personal () {
           {renderPersonalEntry('Studiengang', 'fachrich')}
           {renderPersonalEntry('Fachsemester', 'stgru')}
           {renderPersonalEntry('Prüfungsordnung', null, () => (
-            <a href={userdata.po_url} target="_blank" rel="noreferrer">
+            <a
+              /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
+              href={userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
+              target="_blank"
+              rel="noreferrer">
               {userdata.pvers}
             </a>
           ))}
