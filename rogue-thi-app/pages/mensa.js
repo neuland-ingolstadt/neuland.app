@@ -203,6 +203,10 @@ export default function Mensa () {
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
+                {' '}
+                <Button variant="primary" onClick={() => setReservationDate(new Date(day.timestamp))}>
+                  Sitzplatz reservieren
+                </Button>
               </h4>
 
               {day.meals.map((meal, idx) =>
