@@ -41,6 +41,9 @@ export default function Rooms ({ roomData }) {
         <Dropdown.Item variant="link" href="/rooms/list">
           Listenansicht
         </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
+          Campus- {'&'} Stadtführung
+        </Dropdown.Item>
       </AppNavbar>
 
       <AppBody className={styles.body}>
