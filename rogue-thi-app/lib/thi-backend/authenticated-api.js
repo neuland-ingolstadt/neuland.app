@@ -1,6 +1,10 @@
 import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
-import { convertThiMensaPlan } from './thi-api-conversion'
+import {
+  convertThiMensaPlan,
+  extractFacultyFromPersonalData,
+  extractSpoFromPersonalData
+} from './thi-api-conversion'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
@@ -59,6 +63,16 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     })
 
     return res.data[1]
+  }
+
+  async getFaculty () {
+    const data = await this.getPersonalData()
+    return extractFacultyFromPersonalData(data)
+  }
+
+  async getSpoName () {
+    const data = await this.getPersonalData()
+    return extractSpoFromPersonalData(data)
   }
 
   async getTimetable (date, detailed = false) {

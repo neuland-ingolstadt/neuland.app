@@ -90,3 +90,16 @@ export function getRoomOpenings (rooms, date) {
     })
   return openings
 }
+
+export function extractFacultyFromPersonalData (data) {
+  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
+  return split[split.length - 3]
+    .replace('satzungen-', '')
+    .replace('fakultaet-', '')
+    .replace('campus-', '')
+}
+
+export function extractSpoFromPersonalData (data) {
+  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
+  return split[split.length - 1]
+}

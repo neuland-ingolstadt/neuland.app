@@ -11,8 +11,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
-import courseShorts from '../data/course-short-names.json'
-
 import styles from '../styles/Home.module.css'
 
 const discordUrls = JSON.parse(process.env.NEXT_PUBLIC_DISCORD_URLS || '{}')
@@ -25,9 +23,7 @@ export default function DiscordPrompt ({ onHide }) {
   useEffect(() => {
     async function load () {
       try {
-        const response = await API.getPersonalData()
-        const course = response.persdata.stg
-        const faculty = Object.keys(courseShorts).find(faculty => courseShorts[faculty].hasOwnProperty(course))
+        const faculty = await API.getFaculty()
         if (discordUrls.hasOwnProperty(faculty)) {
           setFaculty(faculty)
           setDiscordUrl(discordUrls[faculty])

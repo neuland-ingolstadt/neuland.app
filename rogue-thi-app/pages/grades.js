@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react'
 import ReactPlaceholder from 'react-placeholder'
 import { useRouter } from 'next/router'
 
-import Button from 'react-bootstrap/Button'
+import Dropdown from 'react-bootstrap/Dropdown'
 import ListGroup from 'react-bootstrap/ListGroup'
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Tooltip from 'react-bootstrap/Tooltip'
-
-import { faQuestion, faQuestionCircle, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
@@ -19,20 +14,15 @@ import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
 import courseSPOs from '../data/spo-grade-weights.json'
-import courseShorts from '../data/course-short-names.json'
 
 import styles from '../styles/Grades.module.css'
-
-// flag to temporarily disable averages until they are finished
-const ENABLE_AVERAGES = !!process.env.NEXT_PUBLIC_ENABLE_AVERAGES
 
 export default function Grades () {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
-  const [gradeAverages, setGradeAverages] = useState(null)
+  const [gradeAverage, setGradeAverage] = useState(null)
 
-  const hasMultipleCourses = gradeAverages && Object.keys(gradeAverages).length > 1
   const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
 
   function simplifyName (x) {
@@ -42,20 +32,38 @@ export default function Grades () {
   useEffect(() => {
     async function load () {
       try {
+        // load and enhance grade list
         const gradeList = await API.getGrades()
-        const averages = {}
+        gradeList.forEach(x => {
+          if (x.anrech === '*' && x.note === '') {
+            x.note = 'E*'
+          }
+          if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
+            x.note = 'E'
+          }
+        })
+        const deduplicatedGrades = gradeList
+          .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+
+        const finishedGrades = deduplicatedGrades.filter(x => x.note)
+        setGrades(finishedGrades)
+        setMissingGrades(
+          deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+        )
+
+        // calculate grade average
+        const spoName = await API.getSpoName()
+        if (!spoName || !courseSPOs[spoName]) {
+          return
+        }
+
+        const average = {
+          result: -1,
+          missingWeight: 0,
+          entries: []
+        }
 
         gradeList.forEach(x => {
-          if (!averages[x.stg]) {
-            averages[x.stg] = {
-              result: -1,
-              entries: []
-            }
-          }
-          const average = averages[x.stg]
-
-          const faculty = Object.keys(courseShorts).find(faculty => courseShorts[faculty][x.stg])
-          const spoName = courseShorts[faculty][x.stg]
           const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
           if (grade && spoName && courseSPOs[spoName]) {
             const spo = courseSPOs[spoName]
@@ -72,6 +80,10 @@ export default function Grades () {
                 weight: typeof entry.weight === 'number' ? entry.weight : null,
                 grade
               })
+
+              if (typeof entry.weight !== 'number') {
+                average.missingWeight++
+              }
             } else {
               average.entries.push({
                 simpleName: name,
@@ -79,35 +91,20 @@ export default function Grades () {
                 weight: null,
                 grade
               })
+              average.missingWeight++
             }
           }
-
-          if (x.anrech === '*' && x.note === '') {
-            x.note = 'E*'
-          }
-          if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
-            x.note = 'E'
-          }
         })
 
-        Object.keys(averages).forEach(stg => {
-          const entries = averages[stg].entries
-          entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
-          const result = entries.reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
-          const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
-          averages[stg].result = Math.floor(result / weight * 10) / 10 // truncate after first decimal place
-        })
-        setGradeAverages(averages)
+        average.entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
+        const result = average.entries
+          .reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
+        const weight = average.entries
+          .filter(curr => curr.grade)
+          .reduce((acc, curr) => acc + (curr.weight || 1), 0)
+        average.result = result / weight
 
-        const deduplicatedGrades = gradeList
-          .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
-
-        const finishedGrades = deduplicatedGrades.filter(x => x.note)
-        setGrades(finishedGrades)
-
-        setMissingGrades(
-          deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
-        )
+        setGradeAverage(average)
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login')
@@ -127,9 +124,15 @@ export default function Grades () {
     load()
   }, [router])
 
-  async function copyFormula (entries) {
-    const weight = entries.filter(curr => curr.grade).reduce((acc, curr) => acc + (curr.weight || 1), 0)
-    const inner = entries
+  async function copyGradeFormula () {
+    if (!gradeAverage) {
+      return
+    }
+
+    const weight = gradeAverage.entries
+      .filter(curr => curr.grade)
+      .reduce((acc, curr) => acc + (curr.weight || 1), 0)
+    const inner = gradeAverage.entries
       .map(entry => entry.weight && entry.weight !== 1
         ? `${entry.weight} * ${entry.grade}`
         : entry.grade.toString()
@@ -137,62 +140,44 @@ export default function Grades () {
       .join(' + ')
 
     await navigator.clipboard.writeText(`(${inner}) / ${weight}`)
-    console.log('copied!')
+    alert('Copied to Clipboard!')
+  }
+
+  function downloadGradeCSV () {
+    alert('Not yet implemented :(')
   }
 
   return (
     <AppContainer>
-      <AppNavbar title="Noten & Fächer" />
+      <AppNavbar title="Noten & Fächer">
+        <Dropdown.Item variant="link" onClick={() => copyGradeFormula()}>
+          Notenschnitt Formel kopieren
+        </Dropdown.Item>
+        <Dropdown.Item variant="link" onClick={() => downloadGradeCSV()}>
+          Noten als CSV exportieren
+        </Dropdown.Item>
+      </AppNavbar>
 
       <AppBody>
-        {ENABLE_AVERAGES && (
-          <ReactPlaceholder type="text" rows={3} ready={gradeAverages}>
-            {gradeAverages && Object.entries(gradeAverages).map(([stg, average], idx) =>
-              <ListGroup key={idx}>
+        <ReactPlaceholder type="text" rows={3} ready={!!gradeAverage}>
+          {gradeAverage && (
+            <ListGroup>
               <h4 className={styles.heading}>
-                Notenschnitt{hasMultipleCourses && ` (${stg})`}
+                Notenschnitt
               </h4>
 
-                <ListGroup.Item>
-                  <span className={styles.gradeAverage}>{formatNum(average.result)}</span>
-                  {average.entries.map((entry, jdx) =>
-                    <>
-                      {jdx !== 0 && <>
-                        <span className={styles.spacer}></span>
-                        {'+'}
-                        <span className={styles.spacer}></span>
-                      </>}
-                      <OverlayTrigger
-                        key={jdx}
-                        placement="top"
-                        overlay={
-                          <Tooltip id={`${stg}-${jdx}`}>
-                            {entry.name}
-                          </Tooltip>
-                        }
-                      >
-                        <Button variant="text">
-                          {entry.weight
-                            ? <b>{formatNum(entry.weight)}</b>
-                            : <FontAwesomeIcon icon={faQuestionCircle} />
-                          }
-                          {' '}
-                          <FontAwesomeIcon icon={faTimes} />
-                          {' '}
-                          {entry.grade
-                            ? <b>{formatNum(entry.grade)}</b>
-                            : <FontAwesomeIcon icon={faQuestion} />
-                          }
-                        </Button>
-                      </OverlayTrigger>
-                    </>
-                  )}
-                  <Button variant="link" onClick={() => copyFormula(average.entries)}>Formel kopieren</Button>
-                </ListGroup.Item>
-              </ListGroup>
-            )}
-          </ReactPlaceholder>
-        )}
+              <ListGroup.Item>
+                <span className={styles.gradeAverage}>{formatNum(gradeAverage.result)}</span>
+                {gradeAverage.missingWeight / gradeAverage.entries.length > 0.2 && (
+                  <span className={styles.details}>
+                    Achtung: {gradeAverage.missingWeight} von {gradeAverage.entries.length} Noten haben
+                    eine unbekannte Gewichtung. Der angezeigte Schnitt ist eventuell nicht korrekt.
+                  </span>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          )}
+        </ReactPlaceholder>
 
         <ListGroup>
           <h4 className={styles.heading}>
@@ -203,7 +188,7 @@ export default function Grades () {
             {grades && grades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
-                  {item.titel}{hasMultipleCourses && ` (${item.stg})`}<br />
+                  {item.titel}<br />
 
                   <div className={styles.details}>
                     Note: {item.note.replace('*', ' (angerechnet)')}<br />
