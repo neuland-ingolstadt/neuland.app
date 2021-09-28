@@ -16,6 +16,7 @@ import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
+import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
 import API from '../lib/thi-backend/authenticated-api'
 import MensaAPI from '../lib/mensa-booking-api'
 import NeulandAPI from '../lib/neuland-api'
@@ -36,6 +37,7 @@ Object.keys(allergenMap)
 export default function Mensa () {
   const router = useRouter()
   const { reserve } = router.query
+  const os = useOperatingSystem()
 
   const [mensaPlan, setMensaPlan] = useState(null)
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
@@ -111,10 +113,10 @@ export default function Mensa () {
       }
     }
 
-    if (reservationTime && !verificationEmail) {
+    if (reservationDate && !reservationParams?.firstName) {
       load()
     }
-  }, [reservationTime, verificationEmail])
+  }, [reservationDate, reservationParams])
 
   useEffect(() => {
     async function check () {
@@ -151,6 +153,8 @@ export default function Mensa () {
     setReservationTime(null)
     setReservationParams({})
     setReservationResult(null)
+    setVerificationEmail(null)
+    setVerificationCode(null)
     setVerificationCorrect(false)
   }
 
@@ -466,9 +470,11 @@ export default function Mensa () {
                   Reservierungsnummer: {reservationResult.code}<br />
                   Tisch: {reservationResult.table}<br />
                   <br />
-                  <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
-                    Zur Wallet hinzufügen
-                  </a>
+                  {os === OS_IOS && (
+                    <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
+                      Zur Apple Wallet hinzufügen
+                    </a>
+                  )}
                 </p>
               )}
             </Form>
