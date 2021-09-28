@@ -26,7 +26,6 @@ import styles from '../styles/Mensa.module.css'
 import allergenMap from '../data/allergens.json'
 
 const COLOR_WARN = '#bb0000'
-const LOCALSTORAGE_SELECTED_ALLERGENS = 'selectedAllergens'
 const FALLBACK_ALLERGEN = 'Unbekannt (Das ist schlecht.)'
 
 // delete comments
@@ -58,12 +57,20 @@ export default function Mensa () {
   const [verificationCode, setVerificationCode] = useState(null)
   const [verificationError, setVerificationError] = useState(null)
   const [verificationCorrect, setVerificationCorrect] = useState(false)
+  const [savedVerificationEmail, setSavedVerificationEmail] = useState(null)
 
   useEffect(() => {
     async function load () {
       try {
         const data = await NeulandAPI.getMensaPlan()
         setMensaPlan(data)
+
+        const { mensaReservationEmail, mensaReservationCode } = localStorage
+        if (mensaReservationEmail && mensaReservationCode &&
+          await MensaAPI.checkVerificationCode(mensaReservationEmail, mensaReservationCode)
+        ) {
+          setSavedVerificationEmail(localStorage.mensaReservationEmail)
+        }
       } catch (e) {
         console.error(e)
         alert(e)
@@ -73,8 +80,8 @@ export default function Mensa () {
   }, [])
 
   useEffect(() => {
-    if (localStorage[LOCALSTORAGE_SELECTED_ALLERGENS]) {
-      setAllergenSelection(JSON.parse(localStorage[LOCALSTORAGE_SELECTED_ALLERGENS]))
+    if (localStorage.selectedAllergens) {
+      setAllergenSelection(JSON.parse(localStorage.selectedAllergens))
     }
   }, [])
 
@@ -115,6 +122,11 @@ export default function Mensa () {
         const success = await MensaAPI.checkVerificationCode(verificationEmail, verificationCode)
         setVerificationCorrect(success)
         setVerificationError(success ? null : 'Ungültiger Verifizierungscode')
+
+        if (success) {
+          localStorage.mensaReservationEmail = verificationEmail
+          localStorage.mensaReservationCode = verificationCode
+        }
       } catch (e) {
         setVerificationError(e.toString())
       }
@@ -126,7 +138,7 @@ export default function Mensa () {
   }, [verificationEmail, verificationCode])
 
   function saveAllergenSelection () {
-    localStorage[LOCALSTORAGE_SELECTED_ALLERGENS] = JSON.stringify(allergenSelection)
+    localStorage.selectedAllergens = JSON.stringify(allergenSelection)
     setShowAllergenSelection(false)
   }
 
@@ -149,6 +161,11 @@ export default function Mensa () {
     } catch (e) {
       setVerificationError(e.toString())
     }
+  }
+  function useSavedEmail () {
+    setVerificationEmail(savedVerificationEmail)
+    setVerificationCode(localStorage.mensaReservationCode)
+    setVerificationCorrect(true)
   }
 
   async function createSeatReservation () {
@@ -350,15 +367,25 @@ export default function Mensa () {
                       />
                   </Form.Group>
 
-                  <Button variant="primary" onClick={sendVerificationMail}>
-                    Verifizierungs E-Mail versenden
-                  </Button>
+                  {savedVerificationEmail === verificationEmail && (
+                    <>
+                      <Button variant="primary" onClick={useSavedEmail}>
+                        Fortfahren
+                      </Button>
+                      {' '}Die Adresse wurde bereits verifiziert
+                    </>
+                  )}
+                  {savedVerificationEmail !== verificationEmail && (
+                    <Button variant="primary" onClick={sendVerificationMail}>
+                      Verifizierungs E-Mail versenden
+                    </Button>
+                  )}
 
                   {verificationError && <br />}
                   {verificationError}
                 </>
               )}
-              {reservationTime && verificationEmail && verificationCode !== null && !verificationCorrect && (
+              {reservationTime && verificationCode !== null && !verificationCorrect && (
                 <>
                   <Form.Group>
                     <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
