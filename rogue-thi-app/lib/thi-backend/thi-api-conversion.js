@@ -92,6 +92,10 @@ export function getRoomOpenings (rooms, date) {
 }
 
 export function extractFacultyFromPersonalData (data) {
+  if (!data || !data.persdata || !data.persdata.po_url) {
+    return null
+  }
+
   const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
   return split[split.length - 3]
     .replace('satzungen-', '')
@@ -100,6 +104,10 @@ export function extractFacultyFromPersonalData (data) {
 }
 
 export function extractSpoFromPersonalData (data) {
+  if (!data || !data.persdata || !data.persdata.po_url) {
+    return null
+  }
+
   const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
   return split[split.length - 1]
 }
