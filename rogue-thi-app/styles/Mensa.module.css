@@ -23,3 +23,8 @@
   font-weight: bold;
   color: red;
 }
+
+.qrCode {
+  width: 100% !important;
+  height: auto !important;
+}

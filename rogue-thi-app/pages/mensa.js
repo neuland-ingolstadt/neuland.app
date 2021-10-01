@@ -15,6 +15,7 @@ import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
+import QRCodeCanvas from '../components/QRCodeCanvas'
 
 import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
 import API from '../lib/thi-backend/authenticated-api'
@@ -464,18 +465,23 @@ export default function Mensa () {
                 </>
               )}
               {reservationResult && (
-                <p>
-                  {reservationResult.message}<br />
-                  <br />
-                  Reservierungsnummer: {reservationResult.code}<br />
-                  Tisch: {reservationResult.table}<br />
-                  <br />
-                  {os === OS_IOS && (
-                    <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
-                      Zur Apple Wallet hinzufügen
-                    </a>
-                  )}
-                </p>
+                <>
+                  <p>
+                    {reservationResult.message}<br />
+                    <br />
+                    Reservierungsnummer: {reservationResult.code}<br />
+                    Tisch: {reservationResult.table}<br />
+                    <br />
+                    Der Code wurde dir per E-Mail zugesendet.
+                    <br />
+                    {os === OS_IOS && (
+                      <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
+                        Zur Apple Wallet hinzufügen
+                      </a>
+                    )}
+                  </p>
+                  <QRCodeCanvas className={styles.qrCode} width={1024} height={1024} value={reservationResult.code} />
+                </>
               )}
             </Form>
           </Modal.Body>
