@@ -19,8 +19,8 @@ ENV NODE_EXTRA_CA_CERTS $NODE_EXTRA_CA_CERTS
 
 COPY rogue-thi-app/package.json rogue-thi-app/package-lock.json ./
 RUN npm install
-COPY --from=spo /opt/spo-grade-weights.json data/
 COPY rogue-thi-app/ .
+COPY --from=spo /opt/spo-grade-weights.json data/
 
 RUN npm run build
 
