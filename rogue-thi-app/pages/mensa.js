@@ -10,6 +10,7 @@ import ReactPlaceholder from 'react-placeholder'
 
 import {
   faExclamationTriangle,
+  faQrcode,
   faUserPlus
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,7 +25,7 @@ import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
 import API from '../lib/thi-backend/authenticated-api'
 import MensaAPI from '../lib/mensa-booking-api'
 import NeulandAPI from '../lib/neuland-api'
-import { formatNearDate } from '../lib/date-utils'
+import { formatNearDate, formatISOTime } from '../lib/date-utils'
 
 import styles from '../styles/Mensa.module.css'
 
@@ -189,12 +190,17 @@ export default function Mensa () {
       })
 
       setReservationResult(result)
-      // TODO store the reservation in localStorage
+      localStorage[`reservation-${dateStr}`] = JSON.stringify(result)
     } catch (e) {
       console.error(e)
       alert(e)
       resetReservationEntries()
     }
+  }
+
+  function showStoredReservation (date) {
+    const reservation = JSON.parse(localStorage[`reservation-${date}`])
+    setReservationResult(reservation)
   }
 
   return (
@@ -211,9 +217,13 @@ export default function Mensa () {
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
-                {' '}
+                {localStorage[`reservation-${day.timestamp}`] &&
+                  <Button variant="outline-secondary" className={styles.reserve} onClick={() => showStoredReservation(day.timestamp)}>
+                    <FontAwesomeIcon icon={faQrcode} fixedWidth />
+                  </Button>
+                }
                 <Button variant="outline-secondary" className={styles.reserve} onClick={() => setReservationDate(new Date(day.timestamp))}>
-                  <FontAwesomeIcon icon={faUserPlus} />
+                  <FontAwesomeIcon icon={faUserPlus} fixedWidth />
                 </Button>
               </h4>
 
@@ -326,13 +336,13 @@ export default function Mensa () {
           </Modal.Footer>
         </Modal>
 
-        <Modal show={!!reservationDate} onHide={() => resetReservationEntries()}>
+        <Modal show={reservationDate || reservationResult} onHide={() => resetReservationEntries()}>
           <Modal.Header closeButton>
             <Modal.Title>Sitzplatz reservieren</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            {!reservationTime && (
+            {!reservationTime && !reservationResult && (
               <Form className={styles.reservationForm}>
                 {[
                   '11:00', '11:10', '11:20', '11:30', '11:40', '11:50',
@@ -454,23 +464,26 @@ export default function Mensa () {
             {reservationResult && (
               <>
                 <p>
-                  {reservationResult.message}<br />
-                  <br />
-                  Reservierungsnummer: {reservationResult.code}<br />
-                  Tisch: {reservationResult.table}<br />
-                  <br />
-                  Der Code wurde dir per E-Mail zugesendet.
-                  <br />
-                  {os === OS_IOS && (
-                    <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
-                      Zur Apple Wallet hinzufügen
-                    </a>
-                  )}
+                  {reservationResult.message}
+                </p>
+                <p>
+                  <strong>Uhrzeit:</strong> {formatISOTime(new Date(reservationResult.start))} <br />
+                  <strong>Tisch:</strong> {reservationResult.table} <br />
+                  <strong>Reservierungsnummer:</strong> {reservationResult.code}
                 </p>
                 <QRCodeCanvas className={styles.qrCode} width={1024} height={1024} value={reservationResult.code} />
               </>
             )}
           </Modal.Body>
+          {reservationResult && (
+            <Modal.Footer>
+              {os === OS_IOS && (
+                <Button variant="secondary" href={reservationResult.walletUrl} className={styles.wallet} target="_blank" rel="noreferrer">
+                  Zu Apple Wallet hinzufügen
+                </Button>
+              )}
+            </Modal.Footer>
+          )}
         </Modal>
       </AppBody>
 

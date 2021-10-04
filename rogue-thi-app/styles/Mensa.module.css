@@ -26,6 +26,7 @@
 
 .reserve {
   float: right;
+  margin-left: 5px;
 }
 
 .reservationForm {
@@ -36,4 +37,8 @@
 
 .reservationTime {
   margin: 5px;
+}
+
+.wallet {
+  text-align: center;
 }
