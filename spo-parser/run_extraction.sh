@@ -9,3 +9,5 @@ for filename in SPOs/*.pdf; do
 	echo "Analyzing $filename => $outfile"
 	python3 extract_grade_weighting.py "$filename" "$outfile"
 done
+
+python3 combine_jsons.py
