@@ -81,7 +81,7 @@ const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'discord',
-    label: 'Fakultäts Discord',
+    label: 'Discord-Server',
     card: hidePromptCard => (
       <DiscordPrompt
         key="discord"

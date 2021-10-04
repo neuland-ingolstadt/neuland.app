@@ -53,7 +53,7 @@ export default function DiscordPrompt ({ onHide }) {
         <Card.Title>
           <FontAwesomeIcon icon={faDiscord} fixedWidth />
           {' '}
-          Fakultäts Discord
+          Discord-Server
           <Button variant="link" className={styles.cardButton} onClick={() => close()}>
             <FontAwesomeIcon icon={faTimes} />
           </Button>
