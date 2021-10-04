@@ -96,7 +96,7 @@ export function formatNearDate (datetime) {
 }
 
 function formatFriendlyTimeDelta (delta) {
-  const rtl = new Intl.RelativeTimeFormat('de', {
+  const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
     numeric: 'auto',
     style: 'long'
   })
