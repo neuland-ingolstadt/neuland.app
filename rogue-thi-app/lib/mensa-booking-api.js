@@ -1,4 +1,5 @@
 import obtainFetchImplementation from './fetch-implementations'
+import { formatISODate, formatISOTime } from './date-utils'
 import packageInfo from '../package.json'
 
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'websocket-proxy'
@@ -97,8 +98,6 @@ class MensaBookingApiClient {
    *   - timestamp (Date object)
    */
   async reserveSeat(params) {
-    const time = params.timestamp.toISOString()
-
     const data = await this.performRequest('/add_by_client', {
       dauer: 30,
       gruppe: 1,
@@ -117,9 +116,9 @@ class MensaBookingApiClient {
       date_val: 0,
       einrichtung_val: '7',
       einrichtung: 'Mensa Ingolstadt',
-      zeitpunkt: time.substr(11, 5),
+      zeitpunkt: formatISOTime(params.timestamp),
       tkid: '664',
-      date_iso: time.substr(0, 10)
+      date_iso: formatISODate(params.timestamp)
     })
 
     if (data.message.status !== 'success') {

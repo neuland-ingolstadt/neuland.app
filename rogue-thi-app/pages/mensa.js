@@ -180,7 +180,7 @@ export default function Mensa () {
   async function createSeatReservation () {
     try {
       const dateStr = reservationDate.toISOString().substr(0, 10)
-      const timestamp = new Date(`${dateStr}T${reservationTime}Z`)
+      const timestamp = new Date(`${dateStr}T${reservationTime}`)
 
       const result = await MensaAPI.reserveSeat({
         ...reservationParams,
