@@ -79,7 +79,7 @@ export function formatFriendlyDateTime (datetime) {
 }
 
 /**
- * Formats a day like "Morgen" or "Montag, 1. Oktober"
+ * Formats a day like "Morgen" or "Montag, 1.10."
  */
 export function formatNearDate (datetime) {
   if (typeof datetime === 'string') {
@@ -95,7 +95,7 @@ export function formatNearDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return WORD_TOMORROW
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'long', day: 'numeric', month: 'long' })
+    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'long', day: 'numeric', month: 'numeric' })
   }
 }
 

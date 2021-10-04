@@ -177,7 +177,7 @@ export default function Library () {
                   </div>
 
                   {formatNearDate(new Date(day.date + 'T' + time.from))}
-                  {', '}
+                  <br />
                   {formatFriendlyTime(new Date(day.date + 'T' + time.from))}
                   {' - '}
                   {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
