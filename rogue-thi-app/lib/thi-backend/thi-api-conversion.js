@@ -1,3 +1,5 @@
+import courseShortNames from '../../data/course-short-names.json'
+
 const IGNORE_GAPS = 15
 
 function addMinutes (date, minutes) {
@@ -92,16 +94,15 @@ export function getRoomOpenings (rooms, date) {
 }
 
 export function extractFacultyFromPersonalData (data) {
-  const split = data?.persdata?.po_url?.split('/').filter(x => x.length > 0)
-
-  if (split.length > 2) {
-    return split[split.length - 3]
-      .replace('satzungen-', '')
-      .replace('fakultaet-', '')
-      .replace('campus-', '')
-  } else {
+  if (!data || !data.persdata || !data.persdata.stg) {
     return null
   }
+
+  const shortName = data.persdata.stg
+  const faculty = Object.keys(courseShortNames)
+    .find(faculty => courseShortNames[faculty].includes(shortName))
+
+  return faculty
 }
 
 export function extractSpoFromPersonalData (data) {

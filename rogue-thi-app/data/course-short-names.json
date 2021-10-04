@@ -1,0 +1,108 @@
+{
+  "Business School": [
+    "AM",
+    "BW",
+    "BZ",
+    "DB",
+    "EDB",
+    "FC",
+    "GBM",
+    "HM",
+    "IG",
+    "LSM",
+    "MPS",
+    "MV",
+    "RCM",
+    "RM",
+    "SB",
+    "SR"
+  ],
+
+  "Elektro- und Informationstechnik": [
+    "AR",
+    "AU",
+    "AVE",
+    "BEE",
+    "EI",
+    "EM",
+    "ES",
+    "IA",
+    "MT",
+    "ROB"
+  ],
+
+  "Institut für Akademische Weiterbildung": [
+    "AC",
+    "BB",
+    "BDB",
+    "BE",
+    "BF",
+    "BG",
+    "BI",
+    "BL",
+    "BM",
+    "BP",
+    "BT",
+    "CM",
+    "DBM",
+    "EF",
+    "GM",
+    "HR",
+    "IB",
+    "IBI",
+    "IM",
+    "INC",
+    "INT",
+    "LE",
+    "MIM",
+    "MiS",
+    "SBE",
+    "SM",
+    "WD"
+  ],
+
+  "Informatik": [
+    "CAI",
+    "CLS",
+    "FF",
+    "IF",
+    "IK",
+    "IW",
+    "KI",
+    "UX",
+    "UXM"
+  ],
+
+  "Maschinenbau": [
+    "EE",
+    "EEE",
+    "ESY",
+    "ET",
+    "FT",
+    "ING",
+    "LT",
+    "MB",
+    "MFT",
+    "ML",
+    "MLT",
+    "MRE",
+    "MS",
+    "MTE",
+    "MWT",
+    "NUM",
+    "TE",
+    "TT"
+  ],
+
+  "Wirtschaftsingenieurwesen": [
+    "AP",
+    "EG",
+    "EGM",
+    "GFT",
+    "MWI",
+    "TB",
+    "TD",
+    "WI",
+    "WIB"
+  ]
+}
