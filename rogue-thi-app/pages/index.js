@@ -37,7 +37,12 @@ import InstallPrompt from '../components/InstallPrompt'
 
 import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
 import { calendar, loadExamList } from './calendar'
-import { formatFriendlyRelativeTime, formatFriendlyTime, formatNearDate } from '../lib/date-utils'
+import {
+  formatFriendlyRelativeTime,
+  formatFriendlyTime,
+  formatNearDate,
+  formatISODate
+} from '../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
 import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
 import NeulandAPI from '../lib/neuland-api'
@@ -172,7 +177,7 @@ class DraggableCardListEntry extends React.Component {
 
 async function getMensaPlanPreview () {
   const plan = await NeulandAPI.getMensaPlan()
-  const isoDate = new Date().toISOString().substring(0, 10)
+  const isoDate = formatISODate(new Date())
 
   const todaysPlan = plan.find(x => x.timestamp === isoDate)?.meals
   if (!todaysPlan) {

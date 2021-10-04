@@ -22,10 +22,14 @@ import AppTabbar from '../components/AppTabbar'
 import QRCodeCanvas from '../components/QRCodeCanvas'
 
 import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
+import {
+  formatISODate,
+  formatISOTime,
+  formatNearDate
+} from '../lib/date-utils'
 import API from '../lib/thi-backend/authenticated-api'
 import MensaAPI from '../lib/mensa-booking-api'
 import NeulandAPI from '../lib/neuland-api'
-import { formatNearDate, formatISOTime } from '../lib/date-utils'
 
 import styles from '../styles/Mensa.module.css'
 
@@ -179,7 +183,7 @@ export default function Mensa () {
 
   async function createSeatReservation () {
     try {
-      const dateStr = reservationDate.toISOString().substr(0, 10)
+      const dateStr = formatISODate(reservationDate)
       const timestamp = new Date(`${dateStr}T${reservationTime}`)
 
       const result = await MensaAPI.reserveSeat({
