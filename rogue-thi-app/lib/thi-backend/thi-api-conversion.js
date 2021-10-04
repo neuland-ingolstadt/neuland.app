@@ -92,15 +92,16 @@ export function getRoomOpenings (rooms, date) {
 }
 
 export function extractFacultyFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.po_url) {
+  const split = data?.persdata?.po_url?.split('/').filter(x => x.length > 0)
+
+  if (split.length > 2) {
+    return split[split.length - 3]
+      .replace('satzungen-', '')
+      .replace('fakultaet-', '')
+      .replace('campus-', '')
+  } else {
     return null
   }
-
-  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
-  return split[split.length - 3]
-    .replace('satzungen-', '')
-    .replace('fakultaet-', '')
-    .replace('campus-', '')
 }
 
 export function extractSpoFromPersonalData (data) {
