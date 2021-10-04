@@ -19,7 +19,7 @@ import { formatFriendlyTime, formatNearDate } from '../lib/date-utils'
 import API from '../lib/thi-backend/authenticated-api'
 import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 
-import styles from '../styles/Common.module.css'
+import styles from '../styles/Library.module.css'
 
 export default function Library () {
   const [reservations, setReservations] = useState(null)
@@ -29,12 +29,6 @@ export default function Library () {
   const [reservationRoom, setReservationRoom] = useState(1)
   const [reservationSeat, setReservationSeat] = useState(-1)
   const router = useRouter()
-
-  const shortNames = {
-    'Lesesaal Nord (alte Bibliothek)': 'Nord',
-    'Lesesaal Süd (neue Bibliothek)': 'Süd',
-    'Lesesaal Galerie': 'Galerie'
-  }
 
   async function refreshData () {
     const available = await API.getAvailableLibrarySeats()
@@ -167,25 +161,16 @@ export default function Library () {
               day.resource.map((time, j) =>
 
                 <ListGroup.Item key={i + '-' + j}>
-                  <div className={styles.floatRight}>
-                    {Object.entries(time.resources).map(([roomId, room], idx) =>
-                      <span key={idx}>
-                        {room.num_seats}/{room.maxnum_seats} {shortNames[room.room_name]}
-                        <br />
-                      </span>
-                    )}
-                  </div>
+                  <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
+                    setReservationDay(day)
+                    setReservationTime(time)
+                  }}>Reservieren</Button>
 
                   {formatNearDate(new Date(day.date + 'T' + time.from))}
                   <br />
                   {formatFriendlyTime(new Date(day.date + 'T' + time.from))}
                   {' - '}
                   {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
-                  <br />
-                  <Button variant="primary" onClick={() => {
-                    setReservationDay(day)
-                    setReservationTime(time)
-                  }}>Reservieren</Button>
                 </ListGroup.Item>
               )
             )}
