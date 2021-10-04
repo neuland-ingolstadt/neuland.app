@@ -17,15 +17,11 @@ export function formatFriendlyDate (datetime) {
   const today = new Date()
   const tomorrow = new Date()
   tomorrow.setDate(today.getDate() + 1)
-  const rtl = new Intl.RelativeTimeFormat('de', {
-    numeric: "auto",
-    style: "long",
-  })
 
   if (datetime.toDateString() === today.toDateString()) {
-    return rtl.format(0, 'day')
+    return WORD_TODAY
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return rtl.format(1, 'day')
+    return WORD_TOMORROW
   } else {
     return datetime.toLocaleString(DATE_LOCALE, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
@@ -101,8 +97,8 @@ export function formatNearDate (datetime) {
 
 function formatFriendlyTimeDelta (delta) {
   const rtl = new Intl.RelativeTimeFormat('de', {
-    numeric: "auto",
-    style: "long",
+    numeric: 'auto',
+    style: 'long'
   })
   delta = Math.abs(delta)
 
