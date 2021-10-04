@@ -8,8 +8,11 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
+import {
+  faExclamationTriangle,
+  faUserPlus
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
@@ -209,8 +212,8 @@ export default function Mensa () {
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
                 {' '}
-                <Button variant="primary" onClick={() => setReservationDate(new Date(day.timestamp))}>
-                  Sitzplatz reservieren
+                <Button variant="outline-secondary" className={styles.reserve} onClick={() => setReservationDate(new Date(day.timestamp))}>
+                  <FontAwesomeIcon icon={faUserPlus} />
                 </Button>
               </h4>
 
@@ -325,165 +328,148 @@ export default function Mensa () {
 
         <Modal show={!!reservationDate} onHide={() => resetReservationEntries()}>
           <Modal.Header closeButton>
-            <Modal.Title>Sitzplatz Reservieren</Modal.Title>
+            <Modal.Title>Sitzplatz reservieren</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <Form>
-              {!reservationTime && (
-                <>
-                  <h4>Wähle eine Uhrzeit</h4>
-                  {[
-                    '11:00',
-                    '12:00',
-                    '13:00',
-                    null,
-                    '11:10',
-                    '12:10',
-                    '13:10',
-                    null,
-                    '11:20',
-                    '12:20',
-                    '13:20',
-                    null,
-                    '11:30',
-                    '12:30',
-                    null,
-                    '11:40',
-                    '12:40',
-                    null,
-                    '11:50',
-                    '12:50'
-                  ].map((time, idx) => time
-                    ? <span key={idx}>
-                        <Button variant="primary" onClick={() => setReservationTime(time)}>
-                          {time}
-                        </Button>
-                        {' '}
-                      </span>
-                    : <br key={idx} />
-                  )}
-                </>
-              )}
-              {reservationTime && verificationCode === null && !verificationCorrect && (
-                <>
-                  <Form.Group>
-                    <Form.Label>E-Mail:</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={verificationEmail}
-                      onChange={event => setVerificationEmail(event.target.value)}
-                      />
-                  </Form.Group>
-
-                  {savedVerificationEmail === verificationEmail && (
-                    <>
-                      <Button variant="primary" onClick={useSavedEmail}>
-                        Fortfahren
-                      </Button>
-                      {' '}Die Adresse wurde bereits verifiziert
-                    </>
-                  )}
-                  {savedVerificationEmail !== verificationEmail && (
-                    <Button variant="primary" onClick={sendVerificationMail}>
-                      Verifizierungs E-Mail versenden
-                    </Button>
-                  )}
-
-                  {verificationError && <br />}
-                  {verificationError}
-                </>
-              )}
-              {reservationTime && verificationCode !== null && !verificationCorrect && (
-                <>
-                  <Form.Group>
-                    <Form.Label>Verifizierungs Code aus der E-Mail:</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={verificationCode}
-                      onChange={event => setVerificationCode(event.target.value)}
-                      />
-                  </Form.Group>
-
-                  {verificationError && <span className={styles.verificationError}>{verificationError}</span>}
-                </>
-              )}
-              {reservationTime && verificationCorrect && !reservationResult && (
-                <>
-                  <Form.Group>
-                    <Form.Label>Vorname</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={reservationParams.firstName}
-                      onChange={event => setReservationParams({ ...reservationParams, firstName: event.target.value })}
-                      />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Nachname</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={reservationParams.lastName}
-                      onChange={event => setReservationParams({ ...reservationParams, lastName: event.target.value })}
-                      />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>E-Mail</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={verificationEmail}
-                      disabled
-                      />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Adresse</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={reservationParams.address}
-                      onChange={event => setReservationParams({ ...reservationParams, address: event.target.value })}
-                      />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Postleitzahl</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={reservationParams.postcode}
-                      onChange={event => setReservationParams({ ...reservationParams, postcode: event.target.value })}
-                      />
-                  </Form.Group>
-                  <Form.Group>
-                    <Form.Label>Ort</Form.Label>
-                    <Form.Control
-                      as="input"
-                      value={reservationParams.city}
-                      onChange={event => setReservationParams({ ...reservationParams, city: event.target.value })}
-                      />
-                  </Form.Group>
-
-                  <Button variant="primary" onClick={createSeatReservation}>
-                    Sitzplatz reservieren
+            {!reservationTime && (
+              <Form className={styles.reservationForm}>
+                {[
+                  '11:00', '11:10', '11:20', '11:30', '11:40', '11:50',
+                  '12:00', '12:10', '12:20', '12:30', '12:40', '12:50',
+                  '13:00', '13:10', '13:20'
+                ].map((time, idx) =>
+                  <Button key={idx} variant="outline-primary" className={styles.reservationTime} onClick={() => setReservationTime(time)}>
+                    {time}
                   </Button>
-                </>
-              )}
-              {reservationResult && (
-                <>
-                  <p>
-                    {reservationResult.message}<br />
-                    <br />
-                    Reservierungsnummer: {reservationResult.code}<br />
-                    Tisch: {reservationResult.table}<br />
-                    <br />
-                    Der Code wurde dir per E-Mail zugesendet.
-                    <br />
-                    {os === OS_IOS && (
-                      <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
-                        Zur Apple Wallet hinzufügen
-                      </a>
-                    )}
-                  </p>
-                  <QRCodeCanvas className={styles.qrCode} width={1024} height={1024} value={reservationResult.code} />
-                </>
-              )}
-            </Form>
+                )}
+              </Form>
+            )}
+            {reservationTime && verificationCode === null && !verificationCorrect && (
+              <Form>
+                <Form.Group>
+                  <Form.Label>E-Mail:</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={verificationEmail}
+                    onChange={event => setVerificationEmail(event.target.value)}
+                    />
+                  {savedVerificationEmail === verificationEmail && (
+                    <Form.Text className="text-muted">
+                      Die Adresse wurde bereits verifiziert
+                    </Form.Text>
+                  )}
+                </Form.Group>
+
+                {savedVerificationEmail === verificationEmail && (
+                  <Button variant="primary" onClick={useSavedEmail}>
+                    Fortfahren
+                  </Button>
+                )}
+                {savedVerificationEmail !== verificationEmail && (
+                  <Button variant="primary" onClick={sendVerificationMail}>
+                    Verifizierungscode anfordern
+                  </Button>
+                )}
+
+                {verificationError && <br />}
+                {verificationError}
+              </Form>
+            )}
+            {reservationTime && verificationCode !== null && !verificationCorrect && (
+              <Form>
+                <Form.Group>
+                  <Form.Label>Verifizierungscode aus der E-Mail:</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={verificationCode}
+                    onChange={event => setVerificationCode(event.target.value)}
+                    isInvalid={verificationError}
+                    />
+                  <Form.Text className="text-muted">
+                    Sollte soeben an die angegebene E-Mail-Adresse verschickt worden sein.
+                  </Form.Text>
+                  <Form.Control.Feedback type="invalid">
+                    {verificationError}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form>
+            )}
+            {reservationTime && verificationCorrect && !reservationResult && (
+              <Form>
+                <Form.Group>
+                  <Form.Label>Vorname</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={reservationParams.firstName}
+                    onChange={event => setReservationParams({ ...reservationParams, firstName: event.target.value })}
+                    />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Nachname</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={reservationParams.lastName}
+                    onChange={event => setReservationParams({ ...reservationParams, lastName: event.target.value })}
+                    />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>E-Mail</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={verificationEmail}
+                    disabled
+                    />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Adresse</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={reservationParams.address}
+                    onChange={event => setReservationParams({ ...reservationParams, address: event.target.value })}
+                    />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Postleitzahl</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={reservationParams.postcode}
+                    onChange={event => setReservationParams({ ...reservationParams, postcode: event.target.value })}
+                    />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Ort</Form.Label>
+                  <Form.Control
+                    as="input"
+                    value={reservationParams.city}
+                    onChange={event => setReservationParams({ ...reservationParams, city: event.target.value })}
+                    />
+                </Form.Group>
+
+                <Button variant="primary" onClick={createSeatReservation}>
+                  Sitzplatz reservieren
+                </Button>
+              </Form>
+            )}
+            {reservationResult && (
+              <>
+                <p>
+                  {reservationResult.message}<br />
+                  <br />
+                  Reservierungsnummer: {reservationResult.code}<br />
+                  Tisch: {reservationResult.table}<br />
+                  <br />
+                  Der Code wurde dir per E-Mail zugesendet.
+                  <br />
+                  {os === OS_IOS && (
+                    <a href={reservationResult.walletUrl} target="_blank" rel="noreferrer">
+                      Zur Apple Wallet hinzufügen
+                    </a>
+                  )}
+                </p>
+                <QRCodeCanvas className={styles.qrCode} width={1024} height={1024} value={reservationResult.code} />
+              </>
+            )}
           </Modal.Body>
         </Modal>
       </AppBody>

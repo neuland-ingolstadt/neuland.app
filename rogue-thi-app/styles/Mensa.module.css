@@ -19,12 +19,21 @@
   text-align: right;
 }
 
-.verificationError {
-  font-weight: bold;
-  color: red;
-}
-
 .qrCode {
   width: 100% !important;
   height: auto !important;
+}
+
+.reserve {
+  float: right;
+}
+
+.reservationForm {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.reservationTime {
+  margin: 5px;
 }
