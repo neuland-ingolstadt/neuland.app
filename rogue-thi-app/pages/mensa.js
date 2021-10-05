@@ -35,6 +35,7 @@ import styles from '../styles/Mensa.module.css'
 
 import allergenMap from '../data/allergens.json'
 
+const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
 const FALLBACK_ALLERGEN = 'Unbekannt (Das ist schlecht.)'
 
@@ -262,7 +263,9 @@ export default function Mensa () {
                     </div>
                   </div>
                   <div className={styles.right}>
-                    {meal.prices.join(' / ')}
+                    {meal.prices.slice(0, 2).map(x => // show only student and employee pricing
+                      x.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
+                    ).join(' / ')}
                   </div>
                 </ListGroup.Item>
               )}
