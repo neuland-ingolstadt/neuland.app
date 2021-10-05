@@ -61,11 +61,17 @@ export async function getFriendlyTimetable (date, detailed) {
       x.endDate = new Date(`${x.datum}T${x.bis}`)
 
       // normalize room order
-      x.raum = x.raum
-        ?.split(',')
-        .map(x => x.trim().toUpperCase())
-        .sort()
-        .join(', ')
+      if (x.raum) {
+        x.rooms = x.raum
+          .split(',')
+          .map(x => x.trim().toUpperCase())
+          .sort()
+        x.raum = x.rooms.join(', ')
+      } else {
+        x.rooms = []
+        x.raum = ''
+      }
+      console.log(x.raum, x.rooms)
 
       return x
     })
@@ -193,7 +199,10 @@ export default function Timetable () {
                       {getTimetableEntryName(item).fullName}
                     </div>
                     <div className={styles.room}>
-                      {item.raum}
+                      {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
+                        ? <a key={i} href={`/rooms?highlight=${room}`} onClick={e => e.stopPropagation()}>{room}</a>
+                        : <span key={i}>{room}</span>
+                      )}
                     </div>
                   </div>
                   <div className={styles.right}>
