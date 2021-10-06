@@ -167,10 +167,17 @@ export default function Library () {
                   }}>Reservieren</Button>
 
                   {formatNearDate(new Date(day.date + 'T' + time.from))}
-                  <br />
+                  {', '}
                   {formatFriendlyTime(new Date(day.date + 'T' + time.from))}
                   {' - '}
                   {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
+                  <br />
+                  <div className="text-muted">
+                    {Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0)}
+                    {' / '}
+                    {Object.values(time.resources).reduce((acc, room) => acc + room.maxnum_seats, 0)}
+                    {' verfügbar'}
+                  </div>
                 </ListGroup.Item>
               )
             )}
