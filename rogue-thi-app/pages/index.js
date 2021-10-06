@@ -456,10 +456,17 @@ export default function Home () {
   useEffect(() => {
     async function load () {
       if (localStorage.personalizedDashboard) {
+        if (localStorage.personalizedDashboard.includes('hidden-below')) {
+          const oldFormat = JSON.parse(localStorage.personalizedDashboard)
+          const hiddenIndex = oldFormat.indexOf('hidden-below')
+          localStorage.personalizedDashboard = JSON.stringify(oldFormat.slice(0, hiddenIndex))
+          localStorage.personalizedDashboardHidden = JSON.stringify(oldFormat.slice(hiddenIndex + 1))
+        }
+
         const entries = JSON.parse(localStorage.personalizedDashboard)
           .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
           .filter(x => !!x)
-        const hiddenEntries = JSON.parse(localStorage.personalizedDashboardHidden || '[]')
+        const hiddenEntries = JSON.parse(localStorage.personalizedDashboardHidden)
           .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
           .filter(x => !!x)
 
