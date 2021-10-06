@@ -203,8 +203,31 @@ export default function Mensa () {
     }
   }
 
+  async function cancelReservationResult () {
+    if (!reservationResult) {
+      return
+    }
+    if (!confirm('Reservierung wirklich stonieren?')) {
+      return
+    }
+
+    try {
+      await MensaAPI.cancelReservation(reservationResult)
+
+      const dateStr = formatISODate(reservationResult.start)
+      localStorage.removeItem(`reservation-${dateStr}`)
+
+      resetReservationEntries()
+    } catch (e) {
+      console.error(e)
+      alert(e)
+    }
+  }
+
   function showStoredReservation (date) {
     const reservation = JSON.parse(localStorage[`reservation-${date}`])
+    reservation.start = new Date(reservation.start)
+    reservation.end = new Date(reservation.end)
     setReservationResult(reservation)
   }
 
@@ -223,13 +246,23 @@ export default function Mensa () {
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
                 {localStorage[`reservation-${day.timestamp}`] &&
-                  <Button variant="outline-secondary" className={styles.reserve} onClick={() => showStoredReservation(day.timestamp)}>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reserve}
+                    onClick={() => showStoredReservation(day.timestamp)}
+                  >
                     <FontAwesomeIcon icon={faQrcode} fixedWidth />
                   </Button>
                 }
-                <Button variant="outline-secondary" className={styles.reserve} onClick={() => setReservationDate(new Date(day.timestamp))}>
-                  <FontAwesomeIcon icon={faUserPlus} fixedWidth />
-                </Button>
+                {!localStorage[`reservation-${day.timestamp}`] &&
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reserve}
+                    onClick={() => setReservationDate(new Date(day.timestamp))}
+                  >
+                    Reservieren
+                  </Button>
+                }
               </h4>
 
               {day.meals.map((meal, idx) =>
@@ -485,10 +518,19 @@ export default function Mensa () {
           {reservationResult && (
             <Modal.Footer>
               {os === OS_IOS && (
-                <Button variant="secondary" href={reservationResult.walletUrl} className={styles.wallet} target="_blank" rel="noreferrer">
+                <Button
+                  variant="secondary"
+                  href={reservationResult.walletUrl}
+                  className={styles.wallet}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Zu Apple Wallet hinzufügen
                 </Button>
               )}
+              <Button variant="secondary" onClick={cancelReservationResult}>
+                Stonieren
+              </Button>
             </Modal.Footer>
           )}
         </Modal>

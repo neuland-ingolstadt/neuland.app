@@ -162,8 +162,12 @@ export default class WebSocketProxyConnection {
    */
   _onDataReady () {
     const data = this.tlsConnection.data.getBytes()
-    const request = this.requests[0]
+    if (this.requests.length === 0) {
+      this._restartTimeout()
+      return
+    }
 
+    const request = this.requests[0]
     if (request.putResponseChunk(data)) {
       this.requests.shift()
       this._sendNextRequest()

@@ -52,18 +52,31 @@ class MensaBookingApiClient {
       })
     }
 
-    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}${path}`, {
-      method: 'POST',
-      body: new URLSearchParams(params).toString(),
-      headers: {
-        Host: ENDPOINT_HOST,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': USER_AGENT
-      }
-    })
+    let resp = null
+    if (params) {
+      resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}${path}`, {
+        method: 'POST',
+        body: new URLSearchParams(params).toString(),
+        headers: {
+          Host: ENDPOINT_HOST,
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': USER_AGENT
+        }
+      })
+    } else {
+      resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}${path}`, {
+        method: 'GET',
+        headers: {
+          Host: ENDPOINT_HOST,
+          'User-Agent': USER_AGENT
+        }
+      })
+    }
 
-    if (resp.status === 200) {
+    if (resp.status === 200 && params) {
       return await resp.json()
+    } else if (resp.status === 200) {
+      return await resp.text()
     } else {
       throw new Error('Mensa Booking API returned an error: ' + await resp.text())
     }
@@ -121,6 +134,8 @@ class MensaBookingApiClient {
       date_iso: formatISODate(params.timestamp)
     })
 
+    console.log(42, data)
+
     if (data.message.status !== 'success') {
       throw new Error(data.message.info)
     }
@@ -130,6 +145,7 @@ class MensaBookingApiClient {
       uhrzeit_start: startTime,
       uhrzeit_ende: endTime,
       id,
+      client_id: clientId,
       krz: code,
       tischgruppe: tableGroup,
       tischnr: table
@@ -145,8 +161,21 @@ class MensaBookingApiClient {
       tableGroup,
       table,
       id,
+      clientId,
       code,
       walletUrl: `https://togo.my-mensa.de/wallet/?c=erl77vB3r&order_id=${code}`
+    }
+  }
+
+  async cancelReservation(reservation) {
+    const data = await this.performRequest(`/cancelcommit?k=${reservation.code}&i=${reservation.clientId}`)
+
+    if (data.includes('Die Reservierung wurde storniert.')) {
+      return true
+    } else if (data.includes('Reservierung wurde bereits am')) {
+      return false
+    } else {
+      throw new Error('Unknown response from backend to cancel request')
     }
   }
 }
