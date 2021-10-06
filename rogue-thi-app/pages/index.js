@@ -27,6 +27,7 @@ import {
   faTrash,
   faTrashRestore,
   faUser,
+  faUserGraduate,
   faUtensils
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -148,6 +149,30 @@ const ALL_DASHBOARD_CARDS = [
         icon={faPen}
         title="Noten & Fächer"
         link="/grades"
+        />
+    )
+  },
+  {
+    key: 'personal',
+    label: 'Persönliche Daten',
+    card: () => (
+      <HomeCard
+        key="personal"
+        icon={faUser}
+        title="Persönliche Daten"
+        link="/personal"
+        />
+    )
+  },
+  {
+    key: 'lecturers',
+    label: 'Dozenten',
+    card: () => (
+      <HomeCard
+        key="lecturers"
+        icon={faUserGraduate}
+        title="Dozenten"
+        link="/lecturers"
         />
     )
   },
@@ -521,11 +546,8 @@ export default function Home () {
     <AppContainer>
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
-          <Dropdown.Item variant="link" href="/lecturers">
-            Dozenten
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href="/personal">
-            Nutzerdaten
+          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
+            App personalisieren
           </Dropdown.Item>
           {showDebug && (
             <Dropdown.Item variant="link" href="/debug">
@@ -536,9 +558,6 @@ export default function Home () {
             Impressum & Datenschutz
           </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            App personalisieren
-          </Dropdown.Item>
           <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
             Ausloggen
           </Dropdown.Item>
