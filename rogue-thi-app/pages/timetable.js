@@ -71,7 +71,6 @@ export async function getFriendlyTimetable (date, detailed) {
         x.rooms = []
         x.raum = ''
       }
-      console.log(x.raum, x.rooms)
 
       return x
     })

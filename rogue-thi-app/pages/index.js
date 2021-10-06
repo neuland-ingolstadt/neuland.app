@@ -10,7 +10,6 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
-import DraggableList from 'react-draggable-list'
 
 import {
   faBook,
@@ -19,11 +18,15 @@ import {
   faCalendarMinus,
   faCar,
   faChargingStation,
+  faChevronDown,
   faChevronRight,
+  faChevronUp,
   faDoorOpen,
-  faGripVertical,
   faPen,
   faTrain,
+  faTrash,
+  faTrashRestore,
+  faUser,
   faUtensils
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -148,32 +151,7 @@ const ALL_DASHBOARD_CARDS = [
         />
     )
   },
-  {
-    key: 'hidden-below',
-    label: '',
-    card: () => ''
-  },
 ]
-
-// required to be a class based component
-// see https://github.com/StreakYC/react-draggable-list/issues/35
-class DraggableCardListEntry extends React.Component {
-  render() {
-    const { item, dragHandleProps } = this.props
-    if(item.key === 'hidden-below') {
-      return (
-        <h5 className={styles.hiddenCardsHeading}>Ausgeblendete Karten:</h5>
-      )
-    }
-
-    return (
-      <ListGroup.Item action {...dragHandleProps}>
-        <FontAwesomeIcon icon={faGripVertical} fixedWidth />
-        {item.label}
-      </ListGroup.Item>
-    )
-  }
-}
 
 async function getMensaPlanPreview () {
   const plan = await NeulandAPI.getMensaPlan()
@@ -442,8 +420,8 @@ export default function Home () {
   const router = useRouter()
 
   // page state
-  const [dashboardEntries, setDashboardEntries] = useState(ALL_DASHBOARD_CARDS)
   const [shownDashboardEntries, setShownDashboardEntries] = useState(ALL_DASHBOARD_CARDS)
+  const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
   const [unlockedThemes, setUnlockedThemes] = useState([])
@@ -456,20 +434,25 @@ export default function Home () {
         const entries = JSON.parse(localStorage.personalizedDashboard)
           .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
           .filter(x => !!x)
+        const hiddenEntries = JSON.parse(localStorage.personalizedDashboardHidden || '[]')
+          .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
+          .filter(x => !!x)
 
         ALL_DASHBOARD_CARDS.forEach(card => {
-          if(!entries.find(x => x.key === card.key)) {
+          if(!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
             // new (previosly unknown) card
             entries.push(card)
           }
         })
-        setDashboardEntries(entries)
+        setShownDashboardEntries(entries)
+        setHiddenDashboardEntries(hiddenEntries)
       } else if (window.matchMedia('(max-width: 768px)').matches) {
         const entries = [
           ...ALL_DASHBOARD_CARDS.filter(x => !x.desktopOnly),
           ...ALL_DASHBOARD_CARDS.filter(x => x.desktopOnly)
         ]
-        setDashboardEntries(entries)
+        setDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !x.desktopOnly))
+        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => x.desktopOnly))
       }
 
       if (localStorage.unlockedThemes) {
@@ -482,28 +465,48 @@ export default function Home () {
     load()
   }, [])
 
-  useEffect(() => {
-    const hiddenFrom = dashboardEntries.findIndex(x => x.key === 'hidden-below')
-    setShownDashboardEntries(dashboardEntries.slice(0, hiddenFrom))
-  }, [dashboardEntries])
-
-  function changeDashboardEntries (entries) {
+  function changeDashboardEntries (entries, hiddenEntries) {
     localStorage.personalizedDashboard = JSON.stringify(entries.map(x => x.key))
-    setDashboardEntries(entries)
+    localStorage.personalizedDashboardHidden = JSON.stringify(hiddenEntries.map(x => x.key))
+    setShownDashboardEntries(entries)
+    setHiddenDashboardEntries(hiddenEntries)
   }
 
-  function hidePromptCard (key) {
-    const entries = dashboardEntries.slice(0)
+  function moveDashboardEntry (oldIndex, diff) {
+    const newIndex = oldIndex + diff
+    if (newIndex < 0 || newIndex >= shownDashboardEntries.length) {
+      return
+    }
+
+    const entries = shownDashboardEntries.slice(0)
+    const entry = entries[oldIndex]
+    entries.splice(oldIndex, 1)
+    entries.splice(newIndex, 0, entry)
+
+    changeDashboardEntries(entries, hiddenDashboardEntries)
+  }
+
+  function hideDashboardEntry (key) {
+    const entries = shownDashboardEntries.slice(0)
+    const hiddenEntries = hiddenDashboardEntries.slice(0)
 
     const index = entries.findIndex(x => x.key === key)
     if (index >= 0) {
-      // move entry to the back where it is behind 'hidden-below'
-      const entry = entries[index]
+      hiddenEntries.push(entries[index])
       entries.splice(index, 1)
-      entries.push(entry)
     }
 
-    changeDashboardEntries(entries)
+    changeDashboardEntries(entries, hiddenEntries)
+  }
+
+  function bringBackDashboardEntry (index) {
+    const entries = shownDashboardEntries.slice(0)
+    const hiddenEntries = hiddenDashboardEntries.slice(0)
+
+    entries.push(hiddenEntries[index])
+    hiddenEntries.splice(index, 1)
+
+    changeDashboardEntries(entries, hiddenEntries)
   }
 
   function changeTheme (theme) {
@@ -574,26 +577,49 @@ export default function Home () {
                 Hier kannst du die Reihenfolge der auf der 'Home' Seite angezeigten Karten durch halten und ziehen verändern.
                 <Button
                   variant="link"
-                  onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS)}
+                  onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS, [])}
                 >
                   Klicke hier zum zurücksetzten
                 </Button>
               </p>
               <ListGroup>
-                <DraggableList
-                  itemKey="key"
-                  template={DraggableCardListEntry}
-                  list={dashboardEntries}
-                  onMoveEnd={changeDashboardEntries}
-                  container={() => themeModalBody.current}
-                  padding={-1}
-                  />
+                {shownDashboardEntries.map((entry, i) => (
+                  <ListGroup.Item key={i}>
+                    {entry.label}
+                    <div className={styles.personalizeButtons}>
+                      <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
+                        <FontAwesomeIcon icon={faChevronUp} fixedWidth />
+                      </Button>
+                      <Button variant="text" onClick={() => moveDashboardEntry(i, +1)}>
+                        <FontAwesomeIcon icon={faChevronDown} fixedWidth />
+                      </Button>
+                      <Button variant="text" onClick={() => hideDashboardEntry(entry.key)}>
+                        <FontAwesomeIcon icon={faTrash} fixedWidth />
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+              <br />
+
+              <h4>Ausgeblendete Elemente</h4>
+              <ListGroup>
+                {hiddenDashboardEntries.map((entry, i) => (
+                  <ListGroup.Item key={i}>
+                    {entry.label}
+                    <div className={styles.personalizeButtons}>
+                      <Button variant="text" onClick={() => bringBackDashboardEntry(i)}>
+                        <FontAwesomeIcon icon={faTrashRestore} fixedWidth />
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                ))}
               </ListGroup>
               <br />
             </Modal.Body>
           </Modal>
 
-          {shownDashboardEntries.map(entry => entry.card(hidePromptCard))}
+          {shownDashboardEntries.map(entry => entry.card(hideDashboardEntry))}
         </div>
       </AppBody>
 

@@ -55,6 +55,10 @@
   text-align: left;
 }
 
+.personalizeButtons {
+  float: right;
+}
+
 .hiddenCardsHeading {
   margin-top: 10px;
 }
