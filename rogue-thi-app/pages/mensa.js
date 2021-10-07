@@ -297,7 +297,7 @@ export default function Mensa () {
                   </div>
                   <div className={styles.right}>
                     {meal.prices.slice(0, 2).map(x => // show only student and employee pricing
-                      x.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
+                      x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
                     ).join(' / ')}
                   </div>
                 </ListGroup.Item>
