@@ -9,6 +9,10 @@ const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xm
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
+function parseGermanFloat (str) {
+  return parseFloat(str.replace(',', '.'))
+}
+
 function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
@@ -44,16 +48,13 @@ function parseDataFromXml (xml) {
         newAllergens.forEach(newAll => allergens.add(newAll))
       }
 
-      const prices = [
-        item.preis1._text,
-        item.preis2._text,
-        item.preis3._text
-      ]
-        .map(x => parseFloat(x.replace(',', '.')))
-
       return {
         name: text.trim(),
-        prices,
+        prices: {
+          student: parseGermanFloat(item.preis1._text),
+          employee: parseGermanFloat(item.preis2._text),
+          guest: parseGermanFloat(item.preis3._text)
+        },
         allergens: [...allergens]
       }
     })
