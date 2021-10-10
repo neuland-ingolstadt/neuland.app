@@ -68,3 +68,9 @@
   text-align: center;
   margin: 0.5rem;
 }
+
+.slide {
+  /* workaround to make sure the entire height is swipeable */
+  /* TODO: find a better solution */
+  min-height: calc(100vh - env(safe-area-inset-top, 0px) - 50px - 38px - 10px - 56px - env(safe-area-inset-bottom, 0px));
+}

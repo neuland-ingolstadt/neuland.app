@@ -378,7 +378,12 @@ export default function Timetable () {
         </div>
 
         <ReactPlaceholder type="text" rows={20} ready={timetable}>
-          <VirtualizeSwipeableViews slideRenderer={timetableRenderer} index={page} onChangeIndex={idx => setPage(idx)} />
+          <VirtualizeSwipeableViews
+            className={styles.slide}
+            slideRenderer={timetableRenderer}
+            index={page}
+            onChangeIndex={idx => setPage(idx)}
+          />
         </ReactPlaceholder>
       </AppBody>
 
