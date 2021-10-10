@@ -554,7 +554,7 @@ export default function Home () {
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
           <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            App personalisieren
+            Personalisierung
           </Dropdown.Item>
           {showDebug && (
             <Dropdown.Item variant="link" href="/debug">
@@ -575,7 +575,7 @@ export default function Home () {
         <div className={styles.cardDeck}>
           <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
             <Modal.Header closeButton>
-              <Modal.Title>App Personalisieren</Modal.Title>
+              <Modal.Title>Personalisierung</Modal.Title>
             </Modal.Header>
             <Modal.Body ref={themeModalBody}>
               <h3 className={styles.themeHeader}>Design</h3>
@@ -598,20 +598,16 @@ export default function Home () {
                 Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
               </p>
 
-              <h3 className={styles.themeHeader}>Dashboard Karten</h3>
+              <h3 className={styles.themeHeader}>Dashboard</h3>
               <p>
-                Hier kannst du die Reihenfolge der auf der 'Home' Seite angezeigten Karten durch halten und ziehen verändern.
-                <Button
-                  variant="link"
-                  onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS, [])}
-                >
-                  Klicke hier zum zurücksetzten
-                </Button>
+                Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.
               </p>
               <ListGroup>
                 {shownDashboardEntries.map((entry, i) => (
-                  <ListGroup.Item key={i}>
-                    {entry.label}
+                  <ListGroup.Item key={i} className={styles.personalizeItem}>
+                    <div className={styles.personalizeLabel}>
+                      {entry.label}
+                    </div>
                     <div className={styles.personalizeButtons}>
                       <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
                         <FontAwesomeIcon icon={faChevronUp} fixedWidth />
@@ -631,8 +627,10 @@ export default function Home () {
               <h4>Ausgeblendete Elemente</h4>
               <ListGroup>
                 {hiddenDashboardEntries.map((entry, i) => (
-                  <ListGroup.Item key={i}>
-                    {entry.label}
+                  <ListGroup.Item key={i} className={styles.personalizeItem}>
+                    <div className={styles.personalizeLabel}>
+                      {entry.label}
+                    </div>
                     <div className={styles.personalizeButtons}>
                       <Button variant="text" onClick={() => bringBackDashboardEntry(i)}>
                         <FontAwesomeIcon icon={faTrashRestore} fixedWidth />
@@ -642,6 +640,13 @@ export default function Home () {
                 ))}
               </ListGroup>
               <br />
+              
+              <Button
+                variant="secondary"
+                onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS, [])}
+              >
+                Reihenfolge zurücksetzen
+              </Button>
             </Modal.Body>
           </Modal>
 
