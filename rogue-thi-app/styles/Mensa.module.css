@@ -24,21 +24,7 @@
   height: auto !important;
 }
 
-.reserve {
+.checkin {
   float: right;
   margin-left: 5px;
-}
-
-.reservationForm {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-
-.reservationTime {
-  margin: 5px;
-}
-
-.wallet {
-  text-align: center;
 }
