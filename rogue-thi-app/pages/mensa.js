@@ -15,8 +15,11 @@ import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
+import {
+  formatISODate,
+  formatNearDate
+} from '../lib/date-utils'
 import NeulandAPI from '../lib/neuland-api'
-import { formatNearDate } from '../lib/date-utils'
 
 import styles from '../styles/Mensa.module.css'
 
@@ -80,15 +83,17 @@ export default function Mensa () {
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
-                <Button
-                  href={MENSA_CHECKIN_LINK}
-                  target="_blank"
-                  rel="noreferrer"
-                  variant="outline-secondary"
-                  className={styles.checkin}
-                >
-                  Einchecken
-                </Button>
+                {day.timestamp === formatISODate(new Date()) &&
+                  <Button
+                    href={MENSA_CHECKIN_LINK}
+                    target="_blank"
+                    rel="noreferrer"
+                    variant="outline-secondary"
+                    className={styles.checkin}
+                  >
+                    Einchecken
+                  </Button>
+                }
               </h4>
 
               {day.meals.map((meal, idx) =>
