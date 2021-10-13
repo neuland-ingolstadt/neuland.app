@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import DOMPurify from 'dompurify'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import SwipeableViews from 'react-swipeable-views'
@@ -199,7 +200,7 @@ export default function Timetable () {
                     </div>
                     <div className={styles.room}>
                       {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
-                        ? <a key={i} href={`/rooms?highlight=${room}`} onClick={e => e.stopPropagation()}>{room}</a>
+                        ? <Link key={i} href={`/rooms?highlight=${room}`} onClick={e => e.stopPropagation()}>{room}</Link>
                         : <span key={i}>{room}</span>
                       )}
                     </div>
