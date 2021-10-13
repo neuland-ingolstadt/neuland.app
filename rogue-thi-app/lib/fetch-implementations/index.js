@@ -1,6 +1,6 @@
 import BrowserFetchConnection from './browser-fetch'
 import CapacitorFetchConnection from './capacitor-http'
-import WebSocketProxyConnection from './websocket-proxy'
+import WebSocketProxyConnection from 'fetch-bypass-cors'
 
 /**
  * Helper class that mimics a `fetch` response.
