@@ -113,7 +113,7 @@ export default function Mensa () {
                       <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
                         {containsSelectedAllergen(meal.allergens) && (
                           <span>
-                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
+                            <FontAwesomeIcon title="Warnung" icon={faExclamationTriangle} color={COLOR_WARN} />
                             {' '}
                           </span>
                         )}

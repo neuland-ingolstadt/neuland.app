@@ -141,7 +141,7 @@ export default function Library () {
               <ListGroup.Item key={i}>
                 <div className={styles.floatRight}>
                   <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
-                    <FontAwesomeIcon icon={faTrashAlt} />
+                    <FontAwesomeIcon title="Löschen" icon={faTrashAlt} />
                   </Button>
                 </div>
 

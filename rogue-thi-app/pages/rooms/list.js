@@ -103,7 +103,7 @@ export default function RoomList () {
                             <Link href={`/rooms?highlight=${room}`}>
                               {room}
                             </Link>
-                            {TUX_ROOMS.includes(room) && <> <FontAwesomeIcon icon={faLinux} /></>}
+                            {TUX_ROOMS.includes(room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                             {idx === rooms.length - 1 ? '' : ', '}
                           </span>
                         )}

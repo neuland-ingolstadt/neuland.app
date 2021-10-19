@@ -555,7 +555,7 @@ export default function Home () {
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
           <AppNavbar.Button onClick={() => setShowThemeModal(true)}>
-            <FontAwesomeIcon icon={faPen} fixedWidth />
+            <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
           </AppNavbar.Button>
           <AppNavbar.Overflow>
             {showDebug && (
@@ -612,13 +612,13 @@ export default function Home () {
                     </div>
                     <div className={styles.personalizeButtons}>
                       <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
-                        <FontAwesomeIcon icon={faChevronUp} fixedWidth />
+                        <FontAwesomeIcon title="Nach oben" icon={faChevronUp} fixedWidth />
                       </Button>
                       <Button variant="text" onClick={() => moveDashboardEntry(i, +1)}>
-                        <FontAwesomeIcon icon={faChevronDown} fixedWidth />
+                        <FontAwesomeIcon title="Nach unten" icon={faChevronDown} fixedWidth />
                       </Button>
                       <Button variant="text" onClick={() => hideDashboardEntry(entry.key)}>
-                        <FontAwesomeIcon icon={faTrash} fixedWidth />
+                        <FontAwesomeIcon title="Entfernen" icon={faTrash} fixedWidth />
                       </Button>
                     </div>
                   </ListGroup.Item>
@@ -635,7 +635,7 @@ export default function Home () {
                     </div>
                     <div className={styles.personalizeButtons}>
                       <Button variant="text" onClick={() => bringBackDashboardEntry(i)}>
-                        <FontAwesomeIcon icon={faTrashRestore} fixedWidth />
+                        <FontAwesomeIcon title="Wiederherstellen" icon={faTrashRestore} fixedWidth />
                       </Button>
                     </div>
                   </ListGroup.Item>

@@ -66,7 +66,7 @@ export default function AppNavbar ({ title, showBack, children }) {
         <Navbar.Brand className={styles.left}>
           {showBackEffective && (
             <Button variant="link" onClick={() => router.back()} className={styles.back}>
-              <FontAwesomeIcon icon={faChevronLeft} fixedWidth />
+              <FontAwesomeIcon title="Zurück" icon={faChevronLeft} fixedWidth />
             </Button>
           )}
           <div className={styles.titleText}>
@@ -105,7 +105,7 @@ function AppNavbarOverflow ({ children }) {
   return (
     <Dropdown align="right">
       <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-        <FontAwesomeIcon icon={faEllipsisV} fixedWidth />
+        <FontAwesomeIcon title="Mehr Optionen" icon={faEllipsisV} fixedWidth />
       </Dropdown.Toggle>
 
       <Dropdown.Menu align="right">

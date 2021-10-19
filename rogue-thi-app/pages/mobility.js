@@ -134,15 +134,15 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
             {item.priceLevel === 'free' && (
-              <FontAwesomeIcon icon={faCreativeCommonsNcEu} />
+              <FontAwesomeIcon title="Kostenlos" icon={faCreativeCommonsNcEu} />
             )}
             {item.priceLevel === 'restricted' && (
-              <FontAwesomeIcon icon={faKey} />
+              <FontAwesomeIcon title="Zugangsbeschränkt" icon={faKey} />
             )}
             {item.priceLevel > 0 && new Array(item.priceLevel)
               .fill(0)
               .map((_, i) => (
-                <FontAwesomeIcon key={i} icon={faEuroSign} />
+                <FontAwesomeIcon title="Kostenpflichtig" key={i} icon={faEuroSign} />
               ))
             }
           </div>

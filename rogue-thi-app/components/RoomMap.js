@@ -122,7 +122,7 @@ export default function RoomMap ({ highlight, roomData }) {
       <FeatureGroup key={key}>
         <Popup>
           <strong>
-            {TUX_ROOMS.includes(entry.properties.Raum) && <><FontAwesomeIcon icon={faLinux} /> </>}
+            {TUX_ROOMS.includes(entry.properties.Raum) && <><FontAwesomeIcon title="Linux" icon={faLinux} /> </>}
             {entry.properties.Raum}
           </strong>
           {`, ${entry.properties.Funktion}`} <br />

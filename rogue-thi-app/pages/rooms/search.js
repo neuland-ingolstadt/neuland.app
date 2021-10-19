@@ -192,7 +192,7 @@ export default function Rooms () {
                     <Link href={`/rooms?highlight=${result.room}`}>
                       {result.room}
                     </Link>
-                    {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon icon={faLinux} /></>}
+                    {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                     <div className={styles.details}>
                       {result.type}
                     </div>

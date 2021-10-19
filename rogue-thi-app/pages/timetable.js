@@ -370,13 +370,13 @@ export default function Timetable () {
 
         <div className={styles.weekSelector}>
           <Button className={styles.prevWeek} variant="link" onClick={() => setPage(idx => idx - 1)}>
-            <FontAwesomeIcon icon={faChevronLeft} />
+            <FontAwesomeIcon title="Woche zurück" icon={faChevronLeft} />
           </Button>
           <div className={styles.currentWeek}>
             {getFriendlyWeek(week[0])}
           </div>
           <Button className={styles.nextWeek} variant="link" onClick={() => setPage(idx => idx + 1)}>
-            <FontAwesomeIcon icon={faChevronRight} />
+            <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
           </Button>
         </div>
 

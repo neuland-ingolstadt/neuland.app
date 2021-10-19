@@ -55,7 +55,7 @@ export default function DiscordPrompt ({ onHide }) {
           {' '}
           Discord-Server
           <Button variant="link" className={styles.cardButton} onClick={() => close()}>
-            <FontAwesomeIcon icon={faTimes} />
+            <FontAwesomeIcon title="Schließen" icon={faTimes} />
           </Button>
         </Card.Title>
         <Card.Text>
