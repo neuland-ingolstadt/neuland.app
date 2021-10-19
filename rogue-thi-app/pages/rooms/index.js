@@ -45,15 +45,17 @@ export default function Rooms ({ roomData }) {
   return (
     <AppContainer className={styles.container}>
       <AppNavbar title="Raumplan" showBack={'desktop-only'}>
-        <Dropdown.Item variant="link" href="/rooms/search">
-          Erweiterte Suche
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" href="/rooms/list">
-          Listenansicht
-        </Dropdown.Item>
-        <Dropdown.Item variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
-          Campus- {'&'} Stadtführung
-        </Dropdown.Item>
+        <AppNavbar.Overflow>
+          <Dropdown.Item variant="link" href="/rooms/search">
+            Erweiterte Suche
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" href="/rooms/list">
+            Listenansicht
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
+            Campus- {'&'} Stadtführung
+          </Dropdown.Item>
+        </AppNavbar.Overflow>
       </AppNavbar>
 
       <AppBody className={styles.body}>

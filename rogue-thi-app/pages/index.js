@@ -23,6 +23,7 @@ import {
   faChevronUp,
   faDoorOpen,
   faPen,
+  faScroll,
   faTrain,
   faTrash,
   faTrashRestore,
@@ -146,7 +147,7 @@ const ALL_DASHBOARD_CARDS = [
     card: () => (
       <HomeCard
         key="grades"
-        icon={faPen}
+        icon={faScroll}
         title="Noten & Fächer"
         link="/grades"
         />
@@ -553,21 +554,22 @@ export default function Home () {
     <AppContainer>
       <ThemeContext.Provider value={currentTheme}>
         <AppNavbar title="neuland.app" showBack={false}>
-          <Dropdown.Item variant="link" onClick={() => setShowThemeModal(true)}>
-            Personalisierung
-          </Dropdown.Item>
-          {showDebug && (
-            <Dropdown.Item variant="link" href="/debug">
-              API Spielwiese
+          <AppNavbar.Button onClick={() => setShowThemeModal(true)}>
+            <FontAwesomeIcon icon={faPen} fixedWidth />
+          </AppNavbar.Button>
+          <AppNavbar.Overflow>
+            {showDebug && (
+              <Dropdown.Item variant="link" href="/debug">
+                API Spielwiese
+              </Dropdown.Item>
+            )}
+            <Dropdown.Item variant="link" href="/imprint">
+              Impressum & Datenschutz
             </Dropdown.Item>
-          )}
-          <Dropdown.Item variant="link" href="/imprint">
-            Impressum & Datenschutz
-          </Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
-            Ausloggen
-          </Dropdown.Item>
+            <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+              Ausloggen
+            </Dropdown.Item>
+          </AppNavbar.Overflow>
         </AppNavbar>
       </ThemeContext.Provider>
 

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
+import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
@@ -65,26 +66,16 @@ export default function AppNavbar ({ title, showBack, children }) {
         <Navbar.Brand className={styles.left}>
           {showBackEffective && (
             <Button variant="link" onClick={() => router.back()} className={styles.back}>
-              <FontAwesomeIcon icon={faChevronLeft} />
+              <FontAwesomeIcon icon={faChevronLeft} fixedWidth />
             </Button>
           )}
           <div className={styles.titleText}>
             {title}
           </div>
         </Navbar.Brand>
-        <Navbar.Brand className={styles.right}>
-          {children &&
-            <Dropdown align="right">
-              <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-                <FontAwesomeIcon icon={faEllipsisV} />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu align="right">
-                {children}
-              </Dropdown.Menu>
-            </Dropdown>
-          }
-        </Navbar.Brand>
+        <Nav>
+          {children}
+        </Nav>
       </Navbar>
 
       <div className={styles.spacer} />
@@ -96,3 +87,35 @@ AppNavbar.propTypes = {
   showBack: PropTypes.any,
   children: PropTypes.any
 }
+
+function AppNavbarButton ({ children, ...props }) {
+  return (
+    <Button variant="link" {...props}>
+      {children}
+    </Button>
+  )
+}
+AppNavbarButton.propTypes = {
+  children: PropTypes.any
+}
+
+AppNavbar.Button = AppNavbarButton
+
+function AppNavbarOverflow ({ children }) {
+  return (
+    <Dropdown align="right">
+      <Dropdown.Toggle variant="link" bsPrefix="dropdown">
+        <FontAwesomeIcon icon={faEllipsisV} fixedWidth />
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu align="right">
+        {children}
+      </Dropdown.Menu>
+    </Dropdown>
+  )
+}
+AppNavbarOverflow.propTypes = {
+  children: PropTypes.any
+}
+
+AppNavbar.Overflow = AppNavbarOverflow
