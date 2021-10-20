@@ -1,0 +1,6 @@
+{
+	"appId": "app.neuland",
+	"appName": "Neuland App",
+	"webDir": "out",
+	"bundledWebRuntime": false
+}
