@@ -11,5 +11,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install Android SDK and Java from Ubuntu repos
       run: sudo apt update && sudo apt dist-upgrade -y && sudo apt install android-sdk openjdk-11-jdk -y
-    - name: Execute the build.sh file
-      run: build_android.sh
+    - name: Execute the build script
+      run: ./build_android.sh
