@@ -1,0 +1,3 @@
+[submodule "rogue-thi-app/android-repo"]
+	path = rogue-thi-app/android-repo
+	url = https://github.com/neuland-ingolstadt/THI-App-Android
