@@ -6,12 +6,23 @@
 
 PROJECT_SUBDIR="rogue-thi-app"
 
-GRADLE_VERSION="6.9.1"
 NODE_VERSION="v14.18.1"
+ANDROID_BUILD_VERSION="7583922"
+ANDROID_SDK_VERSION="r31.0.3"
+ANDROID_PLATFORM_VERSION="platforms;android-30"
+
+ANDROID_SDK_ROOT=$(pwd)/sdk_root
 
 NODE_DIR="node-$NODE_VERSION-linux-x64"
 NODE_ARCHIVE="${NODE_DIR}.tar.xz"
 NODE_URL="https://nodejs.org/dist/$NODE_VERSION/$NODE_ARCHIVE"
+
+ANDROID_TOOLS_ARCHIVE="commandlinetools-linux-${ANDROID_BUILD_VERSION}_latest.zip"
+ANDROID_TOOLS_URL="https://dl.google.com/android/repository/$ANDROID_TOOLS_ARCHIVE"
+
+wget $ANDROID_TOOLS_URL
+unzip $ANDROID_TOOLS_ARCHIVE
+export PATH=$(pwd)/cmdline-tools/bin:$PATH
 
 wget $NODE_URL
 tar xf $NODE_ARCHIVE
@@ -27,8 +38,11 @@ npm run build
 
 npx next build
 npx next export
-npx cap sync android
+yes "n" | npx cap sync android
+
+yes | sdkmanager --sdk_root=$ANDROID_SDK_ROOT --install "$ANDROID_PLATFORM_VERSION"
 
 cd android
-./gradlew wrapper --gradle-version=${GRADLE_VERSION} --distribution-type=bin
-
+ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ./gradlew wrapper --distribution-type=bin
+#ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ./gradlew check  # TODO: prevent from failing!
+ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT ./gradlew assemble
