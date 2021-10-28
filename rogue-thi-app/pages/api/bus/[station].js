@@ -1,16 +1,10 @@
 import AsyncMemoryCache from '../../../lib/cache/async-memory-cache'
 
+import stations from '../../../data/mobility.json'
+
 const CACHE_TTL = 60 * 1000
 const MIN_REGEX = /(\d+) min/
-const URLS = {
-  hochschule: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-THoScu&sid=413',
-  zob: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439',
-  rathausplatz: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Ratha&sid=337',
-  stadttheater: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-SThea&sid=397',
-  heydeckstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Heyde&sid=247',
-  fruehlingstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Fr__ue__hl&sid=211',
-  rechbergstrasse: 'https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Rechb&sid=339'
-}
+const URLS = Object.fromEntries(stations.bus.stations.map(x => [x.id, x.url]))
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
