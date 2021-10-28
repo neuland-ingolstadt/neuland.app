@@ -8,6 +8,11 @@
 				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Fr__ue__hl&sid=211"
 			},
 			{
+				"id": "hauptbahnhof",
+				"name": "Hauptbahnhof",
+				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Hbf&sid=240"
+			},
+			{
 				"id": "heydeckstrasse",
 				"name": "Heydeckstraße",
 				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Heyde&sid=247"
