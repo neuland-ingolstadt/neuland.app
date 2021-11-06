@@ -162,7 +162,7 @@ export default function Grades () {
 
       <AppBody>
         <ReactPlaceholder type="text" rows={3} ready={!!gradeAverage}>
-          {gradeAverage && (
+          {gradeAverage && gradeAverage.entries.length > 0 && (
             <ListGroup>
               <h4 className={styles.heading}>
                 Notenschnitt
