@@ -8,10 +8,11 @@ RUN ./run_extraction.sh
 
 
 
-FROM node:14 AS pwaicons
+FROM alekzonder/puppeteer:latest AS pwaicons
+USER root
 WORKDIR /opt/
 COPY rogue-thi-app/public/favicon.svg .
-RUN npx pwa-asset-generator favicon.svg ./splash/
+RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true favicon.svg ./splash/
 
 
 
