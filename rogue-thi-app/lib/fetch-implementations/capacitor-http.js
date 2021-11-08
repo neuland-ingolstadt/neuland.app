@@ -14,10 +14,9 @@ function getContentType (headers) {
 
 export default class CapacitorFetchConnection {
   async fetch (url, options) {
-
     // parse body because capacitor expects a non-serialized data object
     const mime = options && options.headers && getContentType(options.headers)
-    let data = undefined
+    let data
     if (!options || !options.body) {
       // mimimi
     } else if (mime === 'application/x-www-form-urlencoded') {

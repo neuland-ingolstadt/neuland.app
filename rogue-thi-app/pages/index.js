@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useRef, useMemo, useState } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
@@ -45,8 +45,8 @@ import { calendar, loadExamList } from './calendar'
 import {
   formatFriendlyRelativeTime,
   formatFriendlyTime,
-  formatNearDate,
-  formatISODate
+  formatISODate,
+  formatNearDate
 } from '../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
 import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
@@ -186,7 +186,7 @@ const ALL_DASHBOARD_CARDS = [
         link="/lecturers"
         />
     )
-  },
+  }
 ]
 
 async function getMensaPlanPreview () {
@@ -475,7 +475,7 @@ export default function Home () {
           .filter(x => !!x)
 
         ALL_DASHBOARD_CARDS.forEach(card => {
-          if(!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
+          if (!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
             // new (previosly unknown) card
             entries.push(card)
           }
@@ -642,7 +642,7 @@ export default function Home () {
                 ))}
               </ListGroup>
               <br />
-              
+
               <Button
                 variant="secondary"
                 onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS, [])}

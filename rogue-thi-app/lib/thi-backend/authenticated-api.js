@@ -1,10 +1,10 @@
 import { APIError, AnonymousAPIClient } from './anonymous-api'
-import { callWithSession } from './thi-session-handler'
 import {
   convertThiMensaPlan,
   extractFacultyFromPersonalData,
   extractSpoFromPersonalData
 } from './thi-api-conversion'
+import { callWithSession } from './thi-session-handler'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'

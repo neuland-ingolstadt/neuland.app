@@ -4,7 +4,7 @@ const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'direct'
 const ENDPOINT_HOST = process.env.NEXT_PUBLIC_NEULAND_API_HOST || ''
 
 class NeulandAPIClient {
-  constructor() {
+  constructor () {
     // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
     this.connection = obtainFetchImplementation(ENDPOINT_MODE, {})
   }

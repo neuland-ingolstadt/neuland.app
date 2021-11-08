@@ -1,6 +1,6 @@
-import obtainFetchImplementation from '../fetch-implementations'
 import LocalStorageCache from '../cache/localstorage-cache'
 import MemoryCache from '../cache/memory-cache'
+import obtainFetchImplementation from '../fetch-implementations'
 import packageInfo from '../../package.json'
 
 const CACHE_NAMESPACE = 'thi-api-client'
