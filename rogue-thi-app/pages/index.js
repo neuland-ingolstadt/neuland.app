@@ -73,10 +73,13 @@ const ALL_THEMES = [
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
+const PLATFORM_DESKTOP = 'desktop'
+const PLATFORM_MOBILE = 'mobile'
 const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
     label: 'Installation',
+    default: [PLATFORM_MOBILE],
     card: hidePromptCard => (
       <InstallPrompt
         key="install"
@@ -87,6 +90,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'discord',
     label: 'Discord-Server',
+    default: [],
     card: hidePromptCard => (
       <DiscordPrompt
         key="discord"
@@ -97,29 +101,31 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'timetable',
     label: 'Stundenplan',
-    desktopOnly: true,
+    default: [PLATFORM_DESKTOP],
     card: () => <TimetableCard key="timetable" />
   },
   {
     key: 'mensa',
     label: 'Mensa Speiseplan',
-    desktopOnly: true,
+    default: [PLATFORM_DESKTOP],
     card: () => <MensaCard key="mensa" />
   },
   {
     key: 'mobility',
     label: 'Mobilität',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => <MobilityCard key="mobility" />
   },
   {
     key: 'calendar',
     label: 'Termine',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => <CalendarCard key="calendar" />
   },
   {
     key: 'rooms',
     label: 'Raumplan',
-    desktopOnly: true,
+    default: [PLATFORM_DESKTOP],
     card: () => (
       <HomeCard
         key="rooms"
@@ -132,6 +138,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'library',
     label: 'Bibliothek',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => (
       <HomeCard
         key="library"
@@ -144,6 +151,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'grades',
     label: 'Noten & Fächer',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => (
       <HomeCard
         key="grades"
@@ -156,6 +164,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'personal',
     label: 'Persönliche Daten',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => (
       <HomeCard
         key="personal"
@@ -168,6 +177,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'lecturers',
     label: 'Dozenten',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
     card: () => (
       <HomeCard
         key="lecturers"
@@ -446,7 +456,7 @@ export default function Home () {
   const router = useRouter()
 
   // page state
-  const [shownDashboardEntries, setShownDashboardEntries] = useState(ALL_DASHBOARD_CARDS)
+  const [shownDashboardEntries, setShownDashboardEntries] = useState([])
   const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
@@ -457,13 +467,6 @@ export default function Home () {
   useEffect(() => {
     async function load () {
       if (localStorage.personalizedDashboard) {
-        if (localStorage.personalizedDashboard.includes('hidden-below')) {
-          const oldFormat = JSON.parse(localStorage.personalizedDashboard)
-          const hiddenIndex = oldFormat.indexOf('hidden-below')
-          localStorage.personalizedDashboard = JSON.stringify(oldFormat.slice(0, hiddenIndex))
-          localStorage.personalizedDashboardHidden = JSON.stringify(oldFormat.slice(hiddenIndex + 1))
-        }
-
         const entries = JSON.parse(localStorage.personalizedDashboard)
           .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
           .filter(x => !!x)
@@ -479,13 +482,10 @@ export default function Home () {
         })
         setShownDashboardEntries(entries)
         setHiddenDashboardEntries(hiddenEntries)
-      } else if (window.matchMedia('(max-width: 768px)').matches) {
-        const entries = [
-          ...ALL_DASHBOARD_CARDS.filter(x => !x.desktopOnly),
-          ...ALL_DASHBOARD_CARDS.filter(x => x.desktopOnly)
-        ]
-        setDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !x.desktopOnly))
-        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => x.desktopOnly))
+      } else {
+        const platform = window.matchMedia('(max-width: 768px)').matches ? PLATFORM_MOBILE : PLATFORM_DESKTOP
+        setShownDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => x.default.includes(platform)))
+        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !x.default.includes(platform)))
       }
 
       if (localStorage.unlockedThemes) {
