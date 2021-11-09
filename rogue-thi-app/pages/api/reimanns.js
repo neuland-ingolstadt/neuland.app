@@ -24,7 +24,7 @@ export default async function handler (req, res) {
 
       const $ = cheerio.load(body)
       const year = (new Date()).getFullYear()
-      
+
       const days = {}
       let day = null
       $('.entry-content').children().map((i, el_) => {
@@ -36,10 +36,11 @@ export default async function handler (req, res) {
           const [date, month] = content.split(' ')[1].split('.')
           day = `${year}-${month}-${date}`
           days[day] = []
-        }
-        else if(tag === 'p' && day && content) {
+        } else if (tag === 'p' && day && content) {
           days[day].push(content)
         }
+
+        return null // make eslint happy
       })
 
       // convert format to the same as /api/mensa
@@ -50,9 +51,9 @@ export default async function handler (req, res) {
           prices: {
             student: 5.3,
             employee: 5.9,
-            guest: 6.3,
+            guest: 6.3
           },
-          allergens: [],
+          allergens: []
         }))
       }))
     })
