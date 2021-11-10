@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
@@ -41,6 +41,7 @@ const DEFAULT_CENTER = [48.76677, 11.43322]
 
 export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
+  const searchField = useRef()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState([])
 
@@ -112,6 +113,11 @@ export default function RoomMap ({ highlight, roomData }) {
     load()
   }, [router])
 
+  function unfocus (e) {
+    e.preventDefault()
+    searchField.current?.blur()
+  }
+
   function renderRoom (entry, key, onlyAvailable) {
     const avail = availableRooms.find(x => x.room === entry.properties.Raum)
     if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
@@ -165,13 +171,14 @@ export default function RoomMap ({ highlight, roomData }) {
 
   return (
     <>
-      <Form className={styles.searchForm}>
+      <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
         <Form.Control
           as="input"
           placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
           value={searchText}
           onChange={e => setSearchText(e.target.value.toUpperCase())}
           isInvalid={filteredRooms.length === 0}
+          ref={searchField}
         />
       </Form>
 
