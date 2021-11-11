@@ -106,7 +106,7 @@ const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'mensa',
-    label: 'Mensa Speiseplan',
+    label: 'Speisepläne',
     default: [PLATFORM_DESKTOP],
     card: () => <MensaCard key="mensa" />
   },
@@ -308,8 +308,8 @@ function MensaCard () {
   return (
     <HomeCard
       icon={faUtensils}
-      title="Mensa"
-      link="/mensa"
+      title="Essen"
+      link="/food"
     >
       <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
         <ListGroup variant="flush">

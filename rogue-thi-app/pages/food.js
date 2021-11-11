@@ -126,7 +126,7 @@ export default function Mensa () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Mensa" showBack={'desktop-only'}>
+      <AppNavbar title="Essen" showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
             Allergene auswählen
@@ -158,7 +158,7 @@ export default function Mensa () {
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
-                {day.timestamp === formatISODate(new Date()) &&
+                {day.timestamp === formatISODate(new Date()) && selectedRestaurants.includes('mensa') &&
                   <Button
                     href={MENSA_CHECKIN_LINK}
                     target="_blank"
