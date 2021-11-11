@@ -35,12 +35,32 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
-function mergeFoodEntries (restaurants) {
-  const days = restaurants.flatMap(r => r.map(x => x.timestamp))
+export async function loadFoodEntries (restaurants) {
+  const entries = []
+  if (restaurants.includes('mensa')) {
+    const data = await NeulandAPI.getMensaPlan()
+    data.forEach(day => day.meals.forEach(entry => {
+      entry.restaurant = 'Mensa'
+    }))
+    entries.push(data)
+  }
+  if (restaurants.includes('reimanns')) {
+    const data = await NeulandAPI.getReimannsPlan()
+
+    const startOfToday = new Date(formatISODate(new Date())).getTime()
+    const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
+
+    filteredData.forEach(day => day.meals.forEach(entry => {
+      entry.restaurant = 'Reimanns'
+    }))
+    entries.push(filteredData)
+  }
+
+  const days = entries.flatMap(r => r.map(x => x.timestamp))
   const uniqueDays = [...new Set(days)]
 
   return uniqueDays.map(day => {
-    const dayEntries = restaurants.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
+    const dayEntries = entries.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
     return {
       timestamp: day,
       meals: dayEntries
@@ -58,32 +78,7 @@ export default function Mensa () {
   useEffect(() => {
     async function load () {
       try {
-        const entries = []
-        if (selectedRestaurants.includes('mensa')) {
-          const data = await NeulandAPI.getMensaPlan()
-          data.forEach(day => day.meals.forEach(entry => {
-            entry.restaurant = 'Mensa'
-          }))
-          entries.push(data)
-        }
-        if (selectedRestaurants.includes('reimanns')) {
-          const data = await NeulandAPI.getReimannsPlan()
-
-          const startOfTodayDate = new Date()
-          startOfTodayDate.setHours(0)
-          startOfTodayDate.setMinutes(0)
-          startOfTodayDate.setSeconds(0)
-          startOfTodayDate.setMilliseconds(0)
-          const startOfToday = startOfTodayDate.getTime()
-          const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
-
-          filteredData.forEach(day => day.meals.forEach(entry => {
-            entry.restaurant = 'Reimanns'
-          }))
-          entries.push(filteredData)
-        }
-
-        setFoodEntries(mergeFoodEntries(entries))
+        setFoodEntries(await loadFoodEntries(selectedRestaurants))
       } catch (e) {
         console.error(e)
         alert(e)

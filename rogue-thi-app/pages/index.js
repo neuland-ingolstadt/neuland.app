@@ -50,6 +50,7 @@ import {
 } from '../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
 import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
+import { loadFoodEntries } from './food'
 import NeulandAPI from '../lib/neuland-api'
 import { useTime } from '../lib/time-hook'
 
@@ -108,7 +109,7 @@ const ALL_DASHBOARD_CARDS = [
     key: 'mensa',
     label: 'Speisepläne',
     default: [PLATFORM_DESKTOP],
-    card: () => <MensaCard key="mensa" />
+    card: () => <FoodCard key="mensa" />
   },
   {
     key: 'mobility',
@@ -188,23 +189,6 @@ const ALL_DASHBOARD_CARDS = [
     )
   }
 ]
-
-async function getMensaPlanPreview () {
-  const plan = await NeulandAPI.getMensaPlan()
-  const isoDate = formatISODate(new Date())
-
-  const todaysPlan = plan.find(x => x.timestamp === isoDate)?.meals
-  if (!todaysPlan) {
-    return []
-  } else if (todaysPlan.length <= 2) {
-    return todaysPlan.map(x => x.name)
-  } else {
-    return [
-      todaysPlan[0].name,
-      `und ${todaysPlan.length - 1} weitere Gerichte`
-    ]
-  }
-}
 
 function HomeCard ({ link, icon, title, className, children }) {
   return (
@@ -289,41 +273,66 @@ function TimetableCard () {
   )
 }
 
-function MensaCard () {
-  const [mensaPlan, setMensaPlan] = useState(null)
-  const [mensaPlanError, setMensaPlanError] = useState(null)
+function FoodCard () {
+  const [foodEntries, setFoodEntries] = useState(null)
+  const [foodCardTitle, setFoodCardTitle] = useState('Essen')
+  const [foodError, setFoodError] = useState(null)
 
   useEffect(() => {
     async function load () {
+      const restaurants = localStorage.selectedRestaurants
+        ? JSON.parse(localStorage.selectedRestaurants)
+        : ['mensa']
+      if (restaurants.length === 1 && restaurants[0] === 'mensa') {
+        setFoodCardTitle('Mensa')
+      } else if (restaurants.length === 1 && restaurants[0] === 'reimanns') {
+        setFoodCardTitle('Reimanns')
+      } else {
+        setFoodCardTitle('Essen')
+      }
+
+      const today = formatISODate(new Date())
       try {
-        setMensaPlan(await getMensaPlanPreview())
+        const entries = await loadFoodEntries(restaurants)
+        const todayEntries = entries.find(x => x.timestamp === today)?.meals
+        if (!todayEntries) {
+          setFoodEntries([])
+        } else if (todayEntries.length > 2) {
+          setFoodEntries([
+            todayEntries[0].name,
+            `und ${todayEntries.length - 1} weitere Gerichte`
+          ])
+        } else {
+          setFoodEntries(todayEntries.map(x => x.name))
+        }
       } catch (e) {
         console.error(e)
-        setMensaPlanError(e)
+        setFoodError(e)
       }
     }
     load()
   }, [])
 
+  console.log(foodCardTitle)
   return (
     <HomeCard
       icon={faUtensils}
-      title="Essen"
+      title={foodCardTitle}
       link="/food"
     >
-      <ReactPlaceholder type="text" rows={5} ready={mensaPlan || mensaPlanError}>
+      <ReactPlaceholder type="text" rows={5} ready={foodEntries || foodError}>
         <ListGroup variant="flush">
-          {mensaPlan && mensaPlan.map((x, i) =>
+          {foodEntries && foodEntries.map((x, i) =>
             <ListGroup.Item key={i}>
               {x}
             </ListGroup.Item>
           )}
-          {mensaPlan && mensaPlan.length === 0 &&
+          {foodEntries && foodEntries.length === 0 &&
             <ListGroup.Item>
               Der Speiseplan ist leer.
             </ListGroup.Item>
           }
-          {mensaPlanError &&
+          {foodError &&
             <ListGroup.Item>
               Fehler beim Abruf des Speiseplans.<br />
               Die Mensa mag gerade nicht. :(
