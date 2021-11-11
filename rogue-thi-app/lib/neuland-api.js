@@ -23,6 +23,10 @@ class NeulandAPIClient {
     return this.performRequest('/api/mensa')
   }
 
+  async getReimannsPlan () {
+    return this.performRequest('/api/reimanns')
+  }
+
   async getBusPlan (station) {
     return this.performRequest('/api/bus/' + encodeURIComponent(station))
   }

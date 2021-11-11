@@ -35,8 +35,22 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
+function mergeFoodEntries (restaurants) {
+  const days = restaurants.flatMap(r => r.map(x => x.timestamp))
+  const uniqueDays = [...new Set(days)]
+
+  return uniqueDays.map(day => {
+    const dayEntries = restaurants.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
+    return {
+      timestamp: day,
+      meals: dayEntries
+    }
+  })
+}
+
 export default function Mensa () {
-  const [mensaPlan, setMensaPlan] = useState(null)
+  const [foodEntries, setFoodEntries] = useState(null)
+  const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
   const [showAllergenDetails, setShowAllergenDetails] = useState(false)
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
@@ -44,21 +58,59 @@ export default function Mensa () {
   useEffect(() => {
     async function load () {
       try {
-        const data = await NeulandAPI.getMensaPlan()
-        setMensaPlan(data)
+        const entries = []
+        if (selectedRestaurants.includes('mensa')) {
+          const data = await NeulandAPI.getMensaPlan()
+          data.forEach(day => day.meals.forEach(entry => {
+            entry.restaurant = 'Mensa'
+          }))
+          entries.push(data)
+        }
+        if (selectedRestaurants.includes('reimanns')) {
+          const data = await NeulandAPI.getReimannsPlan()
+
+          const startOfTodayDate = new Date()
+          startOfTodayDate.setHours(0)
+          startOfTodayDate.setMinutes(0)
+          startOfTodayDate.setSeconds(0)
+          startOfTodayDate.setMilliseconds(0)
+          const startOfToday = startOfTodayDate.getTime()
+          const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
+
+          filteredData.forEach(day => day.meals.forEach(entry => {
+            entry.restaurant = 'Reimanns'
+          }))
+          entries.push(filteredData)
+        }
+
+        setFoodEntries(mergeFoodEntries(entries))
       } catch (e) {
         console.error(e)
         alert(e)
       }
     }
     load()
-  }, [])
+  }, [selectedRestaurants])
 
   useEffect(() => {
     if (localStorage.selectedAllergens) {
       setAllergenSelection(JSON.parse(localStorage.selectedAllergens))
     }
+    if (localStorage.selectedRestaurants) {
+      setSelectedRestaurants(JSON.parse(localStorage.selectedRestaurants))
+    }
   }, [])
+
+  function changeSelectedRestaurant (name, checked) {
+    console.log(selectedRestaurants, name, checked)
+    const newSelection = selectedRestaurants.filter(x => x !== name)
+    if (checked) {
+      newSelection.push(name)
+    }
+
+    setSelectedRestaurants(newSelection)
+    localStorage.selectedRestaurants = JSON.stringify(newSelection)
+  }
 
   function saveAllergenSelection () {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
@@ -66,6 +118,9 @@ export default function Mensa () {
   }
 
   function containsSelectedAllergen (allergens) {
+    if (!allergens) {
+      return false
+    }
     return allergens.some(x => allergenSelection[x])
   }
 
@@ -80,8 +135,26 @@ export default function Mensa () {
       </AppNavbar>
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={mensaPlan}>
-          {mensaPlan && mensaPlan.map((day, idx) =>
+        <Form>
+          <div className={styles.restaurantSelection}>
+            <Form.Label>Ausgewählte Restaurants:</Form.Label>
+            <Form.Check
+              type="checkbox"
+              label="Mensa"
+              checked={selectedRestaurants.includes('mensa')}
+              onChange={e => changeSelectedRestaurant('mensa', e.target.checked)}
+              />
+            <Form.Check
+              type="checkbox"
+              label="Reimanns"
+              checked={selectedRestaurants.includes('reimanns')}
+              onChange={e => changeSelectedRestaurant('reimanns', e.target.checked)}
+              />
+          </div>
+        </Form>
+
+        <ReactPlaceholder type="text" rows={20} ready={foodEntries}>
+          {foodEntries && foodEntries.map((day, idx) =>
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
@@ -111,13 +184,14 @@ export default function Mensa () {
                     </div>
                     <div className={styles.room}>
                       <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+                        {!meal.allergens && 'unbekannte Allergene'}
                         {containsSelectedAllergen(meal.allergens) && (
                           <span>
                             <FontAwesomeIcon title="Warnung" icon={faExclamationTriangle} color={COLOR_WARN} />
                             {' '}
                           </span>
                         )}
-                        {meal.allergens.map((supplement, idx) => (
+                        {meal.allergens && meal.allergens.map((supplement, idx) => (
                           <span key={idx}>
                             {idx !== 0 && ', '}
                             <span>
@@ -132,12 +206,14 @@ export default function Mensa () {
                     {[meal.prices.student, meal.prices.employee].map(x =>
                       x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
                     ).join(' / ')}
+                    <br />
+                    {meal.restaurant}
                   </div>
                 </ListGroup.Item>
               )}
             </ListGroup>
           )}
-          {mensaPlan && mensaPlan.length === 0 &&
+          {foodEntries && foodEntries.length === 0 &&
             <ListGroup>
               <ListGroup.Item>
                 Der Speiseplan ist leer.

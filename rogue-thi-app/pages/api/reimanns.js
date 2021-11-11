@@ -34,7 +34,7 @@ export default async function handler (req, res) {
 
         if (tag === 'blockquote') {
           const [date, month] = content.split(' ')[1].split('.')
-          day = `${year}-${month}-${date}`
+          day = `${year}-${month.trim()}-${date.trim()}`
           days[day] = []
         } else if (tag === 'p' && day && content) {
           days[day].push(content)
@@ -53,7 +53,7 @@ export default async function handler (req, res) {
             employee: 5.9,
             guest: 6.3
           },
-          allergens: []
+          allergens: null
         }))
       }))
     })
