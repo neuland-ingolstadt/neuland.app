@@ -107,7 +107,7 @@ const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'mensa',
-    label: 'Speisepläne',
+    label: 'Essen',
     default: [PLATFORM_DESKTOP],
     card: () => <FoodCard key="mensa" />
   },
@@ -335,7 +335,7 @@ function FoodCard () {
           {foodError &&
             <ListGroup.Item>
               Fehler beim Abruf des Speiseplans.<br />
-              Die Mensa mag gerade nicht. :(
+              Irgendetwas scheint kaputt zu sein. :(
             </ListGroup.Item>
           }
         </ListGroup>
