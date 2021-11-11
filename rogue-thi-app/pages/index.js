@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
@@ -48,10 +48,9 @@ import {
   formatISODate,
   formatNearDate
 } from '../lib/date-utils'
+import { loadFoodEntries } from './food'
 import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
 import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
-import { loadFoodEntries } from './food'
-import NeulandAPI from '../lib/neuland-api'
 import { useTime } from '../lib/time-hook'
 
 import styles from '../styles/Home.module.css'
