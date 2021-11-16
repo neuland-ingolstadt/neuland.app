@@ -96,10 +96,10 @@ export default function Mensa () {
     }
   }, [])
 
-  function changeSelectedRestaurant (name, checked) {
-    console.log(selectedRestaurants, name, checked)
+  function toggleSelectedRestaurant (name) {
+    const checked = selectedRestaurants.includes(name)
     const newSelection = selectedRestaurants.filter(x => x !== name)
-    if (checked) {
+    if (!checked) {
       newSelection.push(name)
     }
 
@@ -126,28 +126,16 @@ export default function Mensa () {
           <Dropdown.Item variant="link" onClick={() => setShowAllergenSelection(true)}>
             Allergene auswählen
           </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => toggleSelectedRestaurant('mensa')}>
+            Mensa {selectedRestaurants.includes('mensa') ? 'ausblenden' : 'einblenden'}
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => toggleSelectedRestaurant('reimanns')}>
+            Reimanns {selectedRestaurants.includes('reimanns') ? 'ausblenden' : 'einblenden'}
+          </Dropdown.Item>
         </AppNavbar.Overflow>
       </AppNavbar>
 
       <AppBody>
-        <Form>
-          <div className={styles.restaurantSelection}>
-            <Form.Label>Ausgewählte Restaurants:</Form.Label>
-            <Form.Check
-              type="checkbox"
-              label="Mensa"
-              checked={selectedRestaurants.includes('mensa')}
-              onChange={e => changeSelectedRestaurant('mensa', e.target.checked)}
-              />
-            <Form.Check
-              type="checkbox"
-              label="Reimanns"
-              checked={selectedRestaurants.includes('reimanns')}
-              onChange={e => changeSelectedRestaurant('reimanns', e.target.checked)}
-              />
-          </div>
-        </Form>
-
         <ReactPlaceholder type="text" rows={20} ready={foodEntries}>
           {foodEntries && foodEntries.map((day, idx) =>
             <ListGroup key={idx}>
