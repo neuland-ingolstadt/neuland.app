@@ -47,6 +47,8 @@ function parseDataFromXml (xml) {
         const newAllergens = addIn.split(',')
         newAllergens.forEach(newAll => allergens.add(newAll))
       }
+      const vegetarian = /infomax-food-icon V/.test(item.piktogramme._text)
+      const vegan = /infomax-food-icon veg/.test(item.piktogramme._text)
 
       return {
         name: text.trim(),
@@ -55,7 +57,9 @@ function parseDataFromXml (xml) {
           employee: parseGermanFloat(item.preis2._text),
           guest: parseGermanFloat(item.preis3._text)
         },
-        allergens: [...allergens]
+        allergens: [...allergens],
+        vegetarian,
+        vegan
       }
     })
 
