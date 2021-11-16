@@ -1,6 +1,9 @@
+import { React, useMemo, useState } from 'react'
 import App from 'next/app'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+
 import PropTypes from 'prop-types'
-import { React } from 'react'
 import { ThemeContext } from '../components/AppNavbar'
 
 // fontawesome
@@ -31,9 +34,22 @@ function extractThemeFromCookie (req) {
   return entry.split('=')[1]
 }
 
-function MyApp ({ Component, pageProps, theme }) {
+function MyApp ({ Component, pageProps, theme: initialTheme }) {
+  const router = useRouter()
+  const [theme, setTheme] = useState(initialTheme)
+  const computedTheme = useMemo(() => {
+    if (router.pathname === '/become-hackerman') {
+      return 'hacker'
+    } else {
+      return theme
+    }
+  }, [theme, router.pathname])
+
   return (
-    <ThemeContext.Provider value={theme}>
+    <ThemeContext.Provider value={[computedTheme, setTheme]}>
+      <Head>
+        <link rel="stylesheet" href={`/themes/${computedTheme}.css`} />
+      </Head>
       <Component {...pageProps} />
     </ThemeContext.Provider>
   )

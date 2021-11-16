@@ -467,9 +467,9 @@ export default function Home () {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])
   const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [showThemeModal, setShowThemeModal] = useState(false)
-  const [currentTheme, setCurrentTheme] = useState(useContext(ThemeContext))
   const [unlockedThemes, setUnlockedThemes] = useState([])
   const [showDebug, setShowDebug] = useState(false)
+  const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
 
   useEffect(() => {
@@ -554,32 +554,30 @@ export default function Home () {
     const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
     document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
 
-    setCurrentTheme(theme)
+    setTheme(theme)
     setShowThemeModal(false)
   }
 
   return (
     <AppContainer>
-      <ThemeContext.Provider value={currentTheme}>
-        <AppNavbar title="neuland.app" showBack={false}>
-          <AppNavbar.Button onClick={() => setShowThemeModal(true)}>
-            <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
-          </AppNavbar.Button>
-          <AppNavbar.Overflow>
-            {showDebug && (
-              <Dropdown.Item variant="link" href="/debug">
-                API Spielwiese
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item variant="link" href="/imprint">
-              Impressum & Datenschutz
+      <AppNavbar title="neuland.app" showBack={false}>
+        <AppNavbar.Button onClick={() => setShowThemeModal(true)}>
+          <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
+        </AppNavbar.Button>
+        <AppNavbar.Overflow>
+          {showDebug && (
+            <Dropdown.Item variant="link" href="/debug">
+              API Spielwiese
             </Dropdown.Item>
-            <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
-              Ausloggen
-            </Dropdown.Item>
-          </AppNavbar.Overflow>
-        </AppNavbar>
-      </ThemeContext.Provider>
+          )}
+          <Dropdown.Item variant="link" href="/imprint">
+            Impressum & Datenschutz
+          </Dropdown.Item>
+          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+            Ausloggen
+          </Dropdown.Item>
+        </AppNavbar.Overflow>
+      </AppNavbar>
 
       <AppBody>
         <div className={styles.cardDeck}>
@@ -590,16 +588,16 @@ export default function Home () {
             <Modal.Body ref={themeModalBody}>
               <h3 className={styles.themeHeader}>Design</h3>
               <Form>
-                {ALL_THEMES.map((theme, i) => (
+                {ALL_THEMES.map((availableTheme, i) => (
                   <Button
                     key={i}
                     id={`theme-${i}`}
                     className={styles.themeButton}
-                    variant={currentTheme === theme.style ? 'primary' : 'secondary'}
-                    onClick={() => changeTheme(theme.style)}
-                    disabled={theme.requiresToken && unlockedThemes.indexOf(theme.style) === -1}
+                    variant={theme === availableTheme.style ? 'primary' : 'secondary'}
+                    onClick={() => changeTheme(availableTheme.style)}
+                    disabled={availableTheme.requiresToken && unlockedThemes.indexOf(availableTheme.style) === -1}
                   >
-                    {theme.name}
+                    {availableTheme.name}
                   </Button>
                 ))}
               </Form>

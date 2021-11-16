@@ -20,7 +20,7 @@ export const ThemeContext = createContext('default')
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
-  const theme = useContext(ThemeContext)
+  const [theme] = useContext(ThemeContext)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const showBackEffective = useMemo(() => {
     if (typeof showBack === 'undefined') {
@@ -52,8 +52,6 @@ export default function AppNavbar ({ title, showBack, children }) {
         <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
         <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
         <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
-
-        <link rel="stylesheet" href={`/themes/${theme}.css`} />
       </Head>
 
       {theme === 'hacker' && (
