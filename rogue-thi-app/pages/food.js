@@ -24,6 +24,7 @@ import NeulandAPI from '../lib/neuland-api'
 import styles from '../styles/Mensa.module.css'
 
 import allergenMap from '../data/allergens.json'
+import flagMap from '../data/mensa-flags.json'
 
 const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
@@ -167,16 +168,24 @@ export default function Mensa () {
                     </div>
                     <div className={styles.room}>
                       <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-                        {!meal.allergens && 'unbekannte Allergene'}
+                        {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
                         {containsSelectedAllergen(meal.allergens) && (
                           <span>
                             <FontAwesomeIcon title="Warnung" icon={faExclamationTriangle} color={COLOR_WARN} />
                             {' '}
                           </span>
                         )}
+                        {meal.flags && meal.flags.map((flag, idx) => (
+                          <span key={idx}>
+                            {idx > 0 && ', '}
+                            <span>
+                              {flagMap[flag]}
+                            </span>
+                          </span>
+                        ))}
                         {meal.allergens && meal.allergens.map((supplement, idx) => (
                           <span key={idx}>
-                            {idx !== 0 && ', '}
+                            {(idx > 0 || meal.flags?.length > 0) && ', '}
                             <span>
                               {supplement}
                             </span>

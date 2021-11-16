@@ -53,7 +53,8 @@ export default async function handler (req, res) {
             employee: 5.9,
             guest: 6.3
           },
-          allergens: null
+          allergens: null,
+          flags: null
         }))
       }))
     })
