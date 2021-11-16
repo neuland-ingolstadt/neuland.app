@@ -48,9 +48,9 @@ import {
   formatISODate,
   formatNearDate
 } from '../lib/date-utils'
-import { loadFoodEntries } from './food'
 import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
 import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
+import { loadFoodEntries } from './food'
 import { useTime } from '../lib/time-hook'
 
 import styles from '../styles/Home.module.css'

@@ -258,7 +258,7 @@ export default function Mensa () {
                 </li>
               ))}
             </ul>
- 
+
             <p>
               <strong>Angaben ohne Gewähr. </strong>
               Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
