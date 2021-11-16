@@ -72,7 +72,7 @@ export async function loadFoodEntries (restaurants) {
 export default function Mensa () {
   const [foodEntries, setFoodEntries] = useState(null)
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
-  const [showAllergenDetails, setShowAllergenDetails] = useState(false)
+  const [showMealDetails, setShowMealDetails] = useState(null)
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
 
@@ -159,7 +159,7 @@ export default function Mensa () {
                 <ListGroup.Item
                   key={idx}
                   className={styles.item}
-                  onClick={() => setShowAllergenDetails(meal.allergens)}
+                  onClick={() => setShowMealDetails(meal)}
                   action
                 >
                   <div className={styles.left}>
@@ -216,14 +216,34 @@ export default function Mensa () {
 
         <br />
 
-        <Modal show={showAllergenDetails} onHide={() => setShowAllergenDetails(false)}>
+        <Modal show={showMealDetails} onHide={() => setShowMealDetails(null)}>
           <Modal.Header closeButton>
             <Modal.Title>Erläuterung</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
+            <h3>Bezeichnung</h3>
+            {showMealDetails && showMealDetails.name}
+
+            <h3>Restaurant</h3>
+            {showMealDetails && showMealDetails.restaurant}
+
+            <h3>Inhaltstoffe / Anmerkungen</h3>
+            {showMealDetails && !showMealDetails.flags && 'Unbekannt'}
             <ul>
-              {showAllergenDetails && showAllergenDetails.map(key => (
+              {showMealDetails && showMealDetails.flags && showMealDetails.flags.map(flag => (
+                <li key={flag}>
+                  <strong>{flag}</strong>
+                  {' – '}
+                  {flagMap[flag] || FALLBACK_ALLERGEN}
+                </li>
+              ))}
+            </ul>
+
+            <h3>Allergene</h3>
+            {showMealDetails && !showMealDetails.allergens && 'Unbekannt'}
+            <ul>
+              {showMealDetails && showMealDetails.allergens && showMealDetails.allergens.map(key => (
                 <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
                   {containsSelectedAllergen([key]) && (
                     <span>
@@ -238,6 +258,7 @@ export default function Mensa () {
                 </li>
               ))}
             </ul>
+ 
             <p>
               <strong>Angaben ohne Gewähr. </strong>
               Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
@@ -245,7 +266,7 @@ export default function Mensa () {
           </Modal.Body>
 
           <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowAllergenDetails(false)}>OK</Button>
+            <Button variant="primary" onClick={() => setShowMealDetails(null)}>OK</Button>
           </Modal.Footer>
         </Modal>
 
