@@ -47,8 +47,17 @@ function parseDataFromXml (xml) {
         const newAllergens = addIn.split(',')
         newAllergens.forEach(newAll => allergens.add(newAll))
       }
-      const vegetarian = /infomax-food-icon V/.test(item.piktogramme._text)
-      const vegan = /infomax-food-icon veg/.test(item.piktogramme._text)
+
+      const flags = []
+      if (item.piktogramme._text) {
+        const matches = item.piktogramme._text.match(/class='infomax-food-icon .*?'/g)
+        if (matches) {
+          matches.forEach(x => {
+            const [, end] = x.split(' ')
+            flags.push(end.substr(0, end.length - 1))
+          })
+        }
+      }
 
       return {
         name: text.trim(),
@@ -58,8 +67,7 @@ function parseDataFromXml (xml) {
           guest: parseGermanFloat(item.preis3._text)
         },
         allergens: [...allergens],
-        vegetarian,
-        vegan
+        flags
       }
     })
 
