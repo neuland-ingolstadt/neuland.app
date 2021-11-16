@@ -42,9 +42,9 @@ export default function AppTabbar () {
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link onClick={() => router.replace('/mensa')} className={[styles.tab, router.pathname === '/mensa' && styles.tabActive]}>
+            <Nav.Link onClick={() => router.replace('/food')} className={[styles.tab, router.pathname === '/food' && styles.tabActive]}>
               <FontAwesomeIcon icon={faUtensils} className={styles.icon} />
-              Mensa
+              Essen
             </Nav.Link>
           </Nav.Item>
         </Nav>
