@@ -1,4 +1,4 @@
-# THI-App
+# neuland.app
 
 An open source, web-based replacement for the official app of the
 Technische Hochschule Ingolstadt built with React and Next.js.
