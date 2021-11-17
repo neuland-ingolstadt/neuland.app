@@ -102,7 +102,7 @@ export default function Grades () {
         const weight = average.entries
           .filter(curr => curr.grade)
           .reduce((acc, curr) => acc + (curr.weight || 1), 0)
-        average.result = result / weight
+        average.result = Math.floor((result / weight) * 10) / 10
 
         setGradeAverage(average)
       } catch (e) {
