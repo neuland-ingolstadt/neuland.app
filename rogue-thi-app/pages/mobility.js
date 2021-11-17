@@ -52,9 +52,7 @@ async function getAndConvertCampusParkingData () {
     available = entries.find(x => x.name === 'TG Gießerei Hochschule')?.free
     available = typeof available === 'string' ? parseInt(available) : null
   } catch (e) {
-    if (!(e instanceof NoSessionError)) {
-      throw e
-    }
+    available = null
   }
 
   return {
