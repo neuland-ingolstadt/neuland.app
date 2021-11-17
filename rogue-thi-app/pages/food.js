@@ -222,16 +222,11 @@ export default function Mensa () {
           </Modal.Header>
 
           <Modal.Body>
-            <h3>Bezeichnung</h3>
-            {showMealDetails && showMealDetails.name}
-
-            <h3>Restaurant</h3>
-            {showMealDetails && showMealDetails.restaurant}
-
-            <h3>Inhaltstoffe / Anmerkungen</h3>
-            {showMealDetails && !showMealDetails.flags && 'Unbekannt'}
+            <h5>Anmerkungen</h5>
+            {showMealDetails?.flags === null && 'Unbekannt.'}
+            {showMealDetails?.flags?.length === 0 && 'Keine.'}
             <ul>
-              {showMealDetails && showMealDetails.flags && showMealDetails.flags.map(flag => (
+              {showMealDetails?.flags?.map(flag => (
                 <li key={flag}>
                   <strong>{flag}</strong>
                   {' – '}
@@ -240,10 +235,11 @@ export default function Mensa () {
               ))}
             </ul>
 
-            <h3>Allergene</h3>
-            {showMealDetails && !showMealDetails.allergens && 'Unbekannt'}
+            <h5>Allergene</h5>
+            {showMealDetails?.allergens === null && 'Unbekannt.'}
+            {showMealDetails?.allergens?.length === 0 && 'Keine.'}
             <ul>
-              {showMealDetails && showMealDetails.allergens && showMealDetails.allergens.map(key => (
+              {showMealDetails?.allergens?.map(key => (
                 <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
                   {containsSelectedAllergen([key]) && (
                     <span>
