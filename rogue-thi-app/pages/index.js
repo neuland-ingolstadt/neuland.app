@@ -392,7 +392,7 @@ function MobilityCard () {
           )}
           {mobility && mobility.length === 0 &&
             <ListGroup.Item>
-              Keine Abfahrten in nächster Zeit.
+              Keine Elemente.
             </ListGroup.Item>
           }
           {mobilityError &&

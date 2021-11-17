@@ -193,6 +193,7 @@ export default function Bus () {
         if (kind) {
           localStorage.mobilityKind = kind
           setData(null)
+          setDataError(null)
           setData(await getMobilityEntries(kind, station))
         } else {
           delete localStorage.mobilityKind
@@ -266,6 +267,11 @@ export default function Bus () {
                 {dataError}
               </ListGroup.Item>
             )}
+            {data && data.length === 0 &&
+              <ListGroup.Item className={styles.mobilityItem}>
+                Keine Elemente.
+              </ListGroup.Item>
+            }
             {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
                 {renderMobilityEntry(kind, item, 200, styles)}

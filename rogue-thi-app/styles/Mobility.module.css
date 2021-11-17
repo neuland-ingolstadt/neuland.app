@@ -8,10 +8,9 @@
   .stationForm {
     flex-direction: row;
   }
-}
-
-.stationForm * {
-  margin-right: 20px;
+  .stationForm * {
+    margin-right: 20px;
+  }
 }
 
 .mobilityItem {
