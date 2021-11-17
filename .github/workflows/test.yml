@@ -12,3 +12,14 @@ jobs:
       run: npm install
     - name: Run ESLint
       run: npx eslint . --ext .js,.jsx,.ts,.tsx
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rogue-thi-app
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm install
+    - name: Build
+      run: npm run build
