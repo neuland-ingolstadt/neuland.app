@@ -15,7 +15,6 @@ import AppTabbar from '../components/AppTabbar'
 
 import API from '../lib/thi-backend/authenticated-api'
 import NeulandAPI from '../lib/neuland-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
 import { formatRelativeMinutes } from '../lib/date-utils'
 import stations from '../data/mobility.json'
 import { useTime } from '../lib/time-hook'
