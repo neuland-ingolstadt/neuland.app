@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./frontend
+        working-directory: ./rogue-thi-app
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
