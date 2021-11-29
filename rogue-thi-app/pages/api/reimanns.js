@@ -29,14 +29,15 @@ export default async function handler (req, res) {
       let day = null
       $('.entry-content').children().map((i, el_) => {
         const el = $(el_)
-        const tag = el.get(0).tagName
         const content = el.text().trim()
 
-        if (tag === 'blockquote') {
+        if (/(montag|dienstag|mittwoch|donnerstag|freitag)\s*\d{1,2}\.\d{1,2}/ui.test(content)) {
           const [date, month] = content.split(' ')[1].split('.')
           day = `${year}-${month.trim()}-${date.trim()}`
           days[day] = []
-        } else if (tag === 'p' && day && content) {
+        } else if (/Änderungen\s*vorbehalten/ui.test(content)) {
+          // ignore
+        } else if (day && content) {
           days[day].push(content)
         }
 
