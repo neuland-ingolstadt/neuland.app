@@ -33,7 +33,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import AppNavbar, { ThemeContext } from '../components/AppNavbar'
+import { ThemeContext } from './_app'
+import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
 import AppTabbar from '../components/AppTabbar'

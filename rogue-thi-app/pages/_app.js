@@ -1,16 +1,17 @@
-import { React, useMemo, useState } from 'react'
+import { React, useMemo, useState, createContext } from 'react'
 import App from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
 import PropTypes from 'prop-types'
-import { ThemeContext } from '../components/AppNavbar'
+import TheMatrixAnimation from './../components/TheMatrixAnimation'
 
-// fontawesome
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
 import '../styles/globals.css'
+
+export const ThemeContext = createContext('default')
 
 config.autoAddCss = false
 
@@ -48,8 +49,31 @@ function MyApp ({ Component, pageProps, theme: initialTheme }) {
   return (
     <ThemeContext.Provider value={[computedTheme, setTheme]}>
       <Head>
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+        <meta name="description" content="Eine inoffizielle App für die Technische Hochschule Ingolstadt" />
+        <meta name="keywords" content="THI, Technische Hochschule Ingolstadt, App" />
+        <meta name="theme-color" content="#8845ef" />
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="apple-touch-icon" href="/favicon512.png"></link>
+        <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
+        <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
+        <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
+
         <link rel="stylesheet" href={`/themes/${computedTheme}.css`} />
       </Head>
+
+      {computedTheme === 'hacker' && (
+        <div className="matrixBackground">
+          <TheMatrixAnimation />
+        </div>
+      )}
+
       <Component {...pageProps} />
     </ThemeContext.Provider>
   )

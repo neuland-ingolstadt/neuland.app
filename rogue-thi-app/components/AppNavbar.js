@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 
@@ -11,16 +11,12 @@ import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
 
-import TheMatrixAnimation from './TheMatrixAnimation'
 import { useMediaQuery } from '../lib/media-query-hook'
 
 import styles from '../styles/AppNavbar.module.css'
 
-export const ThemeContext = createContext('default')
-
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
-  const [theme] = useContext(ThemeContext)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const showBackEffective = useMemo(() => {
     if (typeof showBack === 'undefined') {
@@ -36,29 +32,7 @@ export default function AppNavbar ({ title, showBack, children }) {
     <>
       <Head>
         <title>{title}</title>
-
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-        <meta name="description" content="Eine inoffizielle App für die Technische Hochschule Ingolstadt" />
-        <meta name="keywords" content="THI, Technische Hochschule Ingolstadt, App" />
-        <meta name="theme-color" content="#8845ef" />
-
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/favicon512.png"></link>
-        <link href="/favicon32.png" rel="icon" type="image/png" sizes="32x32" />
-        <link href="/favicon64.png" rel="icon" type="image/png" sizes="64x64" />
-        <link href="/favicon512.png" rel="icon" type="image/png" sizes="512x512" />
       </Head>
-
-      {theme === 'hacker' && (
-        <div className={styles.matrixBackground}>
-          <TheMatrixAnimation />
-        </div>
-      )}
 
       <Navbar fixed="top" className={[styles.navbar, 'container', 'justify-content-between']}>
         <Navbar.Brand className={styles.left}>

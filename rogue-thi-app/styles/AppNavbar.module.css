@@ -35,15 +35,6 @@
   text-align: right;
 }
 
-.matrixBackground {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-}
-
 /*
  * this spacer is placed directly above the app body and provides
  * clerance to ensure nothing is displayed under the navbar
