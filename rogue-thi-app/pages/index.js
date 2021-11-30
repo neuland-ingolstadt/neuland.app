@@ -33,13 +33,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { ThemeContext } from './_app'
-import AppNavbar from '../components/AppNavbar'
 import AppBody from '../components/AppBody'
 import AppContainer from '../components/AppContainer'
+import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 import DiscordPrompt from '../components/DiscordPrompt'
 import InstallPrompt from '../components/InstallPrompt'
+import { ThemeContext } from './_app'
 
 import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
 import { calendar, loadExamList } from './calendar'
