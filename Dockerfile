@@ -16,7 +16,7 @@ RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true --path-override 
 
 
 
-FROM node:14
+FROM node:16
 
 WORKDIR /opt/next
 
