@@ -22,7 +22,7 @@
     "bootstrap": "^4.6.1",
     "cheerio": "^1.0.0-rc.10",
     "dompurify": "^2.3.3",
-    "fetch-bypass-cors": "git+https://github.com/neuland-ingolstadt/fetch-bypass-cors.git#v1.0.0",
+    "fetch-bypass-cors": "github:neuland-ingolstadt/fetch-bypass-cors#v1.0.1",
     "fetch-cookie": "^1.0.0",
     "idb": "^6.1.5",
     "leaflet": "^1.7.1",
