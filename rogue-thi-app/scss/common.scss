@@ -1,6 +1,5 @@
 // taken and adapted from https://github.com/ForEvolve/bootstrap-dark/
 
-$body-bg: $bg-color;
 $link-color: $primary;
 $link-hover-color: $primary;
 
@@ -9,7 +8,7 @@ $border-color: $primary;
 
 // Cards
 $card-border-color: $primary;
-$card-cap-bg: rgba($bg-color, .03);
+$card-cap-bg: rgba($body-bg, .03);
 $card-color: $body-color;
 $card-bg: rgba($body-bg, .7);
 $nav-tabs-border-color: $primary;
@@ -21,6 +20,7 @@ $component-active-color: $body-color;
 $component-active-bg: $primary;
 
 // List group
+$list-group-color: $body-color;
 $list-group-bg: rgba($body-bg, .05);
 $list-group-border-color: rgba($primary, .125);
 $list-group-hover-bg: $primary;
@@ -35,7 +35,7 @@ $list-group-action-active-color: $body-color;
 $list-group-action-active-bg: $gray-700;
 
 // Forms
-$input-bg: $bg-color;
+$input-bg: $body-bg;
 $input-disabled-bg: $gray-700;
 $input-color: $gray-700;
 $input-border-color: $gray-700;
@@ -61,7 +61,7 @@ $modal-content-border-color: rgba($body-color, .2);
 $modal-header-border-color: $gray-700;
 $modal-footer-border-color: $modal-header-border-color;
 $close-color: $body-color;
-$close-text-shadow: 0 1px 0 $bg-color;
+$close-text-shadow: 0 1px 0 $body-bg;
 
 // Tables
 $table-color: $body-color;
@@ -77,17 +77,17 @@ $hr-border-color: rgba($body-color, .1);
 
 // Toasts
 //$toast-color: null;
-$toast-background-color: rgba($bg-color, .85);
+$toast-background-color: rgba($body-bg, .85);
 $toast-border-color: rgba(255, 255, 255, .1);
 $toast-box-shadow: 0 .25rem .75rem rgba($body-color, .1);
 $toast-header-color: $gray-700;
-$toast-header-background-color: rgba($bg-color, .85);
+$toast-header-background-color: rgba($body-bg, .85);
 $toast-header-border-color: rgba(255, 255, 255, .05);
 
 // Dropdowns
 //
 $dropdown-color: $body-color;
-$dropdown-bg: $bg-color;
+$dropdown-bg: $body-bg;
 $dropdown-border-color: rgba($body-color, .15);
 $dropdown-divider-bg: $gray-700;
 $dropdown-box-shadow: 0 .5rem 1rem rgba($body-color, .175);
@@ -106,7 +106,7 @@ $breadcrumb-active-color: $gray-700;
 
 // Pagination
 $pagination-color: $link-color;
-$pagination-bg: $bg-color;
+$pagination-bg: $body-bg;
 $pagination-border-color: $gray-700;
 $pagination-hover-color: $link-hover-color;
 $pagination-hover-bg: $gray-700;
@@ -115,7 +115,7 @@ $pagination-active-color: $component-active-color;
 $pagination-active-bg: $component-active-bg;
 $pagination-active-border-color: $pagination-active-bg;
 $pagination-disabled-color: $gray-700;
-$pagination-disabled-bg: $bg-color;
+$pagination-disabled-bg: $body-bg;
 $pagination-disabled-border-color: $gray-700;
 
 // Custom additions
