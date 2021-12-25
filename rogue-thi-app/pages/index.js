@@ -313,7 +313,6 @@ function FoodCard () {
     load()
   }, [])
 
-  console.log(foodCardTitle)
   return (
     <HomeCard
       icon={faUtensils}
