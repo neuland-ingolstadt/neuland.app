@@ -87,8 +87,8 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
             </a>
             <br />
             Webseite:{' '}
-            <a href="https://neuland-infolstadt.de" target="_blank" rel="noreferrer">
-              https://neuland-infolstadt.de
+            <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">
+              https://neuland-ingolstadt.de
             </a>
             <br />
             Instagram:{' '}
