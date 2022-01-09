@@ -93,6 +93,7 @@ module.exports = {
               connect-src 'self' wss://proxy.neuland.app;
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
+              manifest-src 'self';
               `.replace(/\s+/g, ' ')
           }
         ]
