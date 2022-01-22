@@ -107,14 +107,21 @@ export async function getAllEventDetails (username, password) {
   const events = []
   for (const url of await getEventList(fetch)) {
     const details = await getEventDetails(fetch, url)
-    // do not include location and description
-    // since it may contain sensitive information
-    events.push({
-      organizer: details.Verein,
-      title: details.Event,
-      begin: details.Start ? parseLocalDateTime(details.Start) : null,
-      end: details.Ende ? parseLocalDateTime(details.Ende) : null
-    })
+
+    const now = new Date()
+    const begin = details.Start ? parseLocalDateTime(details.Start) : null
+    const end = details.Ende ? parseLocalDateTime(details.Ende) : null
+    
+    if (begin > now || end > now) {
+      // do not include location and description
+      // since it may contain sensitive information
+      events.push({
+        organizer: details.Verein,
+        title: details.Event,
+        begin,
+        end
+      })
+    }
   }
   return events
 }
