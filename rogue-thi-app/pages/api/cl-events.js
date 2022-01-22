@@ -111,7 +111,7 @@ export async function getAllEventDetails (username, password) {
     const now = new Date()
     const begin = details.Start ? parseLocalDateTime(details.Start) : null
     const end = details.Ende ? parseLocalDateTime(details.Ende) : null
-    
+
     if (begin > now || end > now) {
       // do not include location and description
       // since it may contain sensitive information
