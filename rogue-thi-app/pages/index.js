@@ -55,7 +55,6 @@ import { loadFoodEntries } from './food'
 import { useTime } from '../lib/time-hook'
 
 import styles from '../styles/Home.module.css'
-import SurveyCard from '../components/SurveyCard'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 const MAX_STATION_LENGTH = 20
@@ -98,17 +97,6 @@ const ALL_DASHBOARD_CARDS = [
         key="discord"
         onHide={() => hidePromptCard('discord')}
         />
-    )
-  },
-  {
-    key: 'survey',
-    label: 'Umfrage',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
-    card: hidePromptCard => (
-      <SurveyCard
-        key="survey"
-        onHide={() => hidePromptCard('survey')}
-      />
     )
   },
   {
