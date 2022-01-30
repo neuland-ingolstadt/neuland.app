@@ -68,6 +68,7 @@ module.exports = {
             key: 'Content-Security-Policy',
             value: `default-src 'none';
               img-src 'self' data: https://*.tile.openstreetmap.org;
+              font-src 'self';
               connect-src 'self' wss://proxy.neuland.app;
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
