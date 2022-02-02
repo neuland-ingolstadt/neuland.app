@@ -23,6 +23,8 @@ method:   open
 format:   json
 ```
 
+Note the third value in the `data` list seems to be related to the account type. E.g. for an employee account it was `0`.
+
 ```json
 {
     "data": [
@@ -33,6 +35,24 @@ format:   json
     "date": "02.11.2020",
     "status": 0,
     "time": "20:28:40"
+}
+```
+
+### close
+
+```
+service: session
+method:  close
+format:  json
+session: <session token>
+```
+
+```json
+{
+    "data": "STATUS_OK",
+    "date": "02.02.2022",
+    "status": 0,
+    "time": "22:35:40"
 }
 ```
 
