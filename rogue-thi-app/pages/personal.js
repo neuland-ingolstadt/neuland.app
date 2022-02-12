@@ -66,7 +66,7 @@ export default function Personal () {
           {renderPersonalEntry('Prüfungsordnung', null, () => (
             <a
               /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
-              href={userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
+              href={userdata?.po_url && userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
               target="_blank"
               rel="noreferrer">
               {userdata.pvers}
@@ -78,7 +78,7 @@ export default function Personal () {
           {renderPersonalEntry('Vorname', 'vname')}
           {renderPersonalEntry('Nachname', 'name')}
           {renderPersonalEntry('Straße', 'str')}
-          {renderPersonalEntry('Ort', null, () => `${userdata.plz} ${userdata.ort}`)}
+          {renderPersonalEntry('Ort', null, () => userdata.plz && userdata.ort && `${userdata.plz} ${userdata.ort}`)}
         </ListGroup>
 
         <AppTabbar />
