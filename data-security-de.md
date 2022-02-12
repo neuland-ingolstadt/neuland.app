@@ -1,4 +1,4 @@
-# Rogue THI App Datensicherheit
+# Neuland App Datensicherheit
 TL;DR: Nur du und die THI Haben Zugriff auf dein Passwort sowie deine
 persönlichen Daten.
 
@@ -22,5 +22,5 @@ Proxy weitergegeben. So hat nur der THI Server und der Browser Zugriff auf
 Passwörter und Nutzerdaten.
 
 ### Ich vertraue euch trotzdem nicht!
-Gerne kannst du hier auf Github den Source Code der Rogue THI App lesen und
+Gerne kannst du hier auf Github den Source Code der Neuland App lesen und
 diese wenn du möchtest auch selbst auf deinem Server installieren.

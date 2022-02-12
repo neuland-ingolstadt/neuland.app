@@ -1,4 +1,4 @@
-# Rogue THI App Data Safety
+# Neuland App Data Safety
 TL;DR: Only you and the THI will have access to your password and other
 sensitive information.
 
@@ -23,3 +23,7 @@ server. Instead of using `fetch` and `XMLHttpRequests` we use `forge`, which is
 a full javascript implementation of TLS and HTTP. This way packets are
 encrypted in your browser and simply relayed by our server. Only the THI server
 and your browser have access to plain text packet contents.
+
+### What if i still do not trust you?
+You can read the source code of the neuland app here on github.
+If you want, you can even install it on your own server.
