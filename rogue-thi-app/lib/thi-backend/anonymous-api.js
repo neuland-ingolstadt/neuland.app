@@ -113,7 +113,10 @@ export class AnonymousAPIClient {
       throw new APIError(res.status, res.data)
     }
 
-    return res.data[0]
+    return {
+      session: res.data[0],
+      isStudent: res.data[2] === 3
+    }
   }
 
   async isAlive (session) {

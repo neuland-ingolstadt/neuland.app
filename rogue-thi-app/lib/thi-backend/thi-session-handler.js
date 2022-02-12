@@ -19,10 +19,11 @@ export async function createSession (router, username, password, stayLoggedIn) {
   // strip domain if user entered an email address
   username = username.replace(/@thi\.de$/, '')
 
-  const session = await API.login(username, password)
+  const { session, isStudent } = await API.login(username, password)
 
   localStorage.session = session
   localStorage.sessionCreated = Date.now()
+  localStorage.isStudent = isStudent
 
   const credStore = new CredentialStorage(CRED_NAME)
   if (stayLoggedIn) {
@@ -56,9 +57,12 @@ export async function callWithSession (method) {
   if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
-      session = await API.login(username, password)
+      const { session: newSession, isStudent } = await API.login(username, password)
+      session = newSession
+
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
+      localStorage.isStudent = isStudent
     } catch (e) {
       throw new NoSessionError()
     }
@@ -73,9 +77,12 @@ export async function callWithSession (method) {
       if (username && password) {
         console.log('seems to have received a session error trying to get a new session!')
         try {
-          session = await API.login(username, password)
+          const { session: newSession, isStudent } = await API.login(username, password)
+          session = newSession
+
           localStorage.session = session
           localStorage.sessionCreated = Date.now()
+          localStorage.isStudent = isStudent
         } catch (e) {
           throw new NoSessionError()
         }
@@ -114,10 +121,12 @@ export async function obtainSession (router) {
   if (!session && username && password) {
     try {
       console.log('Logging in again')
+      const { session: newSession, isStudent } = await API.login(username, password)
+      session = newSession
 
-      session = await API.login(username, password)
       localStorage.session = session
       localStorage.sessionCreated = Date.now()
+      localStorage.isStudent = isStudent
     } catch (e) {
       console.log('Failed to log in again')
 

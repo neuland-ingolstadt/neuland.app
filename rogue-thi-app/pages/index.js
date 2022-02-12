@@ -76,11 +76,13 @@ const ALL_THEMES = [
 
 const PLATFORM_DESKTOP = 'desktop'
 const PLATFORM_MOBILE = 'mobile'
+const USER_STUDENT = 'student'
+const USER_EMPLOYEE = 'employee'
 const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
     label: 'Installation',
-    default: [PLATFORM_MOBILE],
+    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: hidePromptCard => (
       <InstallPrompt
         key="install"
@@ -102,31 +104,31 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'timetable',
     label: 'Stundenplan',
-    default: [PLATFORM_DESKTOP],
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => <TimetableCard key="timetable" />
   },
   {
     key: 'mensa',
     label: 'Essen',
-    default: [PLATFORM_DESKTOP],
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => <FoodCard key="mensa" />
   },
   {
     key: 'mobility',
     label: 'Mobilität',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => <MobilityCard key="mobility" />
   },
   {
     key: 'calendar',
     label: 'Termine',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => <CalendarCard key="calendar" />
   },
   {
     key: 'rooms',
     label: 'Raumplan',
-    default: [PLATFORM_DESKTOP],
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
       <HomeCard
         key="rooms"
@@ -139,7 +141,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'library',
     label: 'Bibliothek',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
       <HomeCard
         key="library"
@@ -152,7 +154,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'grades',
     label: 'Noten & Fächer',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
       <HomeCard
         key="grades"
@@ -165,7 +167,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'personal',
     label: 'Persönliche Daten',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
       <HomeCard
         key="personal"
@@ -178,7 +180,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'lecturers',
     label: 'Dozenten',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
       <HomeCard
         key="lecturers"
@@ -492,8 +494,10 @@ export default function Home () {
         setHiddenDashboardEntries(hiddenEntries)
       } else {
         const platform = window.matchMedia('(max-width: 768px)').matches ? PLATFORM_MOBILE : PLATFORM_DESKTOP
-        setShownDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => x.default.includes(platform)))
-        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !x.default.includes(platform)))
+        const personGroup = localStorage.isStudent !== 'false' ? USER_STUDENT : USER_EMPLOYEE
+        const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
+        setShownDashboardEntries(ALL_DASHBOARD_CARDS.filter(filter))
+        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !filter(x)))
       }
 
       if (localStorage.unlockedThemes) {
