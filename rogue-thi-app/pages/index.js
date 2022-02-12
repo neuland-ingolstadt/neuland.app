@@ -261,7 +261,7 @@ function TimetableCard () {
         )}
         {timetable && timetable.length === 0 &&
           <ListGroup.Item>
-            Dein Stundenplan ist leer.
+            Du hast heute keine Vorlesungen mehr.
           </ListGroup.Item>
         }
         {timetableError &&
@@ -330,7 +330,7 @@ function FoodCard () {
           )}
           {foodEntries && foodEntries.length === 0 &&
             <ListGroup.Item>
-              Der Speiseplan ist leer.
+              Der heutige Speiseplan ist leer.
             </ListGroup.Item>
           }
           {foodError &&
