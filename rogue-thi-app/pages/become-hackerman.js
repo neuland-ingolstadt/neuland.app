@@ -36,21 +36,18 @@ export default function BecomeHackerman () {
     let hasError = false
     const hashes = await Promise.all(flags.map(sha256))
     flags.forEach((x, i) => {
-      if(hasError) {
+      if (hasError) {
         return
       }
 
       hasError = true
       if (x.trim() === '') {
         setFlagError(`Flag ${i} is empty`)
-      }
-      else if (x.indexOf(x, i + 1) !== -1) {
+      } else if (x.indexOf(x, i + 1) !== -1) {
         setFlagError('Cannot use the same flag more than once!')
-      }
-      else if (!FLAG_HASHES.includes(hashes[i])) {
+      } else if (!FLAG_HASHES.includes(hashes[i])) {
         setFlagError(`Flag ${i} seems to be invalid`)
-      }
-      else {
+      } else {
         hasError = false
       }
     })
