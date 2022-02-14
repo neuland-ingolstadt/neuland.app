@@ -10,7 +10,9 @@ import AppContainer from '../components/AppContainer'
 import AppNavbar from '../components/AppNavbar'
 import AppTabbar from '../components/AppTabbar'
 
-const FLAG_CHECK_URL = process.env.NEXT_PUBLIC_FLAG_CHECK_URL
+// somone could try bruteforcing these, but that way he wont learn how to hack ;)
+const FLAG_CSV = process.env.NEXT_PUBLIC_HACKERMAN_FLAGS || ''
+const FLAG_HASHES = FLAG_CSV.split(',')
 
 export default function BecomeHackerman () {
   const router = useRouter()
@@ -30,47 +32,36 @@ export default function BecomeHackerman () {
     const array = new Uint8Array(buff)
     return [...array].map(x => x.toString(16).padStart(2, '0')).join('')
   }
-  async function checkFlag (flag) {
-    const digest = await sha256(flag)
-    const url = `${FLAG_CHECK_URL}${digest}`
-
-    return await fetch(url)
-      .then(r => r.status === 200)
-      .catch(() => false)
-  }
   async function checkFlags () {
     let hasError = false
+    const hashes = await Promise.all(flags.map(sha256))
     flags.forEach((x, i) => {
-      if (!hasError && x.trim() === '') {
+      if(hasError) {
+        return
+      }
+
+      hasError = true
+      if (x.trim() === '') {
         setFlagError(`Flag ${i} is empty`)
-        hasError = true
       }
-    })
-    flags.forEach((x, i) => {
-      if (!hasError && flags.indexOf(x, i + 1) !== -1) {
+      else if (x.indexOf(x, i + 1) !== -1) {
         setFlagError('Cannot use the same flag more than once!')
-        hasError = true
+      }
+      else if (!FLAG_HASHES.includes(hashes[i])) {
+        setFlagError(`Flag ${i} seems to be invalid`)
+      }
+      else {
+        hasError = false
       }
     })
 
-    if (hasError) {
-      return
-    }
-
-    try {
-      for (let i = 0; i < flags.length; i++) {
-        if (!await checkFlag(flags[i])) {
-          throw new Error(`Flag ${i} seems to be invalid`)
-        }
-      }
-
+    if (!hasError) {
       const unlocked = localStorage.unlockedThemes ? JSON.parse(localStorage.unlockedThemes) : []
       unlocked.push('hacker')
       localStorage.unlockedThemes = JSON.stringify(unlocked)
 
+      setFlagError('Success!')
       router.push('/')
-    } catch (e) {
-      setFlagError(e.message)
     }
   }
 
