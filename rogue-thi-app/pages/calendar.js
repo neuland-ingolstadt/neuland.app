@@ -38,7 +38,7 @@ export const calendar = rawCalendar.map(x => ({
 
 export async function loadExamList () {
   const examList = await API.getExams()
-  return examList
+  let tempList = examList
     .map(x => {
       if (x.exm_date && x.exam_time) {
         const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
@@ -53,6 +53,17 @@ export async function loadExamList () {
 
       return x
     })
+
+  console.log(tempList)
+
+  tempList = tempList.filter((x) => x.modus !== '2')
+
+  console.log(tempList)
+  tempList.sort(function (a, b) {
+    return new Date(a.date) - new Date(b.date)
+  })
+
+  return tempList
 }
 
 export default function Calendar () {
