@@ -18,7 +18,9 @@ const EVENT_DETAILS_PREFIX = 'https://moodle.thi.de/mod/dataform/view.php'
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
 function parseLocalDateTime (str) {
-  const [, day, month, year, hour, minute] = str.match(/, (\d+). (\w+) (\d+), (\d+):(\d+)$/)
+  // use \p{Letter} because \w doesnt match umlauts
+  // https://stackoverflow.com/a/70273329
+  const [, day, month, year, hour, minute] = str.match(/, (\d+). (\p{Letter}+) (\d+), (\d+):(\d+)$/u)
   return new Date(
     year,
     MONTHS[month] - 1,
