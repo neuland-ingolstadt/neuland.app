@@ -54,15 +54,12 @@ export async function loadExamList () {
       return x
     })
 
-  console.log(tempList)
-
+  // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()
   tempList = tempList.filter((x) => x.modus !== '2')
-
-  console.log(tempList)
+  // sort list in chronologically order
   tempList.sort(function (a, b) {
     return new Date(a.date) - new Date(b.date)
   })
-
   return tempList
 }
 
