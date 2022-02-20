@@ -100,20 +100,19 @@ function formatFriendlyTimeDelta (delta) {
     numeric: 'auto',
     style: 'long'
   })
-  delta = Math.abs(delta)
 
   const weeks = delta / (7 * 24 * 60 * 60 * 1000) | 0
-  if (weeks > 2) {
+  if (Math.abs(weeks) > 0) {
     return rtl.format(weeks, 'week')
   }
 
   const days = delta / (24 * 60 * 60 * 1000) | 0
-  if (days > 0) {
+  if (Math.abs(days) > 0) {
     return rtl.format(days, 'day')
   }
 
   const hours = delta / (60 * 60 * 1000) | 0
-  if (hours > 0) {
+  if (Math.abs(hours) > 0) {
     return rtl.format(hours, 'hour')
   }
 
