@@ -38,7 +38,9 @@ export const calendar = rawCalendar.map(x => ({
 
 export async function loadExamList () {
   const examList = await API.getExams()
-  let tempList = examList
+  return examList
+    // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()
+    .filter((x) => x.modus !== '2')
     .map(x => {
       if (x.exm_date && x.exam_time) {
         const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
@@ -53,14 +55,8 @@ export async function loadExamList () {
 
       return x
     })
-
-  // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()
-  tempList = tempList.filter((x) => x.modus !== '2')
-  // sort list in chronologically order
-  tempList.sort(function (a, b) {
-    return new Date(a.date) - new Date(b.date)
-  })
-  return tempList
+    // sort list in chronologically order
+    .sort((a, b) => a.date - b.date)
 }
 
 export default function Calendar () {
