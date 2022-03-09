@@ -4,6 +4,7 @@
 
 import cheerio from 'cheerio'
 import fetchCookie from 'fetch-cookie/node-fetch'
+import fs from 'fs/promises'
 import nodeFetch from 'node-fetch'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
@@ -14,6 +15,7 @@ const CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
 const LOGIN_URL = 'https://moodle.thi.de/login/index.php'
 const EVENT_LIST_URL = 'https://moodle.thi.de/mod/dataform/view.php?id=162869'
 const EVENT_DETAILS_PREFIX = 'https://moodle.thi.de/mod/dataform/view.php'
+const EVENT_STORE = `${process.env.STORE}/cl-events.json`
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
@@ -28,6 +30,24 @@ function parseLocalDateTime (str) {
     hour,
     minute
   )
+}
+
+/**
+ * Load persisted events from disk
+ */
+async function loadEvents () {
+  try {
+    return JSON.parse(await fs.readFile(EVENT_STORE))
+  } catch (e) {
+    return []
+  }
+}
+
+/**
+ * Persist events to disk
+ */
+async function saveEvents (events) {
+  await fs.writeFile(EVENT_STORE, JSON.stringify(events))
 }
 
 /**
@@ -106,25 +126,31 @@ export async function getAllEventDetails (username, password) {
 
   await login(fetch, username, password)
 
-  const events = []
+  let events = await loadEvents()
   for (const url of await getEventList(fetch)) {
     const details = await getEventDetails(fetch, url)
 
-    const now = new Date()
-    const begin = details.Start ? parseLocalDateTime(details.Start) : null
-    const end = details.Ende ? parseLocalDateTime(details.Ende) : null
-
-    if (begin > now || end > now) {
-      // do not include location and description
-      // since it may contain sensitive information
-      events.push({
+    // do not include location and description
+    // since it may contain sensitive information
+    events = [
+      ...events.filter(event => event.url !== url),
+      {
+        url: url,
         organizer: details.Verein,
         title: details.Event,
-        begin,
-        end
-      })
-    }
+        begin: details.Start ? parseLocalDateTime(details.Start) : null,
+        end: details.Ende ? parseLocalDateTime(details.Ende) : null
+      }
+    ]
   }
+
+  const now = new Date()
+  events = events.filter(event => event.begin > now || event.end > now)
+
+  // we need to persist the events because they disappear on monday
+  // even if the event has not passed yet
+  await saveEvents(events)
+
   return events
 }
 
