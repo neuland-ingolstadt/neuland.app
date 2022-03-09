@@ -18,6 +18,10 @@ import styles from '../styles/RoomMap.module.css'
 const TUX_ROOMS = [
   'G308'
 ]
+const SPECIAL_ROOMS = {
+  C073: 'Kostenlose Menstruationsprodukte verfügbar',
+  D171: 'Kostenlose Menstruationsprodukte verfügbar'
+}
 const SEARCHED_PROPERTIES = [
   'Gebaeude',
   'Raum',
@@ -124,6 +128,15 @@ export default function RoomMap ({ highlight, roomData }) {
       return null
     }
 
+    const special = SPECIAL_ROOMS[entry.properties.Raum]
+
+    let color = '#6c757d'
+    if (avail) {
+      color = '#8845ef'
+    } else if (special) {
+      color = '#ff8800'
+    }
+
     return (
       <FeatureGroup key={key}>
         <Popup>
@@ -139,16 +152,16 @@ export default function RoomMap ({ highlight, roomData }) {
               <strong>Frei</strong>
               {' '}von {formatFriendlyTime(avail.from)}
               {' '}bis {formatFriendlyTime(avail.until)}
+              <br />
             </>
           )}
+          {special}
         </Popup>
         <Polygon
           positions={entry.coordinates}
           pathOptions={{
             ...entry.options,
-            color: avail
-              ? '#8845ef'
-              : '#6c757d'
+            color
           }}
         />
       </FeatureGroup>
