@@ -133,9 +133,9 @@ export async function getAllEventDetails (username, password) {
     // do not include location and description
     // since it may contain sensitive information
     events = [
-      ...events.filter(event => event.url !== url),
+      ...events.filter(event => event.origin_url !== url),
       {
-        url: url,
+        origin_url: url,
         organizer: details.Verein,
         title: details.Event,
         begin: details.Start ? parseLocalDateTime(details.Start) : null,
