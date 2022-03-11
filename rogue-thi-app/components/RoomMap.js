@@ -217,8 +217,9 @@ export default function RoomMap ({ highlight, roomData }) {
 
         <div className="leaflet-bottom leaflet-right">
           <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
-          <div className={styles.legendFree}> Freie Räume</div>
-          <div className={styles.legendTaken}> Belegte Räume</div>
+            <div className={styles.legendFree}> Frei</div>
+            <div className={styles.legendTaken}> Belegt</div>
+            <div className={styles.legendSpecial}> Sonderausstattung</div>
           </div>
         </div>
 

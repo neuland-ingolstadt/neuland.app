@@ -53,7 +53,7 @@
   color: var(--inverted-font-color, #ffffff);
 }
 
-.legendFree, .legendTaken {
+.legendFree, .legendTaken, .legendSpecial {
   margin: 0.2em;
 }
 
@@ -73,6 +73,15 @@
   height: 1em;
   border-radius: 0.5em;
   background-color: #6c757d;
+}
+
+.legendSpecial::before {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.5em;
+  background-color: #ff8800;
 }
 
 .linkToSearch {
