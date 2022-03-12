@@ -98,15 +98,15 @@ export class AnonymousAPIClient {
     }
   }
 
-  async login (username, password) {
+  async login (username, passwd) {
     this.cache.flushAll()
 
     const res = await this.request({
       service: 'session',
       method: 'open',
       format: 'json',
-      username: username,
-      passwd: password
+      username,
+      passwd
     })
 
     if (res.status !== 0) {

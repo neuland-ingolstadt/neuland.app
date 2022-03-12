@@ -3,7 +3,7 @@
  */
 
 import cheerio from 'cheerio'
-import fetchCookie from 'fetch-cookie/node-fetch'
+import fetchCookie from 'fetch-cookie'
 import fs from 'fs/promises'
 import nodeFetch from 'node-fetch'
 

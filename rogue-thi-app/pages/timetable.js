@@ -35,7 +35,7 @@ export function getTimetableEntryName (item) {
     const [shortName] = match
     return {
       name: item.fach,
-      shortName: shortName,
+      shortName,
       fullName: `${shortName} - ${item.fach}`
     }
   } else {
@@ -87,7 +87,7 @@ function groupTimetableEntries (timetable) {
 
   // get events for each date
   const groups = dates.map(date => ({
-    date: date,
+    date,
     items: timetable.filter(x => x.datum === date)
   }))
 
