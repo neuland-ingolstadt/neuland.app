@@ -15,69 +15,19 @@ import ReactPlaceholder from 'react-placeholder'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
 import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
-import { OS_IOS, useOperatingSystem } from '../lib/os-hook'
-import API from '../lib/thi-backend/authenticated-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
+import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Timetable.module.css'
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
-
-export function getTimetableEntryName (item) {
-  const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
-  if (match) {
-    const [shortName] = match
-    return {
-      name: item.fach,
-      shortName,
-      fullName: `${shortName} - ${item.fach}`
-    }
-  } else {
-    // fallback for weird entries like
-    //    "veranstaltung": "„Richtige Studienorganisation und Prüfungsplanung“_durchgeführt von CSS und SCS",
-    //    "fach": "fiktiv für Raumbelegung der Verwaltung E",
-    const name = `${item.veranstaltung} - ${item.fach}`
-    const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
-    return {
-      name,
-      shortName,
-      fullName: name
-    }
-  }
-}
-
-export async function getFriendlyTimetable (date, detailed) {
-  const { timetable } = await API.getTimetable(date, detailed)
-
-  return timetable
-    .map(x => {
-      // parse dates
-      x.startDate = new Date(`${x.datum}T${x.von}`)
-      x.endDate = new Date(`${x.datum}T${x.bis}`)
-
-      // normalize room order
-      if (x.raum) {
-        x.rooms = x.raum
-          .split(',')
-          .map(x => x.trim().toUpperCase())
-          .sort()
-        x.raum = x.rooms.join(', ')
-      } else {
-        x.rooms = []
-        x.raum = ''
-      }
-
-      return x
-    })
-    .filter(x => x.endDate > date)
-    .sort((a, b) => a.startDate - b.startDate)
-}
 
 function groupTimetableEntries (timetable) {
   // get all available dates and remove duplicates

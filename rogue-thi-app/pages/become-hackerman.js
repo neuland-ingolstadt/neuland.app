@@ -5,10 +5,10 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
 // somone could try bruteforcing these, but that way he wont learn how to hack ;)
 const FLAG_CSV = process.env.NEXT_PUBLIC_HACKERMAN_FLAGS || ''

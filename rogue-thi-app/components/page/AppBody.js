@@ -2,16 +2,16 @@ import Container from 'react-bootstrap/Container'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import styles from '../styles/AppContainer.module.css'
+import styles from '../../styles/AppBody.module.css'
 
-export default function AppContainer ({ className, children }) {
+export default function AppBody ({ className, children }) {
   return (
     <Container className={[className, styles.container]}>
       {children}
     </Container>
   )
 }
-AppContainer.propTypes = {
+AppBody.propTypes = {
   className: PropTypes.string,
   children: PropTypes.any
 }

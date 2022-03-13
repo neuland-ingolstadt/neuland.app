@@ -10,16 +10,13 @@ import ReactPlaceholder from 'react-placeholder'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
-import {
-  formatISODate,
-  formatNearDate
-} from '../lib/date-utils'
-import NeulandAPI from '../lib/neuland-api'
+import { formatNearDate } from '../lib/date-utils'
+import { loadFoodEntries } from '../lib/backend-utils/food-utils'
 
 import styles from '../styles/Mensa.module.css'
 
@@ -34,39 +31,6 @@ const FALLBACK_ALLERGEN = 'Unbekannt (Das ist schlecht.)'
 Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
-
-export async function loadFoodEntries (restaurants) {
-  const entries = []
-  if (restaurants.includes('mensa')) {
-    const data = await NeulandAPI.getMensaPlan()
-    data.forEach(day => day.meals.forEach(entry => {
-      entry.restaurant = 'Mensa'
-    }))
-    entries.push(data)
-  }
-  if (restaurants.includes('reimanns')) {
-    const data = await NeulandAPI.getReimannsPlan()
-
-    const startOfToday = new Date(formatISODate(new Date())).getTime()
-    const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
-
-    filteredData.forEach(day => day.meals.forEach(entry => {
-      entry.restaurant = 'Reimanns'
-    }))
-    entries.push(filteredData)
-  }
-
-  const days = entries.flatMap(r => r.map(x => x.timestamp))
-  const uniqueDays = [...new Set(days)]
-
-  return uniqueDays.map(day => {
-    const dayEntries = entries.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
-    return {
-      timestamp: day,
-      meals: dayEntries
-    }
-  })
-}
 
 export default function Mensa () {
   const [foodEntries, setFoodEntries] = useState(null)

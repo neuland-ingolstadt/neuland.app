@@ -11,9 +11,9 @@ import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRouter } from 'next/router'
 
-import { useMediaQuery } from '../lib/media-query-hook'
+import { useMediaQuery } from '../../lib/hooks/media-query-hook'
 
-import styles from '../styles/AppNavbar.module.css'
+import styles from '../../styles/AppNavbar.module.css'
 
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()

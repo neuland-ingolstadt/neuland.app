@@ -5,17 +5,17 @@ import { useRouter } from 'next/router'
 import Dropdown from 'react-bootstrap/Dropdown'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
-import API from '../lib/thi-backend/authenticated-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
-
-import courseSPOs from '../data/spo-grade-weights.json'
+import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Grades.module.css'
+
+const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
 
 export default function Grades () {
   const router = useRouter()
@@ -23,87 +23,13 @@ export default function Grades () {
   const [missingGrades, setMissingGrades] = useState(null)
   const [gradeAverage, setGradeAverage] = useState(null)
 
-  const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
-
-  function simplifyName (x) {
-    return x.replace(/\W/g, '').toLowerCase()
-  }
-
   useEffect(() => {
     async function load () {
       try {
-        // load and enhance grade list
-        const gradeList = await API.getGrades()
-        gradeList.forEach(x => {
-          if (x.anrech === '*' && x.note === '') {
-            x.note = 'E*'
-          }
-          if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
-            x.note = 'E'
-          }
-        })
-        const deduplicatedGrades = gradeList
-          .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
-
-        const finishedGrades = deduplicatedGrades.filter(x => x.note)
-        setGrades(finishedGrades)
-        setMissingGrades(
-          deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
-        )
-
-        // calculate grade average
-        const spoName = await API.getSpoName()
-        if (!spoName || !courseSPOs[spoName]) {
-          return
-        }
-
-        const average = {
-          result: -1,
-          missingWeight: 0,
-          entries: []
-        }
-
-        gradeList.forEach(x => {
-          const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
-          if (grade && spoName && courseSPOs[spoName]) {
-            const spo = courseSPOs[spoName]
-            const name = simplifyName(x.titel)
-            const entry = spo.find(y => simplifyName(y.name) === name)
-            const other = average.entries.find(y => y.simpleName === name)
-
-            if (other) {
-              other.grade = other.grade || grade
-            } else if (entry) {
-              average.entries.push({
-                simpleName: name,
-                name: entry.name,
-                weight: typeof entry.weight === 'number' ? entry.weight : null,
-                grade
-              })
-
-              if (typeof entry.weight !== 'number') {
-                average.missingWeight++
-              }
-            } else {
-              average.entries.push({
-                simpleName: name,
-                name: x.titel,
-                weight: null,
-                grade
-              })
-              average.missingWeight++
-            }
-          }
-        })
-
-        average.entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
-        const result = average.entries
-          .reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
-        const weight = average.entries
-          .filter(curr => curr.grade)
-          .reduce((acc, curr) => acc + (curr.weight || 1), 0)
-        average.result = Math.floor((result / weight) * 10) / 10
-
+        const { finished, missing } = await loadGrades()
+        setGrades(finished)
+        setMissingGrades(missing)
+        const average = await loadGradeAverage()
         setGradeAverage(average)
       } catch (e) {
         if (e instanceof NoSessionError) {

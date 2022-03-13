@@ -8,10 +8,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDiscord } from '@fortawesome/free-brands-svg-icons'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 
-import API from '../lib/thi-backend/authenticated-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../../lib/backend/authenticated-api'
+import { NoSessionError } from '../../lib/backend/thi-session-handler'
 
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 
 const discordUrls = JSON.parse(process.env.NEXT_PUBLIC_DISCORD_URLS || '{}')
 

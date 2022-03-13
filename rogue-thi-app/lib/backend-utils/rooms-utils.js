@@ -1,6 +1,9 @@
-import courseShortNames from '../../data/course-short-names.json'
+import API from '../backend/authenticated-api'
 
 const IGNORE_GAPS = 15
+
+export const BUILDINGS_ALL = 'Alle'
+export const DURATION_PRESET = '01:00'
 
 function addMinutes (date, minutes) {
   return new Date(
@@ -20,26 +23,6 @@ function minDate (a, b) {
 
 function maxDate (a, b) {
   return a > b ? a : b
-}
-
-function parseGermanDate (str) {
-  const match = str.match(/^\w+ (\d{2}).(\d{2}).(\d{4})$/)
-  const [, day, month, year] = match
-  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
-}
-
-/**
- * Converts an original THI mensa plan to the format used by /api/mensa
- */
-export function convertThiMensaPlan (plan) {
-  return plan.map(x => ({
-    timestamp: parseGermanDate(x.tag).toISOString(),
-    meals: Object.values(x.gerichte).map(meal => ({
-      name: meal.name[1],
-      prices: meal.name.slice(2, 5).map(x => parseFloat(x.replace(',', '.'))),
-      allergenes: meal.zusatz.split(',')
-    }))
-  }))
 }
 
 /**
@@ -93,23 +76,49 @@ export function getRoomOpenings (rooms, date) {
   return openings
 }
 
-export function extractFacultyFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.stg) {
-    return null
+export function getNextValidDate () {
+  const startDate = new Date()
+  if (startDate.getHours() > 17 || (startDate.getHours() === 17 && startDate.getMinutes() >= 20)) {
+    startDate.setDate(startDate.getDate() + 1)
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  } else if (startDate.getHours() < 8 || (startDate.getHours() === 8 && startDate.getMinutes() < 15)) {
+    startDate.setHours(8)
+    startDate.setMinutes(15)
   }
 
-  const shortName = data.persdata.stg
-  const faculty = Object.keys(courseShortNames)
-    .find(faculty => courseShortNames[faculty].includes(shortName))
-
-  return faculty
+  return startDate
 }
 
-export function extractSpoFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.po_url) {
-    return null
-  }
+export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
+  const beginDate = new Date(date + 'T' + time)
 
-  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
-  return split[split.length - 1]
+  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
+  const endDate = new Date(
+    beginDate.getFullYear(),
+    beginDate.getMonth(),
+    beginDate.getDate(),
+    beginDate.getHours() + durationHours,
+    beginDate.getMinutes() + durationMinutes,
+    beginDate.getSeconds(),
+    beginDate.getMilliseconds()
+  )
+
+  const data = await API.getFreeRooms(beginDate)
+  const openings = getRoomOpenings(data.rooms, date)
+  return Object.keys(openings)
+    .flatMap(room =>
+      openings[room].map(opening => ({
+        room,
+        type: opening.type,
+        from: opening.from,
+        until: opening.until
+      }))
+    )
+    .filter(opening =>
+      (building === BUILDINGS_ALL || opening.room.toLowerCase().startsWith(building.toLowerCase())) &&
+      beginDate >= opening.from &&
+      endDate <= opening.until
+    )
+    .sort((a, b) => a.room.localeCompare(b.room))
 }

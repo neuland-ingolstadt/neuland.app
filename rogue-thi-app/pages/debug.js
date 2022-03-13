@@ -8,13 +8,13 @@ import Link from 'next/link'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Row from 'react-bootstrap/Row'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
-import API from '../lib/thi-backend/anonymous-api'
-import { obtainSession } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/backend/anonymous-api'
+import { obtainSession } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Common.module.css'
 
@@ -94,7 +94,7 @@ export default function Debug () {
       <AppBody>
         <h3 className={styles.heading}>Documentation</h3>
         You can find an inofficial API documentation{' '}
-        <Link href={`${GIT_URL}/blob/master/thi-rest-api.md`}>
+        <Link href={`${GIT_URL}/blob/master/docs/thi-rest-api.md`}>
           here on Github
         </Link>
         <br />

@@ -6,11 +6,11 @@ import Card from 'react-bootstrap/Card'
 import { faPoll, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 
 const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
 
-export default function SurveyCard ({ onHide }) {
+export default function SurveyPrompt ({ onHide }) {
   return (
     <Card className={styles.card}>
       <Card.Body>

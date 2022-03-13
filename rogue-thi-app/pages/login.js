@@ -5,10 +5,10 @@ import Alert from 'react-bootstrap/Alert'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import { createSession } from '../lib/thi-backend/thi-session-handler'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import { createSession } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Login.module.css'
 
@@ -113,7 +113,7 @@ export default function Login () {
               Nur die THI hat Zugriff auf deine Zugangsdaten und deine persönlichen Daten.
             </p>
             <p>
-              <a href={`${GIT_URL}/blob/master/data-security-de.md`}>Hier findest du weitere Informationen zur Sicherheit.</a>
+              <a href={`${GIT_URL}/blob/master/docs/data-security-de.md`}>Hier findest du weitere Informationen zur Sicherheit.</a>
             </p>
             <p>
               <a href={GIT_URL} target="_blank" rel="noreferrer">Quellcode auf GitHub</a>

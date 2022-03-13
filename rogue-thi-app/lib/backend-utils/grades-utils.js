@@ -1,0 +1,91 @@
+import API from '../backend/authenticated-api'
+import courseSPOs from '../../data/spo-grade-weights.json'
+
+function simplifyName (x) {
+  return x.replace(/\W/g, '').toLowerCase()
+}
+
+async function getGradeList () {
+  const gradeList = await API.getGrades()
+  gradeList.forEach(x => {
+    if (x.anrech === '*' && x.note === '') {
+      x.note = 'E*'
+    }
+    if (x.note === '' && gradeList.some(y => x.pon === y.pon && y.note !== '')) {
+      x.note = 'E'
+    }
+  })
+  return gradeList
+}
+
+export async function loadGrades () {
+  const gradeList = await getGradeList()
+
+  const deduplicatedGrades = gradeList
+    .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+
+  const finishedGrades = deduplicatedGrades.filter(x => x.note)
+  const missingGrades = deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+
+  return {
+    finished: finishedGrades,
+    missing: missingGrades
+  }
+}
+
+export async function loadGradeAverage () {
+  const gradeList = await getGradeList()
+  const spoName = await API.getSpoName()
+  if (!spoName || !courseSPOs[spoName]) {
+    return
+  }
+
+  const average = {
+    result: -1,
+    missingWeight: 0,
+    entries: []
+  }
+
+  gradeList.forEach(x => {
+    const grade = x.note ? parseFloat(x.note.replace(',', '.')) : null
+    if (grade && spoName && courseSPOs[spoName]) {
+      const spo = courseSPOs[spoName]
+      const name = simplifyName(x.titel)
+      const entry = spo.find(y => simplifyName(y.name) === name)
+      const other = average.entries.find(y => y.simpleName === name)
+
+      if (other) {
+        other.grade = other.grade || grade
+      } else if (entry) {
+        average.entries.push({
+          simpleName: name,
+          name: entry.name,
+          weight: typeof entry.weight === 'number' ? entry.weight : null,
+          grade
+        })
+
+        if (typeof entry.weight !== 'number') {
+          average.missingWeight++
+        }
+      } else {
+        average.entries.push({
+          simpleName: name,
+          name: x.titel,
+          weight: null,
+          grade
+        })
+        average.missingWeight++
+      }
+    }
+  })
+
+  average.entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
+  const result = average.entries
+    .reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
+  const weight = average.entries
+    .filter(curr => curr.grade)
+    .reduce((acc, curr) => acc + (curr.weight || 1), 0)
+  average.result = Math.floor((result / weight) * 10) / 10
+
+  return average
+}

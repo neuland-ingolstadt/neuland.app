@@ -1,69 +1,46 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 
 import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
-import ReactPlaceholder from 'react-placeholder'
 
 import {
   faBook,
-  faBus,
-  faCalendarAlt,
-  faCalendarMinus,
-  faCar,
-  faChargingStation,
   faChevronDown,
-  faChevronRight,
   faChevronUp,
   faDoorOpen,
   faPen,
   faScroll,
-  faTrain,
   faTrash,
   faTrashRestore,
   faUser,
-  faUserGraduate,
-  faUtensils
+  faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
-import DiscordPrompt from '../components/DiscordPrompt'
-import InstallPrompt from '../components/InstallPrompt'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 import { ThemeContext } from './_app'
 
-import { NoSessionError, forgetSession } from '../lib/thi-backend/thi-session-handler'
-import { calendar, loadExamList } from './calendar'
-import {
-  formatFriendlyRelativeTime,
-  formatFriendlyTime,
-  formatISODate,
-  formatNearDate
-} from '../lib/date-utils'
-import { getFriendlyTimetable, getTimetableEntryName } from './timetable'
-import { getMobilityEntries, getMobilityLabel, getMobilitySettings, renderMobilityEntry } from './mobility'
-import { loadFoodEntries } from './food'
-import { useTime } from '../lib/time-hook'
+import { forgetSession } from '../lib/backend/thi-session-handler'
+
+import BaseCard from '../components/cards/BaseCard'
+import CalendarCard from '../components/cards/CalendarCard'
+import DiscordPrompt from '../components/cards/DiscordPrompt'
+import FoodCard from '../components/cards/FoodCard'
+import InstallPrompt from '../components/cards/InstallPrompt'
+import MobilityCard from '../components/cards/MobilityCard'
+import TimetableCard from '../components/cards/TimetableCard'
 
 import styles from '../styles/Home.module.css'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
-const MAX_STATION_LENGTH = 20
-const MOBILITY_ICONS = {
-  bus: faBus,
-  train: faTrain,
-  parking: faCar,
-  charging: faChargingStation
-}
 const ALL_THEMES = [
   { name: 'Automatisch', style: 'default' },
   { name: 'Hell', style: 'light' },
@@ -130,7 +107,7 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Raumplan',
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
-      <HomeCard
+      <BaseCard
         key="rooms"
         icon={faDoorOpen}
         title="Räume"
@@ -143,7 +120,7 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Bibliothek',
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
-      <HomeCard
+      <BaseCard
         key="library"
         icon={faBook}
         title="Bibliothek"
@@ -156,7 +133,7 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Noten & Fächer',
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
-      <HomeCard
+      <BaseCard
         key="grades"
         icon={faScroll}
         title="Noten & Fächer"
@@ -169,7 +146,7 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Persönliche Daten',
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
-      <HomeCard
+      <BaseCard
         key="personal"
         icon={faUser}
         title="Persönliche Daten"
@@ -182,7 +159,7 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Dozenten',
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
-      <HomeCard
+      <BaseCard
         key="lecturers"
         icon={faUserGraduate}
         title="Dozenten"
@@ -191,276 +168,6 @@ const ALL_DASHBOARD_CARDS = [
     )
   }
 ]
-
-function HomeCard ({ link, icon, title, className, children }) {
-  return (
-    // eslint-disable-next-line @next/next/link-passhref
-    <Link href={link}>
-      <Card className={[styles.card, className]}>
-        <Card.Body>
-          <Card.Title>
-            <FontAwesomeIcon icon={icon} fixedWidth />
-            {' '}
-            {title}
-            <Button variant="link" className={styles.cardButton}>
-              <FontAwesomeIcon icon={faChevronRight} />
-            </Button>
-          </Card.Title>
-          {children}
-        </Card.Body>
-      </Card>
-    </Link>
-  )
-}
-HomeCard.propTypes = {
-  link: PropTypes.string,
-  icon: PropTypes.object,
-  title: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.any
-}
-
-function TimetableCard () {
-  const router = useRouter()
-  const [timetable, setTimetable] = useState(null)
-  const [timetableError, setTimetableError] = useState(null)
-
-  useEffect(() => {
-    async function load () {
-      try {
-        setTimetable(await getFriendlyTimetable(new Date(), false))
-      } catch (e) {
-        if (e instanceof NoSessionError) {
-          router.replace('/login')
-        } else {
-          console.error(e)
-          setTimetableError(e)
-        }
-      }
-    }
-    load()
-  }, [router])
-
-  return (
-    <HomeCard
-      icon={faCalendarMinus}
-      title="Stundenplan"
-      link="/timetable"
-    >
-      <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
-        <ListGroup variant="flush">
-        {timetable && timetable.slice(0, 2).map((x, i) =>
-          <ListGroup.Item key={i}>
-            <div>
-              {getTimetableEntryName(x).shortName} in {x.raum}
-            </div>
-            <div className="text-muted">
-              {formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}
-            </div>
-          </ListGroup.Item>
-        )}
-        {timetable && timetable.length === 0 &&
-          <ListGroup.Item>
-            Du hast heute keine Vorlesungen mehr.
-          </ListGroup.Item>
-        }
-        {timetableError &&
-          <ListGroup.Item>
-            Fehler beim Abruf des Stundenplans.
-          </ListGroup.Item>
-        }
-        </ListGroup>
-      </ReactPlaceholder>
-    </HomeCard>
-  )
-}
-
-function FoodCard () {
-  const [foodEntries, setFoodEntries] = useState(null)
-  const [foodCardTitle, setFoodCardTitle] = useState('Essen')
-  const [foodError, setFoodError] = useState(null)
-
-  useEffect(() => {
-    async function load () {
-      const restaurants = localStorage.selectedRestaurants
-        ? JSON.parse(localStorage.selectedRestaurants)
-        : ['mensa']
-      if (restaurants.length === 1 && restaurants[0] === 'mensa') {
-        setFoodCardTitle('Mensa')
-      } else if (restaurants.length === 1 && restaurants[0] === 'reimanns') {
-        setFoodCardTitle('Reimanns')
-      } else {
-        setFoodCardTitle('Essen')
-      }
-
-      const today = formatISODate(new Date())
-      try {
-        const entries = await loadFoodEntries(restaurants)
-        const todayEntries = entries.find(x => x.timestamp === today)?.meals
-        if (!todayEntries) {
-          setFoodEntries([])
-        } else if (todayEntries.length > 2) {
-          setFoodEntries([
-            todayEntries[0].name,
-            `und ${todayEntries.length - 1} weitere Gerichte`
-          ])
-        } else {
-          setFoodEntries(todayEntries.map(x => x.name))
-        }
-      } catch (e) {
-        console.error(e)
-        setFoodError(e)
-      }
-    }
-    load()
-  }, [])
-
-  return (
-    <HomeCard
-      icon={faUtensils}
-      title={foodCardTitle}
-      link="/food"
-    >
-      <ReactPlaceholder type="text" rows={5} ready={foodEntries || foodError}>
-        <ListGroup variant="flush">
-          {foodEntries && foodEntries.map((x, i) =>
-            <ListGroup.Item key={i}>
-              {x}
-            </ListGroup.Item>
-          )}
-          {foodEntries && foodEntries.length === 0 &&
-            <ListGroup.Item>
-              Der heutige Speiseplan ist leer.
-            </ListGroup.Item>
-          }
-          {foodError &&
-            <ListGroup.Item>
-              Fehler beim Abruf des Speiseplans.<br />
-              Irgendetwas scheint kaputt zu sein. :(
-            </ListGroup.Item>
-          }
-        </ListGroup>
-      </ReactPlaceholder>
-    </HomeCard>
-
-  )
-}
-
-function MobilityCard () {
-  const time = useTime()
-  const [mobility, setMobility] = useState(null)
-  const [mobilityError, setMobilityError] = useState(null)
-  const [mobilitySettings, setMobilitySettings] = useState(null)
-
-  const mobilityIcon = useMemo(() => {
-    return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
-  }, [mobilitySettings])
-  const mobilityLabel = useMemo(() => {
-    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station) : 'Mobilität'
-  }, [mobilitySettings])
-
-  useEffect(() => {
-    setMobilitySettings(getMobilitySettings())
-  }, [])
-
-  useEffect(() => {
-    async function load () {
-      if (!mobilitySettings) {
-        return
-      }
-
-      try {
-        setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
-      } catch (e) {
-        console.error(e)
-        setMobilityError('Fehler beim Abruf.')
-      }
-    }
-    load()
-  }, [mobilitySettings, time])
-
-  return (
-    <HomeCard
-      icon={mobilityIcon}
-      title={mobilityLabel}
-      link="/mobility"
-    >
-      <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
-        <ListGroup variant="flush">
-          {mobility && mobility.slice(0, 4).map((entry, i) =>
-            <ListGroup.Item key={i} className={styles.mobilityItem}>
-              {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
-            </ListGroup.Item>
-          )}
-          {mobility && mobility.length === 0 &&
-            <ListGroup.Item>
-              Keine Elemente.
-            </ListGroup.Item>
-          }
-          {mobilityError &&
-            <ListGroup.Item>
-              Fehler beim Abruf.
-            </ListGroup.Item>
-          }
-        </ListGroup>
-      </ReactPlaceholder>
-    </HomeCard>
-  )
-}
-
-function CalendarCard () {
-  const router = useRouter()
-  const time = useTime()
-  const [mixedCalendar, setMixedCalendar] = useState(calendar)
-
-  useEffect(() => {
-    async function load () {
-      let exams = []
-      try {
-        exams = (await loadExamList())
-          .filter(x => !!x.date) // remove exams without a date
-          .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
-      } catch (e) {
-        if (e instanceof NoSessionError) {
-          router.replace('/login')
-        } else if (e.message === 'Query not possible') {
-          // ignore, leaving examList empty
-        } else {
-          console.error(e)
-        }
-      }
-
-      const combined = [...calendar, ...exams]
-        .sort((a, b) => a.begin - b.begin)
-        .filter(x => x.begin > Date.now() || x.end > Date.now())
-      setMixedCalendar(combined)
-    }
-    load()
-  }, [router])
-
-  return (
-    <HomeCard
-      icon={faCalendarAlt}
-      title="Termine"
-      link="/calendar"
-    >
-      <ListGroup variant="flush">
-        {mixedCalendar && mixedCalendar.slice(0, 2).map((x, i) => (
-          <ListGroup.Item key={i}>
-            <div>
-              {x.name}
-            </div>
-            <div className="text-muted">
-              {(x.end && x.begin < time)
-                ? 'endet ' + formatFriendlyRelativeTime(x.end)
-                : 'beginnt ' + formatFriendlyRelativeTime(x.begin)}
-            </div>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-    </HomeCard>
-  )
-}
 
 export default function Home () {
   const router = useRouter()

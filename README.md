@@ -15,13 +15,13 @@ It connects to the official backend via a WebSocket-to-TCP proxy. The HTTPS
 stack is implemented in JavaScript and runs in the browser, so that the proxy
 never comes in contact with unencrypted user data.
 
-You can find more information on this in [this document](data-security.md).
+You can find more information on this in [this document](docs/data-security.md).
 
 ### API Documentation
 
 Currently the documentation consists of a list of valid requests and examples
 of their responses.
-You can view [the full list here](thi-rest-api.md). This documentation was
+You can view [the full list here](docs/thi-rest-api.md). This documentation was
 created manually by using the official app and logging requests with mitmproxy.
 The app also includes a [debugging tool](https://neuland.app/debug) which handles session generation
 and API communication.

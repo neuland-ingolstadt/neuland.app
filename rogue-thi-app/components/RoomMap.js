@@ -9,9 +9,9 @@ import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContain
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
-import { filterRooms, getNextValidDate } from '../pages/rooms/search'
+import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/RoomMap.module.css'
 

@@ -10,54 +10,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
-import { formatFriendlyDateRange, formatFriendlyDateTime, formatFriendlyDateTimeRange, formatFriendlyRelativeTime } from '../lib/date-utils'
-import API from '../lib/thi-backend/authenticated-api'
-import NeulandAPI from '../lib/neuland-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
-import { parse as parsePostgresArray } from 'postgres-array'
-import { useTime } from '../lib/time-hook'
-
-import rawCalendar from '../data/calendar.json'
+import { calendar, loadExamList } from '../lib/backend-utils/calendar-utils'
+import {
+  formatFriendlyDateRange,
+  formatFriendlyDateTime,
+  formatFriendlyDateTimeRange,
+  formatFriendlyRelativeTime
+} from '../lib/date-utils'
+import NeulandAPI from '../lib/backend/neuland-api'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
-
-const compileTime = new Date()
-export const calendar = rawCalendar.map(x => ({
-  ...x,
-  begin: new Date(x.begin),
-  end: x.end && new Date(x.end)
-}))
-  .filter(x => (x.end && x.end > compileTime) || x.begin > compileTime)
-  .sort((a, b) => a.end - b.end)
-  .sort((a, b) => a.begin - b.begin)
-
-export async function loadExamList () {
-  const examList = await API.getExams()
-  return examList
-    // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()
-    .filter((x) => x.modus !== '2')
-    .map(x => {
-      if (x.exm_date && x.exam_time) {
-        const [, day, month, year] = x.exm_date.match(/(\d{1,})\.(\d{1,})\.(\d{4})/)
-        x.date = new Date(`${year}-${month}-${day}T${x.exam_time}`)
-      } else {
-        x.date = null
-      }
-
-      x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
-      x.allowed_helpers = parsePostgresArray(x.hilfsmittel)
-        .filter((v, i, a) => a.indexOf(v) === i)
-
-      return x
-    })
-    // sort list in chronologically order
-    .sort((a, b) => a.date - b.date)
-}
 
 export default function Calendar () {
   const router = useRouter()

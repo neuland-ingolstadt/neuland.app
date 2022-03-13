@@ -1,4 +1,4 @@
-import obtainFetchImplementation from './fetch-implementations'
+import obtainFetchImplementation from '../fetch-implementations'
 
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'direct'
 const ENDPOINT_HOST = process.env.NEXT_PUBLIC_NEULAND_API_HOST || ''

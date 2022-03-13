@@ -1,10 +1,7 @@
 import { APIError, AnonymousAPIClient } from './anonymous-api'
-import {
-  convertThiMensaPlan,
-  extractFacultyFromPersonalData,
-  extractSpoFromPersonalData
-} from './thi-api-conversion'
 import { callWithSession } from './thi-session-handler'
+
+import courseShortNames from '../../data/course-short-names.json'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
@@ -15,6 +12,27 @@ const KEY_GET_FREE_ROOMS = 'getFreeRooms'
 const KEY_GET_PARKING_DATA = 'getCampusParkingData'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
 const KEY_GET_LECTURERS = 'getLecturers'
+
+function extractFacultyFromPersonalData (data) {
+  if (!data || !data.persdata || !data.persdata.stg) {
+    return null
+  }
+
+  const shortName = data.persdata.stg
+  const faculty = Object.keys(courseShortNames)
+    .find(faculty => courseShortNames[faculty].includes(shortName))
+
+  return faculty
+}
+
+function extractSpoFromPersonalData (data) {
+  if (!data || !data.persdata || !data.persdata.po_url) {
+    return null
+  }
+
+  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
+  return split[split.length - 1]
+}
 
 export class AuthenticatedAPIClient extends AnonymousAPIClient {
   constructor () {
@@ -142,7 +160,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return convertThiMensaPlan(res.data)
+    return res.data
   }
 
   async getFreeRooms (date) {

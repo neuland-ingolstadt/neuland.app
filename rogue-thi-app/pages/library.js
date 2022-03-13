@@ -10,14 +10,14 @@ import ReactPlaceholder from 'react-placeholder'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
 import { formatFriendlyTime, formatNearDate } from '../lib/date-utils'
-import API from '../lib/thi-backend/authenticated-api'
-import { NoSessionError } from '../lib/thi-backend/thi-session-handler'
+import API from '../lib/backend/authenticated-api'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Library.module.css'
 

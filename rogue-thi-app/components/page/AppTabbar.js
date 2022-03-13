@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import styles from '../styles/AppTabbar.module.css'
+import styles from '../../styles/AppTabbar.module.css'
 
 export default function AppTabbar () {
   const router = useRouter()

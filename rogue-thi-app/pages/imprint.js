@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import DOMPurify from 'dompurify'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-import AppBody from '../components/AppBody'
-import AppContainer from '../components/AppContainer'
-import AppNavbar from '../components/AppNavbar'
-import AppTabbar from '../components/AppTabbar'
+import AppBody from '../components/page/AppBody'
+import AppContainer from '../components/page/AppContainer'
+import AppNavbar from '../components/page/AppNavbar'
+import AppTabbar from '../components/page/AppTabbar'
 
-import API from '../lib/thi-backend/authenticated-api'
+import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Imprint.module.css'
 

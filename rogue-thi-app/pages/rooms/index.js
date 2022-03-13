@@ -4,17 +4,17 @@ import https from 'https'
 import PropTypes from 'prop-types'
 import React from 'react'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 
 import Dropdown from 'react-bootstrap/Dropdown'
 
-import AppBody from '../../components/AppBody'
-import AppContainer from '../../components/AppContainer'
-import AppNavbar from '../../components/AppNavbar'
-import AppTabbar from '../../components/AppTabbar'
+import AppBody from '../../components/page/AppBody'
+import AppContainer from '../../components/page/AppContainer'
+import AppNavbar from '../../components/page/AppNavbar'
+import AppTabbar from '../../components/page/AppTabbar'
 
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
-import { useRouter } from 'next/router'
 
 const MAP_CA = 'data/map-thi-de-chain.pem'
 const ROOMDATA_URL = 'https://map.thi.de/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&outputFormat=application%2Fjson&typeName=mythi%3ATHI_Raeume'
