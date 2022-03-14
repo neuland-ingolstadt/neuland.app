@@ -73,6 +73,7 @@ module.exports = {
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';
+              prefetch-src 'self';
               `.replace(/\s+/g, ' ')
           }
         ]
