@@ -76,22 +76,33 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
   }
 
   async getTimetable (date, detailed = false) {
-    const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${detailed}`
-    const res = await this.requestCached(key, {
-      service: 'thiapp',
-      method: 'stpl',
-      format: 'json',
-      day: date.getDate(),
-      month: date.getMonth() + 1,
-      year: 1900 + date.getYear(),
-      details: detailed ? 1 : 0
-    })
+    try {
+      const key = `${KEY_GET_TIMETABLE}-${date.toDateString()}-${detailed}`
+      const res = await this.requestCached(key, {
+        service: 'thiapp',
+        method: 'stpl',
+        format: 'json',
+        day: date.getDate(),
+        month: date.getMonth() + 1,
+        year: 1900 + date.getYear(),
+        details: detailed ? 1 : 0
+      })
 
-    return {
-      semester: res.data[1],
-      holidays: res.data[2],
-      events: res.data[2],
-      timetable: res.data[3]
+      return {
+        semester: res.data[1],
+        holidays: res.data[2],
+        events: res.data[2],
+        timetable: res.data[3]
+      }
+    } catch (e) {
+      // when the user did not select any classes, the timetable returns 'Query not possible'
+      if (e.data === 'Query not possible') {
+        return {
+          timetable: []
+        }
+      } else {
+        throw e
+      }
     }
   }
 
