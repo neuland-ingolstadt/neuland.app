@@ -29,7 +29,6 @@ import flagMap from '../data/mensa-flags.json'
 const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
 const FALLBACK_ALLERGEN = 'Unbekannt (Das ist schlecht.)'
-const MENSA_CHECKIN_LINK = process.env.NEXT_PUBLIC_MENSA_CHECKIN_LINK
 
 // delete comments
 Object.keys(allergenMap)
@@ -142,17 +141,6 @@ export default function Mensa () {
             <ListGroup key={idx}>
               <h4 className={styles.dateBoundary}>
                 {formatNearDate(day.timestamp)}
-                {day.timestamp === formatISODate(new Date()) && selectedRestaurants.includes('mensa') &&
-                  <Button
-                    href={MENSA_CHECKIN_LINK}
-                    target="_blank"
-                    rel="noreferrer"
-                    variant="outline-secondary"
-                    className={styles.checkin}
-                  >
-                    Einchecken
-                  </Button>
-                }
               </h4>
 
               {day.meals.map((meal, idx) =>
