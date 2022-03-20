@@ -38,7 +38,8 @@ function parseDataFromXml (xml) {
 
     const addInReg = /\s*\((.*?)\)\s*/
     const meals = sourceItems.map(item => {
-      let text = item.title._text
+      // sometimes, the title is undefined (see #123)
+      let text = item.title._text ?? ''
       const allergens = new Set()
       while (addInReg.test(text)) {
         const [addInText, addIn] = text.match(addInReg)
