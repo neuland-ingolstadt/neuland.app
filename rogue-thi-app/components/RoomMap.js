@@ -6,21 +6,16 @@ import Form from 'react-bootstrap/Form'
 
 import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
-
 import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/RoomMap.module.css'
 
-const TUX_ROOMS = [
-  'G308'
-]
 const SPECIAL_ROOMS = {
-  C073: 'Kostenlose Menstruationsprodukte verfügbar',
-  D171: 'Kostenlose Menstruationsprodukte verfügbar'
+  C073: { text: 'Kostenlose Menstruationsprodukte verfügbar', color: '#EB749A' },
+  D171: { text: 'Kostenlose Menstruationsprodukte verfügbar', color: '#EB749A' },
+  G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
 }
 const SEARCHED_PROPERTIES = [
   'Gebaeude',
@@ -42,6 +37,8 @@ const FLOOR_ORDER = [
   'EG'
 ]
 const DEFAULT_CENTER = [48.76677, 11.43322]
+
+const SPECIAL_COLORS = [...new Set(Object.values(SPECIAL_ROOMS).map(x => x.color))]
 
 export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
@@ -131,17 +128,16 @@ export default function RoomMap ({ highlight, roomData }) {
     const special = SPECIAL_ROOMS[entry.properties.Raum]
 
     let color = '#6c757d'
-    if (avail) {
+    if (special) {
+      color = special.color
+    } else if (avail) {
       color = '#8845ef'
-    } else if (special) {
-      color = '#ff8800'
     }
 
     return (
       <FeatureGroup key={key}>
         <Popup>
           <strong>
-            {TUX_ROOMS.includes(entry.properties.Raum) && <><FontAwesomeIcon title="Linux" icon={faLinux} /> </>}
             {entry.properties.Raum}
           </strong>
           {`, ${entry.properties.Funktion}`} <br />
@@ -155,7 +151,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <br />
             </>
           )}
-          {special}
+          {special?.text}
         </Popup>
         <Polygon
           positions={entry.coordinates}
@@ -219,7 +215,13 @@ export default function RoomMap ({ highlight, roomData }) {
           <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
             <div className={styles.legendFree}> Frei</div>
             <div className={styles.legendTaken}> Belegt</div>
-            <div className={styles.legendSpecial}> Sonderausstattung</div>
+            <div>
+              {SPECIAL_COLORS.map(color => (
+                <span key={color} className={styles.legendSpecial} style={{ '--legend-color': color }}>
+                </span>
+              ))}
+              {' '}Sonderausstattung
+            </div>
           </div>
         </div>
 
