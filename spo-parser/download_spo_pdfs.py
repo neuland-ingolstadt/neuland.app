@@ -23,7 +23,7 @@ for path in paths:
 	r = requests.get(url + path_prefix + path)
 	r.raise_for_status()
 	for course in course_reg.finditer(r.text):
-		course_name = course[1].split("/")[-1]
+		course_name = course[1].rstrip("/").split("/")[-1]
 
 		r = requests.get(url + course[1])
 		r.raise_for_status()
