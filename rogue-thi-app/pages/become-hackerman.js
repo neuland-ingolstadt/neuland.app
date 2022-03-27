@@ -43,7 +43,7 @@ export default function BecomeHackerman () {
       hasError = true
       if (x.trim() === '') {
         setFlagError(`Flag ${i} is empty`)
-      } else if (x.indexOf(x, i + 1) !== -1) {
+      } else if (flags.indexOf(x, i + 1) !== -1) {
         setFlagError('Cannot use the same flag more than once!')
       } else if (!FLAG_HASHES.includes(hashes[i])) {
         setFlagError(`Flag ${i} seems to be invalid`)
