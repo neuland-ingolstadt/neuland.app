@@ -57,7 +57,6 @@ function MyApp ({ Component, pageProps, theme: initialTheme }) {
         <meta name="theme-color" content="#8845ef" />
 
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/favicon512.png"></link>
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
         {/* generated using npx pwa-asset-generator (run via Dockerfile) */}
