@@ -1,6 +1,7 @@
 .navbar {
   padding: 0 10px;
-  height: 50px;
+  padding-top: calc(env(safe-area-inset-top, 0px));
+  height: calc(50px + env(safe-area-inset-top, 0px));
   background-color: var(--navbar-background, white);
 }
 
