@@ -11,7 +11,9 @@
     "start": "next start",
     "android-add": "rm -rf android/ && npx cap add android",
     "android-open": "next build && next export && npx cap sync android && npx cap open android",
-    "android-run": "next build && next export && npx cap sync android && npx cap run android"
+    "android-run": "next build && next export && npx cap sync android && npx cap run android",
+    "ios-open": "next build && next export && npx cap sync ios && npx cap open ios",
+    "ios-run": "next build && next export && npx cap sync ios && npx cap run ios"
   },
   "dependencies": {
     "@capacitor-community/http": "^1.4.1",
