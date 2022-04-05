@@ -146,6 +146,12 @@ export async function obtainSession (router) {
  * Logs out the user by deleting the session from localStorage.
  */
 export async function forgetSession (router) {
+  try {
+    await API.logout(localStorage.session)
+  } catch (e) {
+    // ignore
+  }
+
   delete localStorage.session
   delete localStorage.sessionCreated
 
