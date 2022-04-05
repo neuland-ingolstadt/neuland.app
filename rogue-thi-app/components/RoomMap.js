@@ -113,7 +113,7 @@ export default function RoomMap ({ highlight, roomData }) {
       }
     }
     load()
-  }, [router])
+  }, [router, highlight])
 
   function unfocus (e) {
     e.preventDefault()
