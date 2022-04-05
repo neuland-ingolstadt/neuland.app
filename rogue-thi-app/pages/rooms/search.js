@@ -54,7 +54,7 @@ export default function Rooms () {
         await filter()
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=rooms%2Fsearch')
         } else {
           console.error(e)
           alert(e)

@@ -70,7 +70,7 @@ export default function Library () {
         await refreshData()
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=library')
         } else {
           console.error(e)
           alert(e)

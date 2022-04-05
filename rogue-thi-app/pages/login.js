@@ -20,6 +20,7 @@ const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
 export default function Login () {
   const router = useRouter()
+  const { redirect } = router.query
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -29,7 +30,8 @@ export default function Login () {
   async function attemptLogin (e) {
     try {
       e.preventDefault()
-      await createSession(router, username, password, saveCredentials)
+      await createSession(username, password, saveCredentials)
+      router.replace('/' + (redirect || ''))
     } catch (e) {
       if (e.message === ORIGINAL_ERROR_WRONG_CREDENTIALS) {
         setFailure(FRIENDLY_ERROR_WRONG_CREDENTIALS)

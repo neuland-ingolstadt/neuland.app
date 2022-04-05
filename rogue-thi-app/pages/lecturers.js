@@ -37,7 +37,7 @@ export default function RoomList () {
         setFilteredLecturers(data)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=lecturers')
         } else {
           console.error(e)
           alert(e)
@@ -68,7 +68,7 @@ export default function RoomList () {
           return
         } catch (e) {
           if (e instanceof NoSessionError) {
-            router.replace('/login')
+            router.replace('/login?redirect=lecturers')
           } else {
             console.error(e)
             alert(e)

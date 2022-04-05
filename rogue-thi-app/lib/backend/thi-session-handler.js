@@ -12,7 +12,7 @@ export class NoSessionError extends Error {
 /**
  * Logs in the user and persists the session to localStorage
  */
-export async function createSession (router, username, password, stayLoggedIn) {
+export async function createSession (username, password, stayLoggedIn) {
   // convert to lowercase just to be safe
   // (the API used to show weird behavior when using upper case usernames)
   username = username.toLowerCase()
@@ -31,8 +31,6 @@ export async function createSession (router, username, password, stayLoggedIn) {
   } else {
     await credStore.delete(CRED_ID)
   }
-
-  router.replace('/')
 }
 
 /**
