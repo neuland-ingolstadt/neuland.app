@@ -1,0 +1,26 @@
+The <b>neuland.app</b> provides the new and unique way to improve the
+student's life at TH Ingolstadt. It is an unofficial rewrite of the old
+university app. The app requires the user to login with their university
+credentials. Afterwards, it provides the following fancy features:
+
+<ul>
+  <li>View your personal time table</li>
+  <li>View your personal university calendar including exams and events</li>
+  <li>View the canteen plans and meals</li>
+  <li>View the university room plan and search for locations</li>
+  <li>View and reserve available seats in the university's library</li>
+  <li>View your grades and averages</li>
+  <li>View the local public transport departure times</li>
+  <li>View and filter available parking spaces in the city of Ingolstadt</li>
+  <li>Open-source and built for students by students</li>
+</ul>
+
+This app was built as web app at first. Check out the web version at
+<a href="https://neuland.app">neuland.app</a>. The full source code and some
+additional documentation of the web version can be found at
+<a href="https://github.com/neuland-ingolstadt/neuland.app">GitHub</a>.
+This project is licensed under AGPL-3.0.
+
+Even though some developers of this project are or were part of the
+<i>StudVer</i> (student council) of the THI, this project is not part of,
+developed for or supported by the StudVer or the THI.
