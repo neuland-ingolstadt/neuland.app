@@ -12,6 +12,7 @@
     "android-add": "rm -rf android/ && npx cap add android",
     "android-open": "next build && next export && npx cap sync android && npx cap open android",
     "android-run": "next build && next export && npx cap sync android && npx cap run android",
+    "ios-add": "rm -rf ios/ && npx cap add ios",
     "ios-open": "next build && next export && npx cap sync ios && npx cap open ios",
     "ios-run": "next build && next export && npx cap sync ios && npx cap run ios"
   },
