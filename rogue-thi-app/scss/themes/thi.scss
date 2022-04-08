@@ -1,0 +1,11 @@
+$theme-colors: (
+  "primary": #005a9b
+);
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// react-placeholder
+// declare after bootstrap, since we need bootstrap variables
+.text-row, .rect-shape, .round-shape {
+  background: $gray-200 !important;
+}
