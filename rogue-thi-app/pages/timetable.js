@@ -114,7 +114,7 @@ export default function Timetable () {
         }
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=timetable')
         } else {
           console.error(e)
           alert(e)

@@ -28,7 +28,7 @@ export default function Personal () {
         setUserdata(data)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=personal')
         } else {
           console.error(e)
           alert(e)

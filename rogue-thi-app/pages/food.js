@@ -38,6 +38,7 @@ export default function Mensa () {
   const [showMealDetails, setShowMealDetails] = useState(null)
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
+  const [isStudent, setIsStudent] = useState(true)
 
   useEffect(() => {
     async function load () {
@@ -57,6 +58,9 @@ export default function Mensa () {
     }
     if (localStorage.selectedRestaurants) {
       setSelectedRestaurants(JSON.parse(localStorage.selectedRestaurants))
+    }
+    if (localStorage.isStudent === 'false') {
+      setIsStudent(false)
     }
   }, [])
 
@@ -81,6 +85,14 @@ export default function Mensa () {
       return false
     }
     return allergens.some(x => allergenSelection[x])
+  }
+
+  function formatPrice (x) {
+    return x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
+  }
+  function getUserSpecificPrice (meal) {
+    const price = isStudent ? meal.prices.student : meal.prices.employee
+    return formatPrice(price)
   }
 
   return (
@@ -147,9 +159,7 @@ export default function Mensa () {
                     </div>
                   </div>
                   <div className={styles.right}>
-                    {[meal.prices.student, meal.prices.employee].map(x =>
-                      x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
-                    ).join(' / ')}
+                    {getUserSpecificPrice(meal)}
                     <br />
                     {meal.restaurant}
                   </div>
@@ -205,6 +215,22 @@ export default function Mensa () {
                   {allergenMap[key] || FALLBACK_ALLERGEN}
                 </li>
               ))}
+            </ul>
+
+            <h5>Preise</h5>
+            <ul>
+              <li>
+                <strong>Studierende</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.student)}
+              </li>
+              <li>
+                <strong>Mitarbeitende</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.employee)}
+              </li>
+              <li>
+                <strong>Gäste</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.guest)}
+              </li>
             </ul>
 
             <p>

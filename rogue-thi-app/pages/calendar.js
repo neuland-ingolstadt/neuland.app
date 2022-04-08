@@ -42,7 +42,7 @@ export default function Calendar () {
         setExams(examList)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=calendar')
         } else {
           console.error(e)
           alert(e)

@@ -59,7 +59,7 @@ export default function RoomList () {
         setFreeRooms(days)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=rooms%2Flist')
         } else {
           console.error(e)
           alert(e)

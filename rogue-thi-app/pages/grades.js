@@ -33,7 +33,7 @@ export default function Grades () {
         setGradeAverage(average)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          router.replace('/login?redirect=grades')
         } else if (e.message === 'Query not possible') {
           // according to the original developers,
           // { status: -102, data: "Query not possible" }

@@ -129,6 +129,17 @@ export class AnonymousAPIClient {
 
     return res.data === 'STATUS_OK'
   }
+
+  async logout (session) {
+    const res = await this.request({
+      service: 'session',
+      method: 'close',
+      format: 'json',
+      session
+    })
+
+    return res.data === 'STATUS_OK'
+  }
 }
 
 export default new AnonymousAPIClient()

@@ -104,7 +104,8 @@ export default function RoomMap ({ highlight, roomData }) {
         setAvailableRooms(rooms)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          router.replace('/login')
+          const target = encodeURIComponent(`rooms?highlight=${highlight}`)
+          router.replace(`/login?redirect=${target}`)
         } else {
           console.error(e)
           alert(e)
@@ -112,7 +113,7 @@ export default function RoomMap ({ highlight, roomData }) {
       }
     }
     load()
-  }, [router])
+  }, [router, highlight])
 
   function unfocus (e) {
     e.preventDefault()
