@@ -1,5 +1,6 @@
 .navbar {
   padding: 0 10px;
+  /* adds padding for the ios status bar to avoid the navbar overlapping the content */
   padding-top: calc(env(safe-area-inset-top, 0px));
   height: calc(50px + env(safe-area-inset-top, 0px));
   background-color: var(--navbar-background, white);
