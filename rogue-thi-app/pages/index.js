@@ -26,6 +26,7 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 import { ThemeContext } from './_app'
+import { saveTheme } from '../lib/theme-utils'
 
 import { forgetSession } from '../lib/backend/thi-session-handler'
 
@@ -262,9 +263,7 @@ export default function Home () {
   }
 
   function changeTheme (theme) {
-    const expires = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000) // 10 years in the future
-    document.cookie = `theme=${theme}; expires=${expires.toUTCString()}; path=/; SameSite=Strict; Secure`
-
+    saveTheme(theme)
     setTheme(theme)
     setShowThemeModal(false)
   }

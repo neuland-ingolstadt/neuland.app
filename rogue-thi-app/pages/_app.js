@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 
 import PropTypes from 'prop-types'
 import TheMatrixAnimation from './../components/TheMatrixAnimation'
+import { loadTheme } from '../lib/theme-utils'
 
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -14,26 +15,6 @@ import '../styles/globals.css'
 export const ThemeContext = createContext('default')
 
 config.autoAddCss = false
-
-function extractThemeFromCookie (req) {
-  let cookie
-  if (typeof req !== 'undefined') {
-    cookie = req.headers.cookie
-  } else if (typeof document !== 'undefined') {
-    cookie = document.cookie
-  }
-
-  if (!cookie) {
-    return 'default'
-  }
-
-  const entry = cookie.split(';').find(x => x.trim().startsWith('theme='))
-  if (!entry) {
-    return 'default'
-  }
-
-  return entry.split('=')[1]
-}
 
 function MyApp ({ Component, pageProps, theme: initialTheme }) {
   const router = useRouter()
@@ -114,7 +95,7 @@ MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext)
   return {
     ...appProps,
-    theme: extractThemeFromCookie(appContext.ctx.req)
+    theme: loadTheme(appContext.ctx.req)
   }
 }
 
