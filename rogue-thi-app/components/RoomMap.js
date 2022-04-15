@@ -44,7 +44,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
   const searchField = useRef()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
-  const [availableRooms, setAvailableRooms] = useState([])
+  const [availableRooms, setAvailableRooms] = useState(null)
 
   const allRooms = useMemo(() => {
     return roomData.features
@@ -104,8 +104,7 @@ export default function RoomMap ({ highlight, roomData }) {
         setAvailableRooms(rooms)
       } catch (e) {
         if (e instanceof NoSessionError) {
-          const target = encodeURIComponent(`rooms?highlight=${highlight}`)
-          router.replace(`/login?redirect=${target}`)
+          setAvailableRooms(null)
         } else {
           console.error(e)
           alert(e)
@@ -121,7 +120,7 @@ export default function RoomMap ({ highlight, roomData }) {
   }
 
   function renderRoom (entry, key, onlyAvailable) {
-    const avail = availableRooms.find(x => x.room === entry.properties.Raum)
+    const avail = availableRooms?.find(x => x.room === entry.properties.Raum)
     if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
       return null
     }
@@ -214,8 +213,13 @@ export default function RoomMap ({ highlight, roomData }) {
 
         <div className="leaflet-bottom leaflet-right">
           <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
-            <div className={styles.legendFree}> Frei</div>
-            <div className={styles.legendTaken}> Belegt</div>
+            {availableRooms && (
+              <>
+                <div className={styles.legendFree}> Frei</div>
+                <div className={styles.legendTaken}> Belegt</div>
+              </>
+            )}
+            {!availableRooms && <div className={styles.legendTaken}> Belegtstatus unbekannt</div>}
             <div>
               {SPECIAL_COLORS.map(color => (
                 <span key={color} className={styles.legendSpecial} style={{ '--legend-color': color }}>
