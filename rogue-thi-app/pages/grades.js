@@ -77,12 +77,12 @@ export default function Grades () {
     <AppContainer>
       <AppNavbar title="Noten & Fächer">
         <AppNavbar.Overflow>
-          <Dropdown.Item variant="link" onClick={() => copyGradeFormula()}>
+          <AppNavbar.Overflow.Link variant="link" onClick={() => copyGradeFormula()}>
             Notenschnitt Formel kopieren
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" onClick={() => downloadGradeCSV()}>
+          </AppNavbar.Overflow.Link>
+          <AppNavbar.Overflow.Link variant="link" onClick={() => downloadGradeCSV()}>
             Noten als CSV exportieren
-          </Dropdown.Item>
+          </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 

@@ -68,12 +68,12 @@ export default function Rooms () {
     <AppContainer>
       <AppNavbar title="Raumsuche">
         <AppNavbar.Overflow>
-          <Dropdown.Item variant="link" href="/rooms">
+          <AppNavbar.Overflow.Link variant="link" href="/rooms">
             Kartenansicht
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href="/rooms/list">
+          </AppNavbar.Overflow.Link>
+          <AppNavbar.Overflow.Link variant="link" href="/rooms/list">
             Listenansicht
-          </Dropdown.Item>
+          </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 

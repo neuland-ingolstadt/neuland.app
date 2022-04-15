@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 
@@ -91,3 +91,32 @@ AppNavbarOverflow.propTypes = {
 }
 
 AppNavbar.Overflow = AppNavbarOverflow
+
+/**
+ * Wrapper around Dropdown.Link that makes it compatible with Next.js.
+ * Use this to make sure the links work even when exported as static HTML.
+ */
+function AppNavbarOverflowLink ({ href, onClick, children }) {
+  const router = useRouter()
+
+  const click = useCallback(() => {
+    if (href) {
+      router.push(href)
+    }
+    if (onClick) {
+      onClick()
+    }
+  }, [router, href, onClick])
+
+  return (
+    <Dropdown.Item onClick={() => click()}>
+      {children}
+    </Dropdown.Item>
+  )
+}
+AppNavbarOverflowLink.propTypes = {
+  href: PropTypes.string,
+  onClick: PropTypes.func,
+  children: PropTypes.any
+}
+AppNavbar.Overflow.Link = AppNavbarOverflowLink

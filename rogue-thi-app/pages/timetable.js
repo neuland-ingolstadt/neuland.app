@@ -185,12 +185,12 @@ export default function Timetable () {
     <AppContainer>
       <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
         <AppNavbar.Overflow>
-          <Dropdown.Item variant="link" onClick={() => setShowTimetableExplanation(true)}>
+          <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
             Fächer bearbeiten
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" onClick={() => setShowICalExplanation(true)}>
+          </AppNavbar.Overflow.Link>
+          <AppNavbar.Overflow.Link variant="link" onClick={() => setShowICalExplanation(true)}>
             Kalender abonnieren
-          </Dropdown.Item>
+          </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 

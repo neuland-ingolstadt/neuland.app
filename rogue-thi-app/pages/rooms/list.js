@@ -73,12 +73,12 @@ export default function RoomList () {
     <AppContainer>
       <AppNavbar title="Stündlicher Raumplan">
         <AppNavbar.Overflow>
-          <Dropdown.Item variant="link" href="/rooms">
+          <AppNavbar.Overflow.Link variant="link" href="/rooms">
             Kartenansicht
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" href="/rooms/search">
+          </AppNavbar.Overflow.Link>
+          <AppNavbar.Overflow.Link variant="link" href="/rooms/search">
             Erweiterte Suche
-          </Dropdown.Item>
+          </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 

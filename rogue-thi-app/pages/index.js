@@ -278,16 +278,16 @@ export default function Home () {
         </AppNavbar.Button>
         <AppNavbar.Overflow>
           {showDebug && (
-            <Dropdown.Item variant="link" href="/debug">
+            <AppNavbar.Overflow.Link variant="link" href="/debug">
               API Spielwiese
-            </Dropdown.Item>
+            </AppNavbar.Overflow.Link>
           )}
-          <Dropdown.Item variant="link" href="/imprint">
+          <AppNavbar.Overflow.Link variant="link" href="/imprint">
             Impressum & Datenschutz
-          </Dropdown.Item>
-          <Dropdown.Item variant="link" onClick={() => forgetSession(router)}>
+          </AppNavbar.Overflow.Link>
+          <AppNavbar.Overflow.Link variant="link" onClick={() => forgetSession(router)}>
             Ausloggen
-          </Dropdown.Item>
+          </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 
