@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import ReactPlaceholder from 'react-placeholder'
 import { useRouter } from 'next/router'
 
-import Dropdown from 'react-bootstrap/Dropdown'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 import AppBody from '../components/page/AppBody'
