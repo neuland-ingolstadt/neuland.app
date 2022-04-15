@@ -26,7 +26,6 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 import { ThemeContext } from './_app'
-import { saveTheme } from '../lib/theme-utils'
 
 import { forgetSession } from '../lib/backend/thi-session-handler'
 
@@ -263,7 +262,7 @@ export default function Home () {
   }
 
   function changeTheme (theme) {
-    saveTheme(theme)
+    localStorage.theme = theme
     setTheme(theme)
     setShowThemeModal(false)
   }
