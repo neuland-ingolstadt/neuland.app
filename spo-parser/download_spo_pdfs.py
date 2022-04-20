@@ -11,7 +11,7 @@ paths = [
 	"satzungen-fakultaet-informatik",
 	"satzungen-fakultaet-maschinenbau",
 	"satzungen-fakultaet-wirtschaftsingenieurwesen",
-	"satzungen-campus-neuburg",
+	"satzungen-fakultaet-nachhaltige-infrastruktur",
 	"satzungen-studienfakultaet-iaw",
 ]
 
