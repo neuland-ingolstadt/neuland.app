@@ -25,17 +25,24 @@ export default async function handler (req, res) {
       const $ = cheerio.load(body)
       const year = (new Date()).getFullYear()
 
+      const lines = Array.from($('.entry-content').children()).flatMap(el_ => {
+        const el = $(el_)
+
+        // see https://github.com/cheeriojs/cheerio/issues/839
+        const html = el.html().replace(/<br\s*\/?>/gi, '___newline___')
+        const content = cheerio.load(html).text().replace(/___newline___/g, '\n').trim()
+
+        return content.split('\n')
+      })
+
       const days = {}
       let day = null
-      $('.entry-content').children().map((i, el_) => {
-        const el = $(el_)
-        const content = el.text().trim()
-
+      lines.map(content => {
         if (/(montag|dienstag|mittwoch|donnerstag|freitag)\s*\d{1,2}\.\d{1,2}/ui.test(content)) {
           const [date, month] = content.split(' ')[1].split('.')
           day = `${year}-${month.trim()}-${date.trim()}`
           days[day] = []
-        } else if (/Änderungen\s*vorbehalten/ui.test(content)) {
+        } else if (/änderungen|sortiment|(jetzt neu)|geöffnet|geschlossen/ui.test(content)) {
           // ignore
         } else if (day && content) {
           days[day].push(content)
