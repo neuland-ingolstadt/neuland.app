@@ -76,15 +76,20 @@ export function getRoomOpenings (rooms, date) {
   return openings
 }
 
+/**
+ * Get a suitable preset for the time selector.
+ * If outside the opening hours, this will skip to the time the university opens.
+ */
 export function getNextValidDate () {
   const startDate = new Date()
-  if (startDate.getHours() > 17 || (startDate.getHours() === 17 && startDate.getMinutes() >= 20)) {
+
+  if (startDate.getDay() === 0 || startDate.getHours() > 20) { // sunday or after 9pm
     startDate.setDate(startDate.getDate() + 1)
-    startDate.setHours(8)
-    startDate.setMinutes(15)
-  } else if (startDate.getHours() < 8 || (startDate.getHours() === 8 && startDate.getMinutes() < 15)) {
-    startDate.setHours(8)
-    startDate.setMinutes(15)
+    startDate.setHours(6)
+    startDate.setMinutes(0)
+  } else if (startDate.getHours() < 6) { // before 6am
+    startDate.setHours(6)
+    startDate.setMinutes(0)
   }
 
   return startDate
