@@ -36,7 +36,7 @@ export default function Login () {
       if (e.message === ORIGINAL_ERROR_WRONG_CREDENTIALS) {
         setFailure(FRIENDLY_ERROR_WRONG_CREDENTIALS)
       } else {
-        setFailure(e.toString())
+        setFailure('Bei der Verbindung zum Server ist ein Fehler aufgetreten.')
       }
     }
   }
