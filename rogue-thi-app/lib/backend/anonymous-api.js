@@ -72,6 +72,11 @@ export class AnonymousAPIClient {
         target: ENDPOINT_HOST,
         via: PROXY_URL,
         certs: THI_CERTS,
+        // temporary workaround
+        // added 2022-05-08, can be removed later
+        verifyOptions: {
+          validityCheckDate: new Date(2022, 4, 7)
+        },
         closed: () => {
           this.connection = null
         },
