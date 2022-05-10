@@ -13,7 +13,7 @@ import { createSession } from '../lib/backend/thi-session-handler'
 import styles from '../styles/Login.module.css'
 
 const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
-const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind ungültig.'
+const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind falsch.'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
@@ -33,7 +33,7 @@ export default function Login () {
       await createSession(username, password, saveCredentials)
       router.replace('/' + (redirect || ''))
     } catch (e) {
-      if (e.message === ORIGINAL_ERROR_WRONG_CREDENTIALS) {
+      if (e.message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
         setFailure(FRIENDLY_ERROR_WRONG_CREDENTIALS)
       } else {
         setFailure('Bei der Verbindung zum Server ist ein Fehler aufgetreten.')
