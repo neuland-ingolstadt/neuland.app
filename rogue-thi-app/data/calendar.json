@@ -1,74 +1,5 @@
 [
   {
-    "name": "Semesterferien",
-    "begin": "2021-08-01",
-    "end": "2021-09-30"
-  },
-  {
-    "name": "Vorlesungsbeginn und Semesterstart (für Bachelor-Erstis in Neuburg)",
-    "begin": "2021-10-04T09:00",
-    "hasHours": true
-  },
-  {
-    "name": "Vorlesungsbeginn und Semesterstart (für Bachelor-Erstis in Ingolstadt)",
-    "begin": "2021-10-04T10:00",
-    "hasHours": true
-  },
-  {
-    "name": "Vorlesungsbeginn und Semesterstart (für alle anderen)",
-    "begin": "2021-10-04T13:15",
-    "hasHours": true
-  },
-  {
-    "name": "Offizielle Eröffnung des Campus Neuburg",
-    "begin": "2021-10-04T14:00",
-    "hasHours": true
-  },
-  {
-    "name": "Vorlesungsfrei",
-    "begin": "2021-11-02"
-  },
-  {
-    "name": "Prüfungsanmeldung",
-    "begin": "2021-11-05",
-    "end": "2021-11-15"
-  },
-  {
-    "name": "Prüfungsabmeldung",
-    "begin": "2021-11-05",
-    "end": "2022-01-10"
-  },
-  {
-    "name": "Vorlesungsfrei (Weihnachten)",
-    "begin": "2021-12-24",
-    "end": "2022-01-10"
-  },
-  {
-    "name": "Rückmeldung",
-    "begin": "2022-01-14",
-    "end": "2022-01-31"
-  },
-  {
-    "name": "Erweiterter Prüfungszeitraum",
-    "begin": "2022-01-19",
-    "end": "2022-01-25"
-  },
-  {
-    "name": "Prüfungszeitraum",
-    "begin": "2022-01-26",
-    "end": "2022-02-04"
-  },
-  {
-    "name": "Notenbekanntgabe",
-    "begin": "2022-02-14T13:00",
-    "hasHours": true
-  },
-  {
-    "name": "Semesterferien",
-    "begin": "2022-02-15",
-    "end": "2022-03-14"
-  },
-  {
     "name": "Vorlesungsbeginn und Semesterstart",
     "begin": "2022-03-15"
   },
@@ -80,7 +11,7 @@
   {
     "name": "Prüfungsanmeldung",
     "begin": "2022-05-02",
-    "end": "2022-05-22"
+    "end": "2022-05-12"
   },
   {
     "name": "Prüfungsabmeldung",
