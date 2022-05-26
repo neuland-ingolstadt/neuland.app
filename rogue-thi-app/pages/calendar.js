@@ -131,6 +131,12 @@ export default function Calendar () {
                 </ListGroup.Item>
               )}
             </ListGroup>
+            <div className="text-muted">
+              <small>
+                Alle Angaben ohne Gewähr.
+                Verbindliche Informationen gibt es nur direkt auf der <a href="https://www.thi.de/studium/pruefung/semestertermine/" target="_blank" rel="noreferrer">Webseite der Hochschule</a>.
+              </small>
+            </div>
           </SwipeableTab>
 
           <SwipeableTab className={styles.tab} title="Prüfungen">
@@ -160,6 +166,12 @@ export default function Calendar () {
                 )}
               </ReactPlaceholder>
             </ListGroup>
+            <div className="text-muted">
+              <small>
+                Alle Angaben ohne Gewähr.
+                Verbindliche Informationen gibt es nur direkt auf der <a href="https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin" target="_blank" rel="noreferrer">Webseite der Hochschule</a>.
+              </small>
+            </div>
           </SwipeableTab>
 
           <SwipeableTab className={styles.tab} title="Veranstaltungen">
