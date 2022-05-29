@@ -44,7 +44,6 @@ const ALL_THEMES = [
   { name: 'Automatisch', style: 'default' },
   { name: 'Hell', style: 'light' },
   { name: 'Dunkel', style: 'dark' },
-  { name: 'THI Corporate Identity', style: 'thi' },
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
   { name: 'Windows 95', style: '95' },
