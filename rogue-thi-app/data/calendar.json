@@ -1,5 +1,14 @@
 [
   {
+    "name": "",
+    "begin": "1970-01-01",
+    "comments": [
+      "If you work on this file, please triple-check if you entered all days correctly.",
+      "Incorrect entries might get people in trouble.",
+      "Also, please do not remove this warning."
+    ]
+  },
+  {
     "name": "Vorlesungsbeginn und Semesterstart",
     "begin": "2022-03-15"
   },
