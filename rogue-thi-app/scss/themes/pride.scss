@@ -1,5 +1,5 @@
 $theme-colors: (
-  "primary": #8845ef
+  "primary": #9C27B0
 );
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
@@ -16,11 +16,18 @@ $theme-colors: (
     #FFEB3B 33.34%, #FFEB3B 49.99%,
     #4CAF50 50%, #4CAF50 66.66%,
     #2196F3 66.67%, #2196F3 83.33%,
-    #9C27B0 83.34%) !important;
+    #9C27B0 83.34%) content-box !important;
 }
 
-.navbar-light .navbar-brand, .navbar .btn-link {
+.navbar-light .navbar-brand {
   font-weight: bold;
-  color: white;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+  color: #9C27B0;
+  background: white;
+  color: #9C27B0;
+  height: 100%;
+}
+.navbar-nav, .navbar-nav .btn-link, .navbar-nav .dropdown {
+  background: white;
+  color: #9C27B0;
+  height: 100%;
 }
