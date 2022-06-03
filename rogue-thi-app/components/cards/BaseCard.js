@@ -11,7 +11,6 @@ import styles from '../../styles/Home.module.css'
 
 export default function BaseCard ({ link, icon, title, className, children }) {
   return (
-    // eslint-disable-next-line @next/next/link-passhref
     <Link href={link}>
       <Card className={[styles.card, className]}>
         <Card.Body>
