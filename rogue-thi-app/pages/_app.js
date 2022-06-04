@@ -17,6 +17,7 @@ config.autoAddCss = false
 function MyApp ({ Component, pageProps }) {
   const router = useRouter()
   const [theme, setTheme] = useState('default')
+  const [showPride, setShowPride] = useState(false)
   useEffect(() => {
     // migrate legacy cookie theme setting to localStorage
     // added 2022-04-15, can be removed later
@@ -28,6 +29,10 @@ function MyApp ({ Component, pageProps }) {
 
     if (localStorage.theme) {
       setTheme(localStorage.theme)
+    }
+
+    if (localStorage.showPride2022 !== 'false' && (new Date()).getMonth() === 5) {
+      setShowPride(true)
     }
   }, [])
   const computedTheme = useMemo(() => {
@@ -83,6 +88,10 @@ function MyApp ({ Component, pageProps }) {
         <link rel="apple-touch-startup-image" href="/apple-splash-dark-1136-640.jpg" media="(prefers-color-scheme: dark) and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
 
         <link rel="stylesheet" href={`/themes/${computedTheme}.css`} />
+
+        {showPride && (
+          <link rel="stylesheet" href={'/themes/pride.css'} />
+        )}
       </Head>
 
       {computedTheme === 'hacker' && (
