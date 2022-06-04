@@ -47,6 +47,7 @@ const ALL_THEMES = [
   { name: 'Barbie & Ken', style: 'barbie' },
   { name: 'Retro', style: 'retro' },
   { name: 'Windows 95', style: '95' },
+  { name: 'Pride', style: 'pride' },
   { name: 'Hackerman', style: 'hacker', requiresToken: true }
 ]
 
@@ -266,11 +267,6 @@ export default function Home () {
     setShowThemeModal(false)
   }
 
-  function setShowPride (showRainbow) {
-    localStorage.showPride2022 = showRainbow.toString()
-    window.location.reload()
-  }
-
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
@@ -299,14 +295,6 @@ export default function Home () {
               <Modal.Title>Personalisierung</Modal.Title>
             </Modal.Header>
             <Modal.Body ref={themeModalBody}>
-              <h3 className={styles.themeHeader}>Pride Month</h3>
-              <Form.Check
-                type="checkbox"
-                label="Regenbogen Anzeigen"
-                checked={typeof localStorage === 'undefined' ? false : localStorage.showPride2022 !== 'false'}
-                onChange={e => setShowPride(e.target.checked)}
-                />
-
               <h3 className={styles.themeHeader}>Design</h3>
               <Form>
                 {ALL_THEMES.map((availableTheme, i) => (
