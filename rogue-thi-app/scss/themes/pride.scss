@@ -2,6 +2,9 @@ $theme-colors: (
   "primary": #9C27B0
 );
 
+@import "dark.scss";
+$body-bg: black;
+
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
 // react-placeholder
@@ -12,22 +15,22 @@ $theme-colors: (
 
 .navbar.fixed-top {
   background: linear-gradient(180deg, #F44336 16.66%,
-    #FF9800 16.67%, #FF9800 33.33%,
-    #FFEB3B 33.34%, #FFEB3B 49.99%,
-    #4CAF50 50%, #4CAF50 66.66%,
-    #2196F3 66.67%, #2196F3 83.33%,
+    #ff8c00 16.67%, #ff8c00 33.33%,
+    #ffdf2b 33.34%, #ffdf2b 49.99%,
+    #3e9141 50%, #3e9141 66.66%,
+    #216fd6 66.67%, #216fd6 83.33%,
     #9C27B0 83.34%) content-box !important;
 }
 
 .navbar-light .navbar-brand {
   font-weight: bold;
   color: #9C27B0;
-  background: white;
+  background: black;
   color: #9C27B0;
   height: 100%;
 }
+
 .navbar-nav, .navbar-nav .btn-link, .navbar-nav .dropdown {
-  background: white;
   color: #9C27B0;
   height: 100%;
 }
