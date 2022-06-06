@@ -14,19 +14,28 @@ $body-bg: black;
 }
 
 .navbar.fixed-top {
-  background: linear-gradient(180deg, #F44336 16.66%,
-    #ff8c00 16.67%, #ff8c00 33.33%,
-    #ffdf2b 33.34%, #ffdf2b 49.99%,
+  background: linear-gradient(180deg, #e12619 16.66%,
+    #f28500 16.67%, #f28500 33.33%,
+    #e7c815 33.34%, #e7c815 49.99%,
     #3e9141 50%, #3e9141 66.66%,
     #216fd6 66.67%, #216fd6 83.33%,
     #9C27B0 83.34%) content-box !important;
+}
+
+
+.navbar-brand {
+  border-image: linear-gradient(90deg, #e12619 16.66%,
+    #f28500 16.67%, #f28500 33.33%,
+    #e7c815 33.34%, #e7c815 49.99%,
+    #3e9141 50%, #3e9141 66.66%,
+    #216fd6 66.67%, #216fd6 83.33%,
+    #9C27B0 83.34%) 0 1 stretch !important;
 }
 
 .navbar-light .navbar-brand {
   font-weight: bold;
   color: #9C27B0;
   background: black;
-  color: #9C27B0;
   height: 100%;
 }
 
