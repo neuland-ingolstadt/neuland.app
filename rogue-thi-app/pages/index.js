@@ -31,7 +31,6 @@ import { forgetSession } from '../lib/backend/thi-session-handler'
 
 import BaseCard from '../components/cards/BaseCard'
 import CalendarCard from '../components/cards/CalendarCard'
-import DiscordPrompt from '../components/cards/DiscordPrompt'
 import FoodCard from '../components/cards/FoodCard'
 import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
@@ -64,17 +63,6 @@ const ALL_DASHBOARD_CARDS = [
       <InstallPrompt
         key="install"
         onHide={() => hidePromptCard('install')}
-        />
-    )
-  },
-  {
-    key: 'discord',
-    label: 'Discord-Server',
-    default: [],
-    card: hidePromptCard => (
-      <DiscordPrompt
-        key="discord"
-        onHide={() => hidePromptCard('discord')}
         />
     )
   },
