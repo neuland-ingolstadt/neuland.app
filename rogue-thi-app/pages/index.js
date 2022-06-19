@@ -37,6 +37,7 @@ import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
 
 import styles from '../styles/Home.module.css'
+import ElectionPrompt from '../components/cards/ElectionPrompt'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 const ALL_THEMES = [
@@ -63,6 +64,17 @@ const ALL_DASHBOARD_CARDS = [
       <InstallPrompt
         key="install"
         onHide={() => hidePromptCard('install')}
+        />
+    )
+  },
+  {
+    key: 'election',
+    label: 'Hochschulwahlen',
+    default: [],
+    card: hidePromptCard => (
+      <ElectionPrompt
+        key="election"
+        onHide={() => hidePromptCard('election')}
         />
     )
   },
@@ -182,7 +194,7 @@ export default function Home () {
         ALL_DASHBOARD_CARDS.forEach(card => {
           if (!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
             // new (previosly unknown) card
-            entries.push(card)
+            entries.splice(0, 0, card)
           }
         })
         setShownDashboardEntries(entries)
