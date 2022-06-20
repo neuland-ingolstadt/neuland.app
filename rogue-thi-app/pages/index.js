@@ -70,7 +70,7 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'election',
     label: 'Hochschulwahlen',
-    default: [],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: hidePromptCard => (
       <ElectionPrompt
         key="election"
