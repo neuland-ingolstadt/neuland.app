@@ -37,7 +37,6 @@ import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
 
 import styles from '../styles/Home.module.css'
-import ElectionPrompt from '../components/cards/ElectionPrompt'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 const ALL_THEMES = [
