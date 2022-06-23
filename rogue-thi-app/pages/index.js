@@ -68,17 +68,6 @@ const ALL_DASHBOARD_CARDS = [
     )
   },
   {
-    key: 'election',
-    label: 'Hochschulwahlen',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
-    card: hidePromptCard => (
-      <ElectionPrompt
-        key="election"
-        onHide={() => hidePromptCard('election')}
-        />
-    )
-  },
-  {
     key: 'timetable',
     label: 'Stundenplan',
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
