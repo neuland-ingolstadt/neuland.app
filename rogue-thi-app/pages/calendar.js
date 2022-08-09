@@ -180,9 +180,9 @@ export default function Calendar () {
             <ListGroup variant="flush">
               <ReactPlaceholder type="text" rows={10} ready={events}>
                 {events && events.length === 0 && (
-                    <ListGroup.Item className={styles.item}>
-                      Es sind derzeit keine Veranstaltungstermine verfügbar.
-                    </ListGroup.Item>
+                  <ListGroup.Item className={styles.item}>
+                    Es sind derzeit keine Veranstaltungstermine verfügbar.
+                  </ListGroup.Item>
                 )}
                 {events && events.map((item, idx) => {
                   const club = clubs.find(club => club.club === item.organizer)
@@ -199,14 +199,18 @@ export default function Calendar () {
                           <div className={styles.details}>
                         <span>
                           { club != null &&
-                              <>
+                            <>
+                              {club.website != null &&
                                 <a href={club.website} className={styles.eventUrl} target="_blank" rel="noreferrer">
                                   {item.organizer}<FontAwesomeIcon icon={faExternalLink} fixedWidth/>
                                 </a>
+                              }
+                              {club.instagram != null &&
                                 <a href={club.instagram} className={styles.eventUrl} target="_blank" rel="noreferrer">
                                   <FontAwesomeIcon icon={faInstagram} fixedWidth/>
                                 </a>
-                              </>
+                              }
+                            </>
                           }
                           { club == null &&
                               <>
