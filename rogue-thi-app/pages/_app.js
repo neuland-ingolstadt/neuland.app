@@ -8,6 +8,8 @@ import TheMatrixAnimation from './../components/TheMatrixAnimation'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
 
+import themes from '../data/themes.json'
+
 import '../styles/globals.css'
 
 export const ThemeContext = createContext('default')
@@ -26,8 +28,9 @@ function MyApp ({ Component, pageProps }) {
       document.cookie = `theme=; expires=${new Date().toUTCString()}; path=/; SameSite=Strict; Secure`
     }
 
-    if (localStorage.theme) {
-      setTheme(localStorage.theme)
+    const theme = localStorage.theme
+    if (theme && themes.find(x => x.style === theme)) {
+      setTheme(theme)
     }
   }, [])
   const computedTheme = useMemo(() => {

@@ -36,19 +36,11 @@ import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
 
+import themes from '../data/themes.json'
+
 import styles from '../styles/Home.module.css'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
-const ALL_THEMES = [
-  { name: 'Automatisch', style: 'default' },
-  { name: 'Hell', style: 'light' },
-  { name: 'Dunkel', style: 'dark' },
-  { name: 'Barbie & Ken', style: 'barbie' },
-  { name: 'Retro', style: 'retro' },
-  { name: 'Windows 95', style: '95' },
-  { name: 'Pride', style: 'pride' },
-  { name: 'Hackerman', style: 'hacker', requiresToken: true }
-]
 
 const PLATFORM_DESKTOP = 'desktop'
 const PLATFORM_MOBILE = 'mobile'
@@ -285,7 +277,7 @@ export default function Home () {
             <Modal.Body ref={themeModalBody}>
               <h3 className={styles.themeHeader}>Design</h3>
               <Form>
-                {ALL_THEMES.map((availableTheme, i) => (
+                {themes.map((availableTheme, i) => (
                   <Button
                     key={i}
                     id={`theme-${i}`}

@@ -25,6 +25,10 @@ function maxDate (a, b) {
   return a > b ? a : b
 }
 
+function isInBuilding (room, building) {
+  return new RegExp(`${building}\\d+`, 'i').test(room)
+}
+
 /**
  * Converts the room plan for easier processing.
  * @param rooms rooms array as described in thi-rest-api.md
@@ -121,7 +125,7 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
       }))
     )
     .filter(opening =>
-      (building === BUILDINGS_ALL || opening.room.toLowerCase().startsWith(building.toLowerCase())) &&
+      (building === BUILDINGS_ALL || isInBuilding(opening.room.toLowerCase(), building)) &&
       beginDate >= opening.from &&
       endDate <= opening.until
     )
