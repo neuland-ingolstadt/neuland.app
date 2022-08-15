@@ -56,13 +56,11 @@ export default function Calendar () {
 
   useEffect(() => {
     async function load () {
-      const [campusLifeEvents, thiEvents] = await Promise.all([
-        NeulandAPI.getCampusLifeEvents(),
-        NeulandAPI.getThiEvents()
+      const [campusLifeEvents] = await Promise.all([
+        NeulandAPI.getCampusLifeEvents()
       ])
 
       const newEvents = campusLifeEvents
-        .concat(thiEvents)
         .map(x => ({
           ...x,
           begin: x.begin ? new Date(x.begin) : null,
