@@ -56,9 +56,7 @@ export default function Calendar () {
 
   useEffect(() => {
     async function load () {
-      const [campusLifeEvents] = await Promise.all([
-        NeulandAPI.getCampusLifeEvents()
-      ])
+      const campusLifeEvents = await NeulandAPI.getCampusLifeEvents()
 
       const newEvents = campusLifeEvents
         .map(x => ({
