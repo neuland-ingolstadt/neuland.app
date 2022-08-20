@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
+
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
@@ -189,6 +191,11 @@ export default function RoomMap ({ highlight, roomData }) {
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
+        <Link href="/rooms/search">
+          <a className={styles.linkToSearch}>
+            Erweiterte Suche
+          </a>
+        </Link>
       </Form>
 
       <MapContainer

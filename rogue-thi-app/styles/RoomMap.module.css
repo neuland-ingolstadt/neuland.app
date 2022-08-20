@@ -1,3 +1,12 @@
+.searchForm {
+  padding: 0px 10px;
+}
+
+.linkToSearch {
+  float: right;
+  font-size: 10pt;
+  margin-top: 0.2em;
+}
 
 .legend {
   display: flex;
@@ -82,9 +91,4 @@
   height: 1em;
   border-radius: 0.5em;
   background-color: var(--legend-color);
-}
-
-.linkToSearch {
-  float: right;
-  margin-top: 0.2em;
 }

@@ -1,0 +1,35 @@
+.searchForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .searchForm {
+    flex-direction: row;
+  }
+
+  .searchForm * {
+    margin-right: 20px;
+  }
+}
+
+.item {
+  display: flex;
+}
+
+.left {
+  flex: 1;
+}
+
+.details {
+  color: gray;
+}
+
+.room {
+  color: gray;
+}
+
+.right {
+  text-align: right;
+}

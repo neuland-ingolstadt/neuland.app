@@ -70,16 +70,7 @@ export default function RoomList () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Stündlicher Raumplan">
-        <AppNavbar.Overflow>
-          <AppNavbar.Overflow.Link variant="link" href="/rooms">
-            Kartenansicht
-          </AppNavbar.Overflow.Link>
-          <AppNavbar.Overflow.Link variant="link" href="/rooms/search">
-            Erweiterte Suche
-          </AppNavbar.Overflow.Link>
-        </AppNavbar.Overflow>
-      </AppNavbar>
+      <AppNavbar title="Stündlicher Raumplan" />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={freeRooms}>
