@@ -158,7 +158,7 @@ export default function RoomList () {
           <Form.Group>
             <Form.Control
               as="input"
-              placeholder="Suche nach Namen, Email, Nummern, ..."
+              placeholder="Alle Dozenten durchsuchen ..."
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
