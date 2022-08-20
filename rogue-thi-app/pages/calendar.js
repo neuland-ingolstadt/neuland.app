@@ -6,8 +6,9 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExternalLink, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import AppBody from '../components/page/AppBody'
@@ -25,10 +26,10 @@ import {
 import NeulandAPI from '../lib/backend/neuland-api'
 import { NoSessionError } from '../lib/backend/thi-session-handler'
 import { useTime } from '../lib/hooks/time-hook'
-import clubs from '../data/clubs.json'
 
 import styles from '../styles/Calendar.module.css'
-import { faInstagram } from '@fortawesome/free-brands-svg-icons'
+
+import clubs from '../data/clubs.json'
 
 export default function Calendar () {
   const router = useRouter()
