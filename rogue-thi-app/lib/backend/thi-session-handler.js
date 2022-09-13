@@ -6,7 +6,15 @@ const CRED_NAME = 'credentials'
 const CRED_ID = 'thi.de'
 
 export class NoSessionError extends Error {
+  constructor () {
+    super('User is not logged in')
+  }
+}
 
+export class UnavailableSessionError extends Error {
+  constructor () {
+    super('User is logged in as guest')
+  }
 }
 
 /**
@@ -33,6 +41,11 @@ export async function createSession (username, password, stayLoggedIn) {
   }
 }
 
+export async function createGuestSession () {
+  await API.clearCache()
+  localStorage.session = 'guest'
+}
+
 /**
  * Calls a method with a session. If the session turns out to be invalid,
  * it attempts to fetch a new session and calls the method again.
@@ -46,6 +59,8 @@ export async function callWithSession (method) {
   // redirect user if he never had a session
   if (!session) {
     throw new NoSessionError()
+  } else if (session === 'guest') {
+    throw new UnavailableSessionError()
   }
 
   const credStore = new CredentialStorage(CRED_NAME)

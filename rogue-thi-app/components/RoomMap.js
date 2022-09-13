@@ -10,7 +10,7 @@ import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContain
 
 import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/RoomMap.module.css'
 
@@ -105,7 +105,7 @@ export default function RoomMap ({ highlight, roomData }) {
         const rooms = await filterRooms(date, time)
         setAvailableRooms(rooms)
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           setAvailableRooms(null)
         } else {
           console.error(e)

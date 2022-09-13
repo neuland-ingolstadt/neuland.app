@@ -24,7 +24,7 @@ import {
   formatFriendlyRelativeTime
 } from '../lib/date-utils'
 import NeulandAPI from '../lib/backend/neuland-api'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
@@ -37,6 +37,7 @@ export default function Calendar () {
   const [exams, setExams] = useState(null)
   const [events, setEvents] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
+  const [isGuest, setIsGuest] = useState(false)
 
   useEffect(() => {
     async function load () {
@@ -46,6 +47,8 @@ export default function Calendar () {
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login?redirect=calendar')
+        } else if (e instanceof UnavailableSessionError) {
+          setIsGuest(true)
         } else {
           console.error(e)
           alert(e)
@@ -140,7 +143,7 @@ export default function Calendar () {
 
           <SwipeableTab className={styles.tab} title="Prüfungen">
             <ListGroup variant="flush">
-              <ReactPlaceholder type="text" rows={4} ready={exams}>
+              <ReactPlaceholder type="text" rows={4} ready={exams || isGuest}>
                 {exams && exams.length === 0 && (
                   <ListGroup.Item>
                     Es sind derzeit keine Prüfungstermine verfügbar.
@@ -161,6 +164,11 @@ export default function Calendar () {
                         {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
                       </div>
                     </div>
+                  </ListGroup.Item>
+                )}
+                {isGuest && (
+                  <ListGroup.Item>
+                    Prüfungstermine sind als Gast nicht verfügbar.
                   </ListGroup.Item>
                 )}
               </ReactPlaceholder>

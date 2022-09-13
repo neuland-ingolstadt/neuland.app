@@ -17,7 +17,7 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import { formatFriendlyTime, formatNearDate } from '../lib/date-utils'
 import API from '../lib/backend/authenticated-api'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Library.module.css'
 
@@ -69,7 +69,7 @@ export default function Library () {
       try {
         await refreshData()
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=library')
         } else {
           console.error(e)

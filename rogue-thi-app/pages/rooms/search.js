@@ -17,7 +17,7 @@ import AppTabbar from '../../components/page/AppTabbar'
 
 import { BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
-import { NoSessionError } from '../../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
@@ -52,7 +52,7 @@ export default function Rooms () {
       try {
         await filter()
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=rooms%2Fsearch')
         } else {
           console.error(e)

@@ -11,7 +11,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import API from '../lib/backend/authenticated-api'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Personal.module.css'
 
@@ -27,7 +27,7 @@ export default function Personal () {
         data.pcounter = response.pcounter
         setUserdata(data)
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=personal')
         } else {
           console.error(e)

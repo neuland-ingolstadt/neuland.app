@@ -10,7 +10,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Grades.module.css'
 
@@ -31,7 +31,7 @@ export default function Grades () {
         const average = await loadGradeAverage()
         setGradeAverage(average)
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=grades')
         } else if (e.message === 'Query not possible') {
           // according to the original developers,

@@ -20,9 +20,9 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
 import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -112,7 +112,7 @@ export default function Timetable () {
           }
         }
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=timetable')
         } else {
           console.error(e)

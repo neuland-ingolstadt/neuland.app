@@ -99,7 +99,7 @@ export class AnonymousAPIClient {
   }
 
   async login (username, passwd) {
-    this.cache.flushAll()
+    await this.clearCache()
 
     const res = await this.request({
       service: 'session',
@@ -139,6 +139,10 @@ export class AnonymousAPIClient {
     })
 
     return res.data === 'STATUS_OK'
+  }
+
+  async clearCache () {
+    this.cache.flushAll()
   }
 }
 

@@ -14,7 +14,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import API from '../lib/backend/authenticated-api'
-import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
@@ -36,7 +36,7 @@ export default function RoomList () {
         setPersonalLecturers(data)
         setFilteredLecturers(data)
       } catch (e) {
-        if (e instanceof NoSessionError) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=lecturers')
         } else {
           console.error(e)
