@@ -25,10 +25,11 @@ const SEARCHED_PROPERTIES = [
   'Funktion'
 ]
 const FLOOR_SUBSTITUTES = {
+  0: 'EG', // room G0099
   OG: '1', // floor 1 in H (Carissma)
   AG: '1.5', // floor 1.5 in A
   G: '1.5', // floor 1.5 in H (Reimanns)
-  null: '4' // floor 4 in Z (Arbeitsamt)
+  null: '4' // floor 4 in Z (Arbeitsamt),
 }
 const FLOOR_ORDER = [
   '4',
