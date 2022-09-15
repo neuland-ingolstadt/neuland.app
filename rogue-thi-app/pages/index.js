@@ -46,11 +46,12 @@ const PLATFORM_DESKTOP = 'desktop'
 const PLATFORM_MOBILE = 'mobile'
 const USER_STUDENT = 'student'
 const USER_EMPLOYEE = 'employee'
+const USER_GUEST = 'guest'
 const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
     label: 'Installation',
-    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: hidePromptCard => (
       <InstallPrompt
         key="install"
@@ -67,25 +68,25 @@ const ALL_DASHBOARD_CARDS = [
   {
     key: 'mensa',
     label: 'Essen',
-    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <FoodCard key="mensa" />
   },
   {
     key: 'mobility',
     label: 'Mobilität',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <MobilityCard key="mobility" />
   },
   {
     key: 'calendar',
     label: 'Termine',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <CalendarCard key="calendar" />
   },
   {
     key: 'rooms',
     label: 'Raumplan',
-    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => (
       <BaseCard
         key="rooms"
@@ -180,8 +181,17 @@ export default function Home () {
         setShownDashboardEntries(entries)
         setHiddenDashboardEntries(hiddenEntries)
       } else {
-        const platform = window.matchMedia('(max-width: 768px)').matches ? PLATFORM_MOBILE : PLATFORM_DESKTOP
-        const personGroup = localStorage.isStudent !== 'false' ? USER_STUDENT : USER_EMPLOYEE
+        const platform = window.matchMedia('(max-width: 768px)').matches
+          ? PLATFORM_MOBILE
+          : PLATFORM_DESKTOP
+
+        let personGroup = USER_STUDENT
+        if (localStorage.session === 'guest') {
+          personGroup = USER_GUEST
+        } else if (localStorage.isStudent === 'false') {
+          personGroup = USER_EMPLOYEE
+        }
+
         const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
         setShownDashboardEntries(ALL_DASHBOARD_CARDS.filter(filter))
         setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !filter(x)))

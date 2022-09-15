@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Nav from 'react-bootstrap/Nav'
@@ -16,6 +16,8 @@ import styles from '../../styles/AppTabbar.module.css'
 
 export default function AppTabbar () {
   const router = useRouter()
+  const [isGuest, setIsGuest] = useState(true)
+  useEffect(() => setIsGuest(localStorage.session === 'guest'), [])
 
   return (
     <>
@@ -29,12 +31,14 @@ export default function AppTabbar () {
               Home
             </Nav.Link>
           </Nav.Item>
-          <Nav.Item>
-            <Nav.Link onClick={() => router.replace('/timetable')} className={[styles.tab, router.pathname === '/timetable' && styles.tabActive]}>
-              <FontAwesomeIcon icon={faCalendar} className={styles.icon} />
-              Stundenplan
-            </Nav.Link>
-          </Nav.Item>
+          {!isGuest && (
+            <Nav.Item>
+              <Nav.Link onClick={() => router.replace('/timetable')} className={[styles.tab, router.pathname === '/timetable' && styles.tabActive]}>
+                <FontAwesomeIcon icon={faCalendar} className={styles.icon} />
+                Stundenplan
+              </Nav.Link>
+            </Nav.Item>
+          )}
           <Nav.Item>
             <Nav.Link onClick={() => router.replace('/rooms')} className={[styles.tab, router.pathname === '/rooms' && styles.tabActive]}>
               <FontAwesomeIcon icon={faMap} className={styles.icon} />
