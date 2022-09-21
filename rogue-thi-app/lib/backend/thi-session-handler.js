@@ -59,7 +59,7 @@ export async function callWithSession (method) {
   // redirect user if he never had a session
   if (!session) {
     throw new NoSessionError()
-  } else if (session === 'guest') {
+  } else if (session === 'guest' || process.env.NEXT_PUBLIC_GUEST_ONLY) {
     throw new UnavailableSessionError()
   }
 
