@@ -1,9 +1,13 @@
 FROM python:3 AS spo
 WORKDIR /opt/
-COPY spo-parser/ .
+COPY spo-parser/requirements.txt .
 RUN apt-get update \
 	&& apt-get install -y libgl1 ghostscript \
-	&& pip install requests opencv-python camelot-py ghostscript
+	&& pip install -r requirements.txt
+
+ARG NEXT_PUBLIC_GUEST_ONLY
+ENV NEXT_PUBLIC_GUEST_ONLY $NEXT_PUBLIC_GUEST_ONLY
+COPY spo-parser/ .
 RUN ./run_extraction.sh
 
 

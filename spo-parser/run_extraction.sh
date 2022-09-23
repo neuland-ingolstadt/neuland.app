@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -n "$NEXT_PUBLIC_GUEST_ONLY" ]; then
+	echo "Skipping grade weight extraction (guest only mode)"
+	echo "{}" > spo-grade-weights.json
+	exit 0
+fi
+
 mkdir -p SPOs
 python3 download_spo_pdfs.py
 
