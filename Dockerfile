@@ -8,6 +8,19 @@ RUN ./run_extraction.sh
 
 
 
+FROM python:3 as courses
+WORKDIR /opt/
+ARG THI_ICAL_USER
+ARG THI_ICAL_SESSION
+ENV THI_ICAL_USER $THI_ICAL_USER
+ENV THI_ICAL_SESSION $THI_ICAL_SESSION
+
+COPY course-downloader .
+RUN pip install -r requirements.txt \
+	&& python3 obtain_course_list.py
+
+
+
 FROM alekzonder/puppeteer:latest AS pwaicons
 USER root
 WORKDIR /opt/
@@ -31,6 +44,7 @@ COPY rogue-thi-app/package.json rogue-thi-app/package-lock.json ./
 RUN npm install
 COPY rogue-thi-app/ .
 COPY --from=spo /opt/spo-grade-weights.json data/
+COPY --from=courses /opt/ical-courses.json data/
 COPY --from=pwaicons /opt/splash/ public/
 
 RUN npm run build
