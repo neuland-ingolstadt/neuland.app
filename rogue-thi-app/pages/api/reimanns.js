@@ -13,6 +13,10 @@ function sendJson (res, code, value) {
   res.end(JSON.stringify(value))
 }
 
+function toNum2 (text) {
+  return Number(text.toString().trim()).toString().padStart(2, '0')
+}
+
 export default async function handler (req, res) {
   try {
     const data = await cache.get('reimanns', async () => {
@@ -38,10 +42,35 @@ export default async function handler (req, res) {
       const days = {}
       let day = null
       lines.map(content => {
-        if (/(montag|dienstag|mittwoch|donnerstag|freitag)\s*\d{1,2}\.\d{1,2}/ui.test(content)) {
-          const [date, month] = content.split(' ')[1].split('.')
-          day = `${year}-${month.trim()}-${date.trim()}`
-          days[day] = []
+        const dayMatch = content.match(/(montag|dienstag|mittwoch|donnerstag|freitag)\s*(\d{1,2}\.\d{1,2})?/ui)
+        if (dayMatch) {
+          if (dayMatch[2]) {
+            const [date, month] = dayMatch[1]
+            day = `${year}-${toNum2(month)}-${toNum2(date)}`
+            days[day] = []
+          } else {
+            const weekDays = [
+              'sonntag',
+              'montag',
+              'dienstag',
+              'mittwoch',
+              'donnerstag',
+              'freitag',
+              'samstag'
+            ]
+
+            const weekDay = weekDays.indexOf(dayMatch[1].toLowerCase())
+            if (weekDay === -1) {
+              // ignore
+              return null
+            }
+
+            const date = new Date()
+            date.setDate(date.getDate() - date.getDay() + weekDay)
+
+            day = `${date.getFullYear()}-${toNum2(date.getMonth() + 1)}-${toNum2(date.getDate())}`
+            days[day] = []
+          }
         } else if (/änderungen|sortiment|(jetzt neu)|geöffnet|geschlossen/ui.test(content)) {
           // ignore
         } else if (day && content) {
