@@ -5,6 +5,7 @@
 import cheerio from 'cheerio'
 import fetchCookie from 'fetch-cookie'
 import fs from 'fs/promises'
+import ical from 'ical-generator'
 import nodeFetch from 'node-fetch'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
@@ -160,6 +161,12 @@ function sendJson (res, status, body) {
   res.end(JSON.stringify(body))
 }
 
+function sendCalendar (res, status, body) {
+  res.statusCode = status
+  res.setHeader('Content-Type', 'text/calendar')
+  res.end(body.toString())
+}
+
 export default async function handler (req, res) {
   try {
     const username = process.env.MOODLE_USERNAME
@@ -167,7 +174,25 @@ export default async function handler (req, res) {
 
     if (username && password) {
       const plan = await cache.get('events', async () => await getAllEventDetails(username, password))
-      sendJson(res, 200, plan)
+      const format = req.query.format ?? 'json'
+
+      if (format === 'json') {
+        sendJson(res, 200, plan)
+      } else if (format === 'ical') {
+        const cal = ical({ name: 'Campus Life' })
+          .timezone('Europe/Berlin')
+          .ttl(60 * 60 * 24)
+        for (const event of plan) {
+          cal.createEvent({
+            id: event.origin_url,
+            summary: event.title,
+            description: `Veranstalter: ${event.organizer}`,
+            start: event.begin,
+            end: event.end
+          })
+        }
+        sendCalendar(res, 200, cal)
+      }
     } else {
       sendJson(res, 500, 'Moodle credentials not configured')
     }
