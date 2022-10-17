@@ -188,7 +188,8 @@ export default async function handler (req, res) {
             summary: event.title,
             description: `Veranstalter: ${event.organizer}`,
             start: event.begin,
-            end: event.end
+            // discard the end if it is before the start
+            end: event.end > event.begin ? event.end : undefined
           })
         }
         sendCalendar(res, 200, cal)
