@@ -60,6 +60,18 @@ function parseDataFromXml (xml) {
         }
       }
 
+      const nutrition = {
+        kj: parseGermanFloat(item.kj._text),
+        kcal: parseGermanFloat(item.kcal._text),
+        fat: parseGermanFloat(item.fett._text),
+        fatSaturated: parseGermanFloat(item.gesfett._text),
+        carbs: parseGermanFloat(item.kh._text),
+        sugar: parseGermanFloat(item.zucker._text),
+        fiber: parseGermanFloat(item.ballaststoffe._text),
+        protein: parseGermanFloat(item.eiweiss._text),
+        salt: parseGermanFloat(item.salz._text)
+      }
+
       return {
         name: text.trim(),
         prices: {
@@ -68,7 +80,8 @@ function parseDataFromXml (xml) {
           guest: parseGermanFloat(item.preis3._text)
         },
         allergens: [...allergens],
-        flags
+        flags,
+        nutrition
       }
     })
 

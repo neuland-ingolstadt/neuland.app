@@ -91,7 +91,8 @@ export default async function handler (req, res) {
             guest: 6.3
           },
           allergens: null,
-          flags: null
+          flags: null,
+          nutrition: null
         }))
       }))
     })

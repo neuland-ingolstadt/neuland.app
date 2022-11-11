@@ -94,6 +94,10 @@ export default function Mensa () {
     return formatPrice(price)
   }
 
+  function formatFloat (x) {
+    return x?.toString().replace('.', ',')
+  }
+
   return (
     <AppContainer>
       <AppNavbar title="Essen" showBack={'desktop-only'}>
@@ -216,6 +220,42 @@ export default function Mensa () {
               ))}
             </ul>
 
+            <h5>Nährwerte</h5>
+
+            {(showMealDetails?.nutrition && (
+
+              <ul>
+                <li>
+                  <strong>Energie</strong>:{' '}
+
+                  {showMealDetails?.nutrition.kj} kJ / {showMealDetails?.nutrition.kcal} kcal
+                </li>
+                <li>
+                  <strong>Fett</strong>:{' '}
+                  {formatFloat(showMealDetails?.nutrition.fat)} g
+                  <br /><strong>davon gesättigte Fettsäuren</strong>: {formatFloat(showMealDetails?.nutrition.fatSaturated)} g
+                </li>
+                <li>
+                  <strong>Kohlenhydrate</strong>:{' '}
+                  {formatFloat(showMealDetails?.nutrition.carbs)} g
+                  <br /><strong>davon Zucker</strong>: {formatFloat(showMealDetails?.nutrition.sugar)} g
+                </li>
+                <li>
+                  <strong>Ballaststoffe</strong>:{' '}
+                  {formatFloat(showMealDetails?.nutrition.fiber)} g
+                </li>
+                <li>
+                  <strong>Eiweiß</strong>:{' '}
+                  {formatFloat(showMealDetails?.nutrition.protein)} g
+                </li>
+                <li>
+                  <strong>Salz</strong>:{' '}
+                  {formatFloat(showMealDetails?.nutrition.salt)} g
+                </li>
+              </ul>)) || (
+                <p>Unbekannt.</p>
+            )}
+
             <h5>Preise</h5>
             <ul>
               <li>
@@ -234,7 +274,9 @@ export default function Mensa () {
 
             <p>
               <strong>Angaben ohne Gewähr. </strong>
+              <br />
               Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
+              Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion.
             </p>
           </Modal.Body>
 
