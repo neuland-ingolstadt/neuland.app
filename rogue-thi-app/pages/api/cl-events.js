@@ -37,11 +37,7 @@ function parseLocalDateTime (str) {
  * Load persisted events from disk
  */
 async function loadEvents () {
-  try {
-    return JSON.parse(await fs.readFile(EVENT_STORE))
-  } catch (e) {
-    return []
-  }
+  return JSON.parse(await fs.readFile(EVENT_STORE))
 }
 
 /**
@@ -146,7 +142,7 @@ export async function getAllEventDetails (username, password) {
   }
 
   const now = new Date()
-  events = events.filter(event => event.begin > now || event.end > now)
+  events = events.filter(event => new Date(event.begin) > now || new Date(event.end) > now)
 
   // we need to persist the events because they disappear on monday
   // even if the event has not passed yet
