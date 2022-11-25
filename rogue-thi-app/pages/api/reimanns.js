@@ -41,43 +41,33 @@ export default async function handler (req, res) {
 
       const days = {}
       let day = null
-      lines.map(content => {
-        const dayMatch = content.match(/(montag|dienstag|mittwoch|donnerstag|freitag)\s*(\d{1,2}\.\d{1,2})?/ui)
-        if (dayMatch) {
-          if (dayMatch[2]) {
-            const [date, month] = dayMatch[1]
-            day = `${year}-${toNum2(month)}-${toNum2(date)}`
-            days[day] = []
-          } else {
-            const weekDays = [
-              'sonntag',
-              'montag',
-              'dienstag',
-              'mittwoch',
-              'donnerstag',
-              'freitag',
-              'samstag'
-            ]
+      lines.forEach(content => {
+        content = content.trim()
+        const dayNameMatch = content.match(/montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag/ui)
+        const numberDateMatch = content.match(/(\d{1,2})\.(\d{1,2})/ui)
+        if (numberDateMatch) {
+          day = `${year}-${toNum2(numberDateMatch[2])}-${toNum2(numberDateMatch[1])}`
+          days[day] = []
+        } else if (dayNameMatch) {
+          const weekDay = [
+            'sonntag',
+            'montag',
+            'dienstag',
+            'mittwoch',
+            'donnerstag',
+            'freitag',
+            'samstag'
+          ].indexOf(dayNameMatch[0].toLowerCase())
 
-            const weekDay = weekDays.indexOf(dayMatch[1].toLowerCase())
-            if (weekDay === -1) {
-              // ignore
-              return null
-            }
-
-            const date = new Date()
-            date.setDate(date.getDate() - date.getDay() + weekDay)
-
-            day = `${date.getFullYear()}-${toNum2(date.getMonth() + 1)}-${toNum2(date.getDate())}`
-            days[day] = []
-          }
+          const date = new Date()
+          date.setDate(date.getDate() - date.getDay() + weekDay)
+          day = `${date.getFullYear()}-${toNum2(date.getMonth() + 1)}-${toNum2(date.getDate())}`
+          days[day] = []
         } else if (/änderungen|sortiment|(jetzt neu)|geöffnet|geschlossen/ui.test(content)) {
           // ignore
         } else if (day && content) {
           days[day].push(content)
         }
-
-        return null // make eslint happy
       })
 
       // convert format to the same as /api/mensa
