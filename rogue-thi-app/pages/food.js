@@ -89,6 +89,12 @@ export default function Mensa () {
   function formatPrice (x) {
     return x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
   }
+
+  function formatGram (x) {
+    // use formatFloat and if g. But if value is '' just return it wihtout adding g
+    return x ? `${formatFloat(x)} g` : x
+  }
+
   function getUserSpecificPrice (meal) {
     const price = isStudent ? meal.prices.student : meal.prices.employee
     return formatPrice(price)
@@ -227,30 +233,30 @@ export default function Mensa () {
               <ul>
                 <li>
                   <strong>Energie</strong>:{' '}
-
-                  {showMealDetails?.nutrition.kj} kJ / {showMealDetails?.nutrition.kcal} kcal
+                  {showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / &nbsp;
+                  {showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}
                 </li>
                 <li>
                   <strong>Fett</strong>:{' '}
-                  {formatFloat(showMealDetails?.nutrition.fat)} g
-                  <br /><strong>davon gesättigte Fettsäuren</strong>: {formatFloat(showMealDetails?.nutrition.fatSaturated)} g
+                  {formatGram(showMealDetails?.nutrition.fat)}
+                  <br /><strong>davon gesättigte Fettsäuren</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
                 </li>
                 <li>
                   <strong>Kohlenhydrate</strong>:{' '}
-                  {formatFloat(showMealDetails?.nutrition.carbs)} g
-                  <br /><strong>davon Zucker</strong>: {formatFloat(showMealDetails?.nutrition.sugar)} g
+                  {formatGram(showMealDetails?.nutrition.carbs)}
+                  <br /><strong>davon Zucker</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
                 </li>
                 <li>
                   <strong>Ballaststoffe</strong>:{' '}
-                  {formatFloat(showMealDetails?.nutrition.fiber)} g
+                  {formatGram(showMealDetails?.nutrition.fiber)}
                 </li>
                 <li>
                   <strong>Eiweiß</strong>:{' '}
-                  {formatFloat(showMealDetails?.nutrition.protein)} g
+                  {formatGram(showMealDetails?.nutrition.protein)}
                 </li>
                 <li>
                   <strong>Salz</strong>:{' '}
-                  {formatFloat(showMealDetails?.nutrition.salt)} g
+                  {formatGram(showMealDetails?.nutrition.salt)}
                 </li>
               </ul>)) || (
                 <p>Unbekannt.</p>

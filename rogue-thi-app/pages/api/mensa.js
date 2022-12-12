@@ -13,6 +13,10 @@ function parseGermanFloat (str) {
   return parseFloat(str.replace(',', '.'))
 }
 
+function parseNutritionFloat (str) {
+  return str._text ? parseGermanFloat(str._text) : ''
+}
+
 function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
@@ -61,15 +65,15 @@ function parseDataFromXml (xml) {
       }
 
       const nutrition = {
-        kj: parseGermanFloat(item.kj._text),
-        kcal: parseGermanFloat(item.kcal._text),
-        fat: parseGermanFloat(item.fett._text),
-        fatSaturated: parseGermanFloat(item.gesfett._text),
-        carbs: parseGermanFloat(item.kh._text),
-        sugar: parseGermanFloat(item.zucker._text),
-        fiber: parseGermanFloat(item.ballaststoffe._text),
-        protein: parseGermanFloat(item.eiweiss._text),
-        salt: parseGermanFloat(item.salz._text)
+        kj: parseNutritionFloat(item.kj),
+        kcal: parseNutritionFloat(item.kcal),
+        fat: parseNutritionFloat(item.fett),
+        fatSaturated: parseNutritionFloat(item.gesfett),
+        carbs: parseNutritionFloat(item.kh),
+        sugar: parseNutritionFloat(item.zucker),
+        fiber: parseNutritionFloat(item.ballaststoffe),
+        protein: parseNutritionFloat(item.eiweiss),
+        salt: parseNutritionFloat(item.salz)
       }
 
       return {
