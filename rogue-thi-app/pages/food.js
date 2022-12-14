@@ -91,7 +91,6 @@ export default function Mensa () {
   }
 
   function formatGram (x) {
-    // use formatFloat and if g. But if value is '' just return it wihtout adding g
     return x ? `${formatFloat(x)} g` : x
   }
 
