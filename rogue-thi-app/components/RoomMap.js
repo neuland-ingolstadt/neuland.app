@@ -15,8 +15,6 @@ import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-sess
 import styles from '../styles/RoomMap.module.css'
 
 const SPECIAL_ROOMS = {
-  C073: { text: 'Kostenlose Menstruationsprodukte verfügbar', color: '#EB749A' },
-  D171: { text: 'Kostenlose Menstruationsprodukte verfügbar', color: '#EB749A' },
   G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
 }
 const SEARCHED_PROPERTIES = [
