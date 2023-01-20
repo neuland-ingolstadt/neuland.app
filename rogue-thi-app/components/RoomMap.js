@@ -6,11 +6,12 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
-import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
+import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, CircleMarker, Popup, TileLayer } from 'react-leaflet'
 
+import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
-import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { useLocation } from '../lib/hooks/geolocation'
 
 import styles from '../styles/RoomMap.module.css'
 
@@ -44,6 +45,7 @@ const SPECIAL_COLORS = [...new Set(Object.values(SPECIAL_ROOMS).map(x => x.color
 export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
   const searchField = useRef()
+  const location = useLocation()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState(null)
 
@@ -251,6 +253,18 @@ export default function RoomMap ({ highlight, roomData }) {
               </LayersControl.BaseLayer>
             ))}
         </LayersControl>
+
+        {location &&
+          <CircleMarker
+            center={[location.latitude, location.longitude]}
+            fillOpacity={1.0}
+            color='#ffffff'
+            fillColor='rgb(51, 136, 255)'
+            radius={8}
+            weight={3}
+            className={styles.locationMarker}
+          />
+        }
       </MapContainer>
     </>
   )

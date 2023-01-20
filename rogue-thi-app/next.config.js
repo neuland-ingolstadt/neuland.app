@@ -10,7 +10,6 @@ const permissionPolicyFeatures = [
   'document-domain',
   'encrypted-media',
   'fullscreen',
-  'geolocation',
   'gyroscope',
   'magnetometer',
   'microphone',
