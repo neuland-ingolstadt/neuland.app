@@ -77,8 +77,8 @@ export default function RoomMap ({ highlight, roomData }) {
       return [allRooms, DEFAULT_CENTER]
     }
 
-    const getProp = (room, prop) => room.properties[prop].toUpperCase()
-    const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x).indexOf(searchText) !== -1)
+    const getProp = (room, prop) => room.properties[prop]?.toUpperCase()
+    const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(searchText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(searchText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(searchText) ? roomOnlySearcher : fullTextSearcher)
 
