@@ -14,8 +14,13 @@ export default function CalendarCard () {
 
   useEffect(() => {
     async function load () {
-      const events = await NeulandAPI.getCampusLifeEvents()
-      setCalendar(events)
+      try {
+        const events = await NeulandAPI.getCampusLifeEvents()
+        setCalendar(events)
+      } catch (e) {
+        // directly notifying the user about the error is not necessary here
+        console.error(e)
+      }
     }
     load()
   }, [router])
