@@ -35,6 +35,7 @@ import FoodCard from '../components/cards/FoodCard'
 import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
+import EventsCard from '../components/cards/EventsCard'
 
 import themes from '../data/themes.json'
 
@@ -82,6 +83,12 @@ const ALL_DASHBOARD_CARDS = [
     label: 'Termine',
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <CalendarCard key="calendar" />
+  },
+  {
+    key: 'events',
+    label: 'Veranstaltungen',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    card: () => <EventsCard key="events" />
   },
   {
     key: 'rooms',

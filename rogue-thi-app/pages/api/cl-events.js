@@ -147,8 +147,8 @@ export async function getAllEventDetails (username, password) {
     events = events.filter(a => a.begin < remoteStart).concat(remoteEvents)
   }
 
-  // remove all events from the past
   events = events.filter(event => new Date(event.begin) > now || new Date(event.end) > now)
+  events = events.sort((a, b) => a.end - b.end).sort((a, b) => a.begin - b.begin)
 
   // we need to persist the events because they disappear on monday
   // even if the event has not passed yet
