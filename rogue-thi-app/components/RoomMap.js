@@ -144,14 +144,17 @@ export default function RoomMap ({ highlight, roomData }) {
             {entry.properties.Raum}
           </strong>
           {`, ${entry.properties.Funktion}`} <br />
-          Gebäude {entry.properties.Gebaeude} <br />
-          Campus {entry.properties.Standort} <br />
           {avail && (
             <>
-              <strong>Frei</strong>
+              Frei
               {' '}von {formatFriendlyTime(avail.from)}
               {' '}bis {formatFriendlyTime(avail.until)}
               <br />
+            </>
+          )}
+          {!avail && availableRooms && (
+            <>
+              Belegt
             </>
           )}
           {special?.text}
@@ -194,7 +197,7 @@ export default function RoomMap ({ highlight, roomData }) {
         />
         <Link href="/rooms/search">
           <a className={styles.linkToSearch}>
-            Erweiterte Suche
+            Stattdessen nach Zeitraum suchen
           </a>
         </Link>
       </Form>

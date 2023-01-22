@@ -63,7 +63,7 @@
 }
 
 .legendFree, .legendTaken, .legendSpecial{
-  margin: 0.2em;
+  margin: 0.2em 0em 0.2em 0.2em;
 }
 
 .legendFree::before {
@@ -71,6 +71,7 @@
   display: inline-block;
   width: 1em;
   height: 1em;
+  margin-bottom: -2px;
   border-radius: 0.5em;
   background-color: #8845ef;
 }
@@ -80,6 +81,7 @@
   display: inline-block;
   width: 1em;
   height: 1em;
+  margin-bottom: -2px;
   border-radius: 0.5em;
   background-color: #6c757d;
 }
@@ -89,6 +91,7 @@
   display: inline-block;
   width: 1em;
   height: 1em;
+  margin-bottom: -2px;
   border-radius: 0.5em;
   background-color: var(--legend-color);
 }
