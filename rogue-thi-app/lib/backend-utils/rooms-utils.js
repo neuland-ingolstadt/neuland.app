@@ -89,11 +89,11 @@ export function getNextValidDate () {
 
   if (startDate.getDay() === 0 || startDate.getHours() > 20) { // sunday or after 9pm
     startDate.setDate(startDate.getDate() + 1)
-    startDate.setHours(6)
-    startDate.setMinutes(0)
-  } else if (startDate.getHours() < 6) { // before 6am
-    startDate.setHours(6)
-    startDate.setMinutes(0)
+    startDate.setHours(8)
+    startDate.setMinutes(15)
+  } else if (startDate.getHours() < 8) { // before 6am
+    startDate.setHours(8)
+    startDate.setMinutes(15)
   }
 
   return startDate
