@@ -9,7 +9,7 @@ import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 
-import { createSession, createGuestSession } from '../lib/backend/thi-session-handler'
+import { createGuestSession, createSession } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Login.module.css'
 

@@ -31,11 +31,11 @@ import { forgetSession } from '../lib/backend/thi-session-handler'
 
 import BaseCard from '../components/cards/BaseCard'
 import CalendarCard from '../components/cards/CalendarCard'
+import EventsCard from '../components/cards/EventsCard'
 import FoodCard from '../components/cards/FoodCard'
 import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
-import EventsCard from '../components/cards/EventsCard'
 
 import themes from '../data/themes.json'
 

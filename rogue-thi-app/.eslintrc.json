@@ -22,6 +22,7 @@
     ],
     "rules": {
         "no-prototype-builtins": "off",
+        "import/no-anonymous-default-export": "off",
         "sort-imports": ["warn", {
             "allowSeparatedGroups": true
         }]

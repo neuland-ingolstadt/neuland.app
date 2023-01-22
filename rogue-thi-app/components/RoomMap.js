@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
-import { AttributionControl, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, CircleMarker, Popup, TileLayer } from 'react-leaflet'
+import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'

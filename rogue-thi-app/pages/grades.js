@@ -9,8 +9,8 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 
 import styles from '../styles/Grades.module.css'
 

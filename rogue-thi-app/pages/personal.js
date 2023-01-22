@@ -10,8 +10,8 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import API from '../lib/backend/authenticated-api'
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
 
