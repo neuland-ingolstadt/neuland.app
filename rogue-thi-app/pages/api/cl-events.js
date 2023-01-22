@@ -123,25 +123,31 @@ export async function getAllEventDetails (username, password) {
 
   await login(fetch, username, password)
 
-  let events = await loadEvents()
+  const remoteEvents = []
   for (const url of await getEventList(fetch)) {
     const details = await getEventDetails(fetch, url)
-
     // do not include location and description
     // since it may contain sensitive information
-    events = [
-      ...events.filter(event => event.origin_url !== url),
-      {
-        origin_url: url,
-        organizer: details.Verein,
-        title: details.Event,
-        begin: details.Start ? parseLocalDateTime(details.Start) : null,
-        end: details.Ende ? parseLocalDateTime(details.Ende) : null
-      }
-    ]
+    remoteEvents.push({
+      origin_url: url,
+      organizer: details.Verein,
+      title: details.Event,
+      begin: details.Start ? parseLocalDateTime(details.Start) : null,
+      end: details.Ende ? parseLocalDateTime(details.Ende) : null
+    })
   }
 
   const now = new Date()
+  let events = await loadEvents()
+
+  if (remoteEvents.length > 0) {
+    // remove all events which disappeared from the server
+    // this will not work if the first event gets removed
+    const remoteStart = remoteEvents.map(event => event.begin).reduce((a, b) => a < b ? a : b)
+    events = events.filter(a => a.begin < remoteStart).concat(remoteEvents)
+  }
+
+  // remove all events from the past
   events = events.filter(event => new Date(event.begin) > now || new Date(event.end) > now)
 
   // we need to persist the events because they disappear on monday
