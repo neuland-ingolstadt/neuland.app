@@ -170,16 +170,16 @@ export default function Mensa () {
                                 )}
                               {meal.flags && meal.flags.map((flag, idx) => (
                                   <span key={idx}>
-                            {idx > 0 && ', '}
+                                    {idx > 0 && ', '}
                                     <span>
-                              {flagMap[flag]}
-                            </span>
-                          </span>
+                                      {flagMap[flag]}
+                                    </span>
+                                  </span>
                               ))}
                               {meal.allergens && meal.allergens.map((supplement, idx) => (
                                   <span key={idx}>
-                            {(idx > 0 || meal.flags?.length > 0) && ', '}
-                                    <span>
+                                    {(idx > 0 || meal.flags?.length > 0) && ', '}
+                                  <span>
                               {supplement}
                             </span>
                           </span>
@@ -218,7 +218,13 @@ export default function Mensa () {
               {showMealDetails?.flags?.length === 0 && 'Keine.'}
               <ul>
                 {showMealDetails?.flags?.map(flag => (
-                    <li key={flag}>
+                    <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
+                      {containsSelectedPreference([flag]) && (
+                          <span>
+                            <FontAwesomeIcon icon={faHandshake} color={COLOR_GOOD} />{' '}
+                          </span>
+                      )}
+                      {' '}
                       <strong>{flag}</strong>
                       {' – '}
                       {flagMap[flag] || FALLBACK_ALLERGEN}
@@ -234,9 +240,9 @@ export default function Mensa () {
                     <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
                       {containsSelectedAllergen([key]) && (
                           <span>
-                      <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
+                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
                             {' '}
-                    </span>
+                          </span>
                       )}
                       {' '}
                       <strong>{key}</strong>
@@ -351,12 +357,7 @@ export default function Mensa () {
 
               <Modal.Body>
                 <span>
-                  {Object.entries(allergenMap).map(([mapkey, mapvalue]) => (
-                    Object.entries(allergenSelection).map(([key, value]) => (
-                          <span key={key} >{mapkey === key && value === true && mapkey + ' - ' + mapvalue + ', '}</span>
-                    ))
-                  ))
-                  }
+                  {Object.entries(allergenSelection).filter(x => x[1]).map(x => allergenMap[x[0]]).join(', ')}
                 </span>
               </Modal.Body>
 
@@ -373,12 +374,7 @@ export default function Mensa () {
 
               <Modal.Body>
                 <span>
-                  {Object.entries(flagMap).map(([mapkey, mapvalue]) => (
-                    Object.entries(preferencesSelection).map(([key, value]) => (
-                          <span key={key} >{mapkey === key && value === true && mapvalue + ', '}</span>
-                    ))
-                  ))
-                  }
+                  {Object.entries(preferencesSelection).filter(x => x[1]).map(x => flagMap[x[0]]).join(', ')}
                 </span>
               </Modal.Body>
 
