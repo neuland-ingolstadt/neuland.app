@@ -158,13 +158,13 @@ export default function Mensa () {
                               {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
                               {containsSelectedAllergen(meal.allergens) && (
                                   <span>
-                                        <FontAwesomeIcon title="Warnung" icon={faExclamationTriangle} color={COLOR_WARN} />
+                                        <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
                                         {' '}
                                   </span>
                               )}
                                 {containsSelectedPreference(meal.flags) && (
                                     <span>
-                                        <FontAwesomeIcon title="Preferences" icon={faHandshake} color={COLOR_GOOD} />
+                                        <FontAwesomeIcon title="Bevorzugtes Essen" icon={faHandshake} color={COLOR_GOOD} />
                                         {' '}
                                     </span>
                                 )}
@@ -375,7 +375,7 @@ export default function Mensa () {
                 <span>
                   {Object.entries(flagMap).map(([mapkey, mapvalue]) => (
                     Object.entries(preferencesSelection).map(([key, value]) => (
-                          <span key={key} >{mapkey === key && value === true && mapkey + ' - ' + mapvalue + ', '}</span>
+                          <span key={key} >{mapkey === key && value === true && mapvalue + ', '}</span>
                     ))
                   ))
                   }
@@ -427,7 +427,7 @@ export default function Mensa () {
                     <Form.Check
                         key={key}
                         id={'preferences-checkbox-' + key}
-                        label={<span><strong>{key}</strong>{' – '}{value}</span>}
+                        label={<span>{value}</span>}
                         checked={preferencesSelection[key] || false}
                         onChange={e => setPreferencesSelection({ ...preferencesSelection, [key]: e.target.checked })}
                     />
