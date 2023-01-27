@@ -27,6 +27,13 @@ function parseDepartureTime (str) {
   return date
 }
 
+/**
+ * Sends a HTTP response as JSON.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
+
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')

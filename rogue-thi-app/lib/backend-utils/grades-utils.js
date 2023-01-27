@@ -5,6 +5,10 @@ function simplifyName (x) {
   return x.replace(/\W/g, '').toLowerCase()
 }
 
+/**
+ * Fetches and parses the grade list
+ * @returns {object[]}
+ */
 async function getGradeList () {
   const gradeList = await API.getGrades()
   gradeList.forEach(x => {
@@ -18,6 +22,10 @@ async function getGradeList () {
   return gradeList
 }
 
+/**
+ * Fetches, parses and filters the grade list
+ * @returns {object}
+ */
 export async function loadGrades () {
   const gradeList = await getGradeList()
 
@@ -33,6 +41,10 @@ export async function loadGrades () {
   }
 }
 
+/**
+ * Calculates the approximate grade average based on automatically extracted SPO data
+ * @returns {object}
+ */
 export async function loadGradeAverage () {
   const gradeList = await getGradeList()
   const spoName = await API.getSpoName()

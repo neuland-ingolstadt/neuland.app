@@ -12,6 +12,9 @@ function getContentType (headers) {
   return value ? value.split(';')[0] : null
 }
 
+/**
+ * A fetch implementation which uses the Capacitor HTTP client in the background.
+ */
 export default class CapacitorFetchConnection {
   async fetch (url, options) {
     // parse body because capacitor expects a non-serialized data object

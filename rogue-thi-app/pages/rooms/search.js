@@ -25,7 +25,10 @@ const BUILDINGS = ['A', 'B', 'BN', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'M', 
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const TUX_ROOMS = ['G308']
 
-export default function Rooms () {
+/**
+ * Page containing the room search.
+ */
+export default function RoomSearch () {
   const router = useRouter()
   const startDate = getNextValidDate()
 
@@ -37,6 +40,9 @@ export default function Rooms () {
   const [searching, setSearching] = useState(false)
   const [filterResults, setFilterResults] = useState(null)
 
+  /**
+   * Searches and displays rooms with the specified filters.
+   */
   const filter = useCallback(async () => {
     setSearching(true)
     setFilterResults(null)

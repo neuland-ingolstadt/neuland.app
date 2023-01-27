@@ -1,5 +1,10 @@
 import API from '../backend/authenticated-api'
 
+/**
+ * Extracts regular, short and full names for a lecture.
+ * @param {object} item Timetable item
+ * @returns {object}
+ */
 export function getTimetableEntryName (item) {
   const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
   if (match) {
@@ -23,6 +28,12 @@ export function getTimetableEntryName (item) {
   }
 }
 
+/**
+ * Fetches and parses timetable data.
+ * @param {Date} date Date to fetch
+ * @param {boolean} detailed Fetch lecture descriptions
+ * @returns {object[]}
+ */
 export async function getFriendlyTimetable (date, detailed) {
   const { timetable } = await API.getTimetable(date, detailed)
 

@@ -7,6 +7,10 @@ const DEFAULT_BACKOFF = 60000
  * It uses exponential backoff to avoid calling the producer too often when it throws an exception.
  */
 export default class AsyncMemoryCache extends MemoryCache {
+  /**
+   * @param {number} ttl Seconds after which an entry should be discarded
+   * @param {number} backoff Seconds to wait before retrying a failed request
+   */
   constructor ({ ttl, backoff }) {
     super({ ttl })
     this.backoff = backoff || DEFAULT_BACKOFF
@@ -17,6 +21,8 @@ export default class AsyncMemoryCache extends MemoryCache {
   /**
    * If there is a value cached under the given key, it is returned.
    * Otherwise producer is called exactly once to populate the cache.
+   *
+   * @param {object} producer Async function that returns the value to be cached
    */
   async get (key, producer) {
     // check if there is a cached result

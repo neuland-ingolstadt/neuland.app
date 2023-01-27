@@ -23,7 +23,10 @@ import styles from '../styles/Calendar.module.css'
 
 import clubs from '../data/clubs.json'
 
-export default function Calendar () {
+/**
+ * Page containing the CL events.
+ */
+export default function Events () {
   const now = useTime()
   const [events, setEvents] = useState(null)
 

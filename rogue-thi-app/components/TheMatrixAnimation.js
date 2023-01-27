@@ -4,6 +4,9 @@ function getRandomChar () {
   return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
 }
 
+/**
+ * Canvas that renders a Matrix-like animation.
+ */
 export default function TheMatrixAnimation () {
   const canvas = useRef()
 

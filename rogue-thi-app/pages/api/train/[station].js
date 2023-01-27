@@ -13,6 +13,10 @@ const STATIONS = {
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
+/**
+ * Parses a time string like "21:05".
+ * If the time appears to be in the past, the next day is used.
+ */
 function dateFromTimestring (str) {
   const [, hourStr, minuteStr] = str.match(/(\d\d):(\d\d)/)
   const hour = parseInt(hourStr)
@@ -28,6 +32,12 @@ function dateFromTimestring (str) {
   return now
 }
 
+/**
+ * Sends a HTTP response as JSON.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')

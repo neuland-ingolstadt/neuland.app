@@ -19,7 +19,10 @@ import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
 
-export default function RoomList () {
+/**
+ * Page containing the lecturer search and details.
+ */
+export default function Lecturers () {
   const router = useRouter()
   const [personalLecturers, setPersonalLecturers] = useState(null)
   const [allLecturers, setAllLecturers] = useState(null)

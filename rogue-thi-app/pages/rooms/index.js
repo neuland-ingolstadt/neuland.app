@@ -26,6 +26,9 @@ export async function getStaticProps () {
   }
 }
 
+/**
+ * Page containing the room map.
+ */
 export default function Rooms ({ roomData }) {
   const router = useRouter()
   const { highlight } = router.query
@@ -51,7 +54,6 @@ export default function Rooms ({ roomData }) {
     </AppContainer>
   )
 }
-
 Rooms.propTypes = {
   roomData: PropTypes.object
 }

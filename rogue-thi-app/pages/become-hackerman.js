@@ -14,6 +14,9 @@ import AppTabbar from '../components/page/AppTabbar'
 const FLAG_CSV = process.env.NEXT_PUBLIC_HACKERMAN_FLAGS || ''
 const FLAG_HASHES = FLAG_CSV.split(',')
 
+/**
+ * Page which allows the user to enable the Hackerman theme by entering CTF flags.
+ */
 export default function BecomeHackerman () {
   const router = useRouter()
   const [flags, setFlags] = useState(['', '', '', ''])

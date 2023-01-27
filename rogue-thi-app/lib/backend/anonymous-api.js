@@ -41,7 +41,14 @@ const THI_CERTS = [
   -----END CERTIFICATE-----`
 ]
 
+/**
+ * Error that is thrown when the API indicates an error.
+ */
 export class APIError extends Error {
+  /**
+   * @param {number} status HTTP status code
+   * @param {object} data Error data
+   */
   constructor (status, data) {
     super(`${data} (${status})`)
     this.status = status
@@ -49,6 +56,13 @@ export class APIError extends Error {
   }
 }
 
+/**
+ * Client for accessing the API without authentication.
+ * This client implements its own caching. If run in the browser,
+ * responses will be cached in `localStorage` for `CACHE_TTL`.
+ *
+ * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
+ */
 export class AnonymousAPIClient {
   constructor () {
     if (typeof localStorage === 'undefined') {
@@ -98,6 +112,9 @@ export class AnonymousAPIClient {
     }
   }
 
+  /**
+   * Creates a login session.
+   */
   async login (username, passwd) {
     await this.clearCache()
 
@@ -119,6 +136,11 @@ export class AnonymousAPIClient {
     }
   }
 
+  /**
+   * Checks whether the session is still valid.
+   * @param {string} session Session token
+   * @returns {boolean} `true` if the session is valid.
+   */
   async isAlive (session) {
     const res = await this.request({
       service: 'session',
@@ -130,6 +152,11 @@ export class AnonymousAPIClient {
     return res.data === 'STATUS_OK'
   }
 
+  /**
+   * Destroys a session.
+   * @param {string} session Session token
+   * @returns {boolean} `true` if the session was destroyed.
+   */
   async logout (session) {
     const res = await this.request({
       service: 'session',
@@ -141,6 +168,11 @@ export class AnonymousAPIClient {
     return res.data === 'STATUS_OK'
   }
 
+  /**
+   * Clears the response cache.
+   * Should be called either before login or after logout
+   * to prevent responses from different users from being mixed up.
+   */
   async clearCache () {
     this.cache.flushAll()
   }

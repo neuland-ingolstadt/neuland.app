@@ -4,6 +4,9 @@ const CHECK_INTERVAL = 10000
  * A simple cache that deletes entries after a certain amount of time
  */
 export default class MemoryCache {
+  /**
+   * @param {number} ttl Seconds after which an entry should be discarded
+   */
   constructor ({ ttl }) {
     this.ttl = ttl
     this.cache = new Map()

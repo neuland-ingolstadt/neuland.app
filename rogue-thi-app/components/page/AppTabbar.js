@@ -14,6 +14,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/AppTabbar.module.css'
 
+/**
+ * Tab bar to be displayed at the bottom of the screen.
+ */
 export default function AppTabbar () {
   const router = useRouter()
   const [isGuest, setIsGuest] = useState(true)

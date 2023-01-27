@@ -11,6 +11,10 @@ class NeulandAPIClient {
     this.connection = obtainFetchImplementation(ENDPOINT_MODE, {})
   }
 
+  /**
+   * Performs a request against the neuland.app API
+   * @param {string} url
+   */
   async performRequest (url) {
     const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
 
@@ -29,10 +33,16 @@ class NeulandAPIClient {
     return this.performRequest(`${ENDPOINT}/api/reimanns`)
   }
 
+  /**
+   * @param {string} station Bus station identifier
+   */
   async getBusPlan (station) {
     return this.performRequest(`${ENDPOINT}/api/bus/${encodeURIComponent(station)}`)
   }
 
+  /**
+   * @param {string} station Train station identifier
+   */
   async getTrainPlan (station) {
     return this.performRequest(`${ENDPOINT}/api/train/${encodeURIComponent(station)}`)
   }

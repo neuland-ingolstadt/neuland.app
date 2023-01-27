@@ -8,6 +8,8 @@ export const DATE_LOCALE = 'de-DE'
 
 /**
  * Formats a date like "Mo., 1.10.2020"
+ * @param {Date|string} datetime
+ * @returns {string}
  */
 export function formatFriendlyDate (datetime) {
   if (typeof datetime === 'string') {
@@ -29,6 +31,9 @@ export function formatFriendlyDate (datetime) {
 
 /**
  * Formats a date range like "Mo., 1.10.2021 - Di., 2.10.2021"
+ * @param {Date} begin
+ * @param {Date} end
+ * @returns {string}
  */
 export function formatFriendlyDateRange (begin, end) {
   let str = formatFriendlyDate(begin)
@@ -40,6 +45,8 @@ export function formatFriendlyDateRange (begin, end) {
 
 /**
  * Formats a time like "8:15"
+ * @param {Date|string} datetime
+ * @returns {string}
  */
 export function formatFriendlyTime (datetime) {
   if (typeof datetime === 'string') {
@@ -51,6 +58,9 @@ export function formatFriendlyTime (datetime) {
 
 /**
  * Formats a date range like "Mo., 1.10.2021 08:00 – 12:00" or "Mo., 1.10.2021 08:00 – Do., 2.10.2021 08:00"
+ * @param {Date} begin
+ * @param {Date} end
+ * @returns {string}
  */
 export function formatFriendlyDateTimeRange (begin, end) {
   let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
@@ -66,6 +76,8 @@ export function formatFriendlyDateTimeRange (begin, end) {
 
 /**
  * Formats a date and time like "Mo., 1.10.2020, 08:15"
+ * @param {Date|string} datetime
+ * @returns {string}
  */
 export function formatFriendlyDateTime (datetime) {
   const date = formatFriendlyDate(datetime)
@@ -76,6 +88,8 @@ export function formatFriendlyDateTime (datetime) {
 
 /**
  * Formats a day like "Morgen" or "Montag, 1.10."
+ * @param {Date|string} datetime
+ * @returns {string}
  */
 export function formatNearDate (datetime) {
   if (typeof datetime === 'string') {
@@ -95,6 +109,11 @@ export function formatNearDate (datetime) {
   }
 }
 
+/**
+ * Formats a time delta like "in 5 Minuten".
+ * @param {number} delta Time delta in milliseconds
+ * @returns {string}
+ */
 function formatFriendlyTimeDelta (delta) {
   const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
     numeric: 'auto',
@@ -122,6 +141,8 @@ function formatFriendlyTimeDelta (delta) {
 
 /**
  * Formats a relative date and time like "in 5 Minuten" or "vor 10 Minuten"
+ * @param {Date} date
+ * @returns {string}
  */
 export function formatFriendlyRelativeTime (date) {
   const startOfDay = new Date()
@@ -146,6 +167,8 @@ export function formatFriendlyRelativeTime (date) {
 
 /**
  * Formats a relative date and time like "5 min"
+ * @param {Date|string} datetime
+ * @returns {string}
  */
 export function formatRelativeMinutes (datetime) {
   if (typeof datetime === 'string') {
@@ -158,6 +181,8 @@ export function formatRelativeMinutes (datetime) {
 
 /**
  * Formats a date like "2020-10-01"
+ * @param {Date} date
+ * @returns {string}
  */
 export function formatISODate (date) {
   return date.getFullYear().toString().padStart(4, '0') + '-' +
@@ -167,6 +192,8 @@ export function formatISODate (date) {
 
 /**
  * Formats a time like "08:15"
+ * @param {Date} date
+ * @returns {string}
  */
 export function formatISOTime (date) {
   return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
@@ -175,6 +202,8 @@ export function formatISOTime (date) {
 /**
  * Returns the start of the week
  * https://stackoverflow.com/a/4156516
+ * @param {Date} date
+ * @returns {string}
  */
 export function getMonday (date) {
   date = new Date(date)
@@ -186,6 +215,8 @@ export function getMonday (date) {
 
 /**
  * Returns the start end the end of the week
+ * @param {Date} date
+ * @returns {string}
  */
 export function getWeek (date) {
   const start = getMonday(date)
@@ -196,6 +227,9 @@ export function getWeek (date) {
 
 /**
  * Adds weeks to a date
+ * @param {Date} date
+ * @param {number} delta
+ * @returns {string}
  */
 export function addWeek (date, delta) {
   date = new Date(date)
@@ -205,6 +239,8 @@ export function addWeek (date, delta) {
 
 /**
  * Formats a date like 'Nächste Woche' or '17.5. – 23.5.'
+ * @param {Date} date
+ * @returns {string}
  */
 export function getFriendlyWeek (date) {
   const [currStart, currEnd] = getWeek(new Date())

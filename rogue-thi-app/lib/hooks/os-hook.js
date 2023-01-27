@@ -14,6 +14,9 @@ function getOperatingSystem () {
   }
 }
 
+/**
+ * React Hook that provides the users operating system.
+ */
 export function useOperatingSystem () {
   const [os, setOS] = useState(OS_OTHER)
   useEffect(() => {

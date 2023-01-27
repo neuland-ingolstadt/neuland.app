@@ -6,6 +6,8 @@ import SwipeableViews from 'react-swipeable-views'
 
 /**
  * A `Tabs`-like component that is swipable on mobile.
+ * @param {string} className Class name to attach to the entire object
+ * @param {object} children Array of `SwipeableTab` objects
  */
 export default function SwipeableTabs ({ className, children }) {
   const [page, setPage] = useState(0)
@@ -32,6 +34,10 @@ SwipeableTabs.propTypes = {
   children: PropTypes.any
 }
 
+/**
+ * Object to be used as a child of `SwipeableTabs`.
+ * @param {string} className Class name to attach to the tab
+ */
 export function SwipeableTab ({ className, children }) {
   return (
     <div className={className}>

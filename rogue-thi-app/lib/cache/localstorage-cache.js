@@ -4,6 +4,10 @@ const CHECK_INTERVAL = 10000
  * A cache that persists to localStorage and deletes entries after a certain amount of time
  */
 export default class LocalStorageCache {
+  /**
+   * @param {string} namespace Unique key which all cache entries will be prefixed with
+   * @param {number} ttl Seconds after which an entry should be discarded
+   */
   constructor ({ namespace, ttl }) {
     this.namespace = namespace
     this.ttl = ttl

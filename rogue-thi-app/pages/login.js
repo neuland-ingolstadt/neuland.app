@@ -29,6 +29,10 @@ export default function Login () {
   const [saveCredentials, setSaveCredentials] = useState(false)
   const [failure, setFailure] = useState(false)
 
+  /**
+   * Logs in the user.
+   * @param {Event} e
+   */
   async function login (e) {
     try {
       e.preventDefault()
@@ -43,6 +47,10 @@ export default function Login () {
     }
   }
 
+  /**
+   * Logs in the user as a guest.
+   * @param {Event} e
+   */
   async function guestLogin (e) {
     e.preventDefault()
     createGuestSession()

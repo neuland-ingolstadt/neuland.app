@@ -9,14 +9,26 @@ const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xm
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
+/**
+ * Parses a float like "1,5".
+ * @returns {number}
+ */
 function parseGermanFloat (str) {
   return parseFloat(str.replace(',', '.'))
 }
 
-function parseNutritionFloat (str) {
+/**
+ * Parses an XML node containing a float.
+ * @returns {number}
+ */
+function parseXmlFloat (str) {
   return str._text ? parseGermanFloat(str._text) : ''
 }
 
+/**
+ * Parses the XML meal plan.
+ * @returns {object[]}
+ */
 function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
@@ -65,15 +77,15 @@ function parseDataFromXml (xml) {
       }
 
       const nutrition = {
-        kj: parseNutritionFloat(item.kj),
-        kcal: parseNutritionFloat(item.kcal),
-        fat: parseNutritionFloat(item.fett),
-        fatSaturated: parseNutritionFloat(item.gesfett),
-        carbs: parseNutritionFloat(item.kh),
-        sugar: parseNutritionFloat(item.zucker),
-        fiber: parseNutritionFloat(item.ballaststoffe),
-        protein: parseNutritionFloat(item.eiweiss),
-        salt: parseNutritionFloat(item.salz)
+        kj: parseXmlFloat(item.kj),
+        kcal: parseXmlFloat(item.kcal),
+        fat: parseXmlFloat(item.fett),
+        fatSaturated: parseXmlFloat(item.gesfett),
+        carbs: parseXmlFloat(item.kh),
+        sugar: parseXmlFloat(item.zucker),
+        fiber: parseXmlFloat(item.ballaststoffe),
+        protein: parseXmlFloat(item.eiweiss),
+        salt: parseXmlFloat(item.salz)
       }
 
       return {
@@ -98,6 +110,11 @@ function parseDataFromXml (xml) {
   return days.filter(x => x !== null)
 }
 
+/**
+ * Fetches and parses the mensa plan.
+ * @param {string} lang Requested language (`de` or `en`)
+ * @returns {object[]}
+ */
 async function fetchPlan (lang) {
   if (lang && lang !== 'de' && lang !== 'en') {
     throw new Error('unknown/unsupported language')

@@ -38,6 +38,12 @@ export default function Personal () {
     load()
   }, [router])
 
+  /**
+   * Displays a row with the users information.
+   * @param {string} label Pretty row name
+   * @param {string} name Row name as returned by the backend
+   * @param {object} render Function returning the data to be displayed. If set, the `name` parameter will be ignored.
+   */
   function renderPersonalEntry (label, name, render) {
     return (
       <ListGroup.Item>

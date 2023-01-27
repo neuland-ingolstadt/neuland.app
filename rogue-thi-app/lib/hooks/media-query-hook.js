@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 /**
- * A React Hook that checks whether a media query matches.
+ * React Hook that checks whether a CSS media query matches.
  */
 export function useMediaQuery (query) {
   const [matches, setMatches] = useState(undefined)

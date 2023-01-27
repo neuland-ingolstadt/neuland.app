@@ -5,6 +5,12 @@ const IGNORE_GAPS = 15
 export const BUILDINGS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 
+/**
+ * Adds minutes to a date object.
+ * @param {Date} date
+ * @param {number} minutes
+ * @returns {Date}
+ */
 function addMinutes (date, minutes) {
   return new Date(
     date.getFullYear(),
@@ -17,14 +23,32 @@ function addMinutes (date, minutes) {
   )
 }
 
+/**
+ * Returns the earlier of two dates.
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {Date}
+ */
 function minDate (a, b) {
   return a < b ? a : b
 }
 
+/**
+ * Returns the later of two dates.
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {Date}
+ */
 function maxDate (a, b) {
   return a > b ? a : b
 }
 
+/**
+ * Checks whether a room is in a certain building.
+ * @param {string} room Room name (e.g. `G215`)
+ * @param {*} building Building name (e.g. `G`)
+ * @returns {boolean}
+ */
 function isInBuilding (room, building) {
   return new RegExp(`${building}\\d+`, 'i').test(room)
 }
@@ -32,7 +56,7 @@ function isInBuilding (room, building) {
 /**
  * Converts the room plan for easier processing.
  * @param rooms rooms array as described in thi-rest-api.md
- * @returns { [room]: { from, until } }
+ * @returns {object}
  */
 export function getRoomOpenings (rooms, date) {
   const openings = {}
@@ -83,6 +107,7 @@ export function getRoomOpenings (rooms, date) {
 /**
  * Get a suitable preset for the time selector.
  * If outside the opening hours, this will skip to the time the university opens.
+ * @returns {Date}
  */
 export function getNextValidDate () {
   const startDate = new Date()
@@ -99,6 +124,14 @@ export function getNextValidDate () {
   return startDate
 }
 
+/**
+ * Filters suitable room openings.
+ * @param {string} date Start date as an ISO string
+ * @param {string} time Start time
+ * @param {string} [building] Building name
+ * @param {string} [duration] Minimum opening duration
+ * @returns {object[]}
+ */
 export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
 

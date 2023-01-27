@@ -20,6 +20,9 @@ import styles from '../styles/Common.module.css'
 
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
+/**
+ * Page containing debug tools for development purposes.
+ */
 export default function Debug () {
   const [parameters, setParameters] = useState([])
   const [result, setResult] = useState('')

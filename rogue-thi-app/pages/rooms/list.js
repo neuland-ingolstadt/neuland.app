@@ -21,6 +21,9 @@ import styles from '../../styles/RoomsList.module.css'
 
 const TUX_ROOMS = ['G308']
 
+/**
+ * Page containing a textual representation of the room openings.
+ */
 export default function RoomList () {
   const router = useRouter()
   const [freeRooms, setFreeRooms] = useState(null)

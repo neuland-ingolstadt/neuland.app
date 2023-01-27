@@ -157,6 +157,9 @@ const ALL_DASHBOARD_CARDS = [
   }
 ]
 
+/**
+ * Main page.
+ */
 export default function Home () {
   const router = useRouter()
 
@@ -214,6 +217,11 @@ export default function Home () {
     load()
   }, [])
 
+  /**
+   * Persists the dashboard settings.
+   * @param {object[]} entries Displayed entries
+   * @param {object[]} hiddenEntries Hidden entries
+   */
   function changeDashboardEntries (entries, hiddenEntries) {
     localStorage.personalizedDashboard = JSON.stringify(entries.map(x => x.key))
     localStorage.personalizedDashboardHidden = JSON.stringify(hiddenEntries.map(x => x.key))
@@ -221,6 +229,11 @@ export default function Home () {
     setHiddenDashboardEntries(hiddenEntries)
   }
 
+  /**
+   * Moves a dashboard entry to a new position.
+   * @param {number} oldIndex Old position
+   * @param {number} diff New position relative to the old position
+   */
   function moveDashboardEntry (oldIndex, diff) {
     const newIndex = oldIndex + diff
     if (newIndex < 0 || newIndex >= shownDashboardEntries.length) {
@@ -235,6 +248,10 @@ export default function Home () {
     changeDashboardEntries(entries, hiddenDashboardEntries)
   }
 
+  /**
+   * Hides a dashboard entry.
+   * @param {string} key Entry key
+   */
   function hideDashboardEntry (key) {
     const entries = shownDashboardEntries.slice(0)
     const hiddenEntries = hiddenDashboardEntries.slice(0)
@@ -248,6 +265,10 @@ export default function Home () {
     changeDashboardEntries(entries, hiddenEntries)
   }
 
+  /**
+   * Unhides a dashboard entry.
+   * @param {number} index Entry position
+   */
   function bringBackDashboardEntry (index) {
     const entries = shownDashboardEntries.slice(0)
     const hiddenEntries = hiddenDashboardEntries.slice(0)
@@ -258,6 +279,10 @@ export default function Home () {
     changeDashboardEntries(entries, hiddenEntries)
   }
 
+  /**
+   * Changes the current theme.
+   * @param {string} theme Theme key
+   */
   function changeTheme (theme) {
     localStorage.theme = theme
     setTheme(theme)

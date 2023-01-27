@@ -15,9 +15,16 @@ import { useMediaQuery } from '../../lib/hooks/media-query-hook'
 
 import styles from '../../styles/AppNavbar.module.css'
 
+/**
+ * Navigation bar to be displayed at the top of the screen.
+ */
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  /**
+   * Indicates whether a back button should be shown.
+   */
   const showBackEffective = useMemo(() => {
     if (typeof showBack === 'undefined') {
       return true
@@ -60,6 +67,9 @@ AppNavbar.propTypes = {
   children: PropTypes.any
 }
 
+/**
+ * Button to be displayed in the navbar.
+ */
 function AppNavbarButton ({ children, ...props }) {
   return (
     <Button variant="link" {...props}>
@@ -73,6 +83,9 @@ AppNavbarButton.propTypes = {
 
 AppNavbar.Button = AppNavbarButton
 
+/**
+ * Overflow menu to be displayed in the navbar.
+ */
 function AppNavbarOverflow ({ children }) {
   return (
     <Dropdown align="right">
