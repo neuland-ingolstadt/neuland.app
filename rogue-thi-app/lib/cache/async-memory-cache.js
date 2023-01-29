@@ -14,7 +14,6 @@ export default class AsyncMemoryCache extends MemoryCache {
   constructor ({ ttl, backoff }) {
     super({ ttl })
     this.backoff = backoff || DEFAULT_BACKOFF
-    this.promises = new Map()
     this.timers = new Map()
   }
 
@@ -26,9 +25,9 @@ export default class AsyncMemoryCache extends MemoryCache {
    */
   async get (key, producer) {
     // check if there is a cached result
-    const cachedValue = super.get(key)
-    if (cachedValue) {
-      return cachedValue
+    const promise = super.get(key)
+    if (promise) {
+      return await promise
     }
 
     // check if we need to back off
@@ -38,23 +37,17 @@ export default class AsyncMemoryCache extends MemoryCache {
       throw error
     }
 
-    // check if there is an ongoing promise
-    if (this.promises.has(key)) {
-      return await this.promises.get(key)
-    }
-
     try {
       // call the producer and remember the promise
       const promise = producer(key)
-      this.promises.set(key, promise)
+      super.set(key, promise)
 
       // wait until the promise resolves
       const result = await promise
 
       // the promise resolved successfully
-      // clear the backoff timer and remember the result
+      // clear the backoff timer
       this.timers.delete(key)
-      super.set(key, result)
 
       // return the result
       return result
@@ -68,9 +61,13 @@ export default class AsyncMemoryCache extends MemoryCache {
       })
 
       throw e
-    } finally {
-      // clean up the promise
-      this.promises.delete(key)
     }
+  }
+
+  /**
+   * Prevents writing to the underlying cache.
+   */
+  set (key, value) {
+    throw new Error('Values can not be set directly')
   }
 }

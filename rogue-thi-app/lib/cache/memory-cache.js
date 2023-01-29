@@ -29,7 +29,7 @@ export default class MemoryCache {
       return undefined
     }
 
-    const { value, expiry } = JSON.parse(json)
+    const { value, expiry } = json
     if (expiry > Date.now()) {
       return value
     } else {
@@ -38,10 +38,14 @@ export default class MemoryCache {
   }
 
   set (key, value) {
-    this.cache.set(key, JSON.stringify({
+    this.cache.set(key, {
       value,
       expiry: Date.now() + this.ttl
-    }))
+    })
+  }
+
+  delete (key) {
+    this.cache.delete(key)
   }
 
   flushAll () {
