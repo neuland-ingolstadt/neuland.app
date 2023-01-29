@@ -56,6 +56,10 @@ export default function Bus () {
     load()
   }, [kind, station, time])
 
+  /**
+   * Changes the mobility type.
+   * @param {string} kind Mobility type (either `bus`, `train`, `parking` or `charging`)
+   */
   function changeKind (kind) {
     setKind(kind)
     setData(null)

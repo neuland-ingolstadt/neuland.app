@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 
+/**
+ * React Hook that continuously provides the users current location.
+ */
 export function useLocation () {
   const [location, setLocation] = useState(undefined)
 

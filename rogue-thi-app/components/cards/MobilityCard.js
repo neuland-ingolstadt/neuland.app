@@ -28,6 +28,9 @@ const MOBILITY_ICONS = {
   charging: faChargingStation
 }
 
+/**
+ * Dashboard card for the mobility page.
+ */
 export default function MobilityCard () {
   const time = useTime()
   const [mobility, setMobility] = useState(null)

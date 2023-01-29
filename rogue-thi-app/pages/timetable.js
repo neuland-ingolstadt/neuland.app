@@ -28,6 +28,10 @@ import styles from '../styles/Timetable.module.css'
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
 
+/**
+ * Groups timetable entries by date.
+ * @param {object[]} timetable
+ */
 function groupTimetableEntries (timetable) {
   // get all available dates and remove duplicates
   const dates = timetable
@@ -43,23 +47,48 @@ function groupTimetableEntries (timetable) {
   return groups
 }
 
+/**
+ * Checks whether a date is today.
+ * @param {Date} date
+ * @returns {boolean}
+ */
 function isToday (date) {
   return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
 }
 
+/**
+ * Checks whether a date is in a particular week.
+ * @param {Date} date
+ * @param {Date} start Start of the week
+ * @param {Date} end End of the week
+ * @returns {boolean}
+ */
 function isInWeek (date, start, end) {
   date = new Date(date)
   return date > start && date < end
 }
 
+/**
+ * Formats a day as a number.
+ * @param {Date} date
+ * @returns {string}
+ */
 function getDay (date) {
   return new Date(date).toLocaleDateString(DATE_LOCALE, { day: 'numeric' })
 }
 
+/**
+ * Formats a weekday as an abbreviation like 'Fr'.
+ * @param {Date} date
+ * @returns {string}
+ */
 function getWeekday (date) {
   return new Date(date).toLocaleDateString(DATE_LOCALE, { weekday: 'short' })
 }
 
+/**
+ * Page displaying the users timetable.
+ */
 export default function Timetable () {
   const router = useRouter()
   const os = useOperatingSystem()
@@ -123,6 +152,10 @@ export default function Timetable () {
     load(week[0])
   }, [router, timetable, focusedEntry, isDetailedData, week, fetchedWeek])
 
+  /**
+   * Renderer for `react-swipeable-views` that displays the timetable for a particular week
+   * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
+   */
   function timetableRenderer ({ key, index }) {
     const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))
     const current = timetable && timetable.filter(group => isInWeek(group.date, start, end))

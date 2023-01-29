@@ -10,6 +10,10 @@ import { OS_ANDROID, OS_IOS, useOperatingSystem } from '../../lib/hooks/os-hook'
 
 import styles from '../../styles/Home.module.css'
 
+/**
+ * Prompt that suggests the user to pin the app to his home screen.
+ * @param {object} onHide Invoked when the user wants to hide the prompt
+ */
 export default function InstallPrompt ({ onHide }) {
   const [showPrompt, setShowPrompt] = useState(false)
   const os = useOperatingSystem()

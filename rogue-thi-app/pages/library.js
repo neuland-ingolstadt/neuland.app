@@ -21,6 +21,9 @@ import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Library.module.css'
 
+/**
+ * Page for reserving library seats.
+ */
 export default function Library () {
   const [reservations, setReservations] = useState(null)
   const [available, setAvailable] = useState([])
@@ -30,6 +33,9 @@ export default function Library () {
   const [reservationSeat, setReservationSeat] = useState(-1)
   const router = useRouter()
 
+  /**
+   * Fetches and displays the reservation data.
+   */
   async function refreshData () {
     const available = await API.getAvailableLibrarySeats()
     setAvailable(available)
@@ -42,16 +48,26 @@ export default function Library () {
     setReservations(response)
   }
 
+  /**
+   * Closes the reservation popup.
+   */
   function hideReservationModal () {
     setReservationDay(null)
     setReservationTime(null)
   }
 
+  /**
+   * Cancels a reservation.
+   * @param {string} id Reservation ID
+   */
   async function deleteReservation (id) {
     await API.removeLibraryReservation(id)
     await refreshData()
   }
 
+  /**
+   * Creates a new reservation.
+   */
   async function addReservation () {
     await API.addLibraryReservation(
       reservationRoom,

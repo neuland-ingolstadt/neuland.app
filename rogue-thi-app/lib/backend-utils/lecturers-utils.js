@@ -1,3 +1,9 @@
+/**
+ * Normalizes lecturer data.
+ * This removes invalid entries and converts phone numbers to a standardized format.
+ * @param {object[]} entries
+ * @returns {object[]}
+ */
 export function normalizeLecturers (entries) {
   return entries
     .filter(x => !!x.vorname) // remove dummy entries

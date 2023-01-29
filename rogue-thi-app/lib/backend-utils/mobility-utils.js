@@ -10,6 +10,10 @@ import { formatRelativeMinutes } from '../date-utils'
 
 import stations from '../../data/mobility.json'
 
+/**
+ * Retrieves the users mobility preferences.
+ * @returns {object}
+ */
 export function getMobilitySettings () {
   return {
     kind: localStorage.mobilityKind || 'bus',
@@ -17,6 +21,12 @@ export function getMobilitySettings () {
   }
 }
 
+/**
+ * Determines the title of the mobility card / page.
+ * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
+ * @param {string} station Station name (only for `bus` or `train`)
+ * @returns {string}
+ */
 export function getMobilityLabel (kind, station) {
   if (kind === 'bus') {
     const entry = stations.bus.stations.find(x => x.id === station)
@@ -33,6 +43,10 @@ export function getMobilityLabel (kind, station) {
   }
 }
 
+/**
+ * Fetches and parses parking availability for the campus
+ * @returns {object}
+ */
 async function getAndConvertCampusParkingData () {
   let available = null
   try {
@@ -49,6 +63,12 @@ async function getAndConvertCampusParkingData () {
   }
 }
 
+/**
+ * Fetches and parses mobility data
+ * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
+ * @param {string} station Station name (only for `bus` or `train`)
+ * @returns {object[]}
+ */
 export async function getMobilityEntries (kind, station) {
   if (kind === 'bus') {
     return NeulandAPI.getBusPlan(station)
@@ -85,6 +105,13 @@ export async function getMobilityEntries (kind, station) {
   }
 }
 
+/**
+ * Renders a row on the mobility page.
+ * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
+ * @param {object} item Mobility data
+ * @param {number} maxLen Truncate the string after this many characters
+ * @param {string} styles CSS object
+ */
 export function renderMobilityEntry (kind, item, maxLen, styles) {
   if (kind === 'bus') {
     return (

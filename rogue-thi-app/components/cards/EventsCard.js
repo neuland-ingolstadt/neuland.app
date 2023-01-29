@@ -8,7 +8,10 @@ import BaseCard from './BaseCard'
 
 import NeulandAPI from '../../lib/backend/neuland-api'
 
-export default function CalendarCard () {
+/**
+ * Dashboard card for CL events.
+ */
+export default function EventsCard () {
   const router = useRouter()
   const [calendar, setCalendar] = useState([])
 

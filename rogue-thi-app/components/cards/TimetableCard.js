@@ -10,6 +10,9 @@ import { getFriendlyTimetable, getTimetableEntryName } from '../../lib/backend-u
 import BaseCard from './BaseCard'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 
+/**
+ * Dashboard card for the timetable.
+ */
 export default function TimetableCard () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)

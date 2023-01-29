@@ -9,6 +9,14 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 import styles from '../../styles/Home.module.css'
 
+/**
+ * Base card which all dashboard cards should extend.
+ * @param {string} link Route to open when clicked
+ * @param {object} icon FontAwesome icon object
+ * @param {string} title Title of the card
+ * @param {string} className Class name to attach to the card
+ * @param {object[]} children Body of the card
+ */
 export default function BaseCard ({ link, icon, title, className, children }) {
   return (
     <Link href={link}>

@@ -20,6 +20,9 @@ function arrayBufferToObject (buf) {
  * replaced with the Credential Management API.
  */
 export default class CredentialStorage {
+  /**
+   * @param {string} name Namespace for the credential storage
+   */
   constructor (name) {
     this.name = name
 
@@ -42,6 +45,11 @@ export default class CredentialStorage {
     })
   }
 
+  /**
+   * Saves credentials in the storage.
+   * @param {string} id Unique identifier for this set of credentials
+   * @param {object} data Object containing the credentials
+   */
   async write (id, data) {
     const key = await crypto.subtle.generateKey(
       {
@@ -70,6 +78,11 @@ export default class CredentialStorage {
     }
   }
 
+  /**
+   * Reads credentials from the storage.
+   * @param {string} id Identifier as used in `write`
+   * @returns {object} Object containing the credentials
+   */
   async read (id) {
     const db = await this._openDatabase()
     try {
@@ -94,6 +107,10 @@ export default class CredentialStorage {
     }
   }
 
+  /**
+   * Deletes a set of credentials from the storage
+   * @param {string} id Identifier as used in `write`
+   */
   async delete (id) {
     const db = await this._openDatabase()
     try {

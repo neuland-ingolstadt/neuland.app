@@ -32,6 +32,9 @@ export async function getStaticProps () {
   }
 }
 
+/**
+ * Page showing the Neuland and THI imprints.
+ */
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [thiImprint, setThiImprint] = useState('Lädt...')

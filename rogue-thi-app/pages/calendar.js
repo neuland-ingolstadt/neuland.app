@@ -27,6 +27,9 @@ import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
 
+/**
+ * Page containing the semester and exam dates.
+ */
 export default function Calendar () {
   const router = useRouter()
   const now = useTime()

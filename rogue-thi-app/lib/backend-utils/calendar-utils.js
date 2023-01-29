@@ -12,6 +12,10 @@ export const calendar = rawCalendar.map(x => ({
   .sort((a, b) => a.end - b.end)
   .sort((a, b) => a.begin - b.begin)
 
+/**
+ * Fetches and parses the exam list
+ * @returns {object[]}
+ */
 export async function loadExamList () {
   const examList = await API.getExams()
   return examList
@@ -26,6 +30,7 @@ export async function loadExamList () {
       }
 
       x.anmeldung = new Date(x.anm_date + 'T' + x.anm_time)
+      // hilfsmittel is returned as a string in postgres array syntax
       x.allowed_helpers = parsePostgresArray(x.hilfsmittel)
         .filter((v, i, a) => a.indexOf(v) === i)
 

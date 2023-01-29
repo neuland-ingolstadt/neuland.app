@@ -10,6 +10,10 @@ import styles from '../../styles/Home.module.css'
 
 const electionUrl = process.env.NEXT_PUBLIC_ELECTION_URL
 
+/**
+ * Student council election notification card.
+ * @param {object} onHide Invoked when the user wants to hide the prompt
+ */
 export default function ElectionPrompt ({ onHide }) {
   return (
     <Card className={styles.card}>

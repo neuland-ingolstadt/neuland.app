@@ -4,6 +4,9 @@ import React from 'react'
 
 import styles from '../../styles/AppContainer.module.css'
 
+/**
+ * Wrapper for the entire application UI.
+ */
 export default function AppContainer ({ className, children }) {
   return (
     <Container className={[className, styles.container]}>

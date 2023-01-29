@@ -5,12 +5,18 @@ const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 const CRED_NAME = 'credentials'
 const CRED_ID = 'thi.de'
 
+/**
+ * Thrown when the user is not logged in.
+ */
 export class NoSessionError extends Error {
   constructor () {
     super('User is not logged in')
   }
 }
 
+/**
+ * Thrown when the user is logged in as a guest.
+ */
 export class UnavailableSessionError extends Error {
   constructor () {
     super('User is logged in as guest')
@@ -41,6 +47,9 @@ export async function createSession (username, password, stayLoggedIn) {
   }
 }
 
+/**
+ * Logs in the user as a guest.
+ */
 export async function createGuestSession () {
   await API.clearCache()
   localStorage.session = 'guest'
@@ -51,6 +60,9 @@ export async function createGuestSession () {
  * it attempts to fetch a new session and calls the method again.
  *
  * If a session can not be obtained, a NoSessionError is thrown.
+ *
+ * @param {object} method Method which will receive the session token
+ * @returns {*} Value returned by `method`
  */
 export async function callWithSession (method) {
   let session = localStorage.session
@@ -115,6 +127,8 @@ export async function callWithSession (method) {
  * using saved credentials.
  *
  * If a session can not be obtained, the user is redirected to /login.
+ *
+ * @param {object} router Next.js router object
  */
 export async function obtainSession (router) {
   let session = localStorage.session
@@ -157,6 +171,8 @@ export async function obtainSession (router) {
 
 /**
  * Logs out the user by deleting the session from localStorage.
+ *
+ * @param {object} router Next.js router object
  */
 export async function forgetSession (router) {
   try {

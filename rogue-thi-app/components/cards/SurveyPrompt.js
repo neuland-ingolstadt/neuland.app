@@ -10,6 +10,10 @@ import styles from '../../styles/Home.module.css'
 
 const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
 
+/**
+ * Prompt for surveys.
+ * @param {object} onHide Invoked when the user wants to hide the prompt
+ */
 export default function SurveyPrompt ({ onHide }) {
   return (
     <Card className={styles.card}>

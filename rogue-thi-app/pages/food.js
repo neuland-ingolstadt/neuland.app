@@ -32,6 +32,9 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
+/**
+ * Page showing the current Mensa / Reimanns meal plan.
+ */
 export default function Mensa () {
   const [foodEntries, setFoodEntries] = useState(null)
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
@@ -70,6 +73,10 @@ export default function Mensa () {
     }
   }, [])
 
+  /**
+   * Enables or disables a restaurant.
+   * @param {string} name Restaurant name (either `mensa` or `reimanns`)
+   */
   function toggleSelectedRestaurant (name) {
     const checked = selectedRestaurants.includes(name)
     const newSelection = selectedRestaurants.filter(x => x !== name)
@@ -84,16 +91,25 @@ export default function Mensa () {
   function closeFilter () {
     setShowFilterSelection(false)
   }
+
   function savePreferencesSelection () {
     localStorage.preferencesSelection = JSON.stringify(preferencesSelection)
     setShowPreferencesSelection(false)
   }
 
+  /**
+   * Persists the allergen selection to localStorage.
+   */
   function saveAllergenSelection () {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
     setShowAllergenSelection(false)
   }
 
+  /**
+   * Checks whether the user should be allergens.
+   * @param {string[]} allergens Selected allergens
+   * @returns {boolean}
+   */
   function containsSelectedAllergen (allergens) {
     if (!allergens) {
       return false
@@ -107,19 +123,39 @@ export default function Mensa () {
     return flags.some(x => preferencesSelection[x])
   }
 
+  /**
+   * Formats a price in euros.
+   * @param {number} x Price
+   * @returns {string}
+   */
   function formatPrice (x) {
     return x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
   }
 
+  /**
+   * Formats a weight in grams.
+   * @param {number} x Weight
+   * @returns {string}
+   */
   function formatGram (x) {
     return x ? `${formatFloat(x)} g` : x
   }
 
+  /**
+   * Formats a price according to the users group (student, employee or guest).
+   * @param {object} meal Parsed meal object
+   * @returns {string}
+   */
   function getUserSpecificPrice (meal) {
     const price = isStudent ? meal.prices.student : meal.prices.employee
     return formatPrice(price)
   }
 
+  /**
+   * Formats a float for the German locale.
+   * @param {number} x
+   * @returns {string}
+   */
   function formatFloat (x) {
     return x?.toString().replace('.', ',')
   }

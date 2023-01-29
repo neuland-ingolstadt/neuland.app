@@ -20,6 +20,11 @@ const EVENT_STORE = `${process.env.STORE}/cl-events.json`
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
+/**
+ * Parses a date like "Donnerstag, 15. Juni 2023, 10:00".
+ * @param {string} str
+ * @returns {Date}
+ */
 function parseLocalDateTime (str) {
   // use \p{Letter} because \w doesnt match umlauts
   // https://stackoverflow.com/a/70273329
@@ -34,14 +39,16 @@ function parseLocalDateTime (str) {
 }
 
 /**
- * Load persisted events from disk
+ * Load persisted events from disk.
+ * @returns {object[]}
  */
 async function loadEvents () {
   return JSON.parse(await fs.readFile(EVENT_STORE))
 }
 
 /**
- * Persist events to disk
+ * Persist events to disk.
+ * @param {object[]} events
  */
 async function saveEvents (events) {
   await fs.writeFile(EVENT_STORE, JSON.stringify(events))
@@ -49,6 +56,7 @@ async function saveEvents (events) {
 
 /**
  * Fetches a login XSRF token.
+ * @param {object} fetch Cookie-aware implementation of `fetch`
  */
 async function fetchToken (fetch) {
   const resp = await fetch(LOGIN_URL)
@@ -59,6 +67,9 @@ async function fetchToken (fetch) {
 
 /**
  * Logs into Moodle.
+ * @param {object} fetch Cookie-aware implementation of `fetch`
+ * @param {string} username
+ * @param {string} password
  */
 async function login (fetch, username, password) {
   const data = new URLSearchParams()
@@ -83,6 +94,8 @@ async function login (fetch, username, password) {
 
 /**
  * Fetch a list of event URLs.
+ * @param {object} fetch Cookie-aware implementation of `fetch`
+ * @returns {string[]}
  */
 async function getEventList (fetch) {
   const resp = await fetch(EVENT_LIST_URL)
@@ -96,6 +109,8 @@ async function getEventList (fetch) {
 
 /**
  * Fetches event details from an event URL.
+ * @param {object} fetch Cookie-aware implementation of `fetch`
+ * @param {string} url
  */
 async function getEventDetails (fetch, url) {
   // check URL just to make sure we're not fetching the wrong thing
@@ -116,6 +131,8 @@ async function getEventDetails (fetch, url) {
 
 /**
  * Fetches all event details from Moodle.
+ * @param {string} username
+ * @param {string} password
  */
 export async function getAllEventDetails (username, password) {
   // create a fetch method that keeps cookies
@@ -157,12 +174,24 @@ export async function getAllEventDetails (username, password) {
   return events
 }
 
+/**
+ * Sends a HTTP response as JSON.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
 function sendJson (res, status, body) {
   res.statusCode = status
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(body))
 }
 
+/**
+ * Sends a HTTP response as iCal.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
 function sendCalendar (res, status, body) {
   res.statusCode = status
   res.setHeader('Content-Type', 'text/calendar')

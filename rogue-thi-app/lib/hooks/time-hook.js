@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 /**
- * A React Hook that supplies the current date and time and updates every minute
+ * React Hook that supplies the current date and time and updates every minute.
  */
 export function useTime () {
   const [time, setTime] = useState(new Date())

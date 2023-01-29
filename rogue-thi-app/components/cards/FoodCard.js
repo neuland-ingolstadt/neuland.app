@@ -7,6 +7,9 @@ import BaseCard from './BaseCard'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
 
+/**
+ * Dashboard card for Mensa and Reimanns food plans.
+ */
 export default function FoodCard () {
   const [foodEntries, setFoodEntries] = useState(null)
   const [foodCardTitle, setFoodCardTitle] = useState('Essen')

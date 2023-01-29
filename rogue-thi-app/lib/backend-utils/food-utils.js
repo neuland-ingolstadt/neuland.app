@@ -1,6 +1,11 @@
 import NeulandAPI from '../backend/neuland-api'
 import { formatISODate } from '../date-utils'
 
+/**
+ * Fetches and parses the meal plan
+ * @param {string[]} restaurants Requested restaurants (`mensa` or `reimanns`)
+ * @returns {object[]}
+ */
 export async function loadFoodEntries (restaurants) {
   const entries = []
   if (restaurants.includes('mensa')) {

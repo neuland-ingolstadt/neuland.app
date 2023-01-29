@@ -13,6 +13,11 @@ const KEY_GET_PARKING_DATA = 'getCampusParkingData'
 const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
 const KEY_GET_LECTURERS = 'getLecturers'
 
+/**
+ * Determines the users faculty.
+ * @param {object} data Personal data
+ * @returns {string} Faculty name (e.g. `Informatik`)
+ */
 function extractFacultyFromPersonalData (data) {
   if (!data || !data.persdata || !data.persdata.stg) {
     return null
@@ -25,6 +30,11 @@ function extractFacultyFromPersonalData (data) {
   return faculty
 }
 
+/**
+ * Determines the users SPO version.
+ * @param {object} data Personal data
+ * @returns {string}
+ */
 function extractSpoFromPersonalData (data) {
   if (!data || !data.persdata || !data.persdata.po_url) {
     return null
@@ -34,6 +44,11 @@ function extractSpoFromPersonalData (data) {
   return split[split.length - 1]
 }
 
+/**
+ * Client for accessing the API as a particular user.
+ *
+ * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
+ */
 export class AuthenticatedAPIClient extends AnonymousAPIClient {
   constructor () {
     super()
@@ -43,6 +58,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 
   /**
    * Performs an authenticated request against the API
+   * @param {object} params Request data
+   * @returns {object}
    */
   async requestAuthenticated (params) {
     return await this.sessionHandler(async session => {
@@ -60,6 +77,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
 
   /**
    * Performs an authenticated and cached request against the API
+   * @param {string} cacheKey Unique key that identifies this request
+   * @param {object} params Request data
+   * @returns {object}
    */
   async requestCached (cacheKey, params) {
     const cached = this.cache.get(cacheKey)
@@ -163,6 +183,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     return res.data
   }
 
+  /**
+   * @param {Date} date Date to fetch the room availability for
+   */
   async getFreeRooms (date) {
     const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
     const res = await this.requestCached(key, {
@@ -197,6 +220,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     return res.data[1]
   }
 
+  /**
+   * @param {string} from Single character indicating where to start listing the lecturers
+   * @param {string} to Single character indicating where to end listing the lecturers
+   */
   async getLecturers (from, to) {
     const key = `${KEY_GET_LECTURERS}-${from}-${to}`
     const res = await this.requestCached(key, {
@@ -248,6 +275,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     return res.data[1]
   }
 
+  /**
+   * TODO documentation
+   */
   async addLibraryReservation (roomId, day, start, end, place) {
     const res = await this.requestAuthenticated({
       service: 'thiapp',
@@ -268,6 +298,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     return res.data[1][0]
   }
 
+  /**
+   * @param {string} reservationId Reservation ID returned by `getLibraryReservations`
+   */
   async removeLibraryReservation (reservationId) {
     try {
       await this.requestAuthenticated({

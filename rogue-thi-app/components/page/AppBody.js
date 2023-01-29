@@ -4,6 +4,9 @@ import React from 'react'
 
 import styles from '../../styles/AppBody.module.css'
 
+/**
+ * Wrapper for the body of every page.
+ */
 export default function AppBody ({ className, children }) {
   return (
     <Container className={[className, styles.container]}>

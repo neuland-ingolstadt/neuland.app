@@ -10,6 +10,9 @@ import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyRelativeTime } from '../../lib/date-utils'
 import { useTime } from '../../lib/hooks/time-hook'
 
+/**
+ * Dashboard card for semester and exam dates.
+ */
 export default function CalendarCard () {
   const router = useRouter()
   const time = useTime()
