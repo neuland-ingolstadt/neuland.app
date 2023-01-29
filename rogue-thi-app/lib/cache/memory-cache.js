@@ -13,16 +13,27 @@ export default class MemoryCache {
     this.interval = setInterval(() => this.checkExpiry(), CHECK_INTERVAL)
   }
 
+  /**
+   * Removes expired cache entries.
+   */
   checkExpiry () {
     Object.keys(this.cache)
       .filter(x => this.cache.get(x).expiry < Date.now())
       .forEach(x => this.cache.delete(x))
   }
 
+  /**
+   * Stops the cache.
+   */
   close () {
     clearInterval(this.interval)
   }
 
+  /**
+   * Returns a cached value or `undefined` if no value is found.
+   * @param {string} key Cache key
+   * @returns {*} Cached value
+   */
   get (key) {
     const json = this.cache.get(key)
     if (!json) {
@@ -37,6 +48,11 @@ export default class MemoryCache {
     }
   }
 
+  /**
+   * Caches a value.
+   * @param {string} key Cache key
+   * @param {*} value Value to be cached (must be serializable)
+   */
   set (key, value) {
     this.cache.set(key, {
       value,
@@ -44,10 +60,17 @@ export default class MemoryCache {
     })
   }
 
+  /**
+   * Deletes a cached value.
+   * @param {string} key Cache key
+   */
   delete (key) {
     this.cache.delete(key)
   }
 
+  /**
+   * Removes all cache entries.
+   */
   flushAll () {
     this.cache.clear()
   }

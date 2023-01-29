@@ -14,16 +14,27 @@ export default class LocalStorageCache {
     this.interval = setInterval(() => this.checkExpiry(), CHECK_INTERVAL)
   }
 
+  /**
+   * Removes expired cache entries.
+   */
   checkExpiry () {
     Object.keys(localStorage)
       .filter(x => x.startsWith(`${this.namespace}-`) && localStorage[x].expiry < Date.now())
       .forEach(x => delete localStorage[x])
   }
 
+  /**
+   * Stops the cache.
+   */
   close () {
     clearInterval(this.interval)
   }
 
+  /**
+   * Returns a cached value or `undefined` if no value is found.
+   * @param {string} key Cache key
+   * @returns {*} Cached value
+   */
   get (key) {
     const json = localStorage[`${this.namespace}-${key}`]
     if (!json) {
@@ -38,6 +49,11 @@ export default class LocalStorageCache {
     }
   }
 
+  /**
+   * Caches a value.
+   * @param {string} key Cache key
+   * @param {*} value Value to be cached (must be serializable)
+   */
   set (key, value) {
     localStorage[`${this.namespace}-${key}`] = JSON.stringify({
       value,
@@ -45,6 +61,17 @@ export default class LocalStorageCache {
     })
   }
 
+  /**
+   * Deletes a cached value.
+   * @param {string} key Cache key
+   */
+  delete (key) {
+    delete localStorage[`${this.namespace}-${key}`]
+  }
+
+  /**
+   * Removes all cache entries.
+   */
   flushAll () {
     Object.keys(localStorage)
       .filter(x => x.startsWith(`${this.namespace}-`))
