@@ -62,7 +62,7 @@ export async function createGuestSession () {
  * If a session can not be obtained, a NoSessionError is thrown.
  *
  * @param {object} method Method which will receive the session token
- * @returns {*} Value returned by
+ * @returns {*} Value returned by `method`
  */
 export async function callWithSession (method) {
   let session = localStorage.session
@@ -171,7 +171,7 @@ export async function obtainSession (router) {
 
 /**
  * Logs out the user by deleting the session from localStorage.
- * 
+ *
  * @param {object} router Next.js router object
  */
 export async function forgetSession (router) {

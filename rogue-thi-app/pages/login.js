@@ -31,7 +31,7 @@ export default function Login () {
 
   /**
    * Logs in the user.
-   * @param {Event} e
+   * @param {Event} e DOM event that triggered the login
    */
   async function login (e) {
     try {
@@ -49,7 +49,7 @@ export default function Login () {
 
   /**
    * Logs in the user as a guest.
-   * @param {Event} e
+   * @param {Event} e DOM event that triggered the login
    */
   async function guestLogin (e) {
     e.preventDefault()

@@ -46,7 +46,7 @@ function maxDate (a, b) {
 /**
  * Checks whether a room is in a certain building.
  * @param {string} room Room name (e.g. `G215`)
- * @param {*} building Building name (e.g. `G`)
+ * @param {string} building Building name (e.g. `G`)
  * @returns {boolean}
  */
 function isInBuilding (room, building) {
