@@ -3,6 +3,7 @@
  */
 
 import cheerio from 'cheerio'
+import crypto from 'crypto'
 import fetchCookie from 'fetch-cookie'
 import fs from 'fs/promises'
 import ical from 'ical-generator'
@@ -146,7 +147,7 @@ export async function getAllEventDetails (username, password) {
     // do not include location and description
     // since it may contain sensitive information
     remoteEvents.push({
-      origin_url: url,
+      id: crypto.createHash('sha256').update(url).digest('hex'),
       organizer: details.Verein,
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
@@ -215,7 +216,7 @@ export default async function handler (req, res) {
           .ttl(60 * 60 * 24)
         for (const event of plan) {
           cal.createEvent({
-            id: event.origin_url,
+            id: event.id,
             summary: event.title,
             description: `Veranstalter: ${event.organizer}`,
             start: event.begin,
