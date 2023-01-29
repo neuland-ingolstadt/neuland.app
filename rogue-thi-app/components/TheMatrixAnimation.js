@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { useWindowSize } from '../lib/hooks/window-size'
 
 function getRandomChar () {
   return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
@@ -9,6 +10,7 @@ function getRandomChar () {
  */
 export default function TheMatrixAnimation () {
   const canvas = useRef()
+  const windowSize = useWindowSize()
 
   const renderFrame = useCallback(async (canvas, ctx, ypos) => {
     // Draw a semitransparent black rectangle on top of previous drawing
@@ -44,8 +46,8 @@ export default function TheMatrixAnimation () {
     // the following code is mostly taken from
     // https://dev.to/gnsp/making-the-matrix-effect-in-javascript-din
 
-    canvas.current.width = window.innerWidth
-    canvas.current.height = window.innerHeight
+    canvas.current.width = windowSize.width
+    canvas.current.height = windowSize.height
 
     const ctx = canvas.current.getContext('2d')
     ctx.fillStyle = '#000'
@@ -68,7 +70,7 @@ export default function TheMatrixAnimation () {
 
     const interval = setInterval(() => renderFrame(canvas.current, ctx, ypos), 50)
     return () => clearInterval(interval)
-  }, [canvas, renderFrame])
+  }, [canvas, renderFrame, windowSize])
 
   return (
     <canvas ref={canvas} />
