@@ -385,7 +385,10 @@ export default function Mensa () {
                     Allergene
                   </div>
                   <div>
-                    <Button variant={'outline-primary'} onClick={() => setShowAllergenSelection(true)}>
+                    <Button variant={'outline-primary'} onClick={() => {
+                      setShowAllergenSelection(true)
+                      setShowFilterSelection(false)
+                    }}>
                       <FontAwesomeIcon title="Allergene" icon={faAllergies} fixedWidth />
                     </Button>
                   </div>
@@ -402,7 +405,10 @@ export default function Mensa () {
                   Essenspräferenzen
                 </div>
                 <div>
-                  <Button variant={'outline-primary'} onClick={() => setShowPreferencesSelection(true)}>
+                  <Button variant={'outline-primary'} onClick={() => {
+                    setShowPreferencesSelection(true)
+                    setShowFilterSelection(false)
+                  }}>
                     <FontAwesomeIcon title='Preferences' icon={faBowlRice} fixedWidth />
                   </Button>
                 </div>
@@ -444,7 +450,10 @@ export default function Mensa () {
             </Modal.Body>
 
             <Modal.Footer>
-              <Button variant="primary" onClick={() => saveAllergenSelection()}>OK</Button>
+              <Button variant="primary" onClick={() => {
+                saveAllergenSelection()
+                setShowFilterSelection(true)
+              }}>OK</Button>
             </Modal.Footer>
           </Modal>
 
@@ -468,7 +477,10 @@ export default function Mensa () {
             </Modal.Body>
 
             <Modal.Footer>
-              <Button variant="primary" onClick={() => savePreferencesSelection()}>OK</Button>
+              <Button variant="primary" onClick={() => {
+                savePreferencesSelection()
+                setShowFilterSelection(true)
+              }}>OK</Button>
             </Modal.Footer>
           </Modal>
         </AppBody>
