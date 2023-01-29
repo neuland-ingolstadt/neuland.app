@@ -172,6 +172,28 @@ export default function Home () {
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
 
+  /**
+   * Get the default order of shown and hidden dashboard entries
+   */
+  function getDefaultDashboardOrder () {
+    const platform = window.matchMedia('(max-width: 768px)').matches
+      ? PLATFORM_MOBILE
+      : PLATFORM_DESKTOP
+
+    let personGroup = USER_STUDENT
+    if (localStorage.session === 'guest') {
+      personGroup = USER_GUEST
+    } else if (localStorage.isStudent === 'false') {
+      personGroup = USER_EMPLOYEE
+    }
+
+    const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
+    return {
+      shown: ALL_DASHBOARD_CARDS.filter(filter),
+      hidden: ALL_DASHBOARD_CARDS.filter(x => !filter(x))
+    }
+  }
+
   useEffect(() => {
     async function load () {
       if (localStorage.personalizedDashboard) {
@@ -191,20 +213,9 @@ export default function Home () {
         setShownDashboardEntries(entries)
         setHiddenDashboardEntries(hiddenEntries)
       } else {
-        const platform = window.matchMedia('(max-width: 768px)').matches
-          ? PLATFORM_MOBILE
-          : PLATFORM_DESKTOP
-
-        let personGroup = USER_STUDENT
-        if (localStorage.session === 'guest') {
-          personGroup = USER_GUEST
-        } else if (localStorage.isStudent === 'false') {
-          personGroup = USER_EMPLOYEE
-        }
-
-        const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
-        setShownDashboardEntries(ALL_DASHBOARD_CARDS.filter(filter))
-        setHiddenDashboardEntries(ALL_DASHBOARD_CARDS.filter(x => !filter(x)))
+        const defaultEntries = getDefaultDashboardOrder()
+        setShownDashboardEntries(defaultEntries.shown)
+        setHiddenDashboardEntries(defaultEntries.hidden)
       }
 
       if (localStorage.unlockedThemes) {
@@ -277,6 +288,16 @@ export default function Home () {
     hiddenEntries.splice(index, 1)
 
     changeDashboardEntries(entries, hiddenEntries)
+  }
+
+  /**
+   * Resets which dashboard entries are shown and their order to default
+   */
+  function resetOrder () {
+    const defaultEntries = getDefaultDashboardOrder()
+    setShownDashboardEntries(defaultEntries.shown)
+    setHiddenDashboardEntries(defaultEntries.hidden)
+    changeDashboardEntries(defaultEntries.shown, defaultEntries.hidden)
   }
 
   /**
@@ -382,7 +403,7 @@ export default function Home () {
 
               <Button
                 variant="secondary"
-                onClick={() => changeDashboardEntries(ALL_DASHBOARD_CARDS, [])}
+                onClick={() => resetOrder()}
               >
                 Reihenfolge zurücksetzen
               </Button>
