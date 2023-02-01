@@ -312,7 +312,7 @@ export default function Home () {
 
   return (
     <AppContainer>
-      <AppNavbar title="neuland.app" showBack={false}>
+      <AppNavbar title="freiland.app" showBack={false}>
         <AppNavbar.Button onClick={() => setShowThemeModal(true)}>
           <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
         </AppNavbar.Button>
