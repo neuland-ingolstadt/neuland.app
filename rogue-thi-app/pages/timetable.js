@@ -53,7 +53,7 @@ function groupTimetableEntries (timetable) {
  * @returns {boolean}
  */
 function isToday (date) {
-  return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
+  return new Date(date).setHours(0, 0, 0, 0) === new Date(2023, 0, 22).setHours(0, 0, 0, 0)
 }
 
 /**
@@ -97,6 +97,8 @@ export default function Timetable () {
   const [isDetailedData, setIsDetailedData] = useState(false)
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
+  console.log((new Date(2023, 0, 22)).getDay())
+  const effectiveDate = ((new Date(2023, 0, 22)).getDay() !== 0) ? new Date(2023, 0, 22) : addWeek(new Date(2023, 0, 22), 1)
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
@@ -104,7 +106,7 @@ export default function Timetable () {
 
   // week for the caption
   const week = useMemo(() => {
-    const [currStart, currEnd] = getWeek(new Date())
+    const [currStart, currEnd] = getWeek(effectiveDate)
     return [addWeek(currStart, page), addWeek(currEnd, page)]
   }, [page])
 
@@ -157,7 +159,7 @@ export default function Timetable () {
    * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
    */
   function timetableRenderer ({ key, index }) {
-    const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))
+    const [start, end] = getWeek(effectiveDate).map(date => addWeek(date, index))
     const current = timetable && timetable.filter(group => isInWeek(group.date, start, end))
 
     return (
