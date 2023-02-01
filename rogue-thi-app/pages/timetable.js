@@ -53,7 +53,7 @@ function groupTimetableEntries (timetable) {
  * @returns {boolean}
  */
 function isToday (date) {
-  return new Date(date).setHours(0, 0, 0, 0) === new Date(2023, 0, 22).setHours(0, 0, 0, 0)
+  return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
 }
 
 /**
@@ -97,8 +97,13 @@ export default function Timetable () {
   const [isDetailedData, setIsDetailedData] = useState(false)
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
-  console.log((new Date(2023, 0, 22)).getDay())
-  const effectiveDate = ((new Date(2023, 0, 22)).getDay() !== 0) ? new Date(2023, 0, 22) : addWeek(new Date(2023, 0, 22), 1)
+
+  let effectiveDate
+  if (new Date().getDay() !== 0) {
+    effectiveDate = new Date()
+  } else {
+    effectiveDate = addWeek(new Date(), 1)
+  }
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
