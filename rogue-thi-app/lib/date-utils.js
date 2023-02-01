@@ -243,8 +243,8 @@ export function addWeek (date, delta) {
  * @returns {string}
  */
 export function getFriendlyWeek (date) {
-  const [currStart, currEnd] = getWeek(new Date())
-  const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
+  const [currStart, currEnd] = getWeek(new Date(2023, 0, 22))
+  const [nextStart, nextEnd] = getWeek(addWeek(new Date(2023, 0, 22), 1))
   if (date >= currStart && date < currEnd) {
     return WORD_THIS_WEEK
   } else if (date >= nextStart && date < nextEnd) {
