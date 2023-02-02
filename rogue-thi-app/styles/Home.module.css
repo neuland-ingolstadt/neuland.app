@@ -86,7 +86,11 @@
 }
 
 .mobilityDestination {
+  width: 100%;
+  white-space: nowrap;
   float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mobilityTime {
