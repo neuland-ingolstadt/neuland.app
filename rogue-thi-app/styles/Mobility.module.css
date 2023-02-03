@@ -31,6 +31,9 @@
 
 .mobilityDestination {
   flex: 1;
+  white-space: break-spaces;
+  word-break: break-word;
+  margin-right: 5px;
 }
 
 .mobilityTime {
