@@ -1,0 +1,24 @@
+.themeModal {
+    width: 700px;
+    max-width: 95vw;
+}
+
+.themeHeader {
+    margin-top: 10px;
+}
+
+.themeButton {
+    margin: 10px 0;
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.personalizeItem {
+    display: flex;
+    align-items: center;
+}
+
+.personalizeLabel {
+    flex: 1;
+}
