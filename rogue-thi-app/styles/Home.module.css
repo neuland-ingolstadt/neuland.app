@@ -71,12 +71,14 @@
 .mobilityItem {
   padding: .25rem;
   border: 0;
+  display: flex;
 }
 
 .mobilityRoute {
   padding: 0px 3px;
   margin-right: 6px;
   min-width: 2.5em;
+  white-space: nowrap;
   text-align: center;
   float: left;
   background: #eeeeee;
@@ -86,9 +88,13 @@
 }
 
 .mobilityDestination {
-  float: left;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mobilityTime {
-  float: right;
+  white-space: nowrap;
+  width: auto;
 }

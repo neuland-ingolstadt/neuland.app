@@ -98,13 +98,20 @@ export default function Timetable () {
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
 
+  let effectiveDate
+  if (new Date().getDay() !== 0) {
+    effectiveDate = new Date()
+  } else {
+    effectiveDate = addWeek(new Date(), 1)
+  }
+
   // page (0 = current week)
   const [page, setPage] = useState(0)
   const [fetchedWeek, setFetchedWeek] = useState(null)
 
   // week for the caption
   const week = useMemo(() => {
-    const [currStart, currEnd] = getWeek(new Date())
+    const [currStart, currEnd] = getWeek(effectiveDate)
     return [addWeek(currStart, page), addWeek(currEnd, page)]
   }, [page])
 
@@ -157,7 +164,7 @@ export default function Timetable () {
    * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
    */
   function timetableRenderer ({ key, index }) {
-    const [start, end] = getWeek(new Date()).map(date => addWeek(date, index))
+    const [start, end] = getWeek(effectiveDate).map(date => addWeek(date, index))
     const current = timetable && timetable.filter(group => isInWeek(group.date, start, end))
 
     return (

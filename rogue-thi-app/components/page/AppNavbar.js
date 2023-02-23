@@ -9,9 +9,8 @@ import Navbar from 'react-bootstrap/Navbar'
 
 import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
-
-import { useMediaQuery } from '../../lib/hooks/media-query-hook'
 
 import styles from '../../styles/AppNavbar.module.css'
 

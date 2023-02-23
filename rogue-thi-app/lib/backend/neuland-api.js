@@ -58,10 +58,6 @@ class NeulandAPIClient {
   async getCampusLifeEvents () {
     return this.performRequest(`${ENDPOINT}/api/cl-events`)
   }
-
-  async getThiEvents () {
-    return this.performRequest(`${ENDPOINT}/api/thi-events`)
-  }
 }
 
 export default new NeulandAPIClient()

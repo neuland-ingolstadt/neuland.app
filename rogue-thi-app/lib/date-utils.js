@@ -229,7 +229,7 @@ export function getWeek (date) {
  * Adds weeks to a date
  * @param {Date} date
  * @param {number} delta
- * @returns {string}
+ * @returns {Date}
  */
 export function addWeek (date, delta) {
   date = new Date(date)
