@@ -2,10 +2,27 @@
   width: 400px;
   max-width: 95vw;
 }
+
 .personal_value {
   float: right;
 }
+
 .personal_value_loading {
   width: 30vw;
   float: right;
+}
+
+.name_interaction_icon {
+  float: right;
+  align-items: center;
+}
+
+.interaction_icon {
+  float: right;
+}
+
+.logout_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

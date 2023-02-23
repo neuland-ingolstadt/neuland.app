@@ -42,6 +42,20 @@ export async function loadGrades () {
 }
 
 /**
+ *
+ */
+export async function calculateECTS () {
+  const { finished } = await loadGrades()
+
+  let j = 0
+  for (let i = finished.length - 1; i >= 0; i--) {
+    j = j + parseInt(finished[i].ects)
+  }
+
+  return j
+}
+
+/**
  * Calculates the approximate grade average based on automatically extracted SPO data
  * @returns {object}
  */
