@@ -25,8 +25,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import PersonalizeModal from '../components/modal/PersonalizeModal'
-import { ShowThemeModal, ThemeContext } from './_app'
+import { ShowFoodFilterModal, ShowPersonalDataModal, ShowPersonalizeModal, ThemeContext } from './_app'
 import Button from 'react-bootstrap/Button'
+import FilterFoodModal from '../components/modal/FilterFoodModal'
+import PersonalDataModal from '../components/modal/PersonalDataModal'
 
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)
@@ -35,7 +37,9 @@ export default function Personal () {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
-  const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
+  const [showThemeModal, setShowThemeModal] = useContext(ShowPersonalizeModal)
+  const [showFoodFilterModal, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
+  const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
 
@@ -80,7 +84,7 @@ export default function Personal () {
       <ReactPlaceholder type="text" rows={20} ready={userdata}>
 
         <ListGroup>
-          <ListGroup.Item action>
+          <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
             <div className={styles.name_interaction_icon}>
               <FontAwesomeIcon icon={faChevronRight} className="text-muted"/>
             </div>
@@ -135,10 +139,10 @@ export default function Personal () {
             </ListGroup.Item>
           ))}
 
-          <ListGroup.Item action>
+          <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
             <div className={styles.interaction_icon}>
             <span className="text-muted">
-              Allergene{' '}
+              Essenspräferenzen{' '}
               <FontAwesomeIcon icon={faChevronRight}/>
             </span>
             </div>
@@ -204,7 +208,9 @@ export default function Personal () {
           </Button>
         </div>
 
+        <PersonalDataModal userdata={userdata}/>
         <PersonalizeModal/>
+        <FilterFoodModal/>
       </ReactPlaceholder>
       <AppTabbar/>
     </AppBody>

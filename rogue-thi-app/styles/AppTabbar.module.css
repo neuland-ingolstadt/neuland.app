@@ -13,6 +13,7 @@
 
 .tab {
   flex: 1;
+  flex-basis: 20%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +26,7 @@
 }
 
 .icon {
-  font-size: 18pt;
+  font-size: 20pt;
 }
 
 /*

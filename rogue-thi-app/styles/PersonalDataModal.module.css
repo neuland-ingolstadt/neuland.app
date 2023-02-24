@@ -1,0 +1,20 @@
+.modalHeader h6 {
+    float: left;
+}
+
+.modalHeader button {
+    float: right;
+}
+
+.modalBody {
+    clear: both;
+}
+
+.personal_value {
+    float: right;
+}
+
+.personal_value_loading {
+    width: 30vw;
+    float: right;
+}
