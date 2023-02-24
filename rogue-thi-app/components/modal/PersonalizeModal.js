@@ -18,7 +18,7 @@ import { useDashboard } from '../../lib/hooks/dashboard'
  * @constructor
  */
 export default function PersonalizeModal () {
-  const [
+  const {
     shownDashboardEntries,
     hiddenDashboardEntries,
     unlockedThemes,
@@ -26,7 +26,7 @@ export default function PersonalizeModal () {
     hideDashboardEntry,
     bringBackDashboardEntry,
     resetOrder
-  ] = useDashboard()
+  } = useDashboard()
   const [showPersonalizeModal, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()

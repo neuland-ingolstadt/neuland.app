@@ -38,17 +38,12 @@ Object.keys(allergenMap)
  * Page showing the current Mensa / Reimanns meal plan.
  */
 export default function Mensa () {
-  const [
+  const {
     selectedRestaurants,
     preferencesSelection,
-    setPreferencesSelection,
     allergenSelection,
-    setAllergenSelection,
-    isStudent,
-    toggleSelectedRestaurant,
-    savePreferencesSelection,
-    saveAllergenSelection
-  ] = useFoodFilter()
+    isStudent
+  } = useFoodFilter()
   const [showFoodFilterModal, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [foodEntries, setFoodEntries] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)

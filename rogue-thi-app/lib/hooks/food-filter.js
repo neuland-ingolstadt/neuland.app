@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 
+/**
+ * React Hook for Managing the Food Filter
+ * @returns {{setAllergenSelection: (value: (((prevState: {}) => {}) | {})) => void, allergenSelection: {}, toggleSelectedRestaurant: toggleSelectedRestaurant, preferencesSelection: {}, setPreferencesSelection: (value: (((prevState: {}) => {}) | {})) => void, selectedRestaurants: string[], isStudent: boolean, savePreferencesSelection: savePreferencesSelection, saveAllergenSelection: saveAllergenSelection}}
+ */
 export function useFoodFilter () {
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
   const [preferencesSelection, setPreferencesSelection] = useState({})
@@ -50,7 +54,7 @@ export function useFoodFilter () {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
   }
 
-  return [
+  return {
     selectedRestaurants,
     preferencesSelection,
     setPreferencesSelection,
@@ -60,5 +64,5 @@ export function useFoodFilter () {
     toggleSelectedRestaurant,
     savePreferencesSelection,
     saveAllergenSelection
-  ]
+  }
 }
