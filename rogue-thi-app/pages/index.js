@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 
 import {
+  faArrowRightFromBracket,
   faBook,
-  faDoorOpen,
+  faDoorOpen, faPen,
   faScroll,
   faUser,
   faUserGraduate
@@ -19,6 +20,12 @@ import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
 import styles from '../styles/Home.module.css'
+import { useDashboard } from '../lib/hooks/dashboard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ShowPersonalizeModal } from './_app'
+import PersonalizeModal from '../components/modal/PersonalizeModal'
+import { forgetSession } from '../lib/backend/thi-session-handler'
+import { useRouter } from 'next/router'
 
 export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -85,7 +92,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'library',
     label: 'Bibliothek',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
+    default: [PLATFORM_DESKTOP, USER_STUDENT],
     card: () => (
       <BaseCard
         key="library"
@@ -137,79 +144,37 @@ export const ALL_DASHBOARD_CARDS = [
 ]
 
 /**
- * Get the default order of shown and hidden dashboard entries
- */
-export function getDefaultDashboardOrder () {
-  const platform = window.matchMedia('(max-width: 768px)').matches
-    ? PLATFORM_MOBILE
-    : PLATFORM_DESKTOP
-
-  let personGroup = USER_STUDENT
-  if (localStorage.session === 'guest') {
-    personGroup = USER_GUEST
-  } else if (localStorage.isStudent === 'false') {
-    personGroup = USER_EMPLOYEE
-  }
-
-  const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
-  return {
-    shown: ALL_DASHBOARD_CARDS.filter(filter),
-    hidden: ALL_DASHBOARD_CARDS.filter(x => !filter(x))
-  }
-}
-
-export function loadDashboardEntries () {
-  if (localStorage.personalizedDashboard) {
-    const entries = JSON.parse(localStorage.personalizedDashboard)
-      .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
-      .filter(x => !!x)
-    const hiddenEntries = JSON.parse(localStorage.personalizedDashboardHidden)
-      .map(key => ALL_DASHBOARD_CARDS.find(x => x.key === key))
-      .filter(x => !!x)
-
-    ALL_DASHBOARD_CARDS.forEach(card => {
-      if (!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
-        // new (previosly unknown) card
-        entries.splice(0, 0, card)
-      }
-    })
-
-    return {
-      shownDashboardEntries: entries,
-      hiddenDashboardEntries: hiddenEntries
-    }
-  } else {
-    const entries = getDefaultDashboardOrder()
-    return {
-      shownDashboardEntries: entries.shown,
-      hiddenDashboardEntries: entries.hidden
-    }
-  }
-}
-
-/**
  * Main page.
  */
 export default function Home () {
   // page state
-  const [shownDashboardEntries, setShownDashboardEntries] = useState([])
-
-  useEffect(() => {
-    async function load () {
-      const entries = await loadDashboardEntries()
-      setShownDashboardEntries(entries.shownDashboardEntries)
-    }
-    load()
-  }, [])
+  const [
+    shownDashboardEntries,
+    hiddenDashboardEntries,
+    unlockedThemes,
+    moveDashboardEntry,
+    hideDashboardEntry,
+    bringBackDashboardEntry,
+    resetOrder
+  ] = useDashboard()
+  const [showPersonalizeModal, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
+  const router = useRouter()
 
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
+        <AppNavbar.Button onClick={() => setShowPersonalizeModal(true)}>
+          <FontAwesomeIcon icon={faPen} title={'Personalisieren'} fixedWidth />
+        </AppNavbar.Button>
+        <AppNavbar.Button onClick={() => forgetSession(router)}>
+          <FontAwesomeIcon icon={faArrowRightFromBracket} color={'#dc3545'} title={'Logout'} fixedWidth />
+        </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
         <div className={styles.cardDeck}>
-          {shownDashboardEntries.map(entry => entry.card())}
+          {shownDashboardEntries.map(entry => entry.card(hideDashboardEntry))}
+          <PersonalizeModal/>
         </div>
       </AppBody>
 

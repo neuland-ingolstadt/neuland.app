@@ -19,14 +19,3 @@
   text-align: right;
 }
 
-.filterHeader h6 {
-  float: left;
-}
-
-.filterHeader button {
-  float: right;
-}
-
-.filterBody {
-  clear: both;
-}

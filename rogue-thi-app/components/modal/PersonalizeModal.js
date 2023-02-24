@@ -1,110 +1,35 @@
-import styles from '../../styles/Personalize.module.css'
-import Modal from 'react-bootstrap/Modal'
-import Form from 'react-bootstrap/Form'
-import themes from '../../data/themes.json'
+import { ShowPersonalizeModal, ThemeContext } from '../../pages/_app'
+import { faChevronDown, faChevronUp, faTrash, faTrashRestore } from '@fortawesome/free-solid-svg-icons'
+import { useContext, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
-import {
-  CTF_URL, getDefaultDashboardOrder, loadDashboardEntries
-} from '../../pages'
+import { CTF_URL } from '../../pages'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Form from 'react-bootstrap/Form'
 import Link from 'next/link'
 import ListGroup from 'react-bootstrap/ListGroup'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronDown, faChevronUp, faTrash, faTrashRestore } from '@fortawesome/free-solid-svg-icons'
-import { ShowThemeModal, ThemeContext } from '../../pages/_app'
-import { useContext, useEffect, useRef, useState } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import styles from '../../styles/Personalize.module.css'
+import themes from '../../data/themes.json'
+import { useDashboard } from '../../lib/hooks/dashboard'
 
+/**
+ * A modal component that allows users to personalize their experience by changing the theme and dashboard layout
+ * @returns {JSX.Element} The PersonalizeModal compontent
+ * @constructor
+ */
 export default function PersonalizeModal () {
-  const [shownDashboardEntries, setShownDashboardEntries] = useState([])
-  const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
-  const [unlockedThemes, setUnlockedThemes] = useState([])
-  const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
+  const [
+    shownDashboardEntries,
+    hiddenDashboardEntries,
+    unlockedThemes,
+    moveDashboardEntry,
+    hideDashboardEntry,
+    bringBackDashboardEntry,
+    resetOrder
+  ] = useDashboard()
+  const [showPersonalizeModal, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
-
-  useEffect(() => {
-    async function load () {
-      const entries = await loadDashboardEntries()
-      setShownDashboardEntries(entries.shownDashboardEntries)
-      setHiddenDashboardEntries(entries.hiddenDashboardEntries)
-
-      if (localStorage.unlockedThemes) {
-        setUnlockedThemes(JSON.parse(localStorage.unlockedThemes))
-      }
-    }
-    load()
-  }, [])
-
-  /**
-   * Persists the dashboard settings.
-   * @param {object[]} entries Displayed entries
-   * @param {object[]} hiddenEntries Hidden entries
-   */
-  function changeDashboardEntries (entries, hiddenEntries) {
-    localStorage.personalizedDashboard = JSON.stringify(entries.map(x => x.key))
-    localStorage.personalizedDashboardHidden = JSON.stringify(hiddenEntries.map(x => x.key))
-    setShownDashboardEntries(entries)
-    setHiddenDashboardEntries(hiddenEntries)
-  }
-
-  /**
-   * Moves a dashboard entry to a new position.
-   * @param {number} oldIndex Old position
-   * @param {number} diff New position relative to the old position
-   */
-  function moveDashboardEntry (oldIndex, diff) {
-    const newIndex = oldIndex + diff
-    if (newIndex < 0 || newIndex >= shownDashboardEntries.length) {
-      return
-    }
-
-    const entries = shownDashboardEntries.slice(0)
-    const entry = entries[oldIndex]
-    entries.splice(oldIndex, 1)
-    entries.splice(newIndex, 0, entry)
-
-    changeDashboardEntries(entries, hiddenDashboardEntries)
-  }
-
-  /**
-   * Hides a dashboard entry.
-   * @param {string} key Entry key
-   */
-  function hideDashboardEntry (key) {
-    const entries = shownDashboardEntries.slice(0)
-    const hiddenEntries = hiddenDashboardEntries.slice(0)
-
-    const index = entries.findIndex(x => x.key === key)
-    if (index >= 0) {
-      hiddenEntries.push(entries[index])
-      entries.splice(index, 1)
-    }
-
-    changeDashboardEntries(entries, hiddenEntries)
-  }
-
-  /**
-   * Unhides a dashboard entry.
-   * @param {number} index Entry position
-   */
-  function bringBackDashboardEntry (index) {
-    const entries = shownDashboardEntries.slice(0)
-    const hiddenEntries = hiddenDashboardEntries.slice(0)
-
-    entries.push(hiddenEntries[index])
-    hiddenEntries.splice(index, 1)
-
-    changeDashboardEntries(entries, hiddenEntries)
-  }
-
-  /**
-   * Resets which dashboard entries are shown and their order to default
-   */
-  function resetOrder () {
-    const defaultEntries = getDefaultDashboardOrder()
-    setShownDashboardEntries(defaultEntries.shown)
-    setHiddenDashboardEntries(defaultEntries.hidden)
-    changeDashboardEntries(defaultEntries.shown, defaultEntries.hidden)
-  }
 
   /**
    * Changes the current theme.
@@ -113,11 +38,12 @@ export default function PersonalizeModal () {
   function changeTheme (theme) {
     localStorage.theme = theme
     setTheme(theme)
-    setShowThemeModal(false)
+    setShowPersonalizeModal(false)
   }
 
   return (
-    <Modal show={!!showThemeModal} dialogClassName={styles.themeModal} onHide={() => setShowThemeModal(false)}>
+    <Modal show={!!showPersonalizeModal} dialogClassName={styles.themeModal}
+           onHide={() => setShowPersonalizeModal(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Personalisierung</Modal.Title>
       </Modal.Header>
