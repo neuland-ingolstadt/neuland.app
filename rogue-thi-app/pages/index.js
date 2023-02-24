@@ -148,15 +148,10 @@ export const ALL_DASHBOARD_CARDS = [
  */
 export default function Home () {
   // page state
-  const [
+  const {
     shownDashboardEntries,
-    hiddenDashboardEntries,
-    unlockedThemes,
-    moveDashboardEntry,
-    hideDashboardEntry,
-    bringBackDashboardEntry,
-    resetOrder
-  ] = useDashboard()
+    hideDashboardEntry
+  } = useDashboard()
   const [showPersonalizeModal, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
   const router = useRouter()
 

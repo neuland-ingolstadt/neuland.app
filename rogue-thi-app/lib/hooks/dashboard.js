@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 /**
  * React Hook for Managing the Dashboard
- * @returns [
+ * @returns {{
  *   showDashboardEntries: object[]
  *   hiddenDashboardEntries: object[]
  *   unlockedThemes: object[]
@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
  *   hideDashboardEntry: (key: string) => void
  *   bringBackDashboardEntry: (index: number) => void
  *   resetOrder: () => void
- * ]
+ * }}
  */
 export function useDashboard () {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])
@@ -150,7 +150,7 @@ export function useDashboard () {
     changeDashboardEntries(defaultEntries.shown, defaultEntries.hidden)
   }
 
-  return [
+  return {
     shownDashboardEntries,
     hiddenDashboardEntries,
     unlockedThemes,
@@ -158,5 +158,5 @@ export function useDashboard () {
     hideDashboardEntry,
     bringBackDashboardEntry,
     resetOrder
-  ]
+  }
 }

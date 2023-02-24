@@ -20,17 +20,16 @@ Object.keys(allergenMap)
  * @constructor
  */
 export default function FilterFoodModal () {
-  const [
+  const {
     selectedRestaurants,
     preferencesSelection,
     setPreferencesSelection,
     allergenSelection,
     setAllergenSelection,
-    isStudent,
     toggleSelectedRestaurant,
     savePreferencesSelection,
     saveAllergenSelection
-  ] = useFoodFilter()
+  } = useFoodFilter()
   const [showFoodFilterModal, setShowFoodFilterSelection] = useContext(ShowFoodFilterModal)
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] = useState(false)
