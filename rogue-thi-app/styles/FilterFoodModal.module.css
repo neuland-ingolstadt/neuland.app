@@ -1,11 +1,11 @@
 .filterHeader h6 {
-    float: left;
+  float: left;
 }
 
 .filterHeader button {
-    float: right;
+  float: right;
 }
 
 .filterBody {
-    clear: both;
+  clear: both;
 }

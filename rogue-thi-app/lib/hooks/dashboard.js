@@ -7,16 +7,38 @@ import {
 import { useEffect, useState } from 'react'
 
 /**
- * React Hook for Managing the Dashboard
- * @returns {{
- *   showDashboardEntries: object[]
- *   hiddenDashboardEntries: object[]
- *   unlockedThemes: object[]
- *   moveDashboardEntry: (oldIndex: number, diff: number) => void
- *   hideDashboardEntry: (key: string) => void
- *   bringBackDashboardEntry: (index: number) => void
- *   resetOrder: () => void
- * }}
+ * @typedef {Object} DashboardSettings
+ * @property {*[]} unlockedThemes - An array of unlocked themes.
+ * @property {moveDashboardEntry} moveDashboardEntry - A function that moves a dashboard entry by a certain amount.
+ * @property {hideDashboardEntry} hideDashboardEntry - A function that hides a dashboard entry.
+ * @property {bringBackDashboardEntry} bringBackDashboardEntry - A function that brings back a hidden dashboard entry.
+ * @property {*[]} shownDashboardEntries - An array of dashboard entries that are currently shown.
+ * @property {resetOrder} resetOrder - A function that resets the order of the dashboard entries.
+ * @property {*[]} hiddenDashboardEntries - An array of dashboard entries that are currently hidden.
+ */
+
+/**
+ * @callback moveDashboardEntry
+ * @param {number} oldIndex - The current index of the dashboard entry.
+ * @param {number} diff - The amount to move the dashboard entry by.
+ * @returns {void}
+ */
+
+/**
+ * @callback hideDashboardEntry
+ * @param {number} index - The index of the dashboard entry to hide.
+ * @returns {void}
+ */
+
+/**
+ * @callback bringBackDashboardEntry
+ * @param {number} index - The index of the hidden dashboard entry to bring back.
+ * @returns {void}
+ */
+
+/**
+ * @callback resetOrder
+ * @returns {void}
  */
 export function useDashboard () {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])

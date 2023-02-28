@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import {
-  faArrowRightFromBracket,
   faBook,
-  faDoorOpen, faPen,
+  faDoorOpen,
   faScroll,
   faUser,
   faUserGraduate
@@ -21,11 +20,7 @@ import MobilityCard from '../components/cards/MobilityCard'
 import TimetableCard from '../components/cards/TimetableCard'
 import styles from '../styles/Home.module.css'
 import { useDashboard } from '../lib/hooks/dashboard'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ShowPersonalizeModal } from './_app'
 import PersonalizeModal from '../components/modal/PersonalizeModal'
-import { forgetSession } from '../lib/backend/thi-session-handler'
-import { useRouter } from 'next/router'
 
 export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -152,18 +147,10 @@ export default function Home () {
     shownDashboardEntries,
     hideDashboardEntry
   } = useDashboard()
-  const [showPersonalizeModal, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
-  const router = useRouter()
 
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
-        <AppNavbar.Button onClick={() => setShowPersonalizeModal(true)}>
-          <FontAwesomeIcon icon={faPen} title={'Personalisieren'} fixedWidth />
-        </AppNavbar.Button>
-        <AppNavbar.Button onClick={() => forgetSession(router)}>
-          <FontAwesomeIcon icon={faArrowRightFromBracket} color={'#dc3545'} title={'Logout'} fixedWidth />
-        </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
