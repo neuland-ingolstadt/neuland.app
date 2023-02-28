@@ -1,24 +1,24 @@
 .themeModal {
-    width: 700px;
-    max-width: 95vw;
+  width: 700px;
+  max-width: 95vw;
 }
 
 .themeHeader {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .themeButton {
-    margin: 10px 0;
-    display: block;
-    width: 100%;
-    text-align: left;
+  margin: 10px 0;
+  display: block;
+  width: 100%;
+  text-align: left;
 }
 
 .personalizeItem {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .personalizeLabel {
-    flex: 1;
+  flex: 1;
 }

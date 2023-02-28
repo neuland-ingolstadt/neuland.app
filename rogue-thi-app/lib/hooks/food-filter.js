@@ -1,8 +1,34 @@
 import { useEffect, useState } from 'react'
 
 /**
- * React Hook for Managing the Food Filter
- * @returns {{setAllergenSelection: (value: (((prevState: {}) => {}) | {})) => void, allergenSelection: {}, toggleSelectedRestaurant: toggleSelectedRestaurant, preferencesSelection: {}, setPreferencesSelection: (value: (((prevState: {}) => {}) | {})) => void, selectedRestaurants: string[], isStudent: boolean, savePreferencesSelection: savePreferencesSelection, saveAllergenSelection: saveAllergenSelection}}
+ * @typedef {Object} RestaurantPreferences
+ * @property {(value: (((prevState: {}) => {}) | {})) => void} setAllergenSelection - A function that sets the selected allergens.
+ * @property {{}} allergenSelection - An object containing the selected allergens.
+ * @property {toggleSelectedRestaurant} toggleSelectedRestaurant - A function that toggles the selection of a restaurant.
+ * @property {{}} preferencesSelection - An object containing the selected preferences.
+ * @property {(value: (((prevState: {}) => {}) | {})) => void} setPreferencesSelection - A function that sets the selected preferences.
+ * @property {string[]} selectedRestaurants - An array containing the selected restaurants.
+ * @property {boolean} isStudent - A boolean indicating whether the user is a student or not.
+ * @property {savePreferencesSelection} savePreferencesSelection - A function that saves the selected preferences.
+ * @property {saveAllergenSelection} saveAllergenSelection - A function that saves the selected allergens.
+ */
+
+/**
+ * @callback toggleSelectedRestaurant
+ * @param {string} restaurant - The ID of the restaurant to toggle.
+ * @returns {void}
+ */
+
+/**
+ * @callback savePreferencesSelection
+ * @param {{}} preferences - An object containing the preferences to save.
+ * @returns {void}
+ */
+
+/**
+ * @callback saveAllergenSelection
+ * @param {{}} allergens - An object containing the allergens to save.
+ * @returns {void}
  */
 export function useFoodFilter () {
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])

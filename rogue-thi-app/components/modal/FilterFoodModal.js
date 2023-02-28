@@ -77,7 +77,7 @@ export default function FilterFoodModal () {
             </Button>
           </div>
           <div className={styles.filterBody}>
-            <>Ausgewählt:</>
+            <>Ausgewählt:{' '}</>
             {Object.entries(allergenSelection).filter(x => x[1]).map(x => allergenMap[x[0]]).join(', ') || 'Keine'}.
           </div>
 

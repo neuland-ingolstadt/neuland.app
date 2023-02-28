@@ -42,7 +42,8 @@ export async function loadGrades () {
 }
 
 /**
- *
+ * This Function is to calculate the number of ETCS a User has.
+ * @returns {Promise<number>}
  */
 export async function calculateECTS () {
   const { finished } = await loadGrades()

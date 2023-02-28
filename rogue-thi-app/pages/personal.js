@@ -37,6 +37,8 @@ export default function Personal () {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
+  const [isGuest, setIsGuest] = useState(true)
+  const [isStudent, setIsStudent] = useState(true)
   const [showThemeModal, setShowThemeModal] = useContext(ShowPersonalizeModal)
   const [showFoodFilterModal, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
@@ -72,6 +74,12 @@ export default function Personal () {
       if (localStorage.debugUnlocked) {
         setShowDebug(true)
       }
+
+      if (localStorage.isStudent === 'false') {
+        setIsStudent(false)
+      }
+
+      setIsGuest(localStorage.session === 'guest')
     }
 
     load()
@@ -95,13 +103,6 @@ export default function Personal () {
           <ListGroup.Item className="text-muted">
             <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
             {userdata && userdata.stgru + '. Semester'}<br/>
-            <a
-              /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
-              href={userdata?.po_url && userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
-              target="_blank"
-              rel="noreferrer">
-            Deine SPO <FontAwesomeIcon icon={faExternalLink}/>
-            </a>
             </span>
             {userdata && 'Mat.-Nr: ' + userdata.mtknr}<br/>
             {userdata && 'Bib.-Nr: ' + userdata.bibnr}
@@ -115,7 +116,7 @@ export default function Personal () {
               </span>
             </div>
             <span className="text-muted">
-              {ects && ects + ' ECTS'}
+              {ects !== null && ects + ' ECTS'}
               {average && ' · '}
               {average && '∅ ' + average}
             </span>
@@ -155,7 +156,8 @@ export default function Personal () {
 
         <ListGroup>
 
-          <ListGroup.Item action onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+          <ListGroup.Item action
+                          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
             <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
             Primuss
           </ListGroup.Item>
@@ -170,11 +172,12 @@ export default function Personal () {
             E-Mail
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            MyTHI (Beschäftigten Portal)
-          </ListGroup.Item>
-
+          {(!isStudent || isGuest) &&
+            <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
+              <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+              MyTHI (Beschäftigten Portal)
+            </ListGroup.Item>
+          }
         </ListGroup>
 
         <br/>
@@ -200,7 +203,7 @@ export default function Personal () {
 
         </ListGroup>
 
-        <br />
+        <br/>
 
         <div className={styles.logout_button}>
           <Button variant={'danger'} onClick={() => forgetSession(router)}>
