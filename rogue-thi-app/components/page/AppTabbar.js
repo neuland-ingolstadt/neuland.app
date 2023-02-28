@@ -5,7 +5,6 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 import {
-  faBook,
   faCalendar,
   faHome,
   faMap,
@@ -30,34 +29,28 @@ export default function AppTabbar () {
       <Navbar fixed="bottom" className={[styles.navbar, 'mobile-only']}>
         <Nav className={['justify-content-around', styles.nav]}>
           <Nav.Item>
-            <Nav.Link onClick={() => router.replace('/library')} className={[styles.tab, router.pathname === '/library' && styles.tabActive]}>
-              <FontAwesomeIcon icon={faBook} className={styles.icon} />
-              Bibliothek
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link onClick={() => router.replace('/rooms')} className={[styles.tab, router.pathname === '/rooms' && styles.tabActive]}>
-              <FontAwesomeIcon icon={faMap} className={styles.icon} fixedWidth />
-              Raumplan
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
             <Nav.Link onClick={() => router.replace('/')} className={[styles.tab, router.pathname === '/' && styles.tabActive]}>
-              <FontAwesomeIcon icon={faHome} className={styles.icon} fixedWidth />
+              <FontAwesomeIcon icon={faHome} className={styles.icon} />
               Home
             </Nav.Link>
           </Nav.Item>
           {!isGuest && (
             <Nav.Item>
               <Nav.Link onClick={() => router.replace('/timetable')} className={[styles.tab, router.pathname === '/timetable' && styles.tabActive]}>
-                <FontAwesomeIcon icon={faCalendar} className={styles.icon} fixedWidth />
+                <FontAwesomeIcon icon={faCalendar} className={styles.icon} />
                 Stundenplan
               </Nav.Link>
             </Nav.Item>
           )}
           <Nav.Item>
+            <Nav.Link onClick={() => router.replace('/rooms')} className={[styles.tab, router.pathname === '/rooms' && styles.tabActive]}>
+              <FontAwesomeIcon icon={faMap} className={styles.icon} />
+              Raumplan
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
             <Nav.Link onClick={() => router.replace('/food')} className={[styles.tab, router.pathname === '/food' && styles.tabActive]}>
-              <FontAwesomeIcon icon={faUtensils} className={styles.icon} fixedWidth />
+              <FontAwesomeIcon icon={faUtensils} className={styles.icon} />
               Essen
             </Nav.Link>
           </Nav.Item>
