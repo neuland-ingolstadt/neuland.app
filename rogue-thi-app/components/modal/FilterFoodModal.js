@@ -96,7 +96,7 @@ export default function FilterFoodModal () {
           </div>
 
           <div className={styles.filterBody}>
-            <>Ausgewählt:</>
+            <>Ausgewählt:{' '}</>
             {Object.entries(preferencesSelection).filter(x => x[1]).map(x => flagMap[x[0]]).join(', ') || 'Keine'}.
           </div>
 
