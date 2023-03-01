@@ -1,14 +1,17 @@
-import Modal from 'react-bootstrap/Modal'
-import styles from '../../styles/FilterFoodModal.module.css'
-import Form from 'react-bootstrap/Form'
+import React, { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Modal from 'react-bootstrap/Modal'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
+
+import { ShowFoodFilterModal } from '../../pages/_app'
+import { useFoodFilter } from '../../lib/hooks/food-filter'
+
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
-import React, { useContext, useState } from 'react'
-import { useFoodFilter } from '../../lib/hooks/food-filter'
-import { ShowFoodFilterModal } from '../../pages/_app'
+import styles from '../../styles/FilterFoodModal.module.css'
 
 Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))

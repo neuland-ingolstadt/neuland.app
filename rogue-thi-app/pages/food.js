@@ -13,16 +13,15 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import FilterFoodModal from '../components/modal/FilterFoodModal'
+import { ShowFoodFilterModal } from './_app'
 import { formatNearDate } from '../lib/date-utils'
 import { loadFoodEntries } from '../lib/backend-utils/food-utils'
-
-import styles from '../styles/Mensa.module.css'
+import { useFoodFilter } from '../lib/hooks/food-filter'
 
 import allergenMap from '../data/allergens.json'
 import flagMap from '../data/mensa-flags.json'
-import { useFoodFilter } from '../lib/hooks/food-filter'
-import { ShowFoodFilterModal } from './_app'
-import FilterFoodModal from '../components/modal/FilterFoodModal'
+import styles from '../styles/Mensa.module.css'
 
 const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
@@ -44,7 +43,7 @@ export default function Mensa () {
     allergenSelection,
     isStudent
   } = useFoodFilter()
-  const [showFoodFilterModal, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
+  const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [foodEntries, setFoodEntries] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
 

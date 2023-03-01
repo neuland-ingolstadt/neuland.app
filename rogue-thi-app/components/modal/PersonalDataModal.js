@@ -1,9 +1,10 @@
+import React, { useContext } from 'react'
+import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
-import { useContext } from 'react'
+import ReactPlaceholder from 'react-placeholder'
+
 import { ShowPersonalDataModal } from '../../pages/_app'
 import styles from '../../styles/PersonalDataModal.module.css'
-import ListGroup from 'react-bootstrap/ListGroup'
-import ReactPlaceholder from 'react-placeholder'
 
 export default function PersonalDataModal ({ userdata }) {
   const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)

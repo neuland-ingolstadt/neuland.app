@@ -1,12 +1,5 @@
 import React from 'react'
 
-import {
-  faBook,
-  faDoorOpen,
-  faScroll,
-  faUser,
-  faUserGraduate
-} from '@fortawesome/free-solid-svg-icons'
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
@@ -17,10 +10,20 @@ import EventsCard from '../components/cards/EventsCard'
 import FoodCard from '../components/cards/FoodCard'
 import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
-import TimetableCard from '../components/cards/TimetableCard'
-import styles from '../styles/Home.module.css'
-import { useDashboard } from '../lib/hooks/dashboard'
 import PersonalizeModal from '../components/modal/PersonalizeModal'
+import TimetableCard from '../components/cards/TimetableCard'
+
+import {
+  faBook,
+  faDoorOpen,
+  faScroll,
+  faUser,
+  faUserGraduate
+} from '@fortawesome/free-solid-svg-icons'
+
+import { useDashboard } from '../lib/hooks/dashboard'
+
+import styles from '../styles/Home.module.css'
 
 export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 

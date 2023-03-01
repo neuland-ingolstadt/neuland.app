@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
+import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
@@ -8,13 +9,10 @@ import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
+import FilterFoodModal from '../components/modal/FilterFoodModal'
+import PersonalDataModal from '../components/modal/PersonalDataModal'
+import PersonalizeModal from '../components/modal/PersonalizeModal'
 
-import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
-import API from '../lib/backend/authenticated-api'
-
-import styles from '../styles/Personal.module.css'
-import themes from '../data/themes.json'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faArrowRightFromBracket,
   faBug,
@@ -23,12 +21,15 @@ import {
   faGavel,
   faShield
 } from '@fortawesome/free-solid-svg-icons'
-import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
-import PersonalizeModal from '../components/modal/PersonalizeModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { ShowFoodFilterModal, ShowPersonalDataModal, ShowPersonalizeModal, ThemeContext } from './_app'
-import Button from 'react-bootstrap/Button'
-import FilterFoodModal from '../components/modal/FilterFoodModal'
-import PersonalDataModal from '../components/modal/PersonalDataModal'
+import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
+import API from '../lib/backend/authenticated-api'
+
+import styles from '../styles/Personal.module.css'
+import themes from '../data/themes.json'
 
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)
@@ -39,9 +40,9 @@ export default function Personal () {
   const [showDebug, setShowDebug] = useState(false)
   const [isGuest, setIsGuest] = useState(true)
   const [isStudent, setIsStudent] = useState(true)
-  const [showThemeModal, setShowThemeModal] = useContext(ShowPersonalizeModal)
-  const [showFoodFilterModal, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
-  const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
+  const [, setShowThemeModal] = useContext(ShowPersonalizeModal)
+  const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
+  const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
 

@@ -113,7 +113,7 @@ export default function Timetable () {
   const week = useMemo(() => {
     const [currStart, currEnd] = getWeek(effectiveDate)
     return [addWeek(currStart, page), addWeek(currEnd, page)]
-  }, [page])
+  }, [page, effectiveDate])
 
   useEffect(() => {
     async function load (currWeek) {
