@@ -38,7 +38,7 @@ export default function PersonalDataModal ({ userdata }) {
     <Modal show={showPersonalDataModal} onHide={() => setShowPersonalDataModal(false)}>
       <Modal.Header closeButton>
         <Modal.Title className={styles.modalHeader}>
-          Deine Persönlichen Daten
+          Persönliche Daten
         </Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles.modalBody}>

@@ -48,6 +48,17 @@ export default function Personal () {
   useEffect(() => {
     async function load () {
       try {
+        if (localStorage.debugUnlocked) {
+          setShowDebug(true)
+        }
+
+        setIsGuest(localStorage.session === 'guest')
+
+        if (localStorage.isStudent === 'false') {
+          setIsStudent(false)
+          return
+        }
+
         const response = await API.getPersonalData()
         const data = response.persdata
         data.pcounter = response.pcounter
@@ -70,59 +81,50 @@ export default function Personal () {
           alert(e)
         }
       }
-
-      if (localStorage.debugUnlocked) {
-        setShowDebug(true)
-      }
-
-      if (localStorage.isStudent === 'false') {
-        setIsStudent(false)
-      }
-
-      setIsGuest(localStorage.session === 'guest')
     }
 
     load()
   }, [router])
 
   return (<AppContainer>
-    <AppNavbar title="Dein Profil"/>
+    <AppNavbar title="Profil"/>
 
     <AppBody>
-      <ReactPlaceholder type="text" rows={20} ready={userdata}>
+      <ReactPlaceholder type="text" rows={20} ready={userdata || !isStudent}>
 
-        <ListGroup>
-          <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
-            <div className={styles.name_interaction_icon}>
-              <FontAwesomeIcon icon={faChevronRight} className="text-muted"/>
-            </div>
-            {userdata && userdata.name + ', ' + userdata.vname}<br/>
-            {userdata && userdata.fachrich}
-          </ListGroup.Item>
+        {isStudent &&
+          <ListGroup>
+            <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
+              <div className={styles.name_interaction_icon}>
+                <FontAwesomeIcon icon={faChevronRight} className="text-muted"/>
+              </div>
+              {userdata && userdata.name + ', ' + userdata.vname}<br/>
+              {userdata && userdata.fachrich}
+            </ListGroup.Item>
 
-          <ListGroup.Item className="text-muted">
-            <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-            {userdata && userdata.stgru + '. Semester'}<br/>
-            </span>
-            {userdata && 'Mat.-Nr: ' + userdata.mtknr}<br/>
-            {userdata && 'Bib.-Nr: ' + userdata.bibnr}
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => window.open('/grades', '_self')}>
-            <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}{' '}Noten{' '}
-                <FontAwesomeIcon icon={faChevronRight}/>
+            <ListGroup.Item className="text-muted">
+              <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
+              {userdata && userdata.stgru + '. Semester'}<br/>
               </span>
-            </div>
-            <span className="text-muted">
-              {ects !== null && ects + ' ECTS'}
-              {average && ' · '}
-              {average && '∅ ' + average}
-            </span>
-          </ListGroup.Item>
+              {userdata && 'Mat.-Nr: ' + userdata.mtknr}<br/>
+              {userdata && 'Bib.-Nr: ' + userdata.bibnr}
+            </ListGroup.Item>
 
-        </ListGroup>
+            <ListGroup.Item action onClick={() => window.open('/grades', '_self')}>
+              <div className={styles.interaction_icon}>
+                <span className="text-muted">
+                  {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}{' '}Noten{' '}
+                  <FontAwesomeIcon icon={faChevronRight}/>
+                </span>
+              </div>
+              <span className="text-muted">
+                {ects !== null && ects + ' ECTS'}
+                {average && ' · '}
+                {average && '∅ ' + average}
+              </span>
+            </ListGroup.Item>
+          </ListGroup>
+        }
 
         <br/>
 
@@ -136,18 +138,17 @@ export default function Personal () {
               <FontAwesomeIcon icon={faChevronRight}/>
             </span>
               </div>
-              Theme
+              Personalisierung
             </ListGroup.Item>
           ))}
 
           <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
             <div className={styles.interaction_icon}>
-            <span className="text-muted">
-              Essenspräferenzen{' '}
-              <FontAwesomeIcon icon={faChevronRight}/>
-            </span>
+              <span className="text-muted">
+                <FontAwesomeIcon icon={faChevronRight}/>
+              </span>
             </div>
-            Einstellungen
+            Essenspräferenzen
           </ListGroup.Item>
 
         </ListGroup>
@@ -175,7 +176,7 @@ export default function Personal () {
           {(!isStudent || isGuest) &&
             <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
               <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-              MyTHI (Beschäftigten Portal)
+              MyTHI
             </ListGroup.Item>
           }
         </ListGroup>

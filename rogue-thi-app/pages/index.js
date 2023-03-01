@@ -112,13 +112,13 @@ export const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'personal',
-    label: 'Dein Profil',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
+    label: 'Profil',
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
       <BaseCard
         key="personal"
         icon={faUser}
-        title="Dein Profil"
+        title="Profil"
         link="/personal"
       />
     )
