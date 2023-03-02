@@ -81,14 +81,16 @@ export default function PersonalizeModal () {
                 {entry.label}
               </div>
               <div className={styles.personalizeButtons}>
+                {entry.removable &&
+                  <Button variant="text" onClick={() => hideDashboardEntry(entry.key)}>
+                    <FontAwesomeIcon title="Entfernen" icon={faTrash} fixedWidth/>
+                  </Button>
+                }
                 <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
                   <FontAwesomeIcon title="Nach oben" icon={faChevronUp} fixedWidth/>
                 </Button>
                 <Button variant="text" onClick={() => moveDashboardEntry(i, +1)}>
                   <FontAwesomeIcon title="Nach unten" icon={faChevronDown} fixedWidth/>
-                </Button>
-                <Button variant="text" onClick={() => hideDashboardEntry(entry.key)}>
-                  <FontAwesomeIcon title="Entfernen" icon={faTrash} fixedWidth/>
                 </Button>
               </div>
             </ListGroup.Item>

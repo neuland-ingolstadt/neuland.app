@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -10,12 +10,11 @@ import EventsCard from '../components/cards/EventsCard'
 import FoodCard from '../components/cards/FoodCard'
 import InstallPrompt from '../components/cards/InstallPrompt'
 import MobilityCard from '../components/cards/MobilityCard'
-import PersonalizeModal from '../components/modal/PersonalizeModal'
 import TimetableCard from '../components/cards/TimetableCard'
 
 import {
   faBook,
-  faDoorOpen, faGear,
+  faDoorOpen,
   faScroll,
   faUser,
   faUserGraduate
@@ -24,10 +23,6 @@ import {
 import { useDashboard } from '../lib/hooks/dashboard'
 
 import styles from '../styles/Home.module.css'
-
-import { ShowPersonalizeModal } from './_app'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -40,6 +35,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
     label: 'Installation',
+    removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: hidePromptCard => (
       <InstallPrompt
@@ -51,36 +47,42 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'timetable',
     label: 'Stundenplan',
+    removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => <TimetableCard key="timetable"/>
   },
   {
     key: 'mensa',
     label: 'Essen',
+    removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <FoodCard key="mensa"/>
   },
   {
     key: 'mobility',
     label: 'Mobilität',
+    removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <MobilityCard key="mobility"/>
   },
   {
     key: 'calendar',
     label: 'Termine',
+    removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <CalendarCard key="calendar"/>
   },
   {
     key: 'events',
     label: 'Veranstaltungen',
+    removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <EventsCard key="events"/>
   },
   {
     key: 'rooms',
     label: 'Raumplan',
+    removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => (
       <BaseCard
@@ -94,6 +96,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'library',
     label: 'Bibliothek',
+    removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT],
     card: () => (
       <BaseCard
@@ -107,6 +110,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'grades',
     label: 'Noten & Fächer',
+    removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
       <BaseCard
@@ -120,6 +124,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'personal',
     label: 'Profil',
+    removable: false,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => (
       <BaseCard
@@ -133,6 +138,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'lecturers',
     label: 'Dozenten',
+    removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
       <BaseCard
@@ -154,24 +160,18 @@ export default function Home () {
     shownDashboardEntries,
     hideDashboardEntry
   } = useDashboard()
-  const [, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
 
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
-        <AppNavbar.Button onClick={() => setShowPersonalizeModal(true)}>
-          <FontAwesomeIcon title="Einstellungen" icon={faGear} fixedWidth />
-        </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
         <div className={styles.cardDeck}>
           {shownDashboardEntries.map(entry => entry.card(hideDashboardEntry))}
-          <PersonalizeModal/>
         </div>
       </AppBody>
 
-      <PersonalizeModal />
       <AppTabbar/>
     </AppContainer>
   )
