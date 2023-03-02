@@ -44,6 +44,7 @@ export default function Mensa () {
     allergenSelection,
     isStudent
   } = useFoodFilter()
+  const [isGuest, setIsGuest] = useState(true)
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [foodEntries, setFoodEntries] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
@@ -51,6 +52,7 @@ export default function Mensa () {
 
   useEffect(() => {
     async function load () {
+      setIsGuest(localStorage.session === 'guest')
       try {
         setFoodEntries(await loadFoodEntries(selectedRestaurants))
       } catch (e) {
@@ -105,7 +107,7 @@ export default function Mensa () {
    * @returns {string}
    */
   function getUserSpecificPrice (meal) {
-    const price = isStudent ? meal.prices.student : meal.prices.employee
+    const price = isStudent && !isGuest ? meal.prices.student : !isStudent && !isGuest ? meal.prices.employee : meal.prices.guest
     return formatPrice(price)
   }
 
@@ -179,9 +181,14 @@ export default function Mensa () {
                         </div>
                       </div>
                       <div className={styles.right}>
-                        {getUserSpecificPrice(meal)}
-                        <br/>
                         {meal.restaurant}
+                        <br/>
+                        <br/>
+                        <span className={styles.price}>{getUserSpecificPrice(meal)}</span>
+                        <br/>
+                        {isStudent && !isGuest && <span className={styles.indicator}>für Studierende</span>}
+                        {!isStudent && !isGuest && <span className={styles.indicator}>für Mitarbeitende</span>}
+                        {isGuest && <span className={styles.indicator}>für Gäste</span>}
                       </div>
                     </ListGroup.Item>
                   )}

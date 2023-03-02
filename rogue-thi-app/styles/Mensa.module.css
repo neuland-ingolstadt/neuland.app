@@ -14,16 +14,13 @@
   text-transform: uppercase;
 }
 
-.dateBoundary {
-  margin-top: 20px;
-}
-
 .item {
   display: flex;
 }
 
 .left {
   flex: 1;
+  margin-right: 1vh;
 }
 
 .room {
@@ -33,4 +30,13 @@
 .right {
   color: gray;
   text-align: right;
+}
+
+.price {
+  margin: 0;
+}
+
+.indicator {
+  font-size: .8rem;
+  font-weight: 200;
 }
