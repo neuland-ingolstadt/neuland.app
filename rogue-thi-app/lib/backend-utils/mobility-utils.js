@@ -58,7 +58,7 @@ async function getAndConvertCampusParkingData () {
   }
 
   return {
-    name: 'THI Campusgelände',
+    name: 'Congressgarage (Mitarbeiter)',
     available
   }
 }
