@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -15,7 +15,7 @@ import TimetableCard from '../components/cards/TimetableCard'
 
 import {
   faBook,
-  faDoorOpen,
+  faDoorOpen, faGear,
   faScroll,
   faUser,
   faUserGraduate
@@ -24,6 +24,10 @@ import {
 import { useDashboard } from '../lib/hooks/dashboard'
 
 import styles from '../styles/Home.module.css'
+
+import { ShowPersonalizeModal } from './_app'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -116,7 +120,7 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'personal',
     label: 'Profil',
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => (
       <BaseCard
         key="personal"
@@ -150,10 +154,14 @@ export default function Home () {
     shownDashboardEntries,
     hideDashboardEntry
   } = useDashboard()
+  const [, setShowPersonalizeModal] = useContext(ShowPersonalizeModal)
 
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
+        <AppNavbar.Button onClick={() => setShowPersonalizeModal(true)}>
+          <FontAwesomeIcon title="Einstellungen" icon={faGear} fixedWidth />
+        </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
@@ -163,6 +171,7 @@ export default function Home () {
         </div>
       </AppBody>
 
+      <PersonalizeModal />
       <AppTabbar/>
     </AppContainer>
   )
