@@ -53,7 +53,11 @@ export default function Personal () {
           setShowDebug(true)
         }
 
-        setIsGuest(localStorage.session === 'guest')
+        if (localStorage.session === 'guest') {
+          setIsStudent(false)
+          setIsGuest(true)
+          return
+        }
 
         if (localStorage.isStudent === 'false') {
           setIsStudent(false)
@@ -93,7 +97,7 @@ export default function Personal () {
     <AppBody>
       <ReactPlaceholder type="text" rows={20} ready={userdata || !isStudent}>
 
-        {isStudent &&
+        {(isStudent || !isGuest) &&
           <ListGroup>
             <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
               <div className={styles.name_interaction_icon}>
