@@ -1,3 +1,19 @@
+/* tab bar */
+.tab :global(.nav) {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+/* tab bar items */
+.tab :global(.nav .nav-item) {
+  flex: 1;
+  text-align: center;
+}
+.tab :global(.nav .nav-link) {
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
 .dateBoundary {
   margin-top: 20px;
 }
@@ -18,4 +34,3 @@
   color: gray;
   text-align: right;
 }
-

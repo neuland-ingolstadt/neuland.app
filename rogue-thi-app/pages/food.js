@@ -15,10 +15,11 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import FilterFoodModal from '../components/modal/FilterFoodModal'
 import { ShowFoodFilterModal } from './_app'
-import { formatNearDate } from '../lib/date-utils'
+import { buildLinedWeekdaySpan } from '../lib/date-utils'
 import { loadFoodEntries } from '../lib/backend-utils/food-utils'
 import { useFoodFilter } from '../lib/hooks/food-filter'
 
+import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import allergenMap from '../data/allergens.json'
 import flagMap from '../data/mensa-flags.json'
 import styles from '../styles/Mensa.module.css'
@@ -46,6 +47,7 @@ export default function Mensa () {
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [foodEntries, setFoodEntries] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
+  const slicedEntries = foodEntries && foodEntries.slice(0, 5)
 
   useEffect(() => {
     async function load () {
@@ -56,6 +58,7 @@ export default function Mensa () {
         alert(e)
       }
     }
+
     load()
   }, [selectedRestaurants])
 
@@ -70,6 +73,7 @@ export default function Mensa () {
     }
     return allergens.some(x => allergenSelection[x])
   }
+
   function containsSelectedPreference (flags) {
     if (!flags) {
       return false
@@ -115,202 +119,195 @@ export default function Mensa () {
   }
 
   return (
-      <AppContainer>
-        <AppNavbar title="Essen" showBack={'desktop-only'}>
-          <AppNavbar.Button onClick={() => setShowFoodFilterModal(true)}>
-            <FontAwesomeIcon title="Filter" icon={faFilter} fixedWidth />
-          </AppNavbar.Button>
-        </AppNavbar>
+    <AppContainer>
+      <AppNavbar title="Essen" showBack={'desktop-only'}>
+        <AppNavbar.Button onClick={() => setShowFoodFilterModal(true)}>
+          <FontAwesomeIcon title="Filter" icon={faFilter} fixedWidth/>
+        </AppNavbar.Button>
+      </AppNavbar>
 
-        <AppBody>
-          <ReactPlaceholder type="text" rows={20} ready={foodEntries}>
-            {foodEntries && foodEntries.map((day, idx) =>
-                <ListGroup key={idx}>
-                  <h4 className={styles.dateBoundary}>
-                    <div className={styles.left}>
-                      {formatNearDate(day.timestamp)}
-                    </div>
-                  </h4>
-
-                  {day.meals.map((meal, idx) =>
-                      <ListGroup.Item
-                          key={idx}
-                          className={styles.item}
-                          onClick={() => setShowMealDetails(meal)}
-                          action
-                      >
-                        <div className={styles.left}>
-                          <div className={styles.name}>
-                            {meal.name}
-                          </div>
-                          <div className={styles.room}>
-                            <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-                              {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
-                              {containsSelectedAllergen(meal.allergens) && (
-                                  <span>
-                                    <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
-                                    {' '}
+      <AppBody>
+        <ReactPlaceholder type="text" rows={20} ready={foodEntries}>
+          <SwipeableTabs className={styles.tab}>
+            {slicedEntries && slicedEntries.map((day, idx) =>
+              <SwipeableTab title={buildLinedWeekdaySpan(day.timestamp)} key={idx}>
+                <ListGroup>
+                  {slicedEntries && slicedEntries[idx].meals.map((meal, idx) =>
+                    <ListGroup.Item
+                      key={idx}
+                      className={styles.item}
+                      onClick={() => setShowMealDetails(meal)}
+                      action
+                    >
+                      <div className={styles.left}>
+                        <div className={styles.name}>
+                          {meal.name}
+                        </div>
+                        <div className={styles.room}>
+                          <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+                            {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
+                            {containsSelectedAllergen(meal.allergens) && (
+                              <span>
+                                    <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle}
+                                                     color={COLOR_WARN}/>
+                                {' '}
                                   </span>
-                              )}
-                              {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
-                                  <span>
-                                      <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD} />
-                                      {' '}
+                            )}
+                            {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
+                              <span>
+                                      <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD}/>
+                                {' '}
                                   </span>
-                              )}
-                              {meal.flags && meal.flags.map((flag, idx) => (
-                                  <span key={idx}>
+                            )}
+                            {meal.flags && meal.flags.map((flag, idx) => (
+                              <span key={idx}>
                                     {idx > 0 && ', '}
-                                    <span>
+                                <span>
                                       {flagMap[flag]}
                                     </span>
                                   </span>
-                              ))}
-                              {meal.allergens && meal.allergens.map((supplement, idx) => (
-                                  <span key={idx}>
+                            ))}
+                            {meal.allergens && meal.allergens.map((supplement, idx) => (
+                              <span key={idx}>
                                     {(idx > 0 || meal.flags?.length > 0) && ', '}
-                                  <span>
+                                <span>
                               {supplement}
                             </span>
                           </span>
-                              ))}
-                            </small>
-                          </div>
+                            ))}
+                          </small>
                         </div>
-                        <div className={styles.right}>
-                          {getUserSpecificPrice(meal)}
-                          <br />
-                          {meal.restaurant}
-                        </div>
-                      </ListGroup.Item>
+                      </div>
+                      <div className={styles.right}>
+                        {getUserSpecificPrice(meal)}
+                        <br/>
+                        {meal.restaurant}
+                      </div>
+                    </ListGroup.Item>
                   )}
                 </ListGroup>
+              </SwipeableTab>
             )}
-            {foodEntries && foodEntries.length === 0 &&
-                <ListGroup>
-                  <ListGroup.Item>
-                    Der Speiseplan ist leer.
-                  </ListGroup.Item>
-                </ListGroup>
-            }
-          </ReactPlaceholder>
+          </SwipeableTabs>
+        </ReactPlaceholder>
 
-          <br />
+        <br/>
 
-          <Modal show={showMealDetails} onHide={() => setShowMealDetails(null)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Erläuterung</Modal.Title>
-            </Modal.Header>
+        <Modal show={showMealDetails} onHide={() => setShowMealDetails(null)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Erläuterung</Modal.Title>
+          </Modal.Header>
 
-            <Modal.Body>
-              <h5>Anmerkungen</h5>
-              {showMealDetails?.flags === null && 'Unbekannt.'}
-              {showMealDetails?.flags?.length === 0 && 'Keine.'}
-              <ul>
-                {showMealDetails?.flags?.map(flag => (
-                    <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
-                      {containsSelectedPreference([flag]) && (
-                        <span>
-                          <FontAwesomeIcon icon={faThumbsUp} color={COLOR_GOOD} />{' '}
+          <Modal.Body>
+            <h5>Anmerkungen</h5>
+            {showMealDetails?.flags === null && 'Unbekannt.'}
+            {showMealDetails?.flags?.length === 0 && 'Keine.'}
+            <ul>
+              {showMealDetails?.flags?.map(flag => (
+                <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
+                  {containsSelectedPreference([flag]) && (
+                    <span>
+                          <FontAwesomeIcon icon={faThumbsUp} color={COLOR_GOOD}/>{' '}
                         </span>
-                      )}
-                      {' '}
-                      <strong>{flag}</strong>
-                      {' – '}
-                      {flagMap[flag] || FALLBACK_ALLERGEN}
-                    </li>
-                ))}
-              </ul>
+                  )}
+                  {' '}
+                  <strong>{flag}</strong>
+                  {' – '}
+                  {flagMap[flag] || FALLBACK_ALLERGEN}
+                </li>
+              ))}
+            </ul>
 
-              <h5>Allergene</h5>
-              {showMealDetails?.allergens === null && 'Unbekannt.'}
-              {showMealDetails?.allergens?.length === 0 && 'Keine.'}
-              <ul>
-                {showMealDetails?.allergens?.map(key => (
-                    <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
-                      {containsSelectedAllergen([key]) && (
-                          <span>
-                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN} />
-                            {' '}
+            <h5>Allergene</h5>
+            {showMealDetails?.allergens === null && 'Unbekannt.'}
+            {showMealDetails?.allergens?.length === 0 && 'Keine.'}
+            <ul>
+              {showMealDetails?.allergens?.map(key => (
+                <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
+                  {containsSelectedAllergen([key]) && (
+                    <span>
+                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN}/>
+                      {' '}
                           </span>
-                      )}
-                      {' '}
-                      <strong>{key}</strong>
-                      {' – '}
-                      {allergenMap[key] || FALLBACK_ALLERGEN}
-                    </li>
-                ))}
-              </ul>
+                  )}
+                  {' '}
+                  <strong>{key}</strong>
+                  {' – '}
+                  {allergenMap[key] || FALLBACK_ALLERGEN}
+                </li>
+              ))}
+            </ul>
 
-              <h5>Nährwerte</h5>
+            <h5>Nährwerte</h5>
 
-              {(showMealDetails?.nutrition && (
+            {(showMealDetails?.nutrition && (
 
-                  <ul>
-                    <li>
-                      <strong>Energie</strong>:{' '}
-                      {showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / &nbsp;
-                      {showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}
-                    </li>
-                    <li>
-                      <strong>Fett</strong>:{' '}
-                      {formatGram(showMealDetails?.nutrition.fat)}
-                      <br /><strong>davon gesättigte Fettsäuren</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
-                    </li>
-                    <li>
-                      <strong>Kohlenhydrate</strong>:{' '}
-                      {formatGram(showMealDetails?.nutrition.carbs)}
-                      <br /><strong>davon Zucker</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
-                    </li>
-                    <li>
-                      <strong>Ballaststoffe</strong>:{' '}
-                      {formatGram(showMealDetails?.nutrition.fiber)}
-                    </li>
-                    <li>
-                      <strong>Eiweiß</strong>:{' '}
-                      {formatGram(showMealDetails?.nutrition.protein)}
-                    </li>
-                    <li>
-                      <strong>Salz</strong>:{' '}
-                      {formatGram(showMealDetails?.nutrition.salt)}
-                    </li>
-                  </ul>)) || (
-                  <p>Unbekannt.</p>
-              )}
-
-              <h5>Preise</h5>
               <ul>
                 <li>
-                  <strong>Studierende</strong>:{' '}
-                  {formatPrice(showMealDetails?.prices.student)}
+                  <strong>Energie</strong>:{' '}
+                  {showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / &nbsp;
+                  {showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}
                 </li>
                 <li>
-                  <strong>Mitarbeitende</strong>:{' '}
-                  {formatPrice(showMealDetails?.prices.employee)}
+                  <strong>Fett</strong>:{' '}
+                  {formatGram(showMealDetails?.nutrition.fat)}
+                  <br/><strong>davon gesättigte
+                  Fettsäuren</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
                 </li>
                 <li>
-                  <strong>Gäste</strong>:{' '}
-                  {formatPrice(showMealDetails?.prices.guest)}
+                  <strong>Kohlenhydrate</strong>:{' '}
+                  {formatGram(showMealDetails?.nutrition.carbs)}
+                  <br/><strong>davon Zucker</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
                 </li>
-              </ul>
+                <li>
+                  <strong>Ballaststoffe</strong>:{' '}
+                  {formatGram(showMealDetails?.nutrition.fiber)}
+                </li>
+                <li>
+                  <strong>Eiweiß</strong>:{' '}
+                  {formatGram(showMealDetails?.nutrition.protein)}
+                </li>
+                <li>
+                  <strong>Salz</strong>:{' '}
+                  {formatGram(showMealDetails?.nutrition.salt)}
+                </li>
+              </ul>)) || (
+              <p>Unbekannt.</p>
+            )}
 
-              <p>
-                <strong>Angaben ohne Gewähr. </strong>
-                <br />
-                Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
-                Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion.
-              </p>
-            </Modal.Body>
+            <h5>Preise</h5>
+            <ul>
+              <li>
+                <strong>Studierende</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.student)}
+              </li>
+              <li>
+                <strong>Mitarbeitende</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.employee)}
+              </li>
+              <li>
+                <strong>Gäste</strong>:{' '}
+                {formatPrice(showMealDetails?.prices.guest)}
+              </li>
+            </ul>
 
-            <Modal.Footer>
-              <Button variant="primary" onClick={() => setShowMealDetails(null)}>OK</Button>
-            </Modal.Footer>
-          </Modal>
+            <p>
+              <strong>Angaben ohne Gewähr. </strong>
+              <br/>
+              Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
+              Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion.
+            </p>
+          </Modal.Body>
 
-          <FilterFoodModal />
-        </AppBody>
+          <Modal.Footer>
+            <Button variant="primary" onClick={() => setShowMealDetails(null)}>OK</Button>
+          </Modal.Footer>
+        </Modal>
 
-        <AppTabbar />
-      </AppContainer>
+        <FilterFoodModal/>
+      </AppBody>
+
+      <AppTabbar/>
+    </AppContainer>
   )
 }
