@@ -98,16 +98,17 @@ export default function Timetable () {
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
 
-  let effectiveDate
-  if (new Date().getDay() !== 0) {
-    effectiveDate = new Date()
-  } else {
-    effectiveDate = addWeek(new Date(), 1)
-  }
-
   // page (0 = current week)
   const [page, setPage] = useState(0)
   const [fetchedWeek, setFetchedWeek] = useState(null)
+
+  const effectiveDate = useMemo(() => {
+    const date = new Date()
+    if (date.getDay() === 0) {
+      date.setDate(date.getDate() + 1)
+    }
+    return date
+  }, [])
 
   // week for the caption
   const week = useMemo(() => {
