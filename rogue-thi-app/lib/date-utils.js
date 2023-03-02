@@ -110,6 +110,22 @@ export function formatNearDate (datetime) {
 }
 
 /**
+ * This Function takes a datetame and returns a span which is Formated, that on the first line is the Weekday and on the second line you get the date
+ * @param datetime
+ * @returns {JSX.Element}
+ */
+export function buildLinedWeekdaySpan (datetime) {
+  if (typeof datetime === 'string') {
+    datetime = new Date(datetime)
+  }
+
+  const weekday = datetime.toLocaleString(DATE_LOCALE, { weekday: 'short' })
+  const date = datetime.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+
+  return <span>{weekday}<br />{date}</span>
+}
+
+/**
  * Formats a time delta like "in 5 Minuten".
  * @param {number} delta Time delta in milliseconds
  * @returns {string}
