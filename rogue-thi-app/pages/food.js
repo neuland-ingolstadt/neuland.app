@@ -141,12 +141,12 @@ export default function Mensa () {
                       onClick={() => setShowMealDetails(meal)}
                       action
                     >
-                      <div className={styles.left}>
+                      <div>
                         <div className={styles.name}>
                           {meal.name}
                         </div>
                         <div className={styles.room}>
-                          <small style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+                          <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
                             {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
                             {containsSelectedAllergen(meal.allergens) && (
                               <span>
@@ -171,24 +171,25 @@ export default function Mensa () {
                             ))}
                             {meal.allergens && meal.allergens.map((supplement, idx) => (
                               <span key={idx}>
-                                    {(idx > 0 || meal.flags?.length > 0) && ', '}
+                                {(idx > 0 || meal.flags?.length > 0) && ', '}
                                 <span>
-                              {supplement}
-                            </span>
-                          </span>
+                                  {supplement}
+                                </span>
+                              </span>
                             ))}
-                          </small>
+                          </span>
                         </div>
                       </div>
-                      <div className={styles.right}>
-                        {meal.restaurant}
-                        <br/>
-                        <br/>
-                        <span className={styles.price}>{getUserSpecificPrice(meal)}</span>
-                        <br/>
-                        {isStudent && !isGuest && <span className={styles.indicator}>für Studierende</span>}
-                        {!isStudent && !isGuest && <span className={styles.indicator}>für Mitarbeitende</span>}
-                        {isGuest && <span className={styles.indicator}>für Gäste</span>}
+                      <div className={styles.details}>
+                        {getUserSpecificPrice(meal)}
+                        <br />
+                        {meal.prices.student > 0 &&
+                          <>
+                            {isStudent && !isGuest && <span className={styles.indicator}>für Studierende</span>}
+                            {!isStudent && !isGuest && <span className={styles.indicator}>für Mitarbeitende</span>}
+                            {isGuest && <span className={styles.indicator}>für Gäste</span>}
+                          </>
+                        }
                       </div>
                     </ListGroup.Item>
                   )}
