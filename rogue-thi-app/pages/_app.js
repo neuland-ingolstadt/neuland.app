@@ -13,9 +13,10 @@ import themes from '../data/themes.json'
 import '../styles/globals.css'
 
 export const ThemeContext = createContext('default')
-export const ShowPersonalizeModal = createContext(false)
+export const ShowDashboardModal = createContext(false)
 export const ShowFoodFilterModal = createContext(false)
 export const ShowPersonalDataModal = createContext(false)
+export const ShowThemeModal = createContext(false)
 
 config.autoAddCss = false
 
@@ -23,6 +24,7 @@ function MyApp ({ Component, pageProps }) {
   const router = useRouter()
   const [theme, setTheme] = useState('default')
   const [showThemeModal, setShowThemeModal] = useState(false)
+  const [showDashboardModal, setShowDashboardModal] = useState(false)
   const [showFoodFilterModal, setShowFoodFilterModal] = useState(false)
   const [showPersonalDataModal, setShowPersonalDataModal] = useState(false)
 
@@ -50,9 +52,10 @@ function MyApp ({ Component, pageProps }) {
 
   return (
     <ThemeContext.Provider value={[computedTheme, setTheme]}>
-      <ShowPersonalizeModal.Provider value={[showThemeModal, setShowThemeModal]}>
+      <ShowDashboardModal.Provider value={[showDashboardModal, setShowDashboardModal]}>
         <ShowFoodFilterModal.Provider value={[showFoodFilterModal, setShowFoodFilterModal]}>
           <ShowPersonalDataModal.Provider value={[showPersonalDataModal, setShowPersonalDataModal]}>
+            <ShowThemeModal.Provider value={[showThemeModal, setShowThemeModal]}>
             <Head>
               <meta charSet="utf-8"/>
               <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
@@ -132,9 +135,10 @@ function MyApp ({ Component, pageProps }) {
             )}
 
             <Component {...pageProps} />
+            </ShowThemeModal.Provider>
           </ShowPersonalDataModal.Provider>
         </ShowFoodFilterModal.Provider>
-      </ShowPersonalizeModal.Provider>
+      </ShowDashboardModal.Provider>
     </ThemeContext.Provider>
   )
 }
