@@ -33,6 +33,9 @@ import API from '../lib/backend/authenticated-api'
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
 
+const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
+const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
+
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)
   const [average, setAverage] = useState(null)
@@ -243,12 +246,12 @@ export default function Personal () {
             </ListGroup.Item>
           )}
 
-          <ListGroup.Item action onClick={() => window.open('/imprint', '_self')}>
+          <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
             <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
             Datenschutzerklärung
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => window.open('/imprint', '_self')}>
+          <ListGroup.Item action onClick={() => window.open(IMPRINT_URL, '_blank')}>
             <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
             Impressum
           </ListGroup.Item>

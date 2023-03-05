@@ -17,6 +17,7 @@ const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
 const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind falsch.'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
+const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const GUEST_ONLY = !!process.env.NEXT_PUBLIC_GUEST_ONLY
 
@@ -162,9 +163,11 @@ export default function Login () {
               <a href={`${GIT_URL}/blob/master/docs/data-security-de.md`}>Hier findest du weitere Informationen zur Sicherheit.</a>
             </p>
             <p>
-              <a href={GIT_URL} target="_blank" rel="noreferrer">Quellcode auf GitHub</a>
+              <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum</a>
               <> &ndash; </>
-              <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum und Datenschutz</a>
+              <a href={PRIVACY_URL} target="_blank" rel="noreferrer">Datenschutzerklärung</a>
+              <> &ndash; </>
+              <a href={GIT_URL} target="_blank" rel="noreferrer">Quellcode auf GitHub</a>
             </p>
           </div>
         </div>
