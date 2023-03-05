@@ -55,21 +55,22 @@ export default function Personal () {
 
     const handleCopy = async () => {
       // Copies the value to the clipboard, and shows an alert.
-      await navigator.clipboard.writeText(value);
-      alert(`${label} in die Zwischenablage kopiert.`);
-    };
+      await navigator.clipboard.writeText(value)
+      alert(`${label} in die Zwischenablage kopiert.`)
+    }
 
     return (
       <span onClick={e => {
         if (!value) {
           // If the value is empty, stop the event from propagating.
-          e.preventDefault();
-          return;
+          e.preventDefault()
+          return
         }
-        e.stopPropagation();
+        e.stopPropagation()
       }}>
         {label}:{' '}
-        {value ? (
+        {value
+          ? (
           <>
             <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
               {value}
@@ -80,11 +81,11 @@ export default function Personal () {
               onClick={handleCopy}
             />
           </>
-        ) : null}
+            )
+          : null}
       </span>
-    );
-  };
-
+    )
+  }
 
   useEffect(() => {
     async function load () {
@@ -131,7 +132,7 @@ export default function Personal () {
     load()
   }, [router])
 
- return (<AppContainer>
+  return (<AppContainer>
     <AppNavbar title="Profil"/>
 
     <AppBody>
