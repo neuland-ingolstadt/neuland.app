@@ -9,9 +9,10 @@ import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
+import DashboardModal from '../components/modal/DashboardModal'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
 import PersonalDataModal from '../components/modal/PersonalDataModal'
-import PersonalizeModal from '../components/modal/PersonalizeModal'
+import ThemeModal from '../components/modal/ThemeModal'
 
 import {
   faArrowRightFromBracket,
@@ -26,7 +27,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
-import { ShowFoodFilterModal, ShowPersonalDataModal, ShowPersonalizeModal, ThemeContext } from './_app'
+import { ShowDashboardModal, ShowFoodFilterModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
 
@@ -45,9 +46,10 @@ export default function Personal () {
   const [showDebug, setShowDebug] = useState(false)
   const [isGuest, setIsGuest] = useState(false)
   const [isStudent, setIsStudent] = useState(true)
-  const [, setShowThemeModal] = useContext(ShowPersonalizeModal)
+  const [, setShowDashboardModal] = useContext(ShowDashboardModal)
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
+  const [, setShowThemeModal] = useContext(ShowThemeModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
 
@@ -57,7 +59,6 @@ export default function Personal () {
     // The label is not clickable.
 
     const handleCopy = async () => {
-      // Copies the value to the clipboard, and shows an alert.
       await navigator.clipboard.writeText(value)
       alert(`${label} in die Zwischenablage kopiert.`)
     }
@@ -65,7 +66,6 @@ export default function Personal () {
     return (
       <span onClick={e => {
         if (!value) {
-          // If the value is empty, stop the event from propagating.
           e.preventDefault()
           return
         }
@@ -157,7 +157,7 @@ export default function Personal () {
               </span>
               {userdata && (
                 <>
-                  <CopyableField label="Mat.-Nr:" value={userdata.mtknr} /> <br />
+                  <CopyableField label="Mat.-Nr" value={userdata.mtknr} /> <br />
                   <CopyableField label="Bib.-Nr" value={userdata.bibnr} />
                 </>
               )}
@@ -192,9 +192,18 @@ export default function Personal () {
               <FontAwesomeIcon icon={faChevronRight}/>
             </span>
               </div>
-              Personalisierung
+              Theme
             </ListGroup.Item>
           ))}
+
+          <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
+            <div className={styles.interaction_icon}>
+              <span className="text-muted">
+                <FontAwesomeIcon icon={faChevronRight}/>
+              </span>
+            </div>
+            Dashboard
+          </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
             <div className={styles.interaction_icon}>
@@ -269,8 +278,9 @@ export default function Personal () {
         </div>
 
         <PersonalDataModal userdata={userdata}/>
-        <PersonalizeModal/>
+        <DashboardModal/>
         <FilterFoodModal/>
+        <ThemeModal/>
       </ReactPlaceholder>
       <AppTabbar/>
     </AppBody>
