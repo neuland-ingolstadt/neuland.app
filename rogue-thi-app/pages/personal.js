@@ -15,8 +15,10 @@ import PersonalizeModal from '../components/modal/PersonalizeModal'
 
 import {
   faArrowRightFromBracket,
+  faArrowRightToBracket,
   faBug,
   faChevronRight,
+  faCopy,
   faExternalLink,
   faGavel,
   faShield
@@ -38,13 +40,52 @@ export default function Personal () {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
-  const [isGuest, setIsGuest] = useState(true)
+  const [isGuest, setIsGuest] = useState(false)
   const [isStudent, setIsStudent] = useState(true)
   const [, setShowThemeModal] = useContext(ShowPersonalizeModal)
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
+
+  const CopyableField = ({ label, value }) => {
+    // This is a component that renders a label and a value.
+    // Only the value and the icon are clickable to copy the value to the clipboard.
+    // The label is not clickable.
+
+    const handleCopy = async () => {
+      // Copies the value to the clipboard, and shows an alert.
+      await navigator.clipboard.writeText(value)
+      alert(`${label} in die Zwischenablage kopiert.`)
+    }
+
+    return (
+      <span onClick={e => {
+        if (!value) {
+          // If the value is empty, stop the event from propagating.
+          e.preventDefault()
+          return
+        }
+        e.stopPropagation()
+      }}>
+        {label}:{' '}
+        {value
+          ? (
+          <>
+            <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
+              {value}
+            </span>
+            <FontAwesomeIcon
+              icon={faCopy}
+              style={{ marginLeft: '5px', cursor: 'pointer' }}
+              onClick={handleCopy}
+            />
+          </>
+            )
+          : null}
+      </span>
+    )
+  }
 
   useEffect(() => {
     async function load () {
@@ -111,8 +152,13 @@ export default function Personal () {
               <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
               {userdata && userdata.stgru + '. Semester'}<br/>
               </span>
-              {userdata && 'Mat.-Nr: ' + userdata.mtknr}<br/>
-              {userdata && 'Bib.-Nr: ' + userdata.bibnr}
+              {userdata && (
+                <>
+                  <CopyableField label="Mat.-Nr:" value={userdata.mtknr} /> <br />
+                  <CopyableField label="Bib.-Nr" value={userdata.bibnr} />
+                </>
+              )}
+
             </ListGroup.Item>
 
             <ListGroup.Item action onClick={() => window.open('/grades', '_self')}>
@@ -212,8 +258,10 @@ export default function Personal () {
         <br/>
 
         <div className={styles.logout_button}>
-          <Button variant={'danger'} onClick={() => forgetSession(router)}>
-            Logout <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+          <Button
+            variant={isGuest ? 'success' : 'danger'}
+            onClick={() => forgetSession(router)}>
+            {isGuest ? 'Login' : 'Logout'} <FontAwesomeIcon icon={isGuest ? faArrowRightToBracket : faArrowRightFromBracket} />
           </Button>
         </div>
 
