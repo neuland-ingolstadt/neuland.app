@@ -11,32 +11,21 @@
 }
 .tab :global(.nav .nav-link) {
   padding: 5px 10px;
-  text-transform: uppercase;
 }
 
-.item {
-  display: flex;
-}
-
-.left {
+.details {
   flex: 1;
-  margin-right: 1vh;
-}
-
-.room {
-  color: gray;
-}
-
-.right {
   color: gray;
   text-align: right;
+  align-self: flex-end;
 }
 
-.price {
-  margin: 0;
+.restaurant {
+  font-size: .8rem;
+  color: gray;
 }
 
 .indicator {
   font-size: .8rem;
-  font-weight: 200;
+  color: gray;
 }
