@@ -15,6 +15,7 @@ import PersonalizeModal from '../components/modal/PersonalizeModal'
 
 import {
   faArrowRightFromBracket,
+  faArrowRightToBracket,
   faBug,
   faChevronRight,
   faCopy,
@@ -256,8 +257,10 @@ export default function Personal () {
         <br/>
 
         <div className={styles.logout_button}>
-          <Button variant={'danger'} onClick={() => forgetSession(router)}>
-            Logout <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+          <Button
+            variant={isGuest ? 'success' : 'danger'}
+            onClick={() => forgetSession(router)}>
+            {isGuest ? 'Login' : 'Logout'} <FontAwesomeIcon icon={isGuest ? faArrowRightToBracket : faArrowRightFromBracket} />
           </Button>
         </div>
 
