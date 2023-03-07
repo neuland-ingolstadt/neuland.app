@@ -139,7 +139,7 @@ export function useDashboard () {
     const entries = shownDashboardEntries.slice(0)
     const hiddenEntries = hiddenDashboardEntries.slice(0)
 
-    const index = entries.filter(entry => entry.removable !== false).findIndex(x => x.key === key)
+    const index = entries.findIndex(x => x.key === key)
     if (index >= 0) {
       hiddenEntries.push(entries[index])
       entries.splice(index, 1)
