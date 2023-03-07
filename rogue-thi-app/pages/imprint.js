@@ -26,7 +26,7 @@ export async function getStaticProps () {
     console.error(e)
     return {
       props: {
-        neulandImprint: 'Laden fehlgeschlagen! <a href="IMPRINT_URL">Bitte hier klicken</a>'
+        neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`
       }
     }
   }
