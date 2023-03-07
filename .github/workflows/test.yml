@@ -8,6 +8,10 @@ jobs:
         working-directory: ./rogue-thi-app
     steps:
     - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
     - name: Install modules
       run: npm install
     - name: Run ESLint
@@ -19,6 +23,10 @@ jobs:
         working-directory: ./rogue-thi-app
     steps:
     - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
     - name: Install modules
       run: npm install
     - name: Build
