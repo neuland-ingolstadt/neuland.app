@@ -9,13 +9,13 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import API from '../lib/backend/authenticated-api'
-
 import styles from '../styles/Imprint.module.css'
+
+const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 
 export async function getStaticProps () {
   try {
-    const res = await fetch('https://neuland-ingolstadt.de/impressum.htm')
+    const res = await fetch(IMPRINT_URL)
     const html = await res.text()
     return {
       props: {
@@ -26,7 +26,7 @@ export async function getStaticProps () {
     console.error(e)
     return {
       props: {
-        neulandImprint: 'Laden fehlgeschlagen! <a href="https://neuland-ingolstadt.de/impressum.htm">Bitte hier klicken</a>'
+        neulandImprint: 'Laden fehlgeschlagen! <a href="IMPRINT_URL">Bitte hier klicken</a>'
       }
     }
   }
@@ -37,25 +37,11 @@ export async function getStaticProps () {
  */
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
-  const [thiImprint, setThiImprint] = useState('Lädt...')
   const [debugUnlockProgress, setDebugUnlockProgress] = useState(0)
 
   useEffect(() => {
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
   }, [unsanitizedNeulandImprint])
-
-  useEffect(() => {
-    async function load () {
-      try {
-        const html = await API.getImprint()
-        setThiImprint(DOMPurify.sanitize(html))
-      } catch (e) {
-        console.error(e)
-        setThiImprint('Laden fehlgeschlagen! <a href="https://www.thi.de/sonstiges/impressum">Bitte hier klicken</a>')
-      }
-    }
-    load()
-  }, [])
 
   function debugUnlockClicked () {
     if (debugUnlockProgress < 4) {
@@ -75,7 +61,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
   return (
     <AppContainer>
-      <AppNavbar title="Impressum und Datenschutz" />
+      <AppNavbar title="Impressum" />
 
       <AppBody>
         <ListGroup>
@@ -100,8 +86,8 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
             </a>
             <br />
             Quellcode auf GitHub:{' '}
-            <a href="https://github.com/neuland-ingolstadt/THI-App" target="_blank" rel="noreferrer">
-              neuland-ingolstadt/THI-App
+            <a href="https://github.com/neuland-ingolstadt/neuland.app" target="_blank" rel="noreferrer">
+              neuland-ingolstadt/neuland.app
             </a>
             <br />
             <br />
@@ -118,12 +104,6 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
           </ListGroup.Item>
         </ListGroup>
 
-        <ListGroup>
-          <h1 className={styles.imprintTitle}>Rechtliche Hinweise der THI (App Backend)</h1>
-          <ListGroup.Item>
-            <div className={styles.imprint} dangerouslySetInnerHTML={{ __html: thiImprint }} />
-          </ListGroup.Item>
-        </ListGroup>
       </AppBody>
 
       <AppTabbar />

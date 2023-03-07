@@ -19,7 +19,6 @@ import {
   faArrowRightToBracket,
   faBug,
   faChevronRight,
-  faCopy,
   faExternalLink,
   faGavel,
   faShield
@@ -34,7 +33,6 @@ import API from '../lib/backend/authenticated-api'
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
 
-const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
 export default function Personal () {
@@ -54,9 +52,7 @@ export default function Personal () {
   const router = useRouter()
 
   const CopyableField = ({ label, value }) => {
-    // This is a component that renders a label and a value.
-    // Only the value and the icon are clickable to copy the value to the clipboard.
-    // The label is not clickable.
+    // Only the value is clickable to copy it to the clipboard.
 
     const handleCopy = async () => {
       await navigator.clipboard.writeText(value)
@@ -78,11 +74,6 @@ export default function Personal () {
             <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
               {value}
             </span>
-            <FontAwesomeIcon
-              icon={faCopy}
-              style={{ marginLeft: '5px', cursor: 'pointer' }}
-              onClick={handleCopy}
-            />
           </>
             )
           : null}
@@ -260,7 +251,7 @@ export default function Personal () {
             Datenschutzerklärung
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => window.open(IMPRINT_URL, '_blank')}>
+          <ListGroup.Item action onClick={() => window.open('/imprint', '_self')}>
             <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
             Impressum
           </ListGroup.Item>
