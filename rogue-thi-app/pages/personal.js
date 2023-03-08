@@ -165,7 +165,6 @@ export default function Personal () {
               <span className="text-muted">
                 {ects !== null && ects + ' ECTS'}
                 {average && ' · '}
-                {average && '∅ ' + average}
                 {average && '∅ ' + average.result}
                 {average && 'missingWeight' in average && average.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
                 {average && 'missingWeight' in average && average.missingWeight > 0 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
