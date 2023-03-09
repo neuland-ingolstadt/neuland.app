@@ -165,7 +165,9 @@ export default function Personal () {
               <span className="text-muted">
                 {ects !== null && ects + ' ECTS'}
                 {average && ' · '}
-                {average && '∅ ' + average}
+                {average && '∅ ' + average.result}
+                {average && average?.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
+                {average && average?.missingWeight > 1 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
               </span>
             </ListGroup.Item>
           </ListGroup>
