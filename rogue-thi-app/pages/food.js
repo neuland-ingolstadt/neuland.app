@@ -45,15 +45,15 @@ export default function Mensa () {
     allergenSelection
   } = useFoodFilter()
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
-  const [foodEntries, setFoodEntries] = useState(null)
+  const [foodDays, setFoodDays] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
   const userKind = useUserKind()
-  const slicedEntries = foodEntries && foodEntries.slice(0, 5)
 
   useEffect(() => {
     async function load () {
       try {
-        setFoodEntries(await loadFoodEntries(selectedRestaurants))
+        const days = await loadFoodEntries(selectedRestaurants)
+        setFoodDays(days.slice(0, 5))
       } catch (e) {
         console.error(e)
         alert(e)
@@ -123,6 +123,92 @@ export default function Mensa () {
     return x?.toString().replace('.', ',')
   }
 
+  /**
+   * Renders a meal entry.
+   * @param {object} meal
+   * @param {any} key
+   * @returns {JSX.Element}
+   */
+  function renderMealEntry (meal, key) {
+    return (
+      <ListGroup.Item
+        key={key}
+        className={styles.item}
+        onClick={() => setShowMealDetails(meal)}
+        action
+      >
+        <div>
+          <div className={styles.name}>
+            {meal.name}
+          </div>
+          <div className={styles.room}>
+            <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
+              {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
+              {containsSelectedAllergen(meal.allergens) && (
+                <span>
+                  <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
+                  {' '}
+                </span>
+              )}
+              {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
+                <span>
+                  <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD} />
+                  {' '}
+                </span>
+              )}
+              {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
+              {meal.allergens && meal.allergens.join(', ')}
+            </span>
+          </div>
+        </div>
+        <div className={styles.details}>
+          {getUserSpecificPrice(meal)}
+        </div>
+      </ListGroup.Item>
+    )
+  }
+
+  /**
+   * Renders a meal entry.
+   * @param {object} meal
+   * @param {any} key
+   * @returns {JSX.Element}
+   */
+  function renderMealDay (day, key) {
+    const soups = day.meals.filter(x => x.category === 'Suppe')
+    const mensa = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
+    const reimanns = day.meals.filter(x => x.restaurant === 'Mensa')
+
+    return (
+      <SwipeableTab title={buildLinedWeekdaySpan(day.timestamp)} key={key}>
+        {soups.length > 0 && (
+          <>
+            <h4 className={styles.kindHeader}>Suppe</h4>
+            <ListGroup>
+              {soups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+            </ListGroup>
+          </>
+        )}
+        {mensa.length > 0 && (
+          <>
+            <h4 className={styles.kindHeader}>Mensa</h4>
+            <ListGroup>
+              {mensa.map((meal, idx) => renderMealEntry(meal, `meal-${idx}`))}
+            </ListGroup>
+          </>
+        )}
+        {reimanns.length > 0 && (
+          <>
+            <h4 className={styles.kindHeader}>Reimanns</h4>
+            <ListGroup>
+              {reimanns.map((meal, idx) => renderMealEntry(meal, `reimanns-${idx}`))}
+            </ListGroup>
+          </>
+        )}
+      </SwipeableTab>
+    )
+  }
+
   return (
     <AppContainer>
       <AppNavbar title="Essen" showBack={'desktop-only'}>
@@ -132,50 +218,9 @@ export default function Mensa () {
       </AppNavbar>
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={foodEntries}>
+        <ReactPlaceholder type="text" rows={20} ready={foodDays}>
           <SwipeableTabs className={styles.tab}>
-            {slicedEntries && slicedEntries.map((day, idx) =>
-              <SwipeableTab title={buildLinedWeekdaySpan(day.timestamp)} key={idx}>
-                <ListGroup>
-                  {slicedEntries && slicedEntries[idx].meals.map((meal, idx) =>
-                    <ListGroup.Item
-                      key={idx}
-                      className={styles.item}
-                      onClick={() => setShowMealDetails(meal)}
-                      action
-                    >
-                      <div>
-                        <div className={styles.name}>
-                          {meal.name}
-                        </div>
-                        <div className={styles.room}>
-                          <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-                            {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
-                            {containsSelectedAllergen(meal.allergens) && (
-                              <span>
-                                <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
-                                {' '}
-                              </span>
-                            )}
-                            {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
-                              <span>
-                                <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD} />
-                                {' '}
-                              </span>
-                            )}
-                            {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
-                            {meal.allergens && meal.allergens.join(', ')}
-                          </span>
-                        </div>
-                      </div>
-                      <div className={styles.details}>
-                        {getUserSpecificPrice(meal)}
-                      </div>
-                    </ListGroup.Item>
-                  )}
-                </ListGroup>
-              </SwipeableTab>
-            )}
+            {foodDays && foodDays.map((day, idx) => renderMealDay(day, idx))}
           </SwipeableTabs>
         </ReactPlaceholder>
 

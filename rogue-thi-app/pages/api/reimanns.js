@@ -81,6 +81,7 @@ export default async function handler (req, res) {
         timestamp: day,
         meals: days[day].map(meal => ({
           name: meal,
+          category: 'Essen',
           prices: {
             student: 5.3,
             employee: 5.9,

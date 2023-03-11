@@ -65,6 +65,9 @@ function parseDataFromXml (xml) {
         newAllergens.forEach(newAll => allergens.add(newAll))
       }
 
+      // convert 'Suppe 1' -> 'Suppe', 'Essen 3' -> 'Essen', etc.
+      const category = item.category._text.split(' ')[0]
+
       const flags = []
       if (item.piktogramme._text) {
         const matches = item.piktogramme._text.match(/class='infomax-food-icon .*?'/g)
@@ -90,6 +93,7 @@ function parseDataFromXml (xml) {
 
       return {
         name: text.trim(),
+        category,
         prices: {
           student: parseGermanFloat(item.preis1._text),
           employee: parseGermanFloat(item.preis2._text),
