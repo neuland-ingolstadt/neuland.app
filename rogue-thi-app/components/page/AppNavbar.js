@@ -47,7 +47,7 @@ export default function AppNavbar ({ title, showBack, children }) {
               <FontAwesomeIcon title="Zurück" icon={faChevronLeft} fixedWidth />
             </Button>
           )}
-          <div className={styles.titleText}>
+          <div className={(new Date()).getMonth() === 5 ? styles.titleTextPride : styles.titleText}>
             {title}
           </div>
         </Navbar.Brand>

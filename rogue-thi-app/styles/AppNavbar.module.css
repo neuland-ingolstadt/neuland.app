@@ -26,6 +26,10 @@
 .titleText {
   display: inline;
   margin: 0px 10px;
+}
+.titleTextPride {
+  display: inline;
+  margin: 0px 10px;
   border-bottom: 2px solid transparent;
   border-image: linear-gradient(90deg, #F44336 16.66%, #FF9800 16.67%, #FF9800 33.33%, #FFEB3B 33.34%, #FFEB3B 49.99%, #4CAF50 50%, #4CAF50 66.66%, #2196F3 66.67%, #2196F3 83.33%, #9C27B0 83.34%) 1 0 stretch;
 }
