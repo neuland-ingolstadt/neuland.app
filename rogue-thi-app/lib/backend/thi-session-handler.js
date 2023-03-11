@@ -181,8 +181,9 @@ export async function forgetSession (router) {
     // ignore
   }
 
-  delete localStorage.session
-  delete localStorage.sessionCreated
+  localStorage.removeItem('session')
+  localStorage.removeItem('sessionCreated')
+  localStorage.removeItem('isStudent')
 
   const credStore = new CredentialStorage(CRED_NAME)
   await credStore.delete(CRED_ID)
