@@ -111,7 +111,7 @@ export default function Personal () {
     if (localStorage.debugUnlocked) {
       setShowDebug(true)
     }
-    if (userKind !== USER_GUEST) {
+    if (userKind === USER_STUDENT) {
       load()
     }
   }, [router, userKind])
