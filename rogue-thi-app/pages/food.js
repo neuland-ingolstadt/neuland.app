@@ -153,46 +153,23 @@ export default function Mensa () {
                             {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
                             {containsSelectedAllergen(meal.allergens) && (
                               <span>
-                                    <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle}
-                                                     color={COLOR_WARN}/>
+                                <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
                                 {' '}
-                                  </span>
+                              </span>
                             )}
                             {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                               <span>
-                                      <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD}/>
+                                <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD} />
                                 {' '}
-                                  </span>
-                            )}
-                            {meal.flags && meal.flags.map((flag, idx) => (
-                              <span key={idx}>
-                                    {idx > 0 && ', '}
-                                <span>
-                                      {flagMap[flag]}
-                                    </span>
-                                  </span>
-                            ))}
-                            {meal.allergens && meal.allergens.map((supplement, idx) => (
-                              <span key={idx}>
-                                {(idx > 0 || meal.flags?.length > 0) && ', '}
-                                <span>
-                                  {supplement}
-                                </span>
                               </span>
-                            ))}
+                            )}
+                            {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
+                            {meal.allergens && meal.allergens.join(', ')}
                           </span>
                         </div>
                       </div>
                       <div className={styles.details}>
                         {getUserSpecificPrice(meal)}
-                        <br />
-                        {meal.prices.student > 0 &&
-                          <>
-                            {userKind === USER_STUDENT && <span className={styles.indicator}>für Studierende</span>}
-                            {userKind === USER_EMPLOYEE && <span className={styles.indicator}>für Mitarbeitende</span>}
-                            {userKind === USER_GUEST && <span className={styles.indicator}>für Gäste</span>}
-                          </>
-                        }
                       </div>
                     </ListGroup.Item>
                   )}
