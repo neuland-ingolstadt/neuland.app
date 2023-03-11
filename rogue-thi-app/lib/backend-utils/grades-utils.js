@@ -109,11 +109,9 @@ export async function loadGradeAverage () {
   })
 
   average.entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
-  const result = average.entries
-    .reduce((acc, curr) => acc + (curr.weight || 1) * (curr.grade || 0), 0)
-  const weight = average.entries
-    .filter(curr => curr.grade)
-    .reduce((acc, curr) => acc + (curr.weight || 1), 0)
+  const relevantEntries = average.entries.filter(curr => curr.grade && curr.grade < 5)
+  const result = relevantEntries.reduce((acc, curr) => acc + (curr.weight || 1) * curr.grade, 0)
+  const weight = relevantEntries.reduce((acc, curr) => acc + (curr.weight || 1), 0)
   average.result = Math.floor((result / weight) * 10) / 10
 
   return average

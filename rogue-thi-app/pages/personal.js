@@ -148,7 +148,8 @@ export default function Personal () {
             <ListGroup.Item action onClick={() => window.open('/grades', '_self')}>
               <div className={styles.interaction_icon}>
                 <span className="text-muted">
-                  {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}{' '}Noten{' '}
+                  {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
+                  {' Noten '}
                   <FontAwesomeIcon icon={faChevronRight}/>
                 </span>
               </div>
