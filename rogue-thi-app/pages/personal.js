@@ -84,10 +84,6 @@ export default function Personal () {
   useEffect(() => {
     async function load () {
       try {
-        if (localStorage.debugUnlocked) {
-          setShowDebug(true)
-        }
-
         const response = await API.getPersonalData()
         const data = response.persdata
         data.pcounter = response.pcounter
@@ -112,8 +108,13 @@ export default function Personal () {
       }
     }
 
-    load()
-  }, [router])
+    if (localStorage.debugUnlocked) {
+      setShowDebug(true)
+    }
+    if (userKind !== USER_GUEST) {
+      load()
+    }
+  }, [router, userKind])
 
   return (<AppContainer>
     <AppNavbar title="Profil"/>
