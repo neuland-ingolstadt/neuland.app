@@ -15,7 +15,8 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
+import { USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calendar, loadExamList } from '../lib/backend-utils/calendar-utils'
 import {
   formatFriendlyDateRange,
@@ -35,7 +36,7 @@ export default function Calendar () {
   const now = useTime()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
-  const [isGuest, setIsGuest] = useState(false)
+  const userKind = useUserKind()
 
   useEffect(() => {
     async function load () {
@@ -45,16 +46,17 @@ export default function Calendar () {
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login?redirect=calendar')
-        } else if (e instanceof UnavailableSessionError) {
-          setIsGuest(true)
         } else {
           console.error(e)
           alert(e)
         }
       }
     }
-    load()
-  }, [router])
+
+    if (userKind === USER_STUDENT) {
+      load()
+    }
+  }, [router, userKind])
 
   return (
     <AppContainer>
@@ -123,7 +125,7 @@ export default function Calendar () {
 
           <SwipeableTab className={styles.tab} title="Prüfungen">
             <ListGroup variant="flush">
-              <ReactPlaceholder type="text" rows={4} ready={exams || isGuest}>
+              <ReactPlaceholder type="text" rows={4} ready={exams || userKind === USER_GUEST}>
                 {exams && exams.length === 0 && (
                   <ListGroup.Item>
                     Es sind derzeit keine Prüfungstermine verfügbar.
@@ -146,7 +148,7 @@ export default function Calendar () {
                     </div>
                   </ListGroup.Item>
                 )}
-                {isGuest && (
+                {userKind === USER_GUEST && (
                   <ListGroup.Item>
                     Prüfungstermine sind als Gast nicht verfügbar.
                   </ListGroup.Item>

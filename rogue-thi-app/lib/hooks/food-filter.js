@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
  * @property {{}} preferencesSelection - An object containing the selected preferences.
  * @property {(value: (((prevState: {}) => {}) | {})) => void} setPreferencesSelection - A function that sets the selected preferences.
  * @property {string[]} selectedRestaurants - An array containing the selected restaurants.
- * @property {boolean} isStudent - A boolean indicating whether the user is a student or not.
  * @property {savePreferencesSelection} savePreferencesSelection - A function that saves the selected preferences.
  * @property {saveAllergenSelection} saveAllergenSelection - A function that saves the selected allergens.
  */

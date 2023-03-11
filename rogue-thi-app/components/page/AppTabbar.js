@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Nav from 'react-bootstrap/Nav'
@@ -12,6 +11,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
+
 import styles from '../../styles/AppTabbar.module.css'
 
 /**
@@ -19,8 +20,7 @@ import styles from '../../styles/AppTabbar.module.css'
  */
 export default function AppTabbar () {
   const router = useRouter()
-  const [isGuest, setIsGuest] = useState(true)
-  useEffect(() => setIsGuest(localStorage.session === 'guest'), [])
+  const userKind = useUserKind()
 
   return (
     <>
@@ -34,7 +34,7 @@ export default function AppTabbar () {
               Home
             </Nav.Link>
           </Nav.Item>
-          {!isGuest && (
+          {userKind !== USER_GUEST && (
             <Nav.Item>
               <Nav.Link onClick={() => router.replace('/timetable')} className={[styles.tab, router.pathname === '/timetable' && styles.tabActive]}>
                 <FontAwesomeIcon icon={faCalendar} className={styles.icon} />
