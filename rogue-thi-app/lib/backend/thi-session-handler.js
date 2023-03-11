@@ -52,7 +52,7 @@ export async function createSession (username, password, stayLoggedIn) {
  */
 export async function createGuestSession () {
   await API.clearCache()
-  localStorage.session = 'guest'
+  localStorage.session = 'guest2'
 }
 
 /**
@@ -71,7 +71,7 @@ export async function callWithSession (method) {
   // redirect user if he never had a session
   if (!session) {
     throw new NoSessionError()
-  } else if (session === 'guest' || process.env.NEXT_PUBLIC_GUEST_ONLY) {
+  } else if (session === 'guest2' || process.env.NEXT_PUBLIC_GUEST_ONLY) {
     throw new UnavailableSessionError()
   }
 
