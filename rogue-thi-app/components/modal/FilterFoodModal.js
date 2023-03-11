@@ -6,8 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
-import { ShowFoodFilterModal } from '../../pages/_app'
-import { useFoodFilter } from '../../lib/hooks/food-filter'
+import { FoodFilterContext } from '../../pages/_app'
 
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
@@ -31,15 +30,16 @@ export default function FilterFoodModal () {
     setAllergenSelection,
     toggleSelectedRestaurant,
     savePreferencesSelection,
-    saveAllergenSelection
-  } = useFoodFilter()
-  const [showFoodFilterModal, setShowFoodFilterSelection] = useContext(ShowFoodFilterModal)
+    saveAllergenSelection,
+    showFoodFilterModal,
+    setShowFoodFilterModal
+  } = useContext(FoodFilterContext)
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] = useState(false)
 
   return (
     <>
-      <Modal show={showFoodFilterModal} onHide={() => setShowFoodFilterSelection(false)}>
+      <Modal show={showFoodFilterModal} onHide={() => setShowFoodFilterModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Filter</Modal.Title>
         </Modal.Header>
@@ -74,7 +74,7 @@ export default function FilterFoodModal () {
             </h6>
             <Button variant='outline-primary' onClick={() => {
               setShowAllergenSelection(true)
-              setShowFoodFilterSelection(false)
+              setShowFoodFilterModal(false)
             }}>
               <FontAwesomeIcon title="Allergene" icon={faPen} fixedWidth/>
             </Button>
@@ -92,7 +92,7 @@ export default function FilterFoodModal () {
             </h6>
             <Button variant='outline-primary' onClick={() => {
               setShowPreferencesSelection(true)
-              setShowFoodFilterSelection(false)
+              setShowFoodFilterModal(false)
             }}>
               <FontAwesomeIcon title='Preferences' icon={faPen} fixedWidth/>
             </Button>
@@ -112,7 +112,7 @@ export default function FilterFoodModal () {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowFoodFilterSelection(false)}>OK</Button>
+          <Button variant="primary" onClick={() => setShowFoodFilterModal(false)}>OK</Button>
         </Modal.Footer>
       </Modal>
 
@@ -139,7 +139,7 @@ export default function FilterFoodModal () {
           <Button variant="primary" onClick={() => {
             saveAllergenSelection()
             setShowAllergenSelection(false)
-            setShowFoodFilterSelection(true)
+            setShowFoodFilterModal(true)
           }}>OK</Button>
         </Modal.Footer>
       </Modal>
@@ -167,7 +167,7 @@ export default function FilterFoodModal () {
           <Button variant="primary" onClick={() => {
             savePreferencesSelection()
             setShowPreferencesSelection(false)
-            setShowFoodFilterSelection(true)
+            setShowFoodFilterModal(true)
           }}>OK</Button>
         </Modal.Footer>
       </Modal>

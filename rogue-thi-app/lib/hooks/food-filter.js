@@ -34,6 +34,7 @@ export function useFoodFilter () {
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
+  const [showFoodFilterModal, setShowFoodFilterModal] = useState(false)
 
   useEffect(() => {
     if (localStorage.selectedAllergens) {
@@ -84,6 +85,8 @@ export function useFoodFilter () {
     setAllergenSelection,
     toggleSelectedRestaurant,
     savePreferencesSelection,
-    saveAllergenSelection
+    saveAllergenSelection,
+    showFoodFilterModal,
+    setShowFoodFilterModal
   }
 }

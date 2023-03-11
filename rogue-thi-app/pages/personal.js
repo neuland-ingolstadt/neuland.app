@@ -25,8 +25,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { FoodFilterContext, ShowDashboardModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
-import { ShowDashboardModal, ShowFoodFilterModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
@@ -44,7 +44,7 @@ export default function Personal () {
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
   const [, setShowDashboardModal] = useContext(ShowDashboardModal)
-  const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
+  const { setShowFoodFilterModal } = useContext(FoodFilterContext)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
   const theme = useContext(ThemeContext)

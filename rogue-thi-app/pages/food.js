@@ -15,10 +15,9 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
-import { ShowFoodFilterModal } from './_app'
+import { FoodFilterContext } from './_app'
 import { buildLinedWeekdaySpan } from '../lib/date-utils'
 import { loadFoodEntries } from '../lib/backend-utils/food-utils'
-import { useFoodFilter } from '../lib/hooks/food-filter'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import allergenMap from '../data/allergens.json'
@@ -42,9 +41,9 @@ export default function Mensa () {
   const {
     selectedRestaurants,
     preferencesSelection,
-    allergenSelection
-  } = useFoodFilter()
-  const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
+    allergenSelection,
+    setShowFoodFilterModal
+  } = useContext(FoodFilterContext)
   const [foodDays, setFoodDays] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
   const userKind = useUserKind()
