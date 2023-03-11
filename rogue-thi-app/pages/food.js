@@ -13,6 +13,7 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
 import { ShowFoodFilterModal } from './_app'
 import { buildLinedWeekdaySpan } from '../lib/date-utils'
@@ -41,18 +42,16 @@ export default function Mensa () {
   const {
     selectedRestaurants,
     preferencesSelection,
-    allergenSelection,
-    isStudent
+    allergenSelection
   } = useFoodFilter()
-  const [isGuest, setIsGuest] = useState(true)
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [foodEntries, setFoodEntries] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
+  const userKind = useUserKind()
   const slicedEntries = foodEntries && foodEntries.slice(0, 5)
 
   useEffect(() => {
     async function load () {
-      setIsGuest(localStorage.session === 'guest')
       try {
         setFoodEntries(await loadFoodEntries(selectedRestaurants))
       } catch (e) {
@@ -107,8 +106,12 @@ export default function Mensa () {
    * @returns {string}
    */
   function getUserSpecificPrice (meal) {
-    const price = isStudent && !isGuest ? meal.prices.student : !isStudent && !isGuest ? meal.prices.employee : meal.prices.guest
-    return formatPrice(price)
+    const prices = {
+      [USER_GUEST]: meal.prices.guest,
+      [USER_EMPLOYEE]: meal.prices.employee,
+      [USER_STUDENT]: meal.prices.student
+    }
+    return formatPrice(prices[userKind])
   }
 
   /**
@@ -185,9 +188,9 @@ export default function Mensa () {
                         <br />
                         {meal.prices.student > 0 &&
                           <>
-                            {isStudent && !isGuest && <span className={styles.indicator}>für Studierende</span>}
-                            {!isStudent && !isGuest && <span className={styles.indicator}>für Mitarbeitende</span>}
-                            {isGuest && <span className={styles.indicator}>für Gäste</span>}
+                            {userKind === USER_STUDENT && <span className={styles.indicator}>für Studierende</span>}
+                            {userKind === USER_EMPLOYEE && <span className={styles.indicator}>für Mitarbeitende</span>}
+                            {userKind === USER_GUEST && <span className={styles.indicator}>für Gäste</span>}
                           </>
                         }
                       </div>

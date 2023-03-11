@@ -1,10 +1,22 @@
-import {
-  ALL_DASHBOARD_CARDS,
-  PLATFORM_DESKTOP,
-  PLATFORM_MOBILE,
-  USER_EMPLOYEE, USER_GUEST, USER_STUDENT
-} from '../../pages'
 import { useEffect, useState } from 'react'
+
+import { ALL_DASHBOARD_CARDS, PLATFORM_DESKTOP, PLATFORM_MOBILE } from '../../pages'
+import { useUserKind } from './user-kind'
+
+/**
+   * Get the default order of shown and hidden dashboard entries
+   */
+function getDefaultDashboardOrder (userKind) {
+  const platform = window.matchMedia('(max-width: 768px)').matches
+    ? PLATFORM_MOBILE
+    : PLATFORM_DESKTOP
+
+  const filter = x => x.default.includes(platform) && x.default.includes(userKind)
+  return {
+    shown: ALL_DASHBOARD_CARDS.filter(filter),
+    hidden: ALL_DASHBOARD_CARDS.filter(x => !filter(x))
+  }
+}
 
 /**
  * @typedef {Object} DashboardSettings
@@ -44,28 +56,7 @@ export function useDashboard () {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])
   const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [unlockedThemes, setUnlockedThemes] = useState([])
-
-  /**
-   * Get the default order of shown and hidden dashboard entries
-   */
-  function getDefaultDashboardOrder () {
-    const platform = window.matchMedia('(max-width: 768px)').matches
-      ? PLATFORM_MOBILE
-      : PLATFORM_DESKTOP
-
-    let personGroup = USER_STUDENT
-    if (localStorage.session === 'guest') {
-      personGroup = USER_GUEST
-    } else if (localStorage.isStudent === 'false') {
-      personGroup = USER_EMPLOYEE
-    }
-
-    const filter = x => x.default.includes(platform) && x.default.includes(personGroup)
-    return {
-      shown: ALL_DASHBOARD_CARDS.filter(filter),
-      hidden: ALL_DASHBOARD_CARDS.filter(x => !filter(x))
-    }
-  }
+  const userKind = useUserKind()
 
   useEffect(() => {
     async function load () {
@@ -87,7 +78,7 @@ export function useDashboard () {
         setShownDashboardEntries(entries)
         setHiddenDashboardEntries(hiddenEntries)
       } else {
-        const entries = getDefaultDashboardOrder()
+        const entries = getDefaultDashboardOrder(userKind)
         setShownDashboardEntries(entries.shown)
         setHiddenDashboardEntries(entries.hidden)
       }
@@ -98,7 +89,7 @@ export function useDashboard () {
     }
 
     load()
-  }, [])
+  }, [userKind])
 
   /**
    * Persists the dashboard settings.
@@ -166,7 +157,7 @@ export function useDashboard () {
    * Resets which dashboard entries are shown and their order to default
    */
   function resetOrder () {
-    const defaultEntries = getDefaultDashboardOrder()
+    const defaultEntries = getDefaultDashboardOrder(userKind)
     setShownDashboardEntries(defaultEntries.shown)
     setHiddenDashboardEntries(defaultEntries.hidden)
     changeDashboardEntries(defaultEntries.shown, defaultEntries.hidden)

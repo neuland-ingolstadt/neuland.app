@@ -34,7 +34,6 @@ export function useFoodFilter () {
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa'])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
-  const [isStudent, setIsStudent] = useState(true)
 
   useEffect(() => {
     if (localStorage.selectedAllergens) {
@@ -45,9 +44,6 @@ export function useFoodFilter () {
     }
     if (localStorage.selectedRestaurants) {
       setSelectedRestaurants(JSON.parse(localStorage.selectedRestaurants))
-    }
-    if (localStorage.isStudent === 'false') {
-      setIsStudent(false)
     }
   }, [])
 
@@ -86,7 +82,6 @@ export function useFoodFilter () {
     setPreferencesSelection,
     allergenSelection,
     setAllergenSelection,
-    isStudent,
     toggleSelectedRestaurant,
     savePreferencesSelection,
     saveAllergenSelection

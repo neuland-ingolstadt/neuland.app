@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { ShowDashboardModal, ShowFoodFilterModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
 
@@ -42,14 +43,13 @@ export default function Personal () {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
-  const [isGuest, setIsGuest] = useState(false)
-  const [isStudent, setIsStudent] = useState(true)
   const [, setShowDashboardModal] = useContext(ShowDashboardModal)
   const [, setShowFoodFilterModal] = useContext(ShowFoodFilterModal)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
+  const userKind = useUserKind()
 
   const CopyableField = ({ label, value }) => {
     // Only the value is clickable to copy it to the clipboard.
@@ -88,17 +88,6 @@ export default function Personal () {
           setShowDebug(true)
         }
 
-        if (localStorage.session === 'guest') {
-          setIsStudent(false)
-          setIsGuest(true)
-          return
-        }
-
-        if (localStorage.isStudent === 'false') {
-          setIsStudent(false)
-          return
-        }
-
         const response = await API.getPersonalData()
         const data = response.persdata
         data.pcounter = response.pcounter
@@ -130,9 +119,9 @@ export default function Personal () {
     <AppNavbar title="Profil"/>
 
     <AppBody>
-      <ReactPlaceholder type="text" rows={20} ready={userdata || !isStudent}>
+      <ReactPlaceholder type="text" rows={20} ready={userdata || userKind !== USER_STUDENT}>
 
-        {(isStudent || !isGuest) &&
+        {userKind === USER_STUDENT &&
           <ListGroup>
             <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
               <div className={styles.name_interaction_icon}>
@@ -229,7 +218,7 @@ export default function Personal () {
             E-Mail
           </ListGroup.Item>
 
-          {(!isStudent || isGuest) &&
+          {userKind === USER_EMPLOYEE &&
             <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
               <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
               MyTHI
@@ -263,11 +252,24 @@ export default function Personal () {
         <br/>
 
         <div className={styles.logout_button}>
-          <Button
-            variant={isGuest ? 'success' : 'danger'}
-            onClick={() => forgetSession(router)}>
-            {isGuest ? 'Login' : 'Logout'} <FontAwesomeIcon icon={isGuest ? faArrowRightToBracket : faArrowRightFromBracket} />
-          </Button>
+          {userKind === USER_GUEST && (
+            <Button
+              variant={'success'}
+              onClick={() => forgetSession(router)}>
+              {'Login'}
+              {' '}
+              <FontAwesomeIcon icon={faArrowRightToBracket} />
+            </Button>
+          )}
+          {userKind === USER_GUEST && (
+            <Button
+              variant={'danger'}
+              onClick={() => forgetSession(router)}>
+              {'Logout'}
+              {' '}
+              <FontAwesomeIcon icon={faArrowRightFromBracket} />
+            </Button>
+          )}
         </div>
 
         <PersonalDataModal userdata={userdata}/>

@@ -20,6 +20,7 @@ import {
   faUserGraduate
 } from '@fortawesome/free-solid-svg-icons'
 
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '../lib/hooks/user-kind'
 import { useDashboard } from '../lib/hooks/dashboard'
 
 import styles from '../styles/Home.module.css'
@@ -28,9 +29,6 @@ export const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
 export const PLATFORM_DESKTOP = 'desktop'
 export const PLATFORM_MOBILE = 'mobile'
-export const USER_STUDENT = 'student'
-export const USER_EMPLOYEE = 'employee'
-export const USER_GUEST = 'guest'
 export const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
