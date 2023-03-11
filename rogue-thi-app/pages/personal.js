@@ -256,17 +256,15 @@ export default function Personal () {
             <Button
               variant={'success'}
               onClick={() => forgetSession(router)}>
-              {'Login'}
-              {' '}
+              {'Login '}
               <FontAwesomeIcon icon={faArrowRightToBracket} />
             </Button>
           )}
-          {userKind === USER_GUEST && (
+          {userKind !== USER_GUEST && (
             <Button
               variant={'danger'}
               onClick={() => forgetSession(router)}>
-              {'Logout'}
-              {' '}
+              {'Logout '}
               <FontAwesomeIcon icon={faArrowRightFromBracket} />
             </Button>
           )}
