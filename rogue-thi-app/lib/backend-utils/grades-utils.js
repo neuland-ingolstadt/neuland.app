@@ -2,7 +2,7 @@ import API from '../backend/authenticated-api'
 import courseSPOs from '../../data/spo-grade-weights.json'
 
 function simplifyName (x) {
-  return x.replace(/\W/g, '').toLowerCase()
+  return x.replace(/\W|und|u\./g, '').toLowerCase()
 }
 
 /**
@@ -93,6 +93,7 @@ export async function loadGradeAverage () {
 
         if (typeof entry.weight !== 'number') {
           average.missingWeight++
+          console.log('Missing weight for lecture:', x.titel)
         }
       } else {
         average.entries.push({
@@ -102,6 +103,7 @@ export async function loadGradeAverage () {
           grade
         })
         average.missingWeight++
+        console.log('Unknown lecture:', x.titel)
       }
     }
   })
