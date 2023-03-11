@@ -157,6 +157,7 @@ export default function Mensa () {
                 </span>
               )}
               {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
+              {'; '}
               {meal.allergens && meal.allergens.join(', ')}
             </span>
           </div>
@@ -177,7 +178,7 @@ export default function Mensa () {
   function renderMealDay (day, key) {
     const soups = day.meals.filter(x => x.category === 'Suppe')
     const mensa = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
-    const reimanns = day.meals.filter(x => x.restaurant === 'Mensa')
+    const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns')
 
     return (
       <SwipeableTab title={buildLinedWeekdaySpan(day.timestamp)} key={key}>
