@@ -1,13 +1,14 @@
 import { ShowThemeModal, ThemeContext } from '../../pages/_app'
 import { useContext, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
-import { CTF_URL } from '../../pages'
 import Form from 'react-bootstrap/Form'
 import Link from 'next/link'
 import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
 import themes from '../../data/themes.json'
 import { useDashboard } from '../../lib/hooks/dashboard'
+
+const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
 /**
  * A modal component that allows users to personalize their experience by changing the theme
