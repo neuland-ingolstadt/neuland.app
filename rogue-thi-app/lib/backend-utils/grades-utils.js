@@ -109,10 +109,18 @@ export async function loadGradeAverage () {
   })
 
   average.entries.sort((a, b) => (b.grade ? 1 : 0) - (a.grade ? 1 : 0))
+
   const relevantEntries = average.entries.filter(curr => curr.grade && curr.grade < 5)
-  const result = relevantEntries.reduce((acc, curr) => acc + (curr.weight || 1) * curr.grade, 0)
-  const weight = relevantEntries.reduce((acc, curr) => acc + (curr.weight || 1), 0)
-  average.result = Math.floor((result / weight) * 10) / 10
+  function calculateAverage (defaultWeight) {
+    const result = relevantEntries.reduce((acc, curr) => acc + (curr.weight || defaultWeight) * curr.grade, 0)
+    const weight = relevantEntries.reduce((acc, curr) => acc + (curr.weight || defaultWeight), 0)
+    return Math.floor((result / weight) * 10) / 10
+  }
+  average.result = calculateAverage(1)
+  const avgP5 = calculateAverage(0.5)
+  const avg4 = calculateAverage(4)
+  average.resultMin = Math.min(avgP5, avg4)
+  average.resultMax = Math.max(avgP5, avg4)
 
   return average
 }

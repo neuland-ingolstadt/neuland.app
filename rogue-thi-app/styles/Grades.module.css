@@ -19,11 +19,19 @@
   text-align: right;
 }
 
+.gradeAverageContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 .gradeAverage {
   font-weight: bold;
   font-size: 3rem;
   float: left;
   margin-right: 20px;
+}
+.gradeAverageDisclaimer {
+  color: gray;
 }
 
 .spacer {

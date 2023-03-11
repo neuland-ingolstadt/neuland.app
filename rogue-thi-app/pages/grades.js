@@ -101,11 +101,15 @@ export default function Grades () {
                 Notenschnitt
               </h4>
 
-              <ListGroup.Item>
-                <span className={styles.gradeAverage}>{formatNum(gradeAverage.result)}</span>
-                {gradeAverage.missingWeight > 0 && (
-                  <span className={styles.details}>
-                    {gradeAverage.missingWeight} von {gradeAverage.entries.length} Noten haben eine unbekannte Gewichtung.
+              <ListGroup.Item className={styles.gradeAverageContainer}>
+                <span className={styles.gradeAverage}>
+                  {gradeAverage.resultMin !== gradeAverage.resultMax && '~'}
+                  {formatNum(gradeAverage.result)}
+                </span>
+                {gradeAverage.resultMin !== gradeAverage.resultMax && (
+                  <span className={styles.gradeAverageDisclaimer}>
+                    Der genaue Notenschnitt kann nicht ermittelt werden und liegt zwischen
+                    {' '}{formatNum(gradeAverage.resultMin)} und {formatNum(gradeAverage.resultMax)}
                   </span>
                 )}
               </ListGroup.Item>
