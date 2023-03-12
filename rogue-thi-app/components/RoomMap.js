@@ -38,7 +38,7 @@ const FLOOR_ORDER = [
   '1',
   'EG'
 ]
-const DEFAULT_CENTER = [48.76677, 11.43322]
+const DEFAULT_CENTER = [48.76630, 11.43330]
 
 const SPECIAL_COLORS = [...new Set(Object.values(SPECIAL_ROOMS).map(x => x.color))]
 
