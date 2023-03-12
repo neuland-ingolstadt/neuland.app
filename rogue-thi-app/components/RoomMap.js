@@ -229,7 +229,7 @@ export default function RoomMap ({ highlight, roomData }) {
 
       <MapContainer
         center={center}
-        zoom={filteredRooms.length === 1 ? 19 : 18}
+        zoom={filteredRooms.length === 1 ? 19 : 17}
         scrollWheelZoom={true}
         zoomControl={false}
         attributionControl={false}
