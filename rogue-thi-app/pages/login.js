@@ -31,6 +31,15 @@ export default function Login () {
   const [failure, setFailure] = useState(false)
 
   /**
+   * Temporary workaround for #208.
+   * Resets the dashboard configuration on every login.
+   */
+  function applyDashboardWorkaround () {
+    delete localStorage.personalizedDashboard
+    delete localStorage.personalizedDashboardHidden
+  }
+
+  /**
    * Logs in the user.
    * @param {Event} e DOM event that triggered the login
    */
@@ -38,6 +47,7 @@ export default function Login () {
     try {
       e.preventDefault()
       await createSession(username, password, saveCredentials)
+      applyDashboardWorkaround()
       router.replace('/' + (redirect || ''))
     } catch (e) {
       if (e.message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
@@ -55,6 +65,7 @@ export default function Login () {
   async function guestLogin (e) {
     e.preventDefault()
     createGuestSession()
+    applyDashboardWorkaround()
     router.replace('/')
   }
 
