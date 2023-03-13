@@ -44,15 +44,20 @@ export default function Mensa () {
     allergenSelection,
     setShowFoodFilterModal
   } = useContext(FoodFilterContext)
-  const [foodDays, setFoodDays] = useState(null)
+  const [currentFoodDays, setCurrentFoodDays] = useState(null)
+  const [futureFoodDays, setFutureFoodDays] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
   const userKind = useUserKind()
 
   useEffect(() => {
     async function load () {
       try {
+        const daysTillFriday = 5 - new Date().getDay() + 1
+
         const days = await loadFoodEntries(selectedRestaurants)
-        setFoodDays(days.slice(0, 5))
+
+        setCurrentFoodDays(days.slice(0, daysTillFriday))
+        setFutureFoodDays(days.slice(daysTillFriday, days.length))
       } catch (e) {
         console.error(e)
         alert(e)
@@ -218,10 +223,21 @@ export default function Mensa () {
       </AppNavbar>
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={foodDays}>
+        <ReactPlaceholder type="text" rows={20} ready={currentFoodDays && futureFoodDays}>
           <SwipeableTabs className={styles.tab}>
-            {foodDays && foodDays.map((day, idx) => renderMealDay(day, idx))}
+            <SwipeableTab title="Aktuelle Woche">
+              <SwipeableTabs className={styles.tab}>
+                {currentFoodDays && currentFoodDays.map((day, idx) => renderMealDay(day, idx))}
+              </SwipeableTabs>
+            </SwipeableTab>
+
+            <SwipeableTab title="Nächste Woche">
+              <SwipeableTabs className={styles.tab}>
+                {futureFoodDays && futureFoodDays.map((day, idx) => renderMealDay(day, idx))}
+              </SwipeableTabs>
+            </SwipeableTab>
           </SwipeableTabs>
+
         </ReactPlaceholder>
 
         <br/>
