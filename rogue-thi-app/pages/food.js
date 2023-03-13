@@ -156,7 +156,7 @@ export default function Mensa () {
                 </span>
               )}
               {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
-              {'; '}
+              {meal.flags?.length > 0 && meal.allergens?.length > 0 && '; '}
               {meal.allergens && meal.allergens.join(', ')}
             </span>
           </div>
