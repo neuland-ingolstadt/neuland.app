@@ -175,28 +175,39 @@ export default function Mensa () {
    * @returns {JSX.Element}
    */
   function renderMealDay (day, key) {
+    const mensa = day.meals.filter(x => x.restaurant === 'Mensa')
     const soups = day.meals.filter(x => x.category === 'Suppe')
-    const mensa = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
+    const food = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
     const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns')
 
     return (
       <SwipeableTab title={buildLinedWeekdaySpan(day.timestamp)} key={key}>
-        {soups.length > 0 && (
-          <>
-            <h4 className={styles.kindHeader}>Suppe</h4>
-            <ListGroup>
-              {soups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
-            </ListGroup>
-          </>
-        )}
         {mensa.length > 0 && (
           <>
             <h4 className={styles.kindHeader}>Mensa</h4>
-            <ListGroup>
-              {mensa.map((meal, idx) => renderMealEntry(meal, `meal-${idx}`))}
-            </ListGroup>
+            {soups.length > 0 && (
+              <>
+                {food.length > 0 && (
+                  <h5 className={styles.kindHeader}>Suppe</h5>
+                )}
+                <ListGroup>
+                  {soups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+                </ListGroup>
+              </>
+            )}
+            {food.length > 0 && (
+              <>
+                {soups.length > 0 && (
+                  <h5 className={styles.kindHeader}>Essen</h5>
+                )}
+                <ListGroup>
+                  {food.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
+                </ListGroup>
+              </>
+            )}
           </>
         )}
+
         {reimanns.length > 0 && (
           <>
             <h4 className={styles.kindHeader}>Reimanns</h4>
