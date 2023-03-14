@@ -1,45 +1,5 @@
-$theme-colors: (
-  "primary": #9C27B0
-);
+@import "default.scss";
 
-@import "dark.scss";
-$body-bg: black;
-
-@import "../../node_modules/bootstrap/scss/bootstrap";
-
-// react-placeholder
-// declare after bootstrap, since we need bootstrap variables
-.text-row, .rect-shape, .round-shape {
-  background: $gray-200 !important;
-}
-
-.navbar.fixed-top {
-  background: linear-gradient(180deg, #e12619 16.66%,
-    #f28500 16.67%, #f28500 33.33%,
-    #e7c815 33.34%, #e7c815 49.99%,
-    #3e9141 50%, #3e9141 66.66%,
-    #216fd6 66.67%, #216fd6 83.33%,
-    #9C27B0 83.34%) content-box !important;
-}
-
-
-.navbar-brand {
-  border-image: linear-gradient(90deg, #e12619 16.66%,
-    #f28500 16.67%, #f28500 33.33%,
-    #e7c815 33.34%, #e7c815 49.99%,
-    #3e9141 50%, #3e9141 66.66%,
-    #216fd6 66.67%, #216fd6 83.33%,
-    #9C27B0 83.34%) 0 1 stretch !important;
-}
-
-.navbar-light .navbar-brand {
-  font-weight: bold;
-  color: #9C27B0;
-  background: black;
-  height: 100%;
-}
-
-.navbar-nav, .navbar-nav .btn-link, .navbar-nav .dropdown {
-  color: #9C27B0;
-  height: 100%;
+:root {
+  --navbar-border-image: linear-gradient(90deg, #F44336 16.66%, #FF9800 16.67%, #FF9800 33.33%, #FFEB3B 33.34%, #FFEB3B 49.99%, #4CAF50 50%, #4CAF50 66.66%, #2196F3 66.67%, #2196F3 83.33%, #9C27B0 83.34%);
 }
