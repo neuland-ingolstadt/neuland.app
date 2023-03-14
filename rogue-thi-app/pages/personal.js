@@ -233,7 +233,7 @@ export default function Personal () {
         <ListGroup>
 
           {showDebug && (
-            <ListGroup.Item action onClick={() => window.open('/debug', '_self')}>
+            <ListGroup.Item action onClick={() => router.push('/debug')}>
               <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
               API Spielwiese
             </ListGroup.Item>
@@ -244,7 +244,7 @@ export default function Personal () {
             Datenschutzerklärung
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => window.open('/imprint', '_self')}>
+          <ListGroup.Item action onClick={() => router.push('/imprint')}>
             <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
             Impressum
           </ListGroup.Item>
