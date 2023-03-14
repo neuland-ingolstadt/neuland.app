@@ -188,7 +188,7 @@ export default function Mensa () {
             {food.length > 0 && (
               <>
                 {soups.length > 0 && (
-                  <h5 className={styles.kindHeader}>Essen</h5>
+                  <h5 className={styles.kindHeader}>Gerichte</h5>
                 )}
                 <ListGroup>
                   {food.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
@@ -198,7 +198,7 @@ export default function Mensa () {
             {soups.length > 0 && (
               <>
                 {food.length > 0 && (
-                  <h5 className={styles.kindHeader}>Suppe</h5>
+                  <h5 className={styles.kindHeader}>Suppen</h5>
                 )}
                 <ListGroup>
                   {soups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
