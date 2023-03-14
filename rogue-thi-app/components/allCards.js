@@ -84,7 +84,7 @@ export const ALL_DASHBOARD_CARDS = [
     key: 'library',
     label: 'Bibliothek',
     removable: true,
-    default: [PLATFORM_DESKTOP, USER_STUDENT],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
       <BaseCard
         key="library"
