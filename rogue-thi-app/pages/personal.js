@@ -103,7 +103,9 @@ export default function Personal () {
           router.replace('/login?redirect=personal')
         } else {
           console.error(e)
-          alert(e)
+          // students who are not enrolled (anymore) get 'Service not available (-112)'
+          // remove the popup temporarily until we figure out a better way to handle this
+          // alert(e)
         }
       }
     }
