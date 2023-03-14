@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
+import { FoodFilterContext } from '../../pages/_app'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
 
@@ -14,6 +15,11 @@ export default function FoodCard () {
   const [foodEntries, setFoodEntries] = useState(null)
   const [foodCardTitle, setFoodCardTitle] = useState('Essen')
   const [foodError, setFoodError] = useState(null)
+  const {
+    selectedRestaurants,
+    preferencesSelection,
+    allergenSelection
+  } = useContext(FoodFilterContext)
 
   useEffect(() => {
     async function load () {
@@ -30,8 +36,26 @@ export default function FoodCard () {
 
       const today = formatISODate(new Date())
       try {
+        function userMealRating (meal) {
+          if (meal.allergens?.some(x => allergenSelection[x])) {
+            return -1
+          } else if (meal.flags?.some(x => preferencesSelection[x])) {
+            return 2
+          } else if (!meal.allergens && Object.keys(allergenSelection).some(x => allergenSelection[x])) {
+            return 0
+          } else {
+            return 1
+          }
+        }
+
         const entries = await loadFoodEntries(restaurants)
-        const todayEntries = entries.find(x => x.timestamp === today)?.meals
+        const todayEntries = entries
+          .find(x => x.timestamp === today)
+          ?.meals
+          .filter(x => x.category !== 'Suppe' && selectedRestaurants.includes(x.restaurant.toLowerCase()))
+
+        todayEntries.sort((a, b) => userMealRating(b) - userMealRating(a))
+
         if (!todayEntries) {
           setFoodEntries([])
         } else if (todayEntries.length > 2) {
@@ -48,7 +72,7 @@ export default function FoodCard () {
       }
     }
     load()
-  }, [])
+  }, [selectedRestaurants, preferencesSelection, allergenSelection])
 
   return (
     <BaseCard
@@ -58,10 +82,11 @@ export default function FoodCard () {
     >
       <ReactPlaceholder type="text" rows={5} ready={foodEntries || foodError}>
         <ListGroup variant="flush">
-          {foodEntries && foodEntries.map((x, i) => <ListGroup.Item key={i}>
-            {x}
-          </ListGroup.Item>
-          )}
+          {foodEntries && foodEntries.map((x, i) => (
+            <ListGroup.Item key={i}>
+              {x}
+            </ListGroup.Item>
+          ))}
           {foodEntries && foodEntries.length === 0 &&
             <ListGroup.Item>
               Der heutige Speiseplan ist leer.

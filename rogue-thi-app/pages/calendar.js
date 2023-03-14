@@ -15,7 +15,6 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { NoSessionError } from '../lib/backend/thi-session-handler'
 import { USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calendar, loadExamList } from '../lib/backend-utils/calendar-utils'
 import {
@@ -24,6 +23,7 @@ import {
   formatFriendlyDateTimeRange,
   formatFriendlyRelativeTime
 } from '../lib/date-utils'
+import { NoSessionError } from '../lib/backend/thi-session-handler'
 import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
