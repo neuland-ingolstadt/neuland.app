@@ -176,8 +176,8 @@ export default function Mensa () {
    */
   function renderMealDay (day, key) {
     const mensa = day.meals.filter(x => x.restaurant === 'Mensa')
-    const soups = day.meals.filter(x => x.category === 'Suppe')
-    const food = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
+    const mensaSoups = day.meals.filter(x => x.restaurant === 'Mensa' && x.category === 'Suppe')
+    const mensaFood = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
     const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns')
 
     return (
@@ -185,23 +185,23 @@ export default function Mensa () {
         {mensa.length > 0 && (
           <>
             <h4 className={styles.kindHeader}>Mensa</h4>
-            {food.length > 0 && (
+            {mensaFood.length > 0 && (
               <>
-                {soups.length > 0 && (
+                {mensaSoups.length > 0 && (
                   <h5 className={styles.kindHeader}>Gerichte</h5>
                 )}
                 <ListGroup>
-                  {food.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
+                  {mensaFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
                 </ListGroup>
               </>
             )}
-            {soups.length > 0 && (
+            {mensaSoups.length > 0 && (
               <>
-                {food.length > 0 && (
+                {mensaFood.length > 0 && (
                   <h5 className={styles.kindHeader}>Suppen</h5>
                 )}
                 <ListGroup>
-                  {soups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+                  {mensaSoups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
                 </ListGroup>
               </>
             )}
