@@ -27,8 +27,9 @@
   display: inline;
   margin: 0px 10px;
   border-bottom: 2px solid transparent;
-  border-image: linear-gradient(to right, #009664, #96BE00, #D7D700, #F08200, #E6320F, #871932) 1 0 stretch;
+  border-image: var(--navbar-border-image, linear-gradient(to right, #009664, #96BE00, #D7D700, #F08200, #E6320F, #871932)) 1 0 stretch;
 }
+
 .titleTextPride {
   display: inline;
   margin: 0px 10px;
