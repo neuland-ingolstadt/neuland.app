@@ -71,28 +71,9 @@ fn main() {
     println!("\nPlease triple check if everything is correct");
     println!("Incorrect entries might get people in trouble.");
 
-    // wait for user input
-    let mut input = String::new();
-    while !(input == "y" || input == "n") {
-        input.clear();
-        println!("Is it correct y/n");
-        stdin()
-            .read_line(&mut input)
-            .expect("Couldn't read the line");
-        // Needs to be trimmed, else a \n will be at the end of the string
-        input = input.trim().to_string();
-    }
-
-    if input == "y" {
-        // If the json is correct, save it
-        let mut file = File::create(&output_file).expect("Couldn't open the json file");
-        write!(file, "{}", json).expect("Couldn't write to the json file");
-        println!("The json was saved to {}", output_file);
-    } else {
-        // if it is not, abort
-        eprintln!("The file wasn't parsed correctly. Please input dates manually to the json or fix this program");
-        exit(1);
-    }
+    let mut file = File::create(&output_file).expect("Couldn't open the json file");
+    write!(file, "{}", json).expect("Couldn't write to the json file");
+    println!("The json was saved to {}", output_file);
 }
 
 /// Parse the given string into a date by using the given regexes

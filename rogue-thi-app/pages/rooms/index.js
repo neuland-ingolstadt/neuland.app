@@ -11,7 +11,8 @@ import AppTabbar from '../../components/page/AppTabbar'
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
 
-const ROOMDATA_URL = 'https://assets.neuland.app/rooms_neuland.geojson'
+const ASSETSERVER_URL = process.env.NEXT_PUBLIC_ASSETSERVER_URL
+const ROOMDATA_URL = `${ASSETSERVER_URL}/manual/rooms_neuland.geojson`
 
 // import RoomMap without SSR because react-leaflet really does not like SSR
 const RoomMap = dynamic(() => import('../../components/RoomMap'), { ssr: false })
