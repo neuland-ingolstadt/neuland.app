@@ -50,9 +50,13 @@ export default function TimetableCard () {
                 {getTimetableEntryName(x).shortName} in {x.raum}
               </div>
               {((x.startDate < new Date() && x.endDate > new Date()) &&
-                  <div className="text-muted">Noch {Math.round((x.endDate - new Date()) / 1000 / 60)} min</div>) ||
+                (x.endDate - new Date()) <= 30 * 60 * 1000 &&
+                <div className="text-muted">Noch {Math.round((x.endDate - new Date()) / 1000 / 60)} min</div>) ||
+                ((x.startDate < new Date() && x.endDate > new Date()) &&
+                  (x.endDate - new Date()) > 30 * 60 * 1000 &&
+                  <div className="text-muted">Bis um {formatFriendlyTime(x.endDate)}</div>) ||
                 ((x.startDate > new Date() && new Date(x.startDate) <= new Date(new Date().getTime() + 30 * 60 * 1000)) &&
-                  <div className="text-muted">In {Math.round((x.startDate - new Date()) / 1000 / 60)} min</div>) ||
+                  <div className="text-muted">Beginnt in {Math.round((x.startDate - new Date()) / 1000 / 60)} min</div>) ||
                 ((x.startDate > new Date() && new Date(x.startDate) > new Date(new Date().getTime() + 30 * 60 * 1000)) &&
                   <div className="text-muted">{formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}</div>) ||
                 null}
