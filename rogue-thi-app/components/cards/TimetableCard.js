@@ -51,10 +51,10 @@ export default function TimetableCard () {
               </div>
               {((x.startDate < new Date() && x.endDate > new Date()) &&
                 (x.endDate - new Date()) <= 30 * 60 * 1000 &&
-                <div className="text-muted">Noch {Math.round((x.endDate - new Date()) / 1000 / 60)} min</div>) ||
+                <div className="text-muted">Endet in {Math.round((x.endDate - new Date()) / 1000 / 60)} min</div>) ||
                 ((x.startDate < new Date() && x.endDate > new Date()) &&
                   (x.endDate - new Date()) > 30 * 60 * 1000 &&
-                  <div className="text-muted">Bis um {formatFriendlyTime(x.endDate)}</div>) ||
+                  <div className="text-muted">Endet um {formatFriendlyTime(x.endDate)}</div>) ||
                 ((x.startDate > new Date() && new Date(x.startDate) <= new Date(new Date().getTime() + 30 * 60 * 1000)) &&
                   <div className="text-muted">Beginnt in {Math.round((x.startDate - new Date()) / 1000 / 60)} min</div>) ||
                 ((x.startDate > new Date() && new Date(x.startDate) > new Date(new Date().getTime() + 30 * 60 * 1000)) &&
