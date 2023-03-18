@@ -10,11 +10,10 @@
     "build": "next build",
     "start": "next start",
     "android-add": "rm -rf android/ && npx cap add android",
-    "android-open": "next build && next export && npx cap sync android && npx cap open android",
-    "android-run": "next build && next export && npx cap sync android && npx cap run android",
-    "ios-add": "rm -rf ios/ && npx cap add ios",
-    "ios-open": "next build && next export && npx cap sync ios && npx cap open ios",
-    "ios-run": "next build && next export && npx cap sync ios && npx cap run ios"
+    "android-open": "npm run prebuild && next build && next export && npx cap sync android && npx cap open android",
+    "android-run": "npm run prebuild && next build && next export && npx cap sync android && npx cap run android",
+    "ios-open": "npm run prebuild && next build && next export && npx cap sync ios && npx cap open ios",
+    "ios-run": "npm run prebuild && next build && next export && npx cap sync ios && npx cap run ios"
   },
   "dependencies": {
     "@capacitor-community/http": "^1.4.1",
@@ -47,6 +46,7 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@capacitor/ios": "^4.6.2",
     "@capacitor/android": "^4.6.2",
     "@capacitor/cli": "^4.6.2",
     "@capacitor/core": "^4.6.2",

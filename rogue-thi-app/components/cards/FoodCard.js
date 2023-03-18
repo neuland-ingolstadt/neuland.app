@@ -53,18 +53,17 @@ export default function FoodCard () {
           .find(x => x.timestamp === today)
           ?.meals
           .filter(x => x.category !== 'Suppe' && selectedRestaurants.includes(x.restaurant.toLowerCase()))
+        const sortedEntries = todayEntries ? todayEntries.sort((a, b) => userMealRating(b) - userMealRating(a)) : []
 
-        todayEntries.sort((a, b) => userMealRating(b) - userMealRating(a))
-
-        if (!todayEntries) {
+        if (!sortedEntries) {
           setFoodEntries([])
-        } else if (todayEntries.length > 2) {
+        } else if (sortedEntries.length > 2) {
           setFoodEntries([
-            todayEntries[0].name,
-            `und ${todayEntries.length - 1} weitere Gerichte`
+            sortedEntries[0].name,
+            `und ${sortedEntries.length - 1} weitere Gerichte`
           ])
         } else {
-          setFoodEntries(todayEntries.map(x => x.name))
+          setFoodEntries(sortedEntries.map(x => x.name))
         }
       } catch (e) {
         console.error(e)
@@ -94,7 +93,7 @@ export default function FoodCard () {
           {foodError &&
             <ListGroup.Item>
               Fehler beim Abruf des Speiseplans.<br />
-              Irgendetwas scheint kaputt zu sein. :(
+              Irgendetwas scheint kaputt zu sein.
             </ListGroup.Item>}
         </ListGroup>
       </ReactPlaceholder>

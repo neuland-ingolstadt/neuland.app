@@ -147,7 +147,7 @@ export default function Personal () {
 
             </ListGroup.Item>
 
-            <ListGroup.Item action onClick={() => window.open('/grades', '_self')}>
+            <ListGroup.Item action onClick={() => router.push('/grades')}>
               <div className={styles.interaction_icon}>
                 <span className="text-muted">
                   {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
