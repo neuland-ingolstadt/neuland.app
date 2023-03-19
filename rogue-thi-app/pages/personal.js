@@ -157,10 +157,10 @@ export default function Personal () {
               </div>
               <span className="text-muted">
                 {ects !== null && ects + ' ECTS'}
-                {average && ' · '}
-                {average && '∅ ' + average.result}
-                {average && average?.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
-                {average && average?.missingWeight > 1 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
+                {!isNaN(average?.result) && ' · '}
+                {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
+                {average?.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
+                {average?.missingWeight > 1 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
               </span>
             </ListGroup.Item>
           </ListGroup>
