@@ -53,17 +53,18 @@ export default function FoodCard () {
           .find(x => x.timestamp === today)
           ?.meals
           .filter(x => x.category !== 'Suppe' && selectedRestaurants.includes(x.restaurant.toLowerCase()))
-        const sortedEntries = todayEntries ? todayEntries.sort((a, b) => userMealRating(b) - userMealRating(a)) : []
 
-        if (!sortedEntries) {
+        todayEntries?.sort((a, b) => userMealRating(b) - userMealRating(a))
+
+        if (!todayEntries) {
           setFoodEntries([])
-        } else if (sortedEntries.length > 2) {
+        } else if (todayEntries.length > 2) {
           setFoodEntries([
-            sortedEntries[0].name,
-            `und ${sortedEntries.length - 1} weitere Gerichte`
+            todayEntries[0].name,
+            `und ${todayEntries.length - 1} weitere Gerichte`
           ])
         } else {
-          setFoodEntries(sortedEntries.map(x => x.name))
+          setFoodEntries(todayEntries.map(x => x.name))
         }
       } catch (e) {
         console.error(e)
