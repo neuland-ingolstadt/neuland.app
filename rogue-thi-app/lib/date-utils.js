@@ -1,8 +1,8 @@
 
 const WORD_TODAY = 'Heute'
 const WORD_TOMORROW = 'Morgen'
-const WORD_THIS_WEEK = 'Diese Woche'
-const WORD_NEXT_WEEK = 'Nächste Woche'
+export const WORD_THIS_WEEK = 'Diese Woche'
+export const WORD_NEXT_WEEK = 'Nächste Woche'
 
 export const DATE_LOCALE = 'de-DE'
 

@@ -33,3 +33,14 @@
   font-size: .8rem;
   color: gray;
 }
+
+/* week selector */
+.weekSelector {
+  display: flex;
+  align-items: center;
+}
+
+.weekSelector .currentWeek {
+  flex: 1;
+  text-align: center;
+}
