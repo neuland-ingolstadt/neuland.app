@@ -222,6 +222,12 @@ export default function Mensa () {
     )
   }
 
+  const dayFiller = Array.from({ length: 5 - currentFoodDays?.length }, (_, i) => i).map((x, idx) => {
+    const day = new Date()
+    day.setDate(day.getDate() + idx)
+    return { title: buildLinedWeekdaySpan(day), key: idx }
+  })
+
   return (
     <AppContainer>
       <AppNavbar title="Essen" showBack={'desktop-only'}>
@@ -246,7 +252,7 @@ export default function Mensa () {
 
         <ReactPlaceholder type="text" rows={20} ready={currentFoodDays && futureFoodDays}>
           <SwipeableViews index={page} onChangeIndex={idx => setPage(idx)}>
-            <SwipeableTabs className={styles.tab}>
+            <SwipeableTabs className={styles.tab} fillers={dayFiller}>
               {currentFoodDays && currentFoodDays.map((day, idx) => renderMealDay(day, idx))}
             </SwipeableTabs>
 

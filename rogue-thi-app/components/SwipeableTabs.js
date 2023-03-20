@@ -9,14 +9,21 @@ import SwipeableViews from 'react-swipeable-views'
  * @param {string} className Class name to attach to the entire object
  * @param {object} children Array of `SwipeableTab` objects
  */
-export default function SwipeableTabs ({ className, children }) {
+export default function SwipeableTabs ({ className, children, fillers }) {
   const [page, setPage] = useState(0)
 
   return (
     <div className={className}>
       <Nav variant="pills" activeKey={page.toString()} onSelect={key => setPage(parseInt(key))}>
+        {fillers && fillers.map((child, idx) =>
+          <Nav.Item key={idx} >
+            <Nav.Link className='disabled'>
+              {child.title}
+            </Nav.Link>
+          </Nav.Item>
+        )}
         {children.map((child, idx) =>
-          <Nav.Item key={idx}>
+          <Nav.Item key={idx + (fillers?.length ?? 0)}>
             <Nav.Link eventKey={idx.toString()}>
               {child.props.title}
             </Nav.Link>
@@ -31,7 +38,8 @@ export default function SwipeableTabs ({ className, children }) {
 }
 SwipeableTabs.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
+  fillers: PropTypes.any
 }
 
 /**
@@ -47,6 +55,6 @@ export function SwipeableTab ({ className, children }) {
 }
 SwipeableTab.propTypes = {
   className: PropTypes.string,
-  title: PropTypes.string,
+  title: PropTypes.object,
   children: PropTypes.any
 }
