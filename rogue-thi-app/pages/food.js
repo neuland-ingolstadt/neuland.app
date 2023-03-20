@@ -62,10 +62,10 @@ export default function Mensa () {
          * api returns full next 2 weeks on weekends, so just `new Date()`
          * to calculate the days till friday would be wrong (higher than 5)
          * */
-        const daysTillFriday = 5 - new Date(days[0].timestamp).getDay() + 1
+        const daysTillFriday = days?.length > 0 ? (5 - new Date(days[0].timestamp).getDay() + 1) : 0
 
         setCurrentFoodDays(days.slice(0, daysTillFriday))
-        setFutureFoodDays(days.slice(daysTillFriday, days.length))
+        setFutureFoodDays(days?.slice(daysTillFriday, days.length))
       } catch (e) {
         console.error(e)
         alert(e)
@@ -245,7 +245,7 @@ export default function Mensa () {
             {page === 0 && WORD_THIS_WEEK}
             {page === 1 && WORD_NEXT_WEEK}
           </div>
-          <Button className={styles.nextWeek} variant="link" onClick={() => setPage(1)} disabled={page === 1}>
+          <Button className={styles.nextWeek} variant="link" onClick={() => setPage(1)} disabled={page === 1 || futureFoodDays?.length === 0}>
             <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
           </Button>
         </div>
