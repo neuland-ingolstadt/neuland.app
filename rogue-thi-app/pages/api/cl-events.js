@@ -45,6 +45,11 @@ function parseLocalDateTime (str) {
  */
 async function loadEvents () {
   return JSON.parse(await fs.readFile(EVENT_STORE))
+    .map(event => ({
+      ...event,
+      begin: new Date(event.begin),
+      end: new Date(event.end)
+    }))
 }
 
 /**
