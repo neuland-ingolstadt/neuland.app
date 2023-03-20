@@ -17,9 +17,10 @@ export default function TimetableCard () {
   const router = useRouter()
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
+  const [currentTime, setCurrentTime] = useState(new Date())
 
   useEffect(() => {
-    async function load () {
+    async function loadTimetable () {
       try {
         setTimetable(await getFriendlyTimetable(new Date(), false))
       } catch (e) {
@@ -31,8 +32,13 @@ export default function TimetableCard () {
         }
       }
     }
-    load()
+    loadTimetable()
   }, [router])
+
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(new Date()), 30000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <BaseCard
@@ -42,23 +48,36 @@ export default function TimetableCard () {
     >
       <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
         <ListGroup variant="flush">
-          {timetable && timetable.slice(0, 2).map((x, i) => <ListGroup.Item key={i}>
-            <div>
-              {getTimetableEntryName(x).shortName} in {x.raum}
-            </div>
-            <div className="text-muted">
-              {formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}
-            </div>
-          </ListGroup.Item>
-          )}
-          {timetable && timetable.length === 0 &&
-            <ListGroup.Item>
-              Du hast heute keine Vorlesungen mehr.
-            </ListGroup.Item>}
-          {timetableError &&
-            <ListGroup.Item>
-              Fehler beim Abruf des Stundenplans.
-            </ListGroup.Item>}
+          {(timetable && timetable.slice(0, 2).map((x, i) => {
+            const isSoon = (x.startDate > currentTime && new Date(x.startDate) <= new Date(currentTime.getTime() + 30 * 60 * 1000))
+            const isOngoing = x.startDate < currentTime && x.endDate > currentTime
+            const isEndingSoon = isOngoing && (x.endDate - currentTime) <= 30 * 60 * 1000
+            const isNotSoonOrOngoing = !isSoon && !isOngoing
+
+            let text = null
+            if (isEndingSoon) {
+              text = <div className="text-muted">Endet in {Math.ceil((x.endDate - currentTime) / 1000 / 60)} min</div>
+            } else if (isOngoing) {
+              text = <div className="text-muted">Endet um {formatFriendlyTime(x.endDate)}</div>
+            } else if (isSoon) {
+              text = <div className="text-muted">Beginnt in {Math.ceil((x.startDate - currentTime) / 1000 / 60)} min</div>
+            } else if (isNotSoonOrOngoing) {
+              text = <div className="text-muted">{formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}</div>
+            }
+
+            return (
+              <ListGroup.Item key={i}>
+                <div>
+                  {getTimetableEntryName(x).shortName} in {x.raum}
+                </div>
+                {text}
+              </ListGroup.Item>
+            )
+          })) ||
+            (timetable && timetable.length === 0 &&
+              <ListGroup.Item>Du hast heute keine Vorlesungen mehr.</ListGroup.Item>) ||
+            (timetableError &&
+              <ListGroup.Item>Fehler beim Abruf des Stundenplans.</ListGroup.Item>)}
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>
