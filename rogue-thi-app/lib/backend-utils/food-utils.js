@@ -8,7 +8,6 @@ import { formatISODate } from '../date-utils'
  */
 export async function loadFoodEntries (restaurants) {
   const entries = []
-  return entries
 
   if (restaurants.includes('mensa')) {
     const data = await NeulandAPI.getMensaPlan()
