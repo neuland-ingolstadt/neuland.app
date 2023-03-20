@@ -5,7 +5,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faExclamationTriangle, faFilter, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -14,15 +14,17 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
+import { WORD_NEXT_WEEK, WORD_THIS_WEEK, buildLinedWeekdaySpan } from '../lib/date-utils'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
 import { FoodFilterContext } from './_app'
-import { buildLinedWeekdaySpan } from '../lib/date-utils'
 import { loadFoodEntries } from '../lib/backend-utils/food-utils'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import allergenMap from '../data/allergens.json'
 import flagMap from '../data/mensa-flags.json'
 import styles from '../styles/Mensa.module.css'
+
+import SwipeableViews from 'react-swipeable-views'
 
 const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
@@ -44,15 +46,26 @@ export default function Mensa () {
     allergenSelection,
     setShowFoodFilterModal
   } = useContext(FoodFilterContext)
-  const [foodDays, setFoodDays] = useState(null)
+  const [currentFoodDays, setCurrentFoodDays] = useState(null)
+  const [futureFoodDays, setFutureFoodDays] = useState(null)
   const [showMealDetails, setShowMealDetails] = useState(null)
+  const [page, setPage] = useState(0)
   const userKind = useUserKind()
 
   useEffect(() => {
     async function load () {
       try {
         const days = await loadFoodEntries(selectedRestaurants)
-        setFoodDays(days.slice(0, 5))
+
+        /**
+         * new Date(days[0].timestamp).getDay()
+         * api returns full next 2 weeks on weekends, so just `new Date()`
+         * to calculate the days till friday would be wrong (higher than 5)
+         * */
+        const daysTillFriday = days?.length > 0 ? (5 - new Date(days[0].timestamp).getDay() + 1) : 0
+
+        setCurrentFoodDays(days.slice(0, daysTillFriday))
+        setFutureFoodDays(days?.slice(daysTillFriday, days.length))
       } catch (e) {
         console.error(e)
         alert(e)
@@ -220,6 +233,12 @@ export default function Mensa () {
     )
   }
 
+  const dayFiller = Array.from({ length: 5 - currentFoodDays?.length }, (_, i) => i).map((x, idx) => {
+    const day = new Date()
+    day.setDate(day.getDate() + idx)
+    return { title: buildLinedWeekdaySpan(day), key: idx }
+  })
+
   return (
     <AppContainer>
       <AppNavbar title="Essen" showBack={'desktop-only'}>
@@ -229,10 +248,29 @@ export default function Mensa () {
       </AppNavbar>
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={foodDays}>
-          <SwipeableTabs className={styles.tab}>
-            {foodDays && foodDays.map((day, idx) => renderMealDay(day, idx))}
-          </SwipeableTabs>
+        <div className={styles.weekSelector}>
+          <Button className={styles.prevWeek} variant="link" onClick={() => setPage(0)} disabled={page === 0}>
+            <FontAwesomeIcon title="Woche zurück" icon={faChevronLeft} />
+          </Button>
+          <div className={styles.currentWeek}>
+            {page === 0 && WORD_THIS_WEEK}
+            {page === 1 && WORD_NEXT_WEEK}
+          </div>
+          <Button className={styles.nextWeek} variant="link" onClick={() => setPage(1)} disabled={page === 1 || futureFoodDays?.length === 0}>
+            <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
+          </Button>
+        </div>
+
+        <ReactPlaceholder type="text" rows={20} ready={currentFoodDays && futureFoodDays}>
+          <SwipeableViews index={page} onChangeIndex={idx => setPage(idx)}>
+            <SwipeableTabs className={styles.tab} fillers={dayFiller}>
+              {currentFoodDays && currentFoodDays.map((day, idx) => renderMealDay(day, idx))}
+            </SwipeableTabs>
+
+            <SwipeableTabs className={styles.tab}>
+              {futureFoodDays && futureFoodDays.map((day, idx) => renderMealDay(day, idx))}
+            </SwipeableTabs>
+          </SwipeableViews>
         </ReactPlaceholder>
 
         <br/>
