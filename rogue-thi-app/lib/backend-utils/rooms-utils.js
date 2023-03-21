@@ -1,4 +1,5 @@
 import API from '../backend/authenticated-api'
+import { formatISODate } from '../date-utils'
 
 const IGNORE_GAPS = 15
 
@@ -56,9 +57,11 @@ function isInBuilding (room, building) {
 /**
  * Converts the room plan for easier processing.
  * @param rooms rooms array as described in thi-rest-api.md
+ * @param {Date} date Date to filter for
  * @returns {object}
  */
 export function getRoomOpenings (rooms, date) {
+  date = formatISODate(date)
   const openings = {}
   // get todays rooms
   rooms.filter(room => room.datum === date)
@@ -146,8 +149,20 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
     beginDate.getMilliseconds()
   )
 
+  return searchRooms(beginDate, endDate, building)
+}
+
+/**
+ * Filters suitable room openings.
+ * @param {Date} beginDate Start date as Date object
+ * @param {Date} endDate End date as Date object
+ * @param {string} [building] Building name (e.g. `G`), defaults to all buildings
+ * @returns {object[]}
+ */
+export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL) {
   const data = await API.getFreeRooms(beginDate)
-  const openings = getRoomOpenings(data.rooms, date)
+
+  const openings = getRoomOpenings(data.rooms, beginDate)
   return Object.keys(openings)
     .flatMap(room =>
       openings[room].map(opening => ({

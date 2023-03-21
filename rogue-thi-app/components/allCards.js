@@ -4,11 +4,11 @@ import EventsCard from './cards/EventsCard'
 import FoodCard from './cards/FoodCard'
 import InstallPrompt from './cards/InstallPrompt'
 import MobilityCard from './cards/MobilityCard'
+import RoomCard from './cards/RoomCard'
 import TimetableCard from './cards/TimetableCard'
 
 import {
   faBook,
-  faDoorOpen,
   faScroll,
   faUser,
   faUserGraduate
@@ -36,49 +36,42 @@ export const ALL_DASHBOARD_CARDS = [
     label: 'Stundenplan',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
-    card: () => <TimetableCard key="timetable"/>
+    card: () => <TimetableCard key="timetable" />
   },
   {
     key: 'mensa',
     label: 'Essen',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <FoodCard key="mensa"/>
+    card: () => <FoodCard key="mensa" />
   },
   {
     key: 'mobility',
     label: 'Mobilität',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <MobilityCard key="mobility"/>
+    card: () => <MobilityCard key="mobility" />
   },
   {
     key: 'calendar',
     label: 'Termine',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <CalendarCard key="calendar"/>
+    card: () => <CalendarCard key="calendar" />
   },
   {
     key: 'events',
     label: 'Veranstaltungen',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <EventsCard key="events"/>
+    card: () => <EventsCard key="events" />
   },
   {
     key: 'rooms',
     label: 'Raumplan',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => (
-      <BaseCard
-        key="rooms"
-        icon={faDoorOpen}
-        title="Räume"
-        link="/rooms"
-      />
-    )
+    card: () => <RoomCard key="rooms" />
   },
   {
     key: 'library',
