@@ -235,9 +235,10 @@ export default function Mensa () {
 
   const dayFiller = Array.from({ length: 5 - currentFoodDays?.length }, (_, i) => i).map((x, idx) => {
     const day = currentFoodDays?.length > 0 ? new Date(currentFoodDays[0].timestamp) : new Date()
-    day.setDate(day.getDate() + idx - 1)
+    day.setDate(day.getDate() - idx - 1)
     return { title: buildLinedWeekdaySpan(day), key: idx }
   })
+  dayFiller.reverse()
 
   return (
     <AppContainer>
