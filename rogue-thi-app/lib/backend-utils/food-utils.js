@@ -16,6 +16,7 @@ export async function loadFoodEntries (restaurants) {
     }))
     entries.push(data)
   }
+
   if (restaurants.includes('reimanns')) {
     const data = await NeulandAPI.getReimannsPlan()
 
@@ -28,10 +29,27 @@ export async function loadFoodEntries (restaurants) {
     entries.push(filteredData)
   }
 
-  const days = entries.flatMap(r => r.map(x => x.timestamp))
-  const uniqueDays = [...new Set(days)]
+  // get start of this week (monday) or next monday if isWeekend
+  const startOfThisWeek = new Date()
+  const isWeekend = startOfThisWeek.getDay() === 0 || startOfThisWeek.getDay() === 6
+  const daysToMonday = isWeekend ? (startOfThisWeek.getDay() === 0 ? 1 : 2) : 1 - startOfThisWeek.getDay()
+  startOfThisWeek.setDate(startOfThisWeek.getDate() + daysToMonday)
 
-  return uniqueDays.map(day => {
+  // create day entries for next 12 days (current and next week including the weekend) starting from monday
+  let days = Array.from({ length: 12 }, (_, i) => {
+    const date = new Date(startOfThisWeek.getTime())
+    date.setDate(date.getDate() + i)
+    return date
+  })
+
+  // remove weekend
+  days = days.filter(x => x.getDay() !== 0 && x.getDay() !== 6)
+
+  // map to ISO date
+  days = days.map(x => formatISODate(x))
+
+  // map entries to daysTest
+  return days.map(day => {
     const dayEntries = entries.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
     return {
       timestamp: day,
