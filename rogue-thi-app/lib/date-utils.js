@@ -274,3 +274,24 @@ export function getFriendlyWeek (date) {
       ' – ' + sunday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
   }
 }
+
+/**
+ * Returns true if the given date is a weekend day
+ * @param {Date} date
+ * @returns {boolean}
+ */
+export function isWeekend (date) {
+  return date.getDay() === 0 || date.getDay() === 6
+}
+
+/**
+ * Returns the given day on working days or the next working day if the given date is a weekend day
+ * @param {Date} date
+ * @returns {Date}
+ */
+export function getAdjustedDay (date) {
+  if (isWeekend(date)) {
+    return getMonday(addWeek(date, 1))
+  }
+  return date
+}

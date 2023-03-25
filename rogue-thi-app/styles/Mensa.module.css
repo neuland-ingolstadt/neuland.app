@@ -40,7 +40,20 @@
   align-items: center;
 }
 
-.weekSelector .currentWeek {
+.weekText {
   flex: 1;
+  text-align: center;
+}
+
+.noMeals {
+  color: var(--gray);
+}
+
+.noMeals.active {
+  background-color: var(--secondary) !important;
+}
+
+.noMealInfo {
+  margin-top: 75px;
   text-align: center;
 }
