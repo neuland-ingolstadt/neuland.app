@@ -40,7 +40,7 @@
   align-items: center;
 }
 
-.weekSelector .currentWeek {
+.weekText {
   flex: 1;
   text-align: center;
 }

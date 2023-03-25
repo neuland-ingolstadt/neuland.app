@@ -1,5 +1,5 @@
+import { formatISODate, getAdjustedDay, getMonday } from '../date-utils'
 import NeulandAPI from '../backend/neuland-api'
-import { formatISODate } from '../date-utils'
 
 /**
  * Fetches and parses the meal plan
@@ -30,10 +30,7 @@ export async function loadFoodEntries (restaurants) {
   }
 
   // get start of this week (monday) or next monday if isWeekend
-  const startOfThisWeek = new Date()
-  const isWeekend = startOfThisWeek.getDay() === 0 || startOfThisWeek.getDay() === 6
-  const daysToMonday = isWeekend ? (startOfThisWeek.getDay() === 0 ? 1 : 2) : 1 - startOfThisWeek.getDay()
-  startOfThisWeek.setDate(startOfThisWeek.getDate() + daysToMonday)
+  const startOfThisWeek = getMonday(getAdjustedDay(new Date()))
 
   // create day entries for next 12 days (current and next week including the weekend) starting from monday
   let days = Array.from({ length: 12 }, (_, i) => {

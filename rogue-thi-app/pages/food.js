@@ -15,7 +15,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
-import { WORD_NEXT_WEEK, WORD_THIS_WEEK, buildLinedWeekdaySpan } from '../lib/date-utils'
+import { buildLinedWeekdaySpan, getAdjustedDay, getFriendlyWeek } from '../lib/date-utils'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
 import { FoodFilterContext } from './_app'
 import { loadFoodEntries } from '../lib/backend-utils/food-utils'
@@ -237,13 +237,6 @@ export default function Mensa () {
     )
   }
 
-  const dayFiller = Array.from({ length: 5 - currentFoodDays?.length }, (_, i) => i).map((x, idx) => {
-    const day = currentFoodDays?.length > 0 ? new Date(currentFoodDays[0].timestamp) : new Date()
-    day.setDate(day.getDate() - idx - 1)
-    return { title: buildLinedWeekdaySpan(day), key: idx }
-  })
-  dayFiller.reverse()
-
   return (
     <AppContainer>
       <AppNavbar title="Essen" showBack={'desktop-only'}>
@@ -257,18 +250,18 @@ export default function Mensa () {
           <Button className={styles.prevWeek} variant="link" onClick={() => setWeek(0)} disabled={week === 0}>
             <FontAwesomeIcon title="Woche zurück" icon={faChevronLeft} />
           </Button>
-          <div className={styles.currentWeek}>
-            {week === 0 && WORD_THIS_WEEK}
-            {week === 1 && WORD_NEXT_WEEK}
+          <div className={styles.weekText}>
+            {week === 0 && getFriendlyWeek(new Date(currentFoodDays?.[0]?.timestamp))}
+            {week === 1 && getFriendlyWeek(new Date(futureFoodDays?.[0]?.timestamp))}
           </div>
-          <Button className={styles.nextWeek} variant="link" onClick={() => setWeek(1)} disabled={week === 1 || futureFoodDays?.length === 0}>
+          <Button className={styles.nextWeek} variant="link" onClick={() => setWeek(1)} disabled={week === 1}>
             <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
           </Button>
         </div>
 
         <ReactPlaceholder type="text" rows={20} ready={currentFoodDays && futureFoodDays}>
           <SwipeableViews index={week} onChangeIndex={idx => setWeek(idx)}>
-            <WeekTab foodEntries={currentFoodDays} startIndex={new Date().getDay() - 1} />
+            <WeekTab foodEntries={currentFoodDays} startIndex={getAdjustedDay(new Date()).getDay() - 1} />
             <WeekTab foodEntries={futureFoodDays} startIndex={0} />
           </SwipeableViews>
         </ReactPlaceholder>
