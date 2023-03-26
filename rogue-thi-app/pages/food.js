@@ -49,6 +49,8 @@ export default function Mensa () {
   } = useContext(FoodFilterContext)
   const [currentFoodDays, setCurrentFoodDays] = useState(null)
   const [futureFoodDays, setFutureFoodDays] = useState(null)
+  const [currentDay, setCurrentDay] = useState(0)
+  const [futureDay, setFutureDay] = useState(0)
   const [showMealDetails, setShowMealDetails] = useState(null)
   const [week, setWeek] = useState(0)
   const userKind = useUserKind()
@@ -60,6 +62,8 @@ export default function Mensa () {
 
         setCurrentFoodDays(days.slice(0, 5))
         setFutureFoodDays(days?.slice(5, days.length))
+
+        setCurrentDay(getAdjustedDay(new Date()).getDay() - 1)
       } catch (e) {
         console.error(e)
         alert(e)
@@ -261,8 +265,8 @@ export default function Mensa () {
 
         <ReactPlaceholder type="text" rows={20} ready={currentFoodDays && futureFoodDays}>
           <SwipeableViews index={week} onChangeIndex={idx => setWeek(idx)}>
-            <WeekTab foodEntries={currentFoodDays} startIndex={getAdjustedDay(new Date()).getDay() - 1} />
-            <WeekTab foodEntries={futureFoodDays} startIndex={0} />
+            <WeekTab foodEntries={currentFoodDays} index={currentDay} setIndex={setCurrentDay} />
+            <WeekTab foodEntries={futureFoodDays} index={futureDay} setIndex={setFutureDay} />
           </SwipeableViews>
         </ReactPlaceholder>
 
@@ -386,19 +390,24 @@ export default function Mensa () {
     </AppContainer>
   )
 
-  function WeekTab ({ foodEntries, startIndex }) {
-    const [page, setPage] = useState(startIndex)
-
+  /**
+   * Renders the week tab.
+   * @param {Array} foodEntries Array of food entries
+   * @param {number} index Index of the currently selected tab
+   * @param {function} setIndex Callback to set the index
+   * @returns {JSX.Element}
+   */
+  function WeekTab ({ foodEntries, index, setIndex }) {
     return <div className={styles.tab}>
-      <Nav variant="pills" activeKey={page.toString()} onSelect={key => setPage(parseInt(key))}>
+      <Nav variant="pills" activeKey={index.toString()} onSelect={key => setIndex(parseInt(key))}>
         {foodEntries && foodEntries.map((child, idx) => <Nav.Item key={idx}>
-          <Nav.Link eventKey={idx.toString()} className={`${page === idx ? styles.active : ''} ${child.meals.length === 0 ? styles.noMeals : ''}`}>
+          <Nav.Link eventKey={idx.toString()} className={`${index === idx ? styles.active : ''} ${child.meals.length === 0 ? styles.noMeals : ''}`}>
             {buildLinedWeekdaySpan(child.timestamp)}
           </Nav.Link>
         </Nav.Item>
         )}
       </Nav>
-      <SwipeableViews index={page} onChangeIndex={idx => setPage(idx)}>
+      <SwipeableViews index={index} onChangeIndex={idx => setIndex(idx)}>
         {foodEntries && foodEntries.map((day, idx) => renderMealDay(day, idx))}
       </SwipeableViews>
     </div>
