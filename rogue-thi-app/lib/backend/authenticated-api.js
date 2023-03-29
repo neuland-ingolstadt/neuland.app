@@ -2,6 +2,7 @@ import { APIError, AnonymousAPIClient } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 
 import courseShortNames from '../../data/course-short-names.json'
+import roomDistances from '../../data/room-distances.json'
 
 const KEY_GET_PERSONAL_DATA = 'getPersonalData'
 const KEY_GET_TIMETABLE = 'getTimetable'
@@ -91,6 +92,14 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
     this.cache.set(cacheKey, resp)
 
     return resp
+  }
+
+  getRoomDistances (room) {
+    if (!room) {
+      return {}
+    }
+
+    return roomDistances[room.toUpperCase()]
   }
 
   async getPersonalData () {

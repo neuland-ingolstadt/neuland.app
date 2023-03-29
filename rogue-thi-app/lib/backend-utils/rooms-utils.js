@@ -179,3 +179,27 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
     )
     .sort((a, b) => a.room.localeCompare(b.room))
 }
+
+/**
+ * Finds rooms that are close to the given room and are available for the given time.
+ * @param {string} room Room name (e.g. `G215`)
+ * @param {Date} startDate Start date as Date object
+ * @param {Date} endDate End date as Date object
+ * @returns {Array}
+ **/
+export async function findSuggestedRooms (room, startDate, endDate) {
+  let rooms = await searchRooms(startDate, endDate)
+
+  // hide Neuburg buildings if next lecture is not in Neuburg
+  rooms = rooms.filter(x => x.room.includes('N') === room.includes('N'))
+
+  // get distances to other rooms
+  const distances = API.getRoomDistances(room)
+
+  // sort by distance (floors are ignored)
+  rooms = rooms.sort((a, b) => {
+    return (distances[a.room] ?? Infinity) - (distances[b.room] ?? Infinity)
+  })
+
+  return rooms
+}

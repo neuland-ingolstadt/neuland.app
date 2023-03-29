@@ -6,7 +6,7 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
-import { getNextValidDate, searchRooms } from '../../lib/backend-utils/rooms-utils'
+import { findSuggestedRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import ReactPlaceholder from 'react-placeholder/lib'
 import { formatFriendlyTime } from '../../lib/date-utils'
@@ -49,17 +49,8 @@ export default function RoomCard () {
         }
 
         // filter for suitable rooms
-        const roomRegex = /^[a-zA-Z]+/
-        const building = roomRegex.exec((today.length > 1 ? today[1] : today[0]).raum)[0]
-        let rooms = await searchRooms(startDate, endDate)
 
-        // filter for building
-        const sameBuilding = rooms.filter(x => x.room.startsWith(building))
-        const sameFloor = rooms.filter(x => x.room.startsWith(building + today[0].raum[building.length]))
-        rooms = sameFloor.length > 0 ? sameFloor : sameBuilding.length > 0 ? sameBuilding : rooms
-
-        // hide Neuburg buildings if next lecture is not in Neuburg
-        rooms = rooms.filter(x => x.room.includes('N') === building.includes('N'))
+        const rooms = await findSuggestedRooms(today[0].raum, startDate, endDate)
 
         setFilterResults(rooms)
       } catch (e) {
