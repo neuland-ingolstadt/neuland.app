@@ -77,7 +77,7 @@ export default function RoomCard () {
           {filterResults && filterResults.slice(0, 2).map((x, i) => {
             return (
               <ListGroup.Item key={i}>
-                <Link href={`/rooms?highlight=${x.room}`}>
+                <Link href={'/rooms/suggestions'}>
                   <div>
                     <div>
                       {x.room}

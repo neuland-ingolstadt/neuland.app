@@ -63,7 +63,7 @@ export default function RoomSearch () {
           return (
             {
               gap,
-              rooms: rooms.slice(0, 3)
+              rooms: rooms.slice(0, 4)
             }
           )
         }))
