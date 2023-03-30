@@ -33,3 +33,25 @@
 .right {
   text-align: right;
 }
+
+.login {
+  margin: 25px 10px;
+  text-align: center;
+}
+
+.suggestion {
+  margin: 15px 5px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.icon {
+  font-size: 10pt;
+  color: var(--secondary);
+  margin: 0px 7px;
+}
+
+.time {
+  font-size: 10pt;
+  color: var(--secondary);
+}

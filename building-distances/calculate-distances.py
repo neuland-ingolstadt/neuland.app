@@ -5,7 +5,7 @@ from math import ceil
 from geopy import distance
 
 MAP_URL = 'https://assets.neuland.app/rooms_neuland.geojson'
-ROOM_TYPES = ['Hörsaal', 'PC-Pool', 'Vorlesung', 'Seminarraum']
+ROOM_TYPES = ['Hörsaal', 'PC-Pool', 'Vorlesung', 'Seminarraum', 'Labor']
 
 # read file from URL
 response = requests.get(MAP_URL)

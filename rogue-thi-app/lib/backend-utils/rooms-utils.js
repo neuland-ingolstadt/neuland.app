@@ -198,7 +198,7 @@ export async function findSuggestedRooms (room, startDate, endDate) {
 
   // sort by distance (floors are ignored)
   rooms = rooms.sort((a, b) => {
-    return (distances[a.room] ?? Infinity) - (distances[b.room] ?? Infinity)
+    return (distances[a?.room] ?? Infinity) - (distances[b?.room] ?? Infinity)
   })
 
   return rooms

@@ -99,7 +99,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       return {}
     }
 
-    return roomDistances[room.toUpperCase()]
+    return roomDistances[room.toUpperCase()] || {}
   }
 
   async getPersonalData () {

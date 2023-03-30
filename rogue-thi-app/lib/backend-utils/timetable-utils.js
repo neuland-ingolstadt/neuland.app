@@ -1,4 +1,5 @@
 import API from '../backend/authenticated-api'
+import { getNextValidDate } from './rooms-utils'
 
 /**
  * Extracts regular, short and full names for a lecture.
@@ -26,6 +27,37 @@ export function getTimetableEntryName (item) {
       fullName: name
     }
   }
+}
+
+/**
+ * Get all gaps between lectures.
+ * Each gap is an object with a start and end date as well as start and end lecture.
+ * @param {object[]} timetable Timetable
+ * @returns {object[]}
+ **/
+export function getTimetableGaps (timetable) {
+  const gaps = []
+  for (let i = 0; i < timetable.length - 1; i++) {
+    const gap = {
+      startDate: timetable[i].endDate,
+      endDate: timetable[i + 1].startDate,
+      startLecture: timetable[i],
+      endLecture: timetable[i + 1]
+    }
+
+    gaps.push(gap)
+  }
+
+  if (new Date().getTime() < timetable[0].startDate.getTime()) {
+    // add gap between now and first lecture
+    gaps.unshift({
+      startDate: getNextValidDate(),
+      endDate: timetable[0].startDate,
+      endLecture: timetable[0]
+    })
+  }
+
+  return gaps
 }
 
 /**

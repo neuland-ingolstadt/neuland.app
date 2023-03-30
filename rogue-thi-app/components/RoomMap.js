@@ -225,6 +225,13 @@ export default function RoomMap ({ highlight, roomData }) {
             Stattdessen nach Zeitraum suchen
           </a>
         </Link>
+
+        <br />
+        <Link href="/rooms/suggestions">
+          <a className={styles.linkToSearch}>
+            Raum Vorschläge
+          </a>
+        </Link>
       </Form>
 
       <MapContainer

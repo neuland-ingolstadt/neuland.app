@@ -6,13 +6,14 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
-import { findSuggestedRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
+import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import ReactPlaceholder from 'react-placeholder/lib'
+import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime } from '../../lib/date-utils'
-import { getFriendlyTimetable } from '../../lib/backend-utils/timetable-utils'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
+import Link from 'next/link'
 
 /**
  * Dashboard card for semester and exam dates.
@@ -35,22 +36,18 @@ export default function RoomCard () {
           return
         }
 
-        /**
-         * If only one lecture is left, find gap between now and start of last lecture.
-         * Else: find gap between end of next (or current) lecture and start of next lecture.
-         */
-        const startDate = today.length === 1 ? getNextValidDate() : today[0].endDate
-        const endDate = today.length === 1 ? today[0].startDate : today[1].startDate
-
-        if (startDate.getTime() > endDate.getTime()) {
-          // last lecture of the day is already running -> no need to show rooms
+        const gaps = getTimetableGaps(today)
+        if (gaps.length < 1) {
+          // no gaps today -> no rooms to show
           setFilterResults([])
           return
         }
 
         // filter for suitable rooms
+        const nextGap = gaps[0]
+        const rooms = await findSuggestedRooms(nextGap.endLecture.raum, nextGap.startDate, nextGap.endDate)
 
-        const rooms = await findSuggestedRooms(today[0].raum, startDate, endDate)
+        // idea: instead of showing the rooms that are near to the next lecture, show the rooms that are between the current lecture and the next lecture
 
         setFilterResults(rooms)
       } catch (e) {
@@ -80,12 +77,16 @@ export default function RoomCard () {
           {filterResults && filterResults.slice(0, 2).map((x, i) => {
             return (
               <ListGroup.Item key={i}>
-                <div>
-                  {x.room}
-                </div>
-                <div className="text-muted">
-                  Frei von {formatFriendlyTime(x.from)} bis {formatFriendlyTime(x.until)}
-                </div>
+                <Link href={`/rooms?highlight=${x.room}`}>
+                  <div>
+                    <div>
+                      {x.room}
+                    </div>
+                    <div className="text-muted">
+                      Frei von {formatFriendlyTime(x.from)} bis {formatFriendlyTime(x.until)}
+                    </div>
+                  </div>
+                </Link>
               </ListGroup.Item>
             )
           }
