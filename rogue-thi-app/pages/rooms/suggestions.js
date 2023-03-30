@@ -6,8 +6,8 @@ import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
+import { faArrowRight, faCalendar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import AppBody from '../../components/page/AppBody'
@@ -155,6 +155,14 @@ export default function RoomSearch () {
             </div>
           )}
         </ReactPlaceholder>
+
+        {suggestions && suggestions.length === 0 &&
+          <div className={styles.noSuggestions}>
+            <FontAwesomeIcon icon={faCalendar} size="xl" style={ { marginBottom: '15px' } } />
+            <br />
+            Keine Vorschläge verfügbar
+          </div>
+        }
       </AppBody>
 
       <AppTabbar />

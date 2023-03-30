@@ -55,3 +55,8 @@
   font-size: 10pt;
   color: var(--secondary);
 }
+
+.noSuggestions {
+  margin-top: 75px;
+  text-align: center;
+}
