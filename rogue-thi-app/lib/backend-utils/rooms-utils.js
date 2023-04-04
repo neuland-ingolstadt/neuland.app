@@ -1,5 +1,6 @@
 import API from '../backend/authenticated-api'
 import { formatISODate } from '../date-utils'
+import roomDistances from '../../data/room-distances.json'
 
 const IGNORE_GAPS = 15
 
@@ -194,7 +195,7 @@ export async function findSuggestedRooms (room, startDate, endDate) {
   rooms = rooms.filter(x => x.room.includes('N') === room.includes('N'))
 
   // get distances to other rooms
-  const distances = API.getRoomDistances(room)
+  const distances = getRoomDistances(room)
 
   // sort by distance (floors are ignored)
   rooms = rooms.sort((a, b) => {
@@ -202,4 +203,17 @@ export async function findSuggestedRooms (room, startDate, endDate) {
   })
 
   return rooms
+}
+
+/**
+ * Returns the distance to other rooms from the given room.
+ * @param {string} room Room name (e.g. `G215`)
+ * @returns {object}
+ **/
+export function getRoomDistances (room) {
+  if (!room) {
+    return {}
+  }
+
+  return roomDistances[room.toUpperCase()] || {}
 }

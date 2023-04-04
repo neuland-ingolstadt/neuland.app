@@ -229,14 +229,14 @@ export default function RoomMap ({ highlight, roomData }) {
         </Link>
 
         {userKind === USER_STUDENT &&
-          <div>
+          <>
             <br />
             <Link href="/rooms/suggestions">
               <a className={styles.linkToSearch}>
                 Raum Vorschläge
               </a>
             </Link>
-          </div>
+          </>
         }
       </Form>
 

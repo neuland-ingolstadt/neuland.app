@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
@@ -16,16 +15,15 @@ import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
+import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
-import { formatFriendlyTime } from '../../lib/date-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
-import { USER_GUEST, USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
+import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import { getFriendlyTimetable, getTimetableEntryName, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 
 const TUX_ROOMS = ['G308']
-const TITLE = 'Raum Vorschläge'
 
 /**
  * Page containing the room search.
@@ -42,7 +40,7 @@ export default function RoomSearch () {
       try {
         // get timeable and filter for today
         const timetable = await getFriendlyTimetable(new Date(), false)
-        const today = timetable.filter(x => x.startDate.getDate() === new Date().getDate())
+        const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
 
         if (today.length < 1) {
           // no lectures today -> no rooms to show
@@ -68,10 +66,6 @@ export default function RoomSearch () {
           )
         }))
 
-        console.log(suggestions)
-
-        // idea: instead of showing the rooms that are near to the next lecture, show the rooms that are between the current lecture and the next lecture
-
         setSuggestions(suggestions)
       } catch (e) {
         if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
@@ -88,29 +82,9 @@ export default function RoomSearch () {
     }
   }, [router, userKind])
 
-  if (userKind === USER_GUEST) {
-    return (
-      <AppContainer>
-      <AppNavbar title={TITLE} />
-
-      <AppBody >
-        <div className={ styles.login }>
-          <p>Bitte logge dich ein, um diese Funktion zu nutzen.</p>
-          <br />
-          <Link href="/login?redirect=rooms%2Fsuggestions">
-            <Button variant="primary">Login</Button>
-          </Link>
-        </div>
-      </AppBody>
-
-      <AppTabbar />
-    </AppContainer>
-    )
-  }
-
   return (
     <AppContainer>
-      <AppNavbar title={TITLE} />
+      <AppNavbar title={'Raum Vorschläge'} />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={suggestions || userKind !== USER_STUDENT}>
