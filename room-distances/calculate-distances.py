@@ -7,7 +7,7 @@ import re
 
 
 MAP_URL = 'https://assets.neuland.app/rooms_neuland.geojson'
-ROOM_TYPES = ['Hörsaal', 'PC-Pool', 'Vorlesung', 'Seminarraum', 'Labor']
+ROOM_TYPES = ['Hörsaal', 'PC-Pool', 'Vorlesung', 'Seminar', 'Labor']
 STAIRCASE_TYPES = ['Treppenhaus']
 
 
