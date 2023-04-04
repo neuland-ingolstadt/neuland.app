@@ -13,14 +13,9 @@ STAIRCASE_TYPES = ['Treppenhaus']
 
 # calculate center of room from coordinates
 def calculate_center(room):
-    lat = []
-    long = []
+    lat, lon = zip(*[(p[0], p[1]) for p in room['geometry']['coordinates'][0]])
 
-    for l in room['geometry']['coordinates'][0]:
-        lat.append(l[0])
-        long.append(l[1])
-
-    return [sum(lat)/len(lat), sum(long)/len(long)]
+    return [sum(lat)/len(lat), sum(lon)/len(lon)]
 
 
 def findNearestStaircase(room, staircases):
@@ -78,10 +73,9 @@ def main():
             # if room is the same
             if room_name == room2_name:
                 distances[room_name][room2_name] = 0
-                continue
 
             # if room is in different building
-            if room['properties']['Gebaeude'] != room2['properties']['Gebaeude']:
+            elif room['properties']['Gebaeude'] != room2['properties']['Gebaeude']:
                 total_distance = 0
                 # find nearest staircase
                 distance1, nearestStaircase1 = findNearestStaircase(room, stairscases)
@@ -101,10 +95,9 @@ def main():
                 total_distance += distance.distance(nearestStaircase1['center'], nearestStaircase2['center']).meters
 
                 distances[room_name][room2_name] = ceil(total_distance)
-                continue
 
             # if room is in same building, but on different floors
-            if room['properties']['Ebene'] != room2['properties']['Ebene']:
+            elif room['properties']['Ebene'] != room2['properties']['Ebene']:
                 total_distance = 0
                 # find nearest staircase
                 staircase_distance, nearest_staircase = findNearestStaircase(room, stairscases)
@@ -117,12 +110,11 @@ def main():
                 total_distance += distance.distance(room2['center'], nearest_staircase['center']).meters
 
                 distances[room_name][room2_name] = ceil(total_distance)
-                continue
-
-            # calculate distance between two points
-            room_distance = distance.distance(room['center'], room2['center']).meters
-
-            distances[room_name][room2_name] = ceil(room_distance)
+                
+            else:
+                # calculate distance between two points
+                room_distance = distance.distance(room['center'], room2['center']).meters
+                distances[room_name][room2_name] = ceil(room_distance)
 
     # write to file
     path = Path(__file__).parent / 'room-distances.json'
