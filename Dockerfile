@@ -12,6 +12,15 @@ RUN ./run_extraction.sh
 
 
 
+FROM python:3 AS distances
+WORKDIR /opt/
+
+COPY room-distances .
+RUN pip install -r requirements.txt \
+	&& python3 calculate-distances.py
+
+
+
 FROM python:3 as courses
 WORKDIR /opt/
 ARG THI_ICAL_USER
@@ -48,6 +57,7 @@ COPY rogue-thi-app/package.json rogue-thi-app/package-lock.json ./
 RUN npm install
 COPY rogue-thi-app/ .
 COPY --from=spo /opt/spo-grade-weights.json data/
+COPY --from=distances /opt/room-distances.json data/
 COPY --from=courses /opt/ical-courses.json data/
 COPY --from=pwaicons /opt/splash/ public/
 

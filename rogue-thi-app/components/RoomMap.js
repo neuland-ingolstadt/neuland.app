@@ -13,6 +13,7 @@ import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
+import { USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import styles from '../styles/RoomMap.module.css'
 
 const SPECIAL_ROOMS = {
@@ -50,6 +51,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
   const searchField = useRef()
   const location = useLocation()
+  const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState(null)
 
@@ -125,7 +127,7 @@ export default function RoomMap ({ highlight, roomData }) {
       }
     }
     load()
-  }, [router, highlight])
+  }, [router, highlight, userKind])
 
   /**
    * Removes focus from the search.
@@ -225,6 +227,17 @@ export default function RoomMap ({ highlight, roomData }) {
             Stattdessen nach Zeitraum suchen
           </a>
         </Link>
+
+        {userKind === USER_STUDENT &&
+          <>
+            <br />
+            <Link href="/rooms/suggestions">
+              <a className={styles.linkToSearch}>
+                Raum Vorschläge
+              </a>
+            </Link>
+          </>
+        }
       </Form>
 
       <MapContainer

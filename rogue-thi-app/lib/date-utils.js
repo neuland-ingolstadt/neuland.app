@@ -295,3 +295,13 @@ export function getAdjustedDay (date) {
   }
   return date
 }
+
+/**
+ * Returns true if the given dates are on the same day
+ * @param {Date} a
+ * @param {Date} b
+ * @returns {boolean}
+ **/
+export function isSameDay (a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
