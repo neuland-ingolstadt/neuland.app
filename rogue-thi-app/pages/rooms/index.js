@@ -8,6 +8,8 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
+import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
+
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
 
@@ -32,6 +34,7 @@ export async function getStaticProps () {
 export default function Rooms ({ roomData }) {
   const router = useRouter()
   const { highlight } = router.query
+  const userKind = useUserKind()
 
   return (
     <AppContainer className={styles.container}>
@@ -40,6 +43,11 @@ export default function Rooms ({ roomData }) {
           <AppNavbar.Overflow.Link variant="link" href="/rooms/list">
             Stündlicher Plan
           </AppNavbar.Overflow.Link>
+          {userKind !== USER_GUEST && (
+            <AppNavbar.Overflow.Link variant="link" href="/rooms/suggestions">
+              Vorschläge
+            </AppNavbar.Overflow.Link>
+          )}
           <AppNavbar.Overflow.Link variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
             Campus- {'&'} Stadtführung
           </AppNavbar.Overflow.Link>

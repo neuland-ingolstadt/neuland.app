@@ -9,11 +9,11 @@ import Form from 'react-bootstrap/Form'
 import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
-import { USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import styles from '../styles/RoomMap.module.css'
 
 const SPECIAL_ROOMS = {
@@ -228,7 +228,7 @@ export default function RoomMap ({ highlight, roomData }) {
           </a>
         </Link>
 
-        {userKind === USER_STUDENT &&
+        {userKind !== USER_GUEST &&
           <>
             <br />
             <Link href="/rooms/suggestions">
