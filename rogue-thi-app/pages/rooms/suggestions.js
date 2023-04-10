@@ -20,7 +20,7 @@ import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
-import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
+import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
 import { getFriendlyTimetable, getTimetableEntryName, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 
 const TUX_ROOMS = ['G308']
@@ -77,7 +77,7 @@ export default function RoomSearch () {
       }
     }
 
-    if (userKind === USER_STUDENT) {
+    if (userKind !== USER_GUEST) {
       load()
     }
   }, [router, userKind])
@@ -87,7 +87,7 @@ export default function RoomSearch () {
       <AppNavbar title={'Raum Vorschläge'} />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={suggestions || userKind !== USER_STUDENT}>
+        <ReactPlaceholder type="text" rows={20} ready={suggestions}>
           {suggestions && suggestions.map((result, idx) =>
             <div key={idx}>
               <div className={styles.suggestion}>
@@ -130,7 +130,7 @@ export default function RoomSearch () {
           )}
         </ReactPlaceholder>
 
-        {suggestions && suggestions.length === 0 &&
+        {(userKind === USER_GUEST || suggestions?.length === 0) &&
           <div className={styles.noSuggestions}>
             <FontAwesomeIcon icon={faCalendar} size="xl" style={ { marginBottom: '15px' } } />
             <br />

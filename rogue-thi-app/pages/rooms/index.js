@@ -8,7 +8,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
+import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
 
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
