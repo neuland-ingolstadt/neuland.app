@@ -84,7 +84,7 @@ export default function RoomSearch () {
 
   return (
     <AppContainer>
-      <AppNavbar title={'Raum Vorschläge'} />
+      <AppNavbar title={'Raumvorschläge'} />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={suggestions}>

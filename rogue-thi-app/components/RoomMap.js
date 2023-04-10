@@ -222,22 +222,23 @@ export default function RoomMap ({ highlight, roomData }) {
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
-        <Link href="/rooms/search">
-          <a className={styles.linkToSearch}>
-            Stattdessen nach Zeitraum suchen
-          </a>
-        </Link>
-
-        {userKind !== USER_GUEST &&
-          <>
-            <br />
-            <Link href="/rooms/suggestions">
-              <a className={styles.linkToSearch}>
-                Raum Vorschläge
-              </a>
-            </Link>
-          </>
-        }
+        <div className={styles.links}>
+          <Link href="/rooms/search">
+            <a className={styles.linkToSearch}>
+              Erweiterte Suche
+            </a>
+          </Link>
+          {userKind !== USER_GUEST &&
+            <>
+              <> · </>
+              <Link href="/rooms/suggestions">
+                <a className={styles.linkToSearch}>
+                  Automatische Vorschläge
+                </a>
+              </Link>
+            </>
+          }
+        </div>
       </Form>
 
       <MapContainer
