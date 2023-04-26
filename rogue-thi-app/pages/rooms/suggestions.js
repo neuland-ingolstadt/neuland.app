@@ -94,6 +94,7 @@ export default function RoomSearch () {
                 {result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : 'Jetzt'}
                 <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
                 {getTimetableEntryName(result.gap.endLecture).shortName}
+                {` (${result.gap.endLecture.raum})`}
 
                 <div className={styles.time}>
                   {'Pause von '}
