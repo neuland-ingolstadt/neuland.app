@@ -33,6 +33,10 @@ class NeulandAPIClient {
     return this.performRequest(`${ENDPOINT}/api/reimanns`)
   }
 
+  async getCanisiusPlan () {
+    return this.performRequest(`${ENDPOINT}/api/canisius`)
+  }
+
   /**
    * @param {string} station Bus station identifier
    */
