@@ -190,8 +190,11 @@ export default function Mensa () {
     const mensaSoups = day.meals.filter(x => x.restaurant === 'Mensa' && x.category === 'Suppe')
     const mensaFood = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
     const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns')
+    const canisius = day.meals.filter(x => x.restaurant === 'Canisius')
+    const canisiusSalads = day.meals.filter(x => x.restaurant === 'Canisius' && x.category === 'Salat')
+    const canisiusFood = day.meals.filter(x => x.restaurant === 'Canisius' && x.category !== 'Salat')
 
-    const noData = mensa.length === 0 && reimanns.length === 0
+    const noData = mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
     return (
       <SwipeableTab key={key} >
@@ -227,6 +230,32 @@ export default function Mensa () {
             <ListGroup>
               {reimanns.map((meal, idx) => renderMealEntry(meal, `reimanns-${idx}`))}
             </ListGroup>
+          </>
+        )}
+
+        {canisius.length > 0 && (
+          <>
+            <h4 className={styles.kindHeader}>Canisiuskonvikt</h4>
+            {canisiusFood.length > 0 && (
+              <>
+                {canisiusSalads.length > 0 && (
+                  <h5 className={styles.kindHeader}>Gerichte</h5>
+                )}
+                <ListGroup>
+                  {canisiusFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
+                </ListGroup>
+              </>
+            )}
+            {canisiusSalads.length > 0 && (
+              <>
+                {canisiusFood.length > 0 && (
+                  <h5 className={styles.kindHeader}>Salate</h5>
+                )}
+                <ListGroup>
+                  {canisiusSalads.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+                </ListGroup>
+              </>
+            )}
           </>
         )}
 

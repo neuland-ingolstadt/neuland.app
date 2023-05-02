@@ -64,6 +64,12 @@ export default function FilterFoodModal () {
               checked={selectedRestaurants.includes('reimanns')}
               onChange={() => toggleSelectedRestaurant('reimanns')}
             />
+            <Form.Check
+              id='restaurant-checkbox-canisius'
+              label='Canisiuskonvikt anzeigen'
+              checked={selectedRestaurants.includes('canisius')}
+              onChange={() => toggleSelectedRestaurant('canisius')}
+            />
           </div>
 
           <hr/>

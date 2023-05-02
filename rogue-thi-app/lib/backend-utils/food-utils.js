@@ -29,6 +29,18 @@ export async function loadFoodEntries (restaurants) {
     entries.push(filteredData)
   }
 
+  if (restaurants.includes('canisius')) {
+    const data = await NeulandAPI.getCanisiusPlan()
+
+    const startOfToday = new Date(formatISODate(new Date())).getTime()
+    const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
+
+    filteredData.forEach(day => day.meals.forEach(entry => {
+      entry.restaurant = 'Canisius'
+    }))
+    entries.push(filteredData)
+  }
+
   // get start of this week (monday) or next monday if isWeekend
   const startOfThisWeek = getMonday(getAdjustedDay(new Date()))
 
