@@ -36,7 +36,7 @@ export function getTimetableEntryName (item) {
  * @returns {object[]}
  **/
 export function getTimetableGaps (timetable) {
-  const gaps = []
+  let gaps = []
   for (let i = 0; i < timetable.length - 1; i++) {
     const gap = {
       startDate: timetable[i].endDate,
@@ -56,6 +56,14 @@ export function getTimetableGaps (timetable) {
       endLecture: timetable[0]
     })
   }
+
+  gaps.forEach(x => {
+    // substract 10 minutes for valid room times
+    x.endDate.setMinutes(x.endDate.getMinutes() - 10)
+  })
+
+  // filter out gaps that are too short (<= 10 minutes) (10 minute are already substracted => 0)
+  gaps = gaps.filter(x => x.endDate - x.startDate > 0)
 
   return gaps
 }
