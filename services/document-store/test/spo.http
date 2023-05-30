@@ -1,0 +1,17 @@
+GET http://localhost:6001/documents/spo
+Accept: application/json
+Content-Type: application/json
+
+###
+
+POST http://localhost:6001/documents/spo
+Accept: application/json
+Content-Type: application/json
+
+{
+  "spo": [
+    "111",
+    "222",
+    "333"
+  ]
+}
