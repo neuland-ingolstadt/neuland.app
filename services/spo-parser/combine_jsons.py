@@ -21,5 +21,7 @@ ects_sums.sort(key=lambda x: x[1])
 for name, ects in ects_sums:
 	print("{:3d} {}".format(ects, name))
 
-with open("spo-grade-weights.json", "w+") as fd:
+spo_filename = os.getenv("SPO_WEIGHTS_FILENAME")
+
+with open(spo_filename, "w+") as fd:
 	json.dump(result, fd)
