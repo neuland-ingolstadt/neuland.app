@@ -1,5 +1,6 @@
 requests>=2.28.1
 opencv-python>=4.6.0.66
-camelot-py>=0.10.1 
+camelot-py>=0.10.1
 ghostscript>=0.7
 schedule~=1.2.0
+python-dotenv~=1.0.0
