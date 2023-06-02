@@ -10,6 +10,8 @@ import { formatRelativeMinutes } from '../date-utils'
 
 import stations from '../../data/mobility.json'
 
+import moment from 'moment'
+
 /**
  * Retrieves the users mobility preferences.
  * @returns {object}
@@ -123,7 +125,7 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.destination}
         </div>
         <div className={styles.mobilityTime}>
-          {formatRelativeMinutes(new Date(item.time))}
+          { moment(item.time).format('HH:mm')} ({ moment(item.time).fromNow() })
         </div>
       </>
     )
