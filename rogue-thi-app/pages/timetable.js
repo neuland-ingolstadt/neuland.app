@@ -186,7 +186,7 @@ export default function Timetable () {
                 <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
                   <div className={styles.left}>
                     <div className={styles.name}>
-                      {getTimetableEntryName(item).fullName}
+                      {getTimetableEntryName(item).name}
                     </div>
                     <div className={styles.room}>
                       {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
@@ -314,6 +314,7 @@ export default function Timetable () {
             <h5>Allgemein</h5>
             <p>
               <strong>Dozent</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>Kürzel</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
               <strong>Prüfung</strong>: {focusedEntry && focusedEntry.pruefung}<br />
               <strong>Studiengang</strong>: {focusedEntry && focusedEntry.stg}<br />
               <strong>Studiengruppe</strong>: {focusedEntry && focusedEntry.stgru}<br />

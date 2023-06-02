@@ -12,8 +12,7 @@ export function getTimetableEntryName (item) {
     const [shortName] = match
     return {
       name: item.fach,
-      shortName,
-      fullName: `${shortName} - ${item.fach}`
+      shortName
     }
   } else {
     // fallback for weird entries like
@@ -23,8 +22,7 @@ export function getTimetableEntryName (item) {
     const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
     return {
       name,
-      shortName,
-      fullName: name
+      shortName
     }
   }
 }
