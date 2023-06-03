@@ -34,8 +34,9 @@ import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
-import { useTranslation } from 'react-i18next'
+
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'react-i18next'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -52,7 +53,7 @@ export default function Personal () {
   const [, setShowThemeModal] = useContext(ShowThemeModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
-  const { t, i18n} = useTranslation('personal')
+  const { t, i18n } = useTranslation('personal')
 
   const userKind = useUserKind()
 
@@ -258,7 +259,7 @@ export default function Personal () {
 
           <ListGroup.Item action onClick={() => {
             i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')
-            router.replace('/', '', {locale: i18n.language})
+            router.replace('/', '', { locale: i18n.language })
           }}>
             <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
             {t('change_language')}
