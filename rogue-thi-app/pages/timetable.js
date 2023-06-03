@@ -101,7 +101,7 @@ function getWeekday (date) {
  * Page displaying the users timetable.
  */
 export default function Timetable () {
-  const { t , i18n} = useTranslation('timetable')
+  const { t } = useTranslation('timetable')
 
   const router = useRouter()
   const os = useOperatingSystem()
