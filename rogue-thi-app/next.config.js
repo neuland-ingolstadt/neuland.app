@@ -28,6 +28,10 @@ const permissionPolicyFeatures = [
 const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
+  i18n: {
+    locales: ['en', 'de'],
+    defaultLocale: 'en'
+  },
   async headers () {
     return [
       {

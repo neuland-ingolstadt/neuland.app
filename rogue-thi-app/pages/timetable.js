@@ -25,8 +25,19 @@ import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
 import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
 
 import styles from '../styles/Timetable.module.css'
+import { useTranslation } from 'next-i18next'
+
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'timetable'
+    ]))
+  }
+})
 
 /**
  * Groups timetable entries by date.
@@ -90,6 +101,8 @@ function getWeekday (date) {
  * Page displaying the users timetable.
  */
 export default function Timetable () {
+  const { t , i18n} = useTranslation('timetable')
+
   const router = useRouter()
   const os = useOperatingSystem()
   const [timetable, setTimetable] = useState(null)
@@ -223,7 +236,7 @@ export default function Timetable () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
+      <AppNavbar title={t('title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
             Fächer bearbeiten

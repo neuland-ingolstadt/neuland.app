@@ -1,6 +1,7 @@
 import { React, createContext, useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { appWithTranslation } from 'next-i18next'
 
 import PropTypes from 'prop-types'
 import TheMatrixAnimation from './../components/TheMatrixAnimation'
@@ -150,4 +151,4 @@ MyApp.propTypes = {
   theme: PropTypes.string
 }
 
-export default MyApp
+export default appWithTranslation(MyApp)

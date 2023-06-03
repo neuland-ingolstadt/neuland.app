@@ -21,6 +21,7 @@ import {
   faChevronRight,
   faExternalLink,
   faGavel,
+  faLanguage,
   faShield
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -33,6 +34,8 @@ import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -49,6 +52,8 @@ export default function Personal () {
   const [, setShowThemeModal] = useContext(ShowThemeModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
+  const { t, i18n} = useTranslation('personal')
+
   const userKind = useUserKind()
 
   const CopyableField = ({ label, value }) => {
@@ -251,6 +256,14 @@ export default function Personal () {
             Impressum
           </ListGroup.Item>
 
+          <ListGroup.Item action onClick={() => {
+            i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')
+            router.replace('/', '', {locale: i18n.language})
+          }}>
+            <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
+            {t('change_language')}
+          </ListGroup.Item>
+
         </ListGroup>
 
         <br/>
@@ -283,3 +296,11 @@ export default function Personal () {
     </AppBody>
   </AppContainer>)
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'personal'
+    ]))
+  }
+})
