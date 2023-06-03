@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -8,11 +8,17 @@ import AppTabbar from '../components/page/AppTabbar'
 import { useDashboard } from '../lib/hooks/dashboard'
 
 import styles from '../styles/Home.module.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { ShowDashboardModal } from './_app'
+import DashboardModal from '../components/modal/DashboardModal'
 
 /**
  * Main page.
  */
 export default function Home () {
+  const [, setShowDashboardModal] = useContext(ShowDashboardModal)
+
   // page state
   const {
     shownDashboardEntries,
@@ -22,12 +28,16 @@ export default function Home () {
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
+        <AppNavbar.Button onClick={() => setShowDashboardModal(true)}>
+          <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
+        </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
         <div className={styles.cardDeck}>
           {shownDashboardEntries.map(entry => entry.card(hideDashboardEntry))}
         </div>
+        <DashboardModal/>
       </AppBody>
 
       <AppTabbar/>
