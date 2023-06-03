@@ -236,7 +236,7 @@ export default function Timetable () {
 
   return (
     <AppContainer>
-      <AppNavbar title={t('title')} showBack={'desktop-only'}>
+      <AppNavbar title={t('appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
             Fächer bearbeiten
