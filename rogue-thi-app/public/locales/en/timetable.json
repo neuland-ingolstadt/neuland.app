@@ -1,3 +1,5 @@
 {
-    "appbar.title": "Timetable"
+    "appbar": {
+        "title": "Timetable"
+    } 
 }

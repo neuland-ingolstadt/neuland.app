@@ -1,3 +1,5 @@
 {
-    "appbar.title": "Stundenplan"
+    "appbar": {
+        "title": "Stundenplan"
+    } 
 }
