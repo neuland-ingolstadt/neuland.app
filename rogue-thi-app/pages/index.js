@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { ShowDashboardModal } from './_app'
 import DashboardModal from '../components/modal/DashboardModal'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /**
  * Main page.
@@ -44,3 +45,11 @@ export default function Home () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'dashboard'
+    ]))
+  }
+})

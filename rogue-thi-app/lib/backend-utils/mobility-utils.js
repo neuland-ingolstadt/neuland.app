@@ -25,21 +25,25 @@ export function getMobilitySettings () {
  * Determines the title of the mobility card / page.
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
  * @param {string} station Station name (only for `bus` or `train`)
+ * @param {object} t Translation object
  * @returns {string}
  */
-export function getMobilityLabel (kind, station) {
-  if (kind === 'bus') {
-    const entry = stations.bus.stations.find(x => x.id === station)
-    return `Bus (${entry ? entry.name : '?'})`
-  } else if (kind === 'train') {
-    const entry = stations.train.stations.find(x => x.id === station)
-    return `Bahn (${entry ? entry.name : '?'})`
-  } else if (kind === 'parking') {
-    return 'Parkplätze'
-  } else if (kind === 'charging') {
-    return 'Ladestationen'
-  } else {
-    return 'Mobilität'
+export function getMobilityLabel (kind, station, t) {
+  switch (kind) {
+    case 'bus': {
+      const busEntry = stations.bus.stations.find(x => x.id === station)
+      return t('transport.title.bus', { station: busEntry ? busEntry.name : '?' })
+    }
+    case 'train': {
+      const trainEntry = stations.train.stations.find(x => x.id === station)
+      return t('transport.title.train', { station: trainEntry ? trainEntry.name : '?' })
+    }
+    case 'parking':
+      return t('transport.title.parking')
+    case 'charging':
+      return t('transport.title.charging')
+    default:
+      return t('transport.title.unknown')
   }
 }
 

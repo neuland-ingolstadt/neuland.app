@@ -82,7 +82,7 @@ export const ALL_DASHBOARD_CARDS = [
       <BaseCard
         key="library"
         icon={faBook}
-        title="Bibliothek"
+        i18nKey="library"
         link="/library"
       />
     )
@@ -96,7 +96,7 @@ export const ALL_DASHBOARD_CARDS = [
       <BaseCard
         key="grades"
         icon={faScroll}
-        title="Noten & Fächer"
+        i18nKey="grades"
         link="/grades"
       />
     )
@@ -110,7 +110,7 @@ export const ALL_DASHBOARD_CARDS = [
       <BaseCard
         key="personal"
         icon={faUser}
-        title="Profil"
+        i18nKey="personal"
         link="/personal"
       />
     )
@@ -124,7 +124,7 @@ export const ALL_DASHBOARD_CARDS = [
       <BaseCard
         key="lecturers"
         icon={faUserGraduate}
-        title="Dozenten"
+        i18nKey="lecturers"
         link="/lecturers"
       />
     )

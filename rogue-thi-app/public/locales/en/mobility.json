@@ -1,1 +1,29 @@
-{}
+{
+    "form": {
+        "type": {
+            "label": "Transportation",
+            "option": {
+                "bus": "Bus",
+                "train": "Train",
+                "parking": "Parking",
+                "charging": "Charging Stations"
+            }
+        },
+        "station": {
+            "label": {
+                "bus": "Stop",
+                "train": "Station"
+            }
+        }
+    },
+    "transport": {
+        "title": {
+            "bus": "Bus ({{station}})",
+            "train": "Train ({{station}})",
+            "parking": "Parking",
+            "charging": "Charging Stations",
+            "unknown": "Mobility"
+        }
+    }
+    
+}

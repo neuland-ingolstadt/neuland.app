@@ -10,6 +10,7 @@ import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyRelativeTime } from '../../lib/date-utils'
 import { useTime } from '../../lib/hooks/time-hook'
 
+import { useTranslation } from 'next-i18next'
 /**
  * Dashboard card for semester and exam dates.
  */
@@ -17,6 +18,7 @@ export default function CalendarCard () {
   const router = useRouter()
   const time = useTime()
   const [mixedCalendar, setMixedCalendar] = useState(calendar)
+  const { t } = useTranslation('dashboard')
 
   useEffect(() => {
     async function load () {
@@ -46,7 +48,7 @@ export default function CalendarCard () {
   return (
     <BaseCard
       icon={faCalendarAlt}
-      title="Termine"
+      i18nKey="calendar"
       link="/calendar"
     >
       <ListGroup variant="flush">
@@ -57,8 +59,8 @@ export default function CalendarCard () {
             </div>
             <div className="text-muted">
               {(x.end && x.begin < time)
-                ? 'endet ' + formatFriendlyRelativeTime(x.end)
-                : 'beginnt ' + formatFriendlyRelativeTime(x.begin)}
+                ? t('calendar.date.ends') + ' ' + formatFriendlyRelativeTime(x.end)
+                : t('calendar.date.starts') + ' ' + formatFriendlyRelativeTime(x.begin)}
             </div>
           </ListGroup.Item>
         ))}

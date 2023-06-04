@@ -19,6 +19,7 @@ import BaseCard from './BaseCard'
 import { useTime } from '../../lib/hooks/time-hook'
 
 import styles from '../../styles/Home.module.css'
+import { useTranslation } from 'next-i18next'
 
 const MAX_STATION_LENGTH = 20
 const MOBILITY_ICONS = {
@@ -36,13 +37,14 @@ export default function MobilityCard () {
   const [mobility, setMobility] = useState(null)
   const [mobilityError, setMobilityError] = useState(null)
   const [mobilitySettings, setMobilitySettings] = useState(null)
+  const { t } = useTranslation(['dashboard'])
 
   const mobilityIcon = useMemo(() => {
     return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
   }, [mobilitySettings])
   const mobilityLabel = useMemo(() => {
-    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station) : 'Mobilität'
-  }, [mobilitySettings])
+    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station, t) : 'Mobilität'
+  }, [mobilitySettings, t])
 
   useEffect(() => {
     setMobilitySettings(getMobilitySettings())
@@ -67,7 +69,7 @@ export default function MobilityCard () {
   return (
     <BaseCard
       icon={mobilityIcon}
-      title={mobilityLabel}
+      title={t(mobilityLabel)}
       link="/mobility"
     >
       <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
@@ -78,11 +80,11 @@ export default function MobilityCard () {
           )}
           {mobility && mobility.length === 0 &&
             <ListGroup.Item>
-              Keine Elemente.
+              {t('transport.error.empty')}
             </ListGroup.Item>}
           {mobilityError &&
             <ListGroup.Item>
-              Fehler beim Abruf.
+              {t('transport.error.generic')}
             </ListGroup.Item>}
         </ListGroup>
       </ReactPlaceholder>

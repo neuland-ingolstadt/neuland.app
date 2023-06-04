@@ -14,6 +14,7 @@ import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 /**
  * Dashboard card for semester and exam dates.
@@ -22,6 +23,7 @@ export default function RoomCard () {
   const router = useRouter()
   const [filterResults, setFilterResults] = useState(null)
   const userKind = useUserKind()
+  const { t } = useTranslation('dashboard')
 
   useEffect(() => {
     async function load () {
@@ -69,7 +71,7 @@ export default function RoomCard () {
   return (
     <BaseCard
       icon={faDoorOpen}
-      title="Räume"
+      i18nKey="rooms"
       link="/rooms"
     >
       <ReactPlaceholder type="text" rows={4} ready={filterResults || userKind !== USER_STUDENT}>
@@ -83,7 +85,7 @@ export default function RoomCard () {
                       {x.room}
                     </div>
                     <div className="text-muted">
-                      Frei von {formatFriendlyTime(x.from)} bis {formatFriendlyTime(x.until)}
+                      {t('rooms.text', { from: formatFriendlyTime(x.from), until: formatFriendlyTime(x.until) })}
                     </div>
                   </div>
                 </Link>
