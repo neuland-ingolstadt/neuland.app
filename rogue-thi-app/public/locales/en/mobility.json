@@ -30,8 +30,15 @@
             },
             "parking": {
                 "available": "{{available}} available",
-                "unknown": "n/a"
+                "unknown": "n/a",
+                "employees": "Employees",
+                "free": "Free",
+                "paid": "Paid",
+                "restricted": "Restricted"
             }
+        },
+        "error": {
+            "retrieval": "Error retrieving data."
         }
     }
     

@@ -7,6 +7,7 @@ import NeulandAPI from '../backend/neuland-api'
 import { formatRelativeMinutes, formatFriendlyTime } from '../date-utils'
 
 import stations from '../../data/mobility.json'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Retrieves the users mobility preferences.
@@ -60,7 +61,7 @@ async function getAndConvertCampusParkingData () {
   }
 
   return {
-    name: 'Congressgarage (Mitarbeiter)',
+    name: 'Congressgarage',
     available
   }
 }
@@ -112,10 +113,11 @@ export async function getMobilityEntries (kind, station) {
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
  * @param {object} item Mobility data
  * @param {number} maxLen Truncate the string after this many characters
- * @param {function} t Translation function
  * @param {string} styles CSS object
  */
-export function renderMobilityEntry (kind, item, maxLen, styles, t) {
+export function RenderMobilityEntry ({ kind, item, maxLen, styles }) {
+  const { t } = useTranslation('mobility')
+
   if (kind === 'bus') {
     return (
       <>
@@ -150,15 +152,15 @@ export function renderMobilityEntry (kind, item, maxLen, styles, t) {
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
             {item.priceLevel === 'free' && (
-              <FontAwesomeIcon title="Kostenlos" icon={faCreativeCommonsNcEu} />
+              <FontAwesomeIcon title={t('transport.details.parking.free')} icon={faCreativeCommonsNcEu} />
             )}
             {item.priceLevel === 'restricted' && (
-              <FontAwesomeIcon title="Zugangsbeschränkt" icon={faKey} />
+              <FontAwesomeIcon title={t('transport.details.parking.restricted')} icon={faKey} />
             )}
             {item.priceLevel > 0 && new Array(item.priceLevel)
               .fill(0)
               .map((_, i) => (
-                <FontAwesomeIcon title="Kostenpflichtig" key={i} icon={faEuroSign} />
+                <FontAwesomeIcon title={t('transport.details.parking.paid')} key={i} icon={faEuroSign} />
               ))}
           </div>
         )}

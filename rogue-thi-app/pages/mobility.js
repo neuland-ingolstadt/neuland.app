@@ -10,10 +10,10 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import {
+  RenderMobilityEntry,
   getMobilityEntries,
   getMobilityLabel,
-  getMobilitySettings,
-  renderMobilityEntry
+  getMobilitySettings
 } from '../lib/backend-utils/mobility-utils'
 import stations from '../data/mobility.json'
 import { useTime } from '../lib/hooks/time-hook'
@@ -128,7 +128,7 @@ export default function Bus () {
             }
             {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                {renderMobilityEntry(kind, item, 200, styles, t)}
+                <RenderMobilityEntry kind={kind} item={item} maxLen={200} styles={styles} t={t} />
               </ListGroup.Item>
             ))}
           </ReactPlaceholder>

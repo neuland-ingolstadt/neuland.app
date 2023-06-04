@@ -23,6 +23,22 @@
             "parking": "Parkplätze",
             "charging": "Ladestationen",
             "unkown": "Mobilität"
+        },
+        "details": {
+            "charging": {
+                "available": "{{available}} von {{total}} frei"
+            },
+            "parking": {
+                "available": "{{available}} frei",
+                "unknown": "n/a",
+                "employees": "Mitarbeiter",
+                "free": "Kostenlos",
+                "paid": "Kostenpflichtig",
+                "restricted": "Zugangsbeschränkt"
+            }
+        },
+        "error": {
+            "retrieval": "Fehler beim Abruf."
         }
     }
 }

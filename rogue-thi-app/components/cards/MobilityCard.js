@@ -10,10 +10,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
+  RenderMobilityEntry,
   getMobilityEntries,
   getMobilityLabel,
-  getMobilitySettings,
-  renderMobilityEntry
+  getMobilitySettings
 } from '../../lib/backend-utils/mobility-utils'
 import BaseCard from './BaseCard'
 import { useTime } from '../../lib/hooks/time-hook'
@@ -43,7 +43,7 @@ export default function MobilityCard () {
     return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
   }, [mobilitySettings])
   const mobilityLabel = useMemo(() => {
-    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station, t) : 'Mobilität'
+    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station, t) : t('transport.title.unknown')
   }, [mobilitySettings, t])
 
   useEffect(() => {
@@ -60,15 +60,11 @@ export default function MobilityCard () {
         setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
       } catch (e) {
         console.error(e)
-        setMobilityError('Fehler beim Abruf.')
+        setMobilityError(t('transport.error.retrieval'))
       }
     }
     load()
-  }, [mobilitySettings, time])
-
-  function mobilityT (key, options) {
-    return t(key, { ...options, ns: 'mobility' })
-  }
+  }, [mobilitySettings, time, t])
 
   return (
     <BaseCard
@@ -79,7 +75,7 @@ export default function MobilityCard () {
       <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
         <ListGroup variant="flush">
           {mobility && mobility.slice(0, 4).map((entry, i) => <ListGroup.Item key={i} className={styles.mobilityItem}>
-            {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles, mobilityT)}
+            <RenderMobilityEntry kind={mobilitySettings.kind} item={entry} maxLen={MAX_STATION_LENGTH} styles={styles} />
           </ListGroup.Item>
           )}
           {mobility && mobility.length === 0 &&
