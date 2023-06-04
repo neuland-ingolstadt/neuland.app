@@ -7,12 +7,13 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import { useDashboard } from '../lib/hooks/dashboard'
 
-import styles from '../styles/Home.module.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
-import { ShowDashboardModal } from './_app'
 import DashboardModal from '../components/modal/DashboardModal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ShowDashboardModal } from './_app'
+
+import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import styles from '../styles/Home.module.css'
 
 /**
  * Main page.
@@ -49,7 +50,8 @@ export default function Home () {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'dashboard'
+      'dashboard',
+      'mobility'
     ]))
   }
 })

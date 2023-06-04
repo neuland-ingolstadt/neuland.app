@@ -37,7 +37,7 @@ export default function MobilityCard () {
   const [mobility, setMobility] = useState(null)
   const [mobilityError, setMobilityError] = useState(null)
   const [mobilitySettings, setMobilitySettings] = useState(null)
-  const { t } = useTranslation(['dashboard'])
+  const { t } = useTranslation(['dashboard', 'mobility'])
 
   const mobilityIcon = useMemo(() => {
     return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
@@ -66,6 +66,10 @@ export default function MobilityCard () {
     load()
   }, [mobilitySettings, time])
 
+  function mobilityT (key, options) {
+    return t(key, { ...options, ns: 'mobility' })
+  }
+
   return (
     <BaseCard
       icon={mobilityIcon}
@@ -75,7 +79,7 @@ export default function MobilityCard () {
       <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
         <ListGroup variant="flush">
           {mobility && mobility.slice(0, 4).map((entry, i) => <ListGroup.Item key={i} className={styles.mobilityItem}>
-            {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
+            {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles, mobilityT)}
           </ListGroup.Item>
           )}
           {mobility && mobility.length === 0 &&

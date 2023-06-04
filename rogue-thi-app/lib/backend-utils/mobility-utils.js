@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
@@ -114,9 +112,10 @@ export async function getMobilityEntries (kind, station) {
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
  * @param {object} item Mobility data
  * @param {number} maxLen Truncate the string after this many characters
+ * @param {function} t Translation function
  * @param {string} styles CSS object
  */
-export function renderMobilityEntry (kind, item, maxLen, styles) {
+export function renderMobilityEntry (kind, item, maxLen, styles, t) {
   if (kind === 'bus') {
     return (
       <>
@@ -168,8 +167,8 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
         </div>
         <div className={styles.mobilityTime}>
           {typeof item.available === 'number'
-            ? item.available + ' frei'
-            : 'n/a'}
+            ? t('transport.details.parking.available', { available: item.available })
+            : t('transport.details.parking.unknown') }
         </div>
       </>
     )
@@ -180,7 +179,7 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.name}
         </div>
         <div className={styles.mobilityTime}>
-          {item.available} von {item.total} frei
+          {t('transport.details.charging.available', { available: item.available, total: item.total })}
         </div>
       </>
     )

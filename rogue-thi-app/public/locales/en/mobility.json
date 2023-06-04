@@ -23,6 +23,15 @@
             "parking": "Parking",
             "charging": "Charging Stations",
             "unknown": "Mobility"
+        },
+        "details": {
+            "charging": {
+                "available": "{{available}} of {{total}} available"
+            },
+            "parking": {
+                "available": "{{available}} available",
+                "unknown": "n/a"
+            }
         }
     }
     
