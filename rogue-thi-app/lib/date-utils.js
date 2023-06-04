@@ -1,10 +1,9 @@
+import { i18n } from 'next-i18next'
 
 const WORD_TODAY = 'Heute'
 const WORD_TOMORROW = 'Morgen'
 export const WORD_THIS_WEEK = 'Diese Woche'
 export const WORD_NEXT_WEEK = 'Nächste Woche'
-
-export const DATE_LOCALE = 'de-DE'
 
 /**
  * Formats a date like "Mo., 1.10.2020"
@@ -25,7 +24,7 @@ export function formatFriendlyDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return WORD_TOMORROW
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
+    return datetime.toLocaleString(i18n.language, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
 }
 
@@ -53,7 +52,7 @@ export function formatFriendlyTime (datetime) {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
+  return datetime.toLocaleTimeString(i18n.language, { hour: 'numeric', minute: '2-digit' })
 }
 
 /**
@@ -105,7 +104,7 @@ export function formatNearDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return WORD_TOMORROW
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'long', day: 'numeric', month: 'numeric' })
+    return datetime.toLocaleString(i18n.language, { weekday: 'long', day: 'numeric', month: 'numeric' })
   }
 }
 
@@ -119,8 +118,8 @@ export function buildLinedWeekdaySpan (datetime) {
     datetime = new Date(datetime)
   }
 
-  const weekday = datetime.toLocaleString(DATE_LOCALE, { weekday: 'short' })
-  const date = datetime.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+  const weekday = datetime.toLocaleString(i18n.language, { weekday: 'short' })
+  const date = datetime.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' })
 
   return <span>{weekday}<br />{date}</span>
 }
@@ -131,7 +130,7 @@ export function buildLinedWeekdaySpan (datetime) {
  * @returns {string}
  */
 function formatFriendlyTimeDelta (delta) {
-  const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
+  const rtl = new Intl.RelativeTimeFormat(i18n.language, {
     numeric: 'auto',
     style: 'long'
   })
@@ -270,8 +269,8 @@ export function getFriendlyWeek (date) {
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() + 6)
 
-    return monday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' }) +
-      ' – ' + sunday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+    return monday.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' }) +
+      ' – ' + sunday.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' })
   }
 }
 
