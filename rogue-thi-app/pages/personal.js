@@ -36,7 +36,7 @@ import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
