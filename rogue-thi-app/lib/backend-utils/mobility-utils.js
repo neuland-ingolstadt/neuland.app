@@ -6,7 +6,7 @@ import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
 
 import API from '../backend/authenticated-api'
 import NeulandAPI from '../backend/neuland-api'
-import { formatRelativeMinutes } from '../date-utils'
+import { formatRelativeMinutes, formatFriendlyTime } from '../date-utils'
 
 import stations from '../../data/mobility.json'
 
@@ -123,7 +123,7 @@ export function renderMobilityEntry (kind, item, maxLen, styles) {
           {item.destination}
         </div>
         <div className={styles.mobilityTime}>
-          {formatRelativeMinutes(new Date(item.time))}
+          { formatFriendlyTime(new Date(item.time))} ({'in'} { formatRelativeMinutes(new Date(item.time)) })
         </div>
       </>
     )
