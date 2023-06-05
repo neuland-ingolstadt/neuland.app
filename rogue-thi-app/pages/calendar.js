@@ -28,6 +28,8 @@ import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 /**
  * Page containing the semester and exam dates.
  */
@@ -169,3 +171,12 @@ export default function Calendar () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'calender',
+      'common'
+    ]))
+  }
+})
