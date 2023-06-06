@@ -1,0 +1,10 @@
+{
+    "common": {
+        "dates": {
+            "today": "Today",
+            "tomorrow": "Tomorrow",
+            "this_week": "This Week",
+            "next_week": "Next Week"
+        }
+    }
+}

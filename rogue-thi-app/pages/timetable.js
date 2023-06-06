@@ -19,14 +19,14 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
+import { addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
 
 import styles from '../styles/Timetable.module.css'
-import { useTranslation } from 'next-i18next'
 
+import { Trans, i18n, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
@@ -34,7 +34,8 @@ const VirtualizeSwipeableViews = virtualize(SwipeableViews)
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'timetable'
+      'timetable',
+      'common'
     ]))
   }
 })
@@ -85,7 +86,7 @@ function isInWeek (date, start, end) {
  * @returns {string}
  */
 function getDay (date) {
-  return new Date(date).toLocaleDateString(DATE_LOCALE, { day: 'numeric' })
+  return new Date(date).toLocaleDateString(i18n.language, { day: 'numeric' })
 }
 
 /**
@@ -94,7 +95,7 @@ function getDay (date) {
  * @returns {string}
  */
 function getWeekday (date) {
-  return new Date(date).toLocaleDateString(DATE_LOCALE, { weekday: 'short' })
+  return new Date(date).toLocaleDateString(i18n.language, { weekday: 'short' })
 }
 
 /**
@@ -220,13 +221,14 @@ export default function Timetable () {
         {current && current.length === 0 &&
           <div className={`text-muted ${styles.notice}`}>
           <p>
-            Keine Veranstaltungen. 🎉
+            {t('timetable.overview.no_lectures')}
           </p>
           <p>
-            Du kannst deinen Stundenplan im{' '}
-            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
-            Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
-            die gewählten Fächer.
+            <Trans
+              i18nKey="timetable.overview.configure_timetable"
+              ns="timetable"
+              components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
+            />
           </p>
           </div>
         }
@@ -234,15 +236,27 @@ export default function Timetable () {
     )
   }
 
+  function ExplanationListElement ({ i18nKey }) {
+    return (
+      <li>
+        <Trans
+          i18nKey={`timetable.modals.${i18nKey}`}
+          ns="timetable"
+          components={{ em: <em/> }}
+        />
+      </li>
+    )
+  }
+
   return (
     <AppContainer>
-      <AppNavbar title={t('appbar.title')} showBack={'desktop-only'}>
+      <AppNavbar title={t('timetable.appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
-            Fächer bearbeiten
+            {t('timetable.overflow.edit_lectures')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowICalExplanation(true)}>
-            Kalender abonnieren
+            {t('timetable.overflow.subscribe_calendar')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
@@ -250,18 +264,18 @@ export default function Timetable () {
       <AppBody>
         <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Fächer bearbeiten</Modal.Title>
+            <Modal.Title>{t('timetable.modals.timetable_explanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:
+            {t('timetable.modals.timetable_explanation.body.header')}
             <ul>
-              <li>In <em>myStundenplan</em> einloggen</li>
-              <li>Links auf <em>Fächerauswahl</em> klicken</li>
-              <li>Studiengang auswählen und unten abspeichern</li>
-              <li>Oben auf <em>Studiengruppen</em> klicken</li>
-              <li>Semestergruppe auswählen und unten abspeichern</li>
-              <li>Oben auf den Studiengang klicken</li>
-              <li>Fächer auswählen und unten abspeichern</li>
+              <ExplanationListElement i18nKey="timetable_explanation.body.login"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.subjects"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.course_of_studies"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.study_groups"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.semester_group"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.click_on_study"/>
+              <ExplanationListElement i18nKey="timetable_explanation.body.select_subjects"/>
             </ul>
 
             {/* TODO: Video? */}
@@ -269,11 +283,11 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                Zu &quot;myStundenplan&quot;
+                {t('timetable.modals.timetable_explanation.actions.to_my_timetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowTimetableExplanation(false)}>
-              Schließen
+              {t('timetable.modals.timetable_explanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>

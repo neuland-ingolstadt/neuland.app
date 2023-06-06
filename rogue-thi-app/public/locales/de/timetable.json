@@ -1,5 +1,34 @@
 {
-    "appbar": {
-        "title": "Stundenplan"
-    } 
+    "timetable": {
+        "appbar": {
+            "title": "Stundenplan"
+        },
+        "overview": {
+            "no_lectures": "Keine Veranstaltungen. 🎉",
+            "configure_timetable": "Du kannst deinen Stundenplan im <a>Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier die Fächer."
+        },
+        "overflow": {
+            "edit_lectures": "Fächer bearbeiten",
+            "subscribe_calendar": "Kalender abonnieren"
+        },
+        "modals": {
+            "timetable_explanation": {
+                "title": "Fächer bearbeiten",
+                "body": {
+                    "header": "Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:",
+                    "login": "In <em>myStundenplan</em> einloggen",
+                    "subjects": "Links auf <em>Fächerauswahl</em> klicken",
+                    "course_of_studies": "Studiengang auswählen und unten abspeichern",
+                    "study_groups": "Oben auf <em>Studiengruppen</em> klicken",
+                    "semester_group": "Semestergruppe auswählen und unten abspeichern",
+                    "click_on_study": "Oben auf den Studiengang klicken",
+                    "select_subjects": "Fächer auswählen und unten abspeichern"
+                },
+                "actions": {
+                    "close": "Schließen",
+                    "to_my_timetable": "Zu \"myStundenplan\""
+                }
+            }
+        }
+    }
 }

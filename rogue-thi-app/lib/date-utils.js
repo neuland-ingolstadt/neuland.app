@@ -1,10 +1,5 @@
 import { i18n } from 'next-i18next'
 
-const WORD_TODAY = 'Heute'
-const WORD_TOMORROW = 'Morgen'
-export const WORD_THIS_WEEK = 'Diese Woche'
-export const WORD_NEXT_WEEK = 'Nächste Woche'
-
 /**
  * Formats a date like "Mo., 1.10.2020"
  * @param {Date|string} datetime
@@ -20,9 +15,9 @@ export function formatFriendlyDate (datetime) {
   tomorrow.setDate(today.getDate() + 1)
 
   if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY
+    return t('common.dates.today')
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW
+    return t('common.dates.tomorrow')
   } else {
     return datetime.toLocaleString(i18n.language, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
@@ -100,9 +95,9 @@ export function formatNearDate (datetime) {
   tomorrow.setDate(today.getDate() + 1)
 
   if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY
+    return i18n.t('common.dates.today', { ns: 'common' })
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW
+    return i18n.t('common.dates.tomorrow', { ns: 'common' })
   } else {
     return datetime.toLocaleString(i18n.language, { weekday: 'long', day: 'numeric', month: 'numeric' })
   }
@@ -261,9 +256,9 @@ export function getFriendlyWeek (date) {
   const [currStart, currEnd] = getWeek(new Date())
   const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
   if (date >= currStart && date < currEnd) {
-    return WORD_THIS_WEEK
+    return t('common.dates.this_week')
   } else if (date >= nextStart && date < nextEnd) {
-    return WORD_NEXT_WEEK
+    return t('common.dates.next_week')
   } else {
     const monday = getMonday(date)
     const sunday = new Date(monday)
@@ -303,4 +298,8 @@ export function getAdjustedDay (date) {
  **/
 export function isSameDay (a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+
+function t (...args) {
+  return i18n.t(...args, { ns: 'common' })
 }
