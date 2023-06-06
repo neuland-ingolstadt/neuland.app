@@ -77,9 +77,9 @@
     "install": {
         "title": "Installation",
         "text": {
-            "question": "Möchtest du diese App auf deinem Smartphone installieren?",
-            "ios": "Drücke in Safari auf Teilen und dann auf Zum Home-Bildschirm.",
-            "android": "Öffne in Chrome das Menü und drücke dann auf Zum Startbildschirm zufügen."
+            "question": "Möchtest du diese App auf deinem Smartphone <strong>installieren</strong>?",
+            "ios": "Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.",
+            "android": "Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>."
         }
     }
 }

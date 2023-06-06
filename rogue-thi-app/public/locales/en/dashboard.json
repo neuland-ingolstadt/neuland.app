@@ -77,9 +77,9 @@
     "install": {
         "title": "Installation",
         "text": {
-            "question": "Would you like to install this app on your smartphone?",
-            "ios": "Press the Share button in Safari and then select Add to Home Screen.",
-            "android": "Open the Chrome menu and then select Add to Home Screen."
+            "question": "Want to <strong>install</strong> this app on your smartphone?",
+            "ios": "In Safari, tap <strong>Share</strong> and then tap <strong>Add to Home Screen</strong>.",
+            "android": "In Chrome, tap the <strong>Menu</strong> button and then tap <strong>Add to Home Screen</strong>."
         }
     }
 }
