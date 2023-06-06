@@ -2,9 +2,9 @@ import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
 
+import { formatFriendlyTime, formatRelativeMinutes } from '../date-utils'
 import API from '../backend/authenticated-api'
 import NeulandAPI from '../backend/neuland-api'
-import { formatRelativeMinutes, formatFriendlyTime } from '../date-utils'
 
 import stations from '../../data/mobility.json'
 import { useTranslation } from 'next-i18next'
@@ -115,10 +115,12 @@ export async function getMobilityEntries (kind, station) {
  * @param {number} maxLen Truncate the string after this many characters
  * @param {string} styles CSS object
  */
-export function RenderMobilityEntry ({ kind, item, maxLen, styles }) {
+export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
   const { t } = useTranslation('mobility')
 
   if (kind === 'bus') {
+    const timeString = formatTimes(item.time, 30, 30)
+
     return (
       <>
         <div className={styles.mobilityRoute}>
@@ -128,23 +130,25 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles }) {
           {item.destination}
         </div>
         <div className={styles.mobilityTime}>
-          { formatFriendlyTime(new Date(item.time))} ({'in'} { formatRelativeMinutes(new Date(item.time)) })
+          {timeString}
         </div>
       </>
     )
   } else if (kind === 'train') {
+    const timeString = formatTimes(item.actualTime, 30, 90)
+
     return (
-      <>
-        <div className={styles.mobilityRoute}>
-          {item.name}
-        </div>
-        <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
-          {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…'}
-        </div>
-        <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
-          {formatRelativeMinutes(new Date(item.actualTime))}
-        </div>
-      </>
+  <>
+    <div className={styles.mobilityRoute}>
+      {item.name}
+    </div>
+    <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
+      {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…'}
+    </div>
+    <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
+      {timeString}
+    </div>
+  </>
     )
   } else if (kind === 'parking') {
     return (
@@ -187,5 +191,32 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles }) {
     )
   } else {
     throw new Error('Invalid mobility kind')
+  }
+
+  /**
+   * Formats the time difference between the current time and the given time.
+   * @param {string} time - The time to format.
+   * @param {number} cardMin - The number of minutes to show relative time for on the card.
+   * @param {number} detailedMin - The number of minutes to relative time for in the detailed view.
+   * @param {boolean} detailed - Whether to return a detailed time string (card vs page)
+   * @returns {string} The formatted time string.
+   */
+  function formatTimes (time, cardMin, detailedMin) {
+    const cardMs = cardMin * 60 * 1000
+    const detailedMs = detailedMin * 60 * 1000
+    const actualTime = new Date(time)
+    const timeDifference = actualTime - new Date()
+    let timeString
+
+    if (detailed) {
+      timeString = `${formatFriendlyTime(actualTime)} ${timeDifference < detailedMs ? `- ${formatRelativeMinutes(actualTime)}` : ''}`
+    } else {
+      if (timeDifference > cardMs) {
+        timeString = formatFriendlyTime(actualTime)
+      } else {
+        timeString = `in ${formatRelativeMinutes(actualTime)}`
+      }
+    }
+    return timeString
   }
 }
