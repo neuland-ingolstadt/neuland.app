@@ -12,6 +12,8 @@ import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
 import styles from '../../styles/FilterFoodModal.module.css'
 
+import { useTranslation } from 'react-i18next'
+
 Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
@@ -36,37 +38,39 @@ export default function FilterFoodModal () {
   } = useContext(FoodFilterContext)
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] = useState(false)
+  const { i18n, t } = useTranslation(['food'])
+  const currentLocale = i18n.language
 
   return (
     <>
       <Modal show={showFoodFilterModal} onHide={() => setShowFoodFilterModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Filter</Modal.Title>
+          <Modal.Title>{t('filterModal.header')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <div className={styles.filterHeader}>
             <h6>
-              Restaurants
+            {t('filterModal.restaurants.title')}
             </h6>
           </div>
 
           <div className={styles.filterBody}>
             <Form.Check
               id='restaurant-checkbox-mensa'
-              label='Mensa anzeigen'
+              label={t('filterModal.restaurants.showMensa')}
               checked={selectedRestaurants.includes('mensa')}
               onChange={() => toggleSelectedRestaurant('mensa')}
             />
             <Form.Check
               id='restaurant-checkbox-reimanns'
-              label='Reimanns anzeigen'
+              label={t('filterModal.restaurants.showReimanns')}
               checked={selectedRestaurants.includes('reimanns')}
               onChange={() => toggleSelectedRestaurant('reimanns')}
             />
             <Form.Check
               id='restaurant-checkbox-canisius'
-              label='Canisiuskonvikt anzeigen'
+              label={t('filterModal.restaurants.showCanisius')}
               checked={selectedRestaurants.includes('canisius')}
               onChange={() => toggleSelectedRestaurant('canisius')}
             />
@@ -76,43 +80,43 @@ export default function FilterFoodModal () {
 
           <div className={styles.filterHeader}>
             <h6>
-              Allergien
+            {t('filterModal.allergens.title')}
             </h6>
             <Button variant='outline-primary' onClick={() => {
               setShowAllergenSelection(true)
               setShowFoodFilterModal(false)
             }}>
-              <FontAwesomeIcon title="Allergene" icon={faPen} fixedWidth/>
+              <FontAwesomeIcon title={t('filterModal.allergens.iconTitle')} icon={faPen} fixedWidth/>
             </Button>
           </div>
           <div className={styles.filterBody}>
-            <>Ausgewählt:{' '}</>
-            {Object.entries(allergenSelection).filter(x => x[1]).map(x => allergenMap[x[0]]).join(', ') || 'Keine'}.
+            <>{t('filterModal.allergens.selected')}:{' '}</>
+            {Object.entries(allergenSelection).filter(x => x[1]).map(x => allergenMap[x[0]][currentLocale]).join(', ') || `${t('filterModal.allergens.empty')}`}
           </div>
 
           <hr/>
 
           <div className={styles.filterHeader}>
             <h6>
-              Essenspräferenzen
+            {t('filterModal.preferences.title')}
             </h6>
             <Button variant='outline-primary' onClick={() => {
               setShowPreferencesSelection(true)
               setShowFoodFilterModal(false)
             }}>
-              <FontAwesomeIcon title='Preferences' icon={faPen} fixedWidth/>
+              <FontAwesomeIcon title={t('filterModal.preferences.iconTitle')} icon={faPen} fixedWidth/>
             </Button>
           </div>
 
           <div className={styles.filterBody}>
-            <>Ausgewählt:{' '}</>
-            {Object.entries(preferencesSelection).filter(x => x[1]).map(x => flagMap[x[0]]).join(', ') || 'Keine'}.
+            <>{t('filterModal.preferences.selected')}:{' '}</>
+            {Object.entries(preferencesSelection).filter(x => x[1]).map(x => flagMap[x[0]][currentLocale]).join(', ') || `${t('filterModal.preferences.empty')}`}
           </div>
 
           <hr/>
 
           <p>
-            Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt.
+            {t('filterModal.info')}
           </p>
 
         </Modal.Body>
@@ -124,7 +128,7 @@ export default function FilterFoodModal () {
 
       <Modal show={showAllergenSelection} onHide={() => setShowAllergenSelection(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Allergene auswählen</Modal.Title>
+          <Modal.Title>{t('allergensModal')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -133,7 +137,7 @@ export default function FilterFoodModal () {
               <Form.Check
                 key={key}
                 id={'allergen-checkbox-' + key}
-                label={<span><strong>{key}</strong>{' – '}{value}</span>}
+                label={<span><strong>{key}</strong>{' – '}{value[currentLocale]}</span>}
                 checked={allergenSelection[key] || false}
                 onChange={e => setAllergenSelection({ ...allergenSelection, [key]: e.target.checked })}
               />
@@ -152,7 +156,7 @@ export default function FilterFoodModal () {
 
       <Modal show={showPreferencesSelection} onHide={() => setShowPreferencesSelection(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Präferenzen auswählen</Modal.Title>
+          <Modal.Title>{t('preferencesModal')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -161,7 +165,7 @@ export default function FilterFoodModal () {
               <Form.Check
                 key={key}
                 id={'preferences-checkbox-' + key}
-                label={<span>{value}</span>}
+                label={<span>{value[currentLocale]}</span>}
                 checked={preferencesSelection[key] || false}
                 onChange={e => setPreferencesSelection({ ...preferencesSelection, [key]: e.target.checked })}
               />

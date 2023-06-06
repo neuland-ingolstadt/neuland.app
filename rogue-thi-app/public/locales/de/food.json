@@ -1,1 +1,95 @@
-{}
+{
+    "warning": {
+        "unkownIngridients": {
+            "text": "Unbekannte Zutaten / Allergene'",
+            "iconTitle": "Allergiewarnung"
+        }
+    },
+    "preferences": {
+        "iconTitle": "Bevorzugtes Essen"
+    },
+    "list": {
+        "titles": {
+            "cafeteria": "Mensa",
+            "meals": "Gerichte",
+            "soups": "Suppen",
+            "salads": "Salate"
+            
+        }
+    },
+    "error": {
+        "dataUnavailable": "Keine Daten verfügbar"
+    },
+    "navigation": {
+        "weeks": {
+            "previous": "Woche zurück",
+            "next": "Woche vor"
+        }
+    },
+    "foodModal": {
+        "header": "Erläuterung",
+        "flags": {
+            "title": "Anmerkungen",
+            "unkown": "Unbekannt",
+            "empty": "Keine Anmerkungen vorhanden."
+        },
+        "allergens": {
+            "title": "Allergene",
+            "unkown": "Unbekannt",
+            "empty": "Keine Allergene vorhanden.",
+            "fallback" : "Unbekannt (Das ist schlecht)"
+        },
+        "nutrition": {
+            "title": "Nährwerte",
+            "energy.title": "Energie",
+            "fat": {
+                "title": "Fett",
+                "saturated": "davon gesättigte Fettsäuren"
+            },
+            "carbohydrates": {
+                "title": "Kohlenhydrate",
+                "sugar": "davon Zucker"
+            },
+            "fiber.title": "Ballaststoffe",
+            "protein.title": "Eiweiß",
+            "salt.title": "Salz",
+            "unkown.title": "Unbekannt."
+        },
+        "prices": {
+            "title": "Preise",
+            "students": "Studierende",
+            "employees": "Mitarbeitende",
+            "guests": "Gäste"
+        },
+        "warning": {
+            "title": "Angaben ohne Gewähr.",
+            "text": "Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert. Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion."
+        }
+    },
+    
+    "filterModal": {
+        "header" : "Filter",
+        "restaurants" :
+            {
+                "title" : "Restaurants",
+                "showMensa" : "Mensa anzeigen",
+                "showReimanns" : "Reimanns anzeigen",
+                "showCanisius" : "Canisiuskonvikt anzeigen"
+            },
+        "allergens" : {
+            "title" : "Allergien",
+            "iconTitle" : "Allergene",
+            "selected" : "Ausgewählt",
+            "empty" : "Keine"
+        },
+        "preferences" : {
+            "title" : "Essenspräferenzen",
+            "iconTitle" : "Präferenzen",
+            "selected" : "Ausgewählt",
+            "empty" : "Keine"
+        },
+        "info" : "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
+    },
+    "allergensModal" : "Allergene auswählen",
+    "preferencesModal" : "Präferenzen auswählen"
+}

@@ -20,7 +20,7 @@ export default function FoodCard () {
     preferencesSelection,
     allergenSelection
   } = useContext(FoodFilterContext)
-  const { t } = useTranslation('dashboard')
+  const { i18n, t } = useTranslation(['food'])
 
   useEffect(() => {
     async function load () {
@@ -60,7 +60,7 @@ export default function FoodCard () {
           }
         }
 
-        const entries = await loadFoodEntries(restaurants)
+        const entries = await loadFoodEntries(restaurants, i18n.language)
         const todayEntries = entries
           .find(x => x.timestamp === today)
           ?.meals
@@ -84,7 +84,7 @@ export default function FoodCard () {
       }
     }
     load()
-  }, [selectedRestaurants, preferencesSelection, allergenSelection, t])
+  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n.language])
 
   return (
     <BaseCard

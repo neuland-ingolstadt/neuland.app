@@ -1,1 +1,92 @@
-{}
+{
+    "warning": {
+        "unkownIngridients": {
+            "text": "Unknown ingredients / allergens",
+            "iconTitle": "Allergy Warning"
+        }
+    },
+    "preferences": {
+        "iconTitle": "Preferred Food"
+    },
+    "list": {
+        "titles": {
+            "cafeteria": "Cafeteria",
+            "meals": "Meals",
+            "soups": "Soups",
+            "salads": "Salads"
+        }
+    },
+    "error": {
+        "dataUnavailable": "Data unavailable"
+    },
+    "navigation": {
+        "weeks": {
+            "previous": "Previous week",
+            "next": "Next week"
+        }
+    },
+    "foodModal": {
+        "header": "Details",
+        "flags": {
+            "title": "Notes",
+            "unkown": "Unknown",
+            "empty": "No notes available"
+        },
+        "allergens": {
+            "title": "Allergens",
+            "unkown": "Unknown",
+            "empty": "No allergens present",
+            "fallback": "Unknown (This is bad)"
+        },
+        "nutrition": {
+            "title": "Nutritional Values",
+            "energy.title": "Energy",
+            "fat": {
+                "title": "Fat",
+                "saturated": "of which saturated fat"
+            },
+            "carbohydrates": {
+                "title": "Carbohydrates",
+                "sugar": "of which sugar"
+            },
+            "fiber.title": "Fiber",
+            "protein.title": "Protein",
+            "salt.title": "Salt",
+            "unkown.title": "Unknown"
+        },
+        "prices": {
+            "title": "Prices",
+            "students": "Students",
+            "employees": "Employees",
+            "guests": "Guests"
+        },
+        "warning": {
+            "title": "Disclaimer",
+            "text": "Please check the information on the information screens before consuming anything. The nutritional information is based on an average portion."
+        }
+    },
+    "filterModal": {
+        "header": "Filters",
+        "restaurants": {
+            "title": "Restaurants",
+            "showMensa": "Show Cafeteria",
+            "showReimanns": "Show Reimanns",
+            "showCanisius": "Show Canisius Convict"
+        },
+        "allergens": {
+            "title": "Allergies",
+            "iconTitle": "Allergens",
+            "selected": "Selected",
+            "empty": "None"
+        },
+        "preferences": {
+            "title": "Food Preferences",
+            "iconTitle": "Preferences",
+            "selected": "Selected",
+            "empty": "None"
+        },
+        "info": "Your data will only be stored locally on your device and not transmitted to anyone."
+    },
+    "allergensModal": "Select Allergens",
+    "preferencesModal": "Select Preferences"
+}
