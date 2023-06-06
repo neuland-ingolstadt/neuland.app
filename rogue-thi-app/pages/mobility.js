@@ -124,7 +124,7 @@ export default function Bus () {
             }
             {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                {renderMobilityEntry(kind, item, 200, styles)}
+                {renderMobilityEntry(kind, item, 200, styles, true)}
               </ListGroup.Item>
             ))}
           </ReactPlaceholder>

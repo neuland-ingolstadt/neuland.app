@@ -73,7 +73,7 @@ export default function MobilityCard () {
       <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
         <ListGroup variant="flush">
           {mobility && mobility.slice(0, 4).map((entry, i) => <ListGroup.Item key={i} className={styles.mobilityItem}>
-            {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles)}
+            {renderMobilityEntry(mobilitySettings.kind, entry, MAX_STATION_LENGTH, styles, false)}
           </ListGroup.Item>
           )}
           {mobility && mobility.length === 0 &&
