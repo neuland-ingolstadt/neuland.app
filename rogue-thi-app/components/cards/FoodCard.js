@@ -20,7 +20,7 @@ export default function FoodCard () {
     preferencesSelection,
     allergenSelection
   } = useContext(FoodFilterContext)
-  const { i18n, t } = useTranslation(['food'])
+  const { i18n, t } = useTranslation(['dashboard', 'food'])
 
   useEffect(() => {
     async function load () {
