@@ -11,6 +11,9 @@ import AppNavbar from '../components/page/AppNavbar'
 
 import { createGuestSession, createSession } from '../lib/backend/thi-session-handler'
 
+import { Trans, useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 import styles from '../styles/Login.module.css'
 
 const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
@@ -29,6 +32,7 @@ export default function Login () {
   const [password, setPassword] = useState('')
   const [saveCredentials, setSaveCredentials] = useState(false)
   const [failure, setFailure] = useState(false)
+  const { t } = useTranslation('login')
 
   /**
    * Temporary workaround for #208.
@@ -84,19 +88,19 @@ export default function Login () {
 
             {!failure && redirect &&
               <Alert variant="warning">
-                Für diese Funktion musst du eingeloggt sein.
+                {t('alert')}
               </Alert>
             }
 
             {GUEST_ONLY &&
               <p>
-                Die App kann derzeit nur als Gast verwendet werden. Weitere Informationen findet ihr unten.
+                {t('guestOnly.warning')}
               </p>
             }
             {!GUEST_ONLY &&
               <>
                 <Form.Group>
-                  <Form.Label>THI-Benutzername</Form.Label>
+                  <Form.Label>{t('form.username')}</Form.Label>
                   <Form.Control
                     type="text"
                     autoComplete="username"
@@ -109,7 +113,7 @@ export default function Login () {
                 </Form.Group>
 
                 <Form.Group>
-                  <Form.Label>Passwort</Form.Label>
+                  <Form.Label>{t('form.password')}</Form.Label>
                   <Form.Control
                     type="password"
                     autoComplete="current-password"
@@ -124,14 +128,14 @@ export default function Login () {
                   <Form.Check
                     type="checkbox"
                     id="stay-logged-in"
-                    label="Eingeloggt bleiben"
+                    label={t('form.save')}
                     onChange={e => setSaveCredentials(e.target.checked)}
                   />
                 </Form.Group>
 
                 <Form.Group>
                   <Button type="submit" variant="primary" className={styles.loginButton}>
-                    Einloggen
+                  {t('form.login')}
                   </Button>
                 </Form.Group>
               </>
@@ -139,7 +143,7 @@ export default function Login () {
 
             <Form.Group>
               <Button type="submit" variant="secondary" className={styles.loginButton} onClick={guestLogin}>
-                Als Gast einloggen
+              {t('form.guest')}
               </Button>
             </Form.Group>
           </Form>
@@ -147,38 +151,44 @@ export default function Login () {
           <div className={styles.disclaimer}>
             {GUEST_ONLY &&
               <>
-                <h6>Warum kann ich mich nicht einloggen?</h6>
+                <h6>{t('guestOnly.title')}</h6>
                 <p>
-                  Die Hochschule hat uns dazu angewiesen, die Login-Funktion zu deaktivieren.
-                  Wir arbeiten an einer Lösung, allerdings ist nicht abzusehen, wann es so weit sein wird.
-                  Vor einer Nutzung der offiziellen THI-App raten wir aus Sicherheitsgründen ab.
+                {t('guestOnly.details')}
                 </p>
                 <p>
-                  Der Speiseplan, die Semester- und Veranstaltungstermine, die Raumkarte, die Bus- und Zugabfahrtszeiten sowie die Parkplatzinformationen können weiterhin über den Gastmodus genutzt werden.
-                </p>
+                {t('guestOnly.details2')}
+                  </p>
               </>
             }
-            <h6>Was ist das?</h6>
+            <h6>{t('notes.title1')}</h6>
             <p>
-              Das ist eine inoffizielle Alternative zur THI-App, welche eine verbesserte Benutzererfahrung bieten soll.
-              Sie wird bei von Studierenden bei <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">Neuland Ingolstadt e.V.</a> für Studierende entwickelt und ist kein Angebot der Technischen Hochschule Ingolstadt.
+              <Trans
+              i18nKey= "notes.text1"
+              ns = "login"
+              components={{
+                a: <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer" />
+              }}
+              />
             </p>
-            <h6>Sind meine Daten sicher?</h6>
+            <h6>{t('notes.title2')}</h6>
             <p>
-              <strong>Ja. </strong>
-              Deine Daten werden direkt auf deinem Gerät verschlüsselt, in verschlüsselter Form über unseren Proxy an die THI übermittelt
-              und erst dort wieder entschlüsselt.
-              Nur du und die THI haben Zugriff auf deine Zugangsdaten und deine persönlichen Daten.
+              <Trans
+              i18nKey= "notes.text2"
+              ns = "login"
+              components={{
+                strong: <strong />
+              }}
+              />
             </p>
             <p>
-              <a href={`${GIT_URL}/blob/master/docs/data-security-de.md`}>Hier findest du weitere Informationen zur Sicherheit.</a>
+              <a href={`${GIT_URL}/blob/master/docs/data-security-de.md`}>{t('links.security')}</a>
             </p>
             <p>
-              <a href={IMPRINT_URL} target="_blank" rel="noreferrer">Impressum</a>
+              <a href={IMPRINT_URL} target="_blank" rel="noreferrer">{t('links.imprint')}</a>
               <> &ndash; </>
-              <a href={PRIVACY_URL} target="_blank" rel="noreferrer">Datenschutzerklärung</a>
+              <a href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('links.imprint')}</a>
               <> &ndash; </>
-              <a href={GIT_URL} target="_blank" rel="noreferrer">Quellcode auf GitHub</a>
+              <a href={GIT_URL} target="_blank" rel="noreferrer">{t('links.github')}</a>
             </p>
           </div>
         </div>
@@ -186,3 +196,11 @@ export default function Login () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'login'
+    ]))
+  }
+})
