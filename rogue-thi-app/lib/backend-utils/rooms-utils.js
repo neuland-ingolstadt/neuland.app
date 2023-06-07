@@ -13,7 +13,7 @@ export const DURATION_PRESET = '01:00'
  * @param {number} minutes
  * @returns {Date}
  */
-function addMinutes (date, minutes) {
+export function addMinutes (date, minutes) {
   return new Date(
     date.getFullYear(),
     date.getMonth(),
@@ -203,6 +203,22 @@ export async function findSuggestedRooms (room, startDate, endDate) {
   })
 
   return rooms
+}
+
+export async function getEmptySuggestions () {
+  const endDate = addMinutes(new Date(), 1)
+  const rooms = await searchRooms(new Date(), endDate)
+  return [(
+    {
+      gap: (
+        {
+          startDate: new Date(),
+          endDate
+        }
+      ),
+      rooms: rooms.slice(0, 4)
+    }
+  )]
 }
 
 /**
