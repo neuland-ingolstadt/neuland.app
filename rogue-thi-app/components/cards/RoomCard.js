@@ -6,11 +6,11 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
+import { findSuggestedRooms, getEmptySuggestions } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import ReactPlaceholder from 'react-placeholder/lib'
-import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import Link from 'next/link'
@@ -26,20 +26,22 @@ export default function RoomCard () {
   useEffect(() => {
     async function load () {
       try {
-        // get timeable and filter for today
+        // get timetable and filter for today
         const timetable = await getFriendlyTimetable(new Date(), false)
         const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
 
         if (today.length < 1) {
-          // no lectures today -> no rooms to show
-          setFilterResults([])
+          // no lectures today -> general room search
+          const emptyRooms = await getEmptySuggestions()
+          setFilterResults(emptyRooms)
           return
         }
 
         const gaps = getTimetableGaps(today)
         if (gaps.length < 1) {
-          // no gaps today -> no rooms to show
-          setFilterResults([])
+          // no lectures today -> general room search
+          const emptyRooms = await getEmptySuggestions()
+          setFilterResults(emptyRooms)
           return
         }
 
