@@ -45,14 +45,14 @@ export default function RoomSearch () {
 
         if (today.length < 1) {
           // no lectures today -> general room search
-          const suggestions = await getEmptySuggestions()
+          const suggestions = await getEmptySuggestions(true)
           setSuggestions(suggestions)
           return
         }
 
         const gaps = getTimetableGaps(today)
         if (gaps.length < 1) {
-          const suggestions = await getEmptySuggestions()
+          const suggestions = await getEmptySuggestions(true)
           setSuggestions(suggestions)
           return
         }

@@ -243,10 +243,11 @@ async function getMajorityRoom () {
 
 /**
  * Finds empty rooms for the current time with the given duration.
- * Returns the results in the same format as `findSuggestedRooms`.
+ * @param {boolean} [asGap] Whether to return the result as a gap with start and end date or only the rooms
+ * @param {number} [duration] Duration of the gap in minutes
  * @returns {Array}
  **/
-export async function getEmptySuggestions (duration = SUGGESTION_DURATION_PRESET) {
+export async function getEmptySuggestions (asGap = false, duration = SUGGESTION_DURATION_PRESET) {
   const endDate = addMinutes(new Date(), duration)
   let rooms = await searchRooms(new Date(), endDate)
 
@@ -255,22 +256,27 @@ export async function getEmptySuggestions (duration = SUGGESTION_DURATION_PRESET
 
   // hide Neuburg buildings if next lecture is not in Neuburg
   rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
+  rooms = rooms.slice(0, 4)
 
-  if (rooms.length < 1) {
-    return []
+  if (asGap) {
+    if (rooms.length < 1) {
+      return []
+    }
+
+    return [(
+      {
+        gap: (
+          {
+            startDate: new Date(),
+            endDate
+          }
+        ),
+        rooms
+      }
+    )]
   }
 
-  return [(
-    {
-      gap: (
-        {
-          startDate: new Date(),
-          endDate
-        }
-      ),
-      rooms: rooms.slice(0, 4)
-    }
-  )]
+  return rooms
 }
 
 /**

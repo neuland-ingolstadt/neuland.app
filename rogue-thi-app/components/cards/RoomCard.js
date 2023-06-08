@@ -6,7 +6,7 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
-import { addMinutes, findSuggestedRooms, searchRooms } from '../../lib/backend-utils/rooms-utils'
+import { findSuggestedRooms, getEmptySuggestions } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
@@ -32,18 +32,16 @@ export default function RoomCard () {
 
         if (today.length < 1) {
           // no lectures today -> general room search
-          const endDate = addMinutes(new Date(), 1)
-          const rooms = await searchRooms(new Date(), endDate)
-          setFilterResults(rooms.slice(0, 2))
+          const emptyRooms = await getEmptySuggestions()
+          setFilterResults(emptyRooms)
           return
         }
 
         const gaps = getTimetableGaps(today)
         if (gaps.length < 1) {
           // no lectures today -> general room search
-          const endDate = addMinutes(new Date(), 1)
-          const rooms = await searchRooms(new Date(), endDate)
-          setFilterResults(rooms.slice(0, 2))
+          const emptyRooms = await getEmptySuggestions()
+          setFilterResults(emptyRooms)
           return
         }
 
