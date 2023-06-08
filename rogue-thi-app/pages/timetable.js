@@ -294,7 +294,7 @@ export default function Timetable () {
 
         <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Kalender abonnieren</Modal.Title>
+            <Modal.Title>{t('timetable.modals.subscription_explanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>
@@ -338,50 +338,50 @@ export default function Timetable () {
             <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h5>Allgemein</h5>
+            <h5>{t('timetable.modals.lecture_details.general')}</h5>
             <p>
-              <strong>Dozent</strong>: {focusedEntry && focusedEntry.dozent}<br />
-              <strong>Kürzel</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
-              <strong>Prüfung</strong>: {focusedEntry && focusedEntry.pruefung}<br />
-              <strong>Studiengang</strong>: {focusedEntry && focusedEntry.stg}<br />
-              <strong>Studiengruppe</strong>: {focusedEntry && focusedEntry.stgru}<br />
-              <strong>Semesterwochenstunden</strong>: {focusedEntry && focusedEntry.sws}<br />
-              <strong>ECTS</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
+              <strong>{t('timetable.modals.lecture_details.lecturer')}</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>{t('timetable.modals.lecture_details.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
+              <strong>{t('timetable.modals.lecture_details.exam')}</strong>: {focusedEntry && focusedEntry.pruefung}<br />
+              <strong>{t('timetable.modals.lecture_details.course_of_studies')}</strong>: {focusedEntry && focusedEntry.stg}<br />
+              <strong>{t('timetable.modals.lecture_details.study_group')}</strong>: {focusedEntry && focusedEntry.stgru}<br />
+              <strong>{t('timetable.modals.lecture_details.semester_weekly_hours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
+              <strong>{t('timetable.modals.lecture_details.ects')}</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
             </p>
 
-            <h5>Ziel</h5>
+            <h5>{t('timetable.modals.lecture_details.goal')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.ziel && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
               )}
               {focusedEntry && !focusedEntry.ziel && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>Inhalt</h5>
+            <h5>{t('timetable.modals.lecture_details.content')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.inhalt && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
               )}
               {focusedEntry && !focusedEntry.inhalt && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>Literatur</h5>
+            <h5>{t('timetable.modals.lecture_details.literature')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.literatur && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
               )}
               {focusedEntry && !focusedEntry.literatur && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
               )}
             </ReactPlaceholder>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
-              Schließen
+              {t('timetable.modals.lecture_details.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>

@@ -43,12 +43,29 @@
                         "open_settings": "Einstellungen-App öffnen",
                         "add_calendar_subscription": "Auf <em>Kalender</em> > <em>Accounts</em> > <em>Account hinzufügen</em> > <em>Kalenderabo hinzufügen</em> drücken",
                         "paste_url": "Aus Primuss kopierten Link einfügen",
-                        "save": "Auf <em>Weiter</em> &gt; <em>Sichern</em> drücken"
+                        "save": "Auf <em>Weiter</em> > <em>Sichern</em> drücken"
                     }
                 },
                 "actions": {
                     "close": "Schließen",
                     "to_my_timetable": "Zu \"myStundenplan\""
+                }
+            },
+            "lecture_details": {
+                "general": "Allgemein",
+                "lecturer": "Dozent:in",
+                "abbreviation": "Kürzel",
+                "exam": "Prüfung",
+                "course_of_studies": "Studiengang",
+                "study_group": "Studiengruppe",
+                "semester_weekly_hours": "Semesterwochenstunden",
+                "ects": "ECTS",
+                "goal": "Ziel",
+                "content": "Inhalt",
+                "literature": "Literatur",
+                "not_specified": "Keine Angabe",
+                "actions": {
+                    "close": "Schließen"
                 }
             }
         }
