@@ -39,7 +39,7 @@ export default function RoomSearch () {
   useEffect(() => {
     async function load () {
       try {
-        // get timeable and filter for today
+        // get timetable and filter for today
         const timetable = await getFriendlyTimetable(new Date(), false)
         const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
 
@@ -89,14 +89,14 @@ export default function RoomSearch () {
       <AppNavbar title={'Raumvorschläge'} />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={suggestions}>
+        <ReactPlaceholder type="text" rows={20} ready={suggestions || userKind === USER_GUEST}>
           {suggestions && suggestions.map((result, idx) =>
             <div key={idx}>
               <div className={styles.suggestion}>
-                {getHeader(result)}
+                <GapHeader result={result} />
 
                 <div className={styles.time}>
-                  {getSubtitle(result)}
+                  <GapSubtitle result={result} />
                 </div>
               </div>
               <ListGroup>
@@ -141,7 +141,12 @@ export default function RoomSearch () {
   )
 }
 
-function getHeader (result) {
+/**
+ * Returns the header for the given result like `Jetzt -> KI_ML3 (K015)`
+ * @param {object} result Gap result object
+ * @returns {JSX.Element} Header
+ */
+function GapHeader ({ result }) {
   if (result.gap.endLecture) {
     return (
       <>
@@ -160,7 +165,12 @@ function getHeader (result) {
   }
 }
 
-function getSubtitle (result) {
+/**
+ * Returns the subtitle for the given result like `Pause von 10:00 bis 10:15`
+ * @param {object} result Gap result object
+ * @returns {JSX.Element} Subtitle
+ **/
+function GapSubtitle ({ result }) {
   if (result.gap.endLecture) {
     return (
       <>

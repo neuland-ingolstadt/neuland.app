@@ -1,11 +1,13 @@
 import API from '../backend/authenticated-api'
 import { formatISODate } from '../date-utils'
+import { getFriendlyTimetable } from './timetable-utils'
 import roomDistances from '../../data/room-distances.json'
 
 const IGNORE_GAPS = 15
 
 export const BUILDINGS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
+const SUGGESTION_DURATION_PRESET = 90
 
 /**
  * Adds minutes to a date object.
@@ -182,6 +184,34 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
 }
 
 /**
+ * Returns the most common element in an array.
+ * @param {Array} arr Array
+ * @returns {*} Most common element
+ */
+function mode (arr) {
+  return arr.reduce(
+    (a, b, _, arr) =>
+      (arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b),
+    null)
+}
+
+/**
+ * Sorts rooms by distance to the given room.
+ * @param {string} room Room name (e.g. `G215`)
+ * @param {Array} rooms Array of timetable entries as returned by `searchRooms`
+ * @returns {Array}
+ */
+function sortRoomsByDistance (room, rooms) {
+  const distances = getRoomDistances(room)
+
+  // sort by distance
+  rooms = rooms.sort((a, b) => {
+    return (distances[a?.room] ?? Infinity) - (distances[b?.room] ?? Infinity)
+  })
+  return rooms
+}
+
+/**
  * Finds rooms that are close to the given room and are available for the given time.
  * @param {string} room Room name (e.g. `G215`)
  * @param {Date} startDate Start date as Date object
@@ -195,19 +225,41 @@ export async function findSuggestedRooms (room, startDate, endDate) {
   rooms = rooms.filter(x => x.room.includes('N') === room.includes('N'))
 
   // get distances to other rooms
-  const distances = getRoomDistances(room)
-
-  // sort by distance (floors are ignored)
-  rooms = rooms.sort((a, b) => {
-    return (distances[a?.room] ?? Infinity) - (distances[b?.room] ?? Infinity)
-  })
+  rooms = sortRoomsByDistance(room, rooms)
 
   return rooms
 }
 
-export async function getEmptySuggestions () {
-  const endDate = addMinutes(new Date(), 1)
-  const rooms = await searchRooms(new Date(), endDate)
+/**
+ * Finds the room with the most lectures for the complete timetable.
+ * @returns {string} Room name (e.g. `G215`)
+ */
+async function getMajorityRoom () {
+  const timetable = await getFriendlyTimetable(new Date(), false)
+  const rooms = timetable.map(x => x.raum)
+
+  return mode(rooms)
+}
+
+/**
+ * Finds empty rooms for the current time with the given duration.
+ * Returns the results in the same format as `findSuggestedRooms`.
+ * @returns {Array}
+ **/
+export async function getEmptySuggestions (duration = SUGGESTION_DURATION_PRESET) {
+  const endDate = addMinutes(new Date(), duration)
+  let rooms = await searchRooms(new Date(), endDate)
+
+  const majorityRoom = await getMajorityRoom()
+  rooms = sortRoomsByDistance(majorityRoom, rooms)
+
+  // hide Neuburg buildings if next lecture is not in Neuburg
+  rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
+
+  if (rooms.length < 1) {
+    return []
+  }
+
   return [(
     {
       gap: (
