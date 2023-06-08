@@ -298,25 +298,25 @@ export default function Timetable () {
           </Modal.Header>
           <Modal.Body>
             <p>
-              Dein Stundenplan kann als Abonnement in eine Kalender-App integriert werden.
+              {t('timetable.modals.subscription_explanation.body.header')}
             </p>
             <p>
-              Die URL findest du aktuell nur in Primuss:
+            {t('timetable.modals.subscription_explanation.body.url')}
               <ul>
-                <li>In <em>myStundenplan</em> einloggen</li>
-                <li>Links auf <em>Aktueller Stundenplan</em> klicken</li>
-                <li>Oben auf <em>Extern</em> klicken</li>
-                <li>Unter <em>Termine Abonnieren</em> auf <em>Link anzeigen</em> klicken</li>
+                <ExplanationListElement i18nKey="subscription_explanation.body.login" />
+                <ExplanationListElement i18nKey="subscription_explanation.body.timetable" />
+                <ExplanationListElement i18nKey="subscription_explanation.body.external_calendar" />
+                <ExplanationListElement i18nKey="subscription_explanation.body.subscribe" />
               </ul>
             </p>
             {os === OS_IOS &&
               <p>
-                Die URL kannst du unter iOS wie folgt importieren:
+                {t('timetable.modals.subscription_explanation.body.ios.header')}
                 <ul>
-                  <li>Einstellungen-App öffnen</li>
-                  <li>Auf <em>Kalender</em> &gt; <em>Accounts</em> &gt; <em>Account hinzufügen</em> &gt; <em>Kalenderabo hinzufügen</em> drücken</li>
-                  <li>Aus Primuss kopierten Link einfügen</li>
-                  <li>Auf <em>Weiter</em> &gt; <em>Sichern</em> drücken</li>
+                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.open_settings" />
+                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.add_calendar_subscription" />
+                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.paste_url" />
+                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.save" />
                 </ul>
               </p>
             }
@@ -324,11 +324,11 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                Zu &quot;myStundenplan&quot;
+                {t('timetable.modals.subscription_explanation.actions.to_my_timetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowICalExplanation(false)}>
-              Schließen
+              {t('timetable.modals.subscription_explanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
