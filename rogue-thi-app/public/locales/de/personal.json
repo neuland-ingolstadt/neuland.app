@@ -1,3 +1,16 @@
 {
-    "change_language": "Sprache ändern"
+    "title" : "Profil",
+    "grades" : {
+        "title" : "Noten",
+        "missingWeight_single" : " Gewichtung fehlt",
+        "missingWeight_multiple" : " Gewichtungen fehlen"
+    },
+    "food_preferences" : "Essenspräferenzen",
+    "debug" : "API Spielwiese",
+    "privacy" : "Datenschutzerklärung",
+    "imprint" : "Impressum",
+    "language" : "Sprache ändern",
+    "login" : "Anmelden ",
+    "logout" : "Ausloggen "
+
 }

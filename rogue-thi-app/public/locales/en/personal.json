@@ -1,3 +1,15 @@
 {
-    "change_language": "Change language"
+    "title": "Profile",
+    "grades": {
+        "title": "Grades",
+        "missingWeight_single": " weight missing",
+        "missingWeight_multiple": " weights missing"
+    },
+    "food_preferences": "Food Preferences",
+    "debug": "API Playground",
+    "privacy": "Privacy Policy",
+    "imprint": "Imprint",
+    "language": "Change Language",
+    "login": "Log In ",
+    "logout": "Log Out "
 }

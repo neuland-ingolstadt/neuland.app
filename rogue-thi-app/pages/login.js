@@ -17,7 +17,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Login.module.css'
 
 const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
-const FRIENDLY_ERROR_WRONG_CREDENTIALS = 'Deine Zugangsdaten sind falsch.'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
@@ -55,9 +54,9 @@ export default function Login () {
       router.replace('/' + (redirect || ''))
     } catch (e) {
       if (e.message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
-        setFailure(FRIENDLY_ERROR_WRONG_CREDENTIALS)
+        setFailure(t('error.wrong_credentials'))
       } else {
-        setFailure('Bei der Verbindung zum Server ist ein Fehler aufgetreten.')
+        setFailure(t('error.generic'))
       }
     }
   }

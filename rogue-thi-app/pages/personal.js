@@ -125,7 +125,7 @@ export default function Personal () {
   }, [router, userKind])
 
   return (<AppContainer>
-    <AppNavbar title="Profil"/>
+    <AppNavbar title={t('title')}/>
 
     <AppBody>
       <ReactPlaceholder type="text" rows={20} ready={userdata || userKind !== USER_STUDENT}>
@@ -165,8 +165,8 @@ export default function Personal () {
                 {ects !== null && ects + ' ECTS'}
                 {!isNaN(average?.result) && ' · '}
                 {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
-                {average?.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
-                {average?.missingWeight > 1 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
+                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('grades.missingWeight_single')})`}
+                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('grades.missingWeight_multiple')})`}
               </span>
             </ListGroup.Item>
           </ListGroup>
@@ -203,7 +203,7 @@ export default function Personal () {
                 <FontAwesomeIcon icon={faChevronRight}/>
               </span>
             </div>
-            Essenspräferenzen
+            {t('food_preferences')}
           </ListGroup.Item>
 
         </ListGroup>
@@ -243,18 +243,18 @@ export default function Personal () {
           {showDebug && (
             <ListGroup.Item action onClick={() => router.push('/debug')}>
               <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
-              API Spielwiese
+              {t('debug')}
             </ListGroup.Item>
           )}
 
           <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
             <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
-            Datenschutzerklärung
+            {t('privacy')}
           </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => router.push('/imprint')}>
             <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
-            Impressum
+            {t('imprint')}
           </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => {
@@ -262,7 +262,7 @@ export default function Personal () {
             router.replace('/', '', { locale: i18n.language })
           }}>
             <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
-            {t('change_language')}
+            {t('language')}
           </ListGroup.Item>
 
         </ListGroup>
@@ -274,7 +274,7 @@ export default function Personal () {
             <Button
               variant={'success'}
               onClick={() => forgetSession(router)}>
-              {'Login '}
+              {t('login')}
               <FontAwesomeIcon icon={faArrowRightToBracket} />
             </Button>
           )}
@@ -282,7 +282,7 @@ export default function Personal () {
             <Button
               variant={'danger'}
               onClick={() => forgetSession(router)}>
-              {'Logout '}
+              {t('logout')}
               <FontAwesomeIcon icon={faArrowRightFromBracket} />
             </Button>
           )}
