@@ -16,7 +16,8 @@ import AppTabbar from '../../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
-import { findSuggestedRooms } from '../../lib/backend-utils/rooms-utils'
+
+import { findSuggestedRooms, getEmptySuggestions } from '../../lib/backend-utils/rooms-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
@@ -38,20 +39,21 @@ export default function RoomSearch () {
   useEffect(() => {
     async function load () {
       try {
-        // get timeable and filter for today
+        // get timetable and filter for today
         const timetable = await getFriendlyTimetable(new Date(), false)
         const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
 
         if (today.length < 1) {
-          // no lectures today -> no rooms to show
-          setSuggestions([])
+          // no lectures today -> general room search
+          const suggestions = await getEmptySuggestions(true)
+          setSuggestions(suggestions)
           return
         }
 
         const gaps = getTimetableGaps(today)
         if (gaps.length < 1) {
-          // no gaps today -> no rooms to show
-          setSuggestions([])
+          const suggestions = await getEmptySuggestions(true)
+          setSuggestions(suggestions)
           return
         }
 
@@ -87,20 +89,14 @@ export default function RoomSearch () {
       <AppNavbar title={'Raumvorschläge'} />
 
       <AppBody>
-        <ReactPlaceholder type="text" rows={20} ready={suggestions}>
+        <ReactPlaceholder type="text" rows={20} ready={suggestions || userKind === USER_GUEST}>
           {suggestions && suggestions.map((result, idx) =>
             <div key={idx}>
               <div className={styles.suggestion}>
-                {result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : 'Jetzt'}
-                <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
-                {getTimetableEntryName(result.gap.endLecture).shortName}
-                {` (${result.gap.endLecture.raum})`}
+                <GapHeader result={result} />
 
                 <div className={styles.time}>
-                  {'Pause von '}
-                  {result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : 'Jetzt'}
-                  {' bis '}
-                  {formatFriendlyTime(result.gap.endLecture.startDate)}
+                  <GapSubtitle result={result} />
                 </div>
               </div>
               <ListGroup>
@@ -143,4 +139,52 @@ export default function RoomSearch () {
       <AppTabbar />
     </AppContainer>
   )
+}
+
+/**
+ * Returns the header for the given result like `Jetzt -> KI_ML3 (K015)`
+ * @param {object} result Gap result object
+ * @returns {JSX.Element} Header
+ */
+function GapHeader ({ result }) {
+  if (result.gap.endLecture) {
+    return (
+      <>
+        {result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : 'Jetzt'}
+        <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
+        {getTimetableEntryName(result.gap.endLecture).shortName}
+        {` (${result.gap.endLecture.raum})`}
+      </>
+    )
+  } else {
+    return (
+      <>
+        Freie Räume
+      </>
+    )
+  }
+}
+
+/**
+ * Returns the subtitle for the given result like `Pause von 10:00 bis 10:15`
+ * @param {object} result Gap result object
+ * @returns {JSX.Element} Subtitle
+ **/
+function GapSubtitle ({ result }) {
+  if (result.gap.endLecture) {
+    return (
+      <>
+        {'Pause von '}
+        {result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : 'Jetzt'}
+        {' bis '}
+        {formatFriendlyTime(result.gap.endLecture.startDate)}
+      </>
+    )
+  } else {
+    return (
+      <>
+        Räume von {formatFriendlyTime(result.gap.startDate)} bis {formatFriendlyTime(result.gap.endDate)}
+      </>
+    )
+  }
 }
