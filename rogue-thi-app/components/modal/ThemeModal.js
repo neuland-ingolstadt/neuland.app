@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
 import themes from '../../data/themes.json'
 import { useDashboard } from '../../lib/hooks/dashboard'
+import { useTranslation } from 'next-i18next'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -22,6 +23,7 @@ export default function ThemeModal () {
   const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
+  const { i18n } = useTranslation('personal')
 
   /**
    * Changes the current theme.
@@ -50,7 +52,7 @@ export default function ThemeModal () {
               onClick={() => changeTheme(availableTheme.style)}
               disabled={availableTheme.requiresToken && unlockedThemes.indexOf(availableTheme.style) === -1}
             >
-              {availableTheme.name}
+              {availableTheme.name[i18n.language]}
             </Button>
           ))}
         </Form>
