@@ -185,7 +185,7 @@ export default function Login () {
             <p>
               <a href={IMPRINT_URL} target="_blank" rel="noreferrer">{t('links.imprint')}</a>
               <> &ndash; </>
-              <a href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('links.imprint')}</a>
+              <a href={PRIVACY_URL} target="_blank" rel="noreferrer">{t('links.privacy')}</a>
               <> &ndash; </>
               <a href={GIT_URL} target="_blank" rel="noreferrer">{t('links.github')}</a>
             </p>
