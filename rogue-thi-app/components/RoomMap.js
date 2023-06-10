@@ -15,6 +15,7 @@ import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-ut
 import { useLocation } from '../lib/hooks/geolocation'
 
 import styles from '../styles/RoomMap.module.css'
+import { useTranslation } from 'next-i18next'
 
 const SPECIAL_ROOMS = {
   G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
@@ -54,6 +55,8 @@ export default function RoomMap ({ highlight, roomData }) {
   const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
   const [availableRooms, setAvailableRooms] = useState(null)
+
+  const { t } = useTranslation('rooms')
 
   /**
    * Preprocessed room data for Leaflet.
@@ -168,15 +171,16 @@ export default function RoomMap ({ highlight, roomData }) {
           {`, ${entry.properties.Funktion}`} <br />
           {avail && (
             <>
-              Frei
-              {' '}von {formatFriendlyTime(avail.from)}
-              {' '}bis {formatFriendlyTime(avail.until)}
+              {t('rooms.map.free_from_until', {
+                from: formatFriendlyTime(avail.from),
+                until: formatFriendlyTime(avail.until)
+              })}
               <br />
             </>
           )}
           {!avail && availableRooms && (
             <>
-              Belegt
+              {t('rooms.map.occupied')}
             </>
           )}
           {special?.text}
@@ -216,7 +220,7 @@ export default function RoomMap ({ highlight, roomData }) {
       <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
         <Form.Control
           as="input"
-          placeholder="Suche nach 'W003', 'Toilette', 'Bibliothek', ..."
+          placeholder={t('rooms.map.search_placeholder')}
           value={searchText}
           onChange={e => setSearchText(e.target.value.toUpperCase())}
           isInvalid={filteredRooms.length === 0}
@@ -225,7 +229,7 @@ export default function RoomMap ({ highlight, roomData }) {
         <div className={styles.links}>
           <Link href="/rooms/search">
             <a className={styles.linkToSearch}>
-              Erweiterte Suche
+              {t('rooms.map.extended_search')}
             </a>
           </Link>
           {userKind !== USER_GUEST &&
@@ -233,7 +237,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <> · </>
               <Link href="/rooms/suggestions">
                 <a className={styles.linkToSearch}>
-                  Automatische Vorschläge
+                  {t('rooms.map.automatic_suggestion')}
                 </a>
               </Link>
             </>
@@ -253,7 +257,7 @@ export default function RoomMap ({ highlight, roomData }) {
         tap={false}
       >
         <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>-Mitwirkende'
+          attribution={t('rooms.map.attribution')}
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxNativeZoom={19}
           maxZoom={21}
@@ -265,17 +269,17 @@ export default function RoomMap ({ highlight, roomData }) {
           <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
             {availableRooms && (
               <>
-                <div className={styles.legendFree}> Frei</div>
-                <div className={styles.legendTaken}> Belegt</div>
+                <div className={styles.legendFree}>{` ${t('rooms.map.legend.free')}`}</div>
+                <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupied')}`}</div>
               </>
             )}
-            {!availableRooms && <div className={styles.legendTaken}> Belegtstatus unbekannt</div>}
+            {!availableRooms && <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupancy_unknown')}`}</div>}
             <div>
               {SPECIAL_COLORS.map(color => (
                 <span key={color} className={styles.legendSpecial} style={{ '--legend-color': color }}>
                 </span>
               ))}
-              {' '}Sonderausstattung
+              {` ${t('rooms.map.legend.special_equipment')}`}
             </div>
           </div>
         </div>

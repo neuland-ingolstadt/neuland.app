@@ -23,8 +23,20 @@ import styles from '../../styles/RoomsSearch.module.css'
 
 import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
 import { getFriendlyTimetable, getTimetableEntryName, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
+import { Trans, useTranslation } from 'next-i18next'
 
 const TUX_ROOMS = ['G308']
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'rooms',
+      'common'
+    ]))
+  }
+})
 
 /**
  * Page containing the room search.
@@ -35,6 +47,8 @@ export default function RoomSearch () {
   const [suggestions, setSuggestions] = useState(null)
 
   const userKind = useUserKind()
+
+  const { t } = useTranslation('rooms')
 
   useEffect(() => {
     async function load () {
@@ -86,7 +100,7 @@ export default function RoomSearch () {
 
   return (
     <AppContainer>
-      <AppNavbar title={'Raumvorschläge'} />
+      <AppNavbar title={t('rooms.suggestions.appbar.title')} />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={suggestions || userKind === USER_GUEST}>
@@ -112,14 +126,23 @@ export default function RoomSearch () {
                       </div>
                     </div>
                     <div className={styles.right}>
-                      frei ab {formatFriendlyTime(roomResult.from)}<br />
-                      bis {formatFriendlyTime(roomResult.until)}
+                      <Trans
+                        i18nKey="rooms.common.available_from_until"
+                        ns='rooms'
+                        values={{
+                          from: formatFriendlyTime(result.from),
+                          until: formatFriendlyTime(result.until)
+                        }}
+                        components={{
+                          br: <br />
+                        }}
+                      />
                     </div>
                   </ListGroup.Item>
                 )}
                 {result.rooms.length === 0 &&
                   <ListGroup.Item className={styles.item}>
-                    Keine freien Räume gefunden.
+                    {t('rooms.suggestions.no_available_rooms')}
                   </ListGroup.Item>
                 }
               </ListGroup>
@@ -131,7 +154,7 @@ export default function RoomSearch () {
           <div className={styles.noSuggestions}>
             <FontAwesomeIcon icon={faCalendar} size="xl" style={ { marginBottom: '15px' } } />
             <br />
-            Keine Vorschläge verfügbar
+            {t('rooms.suggestions.no_suggestions')}
           </div>
         }
       </AppBody>
@@ -149,18 +172,25 @@ export default function RoomSearch () {
 function GapHeader ({ result }) {
   if (result.gap.endLecture) {
     return (
-      <>
-        {result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : 'Jetzt'}
-        <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
-        {getTimetableEntryName(result.gap.endLecture).shortName}
-        {` (${result.gap.endLecture.raum})`}
-      </>
+      <Trans
+        i18nKey="rooms.suggestions.gaps.header.specific"
+        ns='rooms'
+        components={{
+          arrow: <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
+        }}
+        values={{
+          from: result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : 'Jetzt',
+          until: getTimetableEntryName(result.gap.endLecture).shortName,
+          room: result.gap.endLecture.raum
+        }}
+      />
     )
   } else {
     return (
-      <>
-        Freie Räume
-      </>
+      <Trans
+        i18nKey="rooms.suggestions.gaps.header.general"
+        ns='rooms'
+      />
     )
   }
 }
@@ -173,18 +203,25 @@ function GapHeader ({ result }) {
 function GapSubtitle ({ result }) {
   if (result.gap.endLecture) {
     return (
-      <>
-        {'Pause von '}
-        {result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : 'Jetzt'}
-        {' bis '}
-        {formatFriendlyTime(result.gap.endLecture.startDate)}
-      </>
+      <Trans
+        i18nKey="rooms.suggestions.gaps.subtitle.specific"
+        ns='rooms'
+        values={{
+          from: result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : 'Jetzt',
+          until: formatFriendlyTime(result.gap.endLecture.startDate)
+        }}
+      />
     )
   } else {
     return (
-      <>
-        Räume von {formatFriendlyTime(result.gap.startDate)} bis {formatFriendlyTime(result.gap.endDate)}
-      </>
+      <Trans
+        i18nKey="rooms.suggestions.gaps.subtitle.general"
+        ns='rooms'
+        values={{
+          from: formatFriendlyTime(result.gap.startDate),
+          until: formatFriendlyTime(result.gap.endDate)
+        }}
+      />
     )
   }
 }

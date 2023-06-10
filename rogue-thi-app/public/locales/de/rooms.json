@@ -1,0 +1,65 @@
+{
+    "rooms": {
+        "overflow": {
+            "hourly_plan": "Stündlicher Plan",
+            "campus_city_tour": "Campus- & Stadtführung"
+        },
+        "map": {
+            "appbar": {
+                "title": "Raumplan"
+            },
+            "search_placeholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
+            "extended_search": "Erweiterte Suche",
+            "automatic_suggestion": "Automatische Vorschläge",
+            "occupied": "Belegt",
+            "free_from_until": "Frei von {{from}} bis {{until}}",
+            "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
+            "legend": {
+                "free": "Frei",
+                "occupied": "Belegt",
+                "special_equipment": "Sonderausstattung",
+                "occupancy_unknown": "Belegung unbekannt"
+            }
+        },
+        "search": {
+            "appbar": {
+                "title": "Erweiterte Raumsuche"
+            },
+            "building": "Gebäude",
+            "date": "Datum",
+            "time": "Uhrzeit",
+            "duration": "Dauer",
+            "search": "Suchen",
+            "buildings_all": "Alle",
+            "results": {
+                "available_from_until": "frei ab {{from}}<br />bis {{until}}",
+                "no_available_rooms": "Keine freien Räume gefunden"
+            }
+        },
+        "suggestions": {
+            "appbar": {
+                "title": "Raumvorschläge"
+            },
+            "no_suggestions": "Keine Vorschläge verfügbar.",
+            "no_available_rooms": "Keine freien Räume gefunden.",
+            "gaps": {
+                "header": {
+                    "general": "Freie Räume",
+                    "specific": "{{from}} <arrow/> {{until}}"
+                },
+                "subtitle": {
+                    "general": "Pause von {{from}} bis {{until}}",
+                    "specific": "Räume von {{from}} bis {{until}}"
+                }
+            }
+        },
+        "list": {
+          "appbar": {
+            "title": "Stündlicher Raumplan"
+          }  
+        },
+        "common": {
+            "available_from_until": "frei ab {{from}}<br />bis {{until}}"
+        }
+    }
+}

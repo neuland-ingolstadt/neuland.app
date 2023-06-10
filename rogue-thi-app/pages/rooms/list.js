@@ -19,7 +19,19 @@ import API from '../../lib/backend/authenticated-api'
 
 import styles from '../../styles/RoomsList.module.css'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
 const TUX_ROOMS = ['G308']
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'rooms',
+      'common'
+    ]))
+  }
+})
 
 /**
  * Page containing a textual representation of the room openings.
@@ -27,6 +39,8 @@ const TUX_ROOMS = ['G308']
 export default function RoomList () {
   const router = useRouter()
   const [freeRooms, setFreeRooms] = useState(null)
+
+  const { t } = useTranslation('rooms')
 
   useEffect(() => {
     async function load () {
@@ -73,7 +87,7 @@ export default function RoomList () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Stündlicher Raumplan" />
+      <AppNavbar title={t('rooms.list.appbar.title')} />
 
       <AppBody>
         <ReactPlaceholder type="text" rows={20} ready={freeRooms}>

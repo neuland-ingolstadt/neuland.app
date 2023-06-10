@@ -11,16 +11,23 @@ import AppTabbar from '../../components/page/AppTabbar'
 import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
 const ROOMDATA_URL = 'https://assets.neuland.app/rooms_neuland.geojson'
 
 // import RoomMap without SSR because react-leaflet really does not like SSR
 const RoomMap = dynamic(() => import('../../components/RoomMap'), { ssr: false })
 
-export async function getStaticProps () {
+export async function getStaticProps ({ locale }) {
   const response = await fetch(ROOMDATA_URL)
   const roomData = await response.json()
   return {
     props: {
+      ...(await serverSideTranslations(locale ?? 'en', [
+        'rooms',
+        'common'
+      ])),
       roomData
     }
   }
@@ -33,15 +40,17 @@ export default function Rooms ({ roomData }) {
   const router = useRouter()
   const { highlight } = router.query
 
+  const { t } = useTranslation('rooms')
+
   return (
     <AppContainer className={styles.container}>
-      <AppNavbar title="Raumplan" showBack={'desktop-only'}>
+      <AppNavbar title={t('rooms.map.appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" href="/rooms/list">
-            Stündlicher Plan
+            {t('rooms.overflow.hourly_plan')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
-            Campus- {'&'} Stadtführung
+          {t('rooms.overflow.campus_city_tour')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
