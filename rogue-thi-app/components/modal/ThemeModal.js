@@ -7,7 +7,8 @@ import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
 import themes from '../../data/themes.json'
 import { useDashboard } from '../../lib/hooks/dashboard'
-import { useTranslation } from 'next-i18next'
+
+import { Trans, useTranslation } from 'next-i18next'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -23,7 +24,7 @@ export default function ThemeModal () {
   const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
-  const { i18n } = useTranslation('personal')
+  const { t, i18n } = useTranslation('personal')
 
   /**
    * Changes the current theme.
@@ -35,11 +36,25 @@ export default function ThemeModal () {
     setShowThemeModal(false)
   }
 
+  /**
+   * Workaround for using next/link and i18n together
+   * See: https://github.com/i18next/react-i18next/issues/1090
+   * @param {string} href The link to the page
+   * @param {string} children The children of the link
+   */
+  function TransLink ({ href, children }) {
+    return (
+      <Link href={href || ''}>
+        <a>{children}</a>
+      </Link>
+    )
+  }
+
   return (
     <Modal show={!!showThemeModal} dialogClassName={styles.themeModal}
            onHide={() => setShowThemeModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Theme</Modal.Title>
+        <Modal.Title>{t('personal.modals.theme.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body ref={themeModalBody}>
         <Form>
@@ -57,10 +72,21 @@ export default function ThemeModal () {
           ))}
         </Form>
         <p>
-          Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <a href={CTF_URL}
-                                                                                                      target="_blank"
-                                                                                                      rel="noreferrer">Übungs-CTFs</a> lösen.
-          Wenn du so weit bist, kannst du es <Link href="/become-hackerman">hier</Link> freischalten.
+          <Trans
+            i18nKey="personal.modals.theme.hackerman"
+            ns='personal'
+            components={{
+              i: <i />,
+              aCtf: <a
+                href={CTF_URL}
+                target="_blank"
+                rel="noreferrer"
+              />,
+              aHackerman: <TransLink
+                href="/become-hackerman"
+              />
+            }}
+          />
         </p>
       </Modal.Body>
     </Modal>

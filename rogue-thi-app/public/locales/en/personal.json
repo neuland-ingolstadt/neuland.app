@@ -1,15 +1,25 @@
 {
-    "title": "Profile",
-    "grades": {
-        "title": "Grades",
-        "missingWeight_single": " weight missing",
-        "missingWeight_multiple": " weights missing"
-    },
-    "food_preferences": "Food Preferences",
-    "debug": "API Playground",
-    "privacy": "Privacy Policy",
-    "imprint": "Imprint",
-    "language": "Change Language",
-    "login": "Log In ",
-    "logout": "Log Out "
+    "personal": {
+        "title": "Profile",
+        "grades": {
+            "title": "Grades",
+            "missingWeight_single": " weight missing",
+            "missingWeight_multiple": " weights missing"
+        },
+        "food_preferences": "Food Preferences",
+        "debug": "API Playground",
+        "privacy": "Privacy Policy",
+        "imprint": "Imprint",
+        "language": "Change Language",
+        "login": "Log In",
+        "logout": "Log Out",
+        "dashboard": "Dashboard",
+        "theme": "Theme",
+        "modals": {
+            "theme": {
+                "title": "Theme",
+                "hackerman": "To unlock the <i>Hackerman</i> design, you need to solve at least four tasks in our <aCtf>Practice CTF</aCtf>. Once you're there, you can unlock it <aHackerman>here</aHackerman>."
+            }
+        }
+    }
 }

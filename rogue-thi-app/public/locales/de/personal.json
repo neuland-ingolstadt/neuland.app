@@ -1,15 +1,25 @@
 {
-    "title": "Profil",
-    "grades": {
-        "title": "Noten",
-        "missingWeight_single": " Gewichtung fehlt",
-        "missingWeight_multiple": " Gewichtungen fehlen"
-    },
-    "food_preferences": "Essenspräferenzen",
-    "debug": "API Spielwiese",
-    "privacy": "Datenschutzerklärung",
-    "imprint": "Impressum",
-    "language": "Sprache ändern",
-    "login": "Anmelden ",
-    "logout": "Ausloggen "
+    "personal": {
+        "title": "Profil",
+        "grades": {
+            "title": "Noten",
+            "missingWeight_single": " Gewichtung fehlt",
+            "missingWeight_multiple": " Gewichtungen fehlen"
+        },
+        "food_preferences": "Essenspräferenzen",
+        "debug": "API Spielwiese",
+        "privacy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "language": "Sprache ändern",
+        "login": "Anmelden",
+        "logout": "Ausloggen",
+        "dashboard": "Dashboard",
+        "theme": "Theme",
+        "modals": {
+            "theme": {
+                "title": "Theme",
+                "hackerman": "Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <aCtf>Übungs-CTFs</aCtf> lösen. Wenn du so weit bist, kannst du es <aHackerman>hier</aHackerman> freischalten."
+            }
+        }
+    }
 }

@@ -125,7 +125,7 @@ export default function Personal () {
   }, [router, userKind])
 
   return (<AppContainer>
-    <AppNavbar title={t('title')}/>
+    <AppNavbar title={t('personal.title')}/>
 
     <AppBody>
       <ReactPlaceholder type="text" rows={20} ready={userdata || userKind !== USER_STUDENT}>
@@ -165,8 +165,8 @@ export default function Personal () {
                 {ects !== null && ects + ' ECTS'}
                 {!isNaN(average?.result) && ' · '}
                 {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
-                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('grades.missingWeight_single')})`}
-                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('grades.missingWeight_multiple')})`}
+                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeight_single')})`}
+                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeight_multiple')})`}
               </span>
             </ListGroup.Item>
           </ListGroup>
@@ -180,11 +180,11 @@ export default function Personal () {
             <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
               <div className={styles.interaction_icon}>
             <span className="text-muted">
-              {item.name[i18n.language]}{' '}
+              {`${item.name[i18n.language]} `}
               <FontAwesomeIcon icon={faChevronRight}/>
             </span>
               </div>
-              Theme
+              {t('personal.theme')}
             </ListGroup.Item>
           ))}
 
@@ -194,7 +194,7 @@ export default function Personal () {
                 <FontAwesomeIcon icon={faChevronRight}/>
               </span>
             </div>
-            Dashboard
+            {t('personal.dashboard')}
           </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
@@ -203,7 +203,7 @@ export default function Personal () {
                 <FontAwesomeIcon icon={faChevronRight}/>
               </span>
             </div>
-            {t('food_preferences')}
+            {t('personal.food_preferences')}
           </ListGroup.Item>
 
         </ListGroup>
@@ -243,18 +243,18 @@ export default function Personal () {
           {showDebug && (
             <ListGroup.Item action onClick={() => router.push('/debug')}>
               <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
-              {t('debug')}
+              {t('personal.debug')}
             </ListGroup.Item>
           )}
 
           <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
             <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
-            {t('privacy')}
+            {t('personal.privacy')}
           </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => router.push('/imprint')}>
             <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
-            {t('imprint')}
+            {t('personal.imprint')}
           </ListGroup.Item>
 
           <ListGroup.Item action onClick={() => {
@@ -262,7 +262,7 @@ export default function Personal () {
             router.replace('/', '', { locale: i18n.language })
           }}>
             <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
-            {t('language')}
+            {t('personal.language')}
           </ListGroup.Item>
 
         </ListGroup>
@@ -274,7 +274,7 @@ export default function Personal () {
             <Button
               variant={'success'}
               onClick={() => forgetSession(router)}>
-              {t('login')}
+              {`${t('personal.login')} `}
               <FontAwesomeIcon icon={faArrowRightToBracket} />
             </Button>
           )}
@@ -282,7 +282,7 @@ export default function Personal () {
             <Button
               variant={'danger'}
               onClick={() => forgetSession(router)}>
-              {t('logout')}
+              {`${t('personal.logout')} `}
               <FontAwesomeIcon icon={faArrowRightFromBracket} />
             </Button>
           )}
