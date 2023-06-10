@@ -12,7 +12,7 @@ import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
 import styles from '../../styles/FilterFoodModal.module.css'
 
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))

@@ -14,7 +14,7 @@ import ReactPlaceholder from 'react-placeholder/lib'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import Link from 'next/link'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Dashboard card for semester and exam dates.
