@@ -4,13 +4,12 @@ import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
-import { ShowDashboardModal } from '../../pages/_app'
+import { DashboardContext, ShowDashboardModal } from '../../pages/_app'
 import styles from '../../styles/Personalize.module.css'
-import { useDashboard } from '../../lib/hooks/dashboard'
 
 /**
  * A modal component that allows users to personalize their experience by changing the dashboard layout
- * @returns {JSX.Element} The DashboardModal compontent
+ * @returns {JSX.Element} The DashboardModal component
  * @constructor
  */
 export default function DashboardModal () {
@@ -21,7 +20,7 @@ export default function DashboardModal () {
     hideDashboardEntry,
     bringBackDashboardEntry,
     resetOrder
-  } = useDashboard()
+  } = useContext(DashboardContext)
   const [showDashboardModal, setShowDashboardModal] = useContext(ShowDashboardModal)
   const themeModalBody = useRef()
 
