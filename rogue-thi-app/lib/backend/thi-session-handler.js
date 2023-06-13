@@ -32,6 +32,8 @@ export async function createSession (username, password, stayLoggedIn) {
   username = username.toLowerCase()
   // strip domain if user entered an email address
   username = username.replace(/@thi\.de$/, '')
+  // strip username to remove whitespaces
+  username = username.replace(/\s/g, '')
 
   const { session, isStudent } = await API.login(username, password)
 
