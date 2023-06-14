@@ -1,1 +1,11 @@
-{}
+{
+    "events": {
+        "appbar": {
+            "title": "Events"
+        }
+    },
+    "no_events": "There are currently no event dates available.",
+    "dates": {
+        "until": "until"
+    }
+}

@@ -22,6 +22,17 @@ import { useTime } from '../lib/hooks/time-hook'
 import styles from '../styles/Calendar.module.css'
 
 import clubs from '../data/clubs.json'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'events',
+      'common'
+    ]))
+  }
+})
 
 /**
  * Page containing the CL events.
@@ -29,6 +40,8 @@ import clubs from '../data/clubs.json'
 export default function Events () {
   const now = useTime()
   const [events, setEvents] = useState(null)
+
+  const { t } = useTranslation('events')
 
   useEffect(() => {
     async function load () {
@@ -48,14 +61,14 @@ export default function Events () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Veranstaltungen" />
+      <AppNavbar title={t('events.appbar.title')} />
 
       <AppBody className={styles.container}>
         <ListGroup variant="flush">
           <ReactPlaceholder type="text" rows={10} ready={events}>
             {events && events.length === 0 && (
               <ListGroup.Item className={styles.item}>
-                Es sind derzeit keine Veranstaltungstermine verfügbar.
+                {t('events.no_events')}
               </ListGroup.Item>
             )}
             {events && events.map((item, idx) => {
@@ -98,7 +111,7 @@ export default function Events () {
                 </div>
                 <div className={styles.details}>
                   {(item.end && item.begin < now)
-                    ? 'bis ' + formatFriendlyRelativeTime(item.end)
+                    ? `${t('events.dates.until')} ${formatFriendlyRelativeTime(item.end)}`
                     : formatFriendlyRelativeTime(item.begin)}
                 </div>
               </ListGroup.Item>
