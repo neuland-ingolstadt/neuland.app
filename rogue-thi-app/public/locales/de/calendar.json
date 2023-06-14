@@ -1,1 +1,33 @@
-{}
+{
+    "calendar": {
+        "appbar": {
+            "title": "Termine"
+        },
+        "modals": {
+            "exams": {
+                "type": "Art",
+                "room": "Raum",
+                "seat": "Sitzplatz",
+                "date": "Termin",
+                "notes": "Anmerkungen",
+                "examiner": "Prüfer:in",
+                "course_of_studies": "Studiengang",
+                "register_date": "Angemeldet",
+                "tools": "Hilfsmittel",
+                "actions": {
+                    "close": "Schließen"
+                }                
+            }
+        },
+        "notice": "Alle Angaben ohne Gewähr. Verbindliche Informationen gibt es nur direkt auf der <a>Webseite der Hochschule</a>.",
+        "tabs": {
+            "semester": "Semester",
+            "exams": "Prüfungen"
+        },
+        "dates": {
+            "until": "bis"
+        },
+        "no_exams": "Es sind derzeit keine Prüfungstermine verfügbar.",
+        "guest_notice": "Prüfungstermine sind als Gast nicht verfügbar.",
+    }
+}
