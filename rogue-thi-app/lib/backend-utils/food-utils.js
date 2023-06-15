@@ -19,7 +19,7 @@ export async function loadFoodEntries (restaurants, language) {
   }
 
   if (restaurants.includes('reimanns')) {
-    const data = await NeulandAPI.getReimannsPlan()
+    const data = await NeulandAPI.getReimannsPlan(language)
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
@@ -31,7 +31,7 @@ export async function loadFoodEntries (restaurants, language) {
   }
 
   if (restaurants.includes('canisius')) {
-    const data = await NeulandAPI.getCanisiusPlan()
+    const data = await NeulandAPI.getCanisiusPlan(language)
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)

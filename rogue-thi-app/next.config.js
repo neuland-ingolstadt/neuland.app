@@ -72,7 +72,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self' data: https://tile.openstreetmap.org;
               font-src 'self';
-              connect-src 'self' wss://proxy.neuland.app;
+              connect-src 'self' wss://proxy.neuland.app http://localhost:5000/translate;
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';

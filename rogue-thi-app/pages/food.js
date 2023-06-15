@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -154,6 +154,12 @@ export default function Mensa () {
       >
         <div>
           <div className={styles.name}>
+            {meal.translated && (
+                <>
+                  <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                  {' '}
+                </>
+            )}
             {meal.name}
           </div>
           <div className={styles.room}>
@@ -331,7 +337,7 @@ export default function Mensa () {
               ))}
             </ul>
 
-            <h5>Allergene</h5>
+            <h5>{t('foodModal.allergens.title')}</h5>
             {showMealDetails?.allergens === null && `${t('foodModal.allergens.unkown')}`}
             {showMealDetails?.allergens?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
@@ -408,6 +414,24 @@ export default function Mensa () {
               <br/>
               {t('foodModal.warning.text')}
             </p>
+
+            {showMealDetails?.translated && (
+              <p>
+                <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                <strong>{` ${t('foodModal.translation.title')}`}</strong>
+                <br/>
+
+                {` ${t('foodModal.translation.warning')}`}
+
+                <br/>
+                <ul>
+                  <li>
+                    <strong>{t('foodModal.translation.original_name')}</strong>:{' '}
+                    {showMealDetails?.originalName}
+                  </li>
+                </ul>
+              </p>
+            )}
           </Modal.Body>
 
           <Modal.Footer>
