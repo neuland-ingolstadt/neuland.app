@@ -1,0 +1,7 @@
+/SPOs*
+/weightings*
+spo-parser.iml
+spo-grade-weights.json
+.env
+.env-example
+/venv
