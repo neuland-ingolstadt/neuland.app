@@ -14,7 +14,7 @@ const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
 /**
  * A modal component that allows users to personalize their experience by changing the theme
- * @returns {JSX.Element} The ThemeModal compontent
+ * @returns {JSX.Element} The ThemeModal component
  * @constructor
  */
 export default function ThemeModal () {
