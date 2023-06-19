@@ -19,6 +19,18 @@ import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'lecturers',
+      'common'
+    ]))
+  }
+})
+
 /**
  * Page containing the lecturer search and details.
  */
@@ -30,6 +42,8 @@ export default function Lecturers () {
   const [filteredLecturers, setFilteredLecturers] = useState(null)
   const [search, setSearch] = useState('')
   const [focusedLecturer, setFocusedLecturer] = useState(null)
+
+  const { t } = useTranslation('lecturers')
 
   useEffect(() => {
     async function load () {
@@ -98,7 +112,7 @@ export default function Lecturers () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Dozenten" />
+      <AppNavbar title={t('lecturers.appbar.title')} />
 
       <AppBody>
         <Modal size="lg" show={!!focusedLecturer} onHide={() => setFocusedLecturer(null)}>
@@ -108,22 +122,22 @@ export default function Lecturers () {
                 <Modal.Title>{focusedLecturer.titel} {focusedLecturer.vorname} {focusedLecturer.name}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <strong>Titel</strong>: {focusedLecturer.titel}<br />
-                <strong>Name</strong>: {focusedLecturer.name}<br />
-                <strong>Vorname</strong>: {focusedLecturer.vorname}<br />
-                <strong>Organisation</strong>: {focusedLecturer.organisation || 'N/A'}<br />
-                <strong>Funktion</strong>: {focusedLecturer.funktion}<br />
+                <strong>{t('lecturers.modals.details.title')}</strong>: {focusedLecturer.titel}<br />
+                <strong>{t('lecturers.modals.details.surname')}</strong>: {focusedLecturer.name}<br />
+                <strong>{t('lecturers.modals.details.forename')}</strong>: {focusedLecturer.vorname}<br />
+                <strong>{t('lecturers.modals.details.organization')}</strong>: {focusedLecturer.organisation || t('lecturers.modals.details.not_available')}<br />
+                <strong>{t('lecturers.modals.details.function')}</strong>: {focusedLecturer.funktion}<br />
 
-                <strong>Raum</strong>:{' '}
+                <strong>{t('lecturers.modals.details.room')}</strong>:{' '}
                 {focusedLecturer.room_short && (
                   <Link href={`/rooms?highlight=${focusedLecturer.room_short}`}>
                     {focusedLecturer.raum}
                   </Link>
                 )}
-                {focusedLecturer.room_short ? '' : (focusedLecturer.raum || 'N/A')}
+                {focusedLecturer.room_short ? '' : (focusedLecturer.raum || t('lecturers.modals.details.not_available'))}
                 <br />
 
-                <strong>E-Mail</strong>:{' '}
+                <strong>{t('lecturers.modals.details.email')}</strong>:{' '}
                 {focusedLecturer.email.includes('@') && (
                   <a href={`mailto:${focusedLecturer.email}`}>
                     {focusedLecturer.email}
@@ -131,26 +145,26 @@ export default function Lecturers () {
                 )}
                 {!focusedLecturer.email.includes('@') && (
                   <>
-                    {focusedLecturer.email || 'N/A'}
+                    {focusedLecturer.email || t('lecturers.modals.details.not_available')}
                   </>
                 )}
                 <br />
 
-                <strong>Telefon</strong>:{' '}
+                <strong>{t('lecturers.modals.details.phone')}</strong>:{' '}
                 {focusedLecturer.tel_dienst && (
                   <a href={`tel:${focusedLecturer.tel_dienst.split(/\s(?!\d)/)[0]}`}>
                     {focusedLecturer.tel_dienst}
                   </a>
                 )}
-                {!focusedLecturer.tel_dienst && 'N/A'}
+                {!focusedLecturer.tel_dienst && t('lecturers.modals.details.not_available')}
                 <br />
 
-                <strong>Sprechstunde</strong>: {focusedLecturer.sprechstunde}<br />
-                <strong>Einsichtnahme</strong>: {focusedLecturer.einsichtnahme}<br />
+                <strong>{t('lecturers.modals.details.office_hours')}</strong>: {focusedLecturer.sprechstunde}<br />
+                <strong>{t('lecturers.modals.details.insights')}</strong>: {focusedLecturer.einsichtnahme}<br />
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={() => setFocusedLecturer(null)}>
-                  Schließen
+                  {t('lecturers.modals.details.actions.close')}
                 </Button>
               </Modal.Footer>
             </>
@@ -161,7 +175,7 @@ export default function Lecturers () {
           <Form.Group>
             <Form.Control
               as="input"
-              placeholder="Alle Dozenten durchsuchen ..."
+              placeholder={t('lecturers.search.placeholder')}
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
@@ -169,7 +183,7 @@ export default function Lecturers () {
         </Form>
 
         <h3>
-          {search ? 'Suchergebnisse' : 'Persönliche Dozenten'}
+          {search ? t('lecturers.search.search_results') : t('lecturers.search.personal_lecturers')}
         </h3>
         <ReactPlaceholder type="text" rows={20} ready={filteredLecturers}>
           <ListGroup>
@@ -186,7 +200,7 @@ export default function Lecturers () {
                 <div className={styles.right}>
                     {x.raum && (
                       <>
-                        Raum:{' '}
+                        {t('lecturers.body.room')}:{' '}
                         {x.room_short && (
                           <Link href={`/rooms?highlight=${x.room_short}`}>
                             {x.raum}
