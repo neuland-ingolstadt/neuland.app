@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 import languages from '../../data/languages.json'
 import styles from '../../styles/Personalize.module.css'
-// import { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 import { useTranslation } from 'next-i18next'
 
@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next'
 export default function LanguageModal () {
   const [showLanguageModal, setShowLanguageModal] = useContext(ShowLanguageModal)
   const languageModalBody = useRef()
-  // const router = useRouter()
+  const router = useRouter()
 
   const { t, i18n } = useTranslation('personal')
 
@@ -28,7 +28,7 @@ export default function LanguageModal () {
    */
   function changeLanguage (languageKey) {
     i18n.changeLanguage(languageKey)
-    // router.replace('/', '', { locale: i18n.language })
+    router.replace('/', '', { locale: i18n.language })
   }
 
   return (
