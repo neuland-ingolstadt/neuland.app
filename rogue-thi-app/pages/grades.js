@@ -12,9 +12,21 @@ import AppTabbar from '../components/page/AppTabbar'
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
+
 import styles from '../styles/Grades.module.css'
 
-const formatNum = (new Intl.NumberFormat('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'grades',
+      'common'
+    ]))
+  }
+})
+
+const GRADE_REGEX = /\d+[.,]\d+/
 
 /**
  * Page showing the users grades.
@@ -24,6 +36,20 @@ export default function Grades () {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [gradeAverage, setGradeAverage] = useState(null)
+
+  const { i18n, t } = useTranslation('grades')
+
+  const formatNum = (new Intl.NumberFormat(i18n.languages[0], { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
+
+  function getLocalizedGrade (grade) {
+    const match = grade.match(GRADE_REGEX)
+    if (!match) {
+      return grade
+    }
+
+    const num = parseFloat(match[0].replace(',', '.'))
+    return grade.replace(match[0], formatNum(num)).replace('*', t('grades.credited'))
+  }
 
   useEffect(() => {
     async function load () {
@@ -42,7 +68,7 @@ export default function Grades () {
           // means that the transcripts are currently being updated
 
           console.error(e)
-          alert('Noten sind vorübergehend nicht verfügbar.')
+          alert(t('grades.alerts.temporarily_unavailable'))
         } else {
           console.error(e)
           alert(e)
@@ -50,7 +76,7 @@ export default function Grades () {
       }
     }
     load()
-  }, [router])
+  }, [router, t])
 
   /**
    * Copies the formula for calculating the grade average to the users clipboard.
@@ -70,25 +96,25 @@ export default function Grades () {
       .join(' + ')
 
     await navigator.clipboard.writeText(`(${inner}) / ${weight}`)
-    alert('Copied to Clipboard!')
+    alert(t('grades.alerts.copy_to_clipboard'))
   }
 
   /**
    * Downloads the users grades as a CSV file.
    */
   function downloadGradeCSV () {
-    alert('Not yet implemented :(')
+    alert(t('grades.alerts.not_implemented'))
   }
 
   return (
     <AppContainer>
-      <AppNavbar title="Noten & Fächer">
+      <AppNavbar title={t('grades.appbar.title')}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => copyGradeFormula()}>
-            Notenschnitt Formel kopieren
+            {t('grades.appbar.overflow.copy_formula')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => downloadGradeCSV()}>
-            Noten als CSV exportieren
+            {t('grades.appbar.overflow.export_csv')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
@@ -98,7 +124,7 @@ export default function Grades () {
           {gradeAverage && gradeAverage.entries.length > 0 && (
             <ListGroup>
               <h4 className={styles.heading}>
-                Notenschnitt
+                {t('grades.summary.title')}
               </h4>
 
               <ListGroup.Item className={styles.gradeAverageContainer}>
@@ -108,8 +134,10 @@ export default function Grades () {
                 </span>
                 {gradeAverage.resultMin !== gradeAverage.resultMax && (
                   <span className={styles.gradeAverageDisclaimer}>
-                    Der genaue Notenschnitt kann nicht ermittelt werden und liegt zwischen
-                    {' '}{formatNum(gradeAverage.resultMin)} und {formatNum(gradeAverage.resultMax)}
+                    {t('grades.summary.disclaimer', {
+                      minAverage: formatNum(gradeAverage.resultMin),
+                      maxAverage: formatNum(gradeAverage.resultMax)
+                    })}
                   </span>
                 )}
               </ListGroup.Item>
@@ -119,7 +147,7 @@ export default function Grades () {
 
         <ListGroup>
           <h4 className={styles.heading}>
-            Noten
+            {t('grades.grades_list.title')}
           </h4>
 
           <ReactPlaceholder type="text" rows={10} ready={grades}>
@@ -129,8 +157,8 @@ export default function Grades () {
                   {item.titel}<br />
 
                   <div className={styles.details}>
-                    Note: {item.note.replace('*', ' (angerechnet)')}<br />
-                    ECTS: {item.ects || '(keine)'}
+                    {t('grades.grade')}: {getLocalizedGrade(item.note)}<br />
+                    {t('grades.ects')}: {item.ects || t('grades.none')}
                   </div>
                 </div>
               </ListGroup.Item>
@@ -140,7 +168,7 @@ export default function Grades () {
 
         <ListGroup>
           <h4 className={styles.heading}>
-            Ausstehende Fächer
+            {t('grades.pending_list.title')}
           </h4>
 
           <ReactPlaceholder type="text" rows={10} ready={missingGrades}>
@@ -150,8 +178,8 @@ export default function Grades () {
                   {item.titel} ({item.stg}) <br />
 
                   <div className={styles.details}>
-                    Frist: {item.frist || '(keine)'}<br />
-                    ECTS: {item.ects || '(keine)'}
+                    {t('grades.deadline')}: {item.frist || t('grades.none')}<br />
+                    {t('grades.ects')}: {item.ects || t('grades.none')}
                   </div>
                 </div>
               </ListGroup.Item>
