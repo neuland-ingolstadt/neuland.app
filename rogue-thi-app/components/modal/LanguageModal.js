@@ -27,6 +27,7 @@ export default function LanguageModal () {
    * @param {string} languageKey Language key
    */
   function changeLanguage (languageKey) {
+    setShowLanguageModal(false)
     i18n.changeLanguage(languageKey)
     router.replace('/', '', { locale: i18n.language })
   }
