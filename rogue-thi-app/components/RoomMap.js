@@ -133,6 +133,21 @@ export default function RoomMap ({ highlight, roomData }) {
   }, [router, highlight, userKind])
 
   /**
+   * Translates the floor name to the current language.
+   * @param {string} floor The floor name as specified in the data
+   * @returns The translated floor name (or the original if not found)
+   */
+  function translateFloors (floor) {
+    const translated = t(`rooms.map.floors.${floor.toLowerCase()}`)
+
+    if (translated.startsWith('rooms.')) {
+      return floor
+    }
+
+    return translated
+  }
+
+  /**
    * Removes focus from the search.
    */
   function unfocus (e) {
@@ -290,7 +305,7 @@ export default function RoomMap ({ highlight, roomData }) {
             .map((floorName, i, filteredFloorOrder) => (
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
-                name={floorName}
+                name={translateFloors(floorName)}
                 checked={i === filteredFloorOrder.length - 1}
               >
                 <LayerGroup>

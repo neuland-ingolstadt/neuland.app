@@ -19,6 +19,9 @@
                 "occupied": "Belegt",
                 "special_equipment": "Sonderausstattung",
                 "occupancy_unknown": "Belegung unbekannt"
+            },
+            "floors": {
+                "eg": "EG"
             }
         },
         "search": {

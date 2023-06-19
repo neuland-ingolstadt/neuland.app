@@ -19,6 +19,9 @@
                 "occupied": "Occupied",
                 "special_equipment": "Special Equipment",
                 "occupancy_unknown": "Occupancy Unknown"
+            },
+            "floors": {
+                "eg": "GF"
             }
         },
         "search": {
