@@ -70,11 +70,11 @@ export default function Personal () {
         {label}:{' '}
         {value
           ? (
-          <>
+            <>
             <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
               {value}
             </span>
-          </>
+            </>
             )
           : null}
       </span>
@@ -122,7 +122,7 @@ export default function Personal () {
     <AppNavbar title="Profil"/>
 
     <AppBody>
-      <ReactPlaceholder type="text" rows={20} ready={userdata || userKind !== USER_STUDENT}>
+      <ReactPlaceholder type="text" rows={10} ready={userdata || userKind !== USER_STUDENT}>
 
         {userKind === USER_STUDENT &&
           <ListGroup>
@@ -140,8 +140,8 @@ export default function Personal () {
               </span>
               {userdata && (
                 <>
-                  <CopyableField label="Mat.-Nr" value={userdata.mtknr} /> <br />
-                  <CopyableField label="Bib.-Nr" value={userdata.bibnr} />
+                  <CopyableField label="Mat.-Nr" value={userdata.mtknr}/> <br/>
+                  <CopyableField label="Bib.-Nr" value={userdata.bibnr}/>
                 </>
               )}
 
@@ -166,119 +166,121 @@ export default function Personal () {
           </ListGroup>
         }
 
-        <br/>
+        <PersonalDataModal userdata={userdata}/>
+      </ReactPlaceholder>
 
-        <ListGroup>
+      <br/>
 
-          {themes.filter(item => item.style.includes(theme[0])).map(item => (
-            <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
-              <div className={styles.interaction_icon}>
+      <ListGroup>
+
+        {themes.filter(item => item.style.includes(theme[0])).map(item => (
+          <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
+            <div className={styles.interaction_icon}>
             <span className="text-muted">
               {item.name}{' '}
               <FontAwesomeIcon icon={faChevronRight}/>
             </span>
-              </div>
-              Theme
-            </ListGroup.Item>
-          ))}
+            </div>
+            Theme
+          </ListGroup.Item>
+        ))}
 
-          <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
-            <div className={styles.interaction_icon}>
+        <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
+          <div className={styles.interaction_icon}>
               <span className="text-muted">
                 <FontAwesomeIcon icon={faChevronRight}/>
               </span>
-            </div>
-            Dashboard
-          </ListGroup.Item>
+          </div>
+          Dashboard
+        </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
-            <div className={styles.interaction_icon}>
+        <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
+          <div className={styles.interaction_icon}>
               <span className="text-muted">
                 <FontAwesomeIcon icon={faChevronRight}/>
               </span>
-            </div>
-            Essenspräferenzen
-          </ListGroup.Item>
+          </div>
+          Essenspräferenzen
+        </ListGroup.Item>
 
-        </ListGroup>
+      </ListGroup>
 
-        <br/>
+      <br/>
 
-        <ListGroup>
+      <ListGroup>
 
-          <ListGroup.Item action
-                          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+        <ListGroup.Item action
+                        onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          Primuss
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          Moodle
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          E-Mail
+        </ListGroup.Item>
+
+        {userKind === USER_EMPLOYEE &&
+          <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
             <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            Primuss
+            MyTHI
           </ListGroup.Item>
+        }
+      </ListGroup>
 
-          <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            Moodle
+      <br/>
+
+      <ListGroup>
+
+        {showDebug && (
+          <ListGroup.Item action onClick={() => router.push('/debug')}>
+            <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
+            API Spielwiese
           </ListGroup.Item>
+        )}
 
-          <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            E-Mail
-          </ListGroup.Item>
+        <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
+          <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
+          Datenschutzerklärung
+        </ListGroup.Item>
 
-          {userKind === USER_EMPLOYEE &&
-            <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
-              <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-              MyTHI
-            </ListGroup.Item>
-          }
-        </ListGroup>
+        <ListGroup.Item action onClick={() => router.push('/imprint')}>
+          <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
+          Impressum
+        </ListGroup.Item>
 
-        <br/>
+      </ListGroup>
 
-        <ListGroup>
+      <br/>
 
-          {showDebug && (
-            <ListGroup.Item action onClick={() => router.push('/debug')}>
-              <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
-              API Spielwiese
-            </ListGroup.Item>
-          )}
+      <div className={styles.logout_button}>
+        {userKind === USER_GUEST && (
+          <Button
+            variant={'success'}
+            onClick={() => forgetSession(router)}>
+            {'Login '}
+            <FontAwesomeIcon icon={faArrowRightToBracket}/>
+          </Button>
+        )}
+        {userKind !== USER_GUEST && (
+          <Button
+            variant={'danger'}
+            onClick={() => forgetSession(router)}>
+            {'Logout '}
+            <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+          </Button>
+        )}
+      </div>
 
-          <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
-            <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
-            Datenschutzerklärung
-          </ListGroup.Item>
+      <DashboardModal/>
+      <FilterFoodModal/>
+      <ThemeModal/>
 
-          <ListGroup.Item action onClick={() => router.push('/imprint')}>
-            <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
-            Impressum
-          </ListGroup.Item>
-
-        </ListGroup>
-
-        <br/>
-
-        <div className={styles.logout_button}>
-          {userKind === USER_GUEST && (
-            <Button
-              variant={'success'}
-              onClick={() => forgetSession(router)}>
-              {'Login '}
-              <FontAwesomeIcon icon={faArrowRightToBracket} />
-            </Button>
-          )}
-          {userKind !== USER_GUEST && (
-            <Button
-              variant={'danger'}
-              onClick={() => forgetSession(router)}>
-              {'Logout '}
-              <FontAwesomeIcon icon={faArrowRightFromBracket} />
-            </Button>
-          )}
-        </div>
-
-        <PersonalDataModal userdata={userdata}/>
-        <DashboardModal/>
-        <FilterFoodModal/>
-        <ThemeModal/>
-      </ReactPlaceholder>
       <AppTabbar/>
     </AppBody>
   </AppContainer>)
