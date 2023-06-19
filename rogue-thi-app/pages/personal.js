@@ -11,6 +11,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 import DashboardModal from '../components/modal/DashboardModal'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
+import LanguageModal from '../components/modal/LanguageModal'
 import PersonalDataModal from '../components/modal/PersonalDataModal'
 import ThemeModal from '../components/modal/ThemeModal'
 
@@ -21,12 +22,11 @@ import {
   faChevronRight,
   faExternalLink,
   faGavel,
-  faLanguage,
   faShield
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { FoodFilterContext, ShowDashboardModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
+import { FoodFilterContext, ShowDashboardModal, ShowLanguageModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
@@ -51,6 +51,7 @@ export default function Personal () {
   const { setShowFoodFilterModal } = useContext(FoodFilterContext)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
+  const [, setShowLanguageModal] = useContext(ShowLanguageModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
@@ -197,6 +198,15 @@ export default function Personal () {
             {t('personal.dashboard')}
           </ListGroup.Item>
 
+          <ListGroup.Item action onClick={() => setShowLanguageModal(true)}>
+            <div className={styles.interaction_icon}>
+              <span className="text-muted">
+                <FontAwesomeIcon icon={faChevronRight}/>
+              </span>
+            </div>
+            {t('personal.language')}
+          </ListGroup.Item>
+
           <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
             <div className={styles.interaction_icon}>
               <span className="text-muted">
@@ -257,14 +267,6 @@ export default function Personal () {
             {t('personal.imprint')}
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => {
-            i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')
-            router.replace('/', '', { locale: i18n.language })
-          }}>
-            <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
-            {t('personal.language')}
-          </ListGroup.Item>
-
         </ListGroup>
 
         <br/>
@@ -292,6 +294,7 @@ export default function Personal () {
         <DashboardModal/>
         <FilterFoodModal/>
         <ThemeModal/>
+        <LanguageModal/>
       </ReactPlaceholder>
       <AppTabbar/>
     </AppBody>
