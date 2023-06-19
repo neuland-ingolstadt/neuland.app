@@ -19,6 +19,9 @@
             "theme": {
                 "title": "Theme",
                 "hackerman": "Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <aCtf>Übungs-CTFs</aCtf> lösen. Wenn du so weit bist, kannst du es <aHackerman>hier</aHackerman> freischalten."
+            },
+            "language": {
+                "title": "Sprache"
             }
         }
     }

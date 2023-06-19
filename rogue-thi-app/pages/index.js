@@ -5,11 +5,9 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { useDashboard } from '../lib/hooks/dashboard'
-
+import { DashboardContext, ShowDashboardModal } from './_app'
 import DashboardModal from '../components/modal/DashboardModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ShowDashboardModal } from './_app'
 
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -25,7 +23,7 @@ export default function Home () {
   const {
     shownDashboardEntries,
     hideDashboardEntry
-  } = useDashboard()
+  } = useContext(DashboardContext)
 
   return (
     <AppContainer>

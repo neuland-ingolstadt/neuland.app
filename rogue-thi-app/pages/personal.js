@@ -11,6 +11,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 import DashboardModal from '../components/modal/DashboardModal'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
+import LanguageModal from '../components/modal/LanguageModal'
 import PersonalDataModal from '../components/modal/PersonalDataModal'
 import ThemeModal from '../components/modal/ThemeModal'
 
@@ -21,12 +22,11 @@ import {
   faChevronRight,
   faExternalLink,
   faGavel,
-  faLanguage,
   faShield
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { FoodFilterContext, ShowDashboardModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
+import { FoodFilterContext, ShowDashboardModal, ShowLanguageModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
@@ -51,6 +51,7 @@ export default function Personal () {
   const { setShowFoodFilterModal } = useContext(FoodFilterContext)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
+  const [, setShowLanguageModal] = useContext(ShowLanguageModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
@@ -76,11 +77,11 @@ export default function Personal () {
         {label}:{' '}
         {value
           ? (
-          <>
-            <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
-              {value}
-            </span>
-          </>
+            <>
+              <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
+                {value}
+              </span>
+            </>
             )
           : null}
       </span>
@@ -125,24 +126,24 @@ export default function Personal () {
   }, [router, userKind])
 
   return (<AppContainer>
-    <AppNavbar title={t('personal.title')}/>
+    <AppNavbar title={t('personal.title')} />
 
     <AppBody>
-      <ReactPlaceholder type="text" rows={20} ready={userdata || userKind !== USER_STUDENT}>
+      <ReactPlaceholder type="text" rows={10} ready={userdata || userKind !== USER_STUDENT}>
 
         {userKind === USER_STUDENT &&
           <ListGroup>
             <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
               <div className={styles.name_interaction_icon}>
-                <FontAwesomeIcon icon={faChevronRight} className="text-muted"/>
+                <FontAwesomeIcon icon={faChevronRight} className="text-muted" />
               </div>
-              {userdata && userdata.name + ', ' + userdata.vname}<br/>
+              {userdata && userdata.name + ', ' + userdata.vname}<br />
               {userdata && userdata.fachrich}
             </ListGroup.Item>
 
             <ListGroup.Item className="text-muted">
               <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-              {userdata && userdata.stgru + '. Semester'}<br/>
+                {userdata && userdata.stgru + '. Semester'}<br />
               </span>
               {userdata && (
                 <>
@@ -158,7 +159,7 @@ export default function Personal () {
                 <span className="text-muted">
                   {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
                   {' Noten '}
-                  <FontAwesomeIcon icon={faChevronRight}/>
+                  <FontAwesomeIcon icon={faChevronRight} />
                 </span>
               </div>
               <span className="text-muted">
@@ -172,128 +173,132 @@ export default function Personal () {
           </ListGroup>
         }
 
-        <br/>
-
-        <ListGroup>
-
-          {themes.filter(item => item.style.includes(theme[0])).map(item => (
-            <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
-              <div className={styles.interaction_icon}>
-            <span className="text-muted">
-              {`${item.name[i18n.language]} `}
-              <FontAwesomeIcon icon={faChevronRight}/>
-            </span>
-              </div>
-              {t('personal.theme')}
-            </ListGroup.Item>
-          ))}
-
-          <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
-            <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight}/>
-              </span>
-            </div>
-            {t('personal.dashboard')}
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
-            <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight}/>
-              </span>
-            </div>
-            {t('personal.food_preferences')}
-          </ListGroup.Item>
-
-        </ListGroup>
-
-        <br/>
-
-        <ListGroup>
-
-          <ListGroup.Item action
-                          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            Primuss
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            Moodle
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-            E-Mail
-          </ListGroup.Item>
-
-          {userKind === USER_EMPLOYEE &&
-            <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
-              <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
-              MyTHI
-            </ListGroup.Item>
-          }
-        </ListGroup>
-
-        <br/>
-
-        <ListGroup>
-
-          {showDebug && (
-            <ListGroup.Item action onClick={() => router.push('/debug')}>
-              <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
-              {t('personal.debug')}
-            </ListGroup.Item>
-          )}
-
-          <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
-            <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
-            {t('personal.privacy')}
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => router.push('/imprint')}>
-            <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
-            {t('personal.imprint')}
-          </ListGroup.Item>
-
-          <ListGroup.Item action onClick={() => {
-            i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')
-            router.replace('/', '', { locale: i18n.language })
-          }}>
-            <FontAwesomeIcon icon={faLanguage} className={styles.interaction_icon}/>
-            {t('personal.language')}
-          </ListGroup.Item>
-
-        </ListGroup>
-
-        <br/>
-
-        <div className={styles.logout_button}>
-          {userKind === USER_GUEST && (
-            <Button
-              variant={'success'}
-              onClick={() => forgetSession(router)}>
-              {`${t('personal.login')} `}
-              <FontAwesomeIcon icon={faArrowRightToBracket} />
-            </Button>
-          )}
-          {userKind !== USER_GUEST && (
-            <Button
-              variant={'danger'}
-              onClick={() => forgetSession(router)}>
-              {`${t('personal.logout')} `}
-              <FontAwesomeIcon icon={faArrowRightFromBracket} />
-            </Button>
-          )}
-        </div>
-
-        <PersonalDataModal userdata={userdata}/>
-        <DashboardModal/>
-        <FilterFoodModal/>
-        <ThemeModal/>
+        <PersonalDataModal userdata={userdata} />
       </ReactPlaceholder>
-      <AppTabbar/>
+
+      <br />
+
+      <ListGroup>
+
+        {themes.filter(item => item.style.includes(theme[0])).map(item => (
+          <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
+            <div className={styles.interaction_icon}>
+              <span className="text-muted">
+                {`${item.name[i18n.language]} `}
+                <FontAwesomeIcon icon={faChevronRight} />
+              </span>
+            </div>
+            {t('personal.theme')}
+          </ListGroup.Item>
+        ))}
+
+        <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
+          <div className={styles.interaction_icon}>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+          </div>
+          {t('personal.dashboard')}
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => setShowLanguageModal(true)}>
+          <div className={styles.interaction_icon}>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+          </div>
+          {t('personal.language')}
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
+          <div className={styles.interaction_icon}>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+          </div>
+          {t('personal.food_preferences')}
+        </ListGroup.Item>
+
+      </ListGroup>
+
+      <br />
+
+      <ListGroup>
+
+        <ListGroup.Item action
+          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+          Primuss
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+          Moodle
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+          E-Mail
+        </ListGroup.Item>
+
+        {userKind === USER_EMPLOYEE &&
+          <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
+            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+            MyTHI
+          </ListGroup.Item>
+        }
+      </ListGroup>
+
+      <br />
+
+      <ListGroup>
+
+        {showDebug && (
+          <ListGroup.Item action onClick={() => router.push('/debug')}>
+            <FontAwesomeIcon icon={faBug} className={styles.interaction_icon} />
+            {t('personal.debug')}
+          </ListGroup.Item>
+        )}
+
+        <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
+          <FontAwesomeIcon icon={faShield} className={styles.interaction_icon} />
+          {t('personal.privacy')}
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => router.push('/imprint')}>
+          <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon} />
+          {t('personal.imprint')}
+        </ListGroup.Item>
+
+      </ListGroup>
+
+      <br />
+
+      <div className={styles.logout_button}>
+        {userKind === USER_GUEST && (
+          <Button
+            variant={'success'}
+            onClick={() => forgetSession(router)}>
+            {`${t('personal.login')} `}
+            <FontAwesomeIcon icon={faArrowRightToBracket} />
+          </Button>
+        )}
+        {userKind !== USER_GUEST && (
+          <Button
+            variant={'danger'}
+            onClick={() => forgetSession(router)}>
+            {`${t('personal.logout')} `}
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
+          </Button>
+        )}
+      </div>
+
+      <PersonalDataModal userdata={userdata} />
+      <DashboardModal />
+      <FilterFoodModal />
+      <ThemeModal />
+      <LanguageModal />
+      <AppTabbar />
     </AppBody>
   </AppContainer>)
 }
