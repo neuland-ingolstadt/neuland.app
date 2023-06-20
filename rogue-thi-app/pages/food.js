@@ -63,7 +63,7 @@ export default function Mensa () {
   useEffect(() => {
     async function load () {
       try {
-        const days = await loadFoodEntries(selectedRestaurants, router.locale)
+        const days = await loadFoodEntries(selectedRestaurants)
 
         setCurrentFoodDays(days.slice(0, 5))
         setFutureFoodDays(days?.slice(5, days.length))

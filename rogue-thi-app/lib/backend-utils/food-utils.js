@@ -7,11 +7,11 @@ import NeulandAPI from '../backend/neuland-api'
  * @param {string} language Language code
  * @returns {object[]}
  */
-export async function loadFoodEntries (restaurants, language) {
+export async function loadFoodEntries (restaurants) {
   const entries = []
 
   if (restaurants.includes('mensa')) {
-    const data = await NeulandAPI.getMensaPlan(language)
+    const data = await NeulandAPI.getMensaPlan()
     data.forEach(day => day.meals.forEach(entry => {
       entry.restaurant = 'Mensa'
     }))
@@ -19,7 +19,7 @@ export async function loadFoodEntries (restaurants, language) {
   }
 
   if (restaurants.includes('reimanns')) {
-    const data = await NeulandAPI.getReimannsPlan(language)
+    const data = await NeulandAPI.getReimannsPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
@@ -31,7 +31,7 @@ export async function loadFoodEntries (restaurants, language) {
   }
 
   if (restaurants.includes('canisius')) {
-    const data = await NeulandAPI.getCanisiusPlan(language)
+    const data = await NeulandAPI.getCanisiusPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)

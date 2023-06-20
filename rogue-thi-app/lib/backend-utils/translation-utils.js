@@ -27,6 +27,11 @@ async function translate (text, target) {
   }
 }
 
+/**
+ * Translates all meals in the given plan using DeepL.
+ * @param {Object} meals The meal plan
+ * @returns {Object} The translated meal plan
+ */
 export async function translateMeals (meals) {
   return await Promise.all(meals.map(async (day) => {
     const meals = await Promise.all(day.meals.map(async (meal) => {

@@ -26,15 +26,15 @@ class NeulandAPIClient {
   }
 
   async getMensaPlan () {
-    return await this.performRequest(`${ENDPOINT}/api/mensa`)
+    return this.performRequest(`${ENDPOINT}/api/mensa`)
   }
 
   async getReimannsPlan () {
-    return await this.performRequest(`${ENDPOINT}/api/reimanns`)
+    return this.performRequest(`${ENDPOINT}/api/reimanns`)
   }
 
   async getCanisiusPlan () {
-    return await this.performRequest(`${ENDPOINT}/api/canisius`)
+    return this.performRequest(`${ENDPOINT}/api/canisius`)
   }
 
   /**
