@@ -154,12 +154,12 @@ export default function Mensa () {
       >
         <div>
           <div className={styles.name}>
-            {isTranslated(meal) && (
+            {/* {isTranslated(meal) && (
                 <>
                   <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
                   {' '}
                 </>
-            )}
+            )} */}
             {meal.name[i18n.languages[0]]}
           </div>
           <div className={styles.room}>
@@ -430,6 +430,10 @@ export default function Mensa () {
                   <li>
                     <strong>{t('foodModal.translation.original_name')}</strong>:{' '}
                     {showMealDetails?.name[showMealDetails?.originalLanguage]}
+                  </li>
+                  <li>
+                    <strong>{t('foodModal.translation.translated_name')}</strong>:{' '}
+                    {showMealDetails?.name[i18n.languages[0]]}
                   </li>
                 </ul>
               </p>

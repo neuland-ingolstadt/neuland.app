@@ -68,7 +68,8 @@
         "translation": {
             "title": "Übersetzung",
             "warning": "Dieses Gericht wurde automatisch übersetzt. Bitte überprüfen Sie die Informationen auf den Informationsbildschirmen, bevor du etwas konsumierst.",
-            "original_name": "Originalname"
+            "original_name": "Originalname",
+            "translated_name": "Übersetzter Name"
         }
     },
     

@@ -1,6 +1,7 @@
 import cheerio from 'cheerio'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
+import { translateMeals } from '../../lib/backend-utils/translate-utils'
 
 const CACHE_TTL = 10 * 60 * 1000 // 10m
 const URL = 'http://reimanns.in/mittagsgerichte-wochenkarte/'
@@ -77,7 +78,7 @@ export default async function handler (req, res) {
       })
 
       // convert format to the same as /api/mensa
-      return Object.keys(days).map(day => ({
+      const mealPlan = Object.keys(days).map(day => ({
         timestamp: day,
         meals: days[day].map(meal => ({
           name: meal,
@@ -92,6 +93,8 @@ export default async function handler (req, res) {
           nutrition: null
         }))
       }))
+
+      return translateMeals(mealPlan)
     })
 
     sendJson(res, 200, data)

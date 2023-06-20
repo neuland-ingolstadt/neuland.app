@@ -68,7 +68,8 @@
         "translation": {
             "title": "Translation",
             "warning": "This meal has been automatically translated. Please verify the information on the information screens before consuming anything.",
-            "original_name": "Original name"
+            "original_name": "Original name",
+            "translated_name": "Translated name"
         }
     },
     "filterModal": {

@@ -2,11 +2,11 @@ import xmljs from 'xml-js'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
-import { translate } from '../../lib/backend-utils/translation-utils'
+import { translateMeals } from '../../lib/backend-utils/translate-utils'
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
-const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
+// const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
@@ -30,7 +30,7 @@ function parseXmlFloat (str) {
  * Parses the XML meal plan.
  * @returns {object[]}
  */
-async function parseDataFromXml (xml) {
+function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
 
@@ -41,7 +41,7 @@ async function parseDataFromXml (xml) {
     sourceDays = [sourceDays]
   }
 
-  const days = await sourceDays.map(async day => {
+  const days = sourceDays.map(day => {
     const date = new Date(day._attributes.timestamp * 1000)
 
     if (now - date > 24 * 60 * 60 * 1000) {
@@ -54,7 +54,7 @@ async function parseDataFromXml (xml) {
     }
 
     const addInReg = /\s*\((.*?)\)\s*/
-    const meals = await sourceItems.map(async item => {
+    const meals = sourceItems.map(item => {
       // sometimes, the title is undefined (see #123)
       let text = item.title._text ?? ''
       const allergens = new Set()
@@ -117,21 +117,15 @@ async function parseDataFromXml (xml) {
 
 /**
  * Fetches and parses the mensa plan.
- * @param {string} lang Requested language (`de` or `en`)
  * @returns {object[]}
  */
-async function fetchPlan (lang) {
-  if (lang && lang !== 'de' && lang !== 'en') {
-    throw new Error('unknown/unsupported language')
-  }
-
-  const url = lang && lang === 'en' ? URL_EN : URL_DE
-
-  const plan = await cache.get(lang, async () => {
-    const resp = await fetch(url)
+async function fetchPlan () {
+  const plan = await cache.get('mensa', async () => {
+    const resp = await fetch(URL_DE)
 
     if (resp.status === 200) {
-      return await parseDataFromXml(await resp.text())
+      const mealPlan = parseDataFromXml(await resp.text())
+      return await translateMeals(mealPlan)
     } else {
       throw new Error('Data source returned an error: ' + await resp.text())
     }
@@ -145,7 +139,7 @@ export default async function handler (req, res) {
 
   try {
     res.statusCode = 200
-    const plan = await fetchPlan(req.query.lang)
+    const plan = await fetchPlan()
     res.end(JSON.stringify(plan))
   } catch (e) {
     console.error(e)
