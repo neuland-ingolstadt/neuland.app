@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -63,7 +63,7 @@ export default function Mensa () {
   useEffect(() => {
     async function load () {
       try {
-        const days = await loadFoodEntries(selectedRestaurants, router.locale)
+        const days = await loadFoodEntries(selectedRestaurants)
 
         setCurrentFoodDays(days.slice(0, 5))
         setFutureFoodDays(days?.slice(5, days.length))
@@ -154,7 +154,13 @@ export default function Mensa () {
       >
         <div>
           <div className={styles.name}>
-            {meal.name}
+            {/* {isTranslated(meal) && (
+                <>
+                  <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                  {' '}
+                </>
+            )} */}
+            {meal.name[i18n.languages[0]]}
           </div>
           <div className={styles.room}>
             <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
@@ -275,6 +281,8 @@ export default function Mensa () {
     )
   }
 
+  const isTranslated = (meal) => meal?.originalLanguage !== i18n.languages[0]
+
   return (
     <AppContainer>
       <AppNavbar title={t('list.titles.meals')} showBack={'desktop-only'}>
@@ -331,7 +339,7 @@ export default function Mensa () {
               ))}
             </ul>
 
-            <h5>Allergene</h5>
+            <h5>{t('foodModal.allergens.title')}</h5>
             {showMealDetails?.allergens === null && `${t('foodModal.allergens.unkown')}`}
             {showMealDetails?.allergens?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
@@ -408,6 +416,28 @@ export default function Mensa () {
               <br/>
               {t('foodModal.warning.text')}
             </p>
+
+            {isTranslated(showMealDetails) && (
+              <p>
+                <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                <strong>{` ${t('foodModal.translation.title')}`}</strong>
+                <br/>
+
+                {` ${t('foodModal.translation.warning')}`}
+
+                <br/>
+                <ul>
+                  <li>
+                    <strong>{t('foodModal.translation.original_name')}</strong>:{' '}
+                    {showMealDetails?.name[showMealDetails?.originalLanguage]}
+                  </li>
+                  <li>
+                    <strong>{t('foodModal.translation.translated_name')}</strong>:{' '}
+                    {showMealDetails?.name[i18n.languages[0]]}
+                  </li>
+                </ul>
+              </p>
+            )}
           </Modal.Body>
 
           <Modal.Footer>

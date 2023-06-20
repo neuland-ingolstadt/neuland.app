@@ -64,6 +64,12 @@
         "warning": {
             "title": "Angaben ohne Gewähr.",
             "text": "Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert. Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion."
+        },
+        "translation": {
+            "title": "Übersetzung",
+            "warning": "Dieses Gericht wurde automatisch übersetzt. Bitte überprüfen Sie die Informationen auf den Informationsbildschirmen, bevor du etwas konsumierst.",
+            "original_name": "Originalname",
+            "translated_name": "Übersetzter Name"
         }
     },
     

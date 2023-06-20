@@ -60,7 +60,7 @@ export default function FoodCard () {
           }
         }
 
-        const entries = await loadFoodEntries(restaurants, i18n.language)
+        const entries = await loadFoodEntries(restaurants)
         const todayEntries = entries
           .find(x => x.timestamp === today)
           ?.meals
@@ -72,11 +72,11 @@ export default function FoodCard () {
           setFoodEntries([])
         } else if (todayEntries.length > 2) {
           setFoodEntries([
-            todayEntries[0].name,
+            todayEntries[0].name[i18n.languages[0]],
             `${t('food.text.additional', { count: todayEntries.length - 1 })}`
           ])
         } else {
-          setFoodEntries(todayEntries.map(x => x.name))
+          setFoodEntries(todayEntries.map(x => x.name[i18n.languages[0]]))
         }
       } catch (e) {
         console.error(e)
@@ -84,7 +84,7 @@ export default function FoodCard () {
       }
     }
     load()
-  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n.language])
+  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n])
 
   return (
     <BaseCard

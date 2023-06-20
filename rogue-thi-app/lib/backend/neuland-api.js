@@ -25,15 +25,8 @@ class NeulandAPIClient {
     }
   }
 
-  async getMensaPlan (lang) {
-    switch (lang) {
-      case 'de':
-        return this.performRequest(`${ENDPOINT}/api/mensa?lang=de`)
-      case 'en':
-        return this.performRequest(`${ENDPOINT}/api/mensa?lang=en`)
-      default:
-        throw new Error('Invalid language')
-    }
+  async getMensaPlan () {
+    return this.performRequest(`${ENDPOINT}/api/mensa`)
   }
 
   async getReimannsPlan () {
