@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Home.module.css'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Main page.
@@ -25,11 +26,13 @@ export default function Home () {
     hideDashboardEntry
   } = useContext(DashboardContext)
 
+  const { t } = useTranslation('common')
+
   return (
     <AppContainer>
       <AppNavbar title="neuland.app" showBack={false}>
         <AppNavbar.Button onClick={() => setShowDashboardModal(true)}>
-          <FontAwesomeIcon title="Personalisieren" icon={faPen} fixedWidth />
+          <FontAwesomeIcon title={t('dashboard.orderModal.icons.personalize')} icon={faPen} fixedWidth />
         </AppNavbar.Button>
       </AppNavbar>
 

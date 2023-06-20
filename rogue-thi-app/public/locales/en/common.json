@@ -30,5 +30,33 @@
             },
             "info": "Your data will only be stored locally on your device and not transmitted to anyone."
         }
+    },
+    "dashboard": {
+        "orderModal": {
+            "title": "Dashboard",
+            "body": "Here you can change the order of the entries displayed on the dashboard.",
+            "hidden_cards": "Hidden Cards",
+            "reset_order": "Reset Order",
+            "icons": {
+                "move_up": "Move Up",
+                "move_down": "Move Down",
+                "remove": "Remove",
+                "restore": "Restore",
+                "personalize": "Personalize"
+            }
+        }
+    },
+    "cards": {
+        "install": "Installation",
+        "timetable": "Timetable",
+        "mensa": "Cafeteria",
+        "mobility": "Mobility",
+        "calendar": "Calendar",
+        "events": "Events",
+        "rooms": "Room Plan",
+        "library": "Library",
+        "grades": "Grades & Subjects",
+        "personal": "Profile",
+        "lecturers": "Lecturers"
     }
 }

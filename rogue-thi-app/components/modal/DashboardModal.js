@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
+import { useTranslation } from 'next-i18next'
 
 /**
  * A modal component that allows users to personalize their experience by changing the dashboard layout
@@ -24,33 +25,35 @@ export default function DashboardModal () {
   const [showDashboardModal, setShowDashboardModal] = useContext(ShowDashboardModal)
   const themeModalBody = useRef()
 
+  const { t } = useTranslation('common')
+
   return (
     <Modal show={!!showDashboardModal} dialogClassName={styles.themeModal}
            onHide={() => setShowDashboardModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Dashboard</Modal.Title>
+        <Modal.Title>{t('dashboard.orderModal.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body ref={themeModalBody}>
         <p>
-          Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.
+          {t('dashboard.orderModal.body')}
         </p>
         <ListGroup>
           {shownDashboardEntries.map((entry, i) => (
             <ListGroup.Item key={i} className={styles.personalizeItem}>
               <div className={styles.personalizeLabel}>
-                {entry.label}
+                {t(`cards.${entry.key}`)}
               </div>
               <div className={styles.personalizeButtons}>
                 {entry.removable &&
                   <Button variant="text" onClick={() => hideDashboardEntry(entry.key)}>
-                    <FontAwesomeIcon title="Entfernen" icon={faTrash} fixedWidth/>
+                    <FontAwesomeIcon title={t('dashboard.orderModal.icons.remove')} icon={faTrash} fixedWidth/>
                   </Button>
                 }
                 <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
-                  <FontAwesomeIcon title="Nach oben" icon={faChevronUp} fixedWidth/>
+                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.move_up')} icon={faChevronUp} fixedWidth/>
                 </Button>
                 <Button variant="text" onClick={() => moveDashboardEntry(i, +1)}>
-                  <FontAwesomeIcon title="Nach unten" icon={faChevronDown} fixedWidth/>
+                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.move_down')} icon={faChevronDown} fixedWidth/>
                 </Button>
               </div>
             </ListGroup.Item>
@@ -58,16 +61,16 @@ export default function DashboardModal () {
         </ListGroup>
         <br/>
 
-        <h4>Ausgeblendete Elemente</h4>
+        <h4>{t('dashboard.orderModal.hidden_cards')}</h4>
         <ListGroup>
           {hiddenDashboardEntries.map((entry, i) => (
             <ListGroup.Item key={i} className={styles.personalizeItem}>
               <div className={styles.personalizeLabel}>
-                {entry.label}
+                {t(`cards.${entry.key}`)}
               </div>
               <div className={styles.personalizeButtons}>
                 <Button variant="text" onClick={() => bringBackDashboardEntry(i)}>
-                  <FontAwesomeIcon title="Wiederherstellen" icon={faTrashRestore} fixedWidth/>
+                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.restore')} icon={faTrashRestore} fixedWidth/>
                 </Button>
               </div>
             </ListGroup.Item>
@@ -79,7 +82,7 @@ export default function DashboardModal () {
           variant="secondary"
           onClick={() => resetOrder()}
         >
-          Reihenfolge zurücksetzen
+          {t('dashboard.orderModal.reset_order')}
         </Button>
       </Modal.Body>
     </Modal>

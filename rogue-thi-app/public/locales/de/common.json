@@ -9,27 +9,54 @@
     },
     "food": {
         "filterModal": {
-            "header" : "Filter",
-            "restaurants" :
-                {
-                    "title" : "Restaurants",
-                    "showMensa" : "Mensa anzeigen",
-                    "showReimanns" : "Reimanns anzeigen",
-                    "showCanisius" : "Canisiuskonvikt anzeigen"
-                },
-            "allergens" : {
-                "title" : "Allergien",
-                "iconTitle" : "Allergene",
-                "selected" : "Ausgewählt",
-                "empty" : "Keine"
+            "header": "Filter",
+            "restaurants": {
+                "title": "Restaurants",
+                "showMensa": "Mensa anzeigen",
+                "showReimanns": "Reimanns anzeigen",
+                "showCanisius": "Canisiuskonvikt anzeigen"
             },
-            "preferences" : {
-                "title" : "Essenspräferenzen",
-                "iconTitle" : "Präferenzen",
-                "selected" : "Ausgewählt",
-                "empty" : "Keine"
+            "allergens": {
+                "title": "Allergien",
+                "iconTitle": "Allergene",
+                "selected": "Ausgewählt",
+                "empty": "Keine"
             },
-            "info" : "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
+            "preferences": {
+                "title": "Essenspräferenzen",
+                "iconTitle": "Präferenzen",
+                "selected": "Ausgewählt",
+                "empty": "Keine"
+            },
+            "info": "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
         }
+    },
+    "dashboard": {
+        "orderModal": {
+            "title": "Dashboard",
+            "body": "Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.",
+            "hidden_cards": "Ausgeblendete Elemente",
+            "reset_order": "Reihenfolge zurücksetzen",
+            "icons": {
+                "move_up": "Nach oben",
+                "move_down": "Nach unten",
+                "remove": "Entfernen",
+                "restore": "Wiederherstellen",
+                "personalize": "Personalisieren"
+            }
+        }
+    },
+    "cards": {
+        "install": "Installation",
+        "timetable": "Stundenplan",
+        "mensa": "Essen",
+        "mobility": "Mobilität",
+        "calendar": "Termine",
+        "events": "Veranstaltungen",
+        "rooms": "Raumplan",
+        "library": "Bibliothek",
+        "grades": "Noten & Fächer",
+        "personal": "Profil",
+        "lecturers": "Dozenten"
     }
 }

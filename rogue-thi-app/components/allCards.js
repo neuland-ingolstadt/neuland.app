@@ -21,7 +21,6 @@ export const PLATFORM_MOBILE = 'mobile'
 export const ALL_DASHBOARD_CARDS = [
   {
     key: 'install',
-    label: 'Installation',
     removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: hidePromptCard => (
@@ -33,49 +32,42 @@ export const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'timetable',
-    label: 'Stundenplan',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
     card: () => <TimetableCard key="timetable" />
   },
   {
     key: 'mensa',
-    label: 'Essen',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <FoodCard key="mensa" />
   },
   {
     key: 'mobility',
-    label: 'Mobilität',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <MobilityCard key="mobility" />
   },
   {
     key: 'calendar',
-    label: 'Termine',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <CalendarCard key="calendar" />
   },
   {
     key: 'events',
-    label: 'Veranstaltungen',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <EventsCard key="events" />
   },
   {
     key: 'rooms',
-    label: 'Raumplan',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <RoomCard key="rooms" />
   },
   {
     key: 'library',
-    label: 'Bibliothek',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
@@ -89,7 +81,6 @@ export const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'grades',
-    label: 'Noten & Fächer',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
     card: () => (
@@ -103,7 +94,6 @@ export const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'personal',
-    label: 'Profil',
     removable: false,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => (
@@ -117,7 +107,6 @@ export const ALL_DASHBOARD_CARDS = [
   },
   {
     key: 'lecturers',
-    label: 'Dozenten',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
     card: () => (
