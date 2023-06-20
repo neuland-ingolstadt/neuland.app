@@ -7,7 +7,7 @@ const DEEPL_API_KEY = process.env.DEEPL_API_KEY || ''
  * @param {String} target The target language
  * @returns {String}
  */
-export async function translate (text, target) {
+async function translate (text, target) {
   const resp = await fetch(`${DEEPL_ENDPOINT}`,
     {
       method: 'POST',
@@ -25,4 +25,24 @@ export async function translate (text, target) {
   } else {
     throw new Error('DeepL returned an error: ' + await resp.text())
   }
+}
+
+export async function translateMeals (meals) {
+  return await Promise.all(meals.map(async (day) => {
+    const meals = await Promise.all(day.meals.map(async (meal) => {
+      return {
+        ...meal,
+        name: {
+          de: meal.name,
+          en: await translate(meal.name, 'EN')
+        },
+        originalLanguage: 'de'
+      }
+    }))
+
+    return {
+      ...day,
+      meals
+    }
+  }))
 }

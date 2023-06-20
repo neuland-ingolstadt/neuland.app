@@ -417,7 +417,7 @@ export default function Mensa () {
               {t('foodModal.warning.text')}
             </p>
 
-            {showMealDetails?.originalLanguage && (
+            {isTranslated(showMealDetails) && (
               <p>
                 <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
                 <strong>{` ${t('foodModal.translation.title')}`}</strong>

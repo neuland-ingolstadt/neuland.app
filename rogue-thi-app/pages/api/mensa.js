@@ -2,7 +2,7 @@ import xmljs from 'xml-js'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
-import { translateMeals } from '../../lib/backend-utils/translate-utils'
+import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'

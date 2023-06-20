@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
-import { translateMeals } from '../../lib/backend-utils/translate-utils'
+import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
 const CACHE_TTL = 10 * 60 * 1000 // 10m
 const URL = 'http://reimanns.in/mittagsgerichte-wochenkarte/'

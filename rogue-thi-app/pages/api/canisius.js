@@ -1,5 +1,5 @@
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
-import { translateMeals } from '../../lib/backend-utils/translate-utils'
+import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
 const pdf = require('pdf-parse')
 
