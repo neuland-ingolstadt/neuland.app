@@ -37,57 +37,11 @@ class NeulandAPIClient {
   }
 
   async getReimannsPlan (lang) {
-    let data = await this.performRequest(`${ENDPOINT}/api/reimanns`)
-
-    if (lang !== 'de') {
-      data = this.translateMealNames(data, lang)
-    }
-
-    return data
+    return await this.performRequest(`${ENDPOINT}/api/reimanns`)
   }
 
   async getCanisiusPlan (lang) {
-    let data = await this.performRequest(`${ENDPOINT}/api/canisius`)
-
-    if (lang !== 'de') {
-      data = this.translateMealNames(data, lang)
-    }
-
-    return data
-  }
-
-  async translateMealNames (data, lang) {
-    const mealNames = data.flatMap(x => x.meals.map(y => y.name))
-    const translatedMealNames = await this.translate(mealNames, 'de', lang)
-
-    // replace meal names with data.map
-    data.forEach((day, i) => {
-      day.meals.forEach((meal, j) => {
-        meal.originalName = meal.name
-        meal.name = translatedMealNames[i * day.meals.length + j]
-        meal.translated = true
-      })
-    })
-
-    return data
-  }
-
-  async translate (text, source, target) {
-    const res = await fetch('http://localhost:5000/translate', {
-      method: 'POST',
-      body: JSON.stringify({
-        q: text,
-        source,
-        target,
-        format: 'text',
-        api_key: ''
-      }),
-      headers: { 'Content-Type': 'application/json' }
-    })
-
-    // return translated text
-    const result = await res.json()
-    return result.translatedText
+    return await this.performRequest(`${ENDPOINT}/api/canisius`)
   }
 
   /**

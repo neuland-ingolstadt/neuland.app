@@ -154,13 +154,13 @@ export default function Mensa () {
       >
         <div>
           <div className={styles.name}>
-            {meal.translated && (
+            {isTranslated(meal) && (
                 <>
                   <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
                   {' '}
                 </>
             )}
-            {meal.name}
+            {meal.name[i18n.languages[0]]}
           </div>
           <div className={styles.room}>
             <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
@@ -280,6 +280,8 @@ export default function Mensa () {
       </SwipeableTab>
     )
   }
+
+  const isTranslated = (meal) => meal?.originalLanguage !== i18n.languages[0]
 
   return (
     <AppContainer>
@@ -415,7 +417,7 @@ export default function Mensa () {
               {t('foodModal.warning.text')}
             </p>
 
-            {showMealDetails?.translated && (
+            {showMealDetails?.originalLanguage && (
               <p>
                 <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
                 <strong>{` ${t('foodModal.translation.title')}`}</strong>
@@ -427,7 +429,7 @@ export default function Mensa () {
                 <ul>
                   <li>
                     <strong>{t('foodModal.translation.original_name')}</strong>:{' '}
-                    {showMealDetails?.originalName}
+                    {showMealDetails?.name[showMealDetails?.originalLanguage]}
                   </li>
                 </ul>
               </p>

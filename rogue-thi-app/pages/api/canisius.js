@@ -1,4 +1,5 @@
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
+import { translate } from '../../lib/backend-utils/translation-utils'
 
 const pdf = require('pdf-parse')
 
@@ -82,7 +83,7 @@ export default async function handler (_, res) {
   try {
     const data = await cache.get('canisius', async () => {
       const pdfBuffer = await getPdf()
-      return pdf(pdfBuffer).then(function (data) {
+      return pdf(pdfBuffer).then(async function (data) {
         const text = data.text.replace(NEW_LINE_REGEX, ' ')
 
         let days = text.split(TITLE_REGEX)
@@ -104,31 +105,38 @@ export default async function handler (_, res) {
 
         // trim whitespace and split into dishes
         const dishes = days.map(getMealsFromBlock)
-
-        return Object.keys(days).map(day => {
-          const dayDishes = dishes[day].map((dish) => ({
-            name: dish.name,
+        return await Promise.all(dishes.map(async (day, index) => {
+          const dayDishes = await Promise.all(day.map(async (dish) => ({
+            name: {
+              de: dish.name,
+              en: await translate(dish.name, 'EN')
+            },
+            originalLanguage: 'de',
             category: 'Essen',
             prices: dish.prices,
             allergens: null,
             flags: null,
             nutrition: null
-          }))
+          })))
 
-          const daySalads = salads.map((salad) => ({
-            name: salad.name,
+          const daySalads = await Promise.all(salads.map(async (salad) => ({
+            name: {
+              de: salad.name,
+              en: await translate(salad.name, 'EN')
+            },
+            originalLanguage: 'de',
             category: 'Salat',
             prices: salad.prices,
             allergens: null,
             flags: null,
             nutrition: null
-          }))
+          })))
 
           return {
-            timestamp: dates[day],
+            timestamp: dates[index],
             meals: dayDishes.length > 0 ? [...dayDishes, ...daySalads] : []
           }
-        })
+        }))
       })
     })
 

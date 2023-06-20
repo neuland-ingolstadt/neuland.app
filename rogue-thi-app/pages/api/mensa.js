@@ -2,6 +2,7 @@ import xmljs from 'xml-js'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
+import { translate } from '../../lib/backend-utils/translation-utils'
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
@@ -29,7 +30,7 @@ function parseXmlFloat (str) {
  * Parses the XML meal plan.
  * @returns {object[]}
  */
-function parseDataFromXml (xml) {
+async function parseDataFromXml (xml) {
   const sourceData = xmljs.xml2js(xml, { compact: true })
   const now = new Date()
 
@@ -40,7 +41,7 @@ function parseDataFromXml (xml) {
     sourceDays = [sourceDays]
   }
 
-  const days = sourceDays.map(day => {
+  const days = await sourceDays.map(async day => {
     const date = new Date(day._attributes.timestamp * 1000)
 
     if (now - date > 24 * 60 * 60 * 1000) {
@@ -53,7 +54,7 @@ function parseDataFromXml (xml) {
     }
 
     const addInReg = /\s*\((.*?)\)\s*/
-    const meals = sourceItems.map(item => {
+    const meals = await sourceItems.map(async item => {
       // sometimes, the title is undefined (see #123)
       let text = item.title._text ?? ''
       const allergens = new Set()
@@ -130,7 +131,7 @@ async function fetchPlan (lang) {
     const resp = await fetch(url)
 
     if (resp.status === 200) {
-      return parseDataFromXml(await resp.text())
+      return await parseDataFromXml(await resp.text())
     } else {
       throw new Error('Data source returned an error: ' + await resp.text())
     }
