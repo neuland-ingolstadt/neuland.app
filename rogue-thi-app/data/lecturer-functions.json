@@ -1,0 +1,30 @@
+{
+    "Lehrkraft für besondere Aufgaben": {
+        "de": "Lehrkraft für besondere Aufgaben",
+        "en": "Teacher for special tasks"
+    },
+    "Professor(in)": {
+        "de": "Professor(in)",
+        "en": "Professor"
+    },
+    "Wiss. Mitarbeiter(in) mit Deputat": {
+        "de": "Wiss. Mitarbeiter(in) mit Deputat",
+        "en": "Scientific staff with deputat"
+    },
+    "Lehrbeauftragte(r)": {
+        "de": "Lehrbeauftragte(r)",
+        "en": "Lecturer"
+    },
+    "Wissenschaftl. Mitarbeiter(in)": {
+        "de": "Wissenschaftl. Mitarbeiter(in)",
+        "en": "Research associate"
+    },
+    "unbestimmt": {
+        "de": "unbestimmt",
+        "en": "indeterminate"
+    },
+    "Laboringenieur(in)": {
+        "de": "Laboringenieur(in)",
+        "en": "Laboratory Engineer"
+    }
+}

@@ -19,8 +19,11 @@ import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
 
+import { i18n, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'next-i18next'
+
+import functions from '../data/lecturer-functions.json'
+import organizations from '../data/lecturer-organizations.json'
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
@@ -94,7 +97,7 @@ export default function Lecturers () {
         }
       }
 
-      const normalizedSearch = search.toLowerCase()
+      const normalizedSearch = search.toLowerCase().trim()
       const checkField = value => value && value.toString().toLowerCase().includes(normalizedSearch)
       const filtered = allLecturers
         .filter(x => checkField(x.name) ||
@@ -109,6 +112,14 @@ export default function Lecturers () {
     }
     load()
   }, [router, didFetch, search, personalLecturers, allLecturers])
+
+  const getTranslatedFunction = (lecturer) => {
+    return functions[lecturer.funktion] ? functions[lecturer.funktion][i18n.languages[0]] : lecturer.funktion
+  }
+
+  const getTranslatedOrganization = (lecturer) => {
+    return organizations[lecturer.organisation] ? organizations[lecturer.organisation][i18n.languages[0]] : lecturer.organisation ?? t('lecturers.modals.details.not_available')
+  }
 
   return (
     <AppContainer>
@@ -125,8 +136,8 @@ export default function Lecturers () {
                 <strong>{t('lecturers.modals.details.title')}</strong>: {focusedLecturer.titel}<br />
                 <strong>{t('lecturers.modals.details.surname')}</strong>: {focusedLecturer.name}<br />
                 <strong>{t('lecturers.modals.details.forename')}</strong>: {focusedLecturer.vorname}<br />
-                <strong>{t('lecturers.modals.details.organization')}</strong>: {focusedLecturer.organisation || t('lecturers.modals.details.not_available')}<br />
-                <strong>{t('lecturers.modals.details.function')}</strong>: {focusedLecturer.funktion}<br />
+                <strong>{t('lecturers.modals.details.organization')}</strong>: {getTranslatedOrganization(focusedLecturer)}<br />
+                <strong>{t('lecturers.modals.details.function')}</strong>: {getTranslatedFunction(focusedLecturer)}<br />
 
                 <strong>{t('lecturers.modals.details.room')}</strong>:{' '}
                 {focusedLecturer.room_short && (
@@ -194,7 +205,7 @@ export default function Lecturers () {
                     {x.vorname} {x.name}
                   </div>
                   <div className={styles.details}>
-                    {x.funktion}
+                    {getTranslatedFunction(x)}
                   </div>
                 </div>
                 <div className={styles.right}>
