@@ -6,5 +6,30 @@
             "this_week": "Diese Woche",
             "next_week": "Nächste Woche"
         }
+    },
+    "food": {
+        "filterModal": {
+            "header" : "Filter",
+            "restaurants" :
+                {
+                    "title" : "Restaurants",
+                    "showMensa" : "Mensa anzeigen",
+                    "showReimanns" : "Reimanns anzeigen",
+                    "showCanisius" : "Canisiuskonvikt anzeigen"
+                },
+            "allergens" : {
+                "title" : "Allergien",
+                "iconTitle" : "Allergene",
+                "selected" : "Ausgewählt",
+                "empty" : "Keine"
+            },
+            "preferences" : {
+                "title" : "Essenspräferenzen",
+                "iconTitle" : "Präferenzen",
+                "selected" : "Ausgewählt",
+                "empty" : "Keine"
+            },
+            "info" : "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
+        }
     }
 }

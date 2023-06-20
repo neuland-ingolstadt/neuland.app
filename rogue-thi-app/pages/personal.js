@@ -306,7 +306,8 @@ export default function Personal () {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'personal'
+      'personal',
+      'common'
     ]))
   }
 })

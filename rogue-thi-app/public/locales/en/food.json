@@ -72,28 +72,6 @@
             "translated_name": "Translated name"
         }
     },
-    "filterModal": {
-        "header": "Filters",
-        "restaurants": {
-            "title": "Restaurants",
-            "showMensa": "Show Cafeteria",
-            "showReimanns": "Show Reimanns",
-            "showCanisius": "Show Canisius Convict"
-        },
-        "allergens": {
-            "title": "Allergies",
-            "iconTitle": "Allergens",
-            "selected": "Selected",
-            "empty": "None"
-        },
-        "preferences": {
-            "title": "Food Preferences",
-            "iconTitle": "Preferences",
-            "selected": "Selected",
-            "empty": "None"
-        },
-        "info": "Your data will only be stored locally on your device and not transmitted to anyone."
-    },
     "allergensModal": "Select Allergens",
     "preferencesModal": "Select Preferences"
 }

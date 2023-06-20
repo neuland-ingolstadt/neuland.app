@@ -72,30 +72,6 @@
             "translated_name": "Übersetzter Name"
         }
     },
-    
-    "filterModal": {
-        "header" : "Filter",
-        "restaurants" :
-            {
-                "title" : "Restaurants",
-                "showMensa" : "Mensa anzeigen",
-                "showReimanns" : "Reimanns anzeigen",
-                "showCanisius" : "Canisiuskonvikt anzeigen"
-            },
-        "allergens" : {
-            "title" : "Allergien",
-            "iconTitle" : "Allergene",
-            "selected" : "Ausgewählt",
-            "empty" : "Keine"
-        },
-        "preferences" : {
-            "title" : "Essenspräferenzen",
-            "iconTitle" : "Präferenzen",
-            "selected" : "Ausgewählt",
-            "empty" : "Keine"
-        },
-        "info" : "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
-    },
     "allergensModal" : "Allergene auswählen",
     "preferencesModal" : "Präferenzen auswählen"
 }
