@@ -6,6 +6,13 @@
             "missingWeight_single": " weight missing",
             "missingWeight_multiple": " weights missing"
         },
+        "overview": {
+            "grades": "grades",
+            "ects": "ECTS",
+            "matriculation_number": "Mat. No",
+            "library_number": "Lib. No"
+        },
+        "semester": "semester",
         "food_preferences": "Food Preferences",
         "debug": "API Playground",
         "privacy": "Privacy Policy",
@@ -22,7 +29,22 @@
             },
             "language": {
                 "title": "Language"
-            }
+            },
+            "personal_data": {
+                "matriculation_number": "Matriculation Number",
+                "library_number": "Library Number",
+                "printer_balance": "Printer Balance",
+                "field_of_study": "Field of Study",
+                "semester": "Semester",
+                "exam_regulations": "Exam Regulations",
+                "email": "Email",
+                "thi_email": "THI Email",
+                "phone": "Phone",
+                "first_name": "First Name",
+                "last_name": "Last Name",
+                "street": "Street",
+                "city": "City"
+            }            
         }
     }
 }

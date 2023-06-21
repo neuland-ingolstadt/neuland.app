@@ -143,12 +143,12 @@ export default function Personal () {
 
             <ListGroup.Item className="text-muted">
               <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-                {userdata && userdata.stgru + '. Semester'}<br />
+                {userdata && `${userdata.stgru}. ${t('personal.semester')}`}<br />
               </span>
               {userdata && (
                 <>
-                  <CopyableField label="Mat.-Nr" value={userdata.mtknr} /> <br />
-                  <CopyableField label="Bib.-Nr" value={userdata.bibnr} />
+                  <CopyableField label={t('personal.overview.matriculation_number')} value={userdata.mtknr} /> <br />
+                  <CopyableField label={t('personal.overview.library_number')} value={userdata.bibnr} />
                 </>
               )}
 
@@ -158,12 +158,12 @@ export default function Personal () {
               <div className={styles.interaction_icon}>
                 <span className="text-muted">
                   {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
-                  {' Noten '}
+                  {` ${t('personal.overview.grades')} `}
                   <FontAwesomeIcon icon={faChevronRight} />
                 </span>
               </div>
               <span className="text-muted">
-                {ects !== null && ects + ' ECTS'}
+                {ects !== null && `${ects} ${t('personal.overview.ects')} `}
                 {!isNaN(average?.result) && ' · '}
                 {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
                 {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeight_single')})`}

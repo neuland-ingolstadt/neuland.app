@@ -6,6 +6,13 @@
             "missingWeight_single": " Gewichtung fehlt",
             "missingWeight_multiple": " Gewichtungen fehlen"
         },
+        "overview": {
+            "grades": "Noten",
+            "ects": "ECTS",
+            "matriculation_number": "Mat.-Nr",
+            "library_number": "Bib.-Nr"
+        },
+        "semester": "Semester",
         "food_preferences": "Essenspräferenzen",
         "debug": "API Spielwiese",
         "privacy": "Datenschutzerklärung",
@@ -22,6 +29,21 @@
             },
             "language": {
                 "title": "Sprache"
+            },
+            "personal_data": {
+                "matriculation_number": "Matrikelnummer",
+                "library_number": "Bibliotheksnummer",
+                "printer_balance": "Druckguthaben",
+                "field_of_study": "Studiengang",
+                "semester": "Fachsemester",
+                "exam_regulations": "Prüfungsordnung",
+                "email": "E-Mail",
+                "thi_email": "THI E-Mail",
+                "phone": "Telefon",
+                "first_name": "Vorname",
+                "last_name": "Nachname",
+                "street": "Straße",
+                "city": "Ort"
             }
         }
     }
