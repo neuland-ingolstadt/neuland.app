@@ -227,7 +227,8 @@ export default function Library () {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'library'
+      'library',
+      'common'
     ]))
   }
 })
