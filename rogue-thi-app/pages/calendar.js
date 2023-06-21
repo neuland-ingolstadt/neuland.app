@@ -161,8 +161,8 @@ export default function Calendar () {
                           {' '}({formatFriendlyRelativeTime(item.date)})
                           <br />
                         </>}
-                        Raum: {item.exam_rooms || 'TBD'}<br />
-                        {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
+                        {t('calendar.modals.exams.room')}: {item.exam_rooms || 'TBD'}<br />
+                        {item.exam_seat && `${t('calendar.modals.exams.seat')}: ${item.exam_seat}`}
                       </div>
                     </div>
                   </ListGroup.Item>
