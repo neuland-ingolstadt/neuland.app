@@ -5,6 +5,7 @@
             "iconTitle": "Allergiewarnung"
         }
     },
+    "filter": "Filter",
     "preferences": {
         "iconTitle": "Bevorzugtes Essen"
     },

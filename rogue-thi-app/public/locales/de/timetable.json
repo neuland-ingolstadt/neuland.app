@@ -11,6 +11,10 @@
             "editLectures": "Fächer bearbeiten",
             "subscribeCalendar": "Kalender abonnieren"
         },
+        "weekSelection": {
+            "weekBack": "Woche zurück",
+            "weekForward": "Woche vor"
+        },
         "modals": {
             "timetableExplanation": {
                 "title": "Fächer bearbeiten",

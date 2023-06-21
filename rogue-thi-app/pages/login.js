@@ -199,7 +199,8 @@ export default function Login () {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'login'
+      'login',
+      'common'
     ]))
   }
 })

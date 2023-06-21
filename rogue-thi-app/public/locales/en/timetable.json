@@ -11,6 +11,10 @@
             "editLectures": "Edit Subjects",
             "subscribeCalendar": "Subscribe to Calendar"
         },
+        "weekSelection": {
+            "weekBack": "Next week",
+            "weekForward": "Previous week"
+        },
         "modals": {
             "timetableExplanation": {
                 "title": "Edit Subjects",

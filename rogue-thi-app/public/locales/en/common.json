@@ -58,5 +58,12 @@
         "grades": "Grades & Subjects",
         "personal": "Profile",
         "lecturers": "Lecturers"
+    },
+    "prompts": {
+        "close": "Close"
+    },
+    "appbar": {
+        "back": "Back",
+        "overflow": "More options"
     }
 }

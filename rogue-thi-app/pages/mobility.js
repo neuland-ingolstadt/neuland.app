@@ -143,7 +143,8 @@ export default function Bus () {
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
-      'mobility'
+      'mobility',
+      'common'
     ]))
   }
 })

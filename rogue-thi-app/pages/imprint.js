@@ -9,24 +9,33 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Imprint.module.css'
+import { useTranslation } from 'next-i18next'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 
-export async function getStaticProps () {
+export async function getStaticProps ({ locale }) {
+  const locales = await serverSideTranslations(locale ?? 'en', [
+    'imprint',
+    'common'
+  ])
+
   try {
     const res = await fetch(IMPRINT_URL)
     const html = await res.text()
     return {
       props: {
-        neulandImprint: html
+        neulandImprint: html,
+        ...locales
       }
     }
   } catch (e) {
     console.error(e)
     return {
       props: {
-        neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`
+        neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`,
+        ...locales
       }
     }
   }
@@ -38,6 +47,8 @@ export async function getStaticProps () {
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [debugUnlockProgress, setDebugUnlockProgress] = useState(0)
+
+  const { t } = useTranslation('imprint')
 
   useEffect(() => {
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
@@ -61,7 +72,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
   return (
     <AppContainer>
-      <AppNavbar title="Impressum" />
+      <AppNavbar title={t('imprint.appbar.title')} />
 
       <AppBody>
         <ListGroup>

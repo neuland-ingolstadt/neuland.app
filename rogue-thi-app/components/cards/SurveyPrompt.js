@@ -7,6 +7,7 @@ import { faPoll, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from '../../styles/Home.module.css'
+import { useTranslation } from 'next-i18next'
 
 const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
 
@@ -15,6 +16,8 @@ const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
  * @param {object} onHide Invoked when the user wants to hide the prompt
  */
 export default function SurveyPrompt ({ onHide }) {
+  const { t } = useTranslation(['dashboard'])
+
   return (
     <Card className={styles.card}>
       <Card.Body>
@@ -23,7 +26,7 @@ export default function SurveyPrompt ({ onHide }) {
           {' '}
           Umfrage
           <Button variant="link" className={styles.cardButton} onClick={() => onHide()}>
-            <FontAwesomeIcon title="Schließen" icon={faTimes} />
+            <FontAwesomeIcon title={t('prompts.close', { ns: 'common' })} icon={faTimes} />
           </Button>
         </Card.Title>
         <Card.Text>

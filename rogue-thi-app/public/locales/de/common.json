@@ -58,5 +58,12 @@
         "grades": "Noten & Fächer",
         "personal": "Profil",
         "lecturers": "Dozenten"
+    },
+    "prompts": {
+        "close": "Schließen"
+    },
+    "appbar": {
+        "back": "Zurück",
+        "overflow": "Mehr Optionen"
     }
 }

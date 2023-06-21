@@ -287,7 +287,7 @@ export default function Mensa () {
     <AppContainer>
       <AppNavbar title={t('list.titles.meals')} showBack={'desktop-only'}>
         <AppNavbar.Button onClick={() => setShowFoodFilterModal(true)}>
-          <FontAwesomeIcon title="Filter" icon={faFilter} fixedWidth/>
+          <FontAwesomeIcon title={t('filter')} icon={faFilter} fixedWidth/>
         </AppNavbar.Button>
       </AppNavbar>
 

@@ -47,7 +47,7 @@ export default function InstallPrompt ({ onHide }) {
           {' '}
           {t('install.title')}
           <Button variant="link" className={styles.cardButton} onClick={() => close()}>
-            <FontAwesomeIcon title="Schließen" icon={faTimes} />
+            <FontAwesomeIcon title={t('prompts.close', { ns: 'common' })} icon={faTimes} />
           </Button>
         </Card.Title>
         <Card.Text>
