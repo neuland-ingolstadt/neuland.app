@@ -19,17 +19,15 @@ import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
 
-import { i18n, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-
-import functions from '../data/lecturer-functions.json'
-import organizations from '../data/lecturer-organizations.json'
+import { useTranslation } from 'next-i18next'
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
       'lecturers',
-      'common'
+      'common',
+      'api-translations'
     ]))
   }
 })
@@ -46,7 +44,7 @@ export default function Lecturers () {
   const [search, setSearch] = useState('')
   const [focusedLecturer, setFocusedLecturer] = useState(null)
 
-  const { t } = useTranslation('lecturers')
+  const { t } = useTranslation(['lecturers', 'api-translations'])
 
   useEffect(() => {
     async function load () {
@@ -114,11 +112,11 @@ export default function Lecturers () {
   }, [router, didFetch, search, personalLecturers, allLecturers])
 
   const getTranslatedFunction = (lecturer) => {
-    return functions[lecturer.funktion] ? functions[lecturer.funktion][i18n.languages[0]] : lecturer.funktion
+    return t(`apiTranslations.lecturerFunctions.${lecturer.funktion}`, { ns: 'api-translations' })
   }
 
   const getTranslatedOrganization = (lecturer) => {
-    return organizations[lecturer.organisation] ? organizations[lecturer.organisation][i18n.languages[0]] : lecturer.organisation ?? t('lecturers.modals.details.not_available')
+    return t(`apiTranslations.lecturerOrganizations.${lecturer.organisation}`, { ns: 'api-translations' })
   }
 
   return (

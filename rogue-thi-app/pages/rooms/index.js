@@ -26,7 +26,8 @@ export async function getStaticProps ({ locale }) {
     props: {
       ...(await serverSideTranslations(locale ?? 'en', [
         'rooms',
-        'common'
+        'common',
+        'api-translations'
       ])),
       roomData
     }

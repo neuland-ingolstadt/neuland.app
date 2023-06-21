@@ -9,7 +9,7 @@ from shutil import copy
 
 API_URL = "https://hiplan.thi.de/webservice/production2/index.php"
 DEEPL_API_URL = "https://api.deepl.com/v2/translate"
-MAIN_DIR = Path(__file__).parent.parent / "rogue-thi-app" / "data"
+MAIN_DIR = Path(__file__).parent.parent / "rogue-thi-app" / "public" / "locales"
 
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 THI_USERNAME = os.getenv("THI_USERNAME")
@@ -18,6 +18,8 @@ THI_PASSWORD = os.getenv("THI_PASSWORD")
 GENDER_REGEX = re.compile(r"\(\w+\)")
 
 LANGUAGES = ["EN-US"]
+
+MAP_URL = "https://assets.neuland.app/rooms_neuland.geojson"
 
 
 class ThiTranslator:
@@ -31,6 +33,8 @@ class ThiTranslator:
         self.__check_env()
 
         self.translator = deepl.Translator(self.DEEPL_API_KEY)
+        self.__check_deepL()
+
         self.session_id = self.__open_session()
         self.path = Path(__file__).parent / "data"
 
@@ -38,6 +42,7 @@ class ThiTranslator:
             self.path.mkdir()
 
         print(f'Opened session with id "{self.session_id}"')
+        self.output = {}
 
     def __check_env(self):
         """Checks if the environment variables are set"""
@@ -49,6 +54,13 @@ class ThiTranslator:
 
         if not self.THI_PASSWORD:
             raise ValueError("THI_PASSWORD is not set")
+
+    def __check_deepL(self):
+        try:
+            self.translator.translate_text("test", target_lang="EN-US")
+        except Exception as e:
+            print(self.DEEPL_API_KEY)
+            raise ValueError("DeepL API key is not valid")
 
     def __open_session(self):
         """Opens a session with the THI API and returns the session id"""
@@ -74,6 +86,10 @@ class ThiTranslator:
 
         session_req = requests.post(API_URL, data=data)
         return session_req.json()["data"]
+
+    def add_to_output(self, data, key):
+        """Adds the data to the output"""
+        self.output[key] = data
 
     def __get_lecturers(self):
         """Returns a list of all lecturers"""
@@ -104,9 +120,7 @@ class ThiTranslator:
 
     def __translate(self, text):
         """Translates the function to english using the DeepL API"""
-        results = {
-            'de': text
-        }
+        results = {"de": text}
 
         for lang in LANGUAGES:
             result = self.translator.translate_text(text, target_lang=lang)
@@ -115,16 +129,35 @@ class ThiTranslator:
         return results
 
     def __translate_genders(self, text, cleaned_text):
-        """Translates the function to english using the DeepL API"""
-        results = {
-            'de': text
-        }
+        """
+        Translates the function to english using the DeepL API
+        The output dict will contain the original text and and use the cleaned text for the translation.
+        """
+        results = {"de": text}
 
         for lang in LANGUAGES:
             result = self.translator.translate_text(cleaned_text, target_lang=lang)
             results[lang.split("-")[0].lower()] = result.text
 
         return results
+
+    def translate_room_functions(self):
+        """Translates the map properties to english using the DeepL API"""
+        response = requests.get(MAP_URL)
+        data = response.json()["features"]
+
+        room_properties = [feature["properties"]["Funktion"] for feature in data]
+        room_properties = list(set(room_properties))
+
+        room_properties = [
+            property
+            for property in room_properties
+            if property is not None and property != ""
+        ]
+
+        translated = [self.__translate(property) for property in room_properties]
+
+        return dict(zip(room_properties, translated))
 
     def translate_lecturer_functions(self):
         """
@@ -135,7 +168,10 @@ class ThiTranslator:
         lecturers = self.__get_lecturers()
         functions, cleaned_functions = self.__extract_all_functions(lecturers)
 
-        translated = [self.__translate_genders(function, cleaned) for function, cleaned in zip(functions, cleaned_functions)]
+        translated = [
+            self.__translate_genders(function, cleaned)
+            for function, cleaned in zip(functions, cleaned_functions)
+        ]
 
         return dict(zip(functions, translated))
 
@@ -146,7 +182,11 @@ class ThiTranslator:
         """
 
         lecturers = self.__get_lecturers()
-        organizations = [lecturer["organisation"] for lecturer in lecturers if lecturer["organisation"] != ""]
+        organizations = [
+            lecturer["organisation"]
+            for lecturer in lecturers
+            if lecturer["organisation"] != ""
+        ]
         organizations = [lecturer for lecturer in organizations if lecturer is not None]
         organizations = list(set(organizations))
 
@@ -162,32 +202,50 @@ class ThiTranslator:
 
     def save_file(self, data, name):
         """Saves the data to a file with the given name"""
-        with open(self.path / name, "w+", encoding="utf-8") as f:
-            f.write(json.dumps(data, indent=4, ensure_ascii=False))
+        
 
-    def move_output_files(self):
-        """Moves the output files to the data folder in the rogue thi app"""
-        files = [file for file in self.path.glob("*.json") if file.is_file()]
+    def export_files(self):
+        """Creates to localizations files for each language"""
+        languages = LANGUAGES + ["DE"]
 
-        for file in files:
-            copy(file, MAIN_DIR / file.name)
+        for lang in languages:
+            lang_short = lang.split("-")[0].lower()
+
+            content = {
+                "__source": "Generated using the thi-translator script",
+                "apiTranslations": {}
+            }
+
+            for key in self.output.keys():
+                content["apiTranslations"][key] = {}
+                for item_key, value in self.output[key].items():
+                    content["apiTranslations"][key][item_key] = value[lang_short]
+
+            with open(MAIN_DIR / lang_short / 'api-translations.json', "w+", encoding="utf-8") as f:
+                f.write(json.dumps(content, indent=4, ensure_ascii=False, sort_keys=True))
+
 
 
 def main():
     translator = ThiTranslator()
 
     # Functions
-    translator.save_file(
-        translator.translate_lecturer_functions(), "lecturer-functions.json"
+    translator.add_to_output(
+        translator.translate_lecturer_functions(), "lecturerFunctions"
     )
 
     # Organizations
-    translator.save_file(
-        translator.translate_lecturer_organizations(), "lecturer-organizations.json"
+    translator.add_to_output(
+        translator.translate_lecturer_organizations(), "lecturerOrganizations"
+    )
+
+    # Map
+    translator.add_to_output(
+        translator.translate_room_functions(), "roomFunctions"
     )
 
     translator.close()
-    translator.move_output_files()
+    translator.export_files()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Link from 'next/link'
@@ -53,10 +53,14 @@ export default function RoomMap ({ highlight, roomData }) {
   const searchField = useRef()
   const location = useLocation()
   const userKind = useUserKind()
-  const [searchText, setSearchText] = useState(highlight ? highlight.toUpperCase() : '')
+  const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
 
-  const { t } = useTranslation('rooms')
+  const { t, i18n } = useTranslation(['rooms', 'api-translations'])
+
+  const getTranslatedFunction = useCallback((room) => {
+    return t(`apiTranslations.roomFunctions.${room?.properties?.Funktion}`, { ns: 'api-translations' })
+  }, [t])
 
   /**
    * Preprocessed room data for Leaflet.
@@ -94,10 +98,19 @@ export default function RoomMap ({ highlight, roomData }) {
       return [allRooms, DEFAULT_CENTER]
     }
 
-    const getProp = (room, prop) => room.properties[prop]?.toUpperCase()
-    const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(searchText))
-    const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(searchText)
-    const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(searchText) ? roomOnlySearcher : fullTextSearcher)
+    const cleanedText = searchText.toUpperCase().trim()
+
+    const getProp = (room, prop) => {
+      if (prop === 'Funktion') {
+        return getTranslatedFunction(room).toUpperCase()
+      }
+
+      return room.properties[prop]?.toUpperCase()
+    }
+
+    const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
+    const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
+    const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
 
     let lon = 0
     let lat = 0
@@ -110,7 +123,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : DEFAULT_CENTER
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms])
+  }, [searchText, allRooms, getTranslatedFunction])
 
   useEffect(() => {
     async function load () {
@@ -183,7 +196,7 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${entry.properties.Funktion}`} <br />
+          {`, ${getTranslatedFunction(entry, i18n)}`} <br />
           {avail && (
             <>
               {t('rooms.map.free_from_until', {
@@ -237,7 +250,7 @@ export default function RoomMap ({ highlight, roomData }) {
           as="input"
           placeholder={t('rooms.map.search_placeholder')}
           value={searchText}
-          onChange={e => setSearchText(e.target.value.toUpperCase())}
+          onChange={e => setSearchText(e.target.value)}
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
