@@ -77,7 +77,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
       <AppBody>
         <ListGroup>
           <h1 className={styles.imprintTitle}>
-            Wir würden uns über euer Feedback freuen.{' '}
+            {`${t('imprint.feedback.title')} `}
             <span onClick={debugUnlockClicked}>:)</span>
           </h1>
           <ListGroup.Item>
@@ -86,30 +86,30 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
               app-feedback@informatik.sexy
             </a>
             <br />
-            Webseite:{' '}
+            {`${t('imprint.feedback.email')}: `}
             <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">
               https://neuland-ingolstadt.de
             </a>
             <br />
-            Instagram:{' '}
+            {`${t('imprint.feedback.instagram')}: `}
             <a href="https://www.instagram.com/neuland_ingolstadt/" target="_blank" rel="noreferrer">
               @neuland_ingolstadt
             </a>
             <br />
-            Quellcode auf GitHub:{' '}
+            {`${t('imprint.feedback.sourceCode')}: `}
             <a href="https://github.com/neuland-ingolstadt/neuland.app" target="_blank" rel="noreferrer">
               neuland-ingolstadt/neuland.app
             </a>
             <br />
             <br />
             <a href="https://join.neuland-ingolstadt.de" target="_blank" rel="noreferrer">
-              Jetzt Mitglied werden und die Entwicklung unterstützen!
+              {t('imprint.feedback.joinNeuland')}
             </a>
           </ListGroup.Item>
         </ListGroup>
 
         <ListGroup>
-          <h1 className={styles.imprintTitle}>Rechtliche Hinweise von Neuland Ingolstadt e.V.</h1>
+          <h1 className={styles.imprintTitle}>{t('imprint.legal.title')}</h1>
           <ListGroup.Item>
             <div className={styles.imprint} dangerouslySetInnerHTML={{ __html: neulandImprint }} />
           </ListGroup.Item>
