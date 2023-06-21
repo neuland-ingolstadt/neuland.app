@@ -35,7 +35,8 @@
                 "free": "Free",
                 "paid": "Paid",
                 "restricted": "Restricted"
-            }
+            },
+            "noElements": "No elements."
         },
         "error": {
             "retrieval": "Error retrieving data."

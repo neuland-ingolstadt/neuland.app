@@ -10,7 +10,8 @@
             "grades": "Noten",
             "ects": "ECTS",
             "matriculationNumber": "Mat.-Nr",
-            "libraryNumber": "Bib.-Nr"
+            "libraryNumber": "Bib.-Nr",
+            "copiedToClipboard": "{{label}} in Zwischenablage kopiert."
         },
         "semester": "Semester",
         "foodPreferences": "Essenspräferenzen",

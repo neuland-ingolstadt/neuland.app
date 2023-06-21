@@ -117,13 +117,13 @@ export default function Bus () {
           <ReactPlaceholder type="text" rows={10} ready={data || dataError}>
             {dataError && (
               <ListGroup.Item className={styles.mobilityItem}>
-                Fehler beim Abruf!<br />
+                {t('transport.error')}<br />
                 {dataError}
               </ListGroup.Item>
             )}
             {data && data.length === 0 &&
               <ListGroup.Item className={styles.mobilityItem}>
-                Keine Elemente.
+                {t('transport.details.noElements')}
               </ListGroup.Item>
             }
             {data && data.map((item, idx) => (

@@ -10,7 +10,8 @@
             "grades": "grades",
             "ects": "ECTS",
             "matriculationNumber": "Mat. No",
-            "libraryNumber": "Lib. No"
+            "libraryNumber": "Lib. No",
+            "copiedToClipboard": "Copied {{label}} to clipboard"
         },
         "semester": "semester",
         "foodPreferences": "Food Preferences",

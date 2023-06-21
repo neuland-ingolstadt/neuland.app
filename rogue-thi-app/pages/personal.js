@@ -63,7 +63,7 @@ export default function Personal () {
 
     const handleCopy = async () => {
       await navigator.clipboard.writeText(value)
-      alert(`${label} in die Zwischenablage kopiert.`)
+      alert(t('personal.overview.copiedToClipboard', { label }))
     }
 
     return (

@@ -35,7 +35,8 @@
                 "free": "Kostenlos",
                 "paid": "Kostenpflichtig",
                 "restricted": "Zugangsbeschränkt"
-            }
+            },
+            "noElements": "Keine Elemente."
         },
         "error": {
             "retrieval": "Fehler beim Abruf."
