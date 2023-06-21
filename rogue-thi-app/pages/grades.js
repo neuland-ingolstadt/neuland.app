@@ -15,6 +15,7 @@ import { loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
+import { getAdjustedLocale } from '../lib/locale-utils'
 import styles from '../styles/Grades.module.css'
 
 export const getStaticProps = async ({ locale }) => ({
@@ -37,9 +38,9 @@ export default function Grades () {
   const [missingGrades, setMissingGrades] = useState(null)
   const [gradeAverage, setGradeAverage] = useState(null)
 
-  const { i18n, t } = useTranslation('grades')
+  const { t } = useTranslation('grades')
 
-  const formatNum = (new Intl.NumberFormat(i18n.languages[0], { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
+  const formatNum = (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 })).format
 
   function getLocalizedGrade (grade) {
     const match = grade.match(GRADE_REGEX)

@@ -67,7 +67,7 @@ export default function ThemeModal () {
               onClick={() => changeTheme(availableTheme.style)}
               disabled={availableTheme.requiresToken && unlockedThemes.indexOf(availableTheme.style) === -1}
             >
-              {availableTheme.name[i18n.language]}
+              {availableTheme.name[i18n.languages[0]]}
             </Button>
           ))}
         </Form>

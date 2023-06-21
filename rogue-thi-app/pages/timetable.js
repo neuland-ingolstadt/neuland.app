@@ -26,7 +26,8 @@ import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-util
 
 import styles from '../styles/Timetable.module.css'
 
-import { Trans, i18n, useTranslation } from 'next-i18next'
+import { Trans, useTranslation } from 'next-i18next'
+import { getAdjustedLocale } from '../lib/locale-utils'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
@@ -86,7 +87,7 @@ function isInWeek (date, start, end) {
  * @returns {string}
  */
 function getDay (date) {
-  return new Date(date).toLocaleDateString(i18n.language, { day: 'numeric' })
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), { day: 'numeric' })
 }
 
 /**
@@ -95,7 +96,7 @@ function getDay (date) {
  * @returns {string}
  */
 function getWeekday (date) {
-  return new Date(date).toLocaleDateString(i18n.language, { weekday: 'short' })
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), { weekday: 'short' })
 }
 
 /**

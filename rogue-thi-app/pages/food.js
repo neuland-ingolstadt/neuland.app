@@ -58,7 +58,7 @@ export default function Mensa () {
   const userKind = useUserKind()
   const router = useRouter()
   const { i18n, t } = useTranslation('food')
-  const currentLocale = i18n.language
+  const currentLocale = i18n.languages[0]
 
   useEffect(() => {
     async function load () {

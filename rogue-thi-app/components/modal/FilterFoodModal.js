@@ -39,7 +39,7 @@ export default function FilterFoodModal () {
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] = useState(false)
   const { i18n, t } = useTranslation(['common'])
-  const currentLocale = i18n.language
+  const currentLocale = i18n.languages[0]
 
   return (
     <>

@@ -5,12 +5,14 @@ import ReactPlaceholder from 'react-placeholder'
 
 import { ShowPersonalDataModal } from '../../pages/_app'
 import styles from '../../styles/PersonalDataModal.module.css'
+
+import { getAdjustedLocale } from '../../lib/locale-utils'
 import { useTranslation } from 'next-i18next'
 
 export default function PersonalDataModal ({ userdata }) {
   const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
 
-  const { t, i18n } = useTranslation('personal')
+  const { t } = useTranslation('personal')
 
   /**
    * Displays a row with the users information.
@@ -38,7 +40,7 @@ export default function PersonalDataModal ({ userdata }) {
     )
   }
 
-  const formatNum = (new Intl.NumberFormat(i18n.languages[0], { minimumFractionDigits: 2, maximumFractionDigits: 2 })).format
+  const formatNum = (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })).format
 
   return (
     <Modal show={showPersonalDataModal} onHide={() => setShowPersonalDataModal(false)}>

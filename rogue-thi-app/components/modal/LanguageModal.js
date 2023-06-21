@@ -48,7 +48,7 @@ export default function LanguageModal () {
               variant={i18n.language === language.key ? 'primary' : 'secondary'}
               onClick={() => changeLanguage(language.key)}
             >
-              {language.name[i18n.language]}
+              {language.name[i18n.languages[0]]}
             </Button>
           ))}
         </Form>

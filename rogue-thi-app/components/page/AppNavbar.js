@@ -13,7 +13,7 @@ import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
 
 import styles from '../../styles/AppNavbar.module.css'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Navigation bar to be displayed at the top of the screen.

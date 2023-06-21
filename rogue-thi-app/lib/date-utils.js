@@ -1,3 +1,4 @@
+import { getAdjustedLocale } from './locale-utils'
 import { i18n } from 'next-i18next'
 
 /**
@@ -19,7 +20,7 @@ export function formatFriendlyDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return t('common.dates.tomorrow')
   } else {
-    return datetime.toLocaleString(i18n.language, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
+    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
 }
 
@@ -47,7 +48,7 @@ export function formatFriendlyTime (datetime) {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(i18n.language, { hour: 'numeric', minute: '2-digit' })
+  return datetime.toLocaleTimeString(getAdjustedLocale(), { hour: 'numeric', minute: '2-digit' })
 }
 
 /**
@@ -99,7 +100,7 @@ export function formatNearDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return i18n.t('common.dates.tomorrow', { ns: 'common' })
   } else {
-    return datetime.toLocaleString(i18n.language, { weekday: 'long', day: 'numeric', month: 'numeric' })
+    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'long', day: 'numeric', month: 'numeric' })
   }
 }
 
@@ -113,8 +114,8 @@ export function buildLinedWeekdaySpan (datetime) {
     datetime = new Date(datetime)
   }
 
-  const weekday = datetime.toLocaleString(i18n.language, { weekday: 'short' })
-  const date = datetime.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' })
+  const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
+  const date = datetime.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
 
   return <span>{weekday}<br />{date}</span>
 }
@@ -125,7 +126,7 @@ export function buildLinedWeekdaySpan (datetime) {
  * @returns {string}
  */
 function formatFriendlyTimeDelta (delta) {
-  const rtl = new Intl.RelativeTimeFormat(i18n.language, {
+  const rtl = new Intl.RelativeTimeFormat(getAdjustedLocale(), {
     numeric: 'auto',
     style: 'long'
   })
@@ -264,8 +265,8 @@ export function getFriendlyWeek (date) {
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() + 6)
 
-    return monday.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' }) +
-      ' – ' + sunday.toLocaleString(i18n.language, { day: 'numeric', month: 'numeric' })
+    return monday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' }) +
+      ' – ' + sunday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
   }
 }
 

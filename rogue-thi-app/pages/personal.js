@@ -184,7 +184,7 @@ export default function Personal () {
           <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
             <div className={styles.interaction_icon}>
               <span className="text-muted">
-                {`${item.name[i18n.language]} `}
+                {`${item.name[i18n.languages[0]]} `}
                 <FontAwesomeIcon icon={faChevronRight} />
               </span>
             </div>
