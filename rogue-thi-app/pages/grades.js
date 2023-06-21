@@ -49,7 +49,7 @@ export default function Grades () {
     }
 
     const num = parseFloat(match[0].replace(',', '.'))
-    return grade.replace(match[0], formatNum(num)).replace('*', t('grades.credited'))
+    return grade.replace(match[0], formatNum(num)).replace(/\*/g, t('grades.credited'))
   }
 
   useEffect(() => {
