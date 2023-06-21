@@ -130,8 +130,8 @@ export default function RoomSearch () {
                         i18nKey="rooms.common.available_from_until"
                         ns='rooms'
                         values={{
-                          from: formatFriendlyTime(result.from),
-                          until: formatFriendlyTime(result.until)
+                          from: formatFriendlyTime(roomResult.from),
+                          until: formatFriendlyTime(roomResult.until)
                         }}
                         components={{
                           br: <br />
