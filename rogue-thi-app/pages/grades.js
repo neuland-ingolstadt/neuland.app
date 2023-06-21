@@ -68,7 +68,7 @@ export default function Grades () {
           // means that the transcripts are currently being updated
 
           console.error(e)
-          alert(t('grades.alerts.temporarily_unavailable'))
+          alert(t('grades.alerts.temporarilyUnavailable'))
         } else {
           console.error(e)
           alert(e)
@@ -96,14 +96,14 @@ export default function Grades () {
       .join(' + ')
 
     await navigator.clipboard.writeText(`(${inner}) / ${weight}`)
-    alert(t('grades.alerts.copy_to_clipboard'))
+    alert(t('grades.alerts.copyToClipboard'))
   }
 
   /**
    * Downloads the users grades as a CSV file.
    */
   function downloadGradeCSV () {
-    alert(t('grades.alerts.not_implemented'))
+    alert(t('grades.alerts.notImplemented'))
   }
 
   return (
@@ -111,10 +111,10 @@ export default function Grades () {
       <AppNavbar title={t('grades.appbar.title')}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => copyGradeFormula()}>
-            {t('grades.appbar.overflow.copy_formula')}
+            {t('grades.appbar.overflow.copyFormula')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => downloadGradeCSV()}>
-            {t('grades.appbar.overflow.export_csv')}
+            {t('grades.appbar.overflow.exportCsv')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
@@ -147,7 +147,7 @@ export default function Grades () {
 
         <ListGroup>
           <h4 className={styles.heading}>
-            {t('grades.grades_list.title')}
+            {t('grades.gradesList.title')}
           </h4>
 
           <ReactPlaceholder type="text" rows={10} ready={grades}>
@@ -168,7 +168,7 @@ export default function Grades () {
 
         <ListGroup>
           <h4 className={styles.heading}>
-            {t('grades.pending_list.title')}
+            {t('grades.pendingList.title')}
           </h4>
 
           <ReactPlaceholder type="text" rows={10} ready={missingGrades}>

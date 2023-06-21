@@ -128,7 +128,7 @@ export default function Library () {
             <Form.Group>
               <Form.Label>{t('library.modal.details.seat')}:</Form.Label>
               <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
-                <option value={-1}>{t('library.modal.seat_selection.any')}</option>
+                <option value={-1}>{t('library.modal.seatSelection.any')}</option>
               {reservationTime && reservationRoom &&
                 Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
                 <option key={idx} value={x}>
@@ -150,13 +150,13 @@ export default function Library () {
         </Modal>
 
         <h4 className={styles.heading}>
-          {t('library.your_reservations')}
+          {t('library.yourReservations')}
         </h4>
         <ReactPlaceholder type="text" rows={3} ready={reservations}>
           <ListGroup>
             {reservations && reservations.length === 0 &&
               <ListGroup.Item>
-                {t('library.details.no_reservations')}
+                {t('library.details.noReservations')}
               </ListGroup.Item>
             }
             {reservations && reservations.map((x, i) =>
@@ -168,7 +168,7 @@ export default function Library () {
                 </div>
 
                 <Trans
-                  i18nKey="library.details.reservation_details"
+                  i18nKey="library.details.reservationDetails"
                   ns='library'
                   values={{
                     category: x.rcategory,
@@ -187,7 +187,7 @@ export default function Library () {
         </ReactPlaceholder>
 
         <h4 className={styles.heading}>
-          {t('library.available_seats')}
+          {t('library.availableSeats')}
         </h4>
         <ReactPlaceholder type="text" rows={20} ready={available && available.length > 0}>
           <ListGroup>
@@ -207,7 +207,7 @@ export default function Library () {
                   {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
                   <br />
                   <div className="text-muted">
-                    {t('library.details.seats_available', {
+                    {t('library.details.seatsAvailable', {
                       available: Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0),
                       total: Object.values(time.resources).reduce((acc, room) => acc + room.maxnum_seats, 0)
                     })}

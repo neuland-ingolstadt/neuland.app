@@ -62,14 +62,13 @@
         },
         "warning": {
             "title": "Disclaimer",
-            "text": "Please check the information on the information screens before consuming anything. The nutritional information is based on an average portion.",
-            "auto_translated": "The information has been automatically translated. Please verify the information on the information screens before consuming anything."
+            "text": "Please check the information on the information screens before consuming anything. The nutritional information is based on an average portion."
         },
         "translation": {
             "title": "Translation",
             "warning": "This meal has been automatically translated. Please verify the information on the information screens before consuming anything.",
-            "original_name": "Original name",
-            "translated_name": "Translated name"
+            "originalName": "Original name",
+            "translatedName": "Translated name"
         }
     },
     "allergensModal": "Select Allergens",

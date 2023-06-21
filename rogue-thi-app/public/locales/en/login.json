@@ -1,6 +1,6 @@
 {
     "error": {
-        "wrong_credentials": "Your login credentials are incorrect.",
+        "wrongCredentials": "Your login credentials are incorrect.",
         "generic": "An error occurred while connecting to the server."
     },
     "alert": "You must be logged in to use this feature.",

@@ -21,13 +21,13 @@ export default function PersonalDataModal ({ userdata }) {
   function renderPersonalEntry (i18nKey, name, render) {
     return (
       <ListGroup.Item action onClick={() => {
-        if (i18nKey === 'exam_regulations') {
+        if (i18nKey === 'examRegulations') {
           navigator.clipboard.writeText('SPO: ' + userdata.pvers)
         } else {
           navigator.clipboard.writeText(userdata[name])
         }
       }}>
-        {t(`personal.modals.personal_data.${i18nKey}`)}
+        {t(`personal.modals.personalData.${i18nKey}`)}
         <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
           <ReactPlaceholder type="text" rows={1} ready={userdata}>
             {userdata && render && render()}
@@ -49,12 +49,12 @@ export default function PersonalDataModal ({ userdata }) {
       </Modal.Header>
       <Modal.Body className={styles.modalBody}>
         <ListGroup>
-          {renderPersonalEntry('matriculation_number', 'mtknr')}
-          {renderPersonalEntry('library_number', 'bibnr')}
-          {renderPersonalEntry('printer_balance', null, () => `${formatNum(userdata.pcounter.replace('€', ''))}€`)}
-          {renderPersonalEntry('field_of_study', 'fachrich')}
+          {renderPersonalEntry('matriculationNumber', 'mtknr')}
+          {renderPersonalEntry('libraryNumber', 'bibnr')}
+          {renderPersonalEntry('printerBalance', null, () => `${formatNum(userdata.pcounter.replace('€', ''))}€`)}
+          {renderPersonalEntry('fieldOfStudy', 'fachrich')}
           {renderPersonalEntry('semester', 'stgru')}
-          {renderPersonalEntry('exam_regulations', null, () => (
+          {renderPersonalEntry('examRegulations', null, () => (
             <a
               /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
               href={userdata?.po_url && userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
@@ -64,10 +64,10 @@ export default function PersonalDataModal ({ userdata }) {
             </a>
           ))}
           {renderPersonalEntry('email', 'email')}
-          {renderPersonalEntry('thi_email', 'fhmail')}
+          {renderPersonalEntry('thiEmail', 'fhmail')}
           {renderPersonalEntry('phone', null, () => userdata.telefon || 'N/A')}
-          {renderPersonalEntry('first_name', 'vname')}
-          {renderPersonalEntry('last_name', 'name')}
+          {renderPersonalEntry('firstName', 'vname')}
+          {renderPersonalEntry('lastName', 'name')}
           {renderPersonalEntry('street', 'str')}
           {renderPersonalEntry('city', null, () => userdata.plz && userdata.ort && `${userdata.plz} ${userdata.ort}`)}
         </ListGroup>

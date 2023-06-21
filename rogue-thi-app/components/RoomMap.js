@@ -199,7 +199,7 @@ export default function RoomMap ({ highlight, roomData }) {
           {`, ${getTranslatedFunction(entry, i18n)}`} <br />
           {avail && (
             <>
-              {t('rooms.map.free_from_until', {
+              {t('rooms.map.freeFromUntil', {
                 from: formatFriendlyTime(avail.from),
                 until: formatFriendlyTime(avail.until)
               })}
@@ -248,7 +248,7 @@ export default function RoomMap ({ highlight, roomData }) {
       <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
         <Form.Control
           as="input"
-          placeholder={t('rooms.map.search_placeholder')}
+          placeholder={t('rooms.map.searchPlaceholder')}
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
           isInvalid={filteredRooms.length === 0}
@@ -257,7 +257,7 @@ export default function RoomMap ({ highlight, roomData }) {
         <div className={styles.links}>
           <Link href="/rooms/search">
             <a className={styles.linkToSearch}>
-              {t('rooms.map.extended_search')}
+              {t('rooms.map.extendedSearch')}
             </a>
           </Link>
           {userKind !== USER_GUEST &&
@@ -265,7 +265,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <> · </>
               <Link href="/rooms/suggestions">
                 <a className={styles.linkToSearch}>
-                  {t('rooms.map.automatic_suggestion')}
+                  {t('rooms.map.automaticSuggestion')}
                 </a>
               </Link>
             </>
@@ -301,13 +301,13 @@ export default function RoomMap ({ highlight, roomData }) {
                 <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupied')}`}</div>
               </>
             )}
-            {!availableRooms && <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupancy_unknown')}`}</div>}
+            {!availableRooms && <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupancyUnknown')}`}</div>}
             <div>
               {SPECIAL_COLORS.map(color => (
                 <span key={color} className={styles.legendSpecial} style={{ '--legend-color': color }}>
                 </span>
               ))}
-              {` ${t('rooms.map.legend.special_equipment')}`}
+              {` ${t('rooms.map.legend.specialEquipment')}`}
             </div>
           </div>
         </div>

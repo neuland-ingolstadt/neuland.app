@@ -50,10 +50,10 @@ export default function DashboardModal () {
                   </Button>
                 }
                 <Button variant="text" onClick={() => moveDashboardEntry(i, -1)}>
-                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.move_up')} icon={faChevronUp} fixedWidth/>
+                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.moveUp')} icon={faChevronUp} fixedWidth/>
                 </Button>
                 <Button variant="text" onClick={() => moveDashboardEntry(i, +1)}>
-                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.move_down')} icon={faChevronDown} fixedWidth/>
+                  <FontAwesomeIcon title={t('dashboard.orderModal.icons.moveDown')} icon={faChevronDown} fixedWidth/>
                 </Button>
               </div>
             </ListGroup.Item>
@@ -61,7 +61,7 @@ export default function DashboardModal () {
         </ListGroup>
         <br/>
 
-        <h4>{t('dashboard.orderModal.hidden_cards')}</h4>
+        <h4>{t('dashboard.orderModal.hiddenCards')}</h4>
         <ListGroup>
           {hiddenDashboardEntries.map((entry, i) => (
             <ListGroup.Item key={i} className={styles.personalizeItem}>
@@ -82,7 +82,7 @@ export default function DashboardModal () {
           variant="secondary"
           onClick={() => resetOrder()}
         >
-          {t('dashboard.orderModal.reset_order')}
+          {t('dashboard.orderModal.resetOrder')}
         </Button>
       </Modal.Body>
     </Modal>

@@ -68,7 +68,7 @@ export default function Events () {
           <ReactPlaceholder type="text" rows={10} ready={events}>
             {events && events.length === 0 && (
               <ListGroup.Item className={styles.item}>
-                {t('events.no_events')}
+                {t('events.noEvents')}
               </ListGroup.Item>
             )}
             {events && events.map((item, idx) => {

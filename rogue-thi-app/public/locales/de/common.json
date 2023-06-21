@@ -3,8 +3,8 @@
         "dates": {
             "today": "Heute",
             "tomorrow": "Morgen",
-            "this_week": "Diese Woche",
-            "next_week": "Nächste Woche"
+            "thisWeek": "Diese Woche",
+            "nextWeek": "Nächste Woche"
         }
     },
     "food": {
@@ -35,11 +35,11 @@
         "orderModal": {
             "title": "Dashboard",
             "body": "Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.",
-            "hidden_cards": "Ausgeblendete Elemente",
-            "reset_order": "Reihenfolge zurücksetzen",
+            "hiddenCards": "Ausgeblendete Elemente",
+            "resetOrder": "Reihenfolge zurücksetzen",
             "icons": {
-                "move_up": "Nach oben",
-                "move_down": "Nach unten",
+                "moveUp": "Nach oben",
+                "moveDown": "Nach unten",
                 "remove": "Entfernen",
                 "restore": "Wiederherstellen",
                 "personalize": "Personalisieren"

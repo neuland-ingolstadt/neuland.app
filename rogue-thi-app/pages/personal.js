@@ -147,8 +147,8 @@ export default function Personal () {
               </span>
               {userdata && (
                 <>
-                  <CopyableField label={t('personal.overview.matriculation_number')} value={userdata.mtknr} /> <br />
-                  <CopyableField label={t('personal.overview.library_number')} value={userdata.bibnr} />
+                  <CopyableField label={t('personal.overview.matriculationNumber')} value={userdata.mtknr} /> <br />
+                  <CopyableField label={t('personal.overview.libraryNumber')} value={userdata.bibnr} />
                 </>
               )}
 
@@ -166,8 +166,8 @@ export default function Personal () {
                 {ects !== null && `${ects} ${t('personal.overview.ects')} `}
                 {!isNaN(average?.result) && ' · '}
                 {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
-                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeight_single')})`}
-                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeight_multiple')})`}
+                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightSingle')})`}
+                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightMultiple')})`}
               </span>
             </ListGroup.Item>
           </ListGroup>
@@ -216,7 +216,7 @@ export default function Personal () {
               <FontAwesomeIcon icon={faChevronRight} />
             </span>
           </div>
-          {t('personal.food_preferences')}
+          {t('personal.foodPreferences')}
         </ListGroup.Item>
 
       </ListGroup>

@@ -1,6 +1,6 @@
 {
     "error": {
-        "wrong_credentials": "Deine Zugangsdaten sind falsch.",
+        "wrongCredentials": "Deine Zugangsdaten sind falsch.",
         "generic": "Bei der Verbindung zum Server ist ein Fehler aufgetreten."
     },
     "alert": "Für diese Funktion musst du eingeloggt sein.",

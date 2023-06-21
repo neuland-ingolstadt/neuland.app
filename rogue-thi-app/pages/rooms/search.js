@@ -99,7 +99,7 @@ export default function RoomSearch () {
                 value={building}
                 onChange={e => setBuilding(e.target.value)}
               >
-                <option key={BUILDINGS_ALL}>{t('rooms.search.buildings_all')}</option>
+                <option key={BUILDINGS_ALL}>{t('rooms.search.buildingsAll')}</option>
                 {BUILDINGS.map(b => <option key={b}>{b}</option>)}
               </Form.Control>
             </Form.Group>
@@ -159,7 +159,7 @@ export default function RoomSearch () {
                   </div>
                   <div className={styles.right}>
                     <Trans
-                      i18nKey="rooms.common.available_from_until"
+                      i18nKey="rooms.common.availableFromUntil"
                       ns='rooms'
                       values={{
                         from: formatFriendlyTime(result.from),
@@ -174,7 +174,7 @@ export default function RoomSearch () {
               )}
               {filterResults && filterResults.length === 0 &&
                 <ListGroup.Item className={styles.item}>
-                  {t('rooms.search.results.no_available_rooms')}
+                  {t('rooms.search.results.noAvailableRooms')}
                 </ListGroup.Item>
               }
             </ListGroup>

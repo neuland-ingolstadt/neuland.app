@@ -428,11 +428,11 @@ export default function Mensa () {
                 <br/>
                 <ul>
                   <li>
-                    <strong>{t('foodModal.translation.original_name')}</strong>:{' '}
+                    <strong>{t('foodModal.translation.originalName')}</strong>:{' '}
                     {showMealDetails?.name[showMealDetails?.originalLanguage]}
                   </li>
                   <li>
-                    <strong>{t('foodModal.translation.translated_name')}</strong>:{' '}
+                    <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
                     {showMealDetails?.name[i18n.languages[0]]}
                   </li>
                 </ul>

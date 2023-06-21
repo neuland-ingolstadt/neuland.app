@@ -256,9 +256,9 @@ export function getFriendlyWeek (date) {
   const [currStart, currEnd] = getWeek(new Date())
   const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
   if (date >= currStart && date < currEnd) {
-    return t('common.dates.this_week')
+    return t('common.dates.thisWeek')
   } else if (date >= nextStart && date < nextEnd) {
-    return t('common.dates.next_week')
+    return t('common.dates.nextWeek')
   } else {
     const monday = getMonday(date)
     const sunday = new Date(monday)

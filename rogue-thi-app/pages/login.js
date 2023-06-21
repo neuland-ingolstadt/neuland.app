@@ -54,7 +54,7 @@ export default function Login () {
       router.replace('/' + (redirect || ''))
     } catch (e) {
       if (e.message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
-        setFailure(t('error.wrong_credentials'))
+        setFailure(t('error.wrongCredentials'))
       } else {
         setFailure(t('error.generic'))
       }

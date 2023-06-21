@@ -11,8 +11,8 @@
                 "date": "Termin",
                 "notes": "Anmerkungen",
                 "examiner": "Prüfer:in",
-                "course_of_studies": "Studiengang",
-                "register_date": "Angemeldet",
+                "courseOfStudies": "Studiengang",
+                "registerDate": "Angemeldet",
                 "tools": "Hilfsmittel",
                 "actions": {
                     "close": "Schließen"
@@ -27,7 +27,7 @@
         "dates": {
             "until": "bis"
         },
-        "no_exams": "Es sind derzeit keine Prüfungstermine verfügbar.",
-        "guest_notice": "Prüfungstermine sind als Gast nicht verfügbar.",
+        "noExams": "Es sind derzeit keine Prüfungstermine verfügbar.",
+        "guestNotice": "Prüfungstermine sind als Gast nicht verfügbar.",
     }
 }

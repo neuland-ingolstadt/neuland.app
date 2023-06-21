@@ -143,7 +143,7 @@ export default function Lecturers () {
                     {focusedLecturer.raum}
                   </Link>
                 )}
-                {focusedLecturer.room_short ? '' : (focusedLecturer.raum || t('lecturers.modals.details.not_available'))}
+                {focusedLecturer.room_short ? '' : (focusedLecturer.raum || t('lecturers.modals.details.notAvailable'))}
                 <br />
 
                 <strong>{t('lecturers.modals.details.email')}</strong>:{' '}
@@ -154,7 +154,7 @@ export default function Lecturers () {
                 )}
                 {!focusedLecturer.email.includes('@') && (
                   <>
-                    {focusedLecturer.email || t('lecturers.modals.details.not_available')}
+                    {focusedLecturer.email || t('lecturers.modals.details.notAvailable')}
                   </>
                 )}
                 <br />
@@ -165,10 +165,10 @@ export default function Lecturers () {
                     {focusedLecturer.tel_dienst}
                   </a>
                 )}
-                {!focusedLecturer.tel_dienst && t('lecturers.modals.details.not_available')}
+                {!focusedLecturer.tel_dienst && t('lecturers.modals.details.notAvailable')}
                 <br />
 
-                <strong>{t('lecturers.modals.details.office_hours')}</strong>: {focusedLecturer.sprechstunde}<br />
+                <strong>{t('lecturers.modals.details.officeHours')}</strong>: {focusedLecturer.sprechstunde}<br />
                 <strong>{t('lecturers.modals.details.insights')}</strong>: {focusedLecturer.einsichtnahme}<br />
               </Modal.Body>
               <Modal.Footer>
@@ -192,7 +192,7 @@ export default function Lecturers () {
         </Form>
 
         <h3>
-          {search ? t('lecturers.search.search_results') : t('lecturers.search.personal_lecturers')}
+          {search ? t('lecturers.search.searchResults') : t('lecturers.search.personalLecturers')}
         </h3>
         <ReactPlaceholder type="text" rows={20} ready={filteredLecturers}>
           <ListGroup>

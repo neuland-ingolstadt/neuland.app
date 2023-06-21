@@ -221,11 +221,11 @@ export default function Timetable () {
         {current && current.length === 0 &&
           <div className={`text-muted ${styles.notice}`}>
           <p>
-            {t('timetable.overview.no_lectures')}
+            {t('timetable.overview.noLectures')}
           </p>
           <p>
             <Trans
-              i18nKey="timetable.overview.configure_timetable"
+              i18nKey="timetable.overview.configureTimetable"
               ns="timetable"
               components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
             />
@@ -253,10 +253,10 @@ export default function Timetable () {
       <AppNavbar title={t('timetable.appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
-            {t('timetable.overflow.edit_lectures')}
+            {t('timetable.overflow.editLectures')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowICalExplanation(true)}>
-            {t('timetable.overflow.subscribe_calendar')}
+            {t('timetable.overflow.subscribeCalendar')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
@@ -264,18 +264,18 @@ export default function Timetable () {
       <AppBody>
         <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{t('timetable.modals.timetable_explanation.title')}</Modal.Title>
+            <Modal.Title>{t('timetable.modals.timetableExplanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {t('timetable.modals.timetable_explanation.body.header')}
+            {t('timetable.modals.timetableExplanation.body.header')}
             <ul>
-              <ExplanationListElement i18nKey="timetable_explanation.body.login"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.subjects"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.course_of_studies"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.study_groups"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.semester_group"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.click_on_study"/>
-              <ExplanationListElement i18nKey="timetable_explanation.body.select_subjects"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.login"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.subjects"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.courseOfStudies"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.studyGroups"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.semesterGroup"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.clickOnStudy"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.selectSubjects"/>
             </ul>
 
             {/* TODO: Video? */}
@@ -283,40 +283,40 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                {t('timetable.modals.timetable_explanation.actions.to_my_timetable')}
+                {t('timetable.modals.timetableExplanation.actions.toMyTimetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowTimetableExplanation(false)}>
-              {t('timetable.modals.timetable_explanation.actions.close')}
+              {t('timetable.modals.timetableExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>{t('timetable.modals.subscription_explanation.title')}</Modal.Title>
+            <Modal.Title>{t('timetable.modals.subscriptionExplanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>
-              {t('timetable.modals.subscription_explanation.body.header')}
+              {t('timetable.modals.subscriptionExplanation.body.header')}
             </p>
             <p>
-            {t('timetable.modals.subscription_explanation.body.url')}
+            {t('timetable.modals.subscriptionExplanation.body.url')}
               <ul>
-                <ExplanationListElement i18nKey="subscription_explanation.body.login" />
-                <ExplanationListElement i18nKey="subscription_explanation.body.timetable" />
-                <ExplanationListElement i18nKey="subscription_explanation.body.external_calendar" />
-                <ExplanationListElement i18nKey="subscription_explanation.body.subscribe" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.login" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.timetable" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.externalCalendar" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.subscribe" />
               </ul>
             </p>
             {os === OS_IOS &&
               <p>
-                {t('timetable.modals.subscription_explanation.body.ios.header')}
+                {t('timetable.modals.subscriptionExplanation.body.ios.header')}
                 <ul>
-                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.open_settings" />
-                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.add_calendar_subscription" />
-                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.paste_url" />
-                  <ExplanationListElement i18nKey="subscription_explanation.body.ios.save" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.openSettings" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.addCalendarSubscription" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.pasteUrl" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.save" />
                 </ul>
               </p>
             }
@@ -324,11 +324,11 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                {t('timetable.modals.subscription_explanation.actions.to_my_timetable')}
+                {t('timetable.modals.subscriptionExplanation.actions.toMyTimetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowICalExplanation(false)}>
-              {t('timetable.modals.subscription_explanation.actions.close')}
+              {t('timetable.modals.subscriptionExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -338,50 +338,50 @@ export default function Timetable () {
             <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h5>{t('timetable.modals.lecture_details.general')}</h5>
+            <h5>{t('timetable.modals.lectureDetails.general')}</h5>
             <p>
-              <strong>{t('timetable.modals.lecture_details.lecturer')}</strong>: {focusedEntry && focusedEntry.dozent}<br />
-              <strong>{t('timetable.modals.lecture_details.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
-              <strong>{t('timetable.modals.lecture_details.exam')}</strong>: {focusedEntry && focusedEntry.pruefung}<br />
-              <strong>{t('timetable.modals.lecture_details.course_of_studies')}</strong>: {focusedEntry && focusedEntry.stg}<br />
-              <strong>{t('timetable.modals.lecture_details.study_group')}</strong>: {focusedEntry && focusedEntry.stgru}<br />
-              <strong>{t('timetable.modals.lecture_details.semester_weekly_hours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
-              <strong>{t('timetable.modals.lecture_details.ects')}</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
+              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>{t('timetable.modals.lectureDetails.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
+              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>: {focusedEntry && focusedEntry.pruefung}<br />
+              <strong>{t('timetable.modals.lectureDetails.courseOfStudies')}</strong>: {focusedEntry && focusedEntry.stg}<br />
+              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>: {focusedEntry && focusedEntry.stgru}<br />
+              <strong>{t('timetable.modals.lectureDetails.semesterWeeklyHours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
+              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
             </p>
 
-            <h5>{t('timetable.modals.lecture_details.goal')}</h5>
+            <h5>{t('timetable.modals.lectureDetails.goal')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.ziel && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
               )}
               {focusedEntry && !focusedEntry.ziel && (
-                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>{t('timetable.modals.lecture_details.content')}</h5>
+            <h5>{t('timetable.modals.lectureDetails.content')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.inhalt && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
               )}
               {focusedEntry && !focusedEntry.inhalt && (
-                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>{t('timetable.modals.lecture_details.literature')}</h5>
+            <h5>{t('timetable.modals.lectureDetails.literature')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.literatur && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
               )}
               {focusedEntry && !focusedEntry.literatur && (
-                <p>{t('timetable.modals.lecture_details.not_specified')}</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
-              {t('timetable.modals.lecture_details.actions.close')}
+              {t('timetable.modals.lectureDetails.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>

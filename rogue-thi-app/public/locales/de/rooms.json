@@ -1,24 +1,24 @@
 {
     "rooms": {
         "overflow": {
-            "hourly_plan": "Stündlicher Plan",
-            "campus_city_tour": "Campus- & Stadtführung"
+            "hourlyPlan": "Stündlicher Plan",
+            "campusCityTour": "Campus- & Stadtführung"
         },
         "map": {
             "appbar": {
                 "title": "Raumplan"
             },
-            "search_placeholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
-            "extended_search": "Erweiterte Suche",
-            "automatic_suggestion": "Automatische Vorschläge",
+            "searchPlaceholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
+            "extendedSearch": "Erweiterte Suche",
+            "automaticSuggestion": "Automatische Vorschläge",
             "occupied": "Belegt",
-            "free_from_until": "Frei von {{from}} bis {{until}}",
+            "freeFromUntil": "Frei von {{from}} bis {{until}}",
             "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
             "legend": {
                 "free": "Frei",
                 "occupied": "Belegt",
-                "special_equipment": "Sonderausstattung",
-                "occupancy_unknown": "Belegung unbekannt"
+                "specialEquipment": "Sonderausstattung",
+                "occupancyUnknown": "Belegung unbekannt"
             },
             "floors": {
                 "eg": "EG"
@@ -33,18 +33,18 @@
             "time": "Uhrzeit",
             "duration": "Dauer",
             "search": "Suchen",
-            "buildings_all": "Alle",
+            "buildingsAll": "Alle",
             "results": {
-                "available_from_until": "frei ab {{from}}<br />bis {{until}}",
-                "no_available_rooms": "Keine freien Räume gefunden"
+                "availableFromUntil": "frei ab {{from}}<br />bis {{until}}",
+                "noAvailableRooms": "Keine freien Räume gefunden"
             }
         },
         "suggestions": {
             "appbar": {
                 "title": "Raumvorschläge"
             },
-            "no_suggestions": "Keine Vorschläge verfügbar.",
-            "no_available_rooms": "Keine freien Räume gefunden.",
+            "noSuggestions": "Keine Vorschläge verfügbar.",
+            "noAvailableRooms": "Keine freien Räume gefunden.",
             "gaps": {
                 "header": {
                     "general": "Freie Räume",
@@ -62,7 +62,7 @@
           }  
         },
         "common": {
-            "available_from_until": "frei ab {{from}}<br />bis {{until}}"
+            "availableFromUntil": "frei ab {{from}}<br />bis {{until}}"
         }
     }
 }

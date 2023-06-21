@@ -3,23 +3,23 @@
         "appbar": {
             "title": "Grades & Subjects",
             "overflow": {
-                "copy_formula": "Copy Grade Average Formula",
-                "export_csv": "Export Grades as CSV"
+                "copyFormula": "Copy Grade Average Formula",
+                "exportCsv": "Export Grades as CSV"
             }
         },
         "alerts": {
-            "temporarily_unavailable": "Grades are temporarily unavailable.",
-            "copy_to_clipboard": "Copied to clipboard",
-            "not_implemented": "This feature is not yet available."
+            "temporarilyUnavailable": "Grades are temporarily unavailable.",
+            "copyToClipboard": "Copied to clipboard",
+            "notImplemented": "This feature is not yet available."
         },
         "summary": {
             "title": "Grade Average",
             "disclaimer": "The exact grade average cannot be determined and ranges between {{minAverage}} and {{maxAverage}}"
         },
-        "grades_list": {
+        "gradesList": {
             "title": "Grades"
         },
-        "pending_list": {
+        "pendingList": {
             "title": "Pending Subjects"
         },
         "grade": "Grade",

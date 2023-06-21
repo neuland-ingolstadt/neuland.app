@@ -58,12 +58,12 @@ export default function TimetableCard () {
 
             let text = null
             if (isEndingSoon) {
-              text = <div className="text-muted">{t('timetable.text.ending_soon', { mins: Math.ceil((x.endDate - currentTime) / 1000 / 60) })}</div>
+              text = <div className="text-muted">{t('timetable.text.endingSoon', { mins: Math.ceil((x.endDate - currentTime) / 1000 / 60) })}</div>
             } else if (isOngoing) {
               text = <div className="text-muted">{t('timetable.text.ongoing', { time: formatFriendlyTime(x.endDate) })}</div>
             } else if (isSoon) {
               text = <div className="text-muted">
-                {t('timetable.text.starting_soon', {
+                {t('timetable.text.startingSoon', {
                   mins: Math.ceil((x.startDate - currentTime) / 1000 / 60)
                 }
                 )}

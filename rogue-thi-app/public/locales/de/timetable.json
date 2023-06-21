@@ -4,66 +4,66 @@
             "title": "Stundenplan"
         },
         "overview": {
-            "no_lectures": "Keine Veranstaltungen. 🎉",
-            "configure_timetable": "Du kannst deinen Stundenplan im <a>Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier die Fächer."
+            "noLectures": "Keine Veranstaltungen. 🎉",
+            "configureTimetable": "Du kannst deinen Stundenplan im <a>Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier die Fächer."
         },
         "overflow": {
-            "edit_lectures": "Fächer bearbeiten",
-            "subscribe_calendar": "Kalender abonnieren"
+            "editLectures": "Fächer bearbeiten",
+            "subscribeCalendar": "Kalender abonnieren"
         },
         "modals": {
-            "timetable_explanation": {
+            "timetableExplanation": {
                 "title": "Fächer bearbeiten",
                 "body": {
                     "header": "Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:",
                     "login": "In <em>myStundenplan</em> einloggen",
                     "subjects": "Links auf <em>Fächerauswahl</em> klicken",
-                    "course_of_studies": "Studiengang auswählen und unten abspeichern",
-                    "study_groups": "Oben auf <em>Studiengruppen</em> klicken",
-                    "semester_group": "Semestergruppe auswählen und unten abspeichern",
-                    "click_on_study": "Oben auf den Studiengang klicken",
-                    "select_subjects": "Fächer auswählen und unten abspeichern"
+                    "courseOfStudies": "Studiengang auswählen und unten abspeichern",
+                    "studyGroups": "Oben auf <em>Studiengruppen</em> klicken",
+                    "semesterGroup": "Semestergruppe auswählen und unten abspeichern",
+                    "clickOnStudy": "Oben auf den Studiengang klicken",
+                    "selectSubjects": "Fächer auswählen und unten abspeichern"
                 },
                 "actions": {
                     "close": "Schließen",
-                    "to_my_timetable": "Zu \"myStundenplan\""
+                    "toMyTimetable": "Zu \"myStundenplan\""
                 }
             },
-            "subscription_explanation": {
+            "subscriptionExplanation": {
                 "title": "Kalender abonnieren",
                 "body": {
                     "header": "Dein Stundenplan kann als Abonnement in eine Kalender-App integriert werden.",
                     "url": "Die URL findest du aktuell nur in Primuss:", 
                     "login": "In <em>myStundenplan</em> einloggen",
                     "timetable": "Links auf <em>Aktueller Stundenplan</em> klicken",
-                    "external_calendar": "Oben auf <em>Extern</em> klicken",
+                    "externalCalendar": "Oben auf <em>Extern</em> klicken",
                     "subscribe": "Unter <em>Termine Abonnieren</em> auf <em>Link anzeigen</em> klicken",
                     "ios": {
                         "header": "Die URL kannst du unter iOS wie folgt importieren:",
-                        "open_settings": "Einstellungen-App öffnen",
-                        "add_calendar_subscription": "Auf <em>Kalender</em> > <em>Accounts</em> > <em>Account hinzufügen</em> > <em>Kalenderabo hinzufügen</em> drücken",
-                        "paste_url": "Aus Primuss kopierten Link einfügen",
+                        "openSettings": "Einstellungen-App öffnen",
+                        "addCalendarSubscription": "Auf <em>Kalender</em> > <em>Accounts</em> > <em>Account hinzufügen</em> > <em>Kalenderabo hinzufügen</em> drücken",
+                        "pasteUrl": "Aus Primuss kopierten Link einfügen",
                         "save": "Auf <em>Weiter</em> > <em>Sichern</em> drücken"
                     }
                 },
                 "actions": {
                     "close": "Schließen",
-                    "to_my_timetable": "Zu \"myStundenplan\""
+                    "toMyTimetable": "Zu \"myStundenplan\""
                 }
             },
-            "lecture_details": {
+            "lectureDetails": {
                 "general": "Allgemein",
                 "lecturer": "Dozent:in",
                 "abbreviation": "Kürzel",
                 "exam": "Prüfung",
-                "course_of_studies": "Studiengang",
-                "study_group": "Studiengruppe",
-                "semester_weekly_hours": "Semesterwochenstunden",
+                "courseOfStudies": "Studiengang",
+                "studyGroup": "Studiengruppe",
+                "semesterWeeklyHours": "Semesterwochenstunden",
                 "ects": "ECTS",
                 "goal": "Ziel",
                 "content": "Inhalt",
                 "literature": "Literatur",
-                "not_specified": "Keine Angabe",
+                "notSpecified": "Keine Angabe",
                 "actions": {
                     "close": "Schließen"
                 }

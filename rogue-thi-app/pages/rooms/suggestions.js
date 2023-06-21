@@ -127,7 +127,7 @@ export default function RoomSearch () {
                     </div>
                     <div className={styles.right}>
                       <Trans
-                        i18nKey="rooms.common.available_from_until"
+                        i18nKey="rooms.common.availableFromUntil"
                         ns='rooms'
                         values={{
                           from: formatFriendlyTime(roomResult.from),
@@ -142,7 +142,7 @@ export default function RoomSearch () {
                 )}
                 {result.rooms.length === 0 &&
                   <ListGroup.Item className={styles.item}>
-                    {t('rooms.suggestions.no_available_rooms')}
+                    {t('rooms.suggestions.noAvailableRooms')}
                   </ListGroup.Item>
                 }
               </ListGroup>
@@ -154,7 +154,7 @@ export default function RoomSearch () {
           <div className={styles.noSuggestions}>
             <FontAwesomeIcon icon={faCalendar} size="xl" style={ { marginBottom: '15px' } } />
             <br />
-            {t('rooms.suggestions.no_suggestions')}
+            {t('rooms.suggestions.noSuggestions')}
           </div>
         }
       </AppBody>

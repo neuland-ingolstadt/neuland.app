@@ -2,9 +2,9 @@
     "timetable": {
         "title": "Stundenplan",
         "text": {
-            "ending_soon": "endet in {{mins}} min",
+            "endingSoon": "endet in {{mins}} min",
             "ongoing": "endet um {{time}}",
-            "starting_soon": "beginnt in {{mins}} min",
+            "startingSoon": "beginnt in {{mins}} min",
             "future": "um"
         }
     },

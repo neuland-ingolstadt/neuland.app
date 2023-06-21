@@ -3,17 +3,17 @@
         "title": "Profil",
         "grades": {
             "title": "Noten",
-            "missingWeight_single": " Gewichtung fehlt",
-            "missingWeight_multiple": " Gewichtungen fehlen"
+            "missingWeightSingle": " Gewichtung fehlt",
+            "missingWeightMultiple": " Gewichtungen fehlen"
         },
         "overview": {
             "grades": "Noten",
             "ects": "ECTS",
-            "matriculation_number": "Mat.-Nr",
-            "library_number": "Bib.-Nr"
+            "matriculationNumber": "Mat.-Nr",
+            "libraryNumber": "Bib.-Nr"
         },
         "semester": "Semester",
-        "food_preferences": "Essenspräferenzen",
+        "foodPreferences": "Essenspräferenzen",
         "debug": "API Spielwiese",
         "privacy": "Datenschutzerklärung",
         "imprint": "Impressum",
@@ -30,18 +30,18 @@
             "language": {
                 "title": "Sprache"
             },
-            "personal_data": {
-                "matriculation_number": "Matrikelnummer",
-                "library_number": "Bibliotheksnummer",
-                "printer_balance": "Druckguthaben",
-                "field_of_study": "Studiengang",
+            "personalData": {
+                "matriculationNumber": "Matrikelnummer",
+                "libraryNumber": "Bibliotheksnummer",
+                "printerBalance": "Druckguthaben",
+                "fieldOfStudy": "Studiengang",
                 "semester": "Fachsemester",
-                "exam_regulations": "Prüfungsordnung",
+                "examRegulations": "Prüfungsordnung",
                 "email": "E-Mail",
-                "thi_email": "THI E-Mail",
+                "thiEmail": "THI E-Mail",
                 "phone": "Telefon",
-                "first_name": "Vorname",
-                "last_name": "Nachname",
+                "firstName": "Vorname",
+                "lastName": "Nachname",
                 "street": "Straße",
                 "city": "Ort"
             }

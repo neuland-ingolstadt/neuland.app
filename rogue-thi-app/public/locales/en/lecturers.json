@@ -13,18 +13,18 @@
                 "room": "Room",
                 "email": "Email",
                 "phone": "Phone",
-                "office_hours": "Office Hours",
+                "officeHours": "Office Hours",
                 "insights": "Insights",
                 "actions": {
                     "close": "Close"
                 },
-                "not_available": "N/A"
+                "notAvailable": "N/A"
             }
         },
         "search": {
             "placeholder": "Search all lecturers...",
-            "personal_lecturers": "Personal Lecturers",
-            "search_results": "Search Results"
+            "personalLecturers": "Personal Lecturers",
+            "searchResults": "Search Results"
         },
         "body": {
             "room": "Room"

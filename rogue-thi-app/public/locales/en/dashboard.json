@@ -2,9 +2,9 @@
     "timetable": {
         "title": "Timetable",
         "text": {
-            "ending_soon": "ends in {{mins}} min",
+            "endingSoon": "ends in {{mins}} min",
             "ongoing": "ends at {{time}}",
-            "starting_soon": "starts in {{mins}} min",
+            "startingSoon": "starts in {{mins}} min",
             "future": "at"
         }
     },

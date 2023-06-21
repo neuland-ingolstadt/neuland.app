@@ -48,10 +48,10 @@ export default function Rooms ({ roomData }) {
       <AppNavbar title={t('rooms.map.appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" href="/rooms/list">
-            {t('rooms.overflow.hourly_plan')}
+            {t('rooms.overflow.hourlyPlan')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
-          {t('rooms.overflow.campus_city_tour')}
+          {t('rooms.overflow.campusCityTour')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>

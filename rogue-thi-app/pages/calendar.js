@@ -91,8 +91,8 @@ export default function Calendar () {
             <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
             <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && focusedExam.anmerkung}<br />
             <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.pruefer_namen}<br />
-            <strong>{t('calendar.modals.exams.course_of_studies')}</strong>: {focusedExam && focusedExam.stg}<br />
-            <strong>{t('calendar.modals.exams.register_date')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.anmeldung)}<br />
+            <strong>{t('calendar.modals.exams.courseOfStudies')}</strong>: {focusedExam && focusedExam.stg}<br />
+            <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.anmeldung)}<br />
             <strong>{t('calendar.modals.exams.tools')}</strong>:
               <ul>
                 {focusedExam && focusedExam.allowed_helpers.map((helper, i) =>
@@ -147,7 +147,7 @@ export default function Calendar () {
               <ReactPlaceholder type="text" rows={4} ready={exams || userKind === USER_GUEST}>
                 {exams && exams.length === 0 && (
                   <ListGroup.Item>
-                    {t('calendar.no_exams')}
+                    {t('calendar.noExams')}
                   </ListGroup.Item>
                 )}
                 {exams && exams.map((item, idx) =>
@@ -169,7 +169,7 @@ export default function Calendar () {
                 )}
                 {userKind === USER_GUEST && (
                   <ListGroup.Item>
-                    {t('calendar.guest_notice')}
+                    {t('calendar.guestNotice')}
                   </ListGroup.Item>
                 )}
               </ReactPlaceholder>

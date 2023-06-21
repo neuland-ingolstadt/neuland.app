@@ -13,18 +13,18 @@
                 "room": "Raum",
                 "email": "E-Mail",
                 "phone": "Telefon",
-                "office_hours": "Sprechzeiten",
+                "officeHours": "Sprechzeiten",
                 "insights": "Einsichtnahme",
                 "actions": {
                     "close": "Schließen"
                 },
-                "not_available": "N/A"
+                "notAvailable": "N/A"
             }
         },
         "search": {
             "placeholder": "Alle Dozenten durchsuchen...",
-            "personal_lecturers": "Persönliche Dozenten",
-            "search_results": "Suchergebnisse"
+            "personalLecturers": "Persönliche Dozenten",
+            "searchResults": "Suchergebnisse"
         },
         "body": {
             "room": "Raum"

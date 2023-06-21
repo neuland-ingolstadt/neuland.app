@@ -4,7 +4,7 @@
             "title": "Veranstaltungen"
         }
     },
-    "no_events": "Es sind derzeit keine Veranstaltungstermine verfügbar.",
+    "noEvents": "Es sind derzeit keine Veranstaltungstermine verfügbar.",
     "dates": {
         "until": "bis"
     }

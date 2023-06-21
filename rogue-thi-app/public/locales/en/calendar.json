@@ -11,8 +11,8 @@
                 "date": "Date",
                 "notes": "Notes",
                 "examiner": "Examiner",
-                "course_of_studies": "Course of Studies",
-                "register_date": "Registered",
+                "courseOfStudies": "Course of Studies",
+                "registerDate": "Registered",
                 "tools": "Tools",
                 "actions": {
                     "close": "Close"
@@ -27,7 +27,7 @@
         "dates": {
             "until": "until"
         },
-        "no_exams": "There are currently no exam dates available.",
-        "guest_notice": "Exam dates are not available for guests."
+        "noExams": "There are currently no exam dates available.",
+        "guestNotice": "Exam dates are not available for guests."
     }
 }
