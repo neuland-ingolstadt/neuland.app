@@ -1,6 +1,6 @@
 {
     "warning": {
-        "unkownIngridients": {
+        "unknownIngredients": {
             "text": "Unbekannte Zutaten / Allergene'",
             "iconTitle": "Allergiewarnung"
         }
@@ -72,7 +72,5 @@
             "originalName": "Originalname",
             "translatedName": "Übersetzter Name"
         }
-    },
-    "allergensModal" : "Allergene auswählen",
-    "preferencesModal" : "Präferenzen auswählen"
+    }
 }

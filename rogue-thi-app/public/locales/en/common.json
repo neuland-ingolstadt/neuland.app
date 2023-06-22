@@ -29,7 +29,9 @@
                 "empty": "None"
             },
             "info": "Your data will only be stored locally on your device and not transmitted to anyone."
-        }
+        },
+        "allergensModal": "Select Allergens",
+        "preferencesModal": "Select Preferences"
     },
     "dashboard": {
         "orderModal": {

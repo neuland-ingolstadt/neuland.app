@@ -94,7 +94,7 @@ function AppNavbarOverflow ({ children }) {
   return (
     <Dropdown align="right">
       <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-        <FontAwesomeIcon title={t('prompts.overflow', { ns: 'common' })} icon={faEllipsisV} fixedWidth />
+        <FontAwesomeIcon title={t('appbar.overflow', { ns: 'common' })} icon={faEllipsisV} fixedWidth />
       </Dropdown.Toggle>
 
       <Dropdown.Menu align="right">

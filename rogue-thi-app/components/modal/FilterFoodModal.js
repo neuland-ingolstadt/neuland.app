@@ -41,6 +41,8 @@ export default function FilterFoodModal () {
   const { i18n, t } = useTranslation(['common'])
   const currentLocale = i18n.languages[0]
 
+  const filteredFlagMap = Object.fromEntries(Object.entries(flagMap).filter(([key]) => key !== '_source'))
+
   return (
     <>
       <Modal show={showFoodFilterModal} onHide={() => setShowFoodFilterModal(false)}>
@@ -128,7 +130,7 @@ export default function FilterFoodModal () {
 
       <Modal show={showAllergenSelection} onHide={() => setShowAllergenSelection(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{t('allergensModal')}</Modal.Title>
+          <Modal.Title>{t('food.allergensModal')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -156,12 +158,12 @@ export default function FilterFoodModal () {
 
       <Modal show={showPreferencesSelection} onHide={() => setShowPreferencesSelection(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{t('preferencesModal')}</Modal.Title>
+          <Modal.Title>{t('food.preferencesModal')}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
           <Form>
-            {Object.entries(flagMap).map(([key, value]) => (
+            {Object.entries(filteredFlagMap).map(([key, value]) => (
               <Form.Check
                 key={key}
                 id={'preferences-checkbox-' + key}

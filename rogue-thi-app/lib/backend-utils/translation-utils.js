@@ -8,6 +8,11 @@ const DEEPL_API_KEY = process.env.DEEPL_API_KEY || ''
  * @returns {String}
  */
 async function translate (text, target) {
+  if (!DEEPL_ENDPOINT || !DEEPL_API_KEY) {
+    console.error('DeepL is not configured. Please set DEEPL_ENDPOINT and DEEPL_API_KEY in your .env.local file. Using fallback translation.')
+    return `(TRANSLATION_PLACEHOLDER) ${text}`
+  }
+
   const resp = await fetch(`${DEEPL_ENDPOINT}`,
     {
       method: 'POST',

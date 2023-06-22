@@ -59,7 +59,10 @@ export default function RoomMap ({ highlight, roomData }) {
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
   const getTranslatedFunction = useCallback((room) => {
-    return t(`apiTranslations.roomFunctions.${room?.properties?.Funktion}`, { ns: 'api-translations' })
+    const roomFunctionCleaned = room?.properties?.Funktion?.replace(/\s+/g, ' ')?.trim() ?? ''
+
+    const roomFunction = t(`apiTranslations.roomFunctions.${roomFunctionCleaned}`, { ns: 'api-translations' })
+    return roomFunction === `apiTranslations.roomFunctions.${roomFunctionCleaned}` ? roomFunctionCleaned : roomFunction
   }, [t])
 
   /**

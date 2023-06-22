@@ -164,10 +164,10 @@ export default function Mensa () {
           </div>
           <div className={styles.room}>
             <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-              {!meal.allergens && t('warning.unkownIngridients.text')}
+              {!meal.allergens && t('warning.unknownIngredients.text')}
               {containsSelectedAllergen(meal.allergens) && (
                 <span>
-                  <FontAwesomeIcon title={t('warning.unkownIngridients.iconTitle')} icon={faExclamationTriangle} color={COLOR_WARN} />
+                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} color={COLOR_WARN} />
                   {' '}
                 </span>
               )}

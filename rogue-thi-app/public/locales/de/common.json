@@ -29,7 +29,9 @@
                 "empty": "Keine"
             },
             "info": "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
-        }
+        },
+        "allergensModal" : "Allergene auswählen",
+        "preferencesModal" : "Präferenzen auswählen"
     },
     "dashboard": {
         "orderModal": {
