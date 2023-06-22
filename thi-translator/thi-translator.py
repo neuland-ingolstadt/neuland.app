@@ -16,6 +16,7 @@ THI_USERNAME = os.getenv("THI_USERNAME")
 THI_PASSWORD = os.getenv("THI_PASSWORD")
 
 GENDER_REGEX = re.compile(r"\(\w+\)")
+CLEAN_REGEX = re.compile(r"\s+")
 
 LANGUAGES = ["EN-US"]
 
@@ -154,6 +155,8 @@ class ThiTranslator:
             for property in room_properties
             if property is not None and property != ""
         ]
+
+        room_properties = [CLEAN_REGEX.sub(" ", property).strip() for property in room_properties]
 
         translated = [self.__translate(property) for property in room_properties]
 
