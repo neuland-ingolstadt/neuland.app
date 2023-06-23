@@ -1,0 +1,38 @@
+{
+    "library": {
+        "title": "Bibliothek",
+        "yourReservations": "Deine Reservierungen",
+        "availableSeats": "Verfügbare Plätze",
+        "actions": {
+            "reserve": "Reservieren",
+            "delete": "Löschen"
+        },
+        "details": {
+            "seatsAvailable": "{{available}} / {{total}} verfügbar",
+            "noReservations": "Du hast keine Reservierungen",
+            "reservationDetails": "<strong>{{category}}</strong>, Platz {{seat}}, Reservierung {{reservation_id}}"
+        },
+        "modal": {
+            "title": "Sitzplatz reservieren",
+            "details": {
+                "day": "Tag",
+                "start": "Start",
+                "end": "Ende",
+                "location": "Ort",
+                "seat": "Sitz"
+            },
+            "seatSelection": {
+                "any": "Egal"
+            },
+            "librarySelection": {
+                "libraryNorth": "Lesesaal Nord (alte Bibliothek)",
+                "librarySouth": "Lesesaal Süd (neue Bibliothek)",
+                "libraryGallery": "Lesesaal Galerie"
+            },
+            "actions": {
+                "cancel": "Abbrechen",
+                "reserve": "Reservieren"
+            }
+        }
+    }
+}

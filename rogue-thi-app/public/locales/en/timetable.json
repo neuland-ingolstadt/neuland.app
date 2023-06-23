@@ -1,0 +1,77 @@
+{
+    "timetable": {
+        "appbar": {
+            "title": "Timetable"
+        },
+        "overview": {
+            "noLectures": "No lectures. 🎉",
+            "configureTimetable": "You can create your timetable using the <a>THI Timetable Tool</a>, then your subjects will appear here."
+        },
+        "overflow": {
+            "editLectures": "Edit Subjects",
+            "subscribeCalendar": "Subscribe to Calendar"
+        },
+        "weekSelection": {
+            "weekBack": "Next week",
+            "weekForward": "Previous week"
+        },
+        "modals": {
+            "timetableExplanation": {
+                "title": "Edit Subjects",
+                "body": {
+                    "header": "Currently, you can only edit the subjects for your personal timetable in Primuss:",
+                    "login": "Login to <em>myStundenplan</em>",
+                    "subjects": "Click on <em>Subject Selection</em>",
+                    "courseOfStudies": "Select your course of studies and save at the bottom",
+                    "studyGroups": "Click on <em>Study Groups</em> at the top",
+                    "semesterGroup": "Select your semester group and save at the bottom",
+                    "clickOnStudy": "Click on your course of studies at the top",
+                    "selectSubjects": "Select subjects and save at the bottom"
+                },
+                "actions": {
+                    "close": "Close",
+                    "toMyTimetable": "Go to \"myStundenplan\""
+                }
+            },
+            "subscriptionExplanation": {
+                "title": "Subscribe to Calendar",
+                "body": {
+                    "header": "Your timetable can be integrated as a subscription into a calendar app.",
+                    "url": "Currently, you can only find the URL in Primuss:",
+                    "login": "Login to <em>myStundenplan</em>",
+                    "timetable": "Click on <em>Current Timetable</em>",
+                    "externalCalendar": "Click on <em>External</em> at the top",
+                    "subscribe": "Click on <em>Show Link</em> under <em>Subscribe to Events</em>",
+                    "ios": {
+                        "header": "You can import the URL in iOS as follows:",
+                        "openSettings": "Open the Settings app",
+                        "addCalendarSubscription": "Tap on <em>Calendar</em> > <em>Accounts</em> > <em>Add Account</em> > <em>Add Calendar Subscription</em>",
+                        "pasteUrl": "Paste the copied link from Primuss",
+                        "save": "Tap on <em>Next</em> > <em>Save</em>"
+                    }
+                },
+                "actions": {
+                    "close": "Close",
+                    "toMyTimetable": "Go to \"myStundenplan\""
+                }
+            },
+            "lectureDetails": {
+                "general": "General",
+                "lecturer": "Lecturer",
+                "abbreviation": "Abbreviation",
+                "exam": "Exam",
+                "courseOfStudies": "Course of Studies",
+                "studyGroup": "Study Group",
+                "semesterWeeklyHours": "Weekly Semester Hours",
+                "ects": "ECTS",
+                "goal": "Goal",
+                "content": "Content",
+                "literature": "Literature",
+                "notSpecified": "Not specified",
+                "actions": {
+                    "close": "Close"
+                }
+            }
+        }
+    }
+}

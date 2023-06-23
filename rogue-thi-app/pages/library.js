@@ -21,6 +21,10 @@ import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Library.module.css'
 
+import { Trans, useTranslation } from 'next-i18next'
+
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 /**
  * Page for reserving library seats.
  */
@@ -32,6 +36,7 @@ export default function Library () {
   const [reservationRoom, setReservationRoom] = useState(1)
   const [reservationSeat, setReservationSeat] = useState(-1)
   const router = useRouter()
+  const { t } = useTranslation('library')
 
   /**
    * Fetches and displays the reservation data.
@@ -98,19 +103,20 @@ export default function Library () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Bibliothek" />
+      <AppNavbar title={t('library.title')} />
 
       <AppBody>
         <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Sitzplatz reservieren</Modal.Title>
+            <Modal.Title>{t('library.modal.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Tag: {reservationDay && reservationDay.date}<br />
-            Start: {reservationTime && reservationTime.from}<br />
-            Ende: {reservationTime && reservationTime.to}<br />
+            {t('library.modal.details.day')}: {reservationDay && reservationDay.date}<br />
+            {t('library.modal.details.start')}: {reservationTime && reservationTime.from}<br />
+            {t('library.modal.details.end')}: {reservationTime && reservationTime.to}<br />
+            <br />
             <Form.Group>
-              <Form.Label>Ort:</Form.Label>
+              <Form.Label>{t('library.modal.details.location')}:</Form.Label>
               <Form.Control as="select" onChange={event => setReservationRoom(event.target.value)}>
               {reservationTime && Object.entries(reservationTime.resources).map(([roomId, room], idx) =>
                 <option key={idx} value={roomId.toString()}>
@@ -120,9 +126,9 @@ export default function Library () {
               </Form.Control>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Sitz:</Form.Label>
+              <Form.Label>{t('library.modal.details.seat')}:</Form.Label>
               <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
-                <option value={-1}>Egal</option>
+                <option value={-1}>{t('library.modal.seatSelection.any')}</option>
               {reservationTime && reservationRoom &&
                 Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
                 <option key={idx} value={x}>
@@ -135,33 +141,45 @@ export default function Library () {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={addReservation}>
-              Reservieren
+              {t('library.modal.actions.reserve')}
             </Button>
             <Button variant="secondary" onClick={hideReservationModal}>
-              Abbrechen
+              {t('library.modal.actions.cancel')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <h4 className={styles.heading}>
-          Deine Reservierungen
+          {t('library.yourReservations')}
         </h4>
         <ReactPlaceholder type="text" rows={3} ready={reservations}>
           <ListGroup>
             {reservations && reservations.length === 0 &&
               <ListGroup.Item>
-                Du hast keine Reservierungen.
+                {t('library.details.noReservations')}
               </ListGroup.Item>
             }
             {reservations && reservations.map((x, i) =>
               <ListGroup.Item key={i}>
                 <div className={styles.floatRight}>
                   <Button variant="danger" onClick={() => deleteReservation(x.reservation_id)}>
-                    <FontAwesomeIcon title="Löschen" icon={faTrashAlt} />
+                    <FontAwesomeIcon title={t('library.actions.delete')} icon={faTrashAlt} />
                   </Button>
                 </div>
 
-                <strong>{x.rcategory}</strong>, Platz {x.resource}, Reservierung {x.reservation_id}<br />
+                <Trans
+                  i18nKey="library.details.reservationDetails"
+                  ns='library'
+                  values={{
+                    category: x.rcategory,
+                    seat: x.resource,
+                    reservation_id: x.reservation_id
+                  }}
+                  components={{
+                    strong: <strong />
+                  }}
+                />
+                <br />
                 {formatNearDate(x.start)}: {formatFriendlyTime(x.start)} - {formatFriendlyTime(x.end)}
               </ListGroup.Item>
             )}
@@ -169,7 +187,7 @@ export default function Library () {
         </ReactPlaceholder>
 
         <h4 className={styles.heading}>
-          Verfügbare Plätze
+          {t('library.availableSeats')}
         </h4>
         <ReactPlaceholder type="text" rows={20} ready={available && available.length > 0}>
           <ListGroup>
@@ -180,7 +198,7 @@ export default function Library () {
                   <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
                     setReservationDay(day)
                     setReservationTime(time)
-                  }}>Reservieren</Button>
+                  }}>{t('library.actions.reserve')}</Button>
 
                   {formatNearDate(new Date(day.date + 'T' + time.from))}
                   {', '}
@@ -189,10 +207,10 @@ export default function Library () {
                   {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
                   <br />
                   <div className="text-muted">
-                    {Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0)}
-                    {' / '}
-                    {Object.values(time.resources).reduce((acc, room) => acc + room.maxnum_seats, 0)}
-                    {' verfügbar'}
+                    {t('library.details.seatsAvailable', {
+                      available: Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0),
+                      total: Object.values(time.resources).reduce((acc, room) => acc + room.maxnum_seats, 0)
+                    })}
                   </div>
                 </ListGroup.Item>
               )
@@ -205,3 +223,12 @@ export default function Library () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'library',
+      'common'
+    ]))
+  }
+})

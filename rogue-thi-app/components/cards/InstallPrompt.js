@@ -7,6 +7,7 @@ import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { OS_ANDROID, OS_IOS, useOperatingSystem } from '../../lib/hooks/os-hook'
+import { Trans, useTranslation } from 'next-i18next'
 
 import styles from '../../styles/Home.module.css'
 
@@ -17,6 +18,7 @@ import styles from '../../styles/Home.module.css'
 export default function InstallPrompt ({ onHide }) {
   const [showPrompt, setShowPrompt] = useState(false)
   const os = useOperatingSystem()
+  const { t } = useTranslation(['dashboard'])
 
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
@@ -38,30 +40,42 @@ export default function InstallPrompt ({ onHide }) {
   }
 
   return showPrompt && (
-      <Card className={styles.card}>
-        <Card.Body>
-          <Card.Title>
-            <FontAwesomeIcon icon={faDownload} fixedWidth />
-            {' '}
-            Installation
-            <Button variant="link" className={styles.cardButton} onClick={() => close()}>
-              <FontAwesomeIcon title="Schließen" icon={faTimes} />
-            </Button>
-          </Card.Title>
+    <Card className={styles.card}>
+      <Card.Body>
+        <Card.Title>
+          <FontAwesomeIcon icon={faDownload} fixedWidth />
+          {' '}
+          {t('install.title')}
+          <Button variant="link" className={styles.cardButton} onClick={() => close()}>
+            <FontAwesomeIcon title={t('prompts.close', { ns: 'common' })} icon={faTimes} />
+          </Button>
+        </Card.Title>
+        <Card.Text>
+          <Trans
+            i18nKey="install.text.question"
+            ns='dashboard'
+            components={{ strong: <strong /> }}
+          />
+        </Card.Text>
+        {showPrompt === OS_IOS &&
           <Card.Text>
-            Möchtest du diese App auf deinem Smartphone installieren?
+            <Trans
+              i18nKey="install.text.ios"
+              ns='dashboard'
+              components={{ strong: <strong /> }}
+            />
           </Card.Text>
-          {showPrompt === OS_IOS &&
-            <Card.Text>
-              Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.
-            </Card.Text>
-          }
-          {showPrompt === OS_ANDROID &&
-            <Card.Text>
-              Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>.
-            </Card.Text>
-          }
-        </Card.Body>
-      </Card>
+        }
+        {showPrompt === OS_ANDROID &&
+          <Card.Text>
+            <Trans
+              i18nKey="install.text.android"
+              ns='dashboard'
+              components={{ strong: <strong /> }}
+            />
+          </Card.Text>
+        }
+      </Card.Body>
+    </Card>
   )
 }

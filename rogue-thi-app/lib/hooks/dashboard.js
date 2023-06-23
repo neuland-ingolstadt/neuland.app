@@ -70,7 +70,7 @@ export function useDashboard () {
 
         ALL_DASHBOARD_CARDS.forEach(card => {
           if (!entries.find(x => x.key === card.key) && !hiddenEntries.find(x => x.key === card.key)) {
-            // new (previosly unknown) card
+            // new (previously unknown) card
             entries.splice(0, 0, card)
           }
         })

@@ -1,0 +1,33 @@
+{
+    "calendar": {
+        "appbar": {
+            "title": "Appointments"
+        },
+        "modals": {
+            "exams": {
+                "type": "Type",
+                "room": "Room",
+                "seat": "Seat",
+                "date": "Date",
+                "notes": "Notes",
+                "examiner": "Examiner",
+                "courseOfStudies": "Course of Studies",
+                "registerDate": "Registered",
+                "tools": "Tools",
+                "actions": {
+                    "close": "Close"
+                }
+            }
+        },
+        "notice": "All information without guarantee. Binding information is only available directly on the <a>university website</a>.",
+        "tabs": {
+            "semester": "Semester",
+            "exams": "Exams"
+        },
+        "dates": {
+            "until": "until"
+        },
+        "noExams": "There are currently no exam dates available.",
+        "guestNotice": "Exam dates are not available for guests."
+    }
+}

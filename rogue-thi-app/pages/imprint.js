@@ -9,24 +9,33 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Imprint.module.css'
+import { useTranslation } from 'next-i18next'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 
-export async function getStaticProps () {
+export async function getStaticProps ({ locale }) {
+  const locales = await serverSideTranslations(locale ?? 'en', [
+    'imprint',
+    'common'
+  ])
+
   try {
     const res = await fetch(IMPRINT_URL)
     const html = await res.text()
     return {
       props: {
-        neulandImprint: html
+        neulandImprint: html,
+        ...locales
       }
     }
   } catch (e) {
     console.error(e)
     return {
       props: {
-        neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`
+        neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`,
+        ...locales
       }
     }
   }
@@ -38,6 +47,8 @@ export async function getStaticProps () {
 export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [debugUnlockProgress, setDebugUnlockProgress] = useState(0)
+
+  const { t } = useTranslation('imprint')
 
   useEffect(() => {
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
@@ -61,12 +72,12 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 
   return (
     <AppContainer>
-      <AppNavbar title="Impressum" />
+      <AppNavbar title={t('imprint.appbar.title')} />
 
       <AppBody>
         <ListGroup>
           <h1 className={styles.imprintTitle}>
-            Wir würden uns über euer Feedback freuen.{' '}
+            {`${t('imprint.feedback.title')} `}
             <span onClick={debugUnlockClicked}>:)</span>
           </h1>
           <ListGroup.Item>
@@ -75,30 +86,30 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
               app-feedback@informatik.sexy
             </a>
             <br />
-            Webseite:{' '}
+            {`${t('imprint.feedback.email')}: `}
             <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">
               https://neuland-ingolstadt.de
             </a>
             <br />
-            Instagram:{' '}
+            {`${t('imprint.feedback.instagram')}: `}
             <a href="https://www.instagram.com/neuland_ingolstadt/" target="_blank" rel="noreferrer">
               @neuland_ingolstadt
             </a>
             <br />
-            Quellcode auf GitHub:{' '}
+            {`${t('imprint.feedback.sourceCode')}: `}
             <a href="https://github.com/neuland-ingolstadt/neuland.app" target="_blank" rel="noreferrer">
               neuland-ingolstadt/neuland.app
             </a>
             <br />
             <br />
             <a href="https://join.neuland-ingolstadt.de" target="_blank" rel="noreferrer">
-              Jetzt Mitglied werden und die Entwicklung unterstützen!
+              {t('imprint.feedback.joinNeuland')}
             </a>
           </ListGroup.Item>
         </ListGroup>
 
         <ListGroup>
-          <h1 className={styles.imprintTitle}>Rechtliche Hinweise von Neuland Ingolstadt e.V.</h1>
+          <h1 className={styles.imprintTitle}>{t('imprint.legal.title')}</h1>
           <ListGroup.Item>
             <div className={styles.imprint} dangerouslySetInnerHTML={{ __html: neulandImprint }} />
           </ListGroup.Item>

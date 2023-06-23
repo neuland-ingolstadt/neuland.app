@@ -1,0 +1,33 @@
+{
+    "lecturers": {
+        "appbar": {
+            "title": "Dozenten"
+        },
+        "modals": {
+            "details": {
+                "title": "Titel",
+                "surname": "Name",
+                "forename": "Vorname",
+                "organization": "Organisation",
+                "function": "Funktion",
+                "room": "Raum",
+                "email": "E-Mail",
+                "phone": "Telefon",
+                "officeHours": "Sprechzeiten",
+                "insights": "Einsichtnahme",
+                "actions": {
+                    "close": "Schließen"
+                },
+                "notAvailable": "N/A"
+            }
+        },
+        "search": {
+            "placeholder": "Alle Dozenten durchsuchen...",
+            "personalLecturers": "Persönliche Dozenten",
+            "searchResults": "Suchergebnisse"
+        },
+        "body": {
+            "room": "Raum"
+        }
+    }
+}

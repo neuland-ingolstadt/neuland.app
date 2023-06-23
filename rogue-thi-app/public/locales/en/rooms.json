@@ -1,0 +1,68 @@
+{
+    "rooms": {
+        "overflow": {
+            "hourlyPlan": "Hourly Plan",
+            "campusCityTour": "Campus & City Tour"
+        },
+        "map": {
+            "appbar": {
+                "title": "Room Map"
+            },
+            "searchPlaceholder": "Search for 'W003', 'Toilet', 'Library', ...",
+            "extendedSearch": "Extended Search",
+            "automaticSuggestion": "Automatic Suggestions",
+            "occupied": "Occupied",
+            "freeFromUntil": "Free from {{from}} to {{until}}",
+            "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+            "legend": {
+                "free": "Free",
+                "occupied": "Occupied",
+                "specialEquipment": "Special Equipment",
+                "occupancyUnknown": "Occupancy Unknown"
+            },
+            "floors": {
+                "eg": "GF"
+            }
+        },
+        "search": {
+            "appbar": {
+                "title": "Advanced Room Search"
+            },
+            "building": "Building",
+            "date": "Date",
+            "time": "Time",
+            "duration": "Duration",
+            "search": "Search",
+            "buildingsAll": "All",
+            "results": {
+                "availableFromUntil": "Available from {{from}}<br />to {{until}}",
+                "noAvailableRooms": "No available rooms found"
+            }
+        },
+        "suggestions": {
+            "appbar": {
+                "title": "Room Suggestions"
+            },
+            "noSuggestions": "No suggestions available.",
+            "noAvailableRooms": "No available rooms found.",
+            "gaps": {
+                "header": {
+                    "general": "Available Rooms",
+                    "specific": "{{from}} <arrow/> {{until}}"
+                },
+                "subtitle": {
+                    "general": "Break from {{from}} to {{until}}",
+                    "specific": "Rooms from {{from}} to {{until}}"
+                }
+            }
+        },
+        "list": {
+            "appbar": {
+                "title": "Hourly Room Plan"
+            }
+        },
+        "common": {
+            "availableFromUntil": "Available from {{from}}<br />to {{until}}"
+        }
+    }
+}

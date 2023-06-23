@@ -1,0 +1,11 @@
+{
+    "events": {
+        "appbar": {
+            "title": "Veranstaltungen"
+        }
+    },
+    "noEvents": "Es sind derzeit keine Veranstaltungstermine verfügbar.",
+    "dates": {
+        "until": "bis"
+    }
+}

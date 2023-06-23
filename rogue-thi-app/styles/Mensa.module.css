@@ -57,3 +57,8 @@
   margin-top: 75px;
   text-align: center;
 }
+
+.translated {
+  color: var(--primary);
+  font-size: .8rem;
+}

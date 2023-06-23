@@ -1,0 +1,46 @@
+{
+    "form": {
+        "type": {
+            "label": "Transportation",
+            "option": {
+                "bus": "Bus",
+                "train": "Train",
+                "parking": "Parking",
+                "charging": "Charging Stations"
+            }
+        },
+        "station": {
+            "label": {
+                "bus": "Stop",
+                "train": "Station"
+            }
+        }
+    },
+    "transport": {
+        "title": {
+            "bus": "Bus ({{station}})",
+            "train": "Train ({{station}})",
+            "parking": "Parking",
+            "charging": "Charging Stations",
+            "unknown": "Mobility"
+        },
+        "details": {
+            "charging": {
+                "available": "{{available}} of {{total}} available"
+            },
+            "parking": {
+                "available": "{{available}} available",
+                "unknown": "n/a",
+                "employees": "Employees",
+                "free": "Free",
+                "paid": "Paid",
+                "restricted": "Restricted"
+            },
+            "noElements": "No elements."
+        },
+        "error": {
+            "retrieval": "Error retrieving data."
+        }
+    }
+    
+}

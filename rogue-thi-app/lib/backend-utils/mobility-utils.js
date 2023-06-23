@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
@@ -9,6 +7,7 @@ import API from '../backend/authenticated-api'
 import NeulandAPI from '../backend/neuland-api'
 
 import stations from '../../data/mobility.json'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Retrieves the users mobility preferences.
@@ -25,21 +24,25 @@ export function getMobilitySettings () {
  * Determines the title of the mobility card / page.
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
  * @param {string} station Station name (only for `bus` or `train`)
+ * @param {object} t Translation object
  * @returns {string}
  */
-export function getMobilityLabel (kind, station) {
-  if (kind === 'bus') {
-    const entry = stations.bus.stations.find(x => x.id === station)
-    return `Bus (${entry ? entry.name : '?'})`
-  } else if (kind === 'train') {
-    const entry = stations.train.stations.find(x => x.id === station)
-    return `Bahn (${entry ? entry.name : '?'})`
-  } else if (kind === 'parking') {
-    return 'Parkplätze'
-  } else if (kind === 'charging') {
-    return 'Ladestationen'
-  } else {
-    return 'Mobilität'
+export function getMobilityLabel (kind, station, t) {
+  switch (kind) {
+    case 'bus': {
+      const busEntry = stations.bus.stations.find(x => x.id === station)
+      return t('transport.title.bus', { station: busEntry ? busEntry.name : '?' })
+    }
+    case 'train': {
+      const trainEntry = stations.train.stations.find(x => x.id === station)
+      return t('transport.title.train', { station: trainEntry ? trainEntry.name : '?' })
+    }
+    case 'parking':
+      return t('transport.title.parking')
+    case 'charging':
+      return t('transport.title.charging')
+    default:
+      return t('transport.title.unknown')
   }
 }
 
@@ -58,7 +61,7 @@ async function getAndConvertCampusParkingData () {
   }
 
   return {
-    name: 'Congressgarage (Mitarbeiter)',
+    name: 'Congressgarage',
     available
   }
 }
@@ -112,7 +115,9 @@ export async function getMobilityEntries (kind, station) {
  * @param {number} maxLen Truncate the string after this many characters
  * @param {string} styles CSS object
  */
-export function renderMobilityEntry (kind, item, maxLen, styles, detailed) {
+export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
+  const { t } = useTranslation('mobility')
+
   if (kind === 'bus') {
     const timeString = formatTimes(item.time, 30, 30)
 
@@ -151,15 +156,15 @@ export function renderMobilityEntry (kind, item, maxLen, styles, detailed) {
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
             {item.priceLevel === 'free' && (
-              <FontAwesomeIcon title="Kostenlos" icon={faCreativeCommonsNcEu} />
+              <FontAwesomeIcon title={t('transport.details.parking.free')} icon={faCreativeCommonsNcEu} />
             )}
             {item.priceLevel === 'restricted' && (
-              <FontAwesomeIcon title="Zugangsbeschränkt" icon={faKey} />
+              <FontAwesomeIcon title={t('transport.details.parking.restricted')} icon={faKey} />
             )}
             {item.priceLevel > 0 && new Array(item.priceLevel)
               .fill(0)
               .map((_, i) => (
-                <FontAwesomeIcon title="Kostenpflichtig" key={i} icon={faEuroSign} />
+                <FontAwesomeIcon title={t('transport.details.parking.paid')} key={i} icon={faEuroSign} />
               ))}
           </div>
         )}
@@ -168,8 +173,8 @@ export function renderMobilityEntry (kind, item, maxLen, styles, detailed) {
         </div>
         <div className={styles.mobilityTime}>
           {typeof item.available === 'number'
-            ? item.available + ' frei'
-            : 'n/a'}
+            ? t('transport.details.parking.available', { available: item.available })
+            : t('transport.details.parking.unknown') }
         </div>
       </>
     )
@@ -180,7 +185,7 @@ export function renderMobilityEntry (kind, item, maxLen, styles, detailed) {
           {item.name}
         </div>
         <div className={styles.mobilityTime}>
-          {item.available} von {item.total} frei
+          {t('transport.details.charging.available', { available: item.available, total: item.total })}
         </div>
       </>
     )

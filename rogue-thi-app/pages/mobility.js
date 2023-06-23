@@ -10,15 +10,18 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import {
+  RenderMobilityEntry,
   getMobilityEntries,
   getMobilityLabel,
-  getMobilitySettings,
-  renderMobilityEntry
+  getMobilitySettings
 } from '../lib/backend-utils/mobility-utils'
 import stations from '../data/mobility.json'
 import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Mobility.module.css'
+import { useTranslation } from 'next-i18next'
+
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function Bus () {
   const time = useTime()
@@ -26,6 +29,7 @@ export default function Bus () {
   const [station, setStation] = useState(null)
   const [data, setData] = useState(null)
   const [dataError, setDataError] = useState(null)
+  const { t } = useTranslation('mobility')
 
   useEffect(() => {
     const { kind, station } = getMobilitySettings()
@@ -72,40 +76,40 @@ export default function Bus () {
 
   return (
     <AppContainer>
-      <AppNavbar title={getMobilityLabel(kind, station)} />
+      <AppNavbar title={getMobilityLabel(kind, station, t)} />
 
       <AppBody>
         <Form className={styles.stationForm}>
           <Form.Group>
             <Form.Label>
-              Verkehrsmittel
+              {t('form.type.label')}
             </Form.Label>
             <Form.Control
               as="select"
               value={kind}
               onChange={e => changeKind(e.target.value)}
             >
-              <option value="bus">Bus</option>
-              <option value="train">Bahn</option>
-              <option value="parking">Auto</option>
-              <option value="charging">E-Auto</option>
+              <option value="bus">{t('form.type.option.bus')}</option>
+              <option value="train">{t('form.type.option.train')}</option>
+              <option value="parking">{t('form.type.option.parking')}</option>
+              <option value="charging">{t('form.type.option.charging')}</option>ç
             </Form.Control>
           </Form.Group>
           {(kind === 'bus' || kind === 'train') && (
             <Form.Group>
-              <Form.Label>
-                Bahnhof / Haltestelle
-              </Form.Label>
-              <Form.Control
-                as="select"
-                value={station || ''}
-                onChange={e => setStation(e.target.value)}
-              >
-                {kind && stations[kind].stations.map(station =>
-                  <option key={station.id} value={station.id}>{station.name}</option>
-                )}
-              </Form.Control>
-            </Form.Group>
+            <Form.Label>
+              {kind === 'bus' ? t('form.station.label.bus') : t('form.station.label.train')}
+            </Form.Label>
+            <Form.Control
+              as="select"
+              value={station || ''}
+              onChange={e => setStation(e.target.value)}
+            >
+              {kind && stations[kind].stations.map(station =>
+                <option key={station.id} value={station.id}>{station.name}</option>
+              )}
+            </Form.Control>
+          </Form.Group>
           )}
         </Form>
 
@@ -113,18 +117,18 @@ export default function Bus () {
           <ReactPlaceholder type="text" rows={10} ready={data || dataError}>
             {dataError && (
               <ListGroup.Item className={styles.mobilityItem}>
-                Fehler beim Abruf!<br />
+                {t('transport.error')}<br />
                 {dataError}
               </ListGroup.Item>
             )}
             {data && data.length === 0 &&
               <ListGroup.Item className={styles.mobilityItem}>
-                Keine Elemente.
+                {t('transport.details.noElements')}
               </ListGroup.Item>
             }
             {data && data.map((item, idx) => (
               <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                {renderMobilityEntry(kind, item, 200, styles, true)}
+                <RenderMobilityEntry kind={kind} item={item} maxLen={200} styles={styles} detailed={true} t={t} />
               </ListGroup.Item>
             ))}
           </ReactPlaceholder>
@@ -135,3 +139,12 @@ export default function Bus () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'mobility',
+      'common'
+    ]))
+  }
+})

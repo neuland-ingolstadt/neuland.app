@@ -21,9 +21,21 @@ import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date
 
 import styles from '../../styles/RoomsSearch.module.css'
 
+import { Trans, useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const TUX_ROOMS = ['G308']
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'rooms',
+      'common'
+    ]))
+  }
+})
 
 /**
  * Page containing the room search.
@@ -39,6 +51,8 @@ export default function RoomSearch () {
 
   const [searching, setSearching] = useState(false)
   const [filterResults, setFilterResults] = useState(null)
+
+  const { t } = useTranslation('rooms')
 
   /**
    * Searches and displays rooms with the specified filters.
@@ -71,27 +85,27 @@ export default function RoomSearch () {
 
   return (
     <AppContainer>
-      <AppNavbar title="Erweiterte Raumsuche" />
+      <AppNavbar title={t('rooms.search.appbar.title')} />
 
       <AppBody>
         <Form>
           <div className={styles.searchForm}>
             <Form.Group>
               <Form.Label>
-                Gebäude
+                {t('rooms.search.building')}
               </Form.Label>
               <Form.Control
                 as="select"
                 value={building}
                 onChange={e => setBuilding(e.target.value)}
               >
-                <option key={BUILDINGS_ALL}>{BUILDINGS_ALL}</option>
+                <option key={BUILDINGS_ALL}>{t('rooms.search.buildingsAll')}</option>
                 {BUILDINGS.map(b => <option key={b}>{b}</option>)}
               </Form.Control>
             </Form.Group>
             <Form.Group>
               <Form.Label>
-                Datum
+                {t('rooms.search.date')}
               </Form.Label>
               <Form.Control
                 type="date"
@@ -101,7 +115,7 @@ export default function RoomSearch () {
             </Form.Group>
             <Form.Group>
               <Form.Label>
-                Uhrzeit
+                {t('rooms.search.time')}
               </Form.Label>
               <Form.Control
                 type="time"
@@ -111,7 +125,7 @@ export default function RoomSearch () {
             </Form.Group>
             <Form.Group>
               <Form.Label>
-                Dauer
+                {t('rooms.search.duration')}
               </Form.Label>
               <Form.Control
                 as="select"
@@ -123,7 +137,7 @@ export default function RoomSearch () {
             </Form.Group>
           </div>
           <Button onClick={() => filter()}>
-            Suchen
+            {t('rooms.search.search')}
           </Button>
         </Form>
 
@@ -144,14 +158,23 @@ export default function RoomSearch () {
                     </div>
                   </div>
                   <div className={styles.right}>
-                    frei ab {formatFriendlyTime(result.from)}<br />
-                    bis {formatFriendlyTime(result.until)}
+                    <Trans
+                      i18nKey="rooms.common.availableFromUntil"
+                      ns='rooms'
+                      values={{
+                        from: formatFriendlyTime(result.from),
+                        until: formatFriendlyTime(result.until)
+                      }}
+                      components={{
+                        br: <br />
+                      }}
+                    />
                   </div>
                 </ListGroup.Item>
               )}
               {filterResults && filterResults.length === 0 &&
                 <ListGroup.Item className={styles.item}>
-                  Keine freien Räume gefunden.
+                  {t('rooms.search.results.noAvailableRooms')}
                 </ListGroup.Item>
               }
             </ListGroup>

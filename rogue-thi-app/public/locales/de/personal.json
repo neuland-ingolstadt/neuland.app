@@ -1,0 +1,51 @@
+{
+    "personal": {
+        "title": "Profil",
+        "grades": {
+            "title": "Noten",
+            "missingWeightSingle": " Gewichtung fehlt",
+            "missingWeightMultiple": " Gewichtungen fehlen"
+        },
+        "overview": {
+            "grades": "Noten",
+            "ects": "ECTS",
+            "matriculationNumber": "Mat.-Nr",
+            "libraryNumber": "Bib.-Nr",
+            "copiedToClipboard": "{{label}} in Zwischenablage kopiert."
+        },
+        "semester": "Semester",
+        "foodPreferences": "Essenspräferenzen",
+        "debug": "API Spielwiese",
+        "privacy": "Datenschutzerklärung",
+        "imprint": "Impressum",
+        "language": "Sprache ändern",
+        "login": "Anmelden",
+        "logout": "Ausloggen",
+        "dashboard": "Dashboard",
+        "theme": "Theme",
+        "modals": {
+            "theme": {
+                "title": "Theme",
+                "hackerman": "Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <aCtf>Übungs-CTFs</aCtf> lösen. Wenn du so weit bist, kannst du es <aHackerman>hier</aHackerman> freischalten."
+            },
+            "language": {
+                "title": "Sprache"
+            },
+            "personalData": {
+                "matriculationNumber": "Matrikelnummer",
+                "libraryNumber": "Bibliotheksnummer",
+                "printerBalance": "Druckguthaben",
+                "fieldOfStudy": "Studiengang",
+                "semester": "Fachsemester",
+                "examRegulations": "Prüfungsordnung",
+                "email": "E-Mail",
+                "thiEmail": "THI E-Mail",
+                "phone": "Telefon",
+                "firstName": "Vorname",
+                "lastName": "Nachname",
+                "street": "Straße",
+                "city": "Ort"
+            }
+        }
+    }
+}

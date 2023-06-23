@@ -11,6 +11,7 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 import DashboardModal from '../components/modal/DashboardModal'
 import FilterFoodModal from '../components/modal/FilterFoodModal'
+import LanguageModal from '../components/modal/LanguageModal'
 import PersonalDataModal from '../components/modal/PersonalDataModal'
 import ThemeModal from '../components/modal/ThemeModal'
 
@@ -25,7 +26,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { FoodFilterContext, ShowDashboardModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
+import { FoodFilterContext, ShowDashboardModal, ShowLanguageModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
@@ -33,6 +34,9 @@ import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
+
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -47,8 +51,11 @@ export default function Personal () {
   const { setShowFoodFilterModal } = useContext(FoodFilterContext)
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
+  const [, setShowLanguageModal] = useContext(ShowLanguageModal)
   const theme = useContext(ThemeContext)
   const router = useRouter()
+  const { t, i18n } = useTranslation('personal')
+
   const userKind = useUserKind()
 
   const CopyableField = ({ label, value }) => {
@@ -56,7 +63,7 @@ export default function Personal () {
 
     const handleCopy = async () => {
       await navigator.clipboard.writeText(value)
-      alert(`${label} in die Zwischenablage kopiert.`)
+      alert(t('personal.overview.copiedToClipboard', { label }))
     }
 
     return (
@@ -71,9 +78,9 @@ export default function Personal () {
         {value
           ? (
             <>
-            <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
-              {value}
-            </span>
+              <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
+                {value}
+              </span>
             </>
             )
           : null}
@@ -119,7 +126,7 @@ export default function Personal () {
   }, [router, userKind])
 
   return (<AppContainer>
-    <AppNavbar title="Profil"/>
+    <AppNavbar title={t('personal.title')} />
 
     <AppBody>
       <ReactPlaceholder type="text" rows={10} ready={userdata || userKind !== USER_STUDENT}>
@@ -128,20 +135,20 @@ export default function Personal () {
           <ListGroup>
             <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
               <div className={styles.name_interaction_icon}>
-                <FontAwesomeIcon icon={faChevronRight} className="text-muted"/>
+                <FontAwesomeIcon icon={faChevronRight} className="text-muted" />
               </div>
-              {userdata && userdata.name + ', ' + userdata.vname}<br/>
+              {userdata && userdata.name + ', ' + userdata.vname}<br />
               {userdata && userdata.fachrich}
             </ListGroup.Item>
 
             <ListGroup.Item className="text-muted">
               <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-              {userdata && userdata.stgru + '. Semester'}<br/>
+                {userdata && `${userdata.stgru}. ${t('personal.semester')}`}<br />
               </span>
               {userdata && (
                 <>
-                  <CopyableField label="Mat.-Nr" value={userdata.mtknr}/> <br/>
-                  <CopyableField label="Bib.-Nr" value={userdata.bibnr}/>
+                  <CopyableField label={t('personal.overview.matriculationNumber')} value={userdata.mtknr} /> <br />
+                  <CopyableField label={t('personal.overview.libraryNumber')} value={userdata.bibnr} />
                 </>
               )}
 
@@ -151,137 +158,156 @@ export default function Personal () {
               <div className={styles.interaction_icon}>
                 <span className="text-muted">
                   {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
-                  {' Noten '}
-                  <FontAwesomeIcon icon={faChevronRight}/>
+                  {` ${t('personal.overview.grades')} `}
+                  <FontAwesomeIcon icon={faChevronRight} />
                 </span>
               </div>
               <span className="text-muted">
-                {ects !== null && ects + ' ECTS'}
+                {ects !== null && `${ects} ${t('personal.overview.ects')} `}
                 {!isNaN(average?.result) && ' · '}
                 {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
-                {average?.missingWeight === 1 && ' (' + average.missingWeight + ' Gewichtung fehlt)'}
-                {average?.missingWeight > 1 && ' (' + average.missingWeight + ' Gewichtungen fehlen)'}
+                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightSingle')})`}
+                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightMultiple')})`}
               </span>
             </ListGroup.Item>
           </ListGroup>
         }
 
-        <PersonalDataModal userdata={userdata}/>
+        <PersonalDataModal userdata={userdata} />
       </ReactPlaceholder>
 
-      <br/>
+      <br />
 
       <ListGroup>
 
         {themes.filter(item => item.style.includes(theme[0])).map(item => (
           <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
             <div className={styles.interaction_icon}>
-            <span className="text-muted">
-              {item.name}{' '}
-              <FontAwesomeIcon icon={faChevronRight}/>
-            </span>
+              <span className="text-muted">
+                {`${item.name[i18n.languages[0]]} `}
+                <FontAwesomeIcon icon={faChevronRight} />
+              </span>
             </div>
-            Theme
+            {t('personal.theme')}
           </ListGroup.Item>
         ))}
 
         <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
           <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight}/>
-              </span>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
           </div>
-          Dashboard
+          {t('personal.dashboard')}
+        </ListGroup.Item>
+
+        <ListGroup.Item action onClick={() => setShowLanguageModal(true)}>
+          <div className={styles.interaction_icon}>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+          </div>
+          {t('personal.language')}
         </ListGroup.Item>
 
         <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
           <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight}/>
-              </span>
+            <span className="text-muted">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
           </div>
-          Essenspräferenzen
+          {t('personal.foodPreferences')}
         </ListGroup.Item>
 
       </ListGroup>
 
-      <br/>
+      <br />
 
       <ListGroup>
 
         <ListGroup.Item action
-                        onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
-          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           Primuss
         </ListGroup.Item>
 
         <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
-          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           Moodle
         </ListGroup.Item>
 
         <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
-          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+          <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           E-Mail
         </ListGroup.Item>
 
         {userKind === USER_EMPLOYEE &&
           <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon}/>
+            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
             MyTHI
           </ListGroup.Item>
         }
       </ListGroup>
 
-      <br/>
+      <br />
 
       <ListGroup>
 
         {showDebug && (
           <ListGroup.Item action onClick={() => router.push('/debug')}>
-            <FontAwesomeIcon icon={faBug} className={styles.interaction_icon}/>
-            API Spielwiese
+            <FontAwesomeIcon icon={faBug} className={styles.interaction_icon} />
+            {t('personal.debug')}
           </ListGroup.Item>
         )}
 
         <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
-          <FontAwesomeIcon icon={faShield} className={styles.interaction_icon}/>
-          Datenschutzerklärung
+          <FontAwesomeIcon icon={faShield} className={styles.interaction_icon} />
+          {t('personal.privacy')}
         </ListGroup.Item>
 
         <ListGroup.Item action onClick={() => router.push('/imprint')}>
-          <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon}/>
-          Impressum
+          <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon} />
+          {t('personal.imprint')}
         </ListGroup.Item>
 
       </ListGroup>
 
-      <br/>
+      <br />
 
       <div className={styles.logout_button}>
         {userKind === USER_GUEST && (
           <Button
             variant={'success'}
             onClick={() => forgetSession(router)}>
-            {'Login '}
-            <FontAwesomeIcon icon={faArrowRightToBracket}/>
+            {`${t('personal.login')} `}
+            <FontAwesomeIcon icon={faArrowRightToBracket} />
           </Button>
         )}
         {userKind !== USER_GUEST && (
           <Button
             variant={'danger'}
             onClick={() => forgetSession(router)}>
-            {'Logout '}
-            <FontAwesomeIcon icon={faArrowRightFromBracket}/>
+            {`${t('personal.logout')} `}
+            <FontAwesomeIcon icon={faArrowRightFromBracket} />
           </Button>
         )}
       </div>
 
-      <DashboardModal/>
-      <FilterFoodModal/>
-      <ThemeModal/>
-
-      <AppTabbar/>
+      <PersonalDataModal userdata={userdata} />
+      <DashboardModal />
+      <FilterFoodModal />
+      <ThemeModal />
+      <LanguageModal />
+      <AppTabbar />
     </AppBody>
   </AppContainer>)
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'personal',
+      'common'
+    ]))
+  }
+})

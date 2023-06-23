@@ -1,10 +1,10 @@
 [
-    { "name": "Automatisch", "style": "default" },
-    { "name": "Hell", "style": "light" },
-    { "name": "Dunkel", "style": "dark" },
-    { "name": "Barbie & Ken", "style": "barbie" },
-    { "name": "Retro", "style": "retro" },
-    { "name": "Windows 95", "style": "95" },
-    { "name": "Pride", "style": "pride" },
-    { "name": "Hackerman", "style": "hacker", "requiresToken": true }
+    { "name": { "en": "Automatic", "de": "Automatisch" }, "style": "default" },
+    { "name": { "en": "Light", "de": "Hell" }, "style": "light" },
+    { "name": { "en": "Dark", "de": "Dunkel" }, "style": "dark" },
+    { "name": { "en": "Barbie & Ken", "de": "Barbie & Ken" }, "style": "barbie" },
+    { "name": { "en": "Retro", "de": "Retro" }, "style": "retro" },
+    { "name": { "en": "Windows 95", "de": "Windows 95" }, "style": "95" },
+    { "name": { "en": "Pride", "de": "Pride" }, "style": "pride" },
+    { "name": { "en": "Hackerman", "de": "Hackerman" }, "style": "hacker", "requiresToken": true }
 ]

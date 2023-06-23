@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -26,11 +26,13 @@ import flagMap from '../data/mensa-flags.json'
 import styles from '../styles/Mensa.module.css'
 
 import SwipeableViews from 'react-swipeable-views'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
 const CURRENCY_LOCALE = 'de'
 const COLOR_WARN = '#bb0000'
 const COLOR_GOOD = '#00bb00'
-const FALLBACK_ALLERGEN = 'Unbekannt (Das ist schlecht.)'
 
 // delete comments
 Object.keys(allergenMap)
@@ -54,6 +56,9 @@ export default function Mensa () {
   const [showMealDetails, setShowMealDetails] = useState(null)
   const [week, setWeek] = useState(0)
   const userKind = useUserKind()
+  const router = useRouter()
+  const { i18n, t } = useTranslation('food')
+  const currentLocale = i18n.languages[0]
 
   useEffect(() => {
     async function load () {
@@ -71,7 +76,7 @@ export default function Mensa () {
     }
 
     load()
-  }, [selectedRestaurants])
+  }, [selectedRestaurants, router])
 
   /**
    * Checks whether the user should be allergens.
@@ -149,24 +154,30 @@ export default function Mensa () {
       >
         <div>
           <div className={styles.name}>
-            {meal.name}
+            {/* {isTranslated(meal) && (
+                <>
+                  <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                  {' '}
+                </>
+            )} */}
+            {meal.name[i18n.languages[0]]}
           </div>
           <div className={styles.room}>
             <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-              {!meal.allergens && 'Unbekannte Zutaten / Allergene'}
+              {!meal.allergens && t('warning.unknownIngredients.text')}
               {containsSelectedAllergen(meal.allergens) && (
                 <span>
-                  <FontAwesomeIcon title="Allergiewarnung" icon={faExclamationTriangle} color={COLOR_WARN} />
+                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} color={COLOR_WARN} />
                   {' '}
                 </span>
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                 <span>
-                  <FontAwesomeIcon title="Bevorzugtes Essen" icon={faThumbsUp} color={COLOR_GOOD} />
+                  <FontAwesomeIcon title={t('warning.preferences.iconTitle')} icon={faThumbsUp} color={COLOR_GOOD} />
                   {' '}
                 </span>
               )}
-              {meal.flags && meal.flags.map(flag => flagMap[flag]).join(', ')}
+              {meal.flags && meal.flags.map(flag => flagMap[flag]?.[currentLocale]).join(', ')}
               {meal.flags?.length > 0 && meal.allergens?.length > 0 && '; '}
               {meal.allergens && meal.allergens.join(', ')}
             </span>
@@ -200,11 +211,11 @@ export default function Mensa () {
       <SwipeableTab key={key} >
         {mensa.length > 0 && (
           <>
-            <h4 className={styles.kindHeader}>Mensa</h4>
+            <h4 className={styles.kindHeader}>{t('list.titles.cafeteria')}</h4>
             {mensaFood.length > 0 && (
               <>
                 {mensaSoups.length > 0 && (
-                  <h5 className={styles.kindHeader}>Gerichte</h5>
+                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
                 )}
                 <ListGroup>
                   {mensaFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
@@ -214,7 +225,7 @@ export default function Mensa () {
             {mensaSoups.length > 0 && (
               <>
                 {mensaFood.length > 0 && (
-                  <h5 className={styles.kindHeader}>Suppen</h5>
+                  <h5 className={styles.kindHeader}>{t('list.titles.soups')}</h5>
                 )}
                 <ListGroup>
                   {mensaSoups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
@@ -239,7 +250,7 @@ export default function Mensa () {
             {canisiusFood.length > 0 && (
               <>
                 {canisiusSalads.length > 0 && (
-                  <h5 className={styles.kindHeader}>Gerichte</h5>
+                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
                 )}
                 <ListGroup>
                   {canisiusFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
@@ -249,7 +260,7 @@ export default function Mensa () {
             {canisiusSalads.length > 0 && (
               <>
                 {canisiusFood.length > 0 && (
-                  <h5 className={styles.kindHeader}>Salate</h5>
+                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
                 )}
                 <ListGroup>
                   {canisiusSalads.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
@@ -263,32 +274,34 @@ export default function Mensa () {
           <div className={styles.noMealInfo}>
             <FontAwesomeIcon icon={faUtensils} size="xl" style={ { marginBottom: '15px' } }/>
             <br />
-            Keine Daten verfügbar
+            {t('error.dataUnavailable')}
           </div>
         )}
       </SwipeableTab>
     )
   }
 
+  const isTranslated = (meal) => meal?.originalLanguage !== i18n.languages[0]
+
   return (
     <AppContainer>
-      <AppNavbar title="Essen" showBack={'desktop-only'}>
+      <AppNavbar title={t('list.titles.meals')} showBack={'desktop-only'}>
         <AppNavbar.Button onClick={() => setShowFoodFilterModal(true)}>
-          <FontAwesomeIcon title="Filter" icon={faFilter} fixedWidth/>
+          <FontAwesomeIcon title={t('filter')} icon={faFilter} fixedWidth/>
         </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
         <div className={styles.weekSelector}>
           <Button className={styles.prevWeek} variant="link" onClick={() => setWeek(0)} disabled={week === 0}>
-            <FontAwesomeIcon title="Woche zurück" icon={faChevronLeft} />
+            <FontAwesomeIcon title={t('navigation.weeks.previous')} icon={faChevronLeft} />
           </Button>
           <div className={styles.weekText}>
             {week === 0 && getFriendlyWeek(new Date(currentFoodDays?.[0]?.timestamp))}
             {week === 1 && getFriendlyWeek(new Date(futureFoodDays?.[0]?.timestamp))}
           </div>
           <Button className={styles.nextWeek} variant="link" onClick={() => setWeek(1)} disabled={week === 1}>
-            <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
+            <FontAwesomeIcon title={t('navigation.weeks.next')} icon={faChevronRight} />
           </Button>
         </div>
 
@@ -303,13 +316,13 @@ export default function Mensa () {
 
         <Modal show={showMealDetails} onHide={() => setShowMealDetails(null)}>
           <Modal.Header closeButton>
-            <Modal.Title>Erläuterung</Modal.Title>
+            <Modal.Title>{t('foodModal.header')}</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <h5>Anmerkungen</h5>
-            {showMealDetails?.flags === null && 'Unbekannt.'}
-            {showMealDetails?.flags?.length === 0 && 'Keine.'}
+            <h5>{t('foodModal.flags.title')}</h5>
+            {showMealDetails?.flags === null && `${t('foodModal.flags.unkown')}`}
+            {showMealDetails?.flags?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.flags?.map(flag => (
                 <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
@@ -321,14 +334,14 @@ export default function Mensa () {
                   {' '}
                   <strong>{flag}</strong>
                   {' – '}
-                  {flagMap[flag] || FALLBACK_ALLERGEN}
+                  {flagMap[flag]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>
 
-            <h5>Allergene</h5>
-            {showMealDetails?.allergens === null && 'Unbekannt.'}
-            {showMealDetails?.allergens?.length === 0 && 'Keine.'}
+            <h5>{t('foodModal.allergens.title')}</h5>
+            {showMealDetails?.allergens === null && `${t('foodModal.allergens.unkown')}`}
+            {showMealDetails?.allergens?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.allergens?.map(key => (
                 <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
@@ -341,70 +354,90 @@ export default function Mensa () {
                   {' '}
                   <strong>{key}</strong>
                   {' – '}
-                  {allergenMap[key] || FALLBACK_ALLERGEN}
+                  {allergenMap[key]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>
 
-            <h5>Nährwerte</h5>
+            <h5>{t('foodModal.nutrition.title')}</h5>
 
             {(showMealDetails?.nutrition && (
 
               <ul>
                 <li>
-                  <strong>Energie</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.energy.title')}</strong>:{' '}
                   {showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / &nbsp;
                   {showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}
                 </li>
                 <li>
-                  <strong>Fett</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.fat.title')}</strong>:{' '}
                   {formatGram(showMealDetails?.nutrition.fat)}
-                  <br/><strong>davon gesättigte
-                  Fettsäuren</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
+                  <br/><strong>{t('foodModal.nutrition.fat.saturated')}</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
                 </li>
                 <li>
-                  <strong>Kohlenhydrate</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.carbohydrates.title')}</strong>:{' '}
                   {formatGram(showMealDetails?.nutrition.carbs)}
-                  <br/><strong>davon Zucker</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
+                  <br/><strong>{t('foodModal.nutrition.carbohydrates.sugar')}</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
                 </li>
                 <li>
-                  <strong>Ballaststoffe</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.fiber.title')}</strong>:{' '}
                   {formatGram(showMealDetails?.nutrition.fiber)}
                 </li>
                 <li>
-                  <strong>Eiweiß</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.protein.title')}</strong>:{' '}
                   {formatGram(showMealDetails?.nutrition.protein)}
                 </li>
                 <li>
-                  <strong>Salz</strong>:{' '}
+                  <strong>{t('foodModal.nutrition.salt.title')}</strong>:{' '}
                   {formatGram(showMealDetails?.nutrition.salt)}
                 </li>
               </ul>)) || (
-              <p>Unbekannt.</p>
+              <p>{t('foodModal.nutrition.unkown.title')}</p>
             )}
 
-            <h5>Preise</h5>
+            <h5>{t('foodModal.prices.title')}</h5>
             <ul>
               <li>
-                <strong>Studierende</strong>:{' '}
+                <strong>{t('foodModal.prices.students')}</strong>:{' '}
                 {formatPrice(showMealDetails?.prices.student)}
               </li>
               <li>
-                <strong>Mitarbeitende</strong>:{' '}
+                <strong>{t('foodModal.prices.employees')}</strong>:{' '}
                 {formatPrice(showMealDetails?.prices.employee)}
               </li>
               <li>
-                <strong>Gäste</strong>:{' '}
+                <strong>{t('foodModal.prices.guests')}</strong>:{' '}
                 {formatPrice(showMealDetails?.prices.guest)}
               </li>
             </ul>
 
             <p>
-              <strong>Angaben ohne Gewähr. </strong>
+              <strong>{t('foodModal.warning.title')}</strong>
               <br/>
-              Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert.
-              Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion.
+              {t('foodModal.warning.text')}
             </p>
+
+            {isTranslated(showMealDetails) && (
+              <p>
+                <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
+                <strong>{` ${t('foodModal.translation.title')}`}</strong>
+                <br/>
+
+                {` ${t('foodModal.translation.warning')}`}
+
+                <br/>
+                <ul>
+                  <li>
+                    <strong>{t('foodModal.translation.originalName')}</strong>:{' '}
+                    {showMealDetails?.name[showMealDetails?.originalLanguage]}
+                  </li>
+                  <li>
+                    <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
+                    {showMealDetails?.name[i18n.languages[0]]}
+                  </li>
+                </ul>
+              </p>
+            )}
           </Modal.Body>
 
           <Modal.Footer>
@@ -442,3 +475,12 @@ export default function Mensa () {
     </div>
   }
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'food',
+      'common'
+    ]))
+  }
+})

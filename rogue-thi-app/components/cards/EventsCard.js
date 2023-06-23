@@ -8,12 +8,15 @@ import BaseCard from './BaseCard'
 
 import NeulandAPI from '../../lib/backend/neuland-api'
 
+import { useTranslation } from 'next-i18next'
+
 /**
  * Dashboard card for CL events.
  */
 export default function EventsCard () {
   const router = useRouter()
   const [calendar, setCalendar] = useState([])
+  const { t } = useTranslation(['dashboard'])
 
   useEffect(() => {
     async function load () {
@@ -31,7 +34,7 @@ export default function EventsCard () {
   return (
     <BaseCard
       icon={faUserGroup}
-      title="Veranstaltungen"
+      i18nKey="events"
       link="/events"
     >
       <ListGroup variant="flush">
@@ -41,7 +44,7 @@ export default function EventsCard () {
               {x.title}
             </div>
             <div className="text-muted">
-              von {x.organizer}
+              {t('events.organizer.attribute')} {x.organizer}
             </div>
           </ListGroup.Item>
         ))}

@@ -26,8 +26,13 @@ const permissionPolicyFeatures = [
 ]
 
 const isDev = process.env.NODE_ENV === 'development'
+const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
 
 module.exports = {
+  i18n: {
+    locales: ['en', 'de'],
+    defaultLocale: 'en'
+  },
   async headers () {
     return [
       {
@@ -68,7 +73,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self' data: https://tile.openstreetmap.org;
               font-src 'self';
-              connect-src 'self' wss://proxy.neuland.app;
+              connect-src 'self' wss://proxy.neuland.app ${DEEPL_ENDPOINT};
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';

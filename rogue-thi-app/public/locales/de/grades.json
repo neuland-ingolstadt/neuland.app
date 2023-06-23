@@ -1,0 +1,31 @@
+{
+    "grades": {
+        "appbar": {
+            "title": "Noten & Fächer",
+            "overflow": {
+                "copyFormula": "Notenschnitt Formel kopieren",
+                "exportCsv": "Noten als CSV exportieren"
+            }
+        },
+        "alerts": {
+            "temporarilyUnavailable": "Noten sind vorübergehend nicht verfügbar.",
+            "copyToClipboard": "In Zwischenablage kopiert",
+            "notImplemented": "Diese Funktion ist noch nicht verfügbar."
+        },
+        "summary": {
+            "title": "Notenschnitt",
+            "disclaimer": "Der genaue Notenschnitt kann nicht ermittelt werden und liegt zwischen {{minAverage} und {{maxAverage}}"
+        },
+        "gradesList": {
+            "title": "Noten"
+        },
+        "pendingList": {
+            "title": "Ausstehende Fächer"
+        },
+        "grade": "Note",
+        "deadline": "Frist",
+        "ects": "ECTS",
+        "none": "(keine)",
+        "credited": "(angerechnet)"
+    }
+}

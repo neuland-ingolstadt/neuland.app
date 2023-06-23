@@ -1,10 +1,5 @@
-
-const WORD_TODAY = 'Heute'
-const WORD_TOMORROW = 'Morgen'
-export const WORD_THIS_WEEK = 'Diese Woche'
-export const WORD_NEXT_WEEK = 'Nächste Woche'
-
-export const DATE_LOCALE = 'de-DE'
+import { getAdjustedLocale } from './locale-utils'
+import { i18n } from 'next-i18next'
 
 /**
  * Formats a date like "Mo., 1.10.2020"
@@ -21,11 +16,11 @@ export function formatFriendlyDate (datetime) {
   tomorrow.setDate(today.getDate() + 1)
 
   if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY
+    return t('common.dates.today')
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW
+    return t('common.dates.tomorrow')
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
+    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
   }
 }
 
@@ -53,7 +48,7 @@ export function formatFriendlyTime (datetime) {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(DATE_LOCALE, { hour: 'numeric', minute: '2-digit' })
+  return datetime.toLocaleTimeString(getAdjustedLocale(), { hour: 'numeric', minute: '2-digit' })
 }
 
 /**
@@ -101,11 +96,11 @@ export function formatNearDate (datetime) {
   tomorrow.setDate(today.getDate() + 1)
 
   if (datetime.toDateString() === today.toDateString()) {
-    return WORD_TODAY
+    return i18n.t('common.dates.today', { ns: 'common' })
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
-    return WORD_TOMORROW
+    return i18n.t('common.dates.tomorrow', { ns: 'common' })
   } else {
-    return datetime.toLocaleString(DATE_LOCALE, { weekday: 'long', day: 'numeric', month: 'numeric' })
+    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'long', day: 'numeric', month: 'numeric' })
   }
 }
 
@@ -119,8 +114,8 @@ export function buildLinedWeekdaySpan (datetime) {
     datetime = new Date(datetime)
   }
 
-  const weekday = datetime.toLocaleString(DATE_LOCALE, { weekday: 'short' })
-  const date = datetime.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+  const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
+  const date = datetime.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
 
   return <span>{weekday}<br />{date}</span>
 }
@@ -131,7 +126,7 @@ export function buildLinedWeekdaySpan (datetime) {
  * @returns {string}
  */
 function formatFriendlyTimeDelta (delta) {
-  const rtl = new Intl.RelativeTimeFormat(DATE_LOCALE, {
+  const rtl = new Intl.RelativeTimeFormat(getAdjustedLocale(), {
     numeric: 'auto',
     style: 'long'
   })
@@ -262,16 +257,16 @@ export function getFriendlyWeek (date) {
   const [currStart, currEnd] = getWeek(new Date())
   const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
   if (date >= currStart && date < currEnd) {
-    return WORD_THIS_WEEK
+    return t('common.dates.thisWeek')
   } else if (date >= nextStart && date < nextEnd) {
-    return WORD_NEXT_WEEK
+    return t('common.dates.nextWeek')
   } else {
     const monday = getMonday(date)
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() + 6)
 
-    return monday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' }) +
-      ' – ' + sunday.toLocaleString(DATE_LOCALE, { day: 'numeric', month: 'numeric' })
+    return monday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' }) +
+      ' – ' + sunday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
   }
 }
 
@@ -304,4 +299,8 @@ export function getAdjustedDay (date) {
  **/
 export function isSameDay (a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+
+function t (...args) {
+  return i18n.t(...args, { ns: 'common' })
 }

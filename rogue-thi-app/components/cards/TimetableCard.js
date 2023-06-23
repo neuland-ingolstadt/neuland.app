@@ -9,6 +9,7 @@ import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from '../../lib/backend-utils/timetable-utils'
 import BaseCard from './BaseCard'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Dashboard card for the timetable.
@@ -18,6 +19,7 @@ export default function TimetableCard () {
   const [timetable, setTimetable] = useState(null)
   const [timetableError, setTimetableError] = useState(null)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const { t } = useTranslation('dashboard')
 
   useEffect(() => {
     async function loadTimetable () {
@@ -43,7 +45,7 @@ export default function TimetableCard () {
   return (
     <BaseCard
       icon={faCalendarMinus}
-      title="Stundenplan"
+      i18nKey="timetable"
       link="/timetable"
     >
       <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
@@ -56,13 +58,18 @@ export default function TimetableCard () {
 
             let text = null
             if (isEndingSoon) {
-              text = <div className="text-muted">Endet in {Math.ceil((x.endDate - currentTime) / 1000 / 60)} min</div>
+              text = <div className="text-muted">{t('timetable.text.endingSoon', { mins: Math.ceil((x.endDate - currentTime) / 1000 / 60) })}</div>
             } else if (isOngoing) {
-              text = <div className="text-muted">Endet um {formatFriendlyTime(x.endDate)}</div>
+              text = <div className="text-muted">{t('timetable.text.ongoing', { time: formatFriendlyTime(x.endDate) })}</div>
             } else if (isSoon) {
-              text = <div className="text-muted">Beginnt in {Math.ceil((x.startDate - currentTime) / 1000 / 60)} min</div>
+              text = <div className="text-muted">
+                {t('timetable.text.startingSoon', {
+                  mins: Math.ceil((x.startDate - currentTime) / 1000 / 60)
+                }
+                )}
+              </div>
             } else if (isNotSoonOrOngoing) {
-              text = <div className="text-muted">{formatNearDate(x.startDate)} um {formatFriendlyTime(x.startDate)}</div>
+              text = <div className="text-muted">{formatNearDate(x.startDate)} {t('timetable.text.future')} {formatFriendlyTime(x.startDate)}</div>
             }
 
             return (

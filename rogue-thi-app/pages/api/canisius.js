@@ -1,4 +1,5 @@
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
+import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
 const pdf = require('pdf-parse')
 
@@ -82,7 +83,7 @@ export default async function handler (_, res) {
   try {
     const data = await cache.get('canisius', async () => {
       const pdfBuffer = await getPdf()
-      return pdf(pdfBuffer).then(function (data) {
+      const mealPlan = await pdf(pdfBuffer).then(function (data) {
         const text = data.text.replace(NEW_LINE_REGEX, ' ')
 
         let days = text.split(TITLE_REGEX)
@@ -104,9 +105,8 @@ export default async function handler (_, res) {
 
         // trim whitespace and split into dishes
         const dishes = days.map(getMealsFromBlock)
-
-        return Object.keys(days).map(day => {
-          const dayDishes = dishes[day].map((dish) => ({
+        return dishes.map((day, index) => {
+          const dayDishes = day.map((dish) => ({
             name: dish.name,
             category: 'Essen',
             prices: dish.prices,
@@ -117,6 +117,7 @@ export default async function handler (_, res) {
 
           const daySalads = salads.map((salad) => ({
             name: salad.name,
+            originalLanguage: 'de',
             category: 'Salat',
             prices: salad.prices,
             allergens: null,
@@ -125,11 +126,13 @@ export default async function handler (_, res) {
           }))
 
           return {
-            timestamp: dates[day],
+            timestamp: dates[index],
             meals: dayDishes.length > 0 ? [...dayDishes, ...daySalads] : []
           }
         })
       })
+
+      return translateMeals(mealPlan)
     })
 
     sendJson(res, 200, data)

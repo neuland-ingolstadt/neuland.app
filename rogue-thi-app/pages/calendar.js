@@ -28,6 +28,9 @@ import { useTime } from '../lib/hooks/time-hook'
 
 import styles from '../styles/Calendar.module.css'
 
+import { Trans, useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 /**
  * Page containing the semester and exam dates.
  */
@@ -37,6 +40,8 @@ export default function Calendar () {
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
   const userKind = useUserKind()
+
+  const { i18n, t } = useTranslation('calendar')
 
   useEffect(() => {
     async function load () {
@@ -58,9 +63,21 @@ export default function Calendar () {
     }
   }, [router, userKind])
 
+  function InformationNotice () {
+    return (
+      <Trans
+        i18nKey="calendar.notice"
+        ns="calendar"
+        components={{
+          a: i18n.languages[0] === 'de' ? <a href="https://www.thi.de/studium/pruefung/semestertermine/" target="_blank" rel="noreferrer"/> : <a href="https://www.thi.de/en/international/studies/examination/semester-dates/" target="_blank" rel="noreferrer"/>
+        }}
+      />
+    )
+  }
+
   return (
     <AppContainer>
-      <AppNavbar title="Termine" />
+      <AppNavbar title={t('calendar.appbar.title')} />
 
       <AppBody className={styles.container}>
         <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
@@ -68,26 +85,29 @@ export default function Calendar () {
             <Modal.Title>{focusedExam && focusedExam.titel}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <strong>Art</strong>: {focusedExam && focusedExam.pruefungs_art}<br />
-            <strong>Raum</strong>: {focusedExam && (focusedExam.exam_rooms || 'TBD')}<br />
-            <strong>Sitzplatz</strong>: {focusedExam && (focusedExam.exam_seat || 'TBD')}<br />
-            <strong>Termin</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
-            <strong>Anmerkung</strong>: {focusedExam && focusedExam.anmerkung}<br />
-            <strong>Prüfer</strong>: {focusedExam && focusedExam.pruefer_namen}<br />
-            <strong>Studiengang</strong>: {focusedExam && focusedExam.stg}<br />
-            <strong>Angemeldet</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.anmeldung)}<br />
-            <strong>Hilfsmittel</strong>: {focusedExam && focusedExam.allowed_helpers.map((helper, i) =>
-              <div key={i}>{helper}</div>)}
+            <strong>{t('calendar.modals.exams.type')}</strong>: {focusedExam && focusedExam.pruefungs_art}<br />
+            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.exam_rooms || 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.exam_seat || 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && focusedExam.anmerkung}<br />
+            <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.pruefer_namen}<br />
+            <strong>{t('calendar.modals.exams.courseOfStudies')}</strong>: {focusedExam && focusedExam.stg}<br />
+            <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.anmeldung)}<br />
+            <strong>{t('calendar.modals.exams.tools')}</strong>:
+              <ul>
+                {focusedExam && focusedExam.allowed_helpers.map((helper, i) =>
+                <li key={i}>{helper}</li>)}
+              </ul>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedExam(null)}>
-              Schließen
+              {t('calendar.modals.exams.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <SwipeableTabs>
-          <SwipeableTab className={styles.tab} title="Semester">
+          <SwipeableTab className={styles.tab} title={t('calendar.tabs.semester')}>
             <ListGroup variant="flush">
               {calendar.map((item, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
@@ -109,7 +129,7 @@ export default function Calendar () {
                   </div>
                   <div className={styles.details}>
                     {(item.end && item.begin < now)
-                      ? 'bis ' + formatFriendlyRelativeTime(item.end)
+                      ? `${t('calendar.dates.until')} ${formatFriendlyRelativeTime(item.end)}`
                       : formatFriendlyRelativeTime(item.begin)}
                   </div>
                 </ListGroup.Item>
@@ -117,18 +137,17 @@ export default function Calendar () {
             </ListGroup>
             <div className="text-muted">
               <small>
-                Alle Angaben ohne Gewähr.
-                Verbindliche Informationen gibt es nur direkt auf der <a href="https://www.thi.de/studium/pruefung/semestertermine/" target="_blank" rel="noreferrer">Webseite der Hochschule</a>.
+                <InformationNotice />
               </small>
             </div>
           </SwipeableTab>
 
-          <SwipeableTab className={styles.tab} title="Prüfungen">
+          <SwipeableTab className={styles.tab} title={t('calendar.tabs.exams')}>
             <ListGroup variant="flush">
               <ReactPlaceholder type="text" rows={4} ready={exams || userKind === USER_GUEST}>
                 {exams && exams.length === 0 && (
                   <ListGroup.Item>
-                    Es sind derzeit keine Prüfungstermine verfügbar.
+                    {t('calendar.noExams')}
                   </ListGroup.Item>
                 )}
                 {exams && exams.map((item, idx) =>
@@ -142,23 +161,22 @@ export default function Calendar () {
                           {' '}({formatFriendlyRelativeTime(item.date)})
                           <br />
                         </>}
-                        Raum: {item.exam_rooms || 'TBD'}<br />
-                        {item.exam_seat && `Sitzplatz: ${item.exam_seat}`}
+                        {t('calendar.modals.exams.room')}: {item.exam_rooms || 'TBD'}<br />
+                        {item.exam_seat && `${t('calendar.modals.exams.seat')}: ${item.exam_seat}`}
                       </div>
                     </div>
                   </ListGroup.Item>
                 )}
                 {userKind === USER_GUEST && (
                   <ListGroup.Item>
-                    Prüfungstermine sind als Gast nicht verfügbar.
+                    {t('calendar.guestNotice')}
                   </ListGroup.Item>
                 )}
               </ReactPlaceholder>
             </ListGroup>
             <div className="text-muted">
               <small>
-                Alle Angaben ohne Gewähr.
-                Verbindliche Informationen gibt es nur direkt auf der <a href="https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin" target="_blank" rel="noreferrer">Webseite der Hochschule</a>.
+                <InformationNotice />
               </small>
             </div>
           </SwipeableTab>
@@ -169,3 +187,12 @@ export default function Calendar () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'calendar',
+      'common'
+    ]))
+  }
+})

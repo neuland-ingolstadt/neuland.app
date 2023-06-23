@@ -1,0 +1,85 @@
+{
+    "timetable": {
+        "title": "Stundenplan",
+        "text": {
+            "endingSoon": "endet in {{mins}} min",
+            "ongoing": "endet um {{time}}",
+            "startingSoon": "beginnt in {{mins}} min",
+            "future": "um"
+        }
+    },
+    "food": {
+        "location": {
+            "food": {
+                "title": "Essen"
+            },
+            "cafeteria": {
+                "title": "Mensa"
+            },
+            "reimanns": {
+                "title": "Reimanns"
+            },
+            "canisius": {
+                "title": "Canisiuskonvikt"
+            }
+        },
+        "error": {
+            "empty": "Der heutige Speiseplan ist leer.",
+            "generic": "Fehler beim Abruf des Speiseplans.<br />Irgendetwas scheint kaputt zu sein."
+        },
+        "text.additional": "und {{count}} weitere Gerichte"
+    },
+    "transport": {
+        "title": {
+            "train": "Bahn ({{station}})",
+            "bus": "Bus ({{station}})",
+            "parking": "Parkplätze",
+            "charging": "Ladestationen"
+        },
+        "error": {
+            "empty": "Keine Elemente.",
+            "generic": "Fehler beim Abruf."
+        }
+    },
+    "calendar": {
+        "title": "Kalender",
+        "date": {
+            "ends": "endet",
+            "starts": "beginnt"
+        }
+    },
+    "events": {
+        "title": "Veranstaltungen",
+        "organizer.attribute": "von"
+    },
+    "rooms": {
+        "title": "Räume",
+        "text": "Frei von {{from}} bis {{until}}"
+    },
+    "library": {
+        "title": "Bibliothek"
+    },
+    "grades": {
+        "title": "Noten & Fächer"
+    },
+    "personal": {
+        "title": "Persönliche Daten"
+    },
+    "lecturers": {
+        "title": "Dozenten"
+    },
+    "election": {
+        "title": "Hochschulwahlen",
+        "text": "Aktuell finden die Hochschulwahlen statt. Deine Teilnahme ist wichtig, um die demokratischen Strukturen an unserer Hochschule zu stärken.",
+        "button": "Stimme online abgeben",
+        "icon.close": "Schließen"
+    },
+    "install": {
+        "title": "Installation",
+        "text": {
+            "question": "Möchtest du diese App auf deinem Smartphone <strong>installieren</strong>?",
+            "ios": "Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.",
+            "android": "Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>."
+        }
+    }
+}

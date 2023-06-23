@@ -19,14 +19,27 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { DATE_LOCALE, addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
+import { addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
 import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
 
 import styles from '../styles/Timetable.module.css'
 
+import { Trans, useTranslation } from 'next-i18next'
+import { getAdjustedLocale } from '../lib/locale-utils'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 const VirtualizeSwipeableViews = virtualize(SwipeableViews)
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'timetable',
+      'common'
+    ]))
+  }
+})
 
 /**
  * Groups timetable entries by date.
@@ -74,7 +87,7 @@ function isInWeek (date, start, end) {
  * @returns {string}
  */
 function getDay (date) {
-  return new Date(date).toLocaleDateString(DATE_LOCALE, { day: 'numeric' })
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), { day: 'numeric' })
 }
 
 /**
@@ -83,13 +96,15 @@ function getDay (date) {
  * @returns {string}
  */
 function getWeekday (date) {
-  return new Date(date).toLocaleDateString(DATE_LOCALE, { weekday: 'short' })
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), { weekday: 'short' })
 }
 
 /**
  * Page displaying the users timetable.
  */
 export default function Timetable () {
+  const { t } = useTranslation('timetable')
+
   const router = useRouter()
   const os = useOperatingSystem()
   const [timetable, setTimetable] = useState(null)
@@ -207,13 +222,14 @@ export default function Timetable () {
         {current && current.length === 0 &&
           <div className={`text-muted ${styles.notice}`}>
           <p>
-            Keine Veranstaltungen. 🎉
+            {t('timetable.overview.noLectures')}
           </p>
           <p>
-            Du kannst deinen Stundenplan im{' '}
-            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de">
-            Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier
-            die gewählten Fächer.
+            <Trans
+              i18nKey="timetable.overview.configureTimetable"
+              ns="timetable"
+              components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
+            />
           </p>
           </div>
         }
@@ -221,15 +237,27 @@ export default function Timetable () {
     )
   }
 
+  function ExplanationListElement ({ i18nKey }) {
+    return (
+      <li>
+        <Trans
+          i18nKey={`timetable.modals.${i18nKey}`}
+          ns="timetable"
+          components={{ em: <em/> }}
+        />
+      </li>
+    )
+  }
+
   return (
     <AppContainer>
-      <AppNavbar title="Stundenplan" showBack={'desktop-only'}>
+      <AppNavbar title={t('timetable.appbar.title')} showBack={'desktop-only'}>
         <AppNavbar.Overflow>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
-            Fächer bearbeiten
+            {t('timetable.overflow.editLectures')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => setShowICalExplanation(true)}>
-            Kalender abonnieren
+            {t('timetable.overflow.subscribeCalendar')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
@@ -237,18 +265,18 @@ export default function Timetable () {
       <AppBody>
         <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Fächer bearbeiten</Modal.Title>
+            <Modal.Title>{t('timetable.modals.timetableExplanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:
+            {t('timetable.modals.timetableExplanation.body.header')}
             <ul>
-              <li>In <em>myStundenplan</em> einloggen</li>
-              <li>Links auf <em>Fächerauswahl</em> klicken</li>
-              <li>Studiengang auswählen und unten abspeichern</li>
-              <li>Oben auf <em>Studiengruppen</em> klicken</li>
-              <li>Semestergruppe auswählen und unten abspeichern</li>
-              <li>Oben auf den Studiengang klicken</li>
-              <li>Fächer auswählen und unten abspeichern</li>
+              <ExplanationListElement i18nKey="timetableExplanation.body.login"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.subjects"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.courseOfStudies"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.studyGroups"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.semesterGroup"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.clickOnStudy"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.selectSubjects"/>
             </ul>
 
             {/* TODO: Video? */}
@@ -256,40 +284,40 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                Zu &quot;myStundenplan&quot;
+                {t('timetable.modals.timetableExplanation.actions.toMyTimetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowTimetableExplanation(false)}>
-              Schließen
+              {t('timetable.modals.timetableExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Kalender abonnieren</Modal.Title>
+            <Modal.Title>{t('timetable.modals.subscriptionExplanation.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p>
-              Dein Stundenplan kann als Abonnement in eine Kalender-App integriert werden.
+              {t('timetable.modals.subscriptionExplanation.body.header')}
             </p>
             <p>
-              Die URL findest du aktuell nur in Primuss:
+            {t('timetable.modals.subscriptionExplanation.body.url')}
               <ul>
-                <li>In <em>myStundenplan</em> einloggen</li>
-                <li>Links auf <em>Aktueller Stundenplan</em> klicken</li>
-                <li>Oben auf <em>Extern</em> klicken</li>
-                <li>Unter <em>Termine Abonnieren</em> auf <em>Link anzeigen</em> klicken</li>
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.login" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.timetable" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.externalCalendar" />
+                <ExplanationListElement i18nKey="subscriptionExplanation.body.subscribe" />
               </ul>
             </p>
             {os === OS_IOS &&
               <p>
-                Die URL kannst du unter iOS wie folgt importieren:
+                {t('timetable.modals.subscriptionExplanation.body.ios.header')}
                 <ul>
-                  <li>Einstellungen-App öffnen</li>
-                  <li>Auf <em>Kalender</em> &gt; <em>Accounts</em> &gt; <em>Account hinzufügen</em> &gt; <em>Kalenderabo hinzufügen</em> drücken</li>
-                  <li>Aus Primuss kopierten Link einfügen</li>
-                  <li>Auf <em>Weiter</em> &gt; <em>Sichern</em> drücken</li>
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.openSettings" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.addCalendarSubscription" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.pasteUrl" />
+                  <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.save" />
                 </ul>
               </p>
             }
@@ -297,11 +325,11 @@ export default function Timetable () {
           <Modal.Footer>
             <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
               <Button variant="primary">
-                Zu &quot;myStundenplan&quot;
+                {t('timetable.modals.subscriptionExplanation.actions.toMyTimetable')}
               </Button>
             </a>
             <Button variant="secondary" onClick={() => setShowICalExplanation(false)}>
-              Schließen
+              {t('timetable.modals.subscriptionExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -311,63 +339,63 @@ export default function Timetable () {
             <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h5>Allgemein</h5>
+            <h5>{t('timetable.modals.lectureDetails.general')}</h5>
             <p>
-              <strong>Dozent</strong>: {focusedEntry && focusedEntry.dozent}<br />
-              <strong>Kürzel</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
-              <strong>Prüfung</strong>: {focusedEntry && focusedEntry.pruefung}<br />
-              <strong>Studiengang</strong>: {focusedEntry && focusedEntry.stg}<br />
-              <strong>Studiengruppe</strong>: {focusedEntry && focusedEntry.stgru}<br />
-              <strong>Semesterwochenstunden</strong>: {focusedEntry && focusedEntry.sws}<br />
-              <strong>ECTS</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
+              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>{t('timetable.modals.lectureDetails.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
+              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>: {focusedEntry && focusedEntry.pruefung}<br />
+              <strong>{t('timetable.modals.lectureDetails.courseOfStudies')}</strong>: {focusedEntry && focusedEntry.stg}<br />
+              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>: {focusedEntry && focusedEntry.stgru}<br />
+              <strong>{t('timetable.modals.lectureDetails.semesterWeeklyHours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
+              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
             </p>
 
-            <h5>Ziel</h5>
+            <h5>{t('timetable.modals.lectureDetails.goal')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.ziel && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
               )}
               {focusedEntry && !focusedEntry.ziel && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>Inhalt</h5>
+            <h5>{t('timetable.modals.lectureDetails.content')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.inhalt && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
               )}
               {focusedEntry && !focusedEntry.inhalt && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
-            <h5>Literatur</h5>
+            <h5>{t('timetable.modals.lectureDetails.literature')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
               {focusedEntry && focusedEntry.literatur && (
                 <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
               )}
               {focusedEntry && !focusedEntry.literatur && (
-                <p>Keine Angabe</p>
+                <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
-              Schließen
+              {t('timetable.modals.lectureDetails.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <div className={styles.weekSelector}>
           <Button className={styles.prevWeek} variant="link" onClick={() => setPage(idx => idx - 1)}>
-            <FontAwesomeIcon title="Woche zurück" icon={faChevronLeft} />
+            <FontAwesomeIcon title={t('timetable.weekSelection.weekBack')} icon={faChevronLeft} />
           </Button>
           <div className={styles.currentWeek}>
             {getFriendlyWeek(week[0])}
           </div>
           <Button className={styles.nextWeek} variant="link" onClick={() => setPage(idx => idx + 1)}>
-            <FontAwesomeIcon title="Woche vor" icon={faChevronRight} />
+            <FontAwesomeIcon title={t('timetable.weekSelection.weekForward')} icon={faChevronRight} />
           </Button>
         </div>
 

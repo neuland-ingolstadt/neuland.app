@@ -7,7 +7,7 @@ import BaseCard from './BaseCard'
 import { FoodFilterContext } from '../../pages/_app'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
-
+import { useTranslation } from 'next-i18next'
 /**
  * Dashboard card for Mensa and Reimanns food plans.
  */
@@ -20,18 +20,30 @@ export default function FoodCard () {
     preferencesSelection,
     allergenSelection
   } = useContext(FoodFilterContext)
+  const { i18n, t } = useTranslation(['dashboard', 'food'])
 
   useEffect(() => {
     async function load () {
       const restaurants = localStorage.selectedRestaurants
         ? JSON.parse(localStorage.selectedRestaurants)
         : ['mensa']
-      if (restaurants.length === 1 && restaurants[0] === 'mensa') {
-        setFoodCardTitle('Mensa')
-      } else if (restaurants.length === 1 && restaurants[0] === 'reimanns') {
-        setFoodCardTitle('Reimanns')
+      if (restaurants.length !== 1) {
+        setFoodCardTitle('food')
       } else {
-        setFoodCardTitle('Essen')
+        switch (restaurants[0]) {
+          case 'mensa':
+            setFoodCardTitle('cafeteria')
+            break
+          case 'reimanns':
+            setFoodCardTitle('reimanns')
+            break
+          case 'canisius':
+            setFoodCardTitle('canisius')
+            break
+          default:
+            setFoodCardTitle('food')
+            break
+        }
       }
 
       const today = formatISODate(new Date())
@@ -52,7 +64,7 @@ export default function FoodCard () {
         const todayEntries = entries
           .find(x => x.timestamp === today)
           ?.meals
-          .filter(x => x.category !== 'Suppe' && selectedRestaurants.includes(x.restaurant.toLowerCase()))
+          .filter(x => (x.category !== 'Suppe' && x.category !== 'Salat') && selectedRestaurants.includes(x.restaurant.toLowerCase()))
 
         todayEntries?.sort((a, b) => userMealRating(b) - userMealRating(a))
 
@@ -60,11 +72,11 @@ export default function FoodCard () {
           setFoodEntries([])
         } else if (todayEntries.length > 2) {
           setFoodEntries([
-            todayEntries[0].name,
-            `und ${todayEntries.length - 1} weitere Gerichte`
+            todayEntries[0].name[i18n.languages[0]],
+            `${t('food.text.additional', { count: todayEntries.length - 1 })}`
           ])
         } else {
-          setFoodEntries(todayEntries.map(x => x.name))
+          setFoodEntries(todayEntries.map(x => x.name[i18n.languages[0]]))
         }
       } catch (e) {
         console.error(e)
@@ -72,12 +84,12 @@ export default function FoodCard () {
       }
     }
     load()
-  }, [selectedRestaurants, preferencesSelection, allergenSelection])
+  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n])
 
   return (
     <BaseCard
       icon={faUtensils}
-      title={foodCardTitle}
+      i18nKey={`food.location.${foodCardTitle}`}
       link="/food"
     >
       <ReactPlaceholder type="text" rows={5} ready={foodEntries || foodError}>
@@ -89,12 +101,11 @@ export default function FoodCard () {
           ))}
           {foodEntries && foodEntries.length === 0 &&
             <ListGroup.Item>
-              Der heutige Speiseplan ist leer.
+              {t('food.error.empty')}
             </ListGroup.Item>}
           {foodError &&
             <ListGroup.Item>
-              Fehler beim Abruf des Speiseplans.<br />
-              Irgendetwas scheint kaputt zu sein.
+              {t('food.error.generic')}
             </ListGroup.Item>}
         </ListGroup>
       </ReactPlaceholder>

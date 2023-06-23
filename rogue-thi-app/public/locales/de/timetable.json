@@ -1,0 +1,77 @@
+{
+    "timetable": {
+        "appbar": {
+            "title": "Stundenplan"
+        },
+        "overview": {
+            "noLectures": "Keine Veranstaltungen. 🎉",
+            "configureTimetable": "Du kannst deinen Stundenplan im <a>Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier die Fächer."
+        },
+        "overflow": {
+            "editLectures": "Fächer bearbeiten",
+            "subscribeCalendar": "Kalender abonnieren"
+        },
+        "weekSelection": {
+            "weekBack": "Woche zurück",
+            "weekForward": "Woche vor"
+        },
+        "modals": {
+            "timetableExplanation": {
+                "title": "Fächer bearbeiten",
+                "body": {
+                    "header": "Aktuell können die Fächer für den persönlichen Stundenplan leider nur in Primuss bearbeitet werden:",
+                    "login": "In <em>myStundenplan</em> einloggen",
+                    "subjects": "Links auf <em>Fächerauswahl</em> klicken",
+                    "courseOfStudies": "Studiengang auswählen und unten abspeichern",
+                    "studyGroups": "Oben auf <em>Studiengruppen</em> klicken",
+                    "semesterGroup": "Semestergruppe auswählen und unten abspeichern",
+                    "clickOnStudy": "Oben auf den Studiengang klicken",
+                    "selectSubjects": "Fächer auswählen und unten abspeichern"
+                },
+                "actions": {
+                    "close": "Schließen",
+                    "toMyTimetable": "Zu \"myStundenplan\""
+                }
+            },
+            "subscriptionExplanation": {
+                "title": "Kalender abonnieren",
+                "body": {
+                    "header": "Dein Stundenplan kann als Abonnement in eine Kalender-App integriert werden.",
+                    "url": "Die URL findest du aktuell nur in Primuss:", 
+                    "login": "In <em>myStundenplan</em> einloggen",
+                    "timetable": "Links auf <em>Aktueller Stundenplan</em> klicken",
+                    "externalCalendar": "Oben auf <em>Extern</em> klicken",
+                    "subscribe": "Unter <em>Termine Abonnieren</em> auf <em>Link anzeigen</em> klicken",
+                    "ios": {
+                        "header": "Die URL kannst du unter iOS wie folgt importieren:",
+                        "openSettings": "Einstellungen-App öffnen",
+                        "addCalendarSubscription": "Auf <em>Kalender</em> > <em>Accounts</em> > <em>Account hinzufügen</em> > <em>Kalenderabo hinzufügen</em> drücken",
+                        "pasteUrl": "Aus Primuss kopierten Link einfügen",
+                        "save": "Auf <em>Weiter</em> > <em>Sichern</em> drücken"
+                    }
+                },
+                "actions": {
+                    "close": "Schließen",
+                    "toMyTimetable": "Zu \"myStundenplan\""
+                }
+            },
+            "lectureDetails": {
+                "general": "Allgemein",
+                "lecturer": "Dozent:in",
+                "abbreviation": "Kürzel",
+                "exam": "Prüfung",
+                "courseOfStudies": "Studiengang",
+                "studyGroup": "Studiengruppe",
+                "semesterWeeklyHours": "Semesterwochenstunden",
+                "ects": "ECTS",
+                "goal": "Ziel",
+                "content": "Inhalt",
+                "literature": "Literatur",
+                "notSpecified": "Keine Angabe",
+                "actions": {
+                    "close": "Schließen"
+                }
+            }
+        }
+    }
+}

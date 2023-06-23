@@ -1,0 +1,51 @@
+{
+    "personal": {
+        "title": "Profile",
+        "grades": {
+            "title": "Grades",
+            "missingWeightSingle": " weight missing",
+            "missingWeightMultiple": " weights missing"
+        },
+        "overview": {
+            "grades": "grades",
+            "ects": "ECTS",
+            "matriculationNumber": "Mat. No",
+            "libraryNumber": "Lib. No",
+            "copiedToClipboard": "Copied {{label}} to clipboard"
+        },
+        "semester": "semester",
+        "foodPreferences": "Food Preferences",
+        "debug": "API Playground",
+        "privacy": "Privacy Policy",
+        "imprint": "Imprint",
+        "language": "Change Language",
+        "login": "Log In",
+        "logout": "Log Out",
+        "dashboard": "Dashboard",
+        "theme": "Theme",
+        "modals": {
+            "theme": {
+                "title": "Theme",
+                "hackerman": "To unlock the <i>Hackerman</i> design, you need to solve at least four tasks in our <aCtf>Practice CTF</aCtf>. Once you're there, you can unlock it <aHackerman>here</aHackerman>."
+            },
+            "language": {
+                "title": "Language"
+            },
+            "personalData": {
+                "matriculationNumber": "Matriculation Number",
+                "libraryNumber": "Library Number",
+                "printerBalance": "Printer Balance",
+                "fieldOfStudy": "Field of Study",
+                "semester": "Semester",
+                "examRegulations": "Exam Regulations",
+                "email": "Email",
+                "thiEmail": "THI Email",
+                "phone": "Phone",
+                "firstName": "First Name",
+                "lastName": "Last Name",
+                "street": "Street",
+                "city": "City"
+            }            
+        }
+    }
+}

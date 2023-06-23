@@ -3,7 +3,8 @@ import NeulandAPI from '../backend/neuland-api'
 
 /**
  * Fetches and parses the meal plan
- * @param {string[]} restaurants Requested restaurants (`mensa` or `reimanns`)
+ * @param {string[]} restaurants Requested restaurants
+ * @param {string} language Language code
  * @returns {object[]}
  */
 export async function loadFoodEntries (restaurants) {

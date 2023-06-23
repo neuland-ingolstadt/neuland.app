@@ -13,6 +13,7 @@ import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
 
 import styles from '../../styles/AppNavbar.module.css'
+import { useTranslation } from 'next-i18next'
 
 /**
  * Navigation bar to be displayed at the top of the screen.
@@ -20,6 +21,8 @@ import styles from '../../styles/AppNavbar.module.css'
 export default function AppNavbar ({ title, showBack, children }) {
   const router = useRouter()
   const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  const { t } = useTranslation('common')
 
   /**
    * Indicates whether a back button should be shown.
@@ -44,7 +47,7 @@ export default function AppNavbar ({ title, showBack, children }) {
         <Navbar.Brand className={styles.left}>
           {showBackEffective && (
             <Button variant="link" onClick={() => router.back()} className={styles.back}>
-              <FontAwesomeIcon title="Zurück" icon={faChevronLeft} fixedWidth />
+              <FontAwesomeIcon title={t('appbar.back', { ns: 'common' })} icon={faChevronLeft} fixedWidth />
             </Button>
           )}
           <div className={(new Date()).getMonth() === 5 ? styles.titleTextPride : styles.titleText}>
@@ -86,10 +89,12 @@ AppNavbar.Button = AppNavbarButton
  * Overflow menu to be displayed in the navbar.
  */
 function AppNavbarOverflow ({ children }) {
+  const { t } = useTranslation('common')
+
   return (
     <Dropdown align="right">
       <Dropdown.Toggle variant="link" bsPrefix="dropdown">
-        <FontAwesomeIcon title="Mehr Optionen" icon={faEllipsisV} fixedWidth />
+        <FontAwesomeIcon title={t('appbar.overflow', { ns: 'common' })} icon={faEllipsisV} fixedWidth />
       </Dropdown.Toggle>
 
       <Dropdown.Menu align="right">
