@@ -30,6 +30,7 @@ export default function LanguageModal () {
     setShowLanguageModal(false)
     i18n.changeLanguage(languageKey)
     router.replace('/', '', { locale: i18n.language })
+    document.cookie = `NEXT_LOCALE=${i18n.language}; path=/`
   }
 
   return (
