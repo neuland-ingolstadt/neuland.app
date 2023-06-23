@@ -1,3 +1,5 @@
+const { i18n } = require('./next-i18next.config')
+
 // https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md
 const permissionPolicyFeatures = [
   'accelerometer',
@@ -29,10 +31,8 @@ const isDev = process.env.NODE_ENV === 'development'
 const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
 
 module.exports = {
-  i18n: {
-    locales: ['en', 'de'],
-    defaultLocale: 'en'
-  },
+  i18n,
+  trailingSlash: true,
   async headers () {
     return [
       {
