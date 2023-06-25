@@ -112,10 +112,10 @@ export default function Calendar () {
               {calendar.map((item, idx) =>
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
-                    {!item.url && item.name}
+                    {!item.url && item.name[i18n.languages[0]]}
                     {item.url && (
                       <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
-                        {item.name}
+                        {item.name[i18n.languages[0]]}
                         {' '}
                         <FontAwesomeIcon icon={faExternalLinkAlt} />
                       </a>

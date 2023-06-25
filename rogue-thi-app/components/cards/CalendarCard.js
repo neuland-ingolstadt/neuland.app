@@ -10,7 +10,7 @@ import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyRelativeTime } from '../../lib/date-utils'
 import { useTime } from '../../lib/hooks/time-hook'
 
-import { useTranslation } from 'next-i18next'
+import { i18n, useTranslation } from 'next-i18next'
 /**
  * Dashboard card for semester and exam dates.
  */
@@ -55,7 +55,7 @@ export default function CalendarCard () {
         {mixedCalendar && mixedCalendar.slice(0, 2).map((x, i) => (
           <ListGroup.Item key={i}>
             <div>
-              {x.name}
+              {x.name[i18n.languages[0]]}
             </div>
             <div className="text-muted">
               {(x.end && x.begin < time)
