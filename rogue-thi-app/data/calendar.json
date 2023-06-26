@@ -181,7 +181,7 @@
   {
     "name": {
       "de": "Erweiterter Prüfungszeitraum",
-      "en": "Extended examination period"
+      "en": "Additional exam period"
     },
     "begin": "2023-07-04",
     "end": "2023-07-07"
@@ -189,7 +189,7 @@
   {
     "name": {
       "de": "Prüfungszeitraum",
-      "en": "Examination period"
+      "en": "Exam period"
     },
     "begin": "2023-07-08",
     "end": "2023-07-20"
@@ -204,7 +204,7 @@
   {
     "name": {
       "de": "Notenmeldung",
-      "en": "Grade submission"
+      "en": "Recording grades"
     },
     "begin": "2023-07-25T09:00",
     "hasHours": true
@@ -212,7 +212,7 @@
   {
     "name": {
       "de": "Notenbekanntgabe",
-      "en": "Publication of grades"
+      "en": "Announcement of grades"
     },
     "begin": "2023-07-31T13:00",
     "hasHours": true
