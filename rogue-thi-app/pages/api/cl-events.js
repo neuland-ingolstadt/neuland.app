@@ -19,6 +19,8 @@ const EVENT_LIST_URL = 'https://moodle.thi.de/mod/dataform/view.php?id=162869'
 const EVENT_DETAILS_PREFIX = 'https://moodle.thi.de/mod/dataform/view.php'
 const EVENT_STORE = `${process.env.STORE}/cl-events.json`
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
 /**
@@ -153,7 +155,7 @@ export async function getAllEventDetails (username, password) {
     // since it may contain sensitive information
     remoteEvents.push({
       id: crypto.createHash('sha256').update(url).digest('hex'),
-      organizer: details.Verein,
+      organizer: details.Verein.trim().replace(/( \.)$/g, ''),
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
       end: details.Ende ? parseLocalDateTime(details.Ende) : null
@@ -161,7 +163,7 @@ export async function getAllEventDetails (username, password) {
   }
 
   const now = new Date()
-  let events = await loadEvents()
+  let events = !isDev ? await loadEvents() : []
 
   if (remoteEvents.length > 0) {
     // remove all events which disappeared from the server
@@ -175,7 +177,9 @@ export async function getAllEventDetails (username, password) {
 
   // we need to persist the events because they disappear on monday
   // even if the event has not passed yet
-  await saveEvents(events)
+  if (!isDev) {
+    await saveEvents(events)
+  }
 
   return events
 }

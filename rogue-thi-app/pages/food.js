@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faHeartCircleCheck, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -30,7 +30,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-const CURRENCY_LOCALE = 'de'
+import { getAdjustedLocale } from '../lib/locale-utils'
+
 const COLOR_WARN = '#bb0000'
 const COLOR_GOOD = '#00bb00'
 
@@ -103,7 +104,7 @@ export default function Mensa () {
    * @returns {string}
    */
   function formatPrice (x) {
-    return x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
+    return x?.toLocaleString(getAdjustedLocale(), { style: 'currency', currency: 'EUR' })
   }
 
   /**
@@ -130,12 +131,12 @@ export default function Mensa () {
   }
 
   /**
-   * Formats a float for the German locale.
+   * Formats a float for the current locale.
    * @param {number} x
    * @returns {string}
    */
   function formatFloat (x) {
-    return x?.toString().replace('.', ',')
+    return (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 2 })).format(x)
   }
 
   /**
@@ -173,7 +174,7 @@ export default function Mensa () {
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                 <span>
-                  <FontAwesomeIcon title={t('warning.preferences.iconTitle')} icon={faThumbsUp} color={COLOR_GOOD} />
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} color={COLOR_GOOD} />
                   {' '}
                 </span>
               )}
@@ -328,7 +329,7 @@ export default function Mensa () {
                 <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
                   {containsSelectedPreference([flag]) && (
                     <span>
-                          <FontAwesomeIcon icon={faThumbsUp} color={COLOR_GOOD}/>{' '}
+                          <FontAwesomeIcon icon={faHeartCircleCheck} color={COLOR_GOOD}/>{' '}
                         </span>
                   )}
                   {' '}
@@ -347,9 +348,9 @@ export default function Mensa () {
                 <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
                   {containsSelectedAllergen([key]) && (
                     <span>
-                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN}/>
+                      <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN}/>
                       {' '}
-                          </span>
+                    </span>
                   )}
                   {' '}
                   <strong>{key}</strong>

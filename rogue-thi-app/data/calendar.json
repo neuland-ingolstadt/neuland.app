@@ -143,7 +143,10 @@
     "end": "2023-05-04"
   },
   {
-    "name": "Prüfungsabmeldung",
+    "name": {
+      "de": "Prüfungsabmeldung",
+      "en": "Exam withdrawal"
+    },
     "begin": "2023-04-25",
     "end": "2023-06-26"
   },
@@ -167,36 +170,58 @@
     "hasHours": true
   },
   {
-    "name": "Rückmeldung zum Wintersemester 2023/2024",
+    "name": {
+      "de": "Rückmeldung zum Wintersemester 2023/2024",
+      "en": "Re-registration for winter semester 2023/2024"
+    },
+    
     "begin": "2023-07-02",
     "end": "2023-08-07"
   },
   {
-    "name": "Erweiterter Prüfungszeitraum",
+    "name": {
+      "de": "Erweiterter Prüfungszeitraum",
+      "en": "Additional exam period"
+    },
     "begin": "2023-07-04",
     "end": "2023-07-07"
   },
   {
-    "name": "Prüfungszeitraum",
+    "name": {
+      "de": "Prüfungszeitraum",
+      "en": "Exam period"
+    },
     "begin": "2023-07-08",
     "end": "2023-07-20"
   },
   {
-    "name": "Ende der Vorlesungszeit",
+    "name": {
+      "de": "Ende der Vorlesungszeit",
+      "en": "End of lecture period"
+    },
     "begin": "2023-07-07"
   },
   {
-    "name": "Notenmeldung",
+    "name": {
+      "de": "Notenmeldung",
+      "en": "Recording grades"
+    },
     "begin": "2023-07-25T09:00",
     "hasHours": true
   },
   {
-    "name": "Notenbekanntgabe",
+    "name": {
+      "de": "Notenbekanntgabe",
+      "en": "Announcement of grades"
+    },
     "begin": "2023-07-31T13:00",
     "hasHours": true
   },
   {
-    "name": "Semesterferien",
+    "name": {
+      "de": "Semesterferien",
+      "en": "Semester break"
+    },
     "begin": "2023-08-01",
     "end": "2023-09-30"
   }
