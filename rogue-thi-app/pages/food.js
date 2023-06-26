@@ -30,7 +30,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-const CURRENCY_LOCALE = 'de'
+import { getAdjustedLocale } from '../lib/locale-utils'
+
 const COLOR_WARN = '#bb0000'
 const COLOR_GOOD = '#00bb00'
 
@@ -103,7 +104,7 @@ export default function Mensa () {
    * @returns {string}
    */
   function formatPrice (x) {
-    return x?.toLocaleString(CURRENCY_LOCALE, { style: 'currency', currency: 'EUR' })
+    return x?.toLocaleString(getAdjustedLocale(), { style: 'currency', currency: 'EUR' })
   }
 
   /**
@@ -130,12 +131,12 @@ export default function Mensa () {
   }
 
   /**
-   * Formats a float for the German locale.
+   * Formats a float for the current locale.
    * @param {number} x
    * @returns {string}
    */
   function formatFloat (x) {
-    return x?.toString().replace('.', ',')
+    return (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 2 })).format(x)
   }
 
   /**
@@ -173,7 +174,7 @@ export default function Mensa () {
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                 <span>
-                  <FontAwesomeIcon title={t('warning.preferences.iconTitle')} icon={faThumbsUp} color={COLOR_GOOD} />
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faThumbsUp} color={COLOR_GOOD} />
                   {' '}
                 </span>
               )}
