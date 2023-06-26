@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faThumbsUp, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faHeartCircleCheck, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -174,7 +174,7 @@ export default function Mensa () {
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                 <span>
-                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faThumbsUp} color={COLOR_GOOD} />
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} color={COLOR_GOOD} />
                   {' '}
                 </span>
               )}
@@ -329,7 +329,7 @@ export default function Mensa () {
                 <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
                   {containsSelectedPreference([flag]) && (
                     <span>
-                          <FontAwesomeIcon icon={faThumbsUp} color={COLOR_GOOD}/>{' '}
+                          <FontAwesomeIcon icon={faHeartCircleCheck} color={COLOR_GOOD}/>{' '}
                         </span>
                   )}
                   {' '}
@@ -348,9 +348,9 @@ export default function Mensa () {
                 <li key={key} style={{ color: containsSelectedAllergen([key]) && COLOR_WARN }}>
                   {containsSelectedAllergen([key]) && (
                     <span>
-                            <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN}/>
+                      <FontAwesomeIcon icon={faExclamationTriangle} color={COLOR_WARN}/>
                       {' '}
-                          </span>
+                    </span>
                   )}
                   {' '}
                   <strong>{key}</strong>
