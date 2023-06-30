@@ -82,20 +82,19 @@ export default function Calendar () {
       <AppBody className={styles.container}>
         <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
           <Modal.Header closeButton>
-            <Modal.Title>{focusedExam && focusedExam.titel}</Modal.Title>
+            <Modal.Title>{focusedExam && focusedExam.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <strong>{t('calendar.modals.exams.type')}</strong>: {focusedExam && focusedExam.pruefungs_art}<br />
-            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.exam_rooms || 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.exam_seat || 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.type')}</strong>: {focusedExam && focusedExam.type}<br />
+            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.room || 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.seat || 'TBD')}<br />
             <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && focusedExam.anmerkung}<br />
-            <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.pruefer_namen}<br />
-            <strong>{t('calendar.modals.exams.courseOfStudies')}</strong>: {focusedExam && focusedExam.stg}<br />
-            <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.anmeldung)}<br />
+            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && (focusedExam.notes || 'keine')}<br />
+            <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.examiners.join('; ')}<br />
+            <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.enrollment)}<br />
             <strong>{t('calendar.modals.exams.tools')}</strong>:
               <ul>
-                {focusedExam && focusedExam.allowed_helpers.map((helper, i) =>
+                {focusedExam && focusedExam.aids.map((helper, i) =>
                 <li key={i}>{helper}</li>)}
               </ul>
           </Modal.Body>
@@ -153,7 +152,7 @@ export default function Calendar () {
                 {exams && exams.map((item, idx) =>
                   <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
                     <div className={styles.left}>
-                      {item.titel} ({item.stg})<br />
+                      {item.name}<br />
 
                       <div className={styles.details}>
                         {item.date && <>
@@ -161,8 +160,8 @@ export default function Calendar () {
                           {' '}({formatFriendlyRelativeTime(item.date)})
                           <br />
                         </>}
-                        {t('calendar.modals.exams.room')}: {item.exam_rooms || 'TBD'}<br />
-                        {item.exam_seat && `${t('calendar.modals.exams.seat')}: ${item.exam_seat}`}
+                        {t('calendar.modals.exams.room')}: {item.room || 'TBD'}<br />
+                        {item.seat && `${t('calendar.modals.exams.seat')}: ${item.seat}`}
                       </div>
                     </div>
                   </ListGroup.Item>

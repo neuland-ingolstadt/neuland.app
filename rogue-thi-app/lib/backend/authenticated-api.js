@@ -148,7 +148,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       const res = await this.requestCached(KEY_GET_EXAMS, {
         service: 'thiapp',
         method: 'exams',
-        format: 'json'
+        format: 'json',
+        modus: '1' // what does this mean? if only we knew
       })
 
       return res.data[1]
