@@ -125,53 +125,6 @@ export async function callWithSession (method) {
 }
 
 /**
- * Obtains a session, either directly from localStorage or by logging in
- * using saved credentials.
- *
- * If a session can not be obtained, the user is redirected to /login.
- *
- * @param {object} router Next.js router object
- */
-export async function obtainSession (router) {
-  let session = localStorage.session
-  const age = parseInt(localStorage.sessionCreated)
-
-  const credStore = new CredentialStorage(CRED_NAME)
-  const { username, password } = await credStore.read(CRED_ID) || {}
-
-  // invalidate expired session
-  if (age + SESSION_EXPIRES < Date.now() || !await API.isAlive(session)) {
-    console.log('Invalidating session')
-
-    session = null
-  }
-
-  // try to log in again
-  if (!session && username && password) {
-    try {
-      console.log('Logging in again')
-      const { session: newSession, isStudent } = await API.login(username, password)
-      session = newSession
-
-      localStorage.session = session
-      localStorage.sessionCreated = Date.now()
-      localStorage.isStudent = isStudent
-    } catch (e) {
-      console.log('Failed to log in again')
-
-      console.error(e)
-    }
-  }
-
-  if (session) {
-    return session
-  } else {
-    router.replace('/login')
-    return null
-  }
-}
-
-/**
  * Logs out the user by deleting the session from localStorage.
  *
  * @param {object} router Next.js router object

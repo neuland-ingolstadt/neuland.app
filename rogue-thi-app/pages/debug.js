@@ -13,8 +13,8 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import { NoSessionError, UnavailableSessionError, callWithSession } from '../lib/backend/thi-session-handler'
 import API from '../lib/backend/anonymous-api'
-import { obtainSession } from '../lib/backend/thi-session-handler'
 
 import styles from '../styles/Common.module.css'
 
@@ -30,26 +30,36 @@ export default function Debug () {
 
   useEffect(() => {
     async function load () {
-      const initialParams = [
-        {
-          name: 'service',
-          value: 'thiapp'
-        },
-        {
-          name: 'method',
-          value: 'persdata'
-        },
-        {
-          name: 'session',
-          value: await obtainSession(router)
-        },
-        {
-          name: 'format',
-          value: 'json'
-        }
-      ]
+      try {
+        const initialParams = [
+          {
+            name: 'service',
+            value: 'thiapp'
+          },
+          {
+            name: 'method',
+            value: 'persdata'
+          },
+          {
+            name: 'session',
+            // don't do anything with the session key, just return it
+            value: await callWithSession(session => session)
+          },
+          {
+            name: 'format',
+            value: 'json'
+          }
+        ]
 
-      setParameters(initialParams)
+        setParameters(initialParams)
+      } catch (e) {
+        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+          router.replace('/login?redirect=debug')
+        } else {
+          console.error(e)
+          alert(e)
+        }
+      }
     }
     load()
   }, [router])
