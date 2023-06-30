@@ -41,18 +41,32 @@
         },
         "suggestions": {
             "appbar": {
-                "title": "Room Suggestions"
+                "title": "Room Suggestions",
+                "overflow": {
+                    "suggestionPreferences": "Change suggestion preferences"
+                }
             },
             "noSuggestions": "No suggestions available.",
             "noAvailableRooms": "No available rooms found.",
             "gaps": {
                 "header": {
                     "general": "Available Rooms",
-                    "specific": "{{from}} <arrow/> {{until}}"
+                    "specific": "{{from}} <arrow/> {{until}} ({{room}})"
                 },
                 "subtitle": {
-                    "general": "Break from {{from}} to {{until}}",
-                    "specific": "Rooms from {{from}} to {{until}}"
+                    "general": "Rooms until {{until}} ({{duration}} minutes)",
+                    "specific": "Break from {{from}} until {{until}}"
+                },
+                "now": "Now"
+            },
+            "modals": {
+                "suggestionPreferences": {
+                    "title": "Suggestion preferences",
+                    "description": "Here you can adjust the duration and buildings of room suggestions.",
+                    "duration": "Duration",
+                    "preferredBuildings": "Preferred buildings",
+                    "minutes": "minutes",
+                    "close": "Close"
                 }
             }
         },

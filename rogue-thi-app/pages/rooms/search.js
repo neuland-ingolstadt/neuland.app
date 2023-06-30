@@ -15,7 +15,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
+import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 
@@ -24,7 +24,6 @@ import styles from '../../styles/RoomsSearch.module.css'
 import { Trans, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const TUX_ROOMS = ['G308']
 
