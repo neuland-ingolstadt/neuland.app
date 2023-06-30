@@ -9,6 +9,7 @@ const SESSION_TOKEN = 'iamasessiontoken'
 const services = {
     session: {
         open: params => ({
+            status: 0,
             data: [
                 SESSION_TOKEN,
                 params.username,
