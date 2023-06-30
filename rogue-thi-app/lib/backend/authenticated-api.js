@@ -127,10 +127,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       })
 
       return {
-        semester: res.data[1],
-        holidays: res.data[2],
-        events: res.data[2],
-        timetable: res.data[3]
+        semester: res.data[1][0],
+        holidays: res.data[1][1],
+        timetable: res.data[1][2]
       }
     } catch (e) {
       // when the user did not select any classes, the timetable returns 'Query not possible'

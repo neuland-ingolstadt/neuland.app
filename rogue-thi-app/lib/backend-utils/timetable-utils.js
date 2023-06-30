@@ -7,18 +7,18 @@ import { getNextValidDate } from './rooms-utils'
  * @returns {object}
  */
 export function getTimetableEntryName (item) {
-  const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
+  const match = item.shortName.match(/^[A-Z]{2}\S*/)
   if (match) {
     const [shortName] = match
     return {
-      name: item.fach,
+      name: item.name,
       shortName
     }
   } else {
     // fallback for weird entries like
     //    "veranstaltung": "„Richtige Studienorganisation und Prüfungsplanung“_durchgeführt von CSS und SCS",
     //    "fach": "fiktiv für Raumbelegung der Verwaltung E",
-    const name = `${item.veranstaltung} - ${item.fach}`
+    const name = `${item.shortName} - ${item.name}`
     const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
     return {
       name,
@@ -76,25 +76,52 @@ export async function getFriendlyTimetable (date, detailed) {
   const { timetable } = await API.getTimetable(date, detailed)
 
   return timetable
+    .flatMap(day =>
+      Object.values(day.hours)
+        .flatMap(hours => hours.map(hour => ({ date: day.date, ...hour })))
+    )
     .map(x => {
-      // parse dates
-      x.startDate = new Date(`${x.datum}T${x.von}`)
-      x.endDate = new Date(`${x.datum}T${x.bis}`)
+      const date = new Date(x.date)
+
+      // fix date in von/bis
+      const begin = new Date(x.von)
+      begin.setDate(date.getDate())
+      begin.setMonth(date.getMonth())
+      begin.setFullYear(date.getFullYear())
+      const end = new Date(x.bis)
+      end.setDate(date.getDate())
+      end.setMonth(date.getMonth())
+      end.setFullYear(date.getFullYear())
 
       // normalize room order
-      if (x.raum) {
-        x.rooms = x.raum
+      let rooms
+      if (x.details.raum) {
+        rooms = x.details.raum
           .split(',')
           .map(x => x.trim().toUpperCase())
           .sort()
-        x.raum = x.rooms.join(', ')
       } else {
-        x.rooms = []
-        x.raum = ''
+        rooms = []
       }
 
-      return x
+      return {
+        date: x.date,
+        begin,
+        end,
+        name: x.details.fach,
+        shortName: x.details.veranstaltung,
+        rooms,
+        lecturer: x.details.dozent,
+        exam: x.details.pruefung,
+        course: x.details.stg,
+        studyGroup: x.details.stgru,
+        sws: x.details.sws,
+        ects: x.details.ectspoints,
+        objective: x.details.ziel,
+        contents: x.details.inhalt,
+        literature: x.details.literatur
+      }
     })
-    .filter(x => x.endDate > date)
-    .sort((a, b) => a.startDate - b.startDate)
+    .filter(x => x.end > date)
+    .sort((a, b) => a.start - b.start)
 }
