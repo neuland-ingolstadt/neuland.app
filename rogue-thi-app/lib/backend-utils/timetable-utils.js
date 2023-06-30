@@ -84,14 +84,14 @@ export async function getFriendlyTimetable (date, detailed) {
       const date = new Date(x.date)
 
       // fix date in von/bis
-      const begin = new Date(x.von)
-      begin.setDate(date.getDate())
-      begin.setMonth(date.getMonth())
-      begin.setFullYear(date.getFullYear())
-      const end = new Date(x.bis)
-      end.setDate(date.getDate())
-      end.setMonth(date.getMonth())
-      end.setFullYear(date.getFullYear())
+      const startDate = new Date(x.von)
+      startDate.setDate(date.getDate())
+      startDate.setMonth(date.getMonth())
+      startDate.setFullYear(date.getFullYear())
+      const endDate = new Date(x.bis)
+      endDate.setDate(date.getDate())
+      endDate.setMonth(date.getMonth())
+      endDate.setFullYear(date.getFullYear())
 
       // normalize room order
       let rooms
@@ -106,8 +106,8 @@ export async function getFriendlyTimetable (date, detailed) {
 
       return {
         date: x.date,
-        begin,
-        end,
+        startDate,
+        endDate,
         name: x.details.fach,
         shortName: x.details.veranstaltung,
         rooms,
@@ -122,6 +122,6 @@ export async function getFriendlyTimetable (date, detailed) {
         literature: x.details.literatur
       }
     })
-    .filter(x => x.end > date)
-    .sort((a, b) => a.start - b.start)
+    .filter(x => x.endDate > date)
+    .sort((a, b) => a.startDate - b.startDate)
 }

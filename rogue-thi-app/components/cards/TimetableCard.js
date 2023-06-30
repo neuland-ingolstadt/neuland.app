@@ -51,25 +51,25 @@ export default function TimetableCard () {
       <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
         <ListGroup variant="flush">
           {(timetable && timetable.slice(0, 2).map((x, i) => {
-            const isSoon = (x.begin > currentTime && new Date(x.begin) <= new Date(currentTime.getTime() + 30 * 60 * 1000))
-            const isOngoing = x.begin < currentTime && x.end > currentTime
-            const isEndingSoon = isOngoing && (x.end - currentTime) <= 30 * 60 * 1000
+            const isSoon = (x.startDate > currentTime && new Date(x.startDate) <= new Date(currentTime.getTime() + 30 * 60 * 1000))
+            const isOngoing = x.startDate < currentTime && x.endDate > currentTime
+            const isEndingSoon = isOngoing && (x.endDate - currentTime) <= 30 * 60 * 1000
             const isNotSoonOrOngoing = !isSoon && !isOngoing
 
             let text = null
             if (isEndingSoon) {
-              text = <div className="text-muted">{t('timetable.text.endingSoon', { mins: Math.ceil((x.end - currentTime) / 1000 / 60) })}</div>
+              text = <div className="text-muted">{t('timetable.text.endingSoon', { mins: Math.ceil((x.endDate - currentTime) / 1000 / 60) })}</div>
             } else if (isOngoing) {
-              text = <div className="text-muted">{t('timetable.text.ongoing', { time: formatFriendlyTime(x.end) })}</div>
+              text = <div className="text-muted">{t('timetable.text.ongoing', { time: formatFriendlyTime(x.endDate) })}</div>
             } else if (isSoon) {
               text = <div className="text-muted">
                 {t('timetable.text.startingSoon', {
-                  mins: Math.ceil((x.begin - currentTime) / 1000 / 60)
+                  mins: Math.ceil((x.startDate - currentTime) / 1000 / 60)
                 }
                 )}
               </div>
             } else if (isNotSoonOrOngoing) {
-              text = <div className="text-muted">{formatNearDate(x.begin)} {t('timetable.text.future')} {formatFriendlyTime(x.begin)}</div>
+              text = <div className="text-muted">{formatNearDate(x.startDate)} {t('timetable.text.future')} {formatFriendlyTime(x.startDate)}</div>
             }
 
             return (

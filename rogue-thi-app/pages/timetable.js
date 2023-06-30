@@ -211,8 +211,8 @@ export default function Timetable () {
                     </div>
                   </div>
                   <div className={styles.right}>
-                    {formatFriendlyTime(item.begin)} <br />
-                    {formatFriendlyTime(item.end)}
+                    {formatFriendlyTime(item.startDate)} <br />
+                    {formatFriendlyTime(item.endDate)}
                   </div>
                 </ListGroup.Item>
               )}
