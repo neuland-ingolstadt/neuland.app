@@ -1,5 +1,4 @@
 import API from '../backend/authenticated-api'
-import { parse as parsePostgresArray } from 'postgres-array'
 import rawCalendar from '../../data/calendar.json'
 
 export const compileTime = new Date()
@@ -21,19 +20,17 @@ export async function loadExamList () {
   return examList
     // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()
     .filter((x) => x.modus !== '2')
-    .map(exam => {
-      return {
-        name: exam.titel,
-        type: exam.pruefungs_art,
-        room: exam.exam_rooms,
-        seat: exam.exam_seat,
-        notes: exam.anmerkung,
-        examiners: exam.pruefer_namen,
-        date: new Date(exam.exam_ts),
-        enrollment: new Date(exam.anm_ts),
-        aids: exam.hilfsmittel.filter((v, i, a) => a.indexOf(v) === i)
-      }
-    })
+    .map(exam => ({
+      name: exam.titel,
+      type: exam.pruefungs_art,
+      room: exam.exam_rooms,
+      seat: exam.exam_seat,
+      notes: exam.anmerkung,
+      examiners: exam.pruefer_namen,
+      date: new Date(exam.exam_ts),
+      enrollment: new Date(exam.anm_ts),
+      aids: exam.hilfsmittel.filter((v, i, a) => a.indexOf(v) === i)
+    }))
     // sort list in chronologically order
     .sort((a, b) => a.date - b.date)
 }

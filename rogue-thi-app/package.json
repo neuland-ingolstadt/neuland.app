@@ -35,7 +35,6 @@
     "next-i18next": "^13.2.2",
     "node-fetch": "^3.2.3",
     "pdf-parse": "^1.1.1",
-    "postgres-array": "^3.0.1",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.4",
