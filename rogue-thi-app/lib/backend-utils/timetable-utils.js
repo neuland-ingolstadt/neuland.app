@@ -81,17 +81,18 @@ export async function getFriendlyTimetable (date, detailed) {
         .flatMap(hours => hours.map(hour => ({ date: day.date, ...hour })))
     )
     .map(x => {
-      const date = new Date(x.date)
-
-      // fix date in von/bis
-      const startDate = new Date(x.von)
-      startDate.setDate(date.getDate())
-      startDate.setMonth(date.getMonth())
-      startDate.setFullYear(date.getFullYear())
-      const endDate = new Date(x.bis)
-      endDate.setDate(date.getDate())
-      endDate.setMonth(date.getMonth())
-      endDate.setFullYear(date.getFullYear())
+      // the actual timestamp consists of
+      // the date from x.date and the time from x.von
+      const startDate = new Date(x.date)
+      const brokenStartDate = new Date(x.von)
+      startDate.setHours(brokenStartDate.getHours())
+      startDate.setMinutes(brokenStartDate.getMinutes())
+      startDate.setSeconds(brokenStartDate.getSeconds())
+      const endDate = new Date(x.date)
+      const brokenEndDate = new Date(x.bis)
+      endDate.setHours(brokenEndDate.getHours())
+      endDate.setMinutes(brokenEndDate.getMinutes())
+      endDate.setSeconds(brokenEndDate.getSeconds())
 
       // normalize room order
       let rooms
