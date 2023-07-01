@@ -236,7 +236,7 @@ export async function findSuggestedRooms (room, startDate, endDate) {
  */
 async function getMajorityRoom () {
   const timetable = await getFriendlyTimetable(new Date(), false)
-  const rooms = timetable.map(x => x.raum)
+  const rooms = timetable.flatMap(x => x.rooms)
 
   return mode(rooms)
 }
