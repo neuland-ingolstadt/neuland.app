@@ -16,8 +16,9 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { formatFriendlyTime, formatNearDate } from '../lib/date-utils'
+import { formatFriendlyDate, formatFriendlyTime, formatNearDate } from '../lib/date-utils'
 import API from '../lib/backend/authenticated-api'
+import { getFriendlyAvailableLibrarySeats } from '../lib/backend-utils/library-utils'
 
 import styles from '../styles/Library.module.css'
 
@@ -30,7 +31,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
  */
 export default function Library () {
   const [reservations, setReservations] = useState(null)
-  const [available, setAvailable] = useState([])
+  const [available, setAvailable] = useState(null)
   const [reservationDay, setReservationDay] = useState(false)
   const [reservationTime, setReservationTime] = useState(false)
   const [reservationRoom, setReservationRoom] = useState(1)
@@ -42,7 +43,7 @@ export default function Library () {
    * Fetches and displays the reservation data.
    */
   async function refreshData () {
-    const available = await API.getAvailableLibrarySeats()
+    const available = await getFriendlyAvailableLibrarySeats()
     setAvailable(available)
 
     const response = await API.getLibraryReservations()
@@ -77,8 +78,9 @@ export default function Library () {
     await API.addLibraryReservation(
       reservationRoom,
       reservationDay.date,
-      reservationTime.from,
-      reservationTime.to,
+      // this needs to be de-DE regardless of the users locale
+      reservationTime.from.toLocaleTimeString('de-DE', { timeStyle: 'short' }),
+      reservationTime.to.toLocaleTimeString('de-DE', { timeStyle: 'short' }),
       reservationSeat
     )
     await refreshData()
@@ -111,9 +113,9 @@ export default function Library () {
             <Modal.Title>{t('library.modal.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {t('library.modal.details.day')}: {reservationDay && reservationDay.date}<br />
-            {t('library.modal.details.start')}: {reservationTime && reservationTime.from}<br />
-            {t('library.modal.details.end')}: {reservationTime && reservationTime.to}<br />
+            {t('library.modal.details.day')}: {reservationDay && formatFriendlyDate(reservationDay.date)}<br />
+            {t('library.modal.details.start')}: {reservationTime && formatFriendlyTime(reservationTime.from)}<br />
+            {t('library.modal.details.end')}: {reservationTime && formatFriendlyTime(reservationTime.to)}<br />
             <br />
             <Form.Group>
               <Form.Label>{t('library.modal.details.location')}:</Form.Label>
@@ -189,7 +191,7 @@ export default function Library () {
         <h4 className={styles.heading}>
           {t('library.availableSeats')}
         </h4>
-        <ReactPlaceholder type="text" rows={20} ready={available && available.length > 0}>
+        <ReactPlaceholder type="text" rows={20} ready={available}>
           <ListGroup>
             {available && available.map((day, i) =>
               day.resource.map((time, j) =>
@@ -200,11 +202,11 @@ export default function Library () {
                     setReservationTime(time)
                   }}>{t('library.actions.reserve')}</Button>
 
-                  {formatNearDate(new Date(day.date + 'T' + time.from))}
+                  {formatNearDate(new Date(time.from))}
                   {', '}
-                  {formatFriendlyTime(new Date(day.date + 'T' + time.from))}
+                  {formatFriendlyTime(new Date(time.from))}
                   {' - '}
-                  {formatFriendlyTime(new Date(day.date + 'T' + time.to))}
+                  {formatFriendlyTime(new Date(time.to))}
                   <br />
                   <div className="text-muted">
                     {t('library.details.seatsAvailable', {
@@ -215,6 +217,11 @@ export default function Library () {
                 </ListGroup.Item>
               )
             )}
+            {available && available.length === 0 &&
+              <ListGroup.Item>
+                Du darfst keine weiteren Plätze reservieren.
+              </ListGroup.Item>
+            }
           </ListGroup>
         </ReactPlaceholder>
 
