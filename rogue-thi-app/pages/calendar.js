@@ -89,7 +89,7 @@ export default function Calendar () {
             <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.room || 'TBD')}<br />
             <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.seat || 'TBD')}<br />
             <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && (focusedExam.notes || 'keine')}<br />
+            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && (focusedExam.notes || t('calendar.modals.exams.none'))}<br />
             <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.examiners.join('; ')}<br />
             <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.enrollment)}<br />
             <strong>{t('calendar.modals.exams.tools')}</strong>:

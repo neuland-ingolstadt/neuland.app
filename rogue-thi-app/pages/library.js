@@ -219,7 +219,7 @@ export default function Library () {
             )}
             {available && available.length === 0 &&
               <ListGroup.Item>
-                Du darfst keine weiteren Plätze reservieren.
+                {t('library.details.noMoreReservations')}
               </ListGroup.Item>
             }
           </ListGroup>

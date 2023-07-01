@@ -10,6 +10,7 @@
         "details": {
             "seatsAvailable": "{{available}} / {{total}} available",
             "noReservations": "You have no reservations",
+            "noMoreReservations": "You can not reserve any more seats",
             "reservationDetails": "<strong>{{category}}</strong>, Seat {{seat}}, Reservation {{reservation_id}}"
         },
         "modal": {
