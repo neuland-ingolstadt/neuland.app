@@ -58,6 +58,12 @@ export default function RoomSearch () {
    * Searches and displays rooms with the specified filters.
    */
   const filter = useCallback(async () => {
+    // when entering dates on desktop, for a short time the date is invalid (e.g. 2023-07-00) when the user is still typing
+    const validateDate = new Date(date)
+    if (isNaN(validateDate.getTime())) {
+      return
+    }
+
     setSearching(true)
     setFilterResults(null)
 
