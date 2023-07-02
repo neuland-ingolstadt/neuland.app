@@ -15,7 +15,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
+import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 
@@ -31,7 +31,8 @@ export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
       'rooms',
-      'common'
+      'common',
+      'api-translations'
     ]))
   }
 })
@@ -149,11 +150,11 @@ export default function RoomSearch () {
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
                     <Link href={`/rooms?highlight=${result.room}`}>
-                      {result.room}
+                      {getTranslatedRoomName(result.room)}
                     </Link>
                     {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                     <div className={styles.details}>
-                      {result.type}
+                      {getTranslatedRoomFunction(result.type)}
                     </div>
                   </div>
                   <div className={styles.right}>

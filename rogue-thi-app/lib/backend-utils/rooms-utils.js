@@ -264,11 +264,31 @@ async function getMajorityRoom () {
   return mode(rooms)
 }
 
+/**
+ * Translates the room function to the current language.
+ * @param {string} roomFunction Room function (e.g. `Seminarraum`)
+ * @returns {string} Translated room function
+ */
 export function getTranslatedRoomFunction (roomFunction) {
   const roomFunctionCleaned = roomFunction?.replace(/\s+/g, ' ')?.trim() ?? ''
 
   const translatedRoomFunction = i18n.t(`apiTranslations.roomFunctions.${roomFunctionCleaned}`, { ns: 'api-translations' })
   return translatedRoomFunction === `apiTranslations.roomFunctions.${roomFunctionCleaned}` ? roomFunctionCleaned : translatedRoomFunction
+}
+
+/**
+ * Translates the room name to the current language.
+ * This is only used for some special cases like 'alle Räume'.
+ * @param {string} room Room name (e.g. `G215`)
+ * @returns {string} Translated room name
+ */
+export function getTranslatedRoomName (room) {
+  switch (room) {
+    case 'alle Räume':
+      return i18n.t('rooms.common.allRooms', { ns: 'rooms' })
+    default:
+      return room
+  }
 }
 
 /**
@@ -292,7 +312,17 @@ export async function getEmptySuggestions (asGap = false) {
     const filteredBuildings = Object.keys(userBuildings).filter(x => userBuildings[x])
 
     if (filteredBuildings.length !== 0) {
-      rooms = rooms.filter(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+      const filteredRooms = rooms.filter(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+
+      if (filteredRooms.length >= 4) {
+        // enough rooms in preferred buildings -> filter out other buildings
+        console.log('enough rooms in preferred buildings -> filter out other buildings')
+        rooms = filteredRooms
+      } else {
+        // not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings
+        console.log('not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings')
+        rooms = rooms.sort(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+      }
     }
   } else {
     // no preferred buildings -> search rooms near majority room

@@ -23,7 +23,7 @@ import AppTabbar from '../../components/page/AppTabbar'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 
-import { SUGGESTION_DURATION_PRESET, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getTranslatedRoomFunction } from '../../lib/backend-utils/rooms-utils'
+import { SUGGESTION_DURATION_PRESET, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
@@ -113,6 +113,9 @@ export default function RoomSearch () {
     }
   }, [router, userKind])
 
+  /**
+   * Closes the modal and saves the preferences.
+   */
   async function closeModal () {
     setShowEditDuration(false)
     saveBuildingPreferences()
@@ -183,6 +186,31 @@ export default function RoomSearch () {
       />
       )
     }
+  }
+
+  /**
+   * A button to select a duration.
+   * @param {int} duration Duration in minutes
+   * @returns {JSX.Element} Button
+   */
+  function DurationButton ({ duration }) {
+    const variant = (localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`) === `${duration}` ? 'primary' : 'outline-primary'
+    return <Button variant={variant} onClick={() => {
+      localStorage.setItem('suggestion-duration', duration)
+
+      // update page
+      const load = async () => {
+        const suggestions = await getEmptySuggestions(true)
+        setSuggestions(suggestions)
+      }
+
+      load()
+    } }>
+      <h3>
+        {duration}
+      </h3>
+      {t('rooms.suggestions.modals.suggestionPreferences.minutes')}
+    </Button>
   }
 
   return (
@@ -257,7 +285,7 @@ export default function RoomSearch () {
                   <ListGroup.Item key={idx} className={styles.item}>
                     <div className={styles.left}>
                       <Link href={`/rooms?highlight=${roomResult.room}`}>
-                        {roomResult.room}
+                        {getTranslatedRoomName(roomResult.room)}
                       </Link>
                       {TUX_ROOMS.includes(roomResult.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                       <div className={styles.details}>
@@ -301,24 +329,4 @@ export default function RoomSearch () {
       <AppTabbar />
     </AppContainer>
   )
-
-  function DurationButton ({ duration }) {
-    const variant = (localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`) === `${duration}` ? 'primary' : 'outline-primary'
-    return <Button variant={variant} onClick={() => {
-      localStorage.setItem('suggestion-duration', duration)
-
-      // update page
-      const load = async () => {
-        const suggestions = await getEmptySuggestions(true)
-        setSuggestions(suggestions)
-      }
-
-      load()
-    } }>
-      <h3>
-        {duration}
-      </h3>
-      {t('rooms.suggestions.modals.suggestionPreferences.minutes')}
-    </Button>
-  }
 }
