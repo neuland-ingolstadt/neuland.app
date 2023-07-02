@@ -285,7 +285,7 @@ export function getTranslatedRoomFunction (roomFunction) {
 export function getTranslatedRoomName (room) {
   switch (room) {
     case 'alle Räume':
-      return i18n.t('rooms.common.allRooms', { ns: 'rooms' })
+      return i18n.t('rooms.allRooms', { ns: 'common' })
     default:
       return room
   }

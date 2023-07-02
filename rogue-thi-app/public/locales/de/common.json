@@ -67,5 +67,8 @@
     "appbar": {
         "back": "Zurück",
         "overflow": "Mehr Optionen"
+    },
+    "rooms": {
+        "allRooms": "Alle Räume"
     }
 }

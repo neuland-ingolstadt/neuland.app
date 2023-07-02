@@ -76,8 +76,7 @@
             }
         },
         "common": {
-            "availableFromUntil": "frei ab {{from}}<br />bis {{until}}",
-            "allRooms": "Alle Räume"
+            "availableFromUntil": "frei ab {{from}}<br />bis {{until}}"
         }
     }
 }
