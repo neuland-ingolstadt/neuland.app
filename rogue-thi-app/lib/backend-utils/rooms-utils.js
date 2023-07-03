@@ -316,25 +316,24 @@ export async function getEmptySuggestions (asGap = false) {
 
       if (filteredRooms.length >= 4) {
         // enough rooms in preferred buildings -> filter out other buildings
-        console.log('enough rooms in preferred buildings -> filter out other buildings')
         rooms = filteredRooms
       } else {
         // not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings
-        console.log('not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings')
         rooms = rooms.sort(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
       }
     }
-  } else {
-    // no preferred buildings -> search rooms near majority room
-    const majorityRoom = await getMajorityRoom()
+  }
 
-    // if majority room is undefined -> do not filter
-    if (majorityRoom) {
-      rooms = sortRoomsByDistance(majorityRoom, rooms)
+  // no preferred buildings -> search rooms near majority room
+  // preferred buildings -> filter by preferred buildings and sort by distance to majority room
+  const majorityRoom = await getMajorityRoom()
 
-      // hide Neuburg buildings if next lecture is not in Neuburg
-      rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
-    }
+  // if majority room is undefined -> do not filter
+  if (majorityRoom) {
+    rooms = sortRoomsByDistance(majorityRoom, rooms)
+
+    // hide Neuburg buildings if next lecture is not in Neuburg
+    rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
   }
 
   rooms = rooms.slice(0, 4)
