@@ -105,7 +105,7 @@ export class AnonymousAPIClient {
       headers: {
         Host: ENDPOINT_HOST,
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': USER_AGENT,
+        'User-Agent': ENDPOINT_MODE !== 'direct' ? USER_AGENT : undefined,
         'X-API-KEY': API_KEY
       }
     })
