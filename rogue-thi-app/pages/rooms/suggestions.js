@@ -62,42 +62,55 @@ export default function RoomSearch () {
 
   const { t } = useTranslation('rooms')
 
+  async function getSuggestions () {
+    // get timetable and filter for today
+    const timetable = await getFriendlyTimetable(new Date(), false)
+    const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
+
+    if (today.length < 1) {
+      // no lectures today -> general room search
+      const suggestions = await getEmptySuggestions(true)
+      setSuggestions(suggestions)
+      return
+    }
+
+    const gaps = getTimetableGaps(today)
+    if (gaps.length < 1) {
+      const suggestions = await getEmptySuggestions(true)
+      setSuggestions(suggestions)
+      return
+    }
+
+    const suggestions = await Promise.all(gaps.map(async (gap) => {
+      const rooms = await findSuggestedRooms(gap.endLecture.raum, gap.startDate, gap.endDate)
+
+      return (
+        {
+          gap,
+          rooms: rooms.slice(0, 4)
+        }
+      )
+    }))
+
+    // if first gap is in too far in the future (now + suggestion duration), show empty suggestions as well
+    const deltaTime = suggestions[0].gap.startDate.getTime() - new Date().getTime()
+    const suggestionDuration = parseInt(localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`)
+
+    if (deltaTime > suggestionDuration * 60 * 1000) {
+      const emptySuggestions = await getEmptySuggestions(true)
+      suggestions.unshift(emptySuggestions[0])
+    }
+
+    return suggestions
+  }
+
   useEffect(() => {
     async function load () {
       try {
         // load buildings
         setBuildings(await getAllUserBuildings())
 
-        // get timetable and filter for today
-        const timetable = await getFriendlyTimetable(new Date(), false)
-        const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
-
-        if (today.length < 1) {
-          // no lectures today -> general room search
-          const suggestions = await getEmptySuggestions(true)
-          setSuggestions(suggestions)
-          return
-        }
-
-        const gaps = getTimetableGaps(today)
-        if (gaps.length < 1) {
-          const suggestions = await getEmptySuggestions(true)
-          setSuggestions(suggestions)
-          return
-        }
-
-        const suggestions = await Promise.all(gaps.map(async (gap) => {
-          const rooms = await findSuggestedRooms(gap.endLecture.raum, gap.startDate, gap.endDate)
-
-          return (
-            {
-              gap,
-              rooms: rooms.slice(0, 4)
-            }
-          )
-        }))
-
-        setSuggestions(suggestions)
+        setSuggestions(await getSuggestions())
       } catch (e) {
         if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
           router.replace('/login?redirect=rooms%2Fsuggestions')
@@ -120,7 +133,7 @@ export default function RoomSearch () {
     setShowEditDuration(false)
     saveBuildingPreferences()
 
-    const suggestions = await getEmptySuggestions(true)
+    const suggestions = await getSuggestions()
     setSuggestions(suggestions)
   }
 
