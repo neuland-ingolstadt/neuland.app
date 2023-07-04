@@ -82,9 +82,9 @@ export default function TimetableCard () {
             )
           })) ||
             (timetable && timetable.length === 0 &&
-              <ListGroup.Item>Du hast heute keine Vorlesungen mehr.</ListGroup.Item>) ||
+              <ListGroup.Item>{t('timetable.text.noLectures')}</ListGroup.Item>) ||
             (timetableError &&
-              <ListGroup.Item>Fehler beim Abruf des Stundenplans.</ListGroup.Item>)}
+              <ListGroup.Item>{t('timetable.text.error')}</ListGroup.Item>)}
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>

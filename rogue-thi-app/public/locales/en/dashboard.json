@@ -5,7 +5,9 @@
             "endingSoon": "ends in {{mins}} min",
             "ongoing": "ends at {{time}}",
             "startingSoon": "starts in {{mins}} min",
-            "future": "at"
+            "future": "at",
+            "noLectures": "You have no more lectures today.",
+            "error": "Error retrieving timetable."
         }
     },
     "food": {
