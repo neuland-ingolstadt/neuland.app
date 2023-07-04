@@ -18,6 +18,8 @@ import API from '../lib/backend/anonymous-api'
 
 import styles from '../styles/Common.module.css'
 
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 
 /**
@@ -160,3 +162,11 @@ export default function Debug () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'common'
+    ]))
+  }
+})
