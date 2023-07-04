@@ -49,6 +49,7 @@
         }
     },
     "cards": {
+        "home": "Home",
         "install": "Installation",
         "timetable": "Stundenplan",
         "mensa": "Essen",
