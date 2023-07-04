@@ -69,16 +69,12 @@ export default function RoomSearch () {
 
     if (today.length < 1) {
       // no lectures today -> general room search
-      const suggestions = await getEmptySuggestions(true)
-      setSuggestions(suggestions)
-      return
+      return await getEmptySuggestions(true)
     }
 
     const gaps = getTimetableGaps(today)
     if (gaps.length < 1) {
-      const suggestions = await getEmptySuggestions(true)
-      setSuggestions(suggestions)
-      return
+      return await getEmptySuggestions(true)
     }
 
     const suggestions = await Promise.all(gaps.map(async (gap) => {
@@ -210,14 +206,6 @@ export default function RoomSearch () {
     const variant = (localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`) === `${duration}` ? 'primary' : 'outline-primary'
     return <Button variant={variant} onClick={() => {
       localStorage.setItem('suggestion-duration', duration)
-
-      // update page
-      const load = async () => {
-        const suggestions = await getEmptySuggestions(true)
-        setSuggestions(suggestions)
-      }
-
-      load()
     } }>
       <h3>
         {duration}
