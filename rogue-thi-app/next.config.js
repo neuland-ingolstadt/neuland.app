@@ -73,7 +73,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self' data: https://tile.openstreetmap.org;
               font-src 'self';
-              connect-src 'self' wss://proxy.neuland.app ${DEEPL_ENDPOINT};
+              connect-src 'self' wss://proxy.neuland.app https://hiplan.thi.de ${DEEPL_ENDPOINT};
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';
