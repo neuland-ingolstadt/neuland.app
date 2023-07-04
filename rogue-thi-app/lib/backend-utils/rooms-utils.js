@@ -1,13 +1,16 @@
 import API from '../backend/authenticated-api'
-import { formatISODate } from '../date-utils'
+
+import { formatISODate, getWeek } from '../date-utils'
 import { getFriendlyTimetable } from './timetable-utils'
+import { i18n } from 'next-i18next'
 import roomDistances from '../../data/room-distances.json'
 
 const IGNORE_GAPS = 15
 
+export const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
 export const BUILDINGS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
-const SUGGESTION_DURATION_PRESET = 90
+export const SUGGESTION_DURATION_PRESET = 90
 
 /**
  * Adds minutes to a date object.
@@ -212,6 +215,19 @@ function sortRoomsByDistance (room, rooms) {
 }
 
 /**
+ * Returns all buildings filtered by Neuburg or Ingolstadt using the timetable.
+ */
+export async function getAllUserBuildings () {
+  const majorityRoom = await getMajorityRoom()
+
+  if (majorityRoom) {
+    return BUILDINGS.filter(building => building.includes('N') === majorityRoom.includes('N'))
+  }
+
+  return BUILDINGS
+}
+
+/**
  * Finds rooms that are close to the given room and are available for the given time.
  * @param {string} room Room name (e.g. `G215`)
  * @param {Date} startDate Start date as Date object
@@ -235,10 +251,44 @@ export async function findSuggestedRooms (room, startDate, endDate) {
  * @returns {string} Room name (e.g. `G215`)
  */
 async function getMajorityRoom () {
-  const timetable = await getFriendlyTimetable(new Date(), false)
+  const date = new Date()
+  if (date.getDay() === 0) {
+    date.setDate(date.getDate() + 1)
+  }
+
+  const week = getWeek(date)
+
+  const timetable = await getFriendlyTimetable(week[0], false)
   const rooms = timetable.map(x => x.raum)
 
   return mode(rooms)
+}
+
+/**
+ * Translates the room function to the current language.
+ * @param {string} roomFunction Room function (e.g. `Seminarraum`)
+ * @returns {string} Translated room function
+ */
+export function getTranslatedRoomFunction (roomFunction) {
+  const roomFunctionCleaned = roomFunction?.replace(/\s+/g, ' ')?.trim() ?? ''
+
+  const translatedRoomFunction = i18n.t(`apiTranslations.roomFunctions.${roomFunctionCleaned}`, { ns: 'api-translations' })
+  return translatedRoomFunction === `apiTranslations.roomFunctions.${roomFunctionCleaned}` ? roomFunctionCleaned : translatedRoomFunction
+}
+
+/**
+ * Translates the room name to the current language.
+ * This is only used for some special cases like 'alle Räume'.
+ * @param {string} room Room name (e.g. `G215`)
+ * @returns {string} Translated room name
+ */
+export function getTranslatedRoomName (room) {
+  switch (room) {
+    case 'alle Räume':
+      return i18n.t('rooms.allRooms', { ns: 'common' })
+    default:
+      return room
+  }
 }
 
 /**
@@ -247,15 +297,45 @@ async function getMajorityRoom () {
  * @param {number} [duration] Duration of the gap in minutes
  * @returns {Array}
  **/
-export async function getEmptySuggestions (asGap = false, duration = SUGGESTION_DURATION_PRESET) {
-  const endDate = addMinutes(new Date(), duration)
+export async function getEmptySuggestions (asGap = false) {
+  const userDurationStorage = localStorage.getItem('suggestion-duration')
+  const userDuration = userDurationStorage ? parseInt(userDurationStorage) : SUGGESTION_DURATION_PRESET
+
+  const endDate = addMinutes(new Date(), userDuration)
   let rooms = await searchRooms(new Date(), endDate)
 
-  const majorityRoom = await getMajorityRoom()
-  rooms = sortRoomsByDistance(majorityRoom, rooms)
+  const buildingFilter = localStorage.buildingPreferences
 
-  // hide Neuburg buildings if next lecture is not in Neuburg
-  rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
+  if (buildingFilter) {
+    // test if any of the rooms is in any of the user's preferred buildings
+    const userBuildings = JSON.parse(buildingFilter)
+    const filteredBuildings = Object.keys(userBuildings).filter(x => userBuildings[x])
+
+    if (filteredBuildings.length !== 0) {
+      const filteredRooms = rooms.filter(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+
+      if (filteredRooms.length >= 4) {
+        // enough rooms in preferred buildings -> filter out other buildings
+        rooms = filteredRooms
+      } else {
+        // not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings
+        rooms = rooms.sort(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+      }
+    }
+  }
+
+  // no preferred buildings -> search rooms near majority room
+  // preferred buildings -> filter by preferred buildings and sort by distance to majority room
+  const majorityRoom = await getMajorityRoom()
+
+  // if majority room is undefined -> do not filter
+  if (majorityRoom) {
+    rooms = sortRoomsByDistance(majorityRoom, rooms)
+
+    // hide Neuburg buildings if next lecture is not in Neuburg
+    rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
+  }
+
   rooms = rooms.slice(0, 4)
 
   if (asGap) {

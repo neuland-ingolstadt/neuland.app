@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Link from 'next/link'
@@ -10,7 +10,7 @@ import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersContr
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
-import { filterRooms, getNextValidDate } from '../lib/backend-utils/rooms-utils'
+import { filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
@@ -58,13 +58,6 @@ export default function RoomMap ({ highlight, roomData }) {
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
-  const getTranslatedFunction = useCallback((room) => {
-    const roomFunctionCleaned = room?.properties?.Funktion?.replace(/\s+/g, ' ')?.trim() ?? ''
-
-    const roomFunction = t(`apiTranslations.roomFunctions.${roomFunctionCleaned}`, { ns: 'api-translations' })
-    return roomFunction === `apiTranslations.roomFunctions.${roomFunctionCleaned}` ? roomFunctionCleaned : roomFunction
-  }, [t])
-
   /**
    * Preprocessed room data for Leaflet.
    */
@@ -105,7 +98,7 @@ export default function RoomMap ({ highlight, roomData }) {
 
     const getProp = (room, prop) => {
       if (prop === 'Funktion') {
-        return getTranslatedFunction(room).toUpperCase()
+        return getTranslatedRoomFunction(room?.properties?.Funktion).toUpperCase()
       }
 
       return room.properties[prop]?.toUpperCase()
@@ -126,7 +119,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : DEFAULT_CENTER
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, getTranslatedFunction])
+  }, [searchText, allRooms])
 
   useEffect(() => {
     async function load () {
@@ -199,7 +192,7 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedFunction(entry, i18n)}`} <br />
+          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`} <br />
           {avail && (
             <>
               {t('rooms.map.freeFromUntil', {
