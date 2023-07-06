@@ -301,6 +301,22 @@ export function isSameDay (a, b) {
   return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
 }
 
+/**
+ * Combines the date from one Date object and the time from another Date object
+ * @param {Date} date
+ * @param {Date} time
+ * @returns {Date}
+ */
+export function combineDateTime (date, time) {
+  date = new Date(date)
+  time = new Date(time)
+  date.setHours(time.getHours())
+  date.setMinutes(time.getMinutes())
+  date.setSeconds(time.getSeconds())
+  date.setMilliseconds(time.getMilliseconds())
+  return date
+}
+
 function t (...args) {
   return i18n.t(...args, { ns: 'common' })
 }

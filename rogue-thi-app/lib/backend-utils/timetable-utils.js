@@ -1,4 +1,5 @@
 import API from '../backend/authenticated-api'
+import { combineDateTime } from '../date-utils'
 import { getNextValidDate } from './rooms-utils'
 
 /**
@@ -81,18 +82,8 @@ export async function getFriendlyTimetable (date, detailed) {
         .flatMap(hours => hours.map(hour => ({ date: day.date, ...hour })))
     )
     .map(x => {
-      // the actual timestamp consists of
-      // the date from x.date and the time from x.von
-      const startDate = new Date(x.date)
-      const brokenStartDate = new Date(x.von)
-      startDate.setHours(brokenStartDate.getHours())
-      startDate.setMinutes(brokenStartDate.getMinutes())
-      startDate.setSeconds(brokenStartDate.getSeconds())
-      const endDate = new Date(x.date)
-      const brokenEndDate = new Date(x.bis)
-      endDate.setHours(brokenEndDate.getHours())
-      endDate.setMinutes(brokenEndDate.getMinutes())
-      endDate.setSeconds(brokenEndDate.getSeconds())
+      const startDate = combineDateTime(x.date, x.von)
+      const endDate = combineDateTime(x.date, x.bis)
 
       // normalize room order
       let rooms

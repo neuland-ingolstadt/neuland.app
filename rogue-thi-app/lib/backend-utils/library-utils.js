@@ -1,4 +1,5 @@
 import API from '../backend/authenticated-api'
+import { combineDateTime } from '../date-utils'
 
 /**
  * Converts the seat list for easier processing.
@@ -12,18 +13,8 @@ export async function getFriendlyAvailableLibrarySeats () {
       return {
         date,
         resource: day.resource.map(slot => {
-          // the actual timestamp has to be combined
-          // from the date and from attributes
-          const from = new Date(date)
-          const brokenFrom = new Date(slot.from)
-          from.setHours(brokenFrom.getHours())
-          from.setMinutes(brokenFrom.getMinutes())
-          from.setSeconds(brokenFrom.getSeconds())
-          const to = new Date(date)
-          const brokenTo = new Date(slot.to)
-          to.setHours(brokenTo.getHours())
-          to.setMinutes(brokenTo.getMinutes())
-          to.setSeconds(brokenTo.getSeconds())
+          const from = combineDateTime(date, slot.from)
+          const to = combineDateTime(date, slot.to)
 
           return {
             ...slot,
