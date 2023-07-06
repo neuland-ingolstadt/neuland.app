@@ -1,18 +1,23 @@
+import * as deepl from 'deepl-node'
 import AsyncMemoryCache from '../cache/async-memory-cache'
 
 const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY || ''
+const ENABLE_DEV_TRANSLATIONS = process.env.ENABLE_DEV_TRANSLATIONS === 'true' || false
 
-const CACHE_TTL = 60 * 60 * 24 * 1000// 24h
+const CACHE_TTL = 60 * 60 * 24 * 7 * 1000 // 7 days
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
+const isDev = process.env.NODE_ENV !== 'production'
+
+const translator = DEEPL_API_KEY ? new deepl.Translator(DEEPL_API_KEY) : null
+const SOURCE_LANG = 'DE'
 
 /**
  * Gets a translation from the cache or translates it using DeepL.
  * @param {String} text The text to translate
  * @param {String} target The target language
- * @returns {String} The translated text
- * @throws {Error} If DeepL is not configured or returns an error
+ * @returns {String} The translated text or the original text if DeepL is not configured or returns an error
  **/
 async function getTranslation (text, target) {
   return await cache.get(`${text}__${target}`, async () => {
@@ -28,28 +33,37 @@ async function getTranslation (text, target) {
  * @throws {Error} If DeepL is not configured or returns an error
  */
 async function translate (text, target) {
-  if (!DEEPL_ENDPOINT || !DEEPL_API_KEY) {
-    console.error('DeepL is not configured. Please set DEEPL_ENDPOINT and DEEPL_API_KEY in your .env.local file. Using fallback translation.')
-    return `(TRANSLATION_PLACEHOLDER) ${text}`
+  try {
+    return (await translator.translateText(text, SOURCE_LANG, target)).text
+  } catch (err) {
+    console.error(err)
+    return isDev ? `FALLBACK: ${text}` : text
   }
+}
 
-  const resp = await fetch(`${DEEPL_ENDPOINT}`,
-    {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        Authorization: `DeepL-Auth-Key ${DEEPL_API_KEY}`,
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: `text=${encodeURI(text)}&target_lang=${target}`
+/**
+ * Brings the given meal plan into the correct format as if it was translated by DeepL.
+ * @param {Object} meals The meal plan
+ * @returns {Object} The translated meal plan
+ **/
+function translateFallback (meals) {
+  return meals.map((day) => {
+    const meals = day.meals.map((meal) => {
+      return {
+        ...meal,
+        name: {
+          de: meal.name,
+          en: isDev ? `FALLBACK: ${meal.name}` : meal.name
+        },
+        originalLanguage: 'de'
+      }
     })
 
-  if (resp.status === 200) {
-    const result = await resp.json()
-    return result.translations.map(x => x.text)[0]
-  } else {
-    throw new Error('DeepL returned an error: ' + await resp.text())
-  }
+    return {
+      ...day,
+      meals
+    }
+  })
 }
 
 /**
@@ -58,13 +72,25 @@ async function translate (text, target) {
  * @returns {Object} The translated meal plan
  */
 export async function translateMeals (meals) {
+  if (isDev && !ENABLE_DEV_TRANSLATIONS) {
+    console.warn('DeepL is disabled in development mode.')
+    console.warn('To enable DeepL in development mode, set ENABLE_DEV_TRANSLATIONS=true in your .env.local file.')
+    return translateFallback(meals)
+  }
+
+  if (!DEEPL_ENDPOINT || !DEEPL_API_KEY || !translator) {
+    console.warn('DeepL is not configured.')
+    console.warn('To enable DeepL, set the DEEPL_API_KEY in your .env.local file.')
+    return translateFallback(meals)
+  }
+
   return await Promise.all(meals.map(async (day) => {
     const meals = await Promise.all(day.meals.map(async (meal) => {
       return {
         ...meal,
         name: {
           de: meal.name,
-          en: await getTranslation(meal.name, 'EN')
+          en: await getTranslation(meal.name, 'EN-GB')
         },
         originalLanguage: 'de'
       }
