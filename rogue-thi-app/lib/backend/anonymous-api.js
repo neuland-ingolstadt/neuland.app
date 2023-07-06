@@ -99,15 +99,18 @@ export class AnonymousAPIClient {
       })
     }
 
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'X-API-KEY': API_KEY
+    }
+    if (ENDPOINT_MODE !== 'direct') {
+      headers['Host'] = ENDPOINT_HOST
+      headers['User-Agent'] = USER_AGENT
+    }
     const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
       method: 'POST',
       body: new URLSearchParams(params).toString(),
-      headers: {
-        Host: ENDPOINT_HOST,
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': ENDPOINT_MODE !== 'direct' ? USER_AGENT : undefined,
-        'X-API-KEY': API_KEY
-      }
+      headers
     })
     try {
       return await resp.json()
