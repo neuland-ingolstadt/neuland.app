@@ -202,11 +202,11 @@ export default function Library () {
                     setReservationTime(time)
                   }}>{t('library.actions.reserve')}</Button>
 
-                  {formatNearDate(new Date(time.from))}
+                  {formatNearDate(time.from)}
                   {', '}
-                  {formatFriendlyTime(new Date(time.from))}
+                  {formatFriendlyTime(time.from)}
                   {' - '}
-                  {formatFriendlyTime(new Date(time.to))}
+                  {formatFriendlyTime(time.to)}
                   <br />
                   <div className="text-muted">
                     {t('library.details.seatsAvailable', {
