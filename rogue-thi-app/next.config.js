@@ -29,7 +29,7 @@ const permissionPolicyFeatures = [
 
 const isDev = process.env.NODE_ENV === 'development'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
-const API_URL = 'https://' + process.env.NEXT_PUBLIC_API_HOST
+const API_URL = 'https://' + process.env.NEXT_PUBLIC_THI_API_HOST
 
 module.exports = {
   i18n,
