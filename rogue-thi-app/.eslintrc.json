@@ -25,6 +25,7 @@
         "import/no-anonymous-default-export": "off",
         "sort-imports": ["warn", {
             "allowSeparatedGroups": true
-        }]
+        }],
+        "dot-notation": "off"
     }
 }
