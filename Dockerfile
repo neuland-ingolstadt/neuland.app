@@ -42,7 +42,7 @@ RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true --path-override 
 
 
 
-FROM node:16
+FROM node:18
 
 WORKDIR /opt/next
 
@@ -58,7 +58,8 @@ ARG NEXT_PUBLIC_THI_API_MODE $NEXT_PUBLIC_THI_API_MODE
 ENV NEXT_PUBLIC_THI_API_KEY $NEXT_PUBLIC_THI_API_KEY
 
 COPY rogue-thi-app/package.json rogue-thi-app/package-lock.json ./
-RUN npm install
+# OpenSSL legacy provider needed to build node-forge
+RUN NODE_OPTIONS=--openssl-legacy-provider npm install
 COPY rogue-thi-app/ .
 COPY --from=spo /opt/spo-grade-weights.json data/
 COPY --from=distances /opt/room-distances.json data/

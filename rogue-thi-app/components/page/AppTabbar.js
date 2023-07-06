@@ -15,6 +15,8 @@ import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
 
 import styles from '../../styles/AppTabbar.module.css'
 
+import { i18n } from 'next-i18next'
+
 /**
  * Tab bar to be displayed at the bottom of the screen.
  */
@@ -31,27 +33,27 @@ export default function AppTabbar () {
           <Nav.Item>
             <Nav.Link onClick={() => router.replace('/')} className={[styles.tab, router.pathname === '/' && styles.tabActive]}>
               <FontAwesomeIcon icon={faHome} className={styles.icon} />
-              Home
+              {i18n.t('cards.home')}
             </Nav.Link>
           </Nav.Item>
           {userKind !== USER_GUEST && (
             <Nav.Item>
               <Nav.Link onClick={() => router.replace('/timetable')} className={[styles.tab, router.pathname === '/timetable' && styles.tabActive]}>
                 <FontAwesomeIcon icon={faCalendar} className={styles.icon} />
-                Stundenplan
+                {i18n.t('cards.timetable')}
               </Nav.Link>
             </Nav.Item>
           )}
           <Nav.Item>
             <Nav.Link onClick={() => router.replace('/rooms')} className={[styles.tab, router.pathname === '/rooms' && styles.tabActive]}>
               <FontAwesomeIcon icon={faMap} className={styles.icon} />
-              Raumplan
+              {i18n.t('cards.rooms')}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
             <Nav.Link onClick={() => router.replace('/food')} className={[styles.tab, router.pathname === '/food' && styles.tabActive]}>
               <FontAwesomeIcon icon={faUtensils} className={styles.icon} />
-              Essen
+              {i18n.t('cards.mensa')}
             </Nav.Link>
           </Nav.Item>
         </Nav>

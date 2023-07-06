@@ -41,25 +41,39 @@
         },
         "suggestions": {
             "appbar": {
-                "title": "Raumvorschläge"
+                "title": "Raumvorschläge",
+                "overflow": {
+                    "suggestionPreferences": "Vorschlags-Präferenzen bearbeiten"
+                }
             },
             "noSuggestions": "Keine Vorschläge verfügbar.",
             "noAvailableRooms": "Keine freien Räume gefunden.",
             "gaps": {
                 "header": {
                     "general": "Freie Räume",
-                    "specific": "{{from}} <arrow/> {{until}}"
+                    "specific": "{{from}} <arrow/> {{until}} ({{room}})"
                 },
                 "subtitle": {
-                    "general": "Pause von {{from}} bis {{until}}",
-                    "specific": "Räume von {{from}} bis {{until}}"
+                    "general": "Räume bis {{until}} ({{duration}} Minuten)",
+                    "specific": "Pause von {{from}} bis {{until}}"
+                },
+                "now": "Jetzt"
+            },
+            "modals": {
+                "suggestionPreferences": {
+                    "title": "Vorschlags-Präferenzen",
+                    "description": "Hier kannst du die Dauer und Gebäude der Raumvorschläge anpassen.",
+                    "duration": "Dauer",
+                    "preferredBuildings": "Bevorzugte Gebäude",
+                    "minutes": "Minuten",
+                    "close": "Schließen"
                 }
             }
         },
         "list": {
-          "appbar": {
-            "title": "Stündlicher Raumplan"
-          }  
+            "appbar": {
+                "title": "Stündlicher Raumplan"
+            }
         },
         "common": {
             "availableFromUntil": "frei ab {{from}}<br />bis {{until}}"

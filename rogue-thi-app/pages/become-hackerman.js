@@ -9,6 +9,7 @@ import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 // somone could try bruteforcing these, but that way he wont learn how to hack ;)
 const FLAG_CSV = process.env.NEXT_PUBLIC_HACKERMAN_FLAGS || ''
@@ -120,3 +121,11 @@ export default function BecomeHackerman () {
     </AppContainer>
   )
 }
+
+export const getStaticProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale ?? 'en', [
+      'common'
+    ]))
+  }
+})

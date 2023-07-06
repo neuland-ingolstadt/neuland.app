@@ -30,7 +30,7 @@ export default function LanguageModal () {
     setShowLanguageModal(false)
     i18n.changeLanguage(languageKey)
     router.replace('/', '', { locale: i18n.language })
-    document.cookie = `NEXT_LOCALE=${i18n.language}; path=/`
+    document.cookie = `NEXT_LOCALE=${i18n.language}; path=/; expires=${new Date(Date.now() + 1000 * 60 * 60 * 24 * 365 * 5).toUTCString()}`
   }
 
   return (

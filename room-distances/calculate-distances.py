@@ -50,14 +50,14 @@ def main():
 
     # filter rooms by type where a room type is partly in 'Funktion'
     rooms = [room for room in all_rooms if any([room_type in str(room['properties']['Funktion']) for room_type in ROOM_TYPES])]
-    stairscases = [room for room in all_rooms if any([staircase_type in str(room['properties']['Funktion']) for staircase_type in STAIRCASE_TYPES])]
+    staircases = [room for room in all_rooms if any([staircase_type in str(room['properties']['Funktion']) for staircase_type in STAIRCASE_TYPES])]
 
     # add centers to rooms
     for room in rooms:
         room['center'] = calculate_center(room)
 
     # add centers to staircases
-    for staircase in stairscases:
+    for staircase in staircases:
         staircase['center'] = calculate_center(staircase)
 
     # calculate distances between rooms
@@ -78,14 +78,14 @@ def main():
             elif room['properties']['Gebaeude'] != room2['properties']['Gebaeude']:
                 total_distance = 0
                 # find nearest staircase
-                distance1, nearestStaircase1 = findNearestStaircase(room, stairscases)
+                distance1, nearestStaircase1 = findNearestStaircase(room, staircases)
                 total_distance += distance1
 
                 # add distance inside staircase (naive assumption)
                 total_distance += float(room['properties']['Ebene']) * 5
 
                 # find staircase in other building
-                distance2, nearestStaircase2 = findNearestStaircase(room2, stairscases)
+                distance2, nearestStaircase2 = findNearestStaircase(room2, staircases)
                 total_distance += distance2
 
                 # add distance inside staircase (naive assumption)
@@ -100,7 +100,7 @@ def main():
             elif room['properties']['Ebene'] != room2['properties']['Ebene']:
                 total_distance = 0
                 # find nearest staircase
-                staircase_distance, nearest_staircase = findNearestStaircase(room, stairscases)
+                staircase_distance, nearest_staircase = findNearestStaircase(room, staircases)
                 total_distance += staircase_distance
 
                 # add distance inside staircase (naive assumption)

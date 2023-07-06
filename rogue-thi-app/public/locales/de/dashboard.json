@@ -5,7 +5,9 @@
             "endingSoon": "endet in {{mins}} min",
             "ongoing": "endet um {{time}}",
             "startingSoon": "beginnt in {{mins}} min",
-            "future": "um"
+            "future": "um",
+            "noLectures": "Du hast heute keine Vorlesungen mehr.",
+            "error": "Fehler beim Abruf des Stundenplans."
         }
     },
     "food": {

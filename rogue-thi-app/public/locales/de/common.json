@@ -49,6 +49,7 @@
         }
     },
     "cards": {
+        "home": "Home",
         "install": "Installation",
         "timetable": "Stundenplan",
         "mensa": "Essen",
@@ -67,5 +68,8 @@
     "appbar": {
         "back": "Zurück",
         "overflow": "Mehr Optionen"
+    },
+    "rooms": {
+        "allRooms": "Alle Räume"
     }
 }

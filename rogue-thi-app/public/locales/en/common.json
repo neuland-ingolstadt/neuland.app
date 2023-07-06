@@ -49,9 +49,10 @@
         }
     },
     "cards": {
+        "home": "Home",
         "install": "Installation",
         "timetable": "Timetable",
-        "mensa": "Cafeteria",
+        "mensa": "Food",
         "mobility": "Mobility",
         "calendar": "Calendar",
         "events": "Events",
@@ -67,5 +68,8 @@
     "appbar": {
         "back": "Back",
         "overflow": "More options"
+    },
+    "rooms": {
+        "allRooms": "All rooms"
     }
 }
