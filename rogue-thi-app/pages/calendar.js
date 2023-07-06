@@ -86,7 +86,7 @@ export default function Calendar () {
           </Modal.Header>
           <Modal.Body>
             <strong>{t('calendar.modals.exams.type')}</strong>: {focusedExam && focusedExam.type}<br />
-            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.room || 'TBD')}<br />
+            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.rooms || 'TBD')}<br />
             <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.seat || 'TBD')}<br />
             <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
             <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && (focusedExam.notes || t('calendar.modals.exams.none'))}<br />
@@ -160,7 +160,7 @@ export default function Calendar () {
                           {' '}({formatFriendlyRelativeTime(item.date)})
                           <br />
                         </>}
-                        {t('calendar.modals.exams.room')}: {item.room || 'TBD'}<br />
+                        {t('calendar.modals.exams.room')}: {item.rooms || 'TBD'}<br />
                         {item.seat && `${t('calendar.modals.exams.seat')}: ${item.seat}`}
                       </div>
                     </div>

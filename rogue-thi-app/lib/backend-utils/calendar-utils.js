@@ -23,7 +23,7 @@ export async function loadExamList () {
     .map(exam => ({
       name: exam.titel,
       type: exam.pruefungs_art,
-      room: exam.exam_rooms,
+      rooms: exam.exam_rooms,
       seat: exam.exam_seat,
       notes: exam.anmerkung,
       examiners: exam.pruefer_namen,
