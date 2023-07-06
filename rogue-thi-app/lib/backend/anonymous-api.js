@@ -8,7 +8,7 @@ const CACHE_TTL = 10 * 60 * 1000
 
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_THI_API_MODE || 'websocket-proxy'
 const API_KEY = process.env.NEXT_PUBLIC_THI_API_KEY
-const ENDPOINT_HOST = 'hiplan.thi.de'
+const ENDPOINT_HOST = process.env.NEXT_PUBLIC_THI_API_HOST
 const ENDPOINT_URL = '/webservice/zits_s_40_test/index.php'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
