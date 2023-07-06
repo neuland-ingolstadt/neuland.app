@@ -15,7 +15,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate } from '../../lib/backend-utils/rooms-utils'
+import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, filterRooms, getNextValidDate, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 
@@ -24,7 +24,6 @@ import styles from '../../styles/RoomsSearch.module.css'
 import { Trans, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
 const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
 const TUX_ROOMS = ['G308']
 
@@ -32,7 +31,8 @@ export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
       'rooms',
-      'common'
+      'common',
+      'api-translations'
     ]))
   }
 })
@@ -58,6 +58,12 @@ export default function RoomSearch () {
    * Searches and displays rooms with the specified filters.
    */
   const filter = useCallback(async () => {
+    // when entering dates on desktop, for a short time the date is invalid (e.g. 2023-07-00) when the user is still typing
+    const validateDate = new Date(date)
+    if (isNaN(validateDate.getTime())) {
+      return
+    }
+
     setSearching(true)
     setFilterResults(null)
 
@@ -150,11 +156,11 @@ export default function RoomSearch () {
                 <ListGroup.Item key={idx} className={styles.item}>
                   <div className={styles.left}>
                     <Link href={`/rooms?highlight=${result.room}`}>
-                      {result.room}
+                      {getTranslatedRoomName(result.room)}
                     </Link>
                     {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                     <div className={styles.details}>
-                      {result.type}
+                      {getTranslatedRoomFunction(result.type)}
                     </div>
                   </div>
                   <div className={styles.right}>

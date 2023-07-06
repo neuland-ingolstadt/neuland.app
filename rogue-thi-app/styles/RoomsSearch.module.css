@@ -60,3 +60,8 @@
   margin-top: 75px;
   text-align: center;
 }
+
+.container {
+  margin: 10px 0px 15px 0px;
+  flex-wrap: wrap;
+}

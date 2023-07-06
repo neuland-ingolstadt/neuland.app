@@ -6,7 +6,7 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
-import { findSuggestedRooms, getEmptySuggestions } from '../../lib/backend-utils/rooms-utils'
+import { findSuggestedRooms, getEmptySuggestions, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
@@ -84,7 +84,7 @@ export default function RoomCard () {
                 <Link href={'/rooms/suggestions'}>
                   <div>
                     <div>
-                      {x.room}
+                      {getTranslatedRoomName(x.room)}
                     </div>
                     <div className="text-muted">
                       {t('rooms.text', { from: formatFriendlyTime(x.from), until: formatFriendlyTime(x.until) })}
