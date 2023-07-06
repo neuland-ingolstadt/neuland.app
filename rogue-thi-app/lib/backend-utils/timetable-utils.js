@@ -86,14 +86,12 @@ export async function getFriendlyTimetable (date, detailed) {
       const endDate = combineDateTime(x.date, x.bis)
 
       // normalize room order
-      let rooms
+      let rooms = []
       if (x.details.raum) {
         rooms = x.details.raum
           .split(',')
           .map(x => x.trim().toUpperCase())
           .sort()
-      } else {
-        rooms = []
       }
 
       return {
