@@ -47,7 +47,7 @@
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-utils": "^0.14.0",
     "sass": "^1.45.1",
-    "win95.css": "github:neuland-ingolstadt/win95.css#477a223",
+    "win95.css": "github:neuland-ingolstadt/win95.css#commit=477a22394b61b57b20ee2c3a83b769c9a6dc8e46",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

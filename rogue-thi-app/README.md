@@ -2,7 +2,18 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm install
+# or
+yarn
+```
+
+> **Note**
+> For node.js versions 17 and above, you need to set the environment variable `NODE_OPTIONS=--openssl-legacy-provider` to avoid an error when installing the dependencies.
+
+Run the development server:
 
 ```bash
 npm run dev
