@@ -3,11 +3,12 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 
+import { Trans, useTranslation } from 'next-i18next'
 import BaseCard from './BaseCard'
 import { FoodFilterContext } from '../../pages/_app'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
-import { useTranslation } from 'next-i18next'
+
 /**
  * Dashboard card for Mensa and Reimanns food plans.
  */
@@ -105,7 +106,11 @@ export default function FoodCard () {
             </ListGroup.Item>}
           {foodError &&
             <ListGroup.Item>
-              {t('food.error.generic')}
+              <Trans
+                i18nKey='food.error.generic'
+                ns='dashboard'
+                components={{ br: <br /> }}
+              />
             </ListGroup.Item>}
         </ListGroup>
       </ReactPlaceholder>
