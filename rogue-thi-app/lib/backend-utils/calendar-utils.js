@@ -29,7 +29,7 @@ export async function loadExamList () {
       examiners: exam.pruefer_namen,
       date: new Date(exam.exam_ts),
       enrollment: new Date(exam.anm_ts),
-      aids: exam.hilfsmittel.filter((v, i, a) => a.indexOf(v) === i)
+      aids: exam.hilfsmittel?.filter((v, i, a) => a.indexOf(v) === i) || []
     }))
     // sort list in chronologically order
     .sort((a, b) => a.date - b.date)
