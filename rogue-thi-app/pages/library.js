@@ -103,12 +103,28 @@ export default function Library () {
     load()
   }, [router])
 
+  /**
+   * Returns a list of available rooms where are more than 0 seats available.
+   * @returns {Array} List of available rooms
+   **/
+  function getAvailableRooms () {
+    return Object.entries(reservationTime.resources).map(([roomId, room], idx) => [roomId, room, idx]).filter(([, room]) => room.num_seats > 0)
+  }
+
+  /**
+   * Returns the first available room.
+   * @returns {string} Room ID
+   * */
+  function getFirstAvailableRoom () {
+    return getAvailableRooms()[0][0][0]
+  }
+
   return (
     <AppContainer>
       <AppNavbar title={t('library.title')} />
 
       <AppBody>
-        <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal}>
+        <Modal show={!!reservationDay && !!reservationTime} onHide={hideReservationModal} onShow={() => setReservationRoom(getFirstAvailableRoom())}>
           <Modal.Header closeButton>
             <Modal.Title>{t('library.modal.title')}</Modal.Title>
           </Modal.Header>
@@ -120,11 +136,11 @@ export default function Library () {
             <Form.Group>
               <Form.Label>{t('library.modal.details.location')}:</Form.Label>
               <Form.Control as="select" onChange={event => setReservationRoom(event.target.value)}>
-              {reservationTime && Object.entries(reservationTime.resources).map(([roomId, room], idx) =>
-                <option key={idx} value={roomId.toString()}>
-                  {room.room_name}
-                </option>
-              )}
+                {reservationTime && getAvailableRooms().map(([roomId, room, idx]) =>
+                  <option key={idx} value={roomId}>
+                    {room.room_name}
+                  </option>
+                )}
               </Form.Control>
             </Form.Group>
             <Form.Group>
@@ -195,12 +211,15 @@ export default function Library () {
           <ListGroup>
             {available && available.map((day, i) =>
               day.resource.map((time, j) =>
-
                 <ListGroup.Item key={i + '-' + j}>
-                  <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
-                    setReservationDay(day)
-                    setReservationTime(time)
-                  }}>{t('library.actions.reserve')}</Button>
+                  {Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0) > 0 &&
+                    <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
+                        setReservationDay(day)
+                        setReservationTime(time)
+                      }}>
+                      {t('library.actions.reserve')}
+                    </Button>
+                  }
 
                   {formatNearDate(time.from)}
                   {', '}
