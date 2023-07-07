@@ -205,7 +205,9 @@ export default function Timetable () {
                     </div>
                     <div className={styles.room}>
                       {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
-                        ? <Link key={i} href={`/rooms?highlight=${room}`} onClick={e => e.stopPropagation()}>{room}</Link>
+                        ? <Link key={i} href={`/rooms?highlight=${room}`}>
+                            <a onClick={e => e.stopPropagation()}>{room}</a>
+                          </Link>
                         : <span key={i}>{room}</span>
                       )}
                     </div>
