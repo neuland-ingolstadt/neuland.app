@@ -214,9 +214,9 @@ export default function Library () {
                 <ListGroup.Item key={i + '-' + j}>
                   {Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0) > 0 &&
                     <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
-                        setReservationDay(day)
-                        setReservationTime(time)
-                      }}>
+                      setReservationDay(day)
+                       setReservationTime(time)
+                    }}>
                       {t('library.actions.reserve')}
                     </Button>
                   }
