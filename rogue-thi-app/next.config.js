@@ -28,7 +28,8 @@ const permissionPolicyFeatures = [
 ]
 
 const isDev = process.env.NODE_ENV === 'development'
-const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
+const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
+const API_URL = 'https://' + process.env.NEXT_PUBLIC_THI_API_HOST
 
 module.exports = {
   i18n,
@@ -73,7 +74,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self' data: https://tile.openstreetmap.org;
               font-src 'self';
-              connect-src 'self' wss://proxy.neuland.app ${DEEPL_ENDPOINT};
+              connect-src 'self' ${PROXY_URL} ${API_URL};
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';

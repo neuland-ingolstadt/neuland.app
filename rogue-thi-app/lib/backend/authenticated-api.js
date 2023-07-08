@@ -67,11 +67,17 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         session,
         ...params
       })
-      if (res.status === 0) {
-        return res
-      } else {
+
+      // old status format
+      if (res.status !== 0) {
         throw new APIError(res.status, res.data)
       }
+      // new status format
+      if (res.data[0] !== 0) {
+        throw new APIError(res.data[0], res.data[1])
+      }
+
+      return res.data[1]
     })
   }
 
@@ -100,7 +106,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 
   async getFaculty () {
@@ -127,10 +133,9 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       })
 
       return {
-        semester: res.data[1],
-        holidays: res.data[2],
-        events: res.data[2],
-        timetable: res.data[3]
+        semester: res[0],
+        holidays: res[1],
+        timetable: res[2]
       }
     } catch (e) {
       // when the user did not select any classes, the timetable returns 'Query not possible'
@@ -149,10 +154,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       const res = await this.requestCached(KEY_GET_EXAMS, {
         service: 'thiapp',
         method: 'exams',
-        format: 'json'
+        format: 'json',
+        modus: '1' // what does this mean? if only we knew
       })
 
-      return res.data[1]
+      return res
     } catch (e) {
       // when you have no exams the API sometimes returns "No exam data available"
       if (e.data === 'No exam data available' || e.data === 'Query not possible') {
@@ -170,7 +176,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 
   async getMensaPlan () {
@@ -180,7 +186,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data
+    return res
   }
 
   /**
@@ -197,7 +203,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       year: 1900 + date.getYear()
     })
 
-    return res.data[1]
+    return res
   }
 
   async getCampusParkingData () {
@@ -207,7 +213,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data
+    return res
   }
 
   async getPersonalLecturers () {
@@ -217,7 +223,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 
   /**
@@ -234,7 +240,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       to
     })
 
-    return res.data[1]
+    return res
   }
 
   async getLibraryReservations () {
@@ -243,13 +249,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         service: 'thiapp',
         method: 'reservations',
         type: 1,
-        subtype: 1,
-        cmd: 'getreservation',
-        data: '',
+        cmd: 'getreservations',
         format: 'json'
       })
 
-      return res.data[1]
+      return res[1]
     } catch (e) {
       // as of 2021-06 the API returns "Service not available" when the user has no reservations
       // thus we dont alert the error here, but just silently set the reservations to none
@@ -262,17 +266,26 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
   }
 
   async getAvailableLibrarySeats () {
-    const res = await this.requestAuthenticated({
-      service: 'thiapp',
-      method: 'reservations',
-      type: 1,
-      subtype: 1,
-      cmd: 'getavailabilities',
-      data: '',
-      format: 'json'
-    })
+    try {
+      const res = await this.requestAuthenticated({
+        service: 'thiapp',
+        method: 'reservations',
+        type: 1,
+        subtype: 1,
+        cmd: 'getavailabilities',
+        format: 'json'
+      })
 
-    return res.data[1]
+      return res[1]
+    } catch (e) {
+      // Unbekannter Fehler means the user has already reserved a spot
+      // and can not reserve additional ones
+      if (e.data === 'Unbekannter Fehler') {
+        return []
+      } else {
+        throw e
+      }
+    }
   }
 
   /**
@@ -292,10 +305,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         to: end,
         place
       }),
+      dblslots: 0,
       format: 'json'
     })
 
-    return res.data[1][0]
+    return res[0]
   }
 
   /**
@@ -332,7 +346,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res.data[1]
+    return res
   }
 }
 

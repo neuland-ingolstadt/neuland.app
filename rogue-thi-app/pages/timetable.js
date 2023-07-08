@@ -48,13 +48,13 @@ export const getStaticProps = async ({ locale }) => ({
 function groupTimetableEntries (timetable) {
   // get all available dates and remove duplicates
   const dates = timetable
-    .map(x => x.datum)
+    .map(x => x.date)
     .filter((v, i, a) => a.indexOf(v) === i)
 
   // get events for each date
   const groups = dates.map(date => ({
     date,
-    items: timetable.filter(x => x.datum === date)
+    items: timetable.filter(x => x.date === date)
   }))
 
   return groups
@@ -205,7 +205,9 @@ export default function Timetable () {
                     </div>
                     <div className={styles.room}>
                       {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
-                        ? <Link key={i} href={`/rooms?highlight=${room}`} onClick={e => e.stopPropagation()}>{room}</Link>
+                        ? <Link key={i} href={`/rooms?highlight=${room}`}>
+                            <a onClick={e => e.stopPropagation()}>{room}</a>
+                          </Link>
                         : <span key={i}>{room}</span>
                       )}
                     </div>
@@ -341,41 +343,41 @@ export default function Timetable () {
           <Modal.Body>
             <h5>{t('timetable.modals.lectureDetails.general')}</h5>
             <p>
-              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>: {focusedEntry && focusedEntry.dozent}<br />
+              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>: {focusedEntry && focusedEntry.lecturer}<br />
               <strong>{t('timetable.modals.lectureDetails.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
-              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>: {focusedEntry && focusedEntry.pruefung}<br />
-              <strong>{t('timetable.modals.lectureDetails.courseOfStudies')}</strong>: {focusedEntry && focusedEntry.stg}<br />
-              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>: {focusedEntry && focusedEntry.stgru}<br />
+              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>: {focusedEntry && focusedEntry.exam}<br />
+              <strong>{t('timetable.modals.lectureDetails.courseOfStudies')}</strong>: {focusedEntry && focusedEntry.course}<br />
+              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>: {focusedEntry && focusedEntry.studyGroup}<br />
               <strong>{t('timetable.modals.lectureDetails.semesterWeeklyHours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
-              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>: {focusedEntry && focusedEntry.ectspoints}<br />
+              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>: {focusedEntry && focusedEntry.ects}<br />
             </p>
 
             <h5>{t('timetable.modals.lectureDetails.goal')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
-              {focusedEntry && focusedEntry.ziel && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.ziel) }}></div>
+              {focusedEntry && focusedEntry.objective && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.objective) }}></div>
               )}
-              {focusedEntry && !focusedEntry.ziel && (
+              {focusedEntry && !focusedEntry.objective && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
             <h5>{t('timetable.modals.lectureDetails.content')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
-              {focusedEntry && focusedEntry.inhalt && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.inhalt) }}></div>
+              {focusedEntry && focusedEntry.contents && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.contents) }}></div>
               )}
-              {focusedEntry && !focusedEntry.inhalt && (
+              {focusedEntry && !focusedEntry.contents && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>
 
             <h5>{t('timetable.modals.lectureDetails.literature')}</h5>
             <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
-              {focusedEntry && focusedEntry.literatur && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literatur) }}></div>
+              {focusedEntry && focusedEntry.literature && (
+                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literature) }}></div>
               )}
-              {focusedEntry && !focusedEntry.literatur && (
+              {focusedEntry && !focusedEntry.literature && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
               )}
             </ReactPlaceholder>

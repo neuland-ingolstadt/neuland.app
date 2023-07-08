@@ -75,16 +75,18 @@ export default function TimetableCard () {
             return (
               <ListGroup.Item key={i}>
                 <div>
-                  {getTimetableEntryName(x).shortName} in {x.raum}
+                  {getTimetableEntryName(x).shortName} in {x.rooms.join(', ')}
                 </div>
                 {text}
               </ListGroup.Item>
             )
-          })) ||
-            (timetable && timetable.length === 0 &&
-              <ListGroup.Item>{t('timetable.text.noLectures')}</ListGroup.Item>) ||
-            (timetableError &&
-              <ListGroup.Item>{t('timetable.text.error')}</ListGroup.Item>)}
+          }))}
+          {(timetable && timetable.length === 0) &&
+              <ListGroup.Item>{t('timetable.text.noLectures')}</ListGroup.Item>
+          }
+          {(timetableError &&
+              <ListGroup.Item>{t('timetable.text.error')}</ListGroup.Item>)
+          }
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>

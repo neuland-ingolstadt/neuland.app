@@ -204,8 +204,11 @@ export default function RoomSearch () {
    */
   function DurationButton ({ duration }) {
     const variant = (localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`) === `${duration}` ? 'primary' : 'outline-primary'
-    return <Button variant={variant} onClick={() => {
+    return <Button variant={variant} onClick={async () => {
       localStorage.setItem('suggestion-duration', duration)
+
+      const suggestions = await getSuggestions()
+      setSuggestions(suggestions)
     } }>
       <h3>
         {duration}

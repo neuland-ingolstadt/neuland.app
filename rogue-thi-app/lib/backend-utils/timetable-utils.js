@@ -1,4 +1,5 @@
 import API from '../backend/authenticated-api'
+import { combineDateTime } from '../date-utils'
 import { getNextValidDate } from './rooms-utils'
 
 /**
@@ -7,18 +8,18 @@ import { getNextValidDate } from './rooms-utils'
  * @returns {object}
  */
 export function getTimetableEntryName (item) {
-  const match = item.veranstaltung.match(/^[A-Z]{2}\S*/)
+  const match = item.shortName.match(/^[A-Z]{2}\S*/)
   if (match) {
     const [shortName] = match
     return {
-      name: item.fach,
+      name: item.name,
       shortName
     }
   } else {
     // fallback for weird entries like
     //    "veranstaltung": "„Richtige Studienorganisation und Prüfungsplanung“_durchgeführt von CSS und SCS",
     //    "fach": "fiktiv für Raumbelegung der Verwaltung E",
-    const name = `${item.veranstaltung} - ${item.fach}`
+    const name = `${item.shortName} - ${item.name}`
     const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
     return {
       name,
@@ -76,24 +77,40 @@ export async function getFriendlyTimetable (date, detailed) {
   const { timetable } = await API.getTimetable(date, detailed)
 
   return timetable
+    .flatMap(day =>
+      Object.values(day.hours)
+        .flatMap(hours => hours.map(hour => ({ date: day.date, ...hour })))
+    )
     .map(x => {
-      // parse dates
-      x.startDate = new Date(`${x.datum}T${x.von}`)
-      x.endDate = new Date(`${x.datum}T${x.bis}`)
+      const startDate = combineDateTime(x.date, x.von)
+      const endDate = combineDateTime(x.date, x.bis)
 
       // normalize room order
-      if (x.raum) {
-        x.rooms = x.raum
+      let rooms = []
+      if (x.details.raum) {
+        rooms = x.details.raum
           .split(',')
           .map(x => x.trim().toUpperCase())
           .sort()
-        x.raum = x.rooms.join(', ')
-      } else {
-        x.rooms = []
-        x.raum = ''
       }
 
-      return x
+      return {
+        date: x.date,
+        startDate,
+        endDate,
+        name: x.details.fach,
+        shortName: x.details.veranstaltung,
+        rooms,
+        lecturer: x.details.dozent,
+        exam: x.details.pruefung,
+        course: x.details.stg,
+        studyGroup: x.details.stgru,
+        sws: x.details.sws,
+        ects: x.details.ectspoints,
+        objective: x.details.ziel,
+        contents: x.details.inhalt,
+        literature: x.details.literatur
+      }
     })
     .filter(x => x.endDate > date)
     .sort((a, b) => a.startDate - b.startDate)
