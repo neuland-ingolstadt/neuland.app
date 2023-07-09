@@ -9,6 +9,7 @@ const IGNORE_GAPS = 15
 
 export const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
 export const BUILDINGS_ALL = 'Alle'
+export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 export const SUGGESTION_DURATION_PRESET = 90
 
@@ -85,7 +86,8 @@ export function getRoomOpenings (rooms, date) {
     .flatMap(stunde =>
       stunde.raeume
         .map(([,, room]) => ({
-          room,
+          // 0 indicates that every room is free
+          room: room === 0 ? ROOMS_ALL : room,
           type: stunde.type,
           from: new Date(stunde.von),
           until: new Date(stunde.bis)
@@ -284,7 +286,7 @@ export function getTranslatedRoomFunction (roomFunction) {
  */
 export function getTranslatedRoomName (room) {
   switch (room) {
-    case 'alle Räume':
+    case ROOMS_ALL:
       return i18n.t('rooms.allRooms', { ns: 'common' })
     default:
       return room

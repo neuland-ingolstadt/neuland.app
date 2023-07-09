@@ -14,6 +14,7 @@ import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
+import { ROOMS_ALL, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import API from '../../lib/backend/authenticated-api'
 
@@ -65,7 +66,7 @@ export default function RoomList () {
               }
             }
 
-            result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.map(([,, room]) => room)
+            result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.map(([,, room]) => room === 0 ? ROOMS_ALL : room)
           }))
 
           return result
@@ -108,7 +109,7 @@ export default function RoomList () {
                         {rooms.map((room, idx) =>
                           <span key={idx}>
                             <Link href={`/rooms?highlight=${room}`}>
-                              {room}
+                              {getTranslatedRoomName(room)}
                             </Link>
                             {TUX_ROOMS.includes(room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                             {idx === rooms.length - 1 ? '' : ', '}
