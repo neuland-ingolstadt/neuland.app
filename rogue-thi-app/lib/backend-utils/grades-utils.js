@@ -11,6 +11,7 @@ function simplifyName (x) {
  */
 async function getGradeList () {
   const gradeList = await API.getGrades()
+
   gradeList.forEach(x => {
     if (x.anrech === '*' && x.note === '') {
       x.note = 'E*'
@@ -29,11 +30,28 @@ async function getGradeList () {
 export async function loadGrades () {
   const gradeList = await getGradeList()
 
-  const deduplicatedGrades = gradeList
-    .filter((x, i) => x.ects || !gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
+  const duplicateGrades = gradeList.filter((x, i) => gradeList.some((y, j) => i !== j && x.titel.trim() === y.titel.trim()))
 
-  const finishedGrades = deduplicatedGrades.filter(x => x.note)
-  const missingGrades = deduplicatedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
+  // group by title and keep the one with the highest ECTS
+  const groupedDuplicates = duplicateGrades.reduce((acc, curr) => {
+    const existing = acc.find(x => x.titel.trim() === curr.titel.trim())
+    if (existing) {
+      if (existing.ects < curr.ects) {
+        existing.ects = curr.ects
+      }
+    } else {
+      acc.push(curr)
+    }
+    return acc
+  }, [])
+
+  const deduplicatedGrades = gradeList.filter(x => !groupedDuplicates.some(y => x.titel.trim() === y.titel.trim())).concat(groupedDuplicates)
+
+  // sort by original index
+  const sortedGrades = deduplicatedGrades.sort((a, b) => gradeList.indexOf(a) - gradeList.indexOf(b))
+
+  const finishedGrades = sortedGrades.filter(x => x.note)
+  const missingGrades = sortedGrades.filter(x => !finishedGrades.some(y => x.titel.trim() === y.titel.trim()))
 
   return {
     finished: finishedGrades,
