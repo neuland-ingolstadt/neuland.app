@@ -60,7 +60,8 @@
         "library": "Library",
         "grades": "Grades & Subjects",
         "personal": "Profile",
-        "lecturers": "Lecturers"
+        "lecturers": "Lecturers",
+        "exams": "Exams"
     },
     "prompts": {
         "close": "Close"

@@ -48,7 +48,11 @@
         "date": {
             "ends": "endet",
             "starts": "beginnt"
-        }
+        },
+        "exam": "Prüfung"
+    },
+    "exams": {
+        "title": "Prüfungen"
     },
     "events": {
         "title": "Veranstaltungen",

@@ -26,7 +26,7 @@ export default function CalendarCard () {
       try {
         exams = (await loadExamList())
           .filter(x => !!x.date) // remove exams without a date
-          .map(x => ({ name: `Prüfung ${x.titel}`, begin: x.date }))
+          .map(x => ({ name: `${t('calendar.exam')} ${x.titel}`, begin: x.date }))
       } catch (e) {
         if (e instanceof NoSessionError) {
           router.replace('/login')
@@ -43,7 +43,7 @@ export default function CalendarCard () {
       setMixedCalendar(combined)
     }
     load()
-  }, [router])
+  }, [router, t])
 
   return (
     <BaseCard

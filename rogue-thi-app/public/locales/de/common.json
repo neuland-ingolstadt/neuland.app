@@ -60,7 +60,8 @@
         "library": "Bibliothek",
         "grades": "Noten & Fächer",
         "personal": "Profil",
-        "lecturers": "Dozenten"
+        "lecturers": "Dozenten",
+        "exams": "Prüfungen"
     },
     "prompts": {
         "close": "Schließen"

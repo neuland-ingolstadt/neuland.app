@@ -75,6 +75,9 @@ export default function Calendar () {
     )
   }
 
+  const { focus } = router.query
+  const page = focus === 'exams' ? 1 : 0
+
   return (
     <AppContainer>
       <AppNavbar title={t('calendar.appbar.title')} />
@@ -105,7 +108,7 @@ export default function Calendar () {
           </Modal.Footer>
         </Modal>
 
-        <SwipeableTabs>
+        <SwipeableTabs defaultPage={page}>
           <SwipeableTab className={styles.tab} title={t('calendar.tabs.semester')}>
             <ListGroup variant="flush">
               {calendar.map((item, idx) =>
