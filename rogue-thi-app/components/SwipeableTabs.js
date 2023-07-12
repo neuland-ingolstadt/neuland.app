@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Nav from 'react-bootstrap/Nav'
 import SwipeableViews from 'react-swipeable-views'
 
 /**
- * A `Tabs`-like component that is swipable on mobile.
+ * A `Tabs`-like component that is swipeable on mobile.
  * @param {string} className Class name to attach to the entire object
  * @param {object} children Array of `SwipeableTab` objects
+ * @param {number} defaultPage Index of the tab to show by default
  */
-export default function SwipeableTabs ({ className, children }) {
-  const [page, setPage] = useState(0)
+export default function SwipeableTabs ({ className, children, defaultPage }) {
+  const [page, setPage] = useState(defaultPage || 0)
+
+  useEffect(() => {
+    setPage(defaultPage || 0)
+  }, [defaultPage])
 
   return (
     <div className={className}>
@@ -31,6 +36,7 @@ export default function SwipeableTabs ({ className, children }) {
 }
 SwipeableTabs.propTypes = {
   className: PropTypes.string,
+  defaultPage: PropTypes.number,
   children: PropTypes.any
 }
 

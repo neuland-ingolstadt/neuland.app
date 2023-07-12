@@ -1,6 +1,7 @@
 import BaseCard from './cards/BaseCard'
 import CalendarCard from './cards/CalendarCard'
 import EventsCard from './cards/EventsCard'
+import ExamsCard from './cards/ExamsCard'
 import FoodCard from './cards/FoodCard'
 import InstallPrompt from './cards/InstallPrompt'
 import MobilityCard from './cards/MobilityCard'
@@ -29,6 +30,12 @@ export const ALL_DASHBOARD_CARDS = [
         onHide={() => hidePromptCard('install')}
       />
     )
+  },
+  {
+    key: 'exams',
+    removable: true,
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
+    card: () => <ExamsCard key="exams" />
   },
   {
     key: 'timetable',
