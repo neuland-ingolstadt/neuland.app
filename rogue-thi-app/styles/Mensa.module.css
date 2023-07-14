@@ -14,14 +14,23 @@
 }
 
 .kindHeader {
-  margin-top: 10px;
+  color: var(--secondary);
+  font-size: 1.1rem;
+}
+
+.meals {
+  padding-bottom: 15px;
+}
+
+.nav {
+  padding-bottom: 15px;
 }
 
 .details {
-  flex: 1;
+  margin-left: 5px;
   color: gray;
   text-align: right;
-  align-self: flex-end;
+  align-self: flex-start;
 }
 
 .restaurant {
@@ -61,4 +70,20 @@
 .translated {
   color: var(--primary);
   font-size: .8rem;
+}
+
+.variations {
+  margin-top: 10px;
+}
+
+.variation {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.item {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
