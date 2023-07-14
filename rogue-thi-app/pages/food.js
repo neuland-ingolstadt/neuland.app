@@ -261,7 +261,7 @@ export default function Mensa () {
             {canisiusSalads.length > 0 && (
               <>
                 {canisiusFood.length > 0 && (
-                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
+                  <h5 className={styles.kindHeader}>{t('list.titles.salads')}</h5>
                 )}
                 <ListGroup>
                   {canisiusSalads.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
