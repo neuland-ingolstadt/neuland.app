@@ -17,7 +17,7 @@
                     "de": "Hähnchenstreifen",
                     "en": "Chicken strips"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 2.0,
                     "student": 2.0,
@@ -96,7 +96,7 @@
                     "de": "Hähnchenstreifen",
                     "en": "Chicken strips"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 2.0,
                     "student": 2.0,
@@ -108,7 +108,7 @@
                     "de": "Thunfisch",
                     "en": "Tuna"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 2.0,
                     "student": 2.0,
@@ -120,7 +120,7 @@
                     "de": "Ei",
                     "en": "Egg"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 0.7,
                     "student": 0.7,
@@ -132,7 +132,7 @@
                     "de": "Mozzarellakugeln",
                     "en": "Mozzarella balls"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 1.8,
                     "student": 1.8,
@@ -144,7 +144,7 @@
                     "de": "Feta Käse",
                     "en": "Feta cheese"
                 },
-                "type": "addition",
+                "additional": true,
                 "prices": {
                     "employee": 1.8,
                     "student": 1.8,

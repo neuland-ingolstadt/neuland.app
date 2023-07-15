@@ -156,7 +156,7 @@ export default function Mensa () {
             </div>
 
             <div className={styles.details}>
-              {`${variant.type === 'addition' ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
+              {`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
             </div>
           </div>
 

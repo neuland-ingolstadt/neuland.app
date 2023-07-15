@@ -67,3 +67,28 @@ export async function loadFoodEntries (restaurants) {
     }
   })
 }
+
+/**
+ * Unifies the meal plan entries to a common format
+ * @param {object[]} entries Meal plan entries
+ * @returns {object[]} Unified meal plan entries
+ */
+export function unifyFoodEntries (entries) {
+  return entries.map(entry => ({
+    timestamp: entry.timestamp,
+    meals: entry.meals.map(meal => ({
+      name: meal.name,
+      category: meal.category,
+      prices: meal.prices || {
+        student: null,
+        employee: null,
+        guest: null
+      },
+      allergens: meal.allergens || null,
+      flags: meal.flags || [],
+      nutrition: meal.nutrition || null,
+      variations: meal.variations || [],
+      originalLanguage: meal.originalLanguage || 'de'
+    }))
+  }))
+}
