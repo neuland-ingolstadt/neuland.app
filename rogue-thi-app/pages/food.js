@@ -191,18 +191,20 @@ export default function Mensa () {
           </div>
 
           <div>
-            <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-              {!meal.allergens && t('warning.unknownIngredients.text')}
+            <span className={styles.indicator}>
+              {/* {!meal.allergens && t('warning.unknownIngredients.text')} */}
               {containsSelectedAllergen(meal.allergens) && (
-                <span>
-                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} color={COLOR_WARN} />
+                <span className={`${styles.box} ${styles.warn}`}>
+                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle}/>
                   {' '}
+                  {t('preferences.warn')}
                 </span>
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
-                <span>
-                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} color={COLOR_GOOD} />
+                <span className={`${styles.box} ${styles.match}`}>
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck}/>
                   {' '}
+                  {t('preferences.match')}
                 </span>
               )}
               {meal.flags && meal.flags.map(flag => flagMap[flag]?.[currentLocale]).join(', ')}
@@ -357,6 +359,8 @@ export default function Mensa () {
           </Modal.Header>
 
           <Modal.Body>
+            <h4 className={styles.modalTitle}>{showMealDetails?.name[i18n.languages[0]]}</h4>
+
             <h5>{t('foodModal.flags.title')}</h5>
             {showMealDetails?.flags === null && `${t('foodModal.flags.unkown')}`}
             {showMealDetails?.flags?.length === 0 && `${t('foodModal.flags.empty')}`}

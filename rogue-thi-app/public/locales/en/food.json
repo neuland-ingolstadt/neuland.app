@@ -7,7 +7,9 @@
     },
     "filter": "Filter",
     "preferences": {
-        "iconTitle": "Preferred Food"
+        "iconTitle": "Preferred Food",
+        "match": "Match",
+        "warn": "Allergies"
     },
     "list": {
         "titles": {

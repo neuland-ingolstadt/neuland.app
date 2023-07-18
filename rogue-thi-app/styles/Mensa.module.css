@@ -87,3 +87,36 @@
   padding-top: 15px;
   padding-bottom: 15px;
 }
+
+.box {
+  color: var(--white);
+  background-color: var(--secondary);
+  padding: 2px 6px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.warn {
+  color: var(--white);
+  background-color: var(--danger);
+}
+
+.match {
+  color: var(--white);
+  background-color: var(--success);
+}
+
+.name {
+  max-lines: 2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+          line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.modalTitle {
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 3px solid var(--primary);
+}
