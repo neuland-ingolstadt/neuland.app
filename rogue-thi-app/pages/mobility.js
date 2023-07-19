@@ -117,7 +117,7 @@ export default function Bus () {
           <ReactPlaceholder type="text" rows={10} ready={data || dataError}>
             {dataError && (
               <ListGroup.Item className={styles.mobilityItem}>
-                {t('transport.error')}<br />
+                {t('transport.error.retrieval')}<br />
                 {dataError}
               </ListGroup.Item>
             )}
