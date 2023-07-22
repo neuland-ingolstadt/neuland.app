@@ -31,12 +31,12 @@
         "header": "Erläuterung",
         "flags": {
             "title": "Anmerkungen",
-            "unkown": "Unbekannt",
+            "unknown": "Unbekannt",
             "empty": "Keine Anmerkungen vorhanden."
         },
         "allergens": {
             "title": "Allergene",
-            "unkown": "Unbekannt",
+            "unknown": "Unbekannt",
             "empty": "Keine Allergene vorhanden.",
             "fallback" : "Unbekannt (Das ist schlecht)"
         },
@@ -54,7 +54,7 @@
             "fiber.title": "Ballaststoffe",
             "protein.title": "Eiweiß",
             "salt.title": "Salz",
-            "unkown.title": "Unbekannt."
+            "unknown.title": "Unbekannt."
         },
         "prices": {
             "title": "Preise",
