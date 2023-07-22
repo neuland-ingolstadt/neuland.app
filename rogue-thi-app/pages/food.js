@@ -172,6 +172,9 @@ export default function Mensa () {
    * @returns {JSX.Element}
    */
   function renderMealEntry (meal, key) {
+    const userAllergens = meal.allergens && meal.allergens.filter(x => allergenSelection[x]).map(x => allergenMap[x]?.[currentLocale])
+    const userPreferences = meal.flags && meal.flags.filter(x => preferencesSelection[x] || ['veg', 'V'].includes(x))?.map(x => flagMap[x]?.[currentLocale])
+
     return (
       <ListGroup.Item
         key={key}
@@ -191,26 +194,24 @@ export default function Mensa () {
           </div>
 
           <div>
-            <span className={styles.indicator}>
+            <div className={styles.indicator}>
               {/* {!meal.allergens && t('warning.unknownIngredients.text')} */}
               {containsSelectedAllergen(meal.allergens) && (
                 <span className={`${styles.box} ${styles.warn}`}>
-                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle}/>
-                  {' '}
+                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} className={styles.icon}/>
                   {t('preferences.warn')}
                 </span>
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
                 <span className={`${styles.box} ${styles.match}`}>
-                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck}/>
-                  {' '}
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} className={styles.icon}/>
                   {t('preferences.match')}
                 </span>
               )}
-              {meal.flags && meal.flags.map(flag => flagMap[flag]?.[currentLocale]).join(', ')}
-              {meal.flags?.length > 0 && meal.allergens?.length > 0 && '; '}
-              {meal.allergens && meal.allergens.join(', ')}
-            </span>
+              {userPreferences?.join(', ')}
+              {userPreferences?.length > 0 && userAllergens?.length > 0 && ' • '}
+              {userAllergens?.join(', ')}
+            </div>
           </div>
         </div>
 
