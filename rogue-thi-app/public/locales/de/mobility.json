@@ -22,7 +22,7 @@
             "train": "Bahn ({{station}})",
             "parking": "Parkplätze",
             "charging": "Ladestationen",
-            "unkown": "Mobilität"
+            "unknown": "Mobilität"
         },
         "details": {
             "charging": {

@@ -322,7 +322,7 @@ export default function Mensa () {
 
           <Modal.Body>
             <h5>{t('foodModal.flags.title')}</h5>
-            {showMealDetails?.flags === null && `${t('foodModal.flags.unkown')}`}
+            {showMealDetails?.flags === null && `${t('foodModal.flags.unknown')}`}
             {showMealDetails?.flags?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.flags?.map(flag => (
@@ -341,7 +341,7 @@ export default function Mensa () {
             </ul>
 
             <h5>{t('foodModal.allergens.title')}</h5>
-            {showMealDetails?.allergens === null && `${t('foodModal.allergens.unkown')}`}
+            {showMealDetails?.allergens === null && `${t('foodModal.allergens.unknown')}`}
             {showMealDetails?.allergens?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.allergens?.map(key => (
@@ -393,7 +393,7 @@ export default function Mensa () {
                   {formatGram(showMealDetails?.nutrition.salt)}
                 </li>
               </ul>)) || (
-              <p>{t('foodModal.nutrition.unkown.title')}</p>
+              <p>{t('foodModal.nutrition.unknown.title')}</p>
             )}
 
             <h5>{t('foodModal.prices.title')}</h5>
