@@ -32,12 +32,12 @@
         "header": "Details",
         "flags": {
             "title": "Notes",
-            "unkown": "Unknown",
+            "unknown": "Unknown",
             "empty": "No notes available"
         },
         "allergens": {
             "title": "Allergens",
-            "unkown": "Unknown",
+            "unknown": "Unknown",
             "empty": "No allergens present",
             "fallback": "Unknown (This is bad)"
         },
@@ -55,7 +55,7 @@
             "fiber.title": "Fiber",
             "protein.title": "Protein",
             "salt.title": "Salt",
-            "unkown.title": "Unknown"
+            "unknown.title": "Unknown"
         },
         "prices": {
             "title": "Prices",
