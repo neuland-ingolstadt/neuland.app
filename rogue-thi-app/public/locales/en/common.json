@@ -14,6 +14,7 @@
                 "title": "Restaurants",
                 "showMensa": "Show Cafeteria",
                 "showReimanns": "Show Reimanns",
+                "showReimannsStatic": "Show Reimanns (static meals)",
                 "showCanisius": "Show Canisius Convict"
             },
             "allergens": {

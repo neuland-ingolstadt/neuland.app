@@ -18,7 +18,7 @@ export async function loadFoodEntries (restaurants) {
     entries.push(data)
   }
 
-  if (restaurants.includes('reimanns')) {
+  if (restaurants.some(x => ['reimanns', 'reimanns-static'].includes(x))) {
     const data = await NeulandAPI.getReimannsPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
@@ -88,7 +88,8 @@ export function unifyFoodEntries (entries) {
       flags: meal.flags || [],
       nutrition: meal.nutrition || null,
       variations: meal.variations || [],
-      originalLanguage: meal.originalLanguage || 'de'
+      originalLanguage: meal.originalLanguage || 'de',
+      static: meal.static || false
     }))
   }))
 }
