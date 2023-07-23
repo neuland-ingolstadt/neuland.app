@@ -90,23 +90,23 @@
 
 .box {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--secondary) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--secondary) 30%, #ffffff00 70%));
+  background-image: linear-gradient(70deg, color-mix(in srgb, var(--secondary) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--secondary) 30%, color-mix(in srgb, var(--gray) 20%, #ffffff00 80%) 70%));
   padding: 4px 8px 5px 8px;
   border-radius: 5px;
   border: 1px solid var(--secondary);
-  margin: 10px 7px 5px 0;
+  margin: 10px 10px 5px 0;
   display: inline-block;
 }
 
 .warn {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--danger) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--danger) 30%, #ffffff00 70%));
+  background-image: linear-gradient(70deg, color-mix(in srgb, var(--danger) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--danger) 30%, color-mix(in srgb, var(--gray) 20%, #ffffff00 80%) 70%));
   border: 1px solid var(--danger);
 }
 
 .match {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--success) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--success) 30%, #ffffff00 70%));
+  background-image: linear-gradient(70deg, color-mix(in srgb, var(--success) 50%, #ffffff00 50%) 30%, color-mix(in srgb, var(--success) 30%, color-mix(in srgb, var(--gray) 20%, #ffffff00 80%) 70%));
   border: 1px solid var(--success);
 }
 
