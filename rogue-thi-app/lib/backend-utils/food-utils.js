@@ -1,6 +1,8 @@
 import { formatISODate, getAdjustedDay, getMonday } from '../date-utils'
 import NeulandAPI from '../backend/neuland-api'
 
+import flagContradictions from '../../data/flag-contradictions.json'
+
 /**
  * Fetches and parses the meal plan
  * @param {string[]} restaurants Requested restaurants
@@ -69,6 +71,21 @@ export async function loadFoodEntries (restaurants) {
 }
 
 /**
+ * Cleans the meal flags to remove wrong flags (e.g. "veg" (vegan) and "R" (Beef) at the same time => remove "veg")
+ * @param {string[]} flags Meal flags
+ * @returns {string[]} Cleaned meal flags
+ **/
+function cleanMealFlags (flags) {
+  // find contradictions
+  const contradictions = flags?.filter(x => flagContradictions[x]?.some(y => flags?.includes(y))) || []
+
+  // remove contradictions
+  flags = flags?.filter(x => !contradictions.includes(x)) || []
+
+  return flags
+}
+
+/**
  * Unifies the meal plan entries to a common format
  * @param {object[]} entries Meal plan entries
  * @returns {object[]} Unified meal plan entries
@@ -85,7 +102,7 @@ export function unifyFoodEntries (entries) {
         guest: null
       },
       allergens: meal.allergens || null,
-      flags: meal.flags || [],
+      flags: cleanMealFlags(meal.flags) || [],
       nutrition: meal.nutrition || null,
       variations: meal.variations || [],
       originalLanguage: meal.originalLanguage || 'de',

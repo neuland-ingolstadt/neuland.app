@@ -106,6 +106,7 @@ export default async function handler (req, res) {
       const scrapedMeals = await translateMeals(mealPlan)
 
       // add static meals (no need to translate)
+      // TODO: add allergens, flags, nutrition (ask Reimanns for data)
       scrapedMeals.forEach(day => {
         day.meals.push(...staticMeals)
       })
