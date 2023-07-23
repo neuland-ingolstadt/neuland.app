@@ -20,7 +20,7 @@
 }
 
 .today .heading {
-  color: var(--primary-color, #8845ef) !important;
+  color: var(--primary, #8845ef) !important;
 }
 
 .day .heading .date {

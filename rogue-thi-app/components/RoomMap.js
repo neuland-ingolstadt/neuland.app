@@ -179,13 +179,6 @@ export default function RoomMap ({ highlight, roomData }) {
 
     const special = SPECIAL_ROOMS[entry.properties.Raum]
 
-    let color = '#6c757d'
-    if (special) {
-      color = special.color
-    } else if (avail) {
-      color = '#8845ef'
-    }
-
     return (
       <FeatureGroup key={key}>
         <Popup>
@@ -213,7 +206,7 @@ export default function RoomMap ({ highlight, roomData }) {
           positions={entry.coordinates}
           pathOptions={{
             ...entry.options,
-            color
+            className: special ? special.color : (avail ? styles.roomAvailable : styles.roomOccupied)
           }}
         />
       </FeatureGroup>
