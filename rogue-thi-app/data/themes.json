@@ -1,6 +1,7 @@
 [
     { "name": { "en": "Automatic", "de": "Automatisch" }, "style": "default" },
     { "name": { "en": "Light", "de": "Hell" }, "style": "light" },
+    { "name": { "en": "THI Light", "de": "THI Hell" }, "style": "thi-light" },
     { "name": { "en": "Dark", "de": "Dunkel" }, "style": "dark" },
     { "name": { "en": "Barbie & Ken", "de": "Barbie & Ken" }, "style": "barbie" },
     { "name": { "en": "Retro", "de": "Retro" }, "style": "retro" },

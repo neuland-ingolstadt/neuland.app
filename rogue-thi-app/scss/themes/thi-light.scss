@@ -1,0 +1,24 @@
+$theme-colors: (
+  "primary": #005a9b,
+  "secondary": #009bcd
+);
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
+
+// react-placeholder
+// declare after bootstrap, since we need bootstrap variables
+.text-row, .rect-shape, .round-shape {
+  background: $gray-200 !important;
+}
+
+:root {
+  --navbar-border-image: linear-gradient(90deg, #005a9b, #228cc1, #3a93c3, #6fa2c7, #31ccff);
+  --tabbar-tab-active: #005a9b;
+  // --navbar-border-image: none;
+}
+
+
+.navbar-brand > * {
+  color: #025b9c !important;
+  font-weight: bold !important;
+}
