@@ -58,7 +58,7 @@
   cursor: pointer;
 }
 .mapContainer :global(.leaflet-control-layers input:checked + span) {
-  background-color: var(--primary-color, #8845ef);
+  background-color: var(--primary, #8845ef);
   color: var(--inverted-font-color, #ffffff);
 }
 
@@ -74,6 +74,17 @@
   margin-bottom: -2px;
   border-radius: 0.5em;
   background-color: #8845ef;
+}
+
+.roomAvailable {
+  fill: var(--primary);
+  fill-opacity: 0.4;
+  stroke: var(--primary);
+}
+
+.roomOccupied {
+  fill: var(--gray);
+  stroke: var(--gray);
 }
 
 .legendTaken::before {
