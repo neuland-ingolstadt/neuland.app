@@ -11,7 +11,7 @@ You should know how to program in object oriented languages. Prior experience wi
 You need to install the necessary tools.
 
 * [Git](https://git-scm.com/downloads)
-* [Node.js 14 LTS](https://nodejs.org/en/)
+* [Node.js 18 LTS](https://nodejs.org/en/)
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [ESLint for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
