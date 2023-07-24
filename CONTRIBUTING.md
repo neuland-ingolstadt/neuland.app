@@ -28,7 +28,12 @@ cd THI-App/rogue-thi-app
 Download everything else that is required to run the app:
 ```bash
 npm install
+# or
+yarn
 ```
+
+> **Note**
+> For node.js versions 17 and above, you need to set the environment variable `NODE_OPTIONS=--openssl-legacy-provider` to avoid an error when installing the dependencies.
 
 Now open the `rogue-thi-app` folder in Visual Studio Code.
 
@@ -37,6 +42,8 @@ Now open the `rogue-thi-app` folder in Visual Studio Code.
 Start the application locally:
 ```bash
 npm run dev
+# or
+yarn dev
 ```
 
 Go to https://localhost:3000 in your browser and voilà, you're ready to go. You can change things in your code and your browser will automatically load the new version.
