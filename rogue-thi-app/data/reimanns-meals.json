@@ -1,0 +1,160 @@
+[
+    {
+        "category": "Essen",
+        "static": true,
+        "name": {
+            "de": "Thai Curry",
+            "en": "Thai Curry"
+        },
+        "originalLanguage": "de",
+        "prices": {
+            "employee": 5.2,
+            "student": 5.2,
+            "guest": 5.2
+        },
+        "variations": [
+            {
+                "name": {
+                    "de": "Hähnchenstreifen",
+                    "en": "Chicken strips"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 2.0,
+                    "student": 2.0,
+                    "guest": 2.0
+                }
+            }
+        ]
+    },
+    {
+        "category": "Essen",
+        "static": true,
+        "name": {
+            "de": "Beef Burger",
+            "en": "Beef Burger"
+        },
+        "originalLanguage": "de",
+        "prices": {
+            "employee": 5.8,
+            "student": 5.8,
+            "guest": 5.8
+        },
+        "variations": [
+            {
+                "name": {
+                    "de": "Menü mit Pommes und Getränk",
+                    "en": "Menu with fries and drink"
+                },
+                "prices": {
+                    "employee": 8.7,
+                    "student": 8.7,
+                    "guest": 8.7
+                }
+            }
+        ]
+    },
+    {
+        "category": "Essen",
+        "static": true,
+        "name": {
+            "de": "Currywurst",
+            "en": "Currywurst"
+        },
+        "originalLanguage": "de",
+        "prices": {
+            "employee": 3.5,
+            "student": 3.5,
+            "guest": 3.5
+        },
+        "variations": [
+            {
+                "name": {
+                    "de": "Menü mit Pommes und Getränk",
+                    "en": "Menu with fries and drink"
+                },
+                "prices": {
+                    "employee": 6.5,
+                    "student": 6.5,
+                    "guest": 6.5
+                }
+            }
+        ]
+    },
+    {
+        "static": true,
+        "category": "Salat",
+        "name": {
+            "de": "Großer gemischter Salat",
+            "en": "Large mixed salad"
+        },
+        "originalLanguage": "de",
+        "prices": {
+            "employee": 3.5,
+            "student": 3.5,
+            "guest": 3.5
+        },
+        "variations": [
+            {
+                "name": {
+                    "de": "Hähnchenstreifen",
+                    "en": "Chicken strips"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 2.0,
+                    "student": 2.0,
+                    "guest": 2.0
+                }
+            },
+            {
+                "name": {
+                    "de": "Thunfisch",
+                    "en": "Tuna"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 2.0,
+                    "student": 2.0,
+                    "guest": 2.0
+                }
+            },
+            {
+                "name": {
+                    "de": "Ei",
+                    "en": "Egg"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 0.7,
+                    "student": 0.7,
+                    "guest": 0.7
+                }
+            },
+            {
+                "name": {
+                    "de": "Mozzarellakugeln",
+                    "en": "Mozzarella balls"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 1.8,
+                    "student": 1.8,
+                    "guest": 1.8
+                }
+            },
+            {
+                "name": {
+                    "de": "Feta Käse",
+                    "en": "Feta cheese"
+                },
+                "additional": true,
+                "prices": {
+                    "employee": 1.8,
+                    "student": 1.8,
+                    "guest": 1.8
+                }
+            }
+        ]
+    }
+]

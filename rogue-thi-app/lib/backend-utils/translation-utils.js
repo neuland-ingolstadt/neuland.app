@@ -4,6 +4,7 @@ import AsyncMemoryCache from '../cache/async-memory-cache'
 const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY || ''
 const ENABLE_DEV_TRANSLATIONS = process.env.ENABLE_DEV_TRANSLATIONS === 'true' || false
+const DISABLE_FALLBACK_WARNINGS = process.env.DISABLE_FALLBACK_WARNINGS === 'true' || false
 
 const CACHE_TTL = 60 * 60 * 24 * 7 * 1000 // 7 days
 
@@ -37,7 +38,7 @@ async function translate (text, target) {
     return (await translator.translateText(text, SOURCE_LANG, target)).text
   } catch (err) {
     console.error(err)
-    return isDev ? `FALLBACK: ${text}` : text
+    return isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${text}` : text
   }
 }
 
@@ -53,7 +54,7 @@ function translateFallback (meals) {
         ...meal,
         name: {
           de: meal.name,
-          en: isDev ? `FALLBACK: ${meal.name}` : meal.name
+          en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${meal.name}` : meal.name
         },
         originalLanguage: 'de'
       }

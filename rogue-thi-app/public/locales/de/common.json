@@ -14,6 +14,7 @@
                 "title": "Restaurants",
                 "showMensa": "Mensa anzeigen",
                 "showReimanns": "Reimanns anzeigen",
+                "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
                 "showCanisius": "Canisiuskonvikt anzeigen"
             },
             "allergens": {

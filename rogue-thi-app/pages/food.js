@@ -140,12 +140,41 @@ export default function Mensa () {
   }
 
   /**
+   * Renders the variations of a meal in a list.
+   * @param {object} meal
+   * @returns {JSX.Element}
+   **/
+  function renderFoodVariations (meal) {
+    return meal?.variations?.length > 0 && (<ListGroup className={styles.variations}>
+      {meal?.variations?.map((variant, idx) => (
+        <ListGroup.Item
+          key={idx}
+        >
+          <div className={styles.variation}>
+            <div className={styles.name}>
+              {variant.name[i18n.languages[0]]}
+            </div>
+
+            <div className={styles.details}>
+              {`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
+            </div>
+          </div>
+
+        </ListGroup.Item>
+      ))}
+    </ListGroup>)
+  }
+
+  /**
    * Renders a meal entry.
    * @param {object} meal
    * @param {any} key
    * @returns {JSX.Element}
    */
   function renderMealEntry (meal, key) {
+    const userAllergens = meal.allergens && meal.allergens.filter(x => allergenSelection[x]).map(x => allergenMap[x]?.[currentLocale])
+    const userPreferences = meal.flags && meal.flags.filter(x => preferencesSelection[x] || ['veg', 'V'].includes(x))?.map(x => flagMap[x]?.[currentLocale])
+
     return (
       <ListGroup.Item
         key={key}
@@ -154,39 +183,40 @@ export default function Mensa () {
         action
       >
         <div>
-          <div className={styles.name}>
-            {/* {isTranslated(meal) && (
-                <>
-                  <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
-                  {' '}
-                </>
-            )} */}
-            {meal.name[i18n.languages[0]]}
+          <div className={styles.variation}>
+            <div className={styles.name}>
+              {meal.name[i18n.languages[0]]}
+            </div>
+
+            <div className={styles.details}>
+              {getUserSpecificPrice(meal)}
+            </div>
           </div>
-          <div className={styles.room}>
-            <span className={styles.indicator} style={{ color: containsSelectedAllergen(meal.allergens) && COLOR_WARN }}>
-              {!meal.allergens && t('warning.unknownIngredients.text')}
+
+          <div>
+            <div className={styles.indicator}>
+              {/* {!meal.allergens && t('warning.unknownIngredients.text')} */}
               {containsSelectedAllergen(meal.allergens) && (
-                <span>
-                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} color={COLOR_WARN} />
-                  {' '}
+                <span className={`${styles.box} ${styles.warn}`}>
+                  <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} className={styles.icon}/>
+                  {t('preferences.warn')}
                 </span>
               )}
               {!containsSelectedAllergen(meal.allergens) && containsSelectedPreference(meal.flags) && (
-                <span>
-                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} color={COLOR_GOOD} />
-                  {' '}
+                <span className={`${styles.box} ${styles.match}`}>
+                  <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} className={styles.icon}/>
+                  {t('preferences.match')}
                 </span>
               )}
-              {meal.flags && meal.flags.map(flag => flagMap[flag]?.[currentLocale]).join(', ')}
-              {meal.flags?.length > 0 && meal.allergens?.length > 0 && '; '}
-              {meal.allergens && meal.allergens.join(', ')}
-            </span>
+              {userPreferences?.join(', ')}
+              {userPreferences?.length > 0 && userAllergens?.length > 0 && ' • '}
+              {userAllergens?.join(', ')}
+            </div>
           </div>
         </div>
-        <div className={styles.details}>
-          {getUserSpecificPrice(meal)}
-        </div>
+
+        {/* Variations of meal */}
+        {renderFoodVariations(meal)}
       </ListGroup.Item>
     )
   }
@@ -198,13 +228,19 @@ export default function Mensa () {
    * @returns {JSX.Element}
    */
   function renderMealDay (day, key) {
+    const includeStaticReimanns = selectedRestaurants.includes('reimanns-static')
+
     const mensa = day.meals.filter(x => x.restaurant === 'Mensa')
-    const mensaSoups = day.meals.filter(x => x.restaurant === 'Mensa' && x.category === 'Suppe')
-    const mensaFood = day.meals.filter(x => x.restaurant === 'Mensa' && x.category !== 'Suppe')
-    const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns')
+    const mensaSoups = mensa.filter(x => x.category === 'Suppe')
+    const mensaFood = mensa.filter(x => x.category !== 'Suppe')
+
+    const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns').filter(x => !x.static || x.static === includeStaticReimanns)
+    const reimannsFood = reimanns.filter(x => x.category !== 'Salat')
+    const reimannsSalad = reimanns.filter(x => x.category === 'Salat')
+
     const canisius = day.meals.filter(x => x.restaurant === 'Canisius')
-    const canisiusSalads = day.meals.filter(x => x.restaurant === 'Canisius' && x.category === 'Salat')
-    const canisiusFood = day.meals.filter(x => x.restaurant === 'Canisius' && x.category !== 'Salat')
+    const canisiusSalads = canisius.filter(x => x.category === 'Salat')
+    const canisiusFood = canisius.filter(x => x.category !== 'Salat')
 
     const noData = mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
@@ -212,24 +248,20 @@ export default function Mensa () {
       <SwipeableTab key={key} >
         {mensa.length > 0 && (
           <>
-            <h4 className={styles.kindHeader}>{t('list.titles.cafeteria')}</h4>
+            <h4 className={styles.restaurantHeader}>{t('list.titles.cafeteria')}</h4>
             {mensaFood.length > 0 && (
               <>
-                {mensaSoups.length > 0 && (
-                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
-                )}
-                <ListGroup>
-                  {mensaFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
+                <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
+                <ListGroup className={styles.meals}>
+                  {mensaFood.map((meal, idx) => renderMealEntry(meal, `mensa-food-${idx}`))}
                 </ListGroup>
               </>
             )}
             {mensaSoups.length > 0 && (
               <>
-                {mensaFood.length > 0 && (
-                  <h5 className={styles.kindHeader}>{t('list.titles.soups')}</h5>
-                )}
-                <ListGroup>
-                  {mensaSoups.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+                <h5 className={styles.kindHeader}>{t('list.titles.soups')}</h5>
+                <ListGroup className={styles.meals}>
+                  {mensaSoups.map((meal, idx) => renderMealEntry(meal, `mensa-soup-${idx}`))}
                 </ListGroup>
               </>
             )}
@@ -238,33 +270,42 @@ export default function Mensa () {
 
         {reimanns.length > 0 && (
           <>
-            <h4 className={styles.kindHeader}>Reimanns</h4>
-            <ListGroup>
-              {reimanns.map((meal, idx) => renderMealEntry(meal, `reimanns-${idx}`))}
-            </ListGroup>
+            <h4 className={styles.restaurantHeader}>Reimanns</h4>
+            {reimannsFood.length > 0 && (
+              <>
+                <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
+                <ListGroup className={styles.meals}>
+                  {reimannsFood.map((meal, idx) => renderMealEntry(meal, `reimanns-food-${idx}`))}
+                </ListGroup>
+              </>
+            )}
+            {reimannsSalad.length > 0 && (
+              <>
+                <h5 className={styles.kindHeader}>{t('list.titles.salads')}</h5>
+                <ListGroup className={styles.meals}>
+                  {reimannsSalad.map((meal, idx) => renderMealEntry(meal, `reimanns-salad-${idx}`))}
+                </ListGroup>
+              </>
+            )}
           </>
         )}
 
         {canisius.length > 0 && (
           <>
-            <h4 className={styles.kindHeader}>Canisiuskonvikt</h4>
+            <h4 className={styles.restaurantHeader}>Canisiuskonvikt</h4>
             {canisiusFood.length > 0 && (
               <>
-                {canisiusSalads.length > 0 && (
-                  <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
-                )}
-                <ListGroup>
-                  {canisiusFood.map((meal, idx) => renderMealEntry(meal, `food-${idx}`))}
+                <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
+                <ListGroup className={styles.meals}>
+                  {canisiusFood.map((meal, idx) => renderMealEntry(meal, `canisius-food-${idx}`))}
                 </ListGroup>
               </>
             )}
             {canisiusSalads.length > 0 && (
               <>
-                {canisiusFood.length > 0 && (
-                  <h5 className={styles.kindHeader}>{t('list.titles.salads')}</h5>
-                )}
-                <ListGroup>
-                  {canisiusSalads.map((meal, idx) => renderMealEntry(meal, `soup-${idx}`))}
+                <h5 className={styles.kindHeader}>{t('list.titles.salads')}</h5>
+                <ListGroup className={styles.meals}>
+                  {canisiusSalads.map((meal, idx) => renderMealEntry(meal, `canisius-salad-${idx}`))}
                 </ListGroup>
               </>
             )}
@@ -321,6 +362,8 @@ export default function Mensa () {
           </Modal.Header>
 
           <Modal.Body>
+            <h4 className={styles.modalTitle}>{showMealDetails?.name[i18n.languages[0]]}</h4>
+
             <h5>{t('foodModal.flags.title')}</h5>
             {showMealDetails?.flags === null && `${t('foodModal.flags.unknown')}`}
             {showMealDetails?.flags?.length === 0 && `${t('foodModal.flags.empty')}`}
@@ -412,6 +455,10 @@ export default function Mensa () {
               </li>
             </ul>
 
+            {/* Variations of meal */}
+            {renderFoodVariations(showMealDetails)}
+            {showMealDetails?.variations?.length > 0 && (<br />)}
+
             <p>
               <strong>{t('foodModal.warning.title')}</strong>
               <br/>
@@ -462,7 +509,12 @@ export default function Mensa () {
    */
   function WeekTab ({ foodEntries, index, setIndex }) {
     return <div className={styles.tab}>
-      <Nav variant="pills" activeKey={index.toString()} onSelect={key => setIndex(parseInt(key))}>
+      <Nav
+        variant="pills"
+        activeKey={index.toString()}
+        onSelect={key => setIndex(parseInt(key))}
+        className={styles.nav}
+      >
         {foodEntries && foodEntries.map((child, idx) => <Nav.Item key={idx}>
           <Nav.Link eventKey={idx.toString()} className={`${index === idx ? styles.active : ''} ${child.meals.length === 0 ? styles.noMeals : ''}`}>
             {buildLinedWeekdaySpan(child.timestamp)}

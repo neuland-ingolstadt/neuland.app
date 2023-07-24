@@ -237,6 +237,23 @@ export function getWeek (date) {
 }
 
 /**
+ * Returns all days between the given dates
+ * @param {Date} begin
+ * @param {Date} end
+ * @returns {Date[]}
+ */
+export function getDays (begin, end) {
+  const days = []
+  const date = new Date(begin)
+  // eslint-disable-next-line no-unmodified-loop-condition
+  while (date < end) {
+    days.push(new Date(date))
+    date.setDate(date.getDate() + 1)
+  }
+  return days
+}
+
+/**
  * Adds weeks to a date
  * @param {Date} date
  * @param {number} delta

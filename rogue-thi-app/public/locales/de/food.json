@@ -7,7 +7,9 @@
     },
     "filter": "Filter",
     "preferences": {
-        "iconTitle": "Bevorzugtes Essen"
+        "iconTitle": "Bevorzugtes Essen",
+        "match": "Bevorzugt",
+        "warn": "Allergene"
     },
     "list": {
         "titles": {

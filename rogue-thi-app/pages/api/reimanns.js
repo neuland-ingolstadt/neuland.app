@@ -1,7 +1,10 @@
 import cheerio from 'cheerio'
 
+import { addWeek, getDays, getWeek } from '../../lib/date-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
+import staticMeals from '../../data/reimanns-meals.json'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
+import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const CACHE_TTL = 10 * 60 * 1000 // 10m
 const URL = 'http://reimanns.in/mittagsgerichte-wochenkarte/'
@@ -46,7 +49,13 @@ export default async function handler (req, res) {
         return content.split('\n')
       })
 
-      const days = {}
+      // fill in all days (even if they are not on the website to add static meals)
+      const [weekStart] = getWeek(new Date())
+      const [, nextWeekEnd] = getWeek(addWeek(new Date(), 1))
+      const allDays = getDays(weekStart, nextWeekEnd)
+
+      const days = Object.fromEntries(allDays.map(day => [day.toISOString().split('T')[0], []]))
+
       let day = null
       lines.forEach(content => {
         content = content.trim()
@@ -94,7 +103,15 @@ export default async function handler (req, res) {
         }))
       }))
 
-      return translateMeals(mealPlan)
+      const scrapedMeals = await translateMeals(mealPlan)
+
+      // add static meals (no need to translate)
+      // TODO: add allergens, flags, nutrition (ask Reimanns for data)
+      scrapedMeals.forEach(day => {
+        day.meals.push(...staticMeals)
+      })
+
+      return unifyFoodEntries(scrapedMeals)
     })
 
     sendJson(res, 200, data)

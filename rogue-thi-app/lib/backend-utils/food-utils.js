@@ -1,6 +1,8 @@
 import { formatISODate, getAdjustedDay, getMonday } from '../date-utils'
 import NeulandAPI from '../backend/neuland-api'
 
+import flagContradictions from '../../data/flag-contradictions.json'
+
 /**
  * Fetches and parses the meal plan
  * @param {string[]} restaurants Requested restaurants
@@ -18,7 +20,7 @@ export async function loadFoodEntries (restaurants) {
     entries.push(data)
   }
 
-  if (restaurants.includes('reimanns')) {
+  if (restaurants.some(x => ['reimanns', 'reimanns-static'].includes(x))) {
     const data = await NeulandAPI.getReimannsPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
@@ -66,4 +68,45 @@ export async function loadFoodEntries (restaurants) {
       meals: dayEntries
     }
   })
+}
+
+/**
+ * Cleans the meal flags to remove wrong flags (e.g. "veg" (vegan) and "R" (Beef) at the same time => remove "veg")
+ * @param {string[]} flags Meal flags
+ * @returns {string[]} Cleaned meal flags
+ **/
+function cleanMealFlags (flags) {
+  // find contradictions
+  const contradictions = flags?.filter(x => flagContradictions[x]?.some(y => flags?.includes(y))) || []
+
+  // remove contradictions
+  flags = flags?.filter(x => !contradictions.includes(x)) || []
+
+  return flags
+}
+
+/**
+ * Unifies the meal plan entries to a common format
+ * @param {object[]} entries Meal plan entries
+ * @returns {object[]} Unified meal plan entries
+ */
+export function unifyFoodEntries (entries) {
+  return entries.map(entry => ({
+    timestamp: entry.timestamp,
+    meals: entry.meals.map(meal => ({
+      name: meal.name,
+      category: meal.category,
+      prices: meal.prices || {
+        student: null,
+        employee: null,
+        guest: null
+      },
+      allergens: meal.allergens || null,
+      flags: cleanMealFlags(meal.flags) || [],
+      nutrition: meal.nutrition || null,
+      variations: meal.variations || [],
+      originalLanguage: meal.originalLanguage || 'de',
+      static: meal.static || false
+    }))
+  }))
 }
