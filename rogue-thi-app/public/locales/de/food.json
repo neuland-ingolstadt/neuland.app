@@ -62,7 +62,8 @@
             "title": "Preise",
             "students": "Studierende",
             "employees": "Mitarbeitende",
-            "guests": "Gäste"
+            "guests": "Gäste",
+            "unknown": "Unbekannt"
         },
         "warning": {
             "title": "Angaben ohne Gewähr.",
@@ -70,9 +71,12 @@
         },
         "translation": {
             "title": "Übersetzung",
-            "warning": "Dieses Gericht wurde automatisch übersetzt. Bitte überprüfen Sie die Informationen auf den Informationsbildschirmen, bevor du etwas konsumierst.",
+            "warning": "Dieses Gericht wurde automatisch übersetzt.",
             "originalName": "Originalname",
             "translatedName": "Übersetzter Name"
+        },
+        "variations": {
+            "title": "Varianten"
         }
     }
 }

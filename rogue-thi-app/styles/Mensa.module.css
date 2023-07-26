@@ -122,7 +122,7 @@
 .modalTitle {
   padding-bottom: 5px;
   margin-bottom: 10px;
-  border-bottom: 3px solid var(--primary);
+  border-bottom: 1px solid var(--secondary);
 }
 
 .icon {
@@ -131,4 +131,8 @@
 
 .container {
   width: calc(100% - 1px);
+}
+
+.unknown {
+  color: var(--gray);
 }

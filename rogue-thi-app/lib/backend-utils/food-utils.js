@@ -76,13 +76,27 @@ export async function loadFoodEntries (restaurants) {
  * @returns {string[]} Cleaned meal flags
  **/
 function cleanMealFlags (flags) {
+  if (!flags) return null
+
   // find contradictions
-  const contradictions = flags?.filter(x => flagContradictions[x]?.some(y => flags?.includes(y))) || []
+  const contradictions = flags.filter(x => flagContradictions[x]?.some(y => flags?.includes(y)))
 
   // remove contradictions
   flags = flags?.filter(x => !contradictions.includes(x)) || []
 
   return flags
+}
+
+/**
+ * Capitalizes the first letter of the meal names
+ * @param {object} mealNames Meal names
+ * @returns {object} Capitalized meal names
+ * @example { de: 'veganer burger', en: 'vegan burger' } => { de: 'Veganer burger', en: 'Vegan burger' }
+ */
+function capitalize (mealNames) {
+  return Object.fromEntries(Object.entries(mealNames).map(([key, value]) =>
+    [key, value.charAt(0).toUpperCase() + value.slice(1)]
+  ))
 }
 
 /**
@@ -94,7 +108,7 @@ export function unifyFoodEntries (entries) {
   return entries.map(entry => ({
     timestamp: entry.timestamp,
     meals: entry.meals.map(meal => ({
-      name: meal.name,
+      name: capitalize(meal.name),
       category: meal.category,
       prices: meal.prices || {
         student: null,
@@ -102,7 +116,7 @@ export function unifyFoodEntries (entries) {
         guest: null
       },
       allergens: meal.allergens || null,
-      flags: cleanMealFlags(meal.flags) || [],
+      flags: cleanMealFlags(meal.flags),
       nutrition: meal.nutrition || null,
       variations: meal.variations || [],
       originalLanguage: meal.originalLanguage || 'de',
