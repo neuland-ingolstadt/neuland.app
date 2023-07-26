@@ -128,3 +128,7 @@
 .icon {
   margin-right: 6px;
 }
+
+.container {
+  width: calc(100% - 1px);
+}

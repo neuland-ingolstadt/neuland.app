@@ -245,7 +245,7 @@ export default function Mensa () {
     const noData = mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
     return (
-      <SwipeableTab key={key} >
+      <SwipeableTab key={key} className={styles.container}>
         {mensa.length > 0 && (
           <>
             <h4 className={styles.restaurantHeader}>{t('list.titles.cafeteria')}</h4>
