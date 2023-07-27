@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal'
 import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faHeartCircleCheck, faUtensils, faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faHeartCircleCheck, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -140,29 +140,47 @@ export default function Mensa () {
   }
 
   /**
+   * Renders styled ListGroup.Item
+   * @param {string} title
+   * @param {string} content
+   * @param {string} key
+   * @returns {JSX.Element}
+   */
+  function ListGroupItem ({ title, content, key }) {
+    return (
+      <ListGroup.Item key={key}>
+        <div className={styles.variation}>
+          <div className={styles.name}>
+            {title}
+          </div>
+
+          <div className={styles.details}>
+            {content}
+          </div>
+        </div>
+      </ListGroup.Item>
+    )
+  }
+
+  /**
    * Renders the variations of a meal in a list.
    * @param {object} meal
    * @returns {JSX.Element}
    **/
   function renderFoodVariations (meal) {
-    return meal?.variations?.length > 0 && (<ListGroup className={styles.variations}>
-      {meal?.variations?.map((variant, idx) => (
-        <ListGroup.Item
-          key={idx}
-        >
-          <div className={styles.variation}>
-            <div className={styles.name}>
-              {variant.name[i18n.languages[0]]}
-            </div>
-
-            <div className={styles.details}>
-              {`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
-            </div>
-          </div>
-
-        </ListGroup.Item>
-      ))}
-    </ListGroup>)
+    return meal?.variations?.length > 0 && (
+      <p>
+        <ListGroup className={styles.variations}>
+          {meal?.variations?.map((variant, idx) => (
+            <ListGroupItem
+              title={variant.name[i18n.languages[0]]}
+              content={`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
+              key={idx}
+            />
+          ))}
+        </ListGroup>
+      </p>
+    )
   }
 
   /**
@@ -245,7 +263,7 @@ export default function Mensa () {
     const noData = mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
     return (
-      <SwipeableTab key={key} >
+      <SwipeableTab key={key} className={styles.container}>
         {mensa.length > 0 && (
           <>
             <h4 className={styles.restaurantHeader}>{t('list.titles.cafeteria')}</h4>
@@ -364,8 +382,12 @@ export default function Mensa () {
           <Modal.Body>
             <h4 className={styles.modalTitle}>{showMealDetails?.name[i18n.languages[0]]}</h4>
 
-            <h5>{t('foodModal.flags.title')}</h5>
-            {showMealDetails?.flags === null && `${t('foodModal.flags.unknown')}`}
+            <h6>{t('foodModal.flags.title')}</h6>
+            {showMealDetails?.flags === null && (
+              <span className={styles.unknown}>
+                {t('foodModal.flags.unknown')}
+              </span>
+            )}
             {showMealDetails?.flags?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.flags?.map(flag => (
@@ -383,8 +405,12 @@ export default function Mensa () {
               ))}
             </ul>
 
-            <h5>{t('foodModal.allergens.title')}</h5>
-            {showMealDetails?.allergens === null && `${t('foodModal.allergens.unknown')}`}
+            <h6>{t('foodModal.allergens.title')}</h6>
+            {showMealDetails?.allergens === null && (
+              <span className={styles.unknown}>
+                {t('foodModal.allergens.unknown')}
+              </span>
+            )}
             {showMealDetails?.allergens?.length === 0 && `${t('foodModal.flags.empty')}`}
             <ul>
               {showMealDetails?.allergens?.map(key => (
@@ -403,88 +429,123 @@ export default function Mensa () {
               ))}
             </ul>
 
-            <h5>{t('foodModal.nutrition.title')}</h5>
+            <h6>{t('foodModal.nutrition.title')}</h6>
 
             {(showMealDetails?.nutrition && (
-
-              <ul>
-                <li>
-                  <strong>{t('foodModal.nutrition.energy.title')}</strong>:{' '}
-                  {showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / &nbsp;
-                  {showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}
-                </li>
-                <li>
-                  <strong>{t('foodModal.nutrition.fat.title')}</strong>:{' '}
-                  {formatGram(showMealDetails?.nutrition.fat)}
-                  <br/><strong>{t('foodModal.nutrition.fat.saturated')}</strong>: {formatGram(showMealDetails?.nutrition.fatSaturated)}
-                </li>
-                <li>
-                  <strong>{t('foodModal.nutrition.carbohydrates.title')}</strong>:{' '}
-                  {formatGram(showMealDetails?.nutrition.carbs)}
-                  <br/><strong>{t('foodModal.nutrition.carbohydrates.sugar')}</strong>: {formatGram(showMealDetails?.nutrition.sugar)}
-                </li>
-                <li>
-                  <strong>{t('foodModal.nutrition.fiber.title')}</strong>:{' '}
-                  {formatGram(showMealDetails?.nutrition.fiber)}
-                </li>
-                <li>
-                  <strong>{t('foodModal.nutrition.protein.title')}</strong>:{' '}
-                  {formatGram(showMealDetails?.nutrition.protein)}
-                </li>
-                <li>
-                  <strong>{t('foodModal.nutrition.salt.title')}</strong>:{' '}
-                  {formatGram(showMealDetails?.nutrition.salt)}
-                </li>
-              </ul>)) || (
-              <p>{t('foodModal.nutrition.unknown.title')}</p>
+              <p>
+                <ListGroup className={styles.variations}>
+                  <ListGroupItem
+                    title={t('foodModal.nutrition.energy.title')}
+                    content={`${showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / ${showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}`}
+                    key={'energy'}
+                  />
+                  <ListGroupItem
+                    title={(
+                      <>
+                        {t('foodModal.nutrition.fat.title')}
+                        <br/><small>{t('foodModal.nutrition.fat.saturated')}</small>
+                      </>
+                    )}
+                    content={(
+                      <>
+                        {formatGram(showMealDetails?.nutrition.fat)}
+                        <br/><small>{formatGram(showMealDetails?.nutrition.fatSaturated)}</small>
+                      </>
+                    )}
+                    key={'fat'}
+                  />
+                  <ListGroupItem
+                    title={(
+                      <>
+                        {t('foodModal.nutrition.carbohydrates.title')}
+                        <br/><small>{t('foodModal.nutrition.carbohydrates.sugar')}</small>
+                      </>
+                    )}
+                    content={(
+                      <>
+                        {formatGram(showMealDetails?.nutrition.carbs)}
+                        <br/><small>{formatGram(showMealDetails?.nutrition.sugar)}</small>
+                      </>
+                    )}
+                    key={'fat'}
+                  />
+                  <ListGroupItem
+                    title={t('foodModal.nutrition.fiber.title')}
+                    content={formatGram(showMealDetails?.nutrition.fiber)}
+                    key={'fiber'}
+                  />
+                  <ListGroupItem
+                    title={t('foodModal.nutrition.protein.title')}
+                    content={formatGram(showMealDetails?.nutrition.protein)}
+                    key={'protein'}
+                  />
+                  <ListGroupItem
+                    title={t('foodModal.nutrition.salt.title')}
+                    content={formatGram(showMealDetails?.nutrition.salt)}
+                    key={'salt'}
+                  />
+                </ListGroup>
+              </p>
+            )) || (
+              <p className={styles.unknown}>
+                {t('foodModal.allergens.unknown')}
+              </p>
             )}
 
             <h5>{t('foodModal.prices.title')}</h5>
-            <ul>
-              <li>
-                <strong>{t('foodModal.prices.students')}</strong>:{' '}
-                {formatPrice(showMealDetails?.prices.student)}
-              </li>
-              <li>
-                <strong>{t('foodModal.prices.employees')}</strong>:{' '}
-                {formatPrice(showMealDetails?.prices.employee)}
-              </li>
-              <li>
-                <strong>{t('foodModal.prices.guests')}</strong>:{' '}
-                {formatPrice(showMealDetails?.prices.guest)}
-              </li>
-            </ul>
+            <p>
+              <ListGroup className={styles.variations}>
+                {showMealDetails?.prices.student !== null && (
+                  <ListGroupItem
+                    title={t('foodModal.prices.students')}
+                    content={formatPrice(showMealDetails?.prices.student)}
+                    key={'student'}
+                  />
+                )}
+                {showMealDetails?.prices.student !== null && (
+                  <ListGroupItem
+                    title={t('foodModal.prices.employees')}
+                    content={formatPrice(showMealDetails?.prices.employee)}
+                    key={'employee'}
+                  />
+                )}
+                {showMealDetails?.prices.student !== null && (
+                  <ListGroupItem
+                    title={t('foodModal.prices.guests')}
+                    content={formatPrice(showMealDetails?.prices.guest)}
+                    key={'guest'}
+                  />
+                )}
+              </ListGroup>
+              {(showMealDetails?.prices.student === null && showMealDetails?.prices.employee === null && showMealDetails?.prices.guest === null) && (
+                <span className={styles.unknown}>
+                  {t('foodModal.prices.unknown')}
+                </span>
+              )}
+            </p>
 
             {/* Variations of meal */}
+            {showMealDetails?.variations?.length > 0 && (
+              <h6>{t('foodModal.variations.title')}</h6>
+            )}
             {renderFoodVariations(showMealDetails)}
-            {showMealDetails?.variations?.length > 0 && (<br />)}
 
             <p>
-              <strong>{t('foodModal.warning.title')}</strong>
-              <br/>
-              {t('foodModal.warning.text')}
+              <h6>{t('foodModal.warning.title')}</h6>
+              {`${isTranslated(showMealDetails) && `${t('foodModal.translation.warning')} `}${t('foodModal.warning.text')}`}
             </p>
 
             {isTranslated(showMealDetails) && (
-              <p>
-                <FontAwesomeIcon icon={faWandMagicSparkles} className={styles.translated} />
-                <strong>{` ${t('foodModal.translation.title')}`}</strong>
-                <br/>
-
-                {` ${t('foodModal.translation.warning')}`}
-
-                <br/>
-                <ul>
-                  <li>
-                    <strong>{t('foodModal.translation.originalName')}</strong>:{' '}
-                    {showMealDetails?.name[showMealDetails?.originalLanguage]}
-                  </li>
-                  <li>
-                    <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
-                    {showMealDetails?.name[i18n.languages[0]]}
-                  </li>
-                </ul>
-              </p>
+              <ul>
+                <li>
+                  <strong>{t('foodModal.translation.originalName')}</strong>:{' '}
+                  {showMealDetails?.name[showMealDetails?.originalLanguage]}
+                </li>
+                <li>
+                  <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
+                  {showMealDetails?.name[i18n.languages[0]]}
+                </li>
+              </ul>
             )}
           </Modal.Body>
 

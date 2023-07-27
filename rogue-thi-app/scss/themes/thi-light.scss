@@ -1,6 +1,6 @@
 $theme-colors: (
   "primary": #005a9b,
-  "secondary": #009bcd
+  "secondary": #3a93c3
 );
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
@@ -12,7 +12,7 @@ $theme-colors: (
 }
 
 :root {
-  --navbar-border-image: linear-gradient(90deg, #005a9b, #228cc1, #3a93c3, #6fa2c7, #31ccff);
+  --navbar-border-image: linear-gradient(90deg, #005a9b, #00b1ec);
   --tabbar-tab-active: #005a9b;
   // --navbar-border-image: none;
 }
