@@ -20,12 +20,14 @@ You need to install the necessary tools.
 Make a personal copy of the source code using the *Fork* button on the top right of this page.
 
 Open a terminal (e.g. PowerShell if you're on Windows) and download the source code to your PC using Git:
+
 ```bash
 git clone https://github.com/your-github-username/THI-App.git
 cd THI-App/rogue-thi-app
 ```
 
 Download everything else that is required to run the app:
+
 ```bash
 npm install
 # or
@@ -40,17 +42,19 @@ Now open the `rogue-thi-app` folder in Visual Studio Code.
 ## Developing
 
 Start the application locally:
+
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-Go to https://localhost:3000 in your browser and voilà, you're ready to go. You can change things in your code and your browser will automatically load the new version.
+Go to [https://localhost:3000](https://localhost:3000) in your browser and voilà, you're ready to go. You can change things in your code and your browser will automatically load the new version.
 
 ### Structure of the code
 
 A quick overview over the structure of the source code:
+
 * `/pages`  
 The pages of the application that you see in your browser. This is where to look if you want to change the structure of the UI.
 * `/components`  
@@ -62,4 +66,4 @@ Various reusable utilities such as a client for the THI API and a timestamp form
 
 ## Getting help
 
-If you need help with the code, don't hesitate to contact us at info@neuland-ingolstadt.de.
+If you need help with the code, don't hesitate to contact us at [info@neuland-ingolstadt.de](mailto:info@neuland-ingolstadt.de).

@@ -1,13 +1,12 @@
 # Endpoint
 
-- https://hiplan.thi.de/webservice/production2/index.php
+- <https://hiplan.thi.de/webservice/production2/index.php>
 - POST request
 - `Content-Type: application/x-www-form-urlencoded`
 - `User-Agent:Embarcadero RESTClient/1.0`
 
 Only the House plan uses:
-https://hiplan.thi.de/webservice/raumplan.html
-
+<https://hiplan.thi.de/webservice/raumplan.html>
 
 # Services
 
@@ -15,7 +14,7 @@ https://hiplan.thi.de/webservice/raumplan.html
 
 ### open
 
-```
+```http
 username: <username>
 passwd:   <password>
 service:  session
@@ -40,7 +39,7 @@ Note the third value in the `data` list seems to be related to the account type.
 
 ### close
 
-```
+```http
 service: session
 method:  close
 format:  json
@@ -58,7 +57,7 @@ session: <session token>
 
 ### isalive
 
-```
+```http
 service: session
 method:  isalive
 format:  json
@@ -75,7 +74,8 @@ session: <session token>
 ```
 
 ## Personal Data
-```
+
+```http
 service: thiapp
 method:  persdata
 format:  json
@@ -120,7 +120,8 @@ session: <session token>
 ```
 
 ## Exams
-```
+
+```http
 service: thiapp
 method:  exams
 format:  json
@@ -163,7 +164,8 @@ session: <session token>
 ```
 
 ## Grades
-```
+
+```http
 service: thiapp
 method:  grades
 format:  json
@@ -207,9 +209,10 @@ session: <session token>
 ```
 
 ## Personal Timetable
+
 Setting `details` to `1` results in the fields `inhalt`, `literatur` and `ziel` to be filled with HTML code with further information.
 
-```
+```http
 service: thiapp
 method:  stpl
 format:  json
@@ -285,7 +288,8 @@ details: 0
 ```
 
 ## Rooms
-```
+
+```http
 service: thiapp
 method:  rooms
 format:  json
@@ -346,7 +350,8 @@ year:    2020
 ```
 
 ## Mensa
-```
+
+```http
 service: thiapp
 method:  mensa
 format:  json
@@ -390,11 +395,12 @@ session: <session token>
 ```
 
 ## Parking
+
 In the official app the UI using this request is hidden from all users except employees.
 The area `TG Gießerei Hochschule` refers to the area of the THI itself, guarded by
 barries and only accesible to employees and some mebers of the students council.
 
-```
+```http
 service: thiapp
 method:  parking
 format:  json
@@ -427,7 +433,8 @@ session: <session token>
 ```
 
 ## News
-```
+
+```http
 service: thiapp
 method:  thiwebinfo
 format:  json
@@ -447,7 +454,8 @@ session: <session token>
 ```
 
 ## Imprint
-```
+
+```http
 service: thiapp
 method:  impressum
 format:  json
@@ -469,7 +477,8 @@ session: <session token>
 ## Jobs
 
 ### categories
-```
+
+```http
 service: thiapp
 method:  jobs
 query:   categories
@@ -509,7 +518,8 @@ session: <session token>
 ```
 
 ### offers
-```
+
+```http
 service: thiapp
 method:  jobs
 query:   offers
@@ -530,14 +540,15 @@ session: <session token>
 ## Lecturers
 
 ### Personal Lecturers
-```
+
+```http
 service: thiapp
 format:  json
 session: <session token>
 method:  stpllecturers
 ```
 
-```
+```json
 {
     "data": [
         0,
@@ -566,7 +577,8 @@ method:  stpllecturers
 ```
 
 ### All lecturers (from A to Z)
-```
+
+```http
 service: thiapp
 method:  lecturers
 format:  json
@@ -574,7 +586,6 @@ session: <session token>
 from:    a
 to:      c
 ```
-
 
 ```json
 {
@@ -608,7 +619,7 @@ to:      c
 
 ### getreservation
 
-```
+```http
 service: thiapp
 method:  reservations
 format:  json
@@ -620,6 +631,7 @@ data:
 ```
 
 As of 2021-06 the API returns "Service not available" when no reservations are available
+
 ```json
 {
     "data": "Service not available",
@@ -630,6 +642,7 @@ As of 2021-06 the API returns "Service not available" when no reservations are a
 ```
 
 Old response:
+
 ```json
 {
     "data": "No reservation data",
@@ -664,7 +677,8 @@ Old response:
 ```
 
 ### addreservation
-```
+
+```http
 service: thiapp
 method:  reservations
 format:  json
@@ -690,7 +704,8 @@ data:    {"resource":"3","from":"06:00","to":"10:00","at":"2020-11-03","place":"
 ```
 
 ### delreservation
-```
+
+```http
 service: thiapp
 method:  reservations
 format:  json
@@ -711,7 +726,8 @@ data:    6678
 ```
 
 ### getavailabilities
-```
+
+```http
 service: thiapp
 method:  reservations
 format:  json
@@ -723,60 +739,61 @@ data:
 ```
 
 parts redacted, see getavailabilities-full.json
+
 ```json
 {
-	"date": "02.11.2020",
-	"time": "20:37:54",
-	"data": [
-		0,
-		[
-			{
-				"date": "2020-11-02",
-				"hasReservation": false,
-				"resource": [
-					{
-						"from": "18:00",
-						"to": "24:00",
-						"resources": {
-							"1": {
-								"room_name": "Lesesaal Nord (alte Bibliothek)",
-								"seats": [
-									"1",
-									"4",
-									"5",
-									"8",
-									"9",
-									"12",
-									"14",
-									"16",
-									"18",
-									"20",
-									"21",
-									"24",
-									"25",
-									"28",
-									"29",
-									"32",
-									"33",
-									"36",
-									"37",
-									"40",
-									"41",
-									"44",
-									"45",
-									"48",
-									"49",
-									"50",
-									"51",
-									"52",
-									"53",
-									"54",
-									"56",
-									"57"
-								],
-								"num_seats": 32,
-								"maxnum_seats": 32
-							},
+ "date": "02.11.2020",
+ "time": "20:37:54",
+ "data": [
+  0,
+  [
+   {
+    "date": "2020-11-02",
+    "hasReservation": false,
+    "resource": [
+     {
+      "from": "18:00",
+      "to": "24:00",
+      "resources": {
+       "1": {
+        "room_name": "Lesesaal Nord (alte Bibliothek)",
+        "seats": [
+         "1",
+         "4",
+         "5",
+         "8",
+         "9",
+         "12",
+         "14",
+         "16",
+         "18",
+         "20",
+         "21",
+         "24",
+         "25",
+         "28",
+         "29",
+         "32",
+         "33",
+         "36",
+         "37",
+         "40",
+         "41",
+         "44",
+         "45",
+         "48",
+         "49",
+         "50",
+         "51",
+         "52",
+         "53",
+         "54",
+         "56",
+         "57"
+        ],
+        "num_seats": 32,
+        "maxnum_seats": 32
+       },
                             // more rooms ...
                         }
                     }
