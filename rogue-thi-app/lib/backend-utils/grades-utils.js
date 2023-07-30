@@ -1,6 +1,8 @@
 import API from '../backend/authenticated-api'
 import courseSPOs from '../../data/spo-grade-weights.json'
 
+const redactGrades = process.env.NEXT_PUBLIC_REDACT_GRADES === 'true' || false
+
 function simplifyName (x) {
   return x.replace(/\W|und|u\./g, '').toLowerCase()
 }
@@ -20,6 +22,18 @@ async function getGradeList () {
       x.note = 'E'
     }
   })
+
+  /**
+   * Set NEXT_PUBLIC_REDACT_GRADES to true to redact your grades (e.g. for screenshots)
+   */
+  if (redactGrades) {
+    gradeList.forEach(x => {
+      if (parseFloat(x.note)) {
+        x.note = '1.0'
+      }
+    })
+  }
+
   return gradeList
 }
 
