@@ -29,7 +29,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { FoodFilterContext, ShowDashboardModal, ShowLanguageModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
 import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
-import { calculateECTS, loadGradeAverage, loadGrades } from '../lib/backend-utils/grades-utils'
+import { calculateECTS, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
 
 import styles from '../styles/Personal.module.css'
@@ -42,7 +42,6 @@ const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
 export default function Personal () {
   const [userdata, setUserdata] = useState(null)
-  const [average, setAverage] = useState(null)
   const [ects, setEcts] = useState(null)
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
@@ -95,9 +94,6 @@ export default function Personal () {
         const data = response.persdata
         data.pcounter = response.pcounter
         setUserdata(data)
-
-        const average = await loadGradeAverage()
-        setAverage(average)
 
         const { finished, missing } = await loadGrades()
         setGrades(finished)
@@ -164,10 +160,6 @@ export default function Personal () {
               </div>
               <span className="text-muted">
                 {ects !== null && `${ects} ${t('personal.overview.ects')} `}
-                {!isNaN(average?.result) && ' · '}
-                {!isNaN(average?.result) && '∅ ' + average.result.toFixed(2).toString().replace('.', ',')}
-                {average?.missingWeight === 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightSingle')})`}
-                {average?.missingWeight > 1 && ` (${average.missingWeight} ${t('personal.grades.missingWeightMultiple')})`}
               </span>
             </ListGroup.Item>
           </ListGroup>
@@ -225,18 +217,28 @@ export default function Personal () {
 
       <ListGroup>
 
-        <ListGroup.Item action
-          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}>
+        <ListGroup.Item
+          action
+          className={styles.interaction_row}
+          onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}
+        >
           <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           Primuss
         </ListGroup.Item>
 
-        <ListGroup.Item action onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}>
+        <ListGroup.Item
+          action
+          className={styles.interaction_row} onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}
+        >
           <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           Moodle
         </ListGroup.Item>
 
-        <ListGroup.Item action onClick={() => window.open('https://outlook.thi.de/', '_blank')}>
+        <ListGroup.Item
+          action
+          className={styles.interaction_row}
+          onClick={() => window.open('https://outlook.thi.de/', '_blank')}
+        >
           <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
           E-Mail
         </ListGroup.Item>
@@ -254,18 +256,30 @@ export default function Personal () {
       <ListGroup>
 
         {showDebug && (
-          <ListGroup.Item action onClick={() => router.push('/debug')}>
+          <ListGroup.Item
+            action
+            className={styles.interaction_row}
+            onClick={() => router.push('/debug')}
+          >
             <FontAwesomeIcon icon={faBug} className={styles.interaction_icon} />
             {t('personal.debug')}
           </ListGroup.Item>
         )}
 
-        <ListGroup.Item action onClick={() => window.open(PRIVACY_URL, '_blank')}>
+        <ListGroup.Item
+          action
+          className={styles.interaction_row}
+          onClick={() => window.open(PRIVACY_URL, '_blank')}
+        >
           <FontAwesomeIcon icon={faShield} className={styles.interaction_icon} />
           {t('personal.privacy')}
         </ListGroup.Item>
 
-        <ListGroup.Item action onClick={() => router.push('/imprint')}>
+        <ListGroup.Item
+          action
+          className={styles.interaction_row}
+          onClick={() => router.push('/imprint')}
+        >
           <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon} />
           {t('personal.imprint')}
         </ListGroup.Item>

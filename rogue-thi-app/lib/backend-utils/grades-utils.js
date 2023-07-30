@@ -96,7 +96,8 @@ export async function loadGradeAverage () {
     if (grade && spoName && courseSPOs[spoName]) {
       const spo = courseSPOs[spoName]
       const name = simplifyName(x.titel)
-      const entry = spo.find(y => simplifyName(y.name) === name)
+      const spoEntries = spo.filter(y => simplifyName(y.name) === name)
+      const entry = spoEntries.find(y => !!y.weight) || spoEntries[0]
       const other = average.entries.find(y => y.simpleName === name)
 
       if (other) {

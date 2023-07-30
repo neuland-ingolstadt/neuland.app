@@ -21,6 +21,13 @@
   float: right;
 }
 
+.interaction_row {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .logout_button {
   display: flex;
   justify-content: center;

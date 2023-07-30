@@ -16,6 +16,9 @@
             "title": "Grade Average",
             "disclaimer": "The exact grade average cannot be determined and ranges between {{minAverage}} and {{maxAverage}}"
         },
+        "spoiler": {
+            "reveal": "Click to reveal"
+        },
         "gradesList": {
             "title": "Grades"
         },

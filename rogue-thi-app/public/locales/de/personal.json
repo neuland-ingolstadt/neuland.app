@@ -1,11 +1,6 @@
 {
     "personal": {
         "title": "Profil",
-        "grades": {
-            "title": "Noten",
-            "missingWeightSingle": " Gewichtung fehlt",
-            "missingWeightMultiple": " Gewichtungen fehlen"
-        },
         "overview": {
             "grades": "Noten",
             "ects": "ECTS",

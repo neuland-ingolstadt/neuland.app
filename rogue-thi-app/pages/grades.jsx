@@ -107,6 +107,36 @@ export default function Grades () {
     alert(t('grades.alerts.notImplemented'))
   }
 
+  /**
+   * A spoiler component that hides its children until clicked.
+   * @param {Object} props
+   * @param {string} props.className
+   * @param {React.ReactNode} props.children
+   * @returns {React.ReactElement} The spoiler component.
+   */
+  function Spoiler ({ className, children }) {
+    const [show, setShow] = useState(false)
+
+    function getStyle (visible) {
+      return visible ? styles.spoilerVisible : styles.spoilerHidden
+    }
+
+    return (
+      <ListGroup.Item
+        className={`${styles.spoiler} ${className}`}
+        onClick={() => setShow(!show)}
+      >
+        <div className={getStyle(show)}>
+          {children}
+        </div>
+
+        <div className={`${styles.spoilerPlaceholder} ${getStyle(!show)}`}>
+          {t('grades.spoiler.reveal')}
+        </div>
+      </ListGroup.Item>
+    )
+  }
+
   return (
     <AppContainer>
       <AppNavbar title={t('grades.appbar.title')}>
@@ -123,55 +153,60 @@ export default function Grades () {
       <AppBody>
         <ReactPlaceholder type="text" rows={3} ready={!!gradeAverage}>
           {gradeAverage && gradeAverage.entries.length > 0 && (
-            <ListGroup>
+            <>
               <h4 className={styles.heading}>
-                {t('grades.summary.title')}
+              {t('grades.summary.title')}
               </h4>
-
-              <ListGroup.Item className={styles.gradeAverageContainer}>
-                <span className={styles.gradeAverage}>
-                  {gradeAverage.resultMin !== gradeAverage.resultMax && '~'}
-                  {formatNum(gradeAverage.result)}
-                </span>
-                {gradeAverage.resultMin !== gradeAverage.resultMax && (
-                  <span className={styles.gradeAverageDisclaimer}>
-                    {t('grades.summary.disclaimer', {
-                      minAverage: formatNum(gradeAverage.resultMin),
-                      maxAverage: formatNum(gradeAverage.resultMax)
-                    })}
+              <ListGroup>
+                <Spoiler className={styles.gradeAverageContainer}>
+                  <span className={styles.gradeAverage}>
+                    {gradeAverage.resultMin !== gradeAverage.resultMax && '~'}
+                    {formatNum(gradeAverage.result)}
                   </span>
-                )}
-              </ListGroup.Item>
-            </ListGroup>
+
+                  {gradeAverage.resultMin !== gradeAverage.resultMax && (
+                    <span className={styles.gradeAverageDisclaimer}>
+                      {t('grades.summary.disclaimer', {
+                        minAverage: formatNum(gradeAverage.resultMin),
+                        maxAverage: formatNum(gradeAverage.resultMax)
+                      })}
+                    </span>
+                  )}
+                </Spoiler>
+              </ListGroup>
+            </>
           )}
         </ReactPlaceholder>
 
+        <h4 className={styles.heading}>
+          {t('grades.gradesList.title')}
+        </h4>
         <ListGroup>
-          <h4 className={styles.heading}>
-            {t('grades.gradesList.title')}
-          </h4>
-
           <ReactPlaceholder type="text" rows={10} ready={grades}>
             {grades && grades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
                   {item.titel}<br />
-
-                  <div className={styles.details}>
-                    {t('grades.grade')}: {getLocalizedGrade(item.note)}<br />
+                  <small className={styles.details}>
                     {t('grades.ects')}: {item.ects || t('grades.none')}
-                  </div>
+                  </small>
+                </div>
+
+                <div className={styles.grade}>
+                  {getLocalizedGrade(item.note)}<br />
+                  <small className={styles.details}>
+                    {t('grades.grade')}
+                  </small>
                 </div>
               </ListGroup.Item>
             )}
           </ReactPlaceholder>
         </ListGroup>
 
+        <h4 className={styles.heading}>
+          {t('grades.pendingList.title')}
+        </h4>
         <ListGroup>
-          <h4 className={styles.heading}>
-            {t('grades.pendingList.title')}
-          </h4>
-
           <ReactPlaceholder type="text" rows={10} ready={missingGrades}>
             {missingGrades && missingGrades.map((item, idx) =>
               <ListGroup.Item key={idx} className={styles.item}>
@@ -179,8 +214,10 @@ export default function Grades () {
                   {item.titel} ({item.stg}) <br />
 
                   <div className={styles.details}>
-                    {t('grades.deadline')}: {item.frist || t('grades.none')}<br />
-                    {t('grades.ects')}: {item.ects || t('grades.none')}
+                    <small>
+                      {t('grades.deadline')}: {item.frist || t('grades.none')}<br />
+                      {t('grades.ects')}: {item.ects || t('grades.none')}
+                    </small>
                   </div>
                 </div>
               </ListGroup.Item>
