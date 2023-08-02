@@ -76,6 +76,15 @@ export function getTimetableGaps (timetable) {
 export async function getFriendlyTimetable (date, detailed) {
   const { timetable } = await API.getTimetable(date, detailed)
 
+  /**
+   * During the semester break, the API returns an null array ('[null]').
+   * To prevent errors for the room suggestions or the timetable view, we return an empty array.
+   */
+  if (timetable.every(x => x === null)) {
+    console.error('API returned null array for timetable!')
+    return []
+  }
+
   return timetable
     .flatMap(day =>
       Object.values(day.hours)
