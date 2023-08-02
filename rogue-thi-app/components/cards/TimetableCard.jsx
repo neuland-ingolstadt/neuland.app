@@ -82,11 +82,13 @@ export default function TimetableCard () {
             )
           }))}
           {(timetable && timetable.length === 0) &&
-              <ListGroup.Item>{t('timetable.text.noLectures')}</ListGroup.Item>
+            <ListGroup.Item>
+              {t('timetable.text.noLectures')}
+            </ListGroup.Item>
           }
           {(timetableError &&
-              <ListGroup.Item>{t('timetable.text.error')}</ListGroup.Item>)
-          }
+            <ListGroup.Item>{t('timetable.text.error')}</ListGroup.Item>
+          )}
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>
