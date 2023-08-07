@@ -16,6 +16,9 @@
             "title": "Notenschnitt",
             "disclaimer": "Der genaue Notenschnitt kann nicht ermittelt werden und liegt zwischen {{minAverage} und {{maxAverage}}"
         },
+        "spoiler": {
+            "reveal": "Klicken um anzuzeigen"
+        },
         "gradesList": {
             "title": "Noten"
         },

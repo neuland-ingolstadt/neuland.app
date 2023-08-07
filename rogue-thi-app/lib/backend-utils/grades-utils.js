@@ -1,6 +1,8 @@
 import API from '../backend/authenticated-api'
 import courseSPOs from '../../data/spo-grade-weights.json'
 
+const redactGrades = process.env.NEXT_PUBLIC_REDACT_GRADES === 'true' || false
+
 function simplifyName (x) {
   return x.replace(/\W|und|u\./g, '').toLowerCase()
 }
@@ -20,6 +22,18 @@ async function getGradeList () {
       x.note = 'E'
     }
   })
+
+  /**
+   * Set NEXT_PUBLIC_REDACT_GRADES to true to redact your grades (e.g. for screenshots)
+   */
+  if (redactGrades) {
+    gradeList.forEach(x => {
+      if (parseFloat(x.note)) {
+        x.note = '1.0'
+      }
+    })
+  }
+
   return gradeList
 }
 
@@ -96,7 +110,8 @@ export async function loadGradeAverage () {
     if (grade && spoName && courseSPOs[spoName]) {
       const spo = courseSPOs[spoName]
       const name = simplifyName(x.titel)
-      const entry = spo.find(y => simplifyName(y.name) === name)
+      const spoEntries = spo.filter(y => simplifyName(y.name) === name)
+      const entry = spoEntries.find(y => !!y.weight) || spoEntries[0]
       const other = average.entries.find(y => y.simpleName === name)
 
       if (other) {
