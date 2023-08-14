@@ -9,204 +9,102 @@
     ]
   },
   {
-    "name": "Vorlesungsbeginn und Semesterstart",
-    "begin": "2022-03-15"
+    "name": {
+      "de": "Semesterferien",
+      "en": "Semester break"
+    },
+    "begin": "2023-08-01",
+    "end": "2023-09-30"
   },
   {
-    "name": "Vorlesungsfrei (Ostern)",
-    "begin": "2022-04-14",
-    "end": "2022-04-19"
+    "name": {
+      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im ersten Semester mit Semestereröffnungsveranstaltung",
+      "en": "Start of lectures and semester for first-semester bachelor students with semester opening event"
+    },
+    "begin": "2023-10-02"
   },
   {
-    "name": "Prüfungsanmeldung",
-    "begin": "2022-05-02",
-    "end": "2022-05-12"
+    "name": {
+      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im höheren Semester und Masterstudierende",
+      "en": "Start of lectures and semester for higher-semester bachelor students and master students"
+    },
+    "begin": "2023-10-02"
   },
   {
-    "name": "Prüfungsabmeldung",
-    "begin": "2022-05-02",
-    "end": "2022-06-24"
+    "name": {
+      "de": "Vorlesungsfrei",
+      "en": "Lecture-free"
+    },
+    "begin": "2023-10-03"
   },
   {
-    "name": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
-    "begin": "2022-05-26",
-    "end": "2022-05-27"
+    "name": {
+      "de": "Vorlesungsfrei",
+      "en": "Lecture-free"
+    },
+    "begin": "2023-10-31"
   },
   {
-    "name": "Vorlesungsfrei (Pfingsten)",
-    "begin": "2022-06-03",
-    "end": "2022-06-07"
-  },
-  {
-    "name": "Vorlesungsfrei (Fronleichnam)",
-    "begin": "2022-06-16"
-  },
-  {
-    "name": "Rückmeldung",
-    "begin": "2022-07-02",
-    "end": "2022-08-07"
-  },
-  {
-    "name": "Erweiterter Prüfungszeitraum",
-    "begin": "2022-07-02",
-    "end": "2022-07-08"
-  },
-  {
-    "name": "Prüfungszeitraum",
-    "begin": "2022-07-09",
-    "end": "2022-07-19"
-  },
-  {
-    "name": "Notenbekanntgabe",
-    "begin": "2022-07-29T13:00",
-    "hasHours": true
-  },
-  {
-    "name": "Semesterferien",
-    "begin": "2022-07-30",
-    "end": "2022-09-30"
-  },
-  {
-    "name": "Vorlesungsbeginn und Semesterstart",
-    "begin": "2022-10-04"
-  },
-  {
-    "name": "Vorlesungsfrei",
-    "begin": "2022-10-31"
-  },
-  {
-    "name": "Prüfungsanmeldung",
-    "begin": "2022-11-04",
-    "end": "2022-11-14"
-  },
-  {
-    "name": "Prüfungsabmeldung",
-    "begin": "2022-11-04",
-    "end": "2023-01-11"
-  },
-  {
-    "name": "Vorlesungsfrei (Weihnachten)",
-    "begin": "2022-12-24",
-    "end": "2023-01-08"
-  },
-  {
-    "name": "Notenmeldung Prädikate (ZV)",
-    "begin": "2023-01-09T09:00",
-    "hasHours": true
-  },
-  {
-    "name": "Erweiterter Prüfungszeitraum",
-    "begin": "2023-01-19",
-    "end": "2023-01-25"
-  },
-  {
-    "name": "Prüfungszeitraum",
-    "begin": "2023-01-26",
-    "end": "2023-02-04"
-  },
-  {
-    "name": "Ende der Vorlesungszeit",
-    "begin": "2023-01-25"
-  },
-  {
-    "name": "Notenmeldung",
-    "begin": "2023-02-09T09:00",
-    "hasHours": true
-  },
-  {
-    "name": "Notenbekanntgabe",
-    "begin": "2023-02-14T13:00",
-    "hasHours": true
-  },
-  {
-    "name": "Rückmeldung zum Sommersemester 2023",
-    "begin": "2023-01-14",
-    "end": "2023-01-31"
-  },
-  {
-    "name": "Semesterferien",
-    "begin": "2022-02-15",
-    "end": "2022-03-14"
-  },
-  {
-    "name": "Vorlesungsbeginn und Semesterstart",
-    "begin": "2023-03-15"
-  },
-  {
-    "name": "Vorlesungsfrei (Ostern)",
-    "begin": "2023-04-06",
-    "end": "2023-04-11"
-  },
-  {
-    "name": "Prüfungsanmeldung",
-    "begin": "2023-04-25",
-    "end": "2023-05-04"
+    "name": {
+      "de": "Prüfungsanmeldung",
+      "en": "Exam registration"
+    },
+    "begin": "2023-11-06",
+    "end": "2023-11-16"
   },
   {
     "name": {
       "de": "Prüfungsabmeldung",
       "en": "Exam withdrawal"
     },
-    "begin": "2023-04-25",
-    "end": "2023-06-26"
-  },
-  {
-    "name": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
-    "begin": "2023-05-18",
-    "end": "2023-05-19"
-  },
-  {
-    "name": "Vorlesungsfrei (Pfingsten)",
-    "begin": "2023-05-26",
-    "end": "2023-05-30"
-  },
-  {
-    "name": "Vorlesungsfrei (Fronleichnam)",
-    "begin": "2023-06-08"
-  },
-  {
-    "name": "Notenmeldung Prädikate (ZV)",
-    "begin": "2023-06-19T09:00",
-    "hasHours": true
+    "begin": "2023-11-06",
+    "end": "2024-01-11"
   },
   {
     "name": {
-      "de": "Rückmeldung zum Wintersemester 2023/2024",
-      "en": "Re-registration for winter semester 2023/2024"
+      "de": "Vorlesungsfrei (Weihnachten)",
+      "en": "Lecture-free (Christmas)"
     },
-    
-    "begin": "2023-07-02",
-    "end": "2023-08-07"
+    "begin": "2023-12-24",
+    "end": "2024-01-07"
+  },
+  {
+    "name": {
+      "de": "Notenmeldung Prädikate (ZV)",
+      "en": "Grade submission predicates (ZV)"
+    },
+    "begin": "2024-01-09T9:00",
+    "hasHours": true
   },
   {
     "name": {
       "de": "Erweiterter Prüfungszeitraum",
       "en": "Additional exam period"
     },
-    "begin": "2023-07-04",
-    "end": "2023-07-07"
-  },
-  {
-    "name": {
-      "de": "Prüfungszeitraum",
-      "en": "Exam period"
-    },
-    "begin": "2023-07-08",
-    "end": "2023-07-20"
+    "begin": "2024-01-19",
+    "end": "2024-01-25"
   },
   {
     "name": {
       "de": "Ende der Vorlesungszeit",
       "en": "End of lecture period"
     },
-    "begin": "2023-07-07"
+    "begin": "2024-01-25"
+  },
+  {
+    "name": {
+      "de": "Prüfungszeitraum",
+      "en": "Exam period"
+    },
+    "begin": "2024-01-26",
+    "end": "2024-02-05"
   },
   {
     "name": {
       "de": "Notenmeldung",
-      "en": "Recording grades"
+      "en": "Grade submission"
     },
-    "begin": "2023-07-25T09:00",
+    "begin": "2024-02-09T9:00",
     "hasHours": true
   },
   {
@@ -214,7 +112,7 @@
       "de": "Notenbekanntgabe",
       "en": "Announcement of grades"
     },
-    "begin": "2023-07-31T13:00",
+    "begin": "2024-02-14T13:00",
     "hasHours": true
   },
   {
@@ -222,7 +120,123 @@
       "de": "Semesterferien",
       "en": "Semester break"
     },
-    "begin": "2023-08-01",
-    "end": "2023-09-30"
+    "begin": "2024-02-15",
+    "end": "2024-03-14"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im ersten Semester mit Semestereröffnungsveranstaltung",
+      "en": "Start of lectures and semester for first-semester bachelor students with semester opening event"
+    },
+    "begin": "2024-03-18"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im höheren Semester und Masterstudierende",
+      "en": "Start of lectures and semester for higher-semester bachelor students and master students"
+    },
+    "begin": "2024-03-18"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsfrei (Ostern)",
+      "en": "Lecture-free (Easter)"
+    },
+    "begin": "2024-03-28",
+    "end": "2024-04-02"
+  },
+  {
+    "name": {
+      "de": "Prüfungsanmeldung",
+      "en": "Exam registration"
+    },
+    "begin": "2024-04-23",
+    "end": "2024-05-02"
+  },
+  {
+    "name": {
+      "de": "Prüfungsabmeldung",
+      "en": "Exam withdrawal"
+    },
+    "begin": "2024-04-23",
+    "end": "2024-06-26"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
+      "en": "Lecture-free (Ascension Day, Bridge Day)"
+    },
+    "begin": "2024-05-09",
+    "end": "2024-05-10"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsfrei (Pfingsten)",
+      "en": "Lecture-free (Pentecost)"
+    },
+    "begin": "2024-05-17",
+    "end": "2024-05-21"
+  },
+  {
+    "name": {
+      "de": "Vorlesungsfrei (Fronleichnam)",
+      "en": "Lecture-free (Corpus Christi)"
+    },
+    "begin": "2024-05-30"
+  },
+  {
+    "name": {
+      "de": "Notenmeldung Prädikate (ZV)",
+      "en": "Grade submission predicates (ZV)"
+    },
+    "begin": "2024-06-19T9:00",
+    "hasHours": true
+  },
+  {
+    "name": {
+      "de": "Erweiterter Prüfungszeitraum",
+      "en": "Additional exam period"
+    },
+    "begin": "2024-07-04",
+    "end": "2024-07-10"
+  },
+  {
+    "name": {
+      "de": "Ende der Vorlesungszeit",
+      "en": "End of lecture period"
+    },
+    "begin": "2024-07-10"
+  },
+  {
+    "name": {
+      "de": "Prüfungszeitraum",
+      "en": "Exam period"
+    },
+    "begin": "2024-07-11",
+    "end": "2024-07-23"
+  },
+  {
+    "name": {
+      "de": "Notenmeldung",
+      "en": "Grade submission"
+    },
+    "begin": "2024-07-26T9:00",
+    "hasHours": true
+  },
+  {
+    "name": {
+      "de": "Notenbekanntgabe",
+      "en": "Announcement of grades"
+    },
+    "begin": "2024-07-31T13:00",
+    "hasHours": true
+  },
+  {
+    "name": {
+      "de": "Semesterferien",
+      "en": "Semester break"
+    },
+    "begin": "2024-08-01",
+    "end": "2024-09-30"
   }
 ]
