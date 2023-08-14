@@ -26,21 +26,21 @@
   {
     "name": {
       "de": "Vorlesungsfrei",
-      "en": "Lecture-free"
+      "en": "No lectures"
     },
     "begin": "2023-10-03"
   },
   {
     "name": {
       "de": "Vorlesungsfrei",
-      "en": "Lecture-free"
+      "en": "No lectures"
     },
     "begin": "2023-10-31"
   },
   {
     "name": {
       "de": "Prüfungsanmeldung",
-      "en": "Exam registration"
+      "en": "Registration for exams"
     },
     "begin": "2023-11-06",
     "end": "2023-11-16"
@@ -48,7 +48,7 @@
   {
     "name": {
       "de": "Prüfungsabmeldung",
-      "en": "Exam withdrawal"
+      "en": "Deregistration for exams"
     },
     "begin": "2023-11-06",
     "end": "2024-01-11"
@@ -56,7 +56,7 @@
   {
     "name": {
       "de": "Vorlesungsfrei (Weihnachten)",
-      "en": "Lecture-free (Christmas)"
+      "en": "No lectures (Christmas)"
     },
     "begin": "2023-12-24",
     "end": "2024-01-07"
@@ -64,7 +64,7 @@
   {
     "name": {
       "de": "Notenmeldung Prädikate (ZV)",
-      "en": "Grade submission predicates (ZV)"
+      "en": "Recording grades predicates (admission requirements)"
     },
     "begin": "2024-01-09T9:00",
     "hasHours": true
@@ -95,7 +95,7 @@
   {
     "name": {
       "de": "Notenmeldung",
-      "en": "Grade submission"
+      "en": "Recording grades"
     },
     "begin": "2024-02-09T9:00",
     "hasHours": true
@@ -126,7 +126,7 @@
   {
     "name": {
       "de": "Vorlesungsfrei (Ostern)",
-      "en": "Lecture-free (Easter)"
+      "en": "No lectures (Easter)"
     },
     "begin": "2024-03-28",
     "end": "2024-04-02"
@@ -134,7 +134,7 @@
   {
     "name": {
       "de": "Prüfungsanmeldung",
-      "en": "Exam registration"
+      "en": "Registration for exams"
     },
     "begin": "2024-04-23",
     "end": "2024-05-02"
@@ -142,7 +142,7 @@
   {
     "name": {
       "de": "Prüfungsabmeldung",
-      "en": "Exam withdrawal"
+      "en": "Deregistration for exams"
     },
     "begin": "2024-04-23",
     "end": "2024-06-26"
@@ -150,7 +150,7 @@
   {
     "name": {
       "de": "Vorlesungsfrei (Christi Himmelfahrt, Brückentag)",
-      "en": "Lecture-free (Ascension Day, Bridge Day)"
+      "en": "No lectures (Ascension Day, Bridge Day)"
     },
     "begin": "2024-05-09",
     "end": "2024-05-10"
@@ -158,7 +158,7 @@
   {
     "name": {
       "de": "Vorlesungsfrei (Pfingsten)",
-      "en": "Lecture-free (Pentecost)"
+      "en": "No lectures (Whitsun)"
     },
     "begin": "2024-05-17",
     "end": "2024-05-21"
@@ -166,14 +166,14 @@
   {
     "name": {
       "de": "Vorlesungsfrei (Fronleichnam)",
-      "en": "Lecture-free (Corpus Christi)"
+      "en": "No lectures (Corpus Christi)"
     },
     "begin": "2024-05-30"
   },
   {
     "name": {
       "de": "Notenmeldung Prädikate (ZV)",
-      "en": "Grade submission predicates (ZV)"
+      "en": "Recording grades predicates (admission requirements)"
     },
     "begin": "2024-06-19T9:00",
     "hasHours": true
@@ -204,7 +204,7 @@
   {
     "name": {
       "de": "Notenmeldung",
-      "en": "Grade submission"
+      "en": "Recording grades"
     },
     "begin": "2024-07-26T9:00",
     "hasHours": true
