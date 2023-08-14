@@ -18,15 +18,8 @@
   },
   {
     "name": {
-      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im ersten Semester mit Semestereröffnungsveranstaltung",
-      "en": "Start of lectures and semester for first-semester bachelor students with semester opening event"
-    },
-    "begin": "2023-10-02"
-  },
-  {
-    "name": {
-      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im höheren Semester und Masterstudierende",
-      "en": "Start of lectures and semester for higher-semester bachelor students and master students"
+      "de": "Vorlesungsbeginn und Semesterstart",
+      "en": "Start of lectures and semester"
     },
     "begin": "2023-10-02"
   },
@@ -125,15 +118,8 @@
   },
   {
     "name": {
-      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im ersten Semester mit Semestereröffnungsveranstaltung",
-      "en": "Start of lectures and semester for first-semester bachelor students with semester opening event"
-    },
-    "begin": "2024-03-18"
-  },
-  {
-    "name": {
-      "de": "Vorlesungsbeginn und Semesterstart für Bachelorstudierende im höheren Semester und Masterstudierende",
-      "en": "Start of lectures and semester for higher-semester bachelor students and master students"
+      "de": "Vorlesungsbeginn und Semesterstart",
+      "en": "Start of lectures and semester"
     },
     "begin": "2024-03-18"
   },
