@@ -532,7 +532,7 @@ export default function Mensa () {
 
             <p>
               <h6>{t('foodModal.warning.title')}</h6>
-              {`${isTranslated(showMealDetails) && `${t('foodModal.translation.warning')} `}${t('foodModal.warning.text')}`}
+              {`${isTranslated(showMealDetails) ? `${t('foodModal.translation.warning')} ` : ''}${t('foodModal.warning.text')}`}
             </p>
 
             {isTranslated(showMealDetails) && (
