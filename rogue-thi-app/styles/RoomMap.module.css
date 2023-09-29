@@ -73,7 +73,7 @@
   height: 1em;
   margin-bottom: -2px;
   border-radius: 0.5em;
-  background-color: #8845ef;
+  background-color: var(--primary);
 }
 
 .roomAvailable {
@@ -94,7 +94,7 @@
   height: 1em;
   margin-bottom: -2px;
   border-radius: 0.5em;
-  background-color: #6c757d;
+  background-color: var(--gray);
 }
 
 .legendSpecial::before {

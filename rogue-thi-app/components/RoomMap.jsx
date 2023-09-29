@@ -206,7 +206,8 @@ export default function RoomMap ({ highlight, roomData }) {
           positions={entry.coordinates}
           pathOptions={{
             ...entry.options,
-            className: special ? special.color : (avail ? styles.roomAvailable : styles.roomOccupied)
+            color: special && avail ? special.color : null,
+            className: `${avail ? (!special ? styles.roomAvailable : '') : styles.roomOccupied}`
           }}
         />
       </FeatureGroup>
