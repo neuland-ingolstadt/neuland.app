@@ -94,8 +94,8 @@ export default async function handler (req, res) {
           category: 'Essen',
           prices: {
             student: 5.5,
-            employee: 6.2,
-            guest: 7.2
+            employee: 6.5,
+            guest: 7.5
           },
           allergens: null,
           flags: null,
