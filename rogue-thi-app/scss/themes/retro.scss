@@ -5,6 +5,7 @@ $body-bg: #121212;
 $body-color: white;
 
 @import "../common.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 @font-face {
   font-family: fasterone;

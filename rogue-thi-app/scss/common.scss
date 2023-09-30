@@ -150,7 +150,7 @@ pre {
   --home-card-mobile-border: #{$gray-700};
 
   --rooms-controls-background: #{$body-bg};
-  --rooms-controls-border: #{$gray-700};
+  --rooms-controls-border: #{rgba($gray-700, .1)};
 }
 
 // use our CI color
@@ -158,4 +158,3 @@ $theme-colors: (
   "primary": $primary
 );
 
-@import "../node_modules/bootstrap/scss/bootstrap";
