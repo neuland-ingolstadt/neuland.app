@@ -172,7 +172,7 @@ export default function Personal () {
 
       <ListGroup>
 
-        {themes.filter(item => item.style.includes(theme[0])).map(item => (
+        {themes.filter(item => item.style === theme[0]).map(item => (
           <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
             <div className={styles.interaction_icon}>
               <span className="text-muted">
