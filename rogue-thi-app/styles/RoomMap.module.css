@@ -118,7 +118,7 @@
 }
 
 .popup :global(.leaflet-popup-close-button) {
-  top: 1.3rem !important;
+  top: calc(50% - 0.9rem) !important;
   right: 1rem !important;
   background-color: var(--primary) !important;
   border-radius: 50% !important;
