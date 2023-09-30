@@ -184,7 +184,7 @@ export default function RoomMap ({ highlight, roomData }) {
 
     return (
       <FeatureGroup key={key}>
-        <Popup>
+        <Popup className={styles.popup}>
           <strong>
             {entry.properties.Raum}
           </strong>

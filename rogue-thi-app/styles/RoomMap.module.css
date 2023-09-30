@@ -110,3 +110,42 @@
 .locationMarker {
   filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, .25));
 }
+
+/* Popup close button */
+.popup :global(.leaflet-popup-close-button) > span {
+  color: var(--white);
+  font-size: 1.5rem !important;
+}
+
+.popup :global(.leaflet-popup-close-button) {
+  top: 1.3rem !important;
+  right: 1rem !important;
+  background-color: var(--primary) !important;
+  border-radius: 50% !important;
+  height: 1.7rem !important;
+  width: 1.7rem !important;
+  transition: background-color 0.2s ease-in-out !important;
+}
+
+.popup :global(.leaflet-popup-close-button:hover) {
+  background-color: var(--navbar-border) !important;
+}
+
+/* Whole Popup */
+.popup > div {
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--tabbar-tab);
+}
+
+/* Popup wrapper */
+.popup :global(.leaflet-popup-content-wrapper) {
+  padding: 0.2rem;
+  background-color: var(--rooms-controls-background);
+  padding-right: 2.2rem;
+}
+
+/* Popup tip */
+.popup :global(.leaflet-popup-tip) {
+  background-color: var(--tabbar-background);
+}
