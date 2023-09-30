@@ -8,9 +8,12 @@ import Form from 'react-bootstrap/Form'
 
 import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLinux } from '@fortawesome/free-brands-svg-icons'
+
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { TUX_ROOMS, filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
-import { filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
@@ -185,22 +188,29 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`} <br />
+          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`}
           {avail && (
             <>
+              <br />
               {t('rooms.map.freeFromUntil', {
                 from: formatFriendlyTime(avail.from),
                 until: formatFriendlyTime(avail.until)
               })}
-              <br />
             </>
           )}
           {!avail && availableRooms && (
             <>
+              <br />
               {t('rooms.map.occupied')}
             </>
           )}
-          {special?.text}
+          {special && (
+            <>
+              <br />
+              {special.text}
+              {TUX_ROOMS.includes(entry.properties.Raum) && <> <FontAwesomeIcon title="Linux" icon={faLinux} fontSize={12}/></>}
+            </>
+          )}
         </Popup>
         <Polygon
           positions={entry.coordinates}
