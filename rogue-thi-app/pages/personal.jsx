@@ -51,7 +51,7 @@ export default function Personal () {
   const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
   const [, setShowThemeModal] = useContext(ShowThemeModal)
   const [, setShowLanguageModal] = useContext(ShowLanguageModal)
-  const theme = useContext(ThemeContext)
+  const [theme] = useContext(ThemeContext)
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
 
@@ -172,7 +172,7 @@ export default function Personal () {
 
       <ListGroup>
 
-        {themes.filter(item => item.style === theme[0]).map(item => (
+        {themes.filter(item => item.style === theme).map(item => (
           <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
             <div className={styles.interaction_icon}>
               <span className="text-muted">
