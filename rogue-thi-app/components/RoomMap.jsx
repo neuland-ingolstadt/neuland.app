@@ -348,7 +348,6 @@ export default function RoomMap ({ highlight, roomData }) {
             center={[location.latitude, location.longitude]}
             fillOpacity={1.0}
             color='#ffffff'
-            fillColor='rgb(51, 136, 255)'
             radius={8}
             weight={3}
             className={styles.locationMarker}
