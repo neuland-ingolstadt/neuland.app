@@ -14,7 +14,7 @@ import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
-import { ROOMS_ALL, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
+import { ROOMS_ALL, TUX_ROOMS, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import API from '../../lib/backend/authenticated-api'
 
@@ -22,8 +22,6 @@ import styles from '../../styles/RoomsList.module.css'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
-
-const TUX_ROOMS = ['G308']
 
 export const getStaticProps = async ({ locale }) => ({
   props: {

@@ -72,7 +72,7 @@ module.exports = {
           {
             key: 'Content-Security-Policy',
             value: `default-src 'none';
-              img-src 'self' data: https://tile.openstreetmap.org;
+              img-src 'self' data: https://tiles-eu.stadiamaps.com/;
               font-src 'self';
               connect-src 'self' ${PROXY_URL} ${API_URL};
               style-src 'self' 'unsafe-inline';

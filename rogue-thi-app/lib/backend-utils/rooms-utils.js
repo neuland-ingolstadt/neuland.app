@@ -12,6 +12,7 @@ export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
 export const SUGGESTION_DURATION_PRESET = 90
+export const TUX_ROOMS = ['G308']
 
 /**
  * Adds minutes to a date object.

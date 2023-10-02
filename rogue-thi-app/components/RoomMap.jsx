@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Link from 'next/link'
@@ -8,14 +8,20 @@ import Form from 'react-bootstrap/Form'
 
 import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLinux } from '@fortawesome/free-brands-svg-icons'
+
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import { TUX_ROOMS, filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
-import { filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
+import { ThemeContext } from '../pages/_app'
 import styles from '../styles/RoomMap.module.css'
 import { useTranslation } from 'next-i18next'
+
+import themes from '../data/themes.json'
 
 const SPECIAL_ROOMS = {
   G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
@@ -57,6 +63,18 @@ export default function RoomMap ({ highlight, roomData }) {
   const [availableRooms, setAvailableRooms] = useState(null)
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
+
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const [theme] = useContext(ThemeContext)
+
+  function isDark () {
+    const themeSettings = themes.filter(item => item.style === theme)[0].mapTheme ?? 'system'
+    if (themeSettings === 'system') {
+      return systemDark
+    } else {
+      return themeSettings === 'dark'
+    }
+  }
 
   /**
    * Preprocessed room data for Leaflet.
@@ -181,32 +199,40 @@ export default function RoomMap ({ highlight, roomData }) {
 
     return (
       <FeatureGroup key={key}>
-        <Popup>
+        <Popup className={styles.popup}>
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`} <br />
+          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`}
           {avail && (
             <>
+              <br />
               {t('rooms.map.freeFromUntil', {
                 from: formatFriendlyTime(avail.from),
                 until: formatFriendlyTime(avail.until)
               })}
-              <br />
             </>
           )}
           {!avail && availableRooms && (
             <>
+              <br />
               {t('rooms.map.occupied')}
             </>
           )}
-          {special?.text}
+          {special && (
+            <>
+              <br />
+              {special.text}
+              {TUX_ROOMS.includes(entry.properties.Raum) && <> <FontAwesomeIcon title="Linux" icon={faLinux} fontSize={12}/></>}
+            </>
+          )}
         </Popup>
         <Polygon
           positions={entry.coordinates}
           pathOptions={{
             ...entry.options,
-            className: special ? special.color : (avail ? styles.roomAvailable : styles.roomOccupied)
+            color: special && avail ? special.color : null,
+            className: `${avail ? (!special ? styles.roomAvailable : '') : styles.roomOccupied}`
           }}
         />
       </FeatureGroup>
@@ -275,7 +301,7 @@ export default function RoomMap ({ highlight, roomData }) {
       >
         <TileLayer
           attribution={t('rooms.map.attribution')}
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={`https://tiles-eu.stadiamaps.com/tiles/alidade_smooth${isDark() ? '_dark' : ''}/{z}/{x}/{y}{r}.png`}
           maxNativeZoom={19}
           maxZoom={21}
         />
@@ -322,7 +348,6 @@ export default function RoomMap ({ highlight, roomData }) {
             center={[location.latitude, location.longitude]}
             fillOpacity={1.0}
             color='#ffffff'
-            fillColor='rgb(51, 136, 255)'
             radius={8}
             weight={3}
             className={styles.locationMarker}

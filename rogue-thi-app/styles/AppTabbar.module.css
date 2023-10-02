@@ -2,7 +2,6 @@
   /* prevent iOS home bar from overlapping tab bar */
   padding: 0 0 env(safe-area-inset-bottom, 0px) 0;
   background: var(--tabbar-background, white);
-  border-top: 1px solid var(--tabbar-border, #eeeeee);
   box-shadow: 0px 0px 3px var(--tabbar-shadow, #00000020);
 }
 
@@ -32,7 +31,9 @@
  * this spacer is placed directly under the app body and provides
  * clerance to ensure nothing is displayed under the tab bar
  */
-.spacer {
-  /* 56px footer height + iOS home bar height */
-  height: calc(56px + env(safe-area-inset-bottom, 0px));
-}
+ @media only screen and (max-width: 768px) {
+  .spacer {
+    /* 56px footer height + iOS home bar height */
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+  }
+ }

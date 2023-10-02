@@ -5,6 +5,7 @@ $body-bg: #FACDE5;
 $body-color: black;
 
 @import "../common.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 @font-face {
     font-family: sacramento;

@@ -1,9 +1,8 @@
-$theme-colors: (
-  "primary": #005a9b,
-  "secondary": #3a93c3
-);
+$primary: #005a9b;
+$secondary: #3a93c3;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
+@import "../common.scss";
 
 // react-placeholder
 // declare after bootstrap, since we need bootstrap variables
@@ -12,9 +11,8 @@ $theme-colors: (
 }
 
 :root {
-  --navbar-border-image: linear-gradient(90deg, #005a9b, #00b1ec);
-  --tabbar-tab-active: #005a9b;
-  // --navbar-border-image: none;
+  --navbar-border-image: linear-gradient(90deg, #{$primary}, #00b1ec);
+  --home-card-mobile-border: #{$gray-300};
 }
 
 

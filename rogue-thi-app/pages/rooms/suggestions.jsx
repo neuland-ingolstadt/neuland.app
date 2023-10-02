@@ -23,7 +23,7 @@ import AppTabbar from '../../components/page/AppTabbar'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 
-import { SUGGESTION_DURATION_PRESET, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
+import { SUGGESTION_DURATION_PRESET, TUX_ROOMS, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
@@ -33,8 +33,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import { Trans, useTranslation } from 'next-i18next'
 import { useBuildingFilter } from '../../lib/hooks/building-filter'
-
-const TUX_ROOMS = ['G308']
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
