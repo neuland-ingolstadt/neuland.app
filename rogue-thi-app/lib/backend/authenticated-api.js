@@ -139,7 +139,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       }
     } catch (e) {
       // when the user did not select any classes, the timetable returns 'Query not possible'
-      if (e.data === 'Query not possible') {
+      if (e.data === 'Query not possible' || e.data === 'Time table does not exist') {
         return {
           timetable: []
         }
