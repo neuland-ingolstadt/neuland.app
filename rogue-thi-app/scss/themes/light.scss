@@ -1,5 +1,4 @@
 $primary: #8845ef;
-$gray-700: #e5e5e5;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../common.scss";
@@ -8,4 +7,8 @@ $gray-700: #e5e5e5;
 // declare after bootstrap, since we need bootstrap variables
 .text-row, .rect-shape, .round-shape {
   background: $gray-200 !important;
+}
+
+:root {
+  --home-card-mobile-border: #{$gray-300};
 }

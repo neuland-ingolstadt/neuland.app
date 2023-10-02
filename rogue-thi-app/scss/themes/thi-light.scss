@@ -1,6 +1,5 @@
 $primary: #005a9b;
 $secondary: #3a93c3;
-$gray-700: #e5e5e5;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../common.scss";
@@ -13,6 +12,7 @@ $gray-700: #e5e5e5;
 
 :root {
   --navbar-border-image: linear-gradient(90deg, #{$primary}, #00b1ec);
+  --home-card-mobile-border: #{$gray-300};
 }
 
 
