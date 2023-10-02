@@ -1,5 +1,6 @@
 $primary: #005a9b;
 $secondary: #3a93c3;
+$gray-700: #e5e5e5;
 
 @import "../../node_modules/bootstrap/scss/bootstrap";
 @import "../common.scss";
@@ -12,8 +13,6 @@ $secondary: #3a93c3;
 
 :root {
   --navbar-border-image: linear-gradient(90deg, #{$primary}, #00b1ec);
-  --tabbar-tab-active: $primary;
-  // --navbar-border-image: none;
 }
 
 
