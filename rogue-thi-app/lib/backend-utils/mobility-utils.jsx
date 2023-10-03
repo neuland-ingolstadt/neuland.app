@@ -2,6 +2,8 @@ import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
 
+import { TextBlock } from 'react-placeholder/lib/placeholders'
+
 import { formatFriendlyTime, formatRelativeMinutes } from '../date-utils'
 import API from '../backend/authenticated-api'
 import NeulandAPI from '../backend/neuland-api'
@@ -108,6 +110,29 @@ export async function getMobilityEntries (kind, station) {
   }
 }
 
+export function RenderMobilityEntryPlaceholder ({ kind, styles }) {
+  if (kind === 'charging') {
+    return (
+      <>
+        <div className={`${styles.mobilityDestination} ${styles.placeholder_4_0}`}>
+          <TextBlock rows={1} />
+        </div>
+      </>
+    )
+  }
+
+  return (
+    <>
+      <div className={styles.mobilityRoute}>
+      - - -
+      </div>
+      <div className={styles.mobilityDestination}>
+        <TextBlock rows={1} />
+      </div>
+    </>
+  )
+}
+
 /**
  * Renders a row on the mobility page.
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
@@ -138,17 +163,17 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
     const timeString = formatTimes(item.actualTime, 30, 90)
 
     return (
-  <>
-    <div className={styles.mobilityRoute}>
-      {item.name}
-    </div>
-    <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
-      {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…'}
-    </div>
-    <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
-      {timeString}
-    </div>
-  </>
+      <>
+        <div className={styles.mobilityRoute}>
+          {item.name}
+        </div>
+        <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
+          {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…'}
+        </div>
+        <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
+          {timeString}
+        </div>
+      </>
     )
   } else if (kind === 'parking') {
     return (

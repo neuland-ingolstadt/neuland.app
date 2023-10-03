@@ -11,6 +11,7 @@ import {
 
 import {
   RenderMobilityEntry,
+  RenderMobilityEntryPlaceholder,
   getMobilityEntries,
   getMobilityLabel,
   getMobilitySettings
@@ -66,13 +67,23 @@ export default function MobilityCard () {
     load()
   }, [mobilitySettings, time, t])
 
+  const placeholder = (
+    <ListGroup variant="flush">
+      {Array.from({ length: 4 }, (_, i) => (
+        <ListGroup.Item className={styles.mobilityItem} key={i}>
+          <RenderMobilityEntryPlaceholder kind={mobilitySettings?.kind} styles={styles} />
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  )
+
   return (
     <BaseCard
       icon={mobilityIcon}
       title={t(mobilityLabel)}
       link="/mobility"
     >
-      <ReactPlaceholder type="text" rows={5} ready={mobility || mobilityError}>
+      <ReactPlaceholder ready={mobility || mobilityError} customPlaceholder={placeholder}>
         <ListGroup variant="flush">
           {mobility && mobility.slice(0, 4).map((entry, i) => <ListGroup.Item key={i} className={styles.mobilityItem}>
             <RenderMobilityEntry kind={mobilitySettings.kind} item={entry} maxLen={MAX_STATION_LENGTH} styles={styles} detailed={false}/>

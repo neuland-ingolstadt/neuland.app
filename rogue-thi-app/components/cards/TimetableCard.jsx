@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
+import { TextBlock } from 'react-placeholder/lib/placeholders'
 import { useRouter } from 'next/router'
 
 import { faCalendarMinus } from '@fortawesome/free-solid-svg-icons'
@@ -10,6 +11,8 @@ import { getFriendlyTimetable, getTimetableEntryName } from '../../lib/backend-u
 import BaseCard from './BaseCard'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import { useTranslation } from 'next-i18next'
+
+import styles from '../../styles/Home.module.css'
 
 /**
  * Dashboard card for the timetable.
@@ -42,13 +45,25 @@ export default function TimetableCard () {
     return () => clearInterval(interval)
   }, [])
 
+  const placeholder = (
+    <>
+      <ListGroup variant="flush">
+        {Array.from({ length: 2 }, (_, i) => (
+          <ListGroup.Item key={i}>
+            <TextBlock rows={2} className={styles.placeholder_2_5}/>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </>
+  )
+
   return (
     <BaseCard
       icon={faCalendarMinus}
       i18nKey="timetable"
       link="/timetable"
     >
-      <ReactPlaceholder type="text" rows={5} ready={timetable || timetableError}>
+      <ReactPlaceholder ready={timetable || timetableError} customPlaceholder={placeholder}>
         <ListGroup variant="flush">
           {(timetable && timetable.slice(0, 2).map((x, i) => {
             const isSoon = (x.startDate > currentTime && new Date(x.startDate) <= new Date(currentTime.getTime() + 30 * 60 * 1000))
