@@ -98,3 +98,15 @@
   white-space: nowrap;
   width: auto;
 }
+
+.placeholder_2_5 {
+  margin: 2.5px 0;
+}
+
+.placeholder_3_0 {
+  margin: 3px 0;
+}
+
+.placeholder_4_0 {
+  margin: 4px 0;
+}

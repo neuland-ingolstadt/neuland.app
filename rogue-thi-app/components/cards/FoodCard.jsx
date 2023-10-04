@@ -6,8 +6,11 @@ import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { Trans, useTranslation } from 'next-i18next'
 import BaseCard from './BaseCard'
 import { FoodFilterContext } from '../../pages/_app'
+import { TextBlock } from 'react-placeholder/lib/placeholders'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
+
+import styles from '../../styles/Home.module.css'
 
 /**
  * Dashboard card for Mensa and Reimanns food plans.
@@ -87,13 +90,24 @@ export default function FoodCard () {
     load()
   }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n])
 
+  const placeholder = (
+    <ListGroup variant='flush' >
+      <ListGroup.Item>
+        <TextBlock rows={2} className={styles.placeholder_3_0}/>
+      </ListGroup.Item>
+      <ListGroup.Item>
+        <TextBlock rows={1} className={styles.placeholder_3_0}/>
+      </ListGroup.Item>
+    </ListGroup>
+  )
+
   return (
     <BaseCard
       icon={faUtensils}
       i18nKey={`food.location.${foodCardTitle}`}
       link="/food"
     >
-      <ReactPlaceholder type="text" rows={5} ready={foodEntries || foodError}>
+      <ReactPlaceholder ready={foodEntries || foodError} customPlaceholder={placeholder}>
         <ListGroup variant="flush">
           {foodEntries && foodEntries.map((x, i) => (
             <ListGroup.Item key={i}>

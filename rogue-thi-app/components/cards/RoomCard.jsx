@@ -10,7 +10,9 @@ import { findSuggestedRooms, getEmptySuggestions, getTranslatedRoomName } from '
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
+
 import ReactPlaceholder from 'react-placeholder/lib'
+import { TextBlock } from 'react-placeholder/lib/placeholders'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import Link from 'next/link'
@@ -70,13 +72,23 @@ export default function RoomCard () {
     }
   }, [router, userKind])
 
+  const placeholder = (
+    <ListGroup variant="flush">
+      {Array.from({ length: 2 }, (_, i) => (
+        <ListGroup.Item key={i}>
+          <TextBlock rows={2} />
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  )
+
   return (
     <BaseCard
       icon={faDoorOpen}
       i18nKey="rooms"
       link="/rooms"
     >
-      <ReactPlaceholder type="text" rows={4} ready={filterResults || userKind !== USER_STUDENT}>
+      <ReactPlaceholder ready={filterResults || userKind !== USER_STUDENT} customPlaceholder={placeholder}>
         <ListGroup variant="flush">
           {filterResults && filterResults.slice(0, 2).map((x, i) => {
             return (

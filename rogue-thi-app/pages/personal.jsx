@@ -37,6 +37,7 @@ import themes from '../data/themes.json'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+import { TextBlock } from 'react-placeholder/lib/placeholders'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -121,11 +122,25 @@ export default function Personal () {
     }
   }, [router, userKind])
 
+  const placeholder = (
+    <>
+      <ListGroup.Item action>
+        <TextBlock rows={2} className={styles.placeholder} />
+      </ListGroup.Item>
+      <ListGroup.Item action>
+        <TextBlock rows={2} className={styles.placeholder} />
+      </ListGroup.Item>
+      <ListGroup.Item action>
+        <TextBlock rows={1} className={styles.placeholder} />
+      </ListGroup.Item>
+    </>
+  )
+
   return (<AppContainer>
     <AppNavbar title={t('personal.title')} />
 
     <AppBody>
-      <ReactPlaceholder type="text" rows={10} ready={userdata || userKind !== USER_STUDENT}>
+      <ReactPlaceholder ready={userdata || userKind !== USER_STUDENT} customPlaceholder={placeholder}>
 
         {userKind === USER_STUDENT &&
           <ListGroup>
