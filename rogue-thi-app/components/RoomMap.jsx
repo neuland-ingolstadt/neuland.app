@@ -301,7 +301,8 @@ export default function RoomMap ({ highlight, roomData }) {
       >
         <TileLayer
           attribution={t('rooms.map.attribution')}
-          url={`https://tiles-eu.stadiamaps.com/tiles/alidade_smooth${isDark() ? '_dark' : ''}/{z}/{x}/{y}{r}.png`}
+          // url={`https://tiles-eu.stadiamaps.com/tiles/alidade_smooth${isDark() ? '_dark' : ''}/{z}/{x}/{y}{r}.png`}
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxNativeZoom={19}
           maxZoom={21}
         />
