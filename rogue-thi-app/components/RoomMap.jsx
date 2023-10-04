@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import Link from 'next/link'
@@ -17,11 +17,8 @@ import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
-import { ThemeContext } from '../pages/_app'
 import styles from '../styles/RoomMap.module.css'
 import { useTranslation } from 'next-i18next'
-
-import themes from '../data/themes.json'
 
 const SPECIAL_ROOMS = {
   G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
@@ -64,6 +61,8 @@ export default function RoomMap ({ highlight, roomData }) {
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
+  /**
+   * WILL BE USED WITH NEW TILE SERVICE
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
   const [theme] = useContext(ThemeContext)
 
@@ -75,6 +74,7 @@ export default function RoomMap ({ highlight, roomData }) {
       return themeSettings === 'dark'
     }
   }
+  */
 
   /**
    * Preprocessed room data for Leaflet.
