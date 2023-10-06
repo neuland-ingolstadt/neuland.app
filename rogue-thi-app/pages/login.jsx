@@ -23,6 +23,10 @@ const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
 const GUEST_ONLY = !!process.env.NEXT_PUBLIC_GUEST_ONLY
 
+const KNOWN_BACKEND_ERRORS = [
+  'Response is not valid JSON'
+]
+
 export default function Login () {
   const router = useRouter()
   const { redirect } = router.query
@@ -56,7 +60,12 @@ export default function Login () {
       if (e.message.includes(ORIGINAL_ERROR_WRONG_CREDENTIALS)) {
         setFailure(t('error.wrongCredentials'))
       } else {
-        setFailure(t('error.generic'))
+        console.error(e)
+        if (KNOWN_BACKEND_ERRORS.some(error => e.message.includes(error))) {
+          setFailure(t('error.backend'))
+        } else {
+          setFailure(t('error.generic'))
+        }
       }
     }
   }

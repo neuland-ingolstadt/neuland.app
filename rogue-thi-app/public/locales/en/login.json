@@ -1,7 +1,8 @@
 {
     "error": {
         "wrongCredentials": "Your login credentials are incorrect.",
-        "generic": "An error occurred while connecting to the server."
+        "generic": "An error occurred while connecting to the server.",
+        "backend": "The THI backend is currently unavailable. Please try again later."
     },
     "alert": "You must be logged in to use this feature.",
     "guestOnly": {
