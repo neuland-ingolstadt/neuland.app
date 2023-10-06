@@ -1,7 +1,8 @@
 {
     "error": {
         "wrongCredentials": "Deine Zugangsdaten sind falsch.",
-        "generic": "Bei der Verbindung zum Server ist ein Fehler aufgetreten."
+        "generic": "Bei der Verbindung zum Server ist ein Fehler aufgetreten.",
+        "backend": "Das THI Backend ist derzeit nicht erreichbar. Bitte versuche es später erneut."
     },
     "alert": "Für diese Funktion musst du eingeloggt sein.",
     "guestOnly": {
