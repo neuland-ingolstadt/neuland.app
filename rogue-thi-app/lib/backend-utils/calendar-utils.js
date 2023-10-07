@@ -5,6 +5,7 @@ import rawCalendar from '../../data/calendar.json'
 export const compileTime = new Date()
 export const calendar = rawCalendar.map(x => ({
   ...x,
+  name: x.name.de,
   begin: new Date(x.begin),
   end: x.end && new Date(x.end)
 }))
