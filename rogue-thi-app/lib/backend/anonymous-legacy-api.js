@@ -25,8 +25,6 @@ export class LegacyAnonymousAPIClient extends AnonymousAPIClient {
    * Submits an API request to the THI backend using a WebSocket proxy
    */
   async request (params) {
-    console.log(ENDPOINT_MODE)
-
     if (!this.connection) {
       this.connection = obtainFetchImplementation(ENDPOINT_MODE, {
         target: ENDPOINT_HOST,
