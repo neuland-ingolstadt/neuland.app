@@ -1,9 +1,12 @@
 import API from '../backend/authenticated-api'
+import LegacyAPI from '../backend/authenticated-legacy-api'
 
 import { formatISODate, getWeek } from '../date-utils'
 import { getFriendlyTimetable } from './timetable-utils'
 import { i18n } from 'next-i18next'
 import roomDistances from '../../data/room-distances.json'
+
+import { UseLegacyAPI } from './use-legacy'
 
 const IGNORE_GAPS = 15
 
@@ -60,6 +63,53 @@ function maxDate (a, b) {
  */
 function isInBuilding (room, building) {
   return new RegExp(`${building}\\d+`, 'i').test(room)
+}
+
+export function getLegacyRoomOpenings (rooms, date) {
+  date = formatISODate(date)
+  const openings = {}
+  // get todays rooms
+  rooms.filter(room => room.datum === date)
+    // flatten room types
+    .flatMap(room => room.rtypes)
+    // flatten time slots
+    .flatMap(rtype =>
+      Object.values(rtype.stunden)
+        .map(stunde => ({
+          type: rtype.raumtyp,
+          ...stunde
+        }))
+    )
+    // flatten room list
+    .flatMap(stunde =>
+      stunde.raeume.split(', ')
+        .map(room => ({
+          room,
+          type: stunde.type,
+          from: new Date(date + 'T' + stunde.von),
+          until: new Date(date + 'T' + stunde.bis)
+        }))
+    )
+    // iterate over every room
+    .forEach(({ room, type, from, until }) => {
+      // initialize room
+      const roomOpenings = openings[room] = openings[room] || []
+      // find overlapping opening
+      // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
+      const opening = roomOpenings.find(opening =>
+        from <= addMinutes(opening.until, IGNORE_GAPS) &&
+        until >= addMinutes(opening.from, -IGNORE_GAPS)
+      )
+      if (opening) {
+        // extend existing opening
+        opening.from = minDate(from, opening.from)
+        opening.until = maxDate(until, opening.until)
+      } else {
+        // create new opening
+        roomOpenings.push({ type, from, until })
+      }
+    })
+  return openings
 }
 
 /**
@@ -169,6 +219,28 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
  * @returns {object[]}
  */
 export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL) {
+  const legacy = UseLegacyAPI()
+  if (legacy) {
+    const data = await LegacyAPI.getFreeRooms(beginDate)
+
+    const openings = getLegacyRoomOpenings(data.rooms, beginDate)
+    return Object.keys(openings)
+      .flatMap(room =>
+        openings[room].map(opening => ({
+          room,
+          type: opening.type,
+          from: opening.from,
+          until: opening.until
+        }))
+      )
+      .filter(opening =>
+        (building === BUILDINGS_ALL || isInBuilding(opening.room.toLowerCase(), building)) &&
+        beginDate >= opening.from &&
+        endDate <= opening.until
+      )
+      .sort((a, b) => a.room.localeCompare(b.room))
+  }
+
   const data = await API.getFreeRooms(beginDate)
 
   const openings = getRoomOpenings(data, beginDate)
