@@ -1,55 +1,25 @@
-import { APIError, AnonymousAPIClient } from './anonymous-api'
+import { APIError } from './anonymous-api'
 import { callWithSession } from './thi-session-handler'
 
-import courseShortNames from '../../data/course-short-names.json'
+import { extractFacultyFromPersonalData, extractSpoFromPersonalData } from './authenticated-api'
+import { LegacyAnonymousAPIClient } from './anonymous-legacy-api'
 
-const KEY_GET_PERSONAL_DATA = 'getPersonalData'
-const KEY_GET_TIMETABLE = 'getTimetable'
-const KEY_GET_EXAMS = 'getExams'
-const KEY_GET_GRADES = 'getGrades'
-const KEY_GET_MENSA_PLAN = 'getMensaPlan'
-const KEY_GET_FREE_ROOMS = 'getFreeRooms'
-const KEY_GET_PARKING_DATA = 'getCampusParkingData'
-const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturers'
-const KEY_GET_LECTURERS = 'getLecturers'
-
-/**
- * Determines the users faculty.
- * @param {object} data Personal data
- * @returns {string} Faculty name (e.g. `Informatik`)
- */
-export function extractFacultyFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.stg) {
-    return null
-  }
-
-  const shortName = data.persdata.stg
-  const faculty = Object.keys(courseShortNames)
-    .find(faculty => courseShortNames[faculty].includes(shortName))
-
-  return faculty
-}
-
-/**
- * Determines the users SPO version.
- * @param {object} data Personal data
- * @returns {string}
- */
-export function extractSpoFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.po_url) {
-    return null
-  }
-
-  const split = data.persdata.po_url.split('/').filter(x => x.length > 0)
-  return split[split.length - 1]
-}
+const KEY_GET_PERSONAL_DATA = 'getPersonalDataLegacy'
+const KEY_GET_TIMETABLE = 'getTimetableLegacy'
+const KEY_GET_EXAMS = 'getExamsLegacy'
+const KEY_GET_GRADES = 'getGradesLegacy'
+const KEY_GET_MENSA_PLAN = 'getMensaPlanLegacy'
+const KEY_GET_FREE_ROOMS = 'getFreeRoomsLegacy'
+const KEY_GET_PARKING_DATA = 'getCampusParkingDataLegacy'
+const KEY_GET_PERSONAL_LECTURERS = 'getPersonalLecturersLegacy'
+const KEY_GET_LECTURERS = 'getLecturersLegacy'
 
 /**
  * Client for accessing the API as a particular user.
  *
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
-export class AuthenticatedAPIClient extends AnonymousAPIClient {
+export class LegacyAuthenticatedAPIClient extends LegacyAnonymousAPIClient {
   constructor () {
     super()
 
@@ -67,17 +37,11 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         session,
         ...params
       })
-
-      // old status format
-      if (res.status !== 0) {
+      if (res.status === 0) {
+        return res
+      } else {
         throw new APIError(res.status, res.data)
       }
-      // new status format
-      if (res.data[0] !== 0) {
-        throw new APIError(res.data[0], res.data[1])
-      }
-
-      return res.data[1]
     })
   }
 
@@ -128,14 +92,14 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         format: 'json',
         day: date.getDate(),
         month: date.getMonth() + 1,
-        year: date.getFullYear(),
+        year: 1900 + date.getYear(),
         details: detailed ? 1 : 0
       })
 
       return {
-        semester: res[0],
-        holidays: res[1],
-        timetable: res[2]
+        semester: res.data[1],
+        holidays: res.data[2],
+        timetable: res.data[3]
       }
     } catch (e) {
       // when the user did not select any classes, the timetable returns 'Query not possible'
@@ -154,8 +118,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       const res = await this.requestCached(KEY_GET_EXAMS, {
         service: 'thiapp',
         method: 'exams',
-        format: 'json',
-        modus: '1' // what does this mean? if only we knew
+        format: 'json'
       })
 
       return res
@@ -176,7 +139,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data[1]
   }
 
   async getMensaPlan () {
@@ -186,7 +149,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data
   }
 
   /**
@@ -200,10 +163,10 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json',
       day: date.getDate(),
       month: date.getMonth() + 1,
-      year: date.getFullYear()
+      year: 1900 + date.getYear()
     })
 
-    return res
+    return res.data[1]
   }
 
   async getCampusParkingData () {
@@ -213,7 +176,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data
   }
 
   async getPersonalLecturers () {
@@ -223,7 +186,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data[1]
   }
 
   /**
@@ -240,103 +203,26 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       to
     })
 
-    return res
+    return res.data[1]
   }
 
   async getLibraryReservations () {
-    try {
-      const res = await this.requestAuthenticated({
-        service: 'thiapp',
-        method: 'reservations',
-        type: 1,
-        cmd: 'getreservations',
-        format: 'json'
-      })
-
-      return res[1]
-    } catch (e) {
-      // as of 2021-06 the API returns "Service not available" when the user has no reservations
-      // thus we dont alert the error here, but just silently set the reservations to none
-      if (e.data === 'No reservation data' || e.data === 'Service not available') {
-        return []
-      } else {
-        throw e
-      }
-    }
+    throw new Error('Not implemented')
   }
 
   async getAvailableLibrarySeats () {
-    try {
-      const res = await this.requestAuthenticated({
-        service: 'thiapp',
-        method: 'reservations',
-        type: 1,
-        subtype: 1,
-        cmd: 'getavailabilities',
-        format: 'json'
-      })
-
-      return res[1]
-    } catch (e) {
-      // Unbekannter Fehler means the user has already reserved a spot
-      // and can not reserve additional ones
-      if (e.data === 'Unbekannter Fehler') {
-        return []
-      } else {
-        throw e
-      }
-    }
+    throw new Error('Not implemented')
   }
 
-  /**
-   * TODO documentation
-   */
   async addLibraryReservation (roomId, day, start, end, place) {
-    const res = await this.requestAuthenticated({
-      service: 'thiapp',
-      method: 'reservations',
-      type: 1,
-      subtype: 1,
-      cmd: 'addreservation',
-      data: JSON.stringify({
-        resource: roomId,
-        at: day,
-        from: start,
-        to: end,
-        place
-      }),
-      dblslots: 0,
-      format: 'json'
-    })
-
-    return res[0]
+    throw new Error('Not implemented')
   }
 
   /**
    * @param {string} reservationId Reservation ID returned by `getLibraryReservations`
    */
   async removeLibraryReservation (reservationId) {
-    try {
-      await this.requestAuthenticated({
-        service: 'thiapp',
-        method: 'reservations',
-        type: 1,
-        subtype: 1,
-        cmd: 'delreservation',
-        data: reservationId,
-        format: 'json'
-      })
-
-      return true
-    } catch (e) {
-      // as of 2021-06 the API returns "Service not available" when the user has no reservations
-      // thus we dont alert the error here, but just silently set the reservations to none
-      if (e.data === 'No reservation data' || e.data === 'Service not available') {
-        return true
-      } else {
-        throw e
-      }
-    }
+    throw new Error('Not implemented')
   }
 
   async getImprint () {
@@ -346,8 +232,8 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data[1]
   }
 }
 
-export default new AuthenticatedAPIClient()
+export default new LegacyAuthenticatedAPIClient()

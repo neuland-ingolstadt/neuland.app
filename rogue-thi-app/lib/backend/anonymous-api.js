@@ -16,7 +16,7 @@ const USER_AGENT = `neuland.app/${packageInfo.version} (+${GIT_URL})`
 
 // AAA Certificate Services
 // valid until 01.01.2029
-const THI_CERTS = [
+export const THI_CERTS = [
   `-----BEGIN CERTIFICATE-----
   MIIEMjCCAxqgAwIBAgIBATANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJHQjEb
   MBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHDAdTYWxmb3JkMRow
