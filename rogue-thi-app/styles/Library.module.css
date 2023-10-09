@@ -5,3 +5,7 @@
 .floatRight {
   float: right;
 }
+
+.alert {
+  margin-top: 30px;
+}

@@ -17,6 +17,7 @@ import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-s
 import { ROOMS_ALL, TUX_ROOMS, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import API from '../../lib/backend/authenticated-api'
+import LegacyAPI from '../../lib/backend/authenticated-legacy-api'
 
 import styles from '../../styles/RoomsList.module.css'
 
@@ -32,6 +33,8 @@ export const getStaticProps = async ({ locale }) => ({
   }
 })
 
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
+
 /**
  * Page containing a textual representation of the room openings.
  */
@@ -45,7 +48,7 @@ export default function RoomList () {
     async function load () {
       try {
         const now = new Date()
-        const data = await API.getFreeRooms(now)
+        const data = LEGACY_MODE ? await LegacyAPI.getFreeRooms() : await API.getFreeRooms(now)
 
         const days = data.map(day => {
           const result = {}

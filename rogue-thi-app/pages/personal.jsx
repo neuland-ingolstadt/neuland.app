@@ -31,13 +31,17 @@ import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/b
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
 import { calculateECTS, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
+import LegacyAPI from '../lib/backend/authenticated-legacy-api'
 
 import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+
 import { TextBlock } from 'react-placeholder/lib/placeholders'
+
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -91,7 +95,7 @@ export default function Personal () {
   useEffect(() => {
     async function load () {
       try {
-        const response = await API.getPersonalData()
+        const response = LEGACY_MODE ? await LegacyAPI.getPersonalData() : await API.getPersonalData()
         const data = response.persdata
         data.pcounter = response.pcounter
         setUserdata(data)

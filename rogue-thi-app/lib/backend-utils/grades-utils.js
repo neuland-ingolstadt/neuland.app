@@ -1,5 +1,9 @@
 import API from '../backend/authenticated-api'
+import LegacyAPI from '../backend/authenticated-legacy-api'
 import courseSPOs from '../../data/spo-grade-weights.json'
+import { getLegacyGradeList } from '../backend-legacy-utils/grades-legacy-utils'
+
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
 
 const redactGrades = process.env.NEXT_PUBLIC_REDACT_GRADES === 'true' || false
 
@@ -12,6 +16,10 @@ function simplifyName (x) {
  * @returns {object[]}
  */
 async function getGradeList () {
+  if (LEGACY_MODE) {
+    return await getLegacyGradeList()
+  }
+
   const gradeList = await API.getGrades()
 
   gradeList.forEach(x => {
@@ -94,7 +102,7 @@ export async function calculateECTS () {
  */
 export async function loadGradeAverage () {
   const gradeList = await getGradeList()
-  const spoName = await API.getSpoName()
+  const spoName = LEGACY_MODE ? await LegacyAPI.getSpoName() : await API.getSpoName()
   if (!spoName || !courseSPOs[spoName]) {
     return
   }

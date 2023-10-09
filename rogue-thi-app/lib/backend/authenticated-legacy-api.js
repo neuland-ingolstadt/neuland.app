@@ -70,7 +70,7 @@ export class LegacyAuthenticatedAPIClient extends LegacyAnonymousAPIClient {
       format: 'json'
     })
 
-    return res
+    return res.data[1]
   }
 
   async getFaculty () {

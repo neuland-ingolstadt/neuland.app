@@ -34,6 +34,7 @@
                 "cancel": "Abbrechen",
                 "reserve": "Reservieren"
             }
-        }
+        },
+        "legacyWarning": "Da die THI API im Moment nicht verfügbar ist, können keine Reservierungen vorgenommen werden."
     }
 }
