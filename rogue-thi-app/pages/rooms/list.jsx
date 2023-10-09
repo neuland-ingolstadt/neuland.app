@@ -24,6 +24,8 @@ import styles from '../../styles/RoomsList.module.css'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
+import { getFreeRoomsLegacy } from '../../lib/backend-legacy-utils/rooms-legacy-utils'
+
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
@@ -47,6 +49,13 @@ export default function RoomList () {
   useEffect(() => {
     async function load () {
       try {
+        if (LEGACY_MODE) {
+          const days = await getFreeRoomsLegacy()
+          setFreeRooms(days)
+
+          return
+        }
+
         const now = new Date()
         const data = LEGACY_MODE ? await LegacyAPI.getFreeRooms() : await API.getFreeRooms(now)
 

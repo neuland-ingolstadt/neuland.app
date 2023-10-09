@@ -72,3 +72,34 @@ export async function searchLegacyRooms (beginDate, endDate, building = BUILDING
     )
     .sort((a, b) => a.room.localeCompare(b.room))
 }
+
+export async function getFreeRoomsLegacy () {
+  const now = new Date()
+  const data = await LegacyAPI.getFreeRooms(now)
+
+  const days = data.rooms.map(day => {
+    const result = {}
+    result.date = new Date(day.datum)
+    result.hours = {}
+
+    day.rtypes.forEach(roomType => Object.entries(roomType.stunden).forEach(([hIndex, hour]) => {
+      const to = new Date(hour.bis)
+      if (to < now) { return }
+
+      if (!result.hours[hIndex]) {
+        result.hours[hIndex] = {
+          from: new Date(day.datum + 'T' + hour.von),
+          to: new Date(day.datum + 'T' + hour.bis),
+          roomTypes: {}
+        }
+      }
+
+      result.hours[hIndex].roomTypes[roomType.raumtyp] = hour.raeume.split(', ')
+    }))
+
+    return result
+  })
+    .filter(day => Object.entries(day.hours) !== 0)
+
+  return days
+}
