@@ -36,7 +36,7 @@ export const ALL_DASHBOARD_CARDS = [
     key: 'eventprompt',
     label: 'Infoveranstaltung',
     removable: true,
-    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: hidePromptCard => (
       <EventPrompt
         key="eventprompt"
