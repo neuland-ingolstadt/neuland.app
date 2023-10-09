@@ -62,6 +62,9 @@
         "title": "Räume",
         "text": "Frei von {{from}} bis {{until}}"
     },
+    "roomplan": {
+        "title": "Raumplan"
+    },
     "library": {
         "title": "Bibliothek"
     },

@@ -11,6 +11,7 @@ import TimetableCard from './cards/TimetableCard'
 
 import {
   faBook,
+  faMap,
   faScroll,
   faUser,
   faUserGraduate
@@ -83,8 +84,21 @@ export const ALL_DASHBOARD_CARDS = [
   {
     key: 'rooms',
     removable: true,
-    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <RoomCard key="rooms" />
+  },
+  {
+    key: 'roomplan',
+    removable: true,
+    default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    card: () => (
+      <BaseCard
+        key="roomplan"
+        icon={faMap}
+        i18nKey="roomplan"
+        link="/rooms"
+      />
+    )
   },
   {
     key: 'library',
