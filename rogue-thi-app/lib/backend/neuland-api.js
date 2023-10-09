@@ -1,21 +1,18 @@
-import { Capacitor } from '@capacitor/core'
 import obtainFetchImplementation from '../fetch-implementations'
 
-const ENDPOINT = Capacitor.isNativePlatform() ? 'https://neuland.app' : ''
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'direct'
 const ENDPOINT_HOST = process.env.NEXT_PUBLIC_NEULAND_API_HOST || ''
 
 class NeulandAPIClient {
-  constructor () {
-    // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
-    this.connection = obtainFetchImplementation(ENDPOINT_MODE, {})
-  }
-
   /**
    * Performs a request against the neuland.app API
    * @param {string} url
    */
   async performRequest (url) {
+    if (!this.connection) {
+      // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
+      this.connection = await obtainFetchImplementation(ENDPOINT_MODE, {})
+    }
     const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
 
     if (resp.status === 200) {
@@ -26,41 +23,41 @@ class NeulandAPIClient {
   }
 
   async getMensaPlan () {
-    return this.performRequest(`${ENDPOINT}/api/mensa/`)
+    return this.performRequest('/api/mensa/')
   }
 
   async getReimannsPlan () {
-    return this.performRequest(`${ENDPOINT}/api/reimanns/`)
+    return this.performRequest('/api/reimanns/')
   }
 
   async getCanisiusPlan () {
-    return this.performRequest(`${ENDPOINT}/api/canisius/`)
+    return this.performRequest('/api/canisius/')
   }
 
   /**
    * @param {string} station Bus station identifier
    */
   async getBusPlan (station) {
-    return this.performRequest(`${ENDPOINT}/api/bus/${encodeURIComponent(station)}`)
+    return this.performRequest(`/api/bus/${encodeURIComponent(station)}`)
   }
 
   /**
    * @param {string} station Train station identifier
    */
   async getTrainPlan (station) {
-    return this.performRequest(`${ENDPOINT}/api/train/${encodeURIComponent(station)}`)
+    return this.performRequest(`/api/train/${encodeURIComponent(station)}`)
   }
 
   async getParkingData () {
-    return this.performRequest(`${ENDPOINT}/api/parking/`)
+    return this.performRequest('/api/parking/')
   }
 
   async getCharingStationData () {
-    return this.performRequest(`${ENDPOINT}/api/charging-stations/`)
+    return this.performRequest('/api/charging-stations/')
   }
 
   async getCampusLifeEvents () {
-    return this.performRequest(`${ENDPOINT}/api/cl-events/`)
+    return this.performRequest('/api/cl-events/')
   }
 }
 
