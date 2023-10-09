@@ -1,14 +1,7 @@
-import { AnonymousAPIClient, THI_CERTS } from './anonymous-api'
+import { AnonymousAPIClient, ENDPOINT_HOST, ENDPOINT_MODE, PROXY_URL, THI_CERTS, USER_AGENT } from './anonymous-api'
 import obtainFetchImplementation from '../fetch-implementations'
 
-import packageInfo from '../../package.json'
-
-const ENDPOINT_MODE = process.env.NEXT_PUBLIC_THI_API_MODE || 'websocket-proxy'
-const ENDPOINT_HOST = process.env.NEXT_PUBLIC_THI_API_HOST
 const ENDPOINT_URL = '/webservice/production2/index.php'
-const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
-const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const USER_AGENT = `neuland.app/${packageInfo.version} (+${GIT_URL})`
 
 /**
  * Client for accessing the API without authentication.
