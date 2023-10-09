@@ -15,12 +15,15 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
 import API from '../lib/backend/authenticated-api'
+import LegacyAPI from '../lib/backend/authenticated-legacy-api'
 import { normalizeLecturers } from '../lib/backend-utils/lecturers-utils'
 
 import styles from '../styles/Lecturers.module.css'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
+
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
@@ -49,7 +52,7 @@ export default function Lecturers () {
   useEffect(() => {
     async function load () {
       try {
-        const rawData = await API.getPersonalLecturers()
+        const rawData = LEGACY_MODE ? await LegacyAPI.getPersonalLecturers() : await API.getPersonalLecturers()
         const data = normalizeLecturers(rawData)
         setPersonalLecturers(data)
         setFilteredLecturers(data)
@@ -80,7 +83,7 @@ export default function Lecturers () {
         setDidFetch(true)
         setFilteredLecturers(null)
         try {
-          const rawData = await API.getLecturers('0', 'z')
+          const rawData = LEGACY_MODE ? await LegacyAPI.getLecturers('0', 'z') : await API.getLecturers('0', 'z')
           const data = normalizeLecturers(rawData)
           setAllLecturers(data)
           return
