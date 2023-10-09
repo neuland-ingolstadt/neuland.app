@@ -26,15 +26,15 @@ class NeulandAPIClient {
   }
 
   async getMensaPlan () {
-    return this.performRequest(`${ENDPOINT}/api/mensa`)
+    return this.performRequest(`${ENDPOINT}/api/mensa/`)
   }
 
   async getReimannsPlan () {
-    return this.performRequest(`${ENDPOINT}/api/reimanns`)
+    return this.performRequest(`${ENDPOINT}/api/reimanns/`)
   }
 
   async getCanisiusPlan () {
-    return this.performRequest(`${ENDPOINT}/api/canisius`)
+    return this.performRequest(`${ENDPOINT}/api/canisius/`)
   }
 
   /**
@@ -52,15 +52,15 @@ class NeulandAPIClient {
   }
 
   async getParkingData () {
-    return this.performRequest(`${ENDPOINT}/api/parking`)
+    return this.performRequest(`${ENDPOINT}/api/parking/`)
   }
 
   async getCharingStationData () {
-    return this.performRequest(`${ENDPOINT}/api/charging-stations`)
+    return this.performRequest(`${ENDPOINT}/api/charging-stations/`)
   }
 
   async getCampusLifeEvents () {
-    return this.performRequest(`${ENDPOINT}/api/cl-events`)
+    return this.performRequest(`${ENDPOINT}/api/cl-events/`)
   }
 }
 
