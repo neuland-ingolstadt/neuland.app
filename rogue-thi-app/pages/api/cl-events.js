@@ -20,8 +20,6 @@ const LOGIN_URL = 'https://moodle.thi.de/login/index.php'
 const EVENT_LIST_URL = 'https://moodle.thi.de/mod/dataform/view.php?id=162869'
 const EVENT_DETAILS_PREFIX = 'https://moodle.thi.de/mod/dataform/view.php'
 const EVENT_STORE = `${process.env.STORE}/cl-events.json`
-const OMDB_API_KEY = process.env.OMDB_API_KEY
-const OMDB_BASE_URL = 'http://www.omdbapi.com/'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -142,51 +140,6 @@ async function getEventDetails (fetch, url) {
 }
 
 /**
- * Get all movies from the university cinema.
- * The data source is a static JSON file due to the outdated website.
- */
-async function getMovies () {
-  /**
-   * Retrieves the duration of a movie from the OMDB API.
-   * @param {string} title Movie title
-   * @returns {number} Duration in minutes
-   */
-  async function fetchMovieDuration (title) {
-    const resp = await fetch(`${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&t=${encodeURIComponent(title.toLowerCase())}&type=movie`)
-    const data = await resp.json()
-
-    if (!data.Response || data.Response === 'False') {
-      return null
-    }
-
-    return parseInt(data.Runtime)
-  }
-
-  /**
-   * Returns the end time of a movie event.
-   * @param {string} title Movie title
-   * @param {string || Date} startTime DateTime string or Date object
-   * @returns {Date} End time
-   */
-  async function getEndTime (title, startTime) {
-    const endTime = new Date(startTime)
-
-    const duration = await fetchMovieDuration(title)
-
-    endTime.setMinutes(endTime.getMinutes() + duration)
-    return endTime
-  }
-
-  return await Promise.all(movies.map(async movie => ({
-    id: crypto.createHash('sha256').update(movie.title).digest('hex'),
-    organizer: 'Hochschulkino',
-    title: movie.title,
-    begin: new Date(movie.date),
-    end: await getEndTime(movie.title, movie.date)
-  })))
-}
-
-/**
  * Fetches all event details from Moodle.
  * @param {string} username
  * @param {string} password
@@ -211,8 +164,13 @@ async function getAllEventDetails (username, password) {
     })
   }
 
-  const movies = await getMovies()
-  remoteEvents = remoteEvents.concat(movies)
+  const moviesEvents = movies.map(movie => ({
+    ...movie,
+    begin: new Date(movie.begin),
+    end: new Date(movie.end)
+  }))
+
+  remoteEvents = remoteEvents.concat(moviesEvents)
 
   const now = new Date()
   let events = !isDev ? await loadEvents() : []

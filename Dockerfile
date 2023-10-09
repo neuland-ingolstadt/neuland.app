@@ -21,6 +21,14 @@ RUN pip install -r requirements.txt \
 
 
 
+FROM python:3 AS movies
+WORKDIR /opt/
+COPY movie-details/ .
+RUN pip install -r requirements.txt \
+	&& python3 movie-details.py
+
+
+
 FROM python:3 as courses
 WORKDIR /opt/
 ARG THI_ICAL_USER
@@ -63,6 +71,7 @@ RUN NODE_OPTIONS=--openssl-legacy-provider npm install
 COPY rogue-thi-app/ .
 COPY --from=spo /opt/spo-grade-weights.json data/
 COPY --from=distances /opt/room-distances.json data/
+COPY --from=movies /opt/movies.json data/
 COPY --from=courses /opt/ical-courses.json data/
 COPY --from=pwaicons /opt/splash/ public/
 
