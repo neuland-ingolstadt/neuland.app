@@ -16,7 +16,7 @@ class NeulandAPIClient {
    * @param {string} url
    */
   async performRequest (url) {
-    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
+    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}?cache=123`)
 
     if (resp.status === 200) {
       return await resp.json()
