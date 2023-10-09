@@ -1,9 +1,7 @@
 import LegacyAPI from '../backend/authenticated-legacy-api'
 
-import { BUILDINGS_ALL, addMinutes, isInBuilding, maxDate, minDate } from '../backend-utils/rooms-utils'
+import { BUILDINGS_ALL, IGNORE_GAPS, addMinutes, isInBuilding, maxDate, minDate } from '../backend-utils/rooms-utils'
 import { formatISODate } from '../date-utils'
-
-const IGNORE_GAPS = 15
 
 function getLegacyRoomOpenings (rooms, date) {
   date = formatISODate(date)

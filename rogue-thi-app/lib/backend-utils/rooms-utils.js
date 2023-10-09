@@ -6,7 +6,7 @@ import { i18n } from 'next-i18next'
 import roomDistances from '../../data/room-distances.json'
 import { searchLegacyRooms } from '../backend-legacy-utils/rooms-legacy-utils'
 
-const IGNORE_GAPS = 15
+export const IGNORE_GAPS = 15
 
 const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true'
 
