@@ -1,6 +1,10 @@
 import API from '../backend/authenticated-api'
 import rawCalendar from '../../data/calendar.json'
 
+import { loadLegacyExamList } from '../backend-legacy-utils/calendar-legacy-utils'
+
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
+
 export const compileTime = new Date()
 export const calendar = rawCalendar.map(x => ({
   ...x,
@@ -16,6 +20,10 @@ export const calendar = rawCalendar.map(x => ({
  * @returns {object[]}
  */
 export async function loadExamList () {
+  if (LEGACY_MODE) {
+    return await loadLegacyExamList()
+  }
+
   const examList = await API.getExams()
   return examList
     // Modus 2 seems to be an indicator for "not real" exams like internships, which still got listed in API.getExams()

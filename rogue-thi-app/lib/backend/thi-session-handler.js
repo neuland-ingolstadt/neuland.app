@@ -1,9 +1,15 @@
 import API from './anonymous-api'
+import LegacyAPI from './anonymous-legacy-api'
+
 import CredentialStorage from '../credential-storage'
 
 const SESSION_EXPIRES = 3 * 60 * 60 * 1000
 const CRED_NAME = 'credentials'
 const CRED_ID = 'thi.de'
+
+const LEGACY_MODE = process.env.NEXT_PUBLIC_LEGACY_MODE === 'true' || false
+
+const api = LEGACY_MODE ? LegacyAPI : API
 
 /**
  * Thrown when the user is not logged in.
@@ -35,7 +41,7 @@ export async function createSession (username, password, stayLoggedIn) {
   // strip username to remove whitespaces
   username = username.replace(/\s/g, '')
 
-  const { session, isStudent } = await API.login(username, password)
+  const { session, isStudent } = await api.login(username, password)
 
   localStorage.session = session
   localStorage.sessionCreated = Date.now()
@@ -53,7 +59,7 @@ export async function createSession (username, password, stayLoggedIn) {
  * Logs in the user as a guest.
  */
 export async function createGuestSession () {
-  await API.clearCache()
+  await api.clearCache()
   localStorage.session = 'guest2'
 }
 
@@ -84,7 +90,7 @@ export async function callWithSession (method) {
   if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
     try {
       console.log('no session, logging in...')
-      const { session: newSession, isStudent } = await API.login(username, password)
+      const { session: newSession, isStudent } = await api.login(username, password)
       session = newSession
 
       localStorage.session = session
@@ -104,7 +110,7 @@ export async function callWithSession (method) {
       if (username && password) {
         console.log('seems to have received a session error trying to get a new session!')
         try {
-          const { session: newSession, isStudent } = await API.login(username, password)
+          const { session: newSession, isStudent } = await api.login(username, password)
           session = newSession
 
           localStorage.session = session

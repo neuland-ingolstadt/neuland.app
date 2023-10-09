@@ -34,6 +34,7 @@
                 "cancel": "Cancel",
                 "reserve": "Reserve"
             }
-        }
+        },
+        "legacyWarning": "Due to the THI API being unavailable at the moment, reservations cannot be submitted."
     }
 }
