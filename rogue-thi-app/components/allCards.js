@@ -37,12 +37,7 @@ export const ALL_DASHBOARD_CARDS = [
     label: 'Infoveranstaltung',
     removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: hidePromptCard => (
-      <EventPrompt
-        key="eventprompt"
-        onHide={() => hidePromptCard('eventprompt')}
-      />
-    )
+    card: () => <EventPrompt key="eventprompt" />
   },
   {
     key: 'timetable',
