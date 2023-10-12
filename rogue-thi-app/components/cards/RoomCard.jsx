@@ -86,7 +86,7 @@ export default function RoomCard () {
     <BaseCard
       icon={faDoorOpen}
       i18nKey="rooms"
-      link="/rooms"
+      link="/rooms/suggestions"
     >
       <ReactPlaceholder ready={filterResults || userKind !== USER_STUDENT} customPlaceholder={placeholder}>
         <ListGroup variant="flush">

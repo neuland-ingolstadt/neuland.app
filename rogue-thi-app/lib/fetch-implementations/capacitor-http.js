@@ -1,7 +1,5 @@
 import { Http } from '@capacitor-community/http'
 
-import { HttpResponse } from './index'
-
 function getHeaderValue (headers, header) {
   const value = Object.entries(headers).find(([key]) => key.toLowerCase() === header.toLowerCase())
   return value ? value[1] : null
@@ -10,6 +8,28 @@ function getHeaderValue (headers, header) {
 function getContentType (headers) {
   const value = getHeaderValue(headers, 'Content-Type')
   return value ? value.split(';')[0] : null
+}
+
+/**
+ * Helper class that mimics a `fetch` response.
+ */
+class HttpResponse {
+  /**
+   * @param {number} status HTTP status code
+   * @param {object} data Error data
+   */
+  constructor (status, data) {
+    this.status = status
+    this.data = data
+  }
+
+  async text () {
+    return this.data
+  }
+
+  async json () {
+    return JSON.parse(this.data)
+  }
 }
 
 /**

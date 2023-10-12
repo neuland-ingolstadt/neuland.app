@@ -85,7 +85,7 @@ export class AnonymousAPIClient {
    */
   async request (params) {
     if (!this.connection) {
-      this.connection = obtainFetchImplementation(ENDPOINT_MODE, {
+      this.connection = await obtainFetchImplementation(ENDPOINT_MODE, {
         target: ENDPOINT_HOST,
         via: PROXY_URL,
         certs: THI_CERTS,
