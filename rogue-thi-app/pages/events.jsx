@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faExternalLink, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { faExternalLink, faExternalLinkAlt, faFilm } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
@@ -75,6 +75,7 @@ export default function Events () {
               const club = clubs.find(club => club.club === item.organizer)
               return <ListGroup.Item key={idx} className={styles.item}>
                 <div className={styles.left}>
+                  {item.type === 'movie' && <FontAwesomeIcon icon={faFilm} className={styles.typeIcon}/>}
                   {!item.url && item.title}
                   {item.url && (
                     <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">

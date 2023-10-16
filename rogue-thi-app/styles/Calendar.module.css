@@ -33,3 +33,7 @@
 .eventUrl {
   color: unset;
 }
+
+.typeIcon {
+  margin-right: 5px;
+}

@@ -9,7 +9,7 @@ import asyncio
 
 OMDB_BASE_URL = "http://www.omdbapi.com/"
 
-ADDITIONAL_TIME = 15 + 15 #(15 introduction short film + 15 minutes break)
+ADDITIONAL_TIME = 15 + 15  # (15 introduction short film + 15 minutes break)
 
 BASE_DIR = Path(__file__).parent / "data"
 MOVIES_PATH = BASE_DIR / "base_movies.json"
@@ -32,7 +32,8 @@ class MovieDetails:
 
     async def __fetchMovieDuration(self, title):
         resp = requests.get(
-            f"{OMDB_BASE_URL}?apikey={self.OMDB_API_KEY}&t={title.lower()}&type=movie"
+            f"{OMDB_BASE_URL}?apikey={self.OMDB_API_KEY}&t={title.lower()}&type=movie",
+            timeout=5,
         )
         data = resp.json()
 
@@ -51,10 +52,12 @@ class MovieDetails:
         return endTime.isoformat()
 
     async def getMovies(self):
-        with open(MOVIES_PATH, "r") as f:
+        with open(MOVIES_PATH, "r", encoding="utf-8") as f:
             movies = json.load(f)
 
-        return await asyncio.gather(*[self.__getMovieDetails(movie) for movie in movies])
+        return await asyncio.gather(
+            *[self.__getMovieDetails(movie) for movie in movies]
+        )
 
     async def __getMovieDetails(self, movie):
         return {
@@ -63,15 +66,17 @@ class MovieDetails:
             "title": movie["title"],
             "begin": movie["date"],
             "end": await self.__getEndTime(movie["title"], movie["date"]),
+            "type": "movie",
         }
+
 
 def main():
     movieDetails = MovieDetails()
     movies = asyncio.run(movieDetails.getMovies())
 
-    with open(OUTPUT_PATH, "w+") as f:
+    with open(OUTPUT_PATH, "w+", encoding="utf-8") as f:
         json.dump(movies, f, indent=4)
+
 
 if __name__ == "__main__":
     main()
-    

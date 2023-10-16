@@ -150,7 +150,7 @@ async function getAllEventDetails (username, password) {
 
   await login(fetch, username, password)
 
-  let remoteEvents = []
+  const remoteEvents = []
   for (const url of await getEventList(fetch)) {
     const details = await getEventDetails(fetch, url)
     // do not include location and description
@@ -160,17 +160,10 @@ async function getAllEventDetails (username, password) {
       organizer: details.Verein.trim().replace(/( \.)$/g, ''),
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
-      end: details.Ende ? parseLocalDateTime(details.Ende) : null
+      end: details.Ende ? parseLocalDateTime(details.Ende) : null,
+      type: 'event'
     })
   }
-
-  const moviesEvents = movies.map(movie => ({
-    ...movie,
-    begin: new Date(movie.begin),
-    end: new Date(movie.end)
-  }))
-
-  remoteEvents = remoteEvents.concat(moviesEvents)
 
   const now = new Date()
   let events = !isDev ? await loadEvents() : []
@@ -181,6 +174,20 @@ async function getAllEventDetails (username, password) {
     const remoteStart = remoteEvents.map(event => event.begin).reduce((a, b) => a < b ? a : b)
     events = events.filter(a => a.begin < remoteStart).concat(remoteEvents)
   }
+
+  const moviesEvents = movies.map(movie => ({
+    ...movie,
+    begin: new Date(movie.begin),
+    end: new Date(movie.end)
+  }))
+
+  // filter out movies from Moodle which are already in the movie list (just to be sure)
+  events = events
+    .filter(event => !(event.organizer === 'Hochschulkino' && moviesEvents
+      .map(movie => movie.title.toLowerCase())
+      .includes(event.title.toLowerCase()))
+    )
+  events = events.concat(moviesEvents)
 
   events = events.filter(event => new Date(event.begin) > now || new Date(event.end) > now)
   events = events.sort((a, b) => a.end - b.end).sort((a, b) => a.begin - b.begin)
