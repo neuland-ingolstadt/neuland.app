@@ -249,16 +249,16 @@ export default function Mensa () {
     const includeStaticReimanns = selectedRestaurants.includes('reimanns-static')
 
     const mensa = day.meals.filter(x => x.restaurant === 'Mensa')
-    const mensaSoups = mensa.filter(x => x.category === 'Suppe')
-    const mensaFood = mensa.filter(x => x.category !== 'Suppe')
+    const mensaSoups = mensa.filter(x => x.category.includes('Suppe'))
+    const mensaFood = mensa.filter(x => !x.category.includes('Suppe'))
 
     const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns').filter(x => !x.static || x.static === includeStaticReimanns)
-    const reimannsFood = reimanns.filter(x => x.category !== 'Salat')
-    const reimannsSalad = reimanns.filter(x => x.category === 'Salat')
+    const reimannsFood = reimanns.filter(x => x.category.includes('Salat'))
+    const reimannsSalad = reimanns.filter(x => !x.category.includes('Salat'))
 
     const canisius = day.meals.filter(x => x.restaurant === 'Canisius')
-    const canisiusSalads = canisius.filter(x => x.category === 'Salat')
-    const canisiusFood = canisius.filter(x => x.category !== 'Salat')
+    const canisiusSalads = canisius.filter(x => x.category.includes('Salat'))
+    const canisiusFood = canisius.filter(x => !x.category.includes('Salat'))
 
     const noData = mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
 
