@@ -15,7 +15,7 @@
         "title1": "Was ist das?",
         "text1": "Das ist eine inoffizielle Alternative zur THI-App, welche eine verbesserte Benutzererfahrung bieten soll. Sie wird bei von Studierenden bei <a>Neuland Ingolstadt e.V.</a> für Studierende entwickelt und ist kein Angebot der Technischen Hochschule Ingolstadt.",
         "title2": "Sind meine Daten sicher?",
-        "text2": "<strong>Ja. </strong> Deine Daten werden direkt auf deinem Gerät verschlüsselt, in verschlüsselter Form über unseren Proxy an die THI übermittelt und erst dort wieder entschlüsselt. Nur du und die THI haben Zugriff auf deine Zugangsdaten und deine persönlichen Daten."
+        "text2": "<strong>Ja. </strong> Deine Daten werden auf deinem Gerät verschlüsselt und sicher über die offizielle Schnittstelle an die THI übertragen. Nur du und die THI haben Zugriff auf deine Zugangsdaten und deine persönlichen Daten."
     },
     "links": {
         "security": "Hier findest du weitere Informationen zur Sicherheit.",
