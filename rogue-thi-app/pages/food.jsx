@@ -253,8 +253,8 @@ export default function Mensa () {
     const mensaFood = mensa.filter(x => !x.category.includes('Suppe'))
 
     const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns').filter(x => !x.static || x.static === includeStaticReimanns)
-    const reimannsFood = reimanns.filter(x => x.category.includes('Salat'))
-    const reimannsSalad = reimanns.filter(x => !x.category.includes('Salat'))
+    const reimannsFood = reimanns.filter(x => !x.category.includes('Salat'))
+    const reimannsSalad = reimanns.filter(x => x.category.includes('Salat'))
 
     const canisius = day.meals.filter(x => x.restaurant === 'Canisius')
     const canisiusSalads = canisius.filter(x => x.category.includes('Salat'))
