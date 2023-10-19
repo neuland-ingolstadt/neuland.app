@@ -51,7 +51,16 @@ export default function RoomCard () {
 
         // filter for suitable rooms
         const nextGap = gaps[0]
-        const rooms = await findSuggestedRooms(nextGap.endLecture.raum, nextGap.startDate, nextGap.endDate)
+        const room = nextGap.endLecture.rooms[0] || nextGap.endLecture.raum || undefined
+
+        if (!room) {
+          // no room -> general room search
+          const emptyRooms = await getEmptySuggestions()
+          setFilterResults(emptyRooms)
+          return
+        }
+
+        const rooms = await findSuggestedRooms(room, nextGap.startDate, nextGap.endDate)
 
         // idea: instead of showing the rooms that are near to the next lecture, show the rooms that are between the current lecture and the next lecture
 

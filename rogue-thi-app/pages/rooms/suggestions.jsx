@@ -76,15 +76,28 @@ export default function RoomSearch () {
     }
 
     const suggestions = await Promise.all(gaps.map(async (gap) => {
-      const rooms = await findSuggestedRooms(gap.endLecture.raum, gap.startDate, gap.endDate)
+      const room = gap.endLecture.rooms[0] || gap.endLecture.raum || undefined
+
+      // if there is no room, we can't suggest anything
+      if (!room) {
+        return
+      }
+
+      const rooms = await findSuggestedRooms(room, gap.startDate, gap.endDate)
 
       return (
         {
           gap,
+          room,
           rooms: rooms.slice(0, 4)
         }
       )
     }))
+
+    // if there are no suggestions, show empty suggestions
+    if (!suggestions[0]?.gap) {
+      return await getEmptySuggestions(true)
+    }
 
     // if first gap is in too far in the future (now + suggestion duration), show empty suggestions as well
     const deltaTime = suggestions[0].gap.startDate.getTime() - new Date().getTime()
@@ -148,7 +161,7 @@ export default function RoomSearch () {
         values={{
           from: result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : t('rooms.suggestions.gaps.now'),
           until: getTimetableEntryName(result.gap.endLecture).shortName,
-          room: result.gap.endLecture.raum
+          room: result.room
         }}
       />
       )
@@ -176,7 +189,7 @@ export default function RoomSearch () {
         values={{
           from: result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : t('rooms.suggestions.gaps.now').toLowerCase(),
           until: formatFriendlyTime(result.gap.endLecture.startDate),
-          room: result.gap.endLecture.raum
+          room: result.room
         }}
       />
       )
