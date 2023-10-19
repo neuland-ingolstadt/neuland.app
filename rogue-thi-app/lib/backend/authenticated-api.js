@@ -128,7 +128,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
         format: 'json',
         day: date.getDate(),
         month: date.getMonth() + 1,
-        year: 1900 + date.getYear(),
+        year: date.getFullYear(),
         details: detailed ? 1 : 0
       })
 
@@ -200,7 +200,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       format: 'json',
       day: date.getDate(),
       month: date.getMonth() + 1,
-      year: 1900 + date.getYear()
+      year: date.getFullYear()
     })
 
     return res
