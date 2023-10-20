@@ -26,11 +26,13 @@ Object.keys(allergenMap)
 export default function FilterFoodModal () {
   const {
     selectedRestaurants,
+    selectedLanguageFood,
     preferencesSelection,
     setPreferencesSelection,
     allergenSelection,
     setAllergenSelection,
     toggleSelectedRestaurant,
+    toggleSelectedLanguageFood,
     savePreferencesSelection,
     saveAllergenSelection,
     showFoodFilterModal,
@@ -83,6 +85,26 @@ export default function FilterFoodModal () {
               onChange={() => toggleSelectedRestaurant('canisius')}
             />
           </div>
+
+          <hr/>
+            <div>
+              <h6>
+              {'Sprache Essen'}
+              </h6>
+            </div>
+
+            <Form.Check
+              id='LanguageFoodDe'
+              label={'Deutsch'}
+              checked={selectedLanguageFood.includes('de')}
+              onChange={() => toggleSelectedLanguageFood('de')}
+            />
+            <Form.Check
+              id='LanguageFoodEng'
+              label={'Englisch'}
+              checked={selectedLanguageFood.includes('en')}
+              onChange={() => toggleSelectedLanguageFood('en')}
+            />
 
           <hr/>
 
