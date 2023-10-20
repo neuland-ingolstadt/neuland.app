@@ -17,6 +17,9 @@
                 "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
                 "showCanisius": "Canisiuskonvikt anzeigen"
             },
+            "languageFood":{
+                "title":"Sprache Essen"
+            },
             "allergens": {
                 "title": "Allergien",
                 "iconTitle": "Allergene",

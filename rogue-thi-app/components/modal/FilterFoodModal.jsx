@@ -89,7 +89,7 @@ export default function FilterFoodModal () {
           <hr/>
             <div>
               <h6>
-              {'Sprache Essen'}
+              {t('food.filterModal.languageFood.title')}
               </h6>
             </div>
 

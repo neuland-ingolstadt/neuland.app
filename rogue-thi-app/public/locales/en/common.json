@@ -17,6 +17,9 @@
                 "showReimannsStatic": "Show Reimanns (static meals)",
                 "showCanisius": "Show Canisius Convict"
             },
+            "languageFood":{
+                "title":"Language Food"
+            },
             "allergens": {
                 "title": "Allergies",
                 "iconTitle": "Allergens",
