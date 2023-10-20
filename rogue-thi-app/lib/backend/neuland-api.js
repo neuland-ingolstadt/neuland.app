@@ -13,7 +13,7 @@ class NeulandAPIClient {
       // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
       this.connection = await obtainFetchImplementation(ENDPOINT_MODE, {})
     }
-    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
+    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}?cache=27`)
 
     if (resp.status === 200) {
       return await resp.json()
