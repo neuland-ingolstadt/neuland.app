@@ -143,7 +143,7 @@ export default function Login () {
 
                 <Form.Group>
                   <Button type="submit" variant="primary" className={styles.loginButton}>
-                  {t('form.login')}
+                    {t('form.login')}
                   </Button>
                 </Form.Group>
               </>
@@ -151,7 +151,7 @@ export default function Login () {
 
             <Form.Group>
               <Button type="submit" variant="secondary" className={styles.loginButton} onClick={guestLogin}>
-              {t('form.guest')}
+                {t('form.guest')}
               </Button>
             </Form.Group>
           </Form>
@@ -161,31 +161,31 @@ export default function Login () {
               <>
                 <h6>{t('guestOnly.title')}</h6>
                 <p>
-                {t('guestOnly.details')}
+                  {t('guestOnly.details')}
                 </p>
                 <p>
-                {t('guestOnly.details2')}
-                  </p>
+                  {t('guestOnly.details2')}
+                </p>
               </>
             }
             <h6>{t('notes.title1')}</h6>
             <p>
               <Trans
-              i18nKey= "notes.text1"
-              ns = "login"
-              components={{
-                a: <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer" />
-              }}
+                i18nKey= "notes.text1"
+                ns = "login"
+                components={{
+                  a: <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer" />
+                }}
               />
             </p>
             <h6>{t('notes.title2')}</h6>
             <p>
               <Trans
-              i18nKey= "notes.text2"
-              ns = "login"
-              components={{
-                strong: <strong />
-              }}
+                i18nKey= "notes.text2"
+                ns = "login"
+                components={{
+                  strong: <strong />
+                }}
               />
             </p>
             <p>

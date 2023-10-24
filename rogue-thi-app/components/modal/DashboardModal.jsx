@@ -28,8 +28,11 @@ export default function DashboardModal () {
   const { t } = useTranslation('common')
 
   return (
-    <Modal show={!!showDashboardModal} dialogClassName={styles.themeModal}
-           onHide={() => setShowDashboardModal(false)}>
+    <Modal
+      show={!!showDashboardModal}
+      dialogClassName={styles.themeModal}
+      onHide={() => setShowDashboardModal(false)}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{t('dashboard.orderModal.title')}</Modal.Title>
       </Modal.Header>

@@ -96,10 +96,10 @@ export default function Calendar () {
             <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.examiners.join('; ')}<br />
             <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.enrollment)}<br />
             <strong>{t('calendar.modals.exams.tools')}</strong>:
-              <ul>
-                {focusedExam && focusedExam.aids.map((helper, i) =>
+            <ul>
+              {focusedExam && focusedExam.aids.map((helper, i) =>
                 <li key={i}>{helper}</li>)}
-              </ul>
+            </ul>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setFocusedExam(null)}>

@@ -147,13 +147,13 @@ export default function Library () {
               <Form.Label>{t('library.modal.details.seat')}:</Form.Label>
               <Form.Control as="select" onChange={event => setReservationSeat(event.target.value)}>
                 <option value={-1}>{t('library.modal.seatSelection.any')}</option>
-              {reservationTime && reservationRoom &&
+                {reservationTime && reservationRoom &&
                 Object.values(reservationTime.resources[reservationRoom].seats).map((x, idx) =>
-                <option key={idx} value={x}>
-                  {x}
-                </option>
+                  <option key={idx} value={x}>
+                    {x}
+                  </option>
                 )
-              }
+                }
               </Form.Control>
             </Form.Group>
           </Modal.Body>
@@ -213,10 +213,14 @@ export default function Library () {
               day.resource.map((time, j) =>
                 <ListGroup.Item key={i + '-' + j}>
                   {Object.values(time.resources).reduce((acc, room) => acc + room.num_seats, 0) > 0 &&
-                    <Button variant="outline-secondary" className={styles.floatRight} onClick={() => {
-                      setReservationDay(day)
-                      setReservationTime(time)
-                    }}>
+                    <Button
+                      variant="outline-secondary"
+                      className={styles.floatRight}
+                      onClick={() => {
+                        setReservationDay(day)
+                        setReservationTime(time)
+                      }}
+                    >
                       {t('library.actions.reserve')}
                     </Button>
                   }
