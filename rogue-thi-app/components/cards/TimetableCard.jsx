@@ -77,12 +77,14 @@ export default function TimetableCard () {
             } else if (isOngoing) {
               text = <div className="text-muted">{t('timetable.text.ongoing', { time: formatFriendlyTime(x.endDate) })}</div>
             } else if (isSoon) {
-              text = <div className="text-muted">
-                {t('timetable.text.startingSoon', {
-                  mins: Math.ceil((x.startDate - currentTime) / 1000 / 60)
-                }
-                )}
-              </div>
+              text = (
+                <div className="text-muted">
+                  {t('timetable.text.startingSoon', {
+                    mins: Math.ceil((x.startDate - currentTime) / 1000 / 60)
+                  }
+                  )}
+                </div>
+              )
             } else if (isNotSoonOrOngoing) {
               text = <div className="text-muted">{formatNearDate(x.startDate)} {t('timetable.text.future')} {formatFriendlyTime(x.startDate)}</div>
             }

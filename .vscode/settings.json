@@ -1,5 +1,9 @@
 {
   "eslint.workingDirectories": [
     "rogue-thi-app"
-  ]
+  ],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
 }

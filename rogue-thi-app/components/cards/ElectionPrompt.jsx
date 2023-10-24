@@ -30,7 +30,7 @@ export default function ElectionPrompt ({ onHide }) {
         </Card.Title>
         <Card.Text>
           <p>
-             {t('election.text')}
+            {t('election.text')}
           </p>
           <a href={electionUrl} ping="/api/election-vote-ping" target="_blank" rel="noreferrer">
             <Button>

@@ -207,23 +207,23 @@ export default function Lecturers () {
                   </div>
                 </div>
                 <div className={styles.right}>
-                    {x.raum && (
-                      <>
-                        {t('lecturers.body.room')}:{' '}
-                        {x.room_short && (
-                          <Link href={`/rooms?highlight=${x.room_short}`}>
-                            {x.raum}
-                          </Link>
-                        )}
-                        {!x.room_short && x.raum}
-                      </>
-                    )}
-                    {x.raum && x.tel_dienst && (<br />)}
-                    {x.tel_dienst && (
-                      <a href={`tel:${x.tel_dienst.split(/\s(?!\d)/)[0]}`}>
-                        {x.tel_dienst}
-                      </a>
-                    )}
+                  {x.raum && (
+                    <>
+                      {t('lecturers.body.room')}:{' '}
+                      {x.room_short && (
+                        <Link href={`/rooms?highlight=${x.room_short}`}>
+                          {x.raum}
+                        </Link>
+                      )}
+                      {!x.room_short && x.raum}
+                    </>
+                  )}
+                  {x.raum && x.tel_dienst && (<br />)}
+                  {x.tel_dienst && (
+                    <a href={`tel:${x.tel_dienst.split(/\s(?!\d)/)[0]}`}>
+                      {x.tel_dienst}
+                    </a>
+                  )}
                 </div>
               </ListGroup.Item>
             ))}

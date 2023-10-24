@@ -13,7 +13,8 @@
     "android-open": "npm run prebuild && next build && next export && npx cap sync android && npx cap open android",
     "android-run": "npm run prebuild && next build && next export && npx cap sync android && npx cap run android",
     "ios-open": "npm run prebuild && next build && next export && npx cap sync ios && npx cap open ios",
-    "ios-run": "npm run prebuild && next build && next export && npx cap sync ios && npx cap run ios"
+    "ios-run": "npm run prebuild && next build && next export && npx cap sync ios && npx cap run ios",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "dependencies": {
     "@capacitor-community/http": "^1.4.1",

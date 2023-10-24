@@ -73,19 +73,20 @@ export default function Events () {
             )}
             {events && events.map((item, idx) => {
               const club = clubs.find(club => club.club === item.organizer)
-              return <ListGroup.Item key={idx} className={styles.item}>
-                <div className={styles.left}>
-                  {!item.url && item.title}
-                  {item.url && (
-                    <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
-                      {item.title}
-                      {' '}
-                      <FontAwesomeIcon icon={faExternalLinkAlt}/>
-                    </a>
-                  )}
-                  <div className={styles.details}>
-                    <span>
-                      {club != null &&
+              return (
+                <ListGroup.Item key={idx} className={styles.item}>
+                  <div className={styles.left}>
+                    {!item.url && item.title}
+                    {item.url && (
+                      <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
+                        {item.title}
+                        {' '}
+                        <FontAwesomeIcon icon={faExternalLinkAlt}/>
+                      </a>
+                    )}
+                    <div className={styles.details}>
+                      <span>
+                        {club != null &&
                         <>
                           {club.website != null &&
                             <a href={club.website} className={styles.eventUrl} target="_blank" rel="noreferrer">
@@ -98,25 +99,25 @@ export default function Events () {
                             </a>
                           }
                         </>
-                      }
-                      {club == null &&
+                        }
+                        {club == null &&
                         <>
                           {item.organizer}
                         </>
-                      }
-                    </span>
-                    <br/>
+                        }
+                      </span>
+                      <br/>
                       {item.begin && formatFriendlyDateTimeRange(item.begin, item.end)}
+                    </div>
                   </div>
-                </div>
-                <div className={styles.details}>
-                  {(item.end && item.begin < now)
-                    ? `${t('events.dates.until')} ${formatFriendlyRelativeTime(item.end)}`
-                    : formatFriendlyRelativeTime(item.begin)}
-                </div>
-              </ListGroup.Item>
-            }
-            )}
+                  <div className={styles.details}>
+                    {(item.end && item.begin < now)
+                      ? `${t('events.dates.until')} ${formatFriendlyRelativeTime(item.end)}`
+                      : formatFriendlyRelativeTime(item.begin)}
+                  </div>
+                </ListGroup.Item>
+              )
+            })}
           </ReactPlaceholder>
         </ListGroup>
       </AppBody>
