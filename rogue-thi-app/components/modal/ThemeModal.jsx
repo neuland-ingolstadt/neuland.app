@@ -51,8 +51,11 @@ export default function ThemeModal () {
   }
 
   return (
-    <Modal show={!!showThemeModal} dialogClassName={styles.themeModal}
-           onHide={() => setShowThemeModal(false)}>
+    <Modal
+      show={!!showThemeModal}
+      dialogClassName={styles.themeModal}
+      onHide={() => setShowThemeModal(false)}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{t('personal.modals.theme.title')}</Modal.Title>
       </Modal.Header>

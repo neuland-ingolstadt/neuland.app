@@ -206,8 +206,8 @@ export default function Timetable () {
                     <div className={styles.room}>
                       {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
                         ? <Link key={i} href={`/rooms?highlight=${room}`}>
-                            <a onClick={e => e.stopPropagation()}>{room}</a>
-                          </Link>
+                          <a onClick={e => e.stopPropagation()}>{room}</a>
+                        </Link>
                         : <span key={i}>{room}</span>
                       )}
                     </div>
@@ -223,16 +223,16 @@ export default function Timetable () {
         )}
         {current && current.length === 0 &&
           <div className={`text-muted ${styles.notice}`}>
-          <p>
-            {t('timetable.overview.noLectures')}
-          </p>
-          <p>
-            <Trans
-              i18nKey="timetable.overview.configureTimetable"
-              ns="timetable"
-              components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
-            />
-          </p>
+            <p>
+              {t('timetable.overview.noLectures')}
+            </p>
+            <p>
+              <Trans
+                i18nKey="timetable.overview.configureTimetable"
+                ns="timetable"
+                components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
+              />
+            </p>
           </div>
         }
       </div>
@@ -304,7 +304,7 @@ export default function Timetable () {
               {t('timetable.modals.subscriptionExplanation.body.header')}
             </p>
             <p>
-            {t('timetable.modals.subscriptionExplanation.body.url')}
+              {t('timetable.modals.subscriptionExplanation.body.url')}
               <ul>
                 <ExplanationListElement i18nKey="subscriptionExplanation.body.login" />
                 <ExplanationListElement i18nKey="subscriptionExplanation.body.timetable" />
