@@ -97,19 +97,19 @@ export default function Bus () {
           </Form.Group>
           {(kind === 'bus' || kind === 'train') && (
             <Form.Group>
-            <Form.Label>
-              {kind === 'bus' ? t('form.station.label.bus') : t('form.station.label.train')}
-            </Form.Label>
-            <Form.Control
-              as="select"
-              value={station || ''}
-              onChange={e => setStation(e.target.value)}
-            >
-              {kind && stations[kind].stations.map(station =>
-                <option key={station.id} value={station.id}>{station.name}</option>
-              )}
-            </Form.Control>
-          </Form.Group>
+              <Form.Label>
+                {kind === 'bus' ? t('form.station.label.bus') : t('form.station.label.train')}
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={station || ''}
+                onChange={e => setStation(e.target.value)}
+              >
+                {kind && stations[kind].stations.map(station =>
+                  <option key={station.id} value={station.id}>{station.name}</option>
+                )}
+              </Form.Control>
+            </Form.Group>
           )}
         </Form>
 

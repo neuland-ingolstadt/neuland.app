@@ -26,6 +26,28 @@
         "sort-imports": ["warn", {
             "allowSeparatedGroups": true
         }],
-        "dot-notation": "off"
+        "dot-notation": "off",
+        "react/jsx-wrap-multilines": [
+            "error",
+            {
+              "declaration": "parens-new-line",
+              "assignment": "parens-new-line",
+              "return": "parens-new-line",
+              "arrow": "ignore",
+              "condition": "ignore",
+              "logical": "ignore",
+              "prop": "ignore"
+            }
+          ],
+        "indent": ["error", 2, {
+            "SwitchCase": 1
+        }],
+        "react/jsx-closing-bracket-location": ["error", "line-aligned"],
+        "react/jsx-indent": ["error", 2],
+        "react/jsx-first-prop-new-line": ["error", "multiline"],
+        "react/jsx-max-props-per-line": ["error", {
+            "maximum": 1,
+            "when": "multiline"
+        }]
     }
 }

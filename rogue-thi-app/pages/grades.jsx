@@ -155,7 +155,7 @@ export default function Grades () {
           {gradeAverage && gradeAverage.entries.length > 0 && (
             <>
               <h4 className={styles.heading}>
-              {t('grades.summary.title')}
+                {t('grades.summary.title')}
               </h4>
               <ListGroup>
                 <Spoiler className={styles.gradeAverageContainer}>

@@ -124,7 +124,7 @@ export function RenderMobilityEntryPlaceholder ({ kind, styles }) {
   return (
     <>
       <div className={styles.mobilityRoute}>
-      - - -
+        - - -
       </div>
       <div className={styles.mobilityDestination}>
         <TextBlock rows={1} />

@@ -53,7 +53,7 @@ export default function FilterFoodModal () {
         <Modal.Body>
           <div className={styles.filterHeader}>
             <h6>
-            {t('food.filterModal.restaurants.title')}
+              {t('food.filterModal.restaurants.title')}
             </h6>
           </div>
 
@@ -88,12 +88,15 @@ export default function FilterFoodModal () {
 
           <div className={styles.filterHeader}>
             <h6>
-            {t('food.filterModal.allergens.title')}
+              {t('food.filterModal.allergens.title')}
             </h6>
-            <Button variant='outline-primary' onClick={() => {
-              setShowAllergenSelection(true)
-              setShowFoodFilterModal(false)
-            }}>
+            <Button
+              variant='outline-primary'
+              onClick={() => {
+                setShowAllergenSelection(true)
+                setShowFoodFilterModal(false)
+              }}
+            >
               <FontAwesomeIcon title={t('food.filterModal.allergens.iconTitle')} icon={faPen} fixedWidth/>
             </Button>
           </div>
@@ -106,12 +109,15 @@ export default function FilterFoodModal () {
 
           <div className={styles.filterHeader}>
             <h6>
-            {t('food.filterModal.preferences.title')}
+              {t('food.filterModal.preferences.title')}
             </h6>
-            <Button variant='outline-primary' onClick={() => {
-              setShowPreferencesSelection(true)
-              setShowFoodFilterModal(false)
-            }}>
+            <Button
+              variant='outline-primary'
+              onClick={() => {
+                setShowPreferencesSelection(true)
+                setShowFoodFilterModal(false)
+              }}
+            >
               <FontAwesomeIcon title={t('food.filterModal.preferences.iconTitle')} icon={faPen} fixedWidth/>
             </Button>
           </div>
@@ -154,11 +160,14 @@ export default function FilterFoodModal () {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="primary" onClick={() => {
-            saveAllergenSelection()
-            setShowAllergenSelection(false)
-            setShowFoodFilterModal(true)
-          }}>OK</Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              saveAllergenSelection()
+              setShowAllergenSelection(false)
+              setShowFoodFilterModal(true)
+            }}
+          >OK</Button>
         </Modal.Footer>
       </Modal>
 
@@ -182,11 +191,14 @@ export default function FilterFoodModal () {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="primary" onClick={() => {
-            savePreferencesSelection()
-            setShowPreferencesSelection(false)
-            setShowFoodFilterModal(true)
-          }}>OK</Button>
+          <Button
+            variant="primary"
+            onClick={() => {
+              savePreferencesSelection()
+              setShowPreferencesSelection(false)
+              setShowFoodFilterModal(true)
+            }}
+          >OK</Button>
         </Modal.Footer>
       </Modal>
     </>

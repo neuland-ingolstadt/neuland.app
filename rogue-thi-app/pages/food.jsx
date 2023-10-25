@@ -394,8 +394,8 @@ export default function Mensa () {
                 <li key={flag} style={{ color: containsSelectedPreference([flag]) && COLOR_GOOD }}>
                   {containsSelectedPreference([flag]) && (
                     <span>
-                          <FontAwesomeIcon icon={faHeartCircleCheck} color={COLOR_GOOD}/>{' '}
-                        </span>
+                      <FontAwesomeIcon icon={faHeartCircleCheck} color={COLOR_GOOD}/>{' '}
+                    </span>
                   )}
                   {' '}
                   <strong>{flag}</strong>
@@ -569,24 +569,26 @@ export default function Mensa () {
    * @returns {JSX.Element}
    */
   function WeekTab ({ foodEntries, index, setIndex }) {
-    return <div className={styles.tab}>
-      <Nav
-        variant="pills"
-        activeKey={index.toString()}
-        onSelect={key => setIndex(parseInt(key))}
-        className={styles.nav}
-      >
-        {foodEntries && foodEntries.map((child, idx) => <Nav.Item key={idx}>
-          <Nav.Link eventKey={idx.toString()} className={`${index === idx ? styles.active : ''} ${child.meals.length === 0 ? styles.noMeals : ''}`}>
-            {buildLinedWeekdaySpan(child.timestamp)}
-          </Nav.Link>
-        </Nav.Item>
-        )}
-      </Nav>
-      <SwipeableViews index={index} onChangeIndex={idx => setIndex(idx)}>
-        {foodEntries && foodEntries.map((day, idx) => renderMealDay(day, idx))}
-      </SwipeableViews>
-    </div>
+    return (
+      <div className={styles.tab}>
+        <Nav
+          variant="pills"
+          activeKey={index.toString()}
+          onSelect={key => setIndex(parseInt(key))}
+          className={styles.nav}
+        >
+          {foodEntries && foodEntries.map((child, idx) => <Nav.Item key={idx}>
+            <Nav.Link eventKey={idx.toString()} className={`${index === idx ? styles.active : ''} ${child.meals.length === 0 ? styles.noMeals : ''}`}>
+              {buildLinedWeekdaySpan(child.timestamp)}
+            </Nav.Link>
+          </Nav.Item>
+          )}
+        </Nav>
+        <SwipeableViews index={index} onChangeIndex={idx => setIndex(idx)}>
+          {foodEntries && foodEntries.map((day, idx) => renderMealDay(day, idx))}
+        </SwipeableViews>
+      </div>
+    )
   }
 }
 
