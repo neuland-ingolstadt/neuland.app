@@ -38,7 +38,7 @@ import { useEffect, useState } from 'react'
  * @returns {void}
  */
 export function useFoodFilter () {
-  const [selectedLanguageFood, setSelectedLanguageFood] = useState(['mensa', 'reimanns', 'reimanns-static'])
+  const [selectedLanguageFood, setSelectedLanguageFood] = useState([])
   const [selectedRestaurants, setSelectedRestaurants] = useState([])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
@@ -79,11 +79,7 @@ export function useFoodFilter () {
    * @param {string} name Restaurant name (either `mensa` or `reimanns`)
    */
   function toggleSelectedLanguageFood (name) {
-    const checked = selectedLanguageFood.includes(name)
-    const newSelection = selectedLanguageFood.filter(x => x !== name)
-    if (!checked) {
-      newSelection.push(name)
-    }
+    const newSelection = name
 
     setSelectedLanguageFood(newSelection)
     localStorage.selectedLanguageFood = JSON.stringify(newSelection)

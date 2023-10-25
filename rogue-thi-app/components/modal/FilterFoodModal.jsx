@@ -87,24 +87,32 @@ export default function FilterFoodModal () {
           </div>
 
           <hr/>
-            <div>
-              <h6>
+          <div>
+            <h6>
               {t('food.filterModal.languageFood.title')}
-              </h6>
-            </div>
-
-            <Form.Check
-              id='LanguageFoodDe'
-              label={'Deutsch'}
-              checked={selectedLanguageFood.includes('de')}
-              onChange={() => toggleSelectedLanguageFood('de')}
-            />
-            <Form.Check
-              id='LanguageFoodEng'
-              label={'Englisch'}
-              checked={selectedLanguageFood.includes('en')}
-              onChange={() => toggleSelectedLanguageFood('en')}
-            />
+            </h6>
+          </div>
+          <Form.Check
+            id='LanguageFoodDefault'
+            label={t('food.filterModal.languageFood.default')}
+            checked={selectedLanguageFood === 'default' || selectedLanguageFood.length === 0}
+            onChange={() => toggleSelectedLanguageFood('default')}
+            type={'radio'} // ohne type ist es eine checkbox
+          />
+          <Form.Check
+            id='LanguageFoodDe'
+            label={t('food.filterModal.languageFood.german')}
+            checked={selectedLanguageFood === 'de'}
+            onChange={() => toggleSelectedLanguageFood('de')}
+            type={'radio'}
+          />
+          <Form.Check
+            id='LanguageFoodEng'
+            label={t('food.filterModal.languageFood.english')}
+            checked={selectedLanguageFood === 'en'}
+            onChange={() => toggleSelectedLanguageFood('en')}
+            type={'radio'}
+          />
 
           <hr/>
 

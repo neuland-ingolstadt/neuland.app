@@ -18,7 +18,10 @@
                 "showCanisius": "Canisiuskonvikt anzeigen"
             },
             "languageFood":{
-                "title":"Sprache Essen"
+                "title":"Sprache für den Speiseplan",
+                "german":"Deutsch",
+                "english":"Englisch",
+                "default":"Standart"
             },
             "allergens": {
                 "title": "Allergien",

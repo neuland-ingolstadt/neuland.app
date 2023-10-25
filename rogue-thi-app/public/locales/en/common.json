@@ -18,7 +18,10 @@
                 "showCanisius": "Show Canisius Convict"
             },
             "languageFood":{
-                "title":"Language Food"
+                "title":"Language for food menu",
+                "german":"German",
+                "english":"English",
+                "default":"Default"
             },
             "allergens": {
                 "title": "Allergies",
