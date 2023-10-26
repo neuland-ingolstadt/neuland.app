@@ -46,6 +46,7 @@ Object.keys(allergenMap)
 export default function Mensa () {
   const {
     selectedRestaurants,
+    selectedLanguageFood,
     preferencesSelection,
     allergenSelection,
     setShowFoodFilterModal
@@ -59,7 +60,15 @@ export default function Mensa () {
   const userKind = useUserKind()
   const router = useRouter()
   const { i18n, t } = useTranslation('food')
-  const currentLocale = i18n.languages[0]
+
+  let languageFood = ''
+  if (selectedLanguageFood === undefined || selectedLanguageFood.length === 0 || selectedLanguageFood === 'default') {
+    languageFood = i18n.languages[0]
+  } else {
+    languageFood = selectedLanguageFood
+  }
+
+  const currentLocale = languageFood
 
   useEffect(() => {
     async function load () {
@@ -173,7 +182,7 @@ export default function Mensa () {
         <ListGroup className={styles.variations}>
           {meal?.variations?.map((variant, idx) => (
             <ListGroupItem
-              title={variant.name[i18n.languages[0]]}
+              title={variant.name[languageFood]}
               content={`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
               key={idx}
             />
@@ -203,7 +212,7 @@ export default function Mensa () {
         <div>
           <div className={styles.variation}>
             <div className={styles.name}>
-              {meal.name[i18n.languages[0]]}
+              {meal.name[languageFood]}
             </div>
 
             <div className={styles.details}>
@@ -341,7 +350,7 @@ export default function Mensa () {
     )
   }
 
-  const isTranslated = (meal) => meal?.originalLanguage !== i18n.languages[0]
+  const isTranslated = (meal) => meal?.originalLanguage !== languageFood
 
   return (
     <AppContainer>
@@ -380,7 +389,7 @@ export default function Mensa () {
           </Modal.Header>
 
           <Modal.Body>
-            <h4 className={styles.modalTitle}>{showMealDetails?.name[i18n.languages[0]]}</h4>
+            <h4 className={styles.modalTitle}>{showMealDetails?.name[languageFood]}</h4>
 
             <h6>{t('foodModal.flags.title')}</h6>
             {showMealDetails?.flags === null && (
@@ -543,7 +552,7 @@ export default function Mensa () {
                 </li>
                 <li>
                   <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
-                  {showMealDetails?.name[i18n.languages[0]]}
+                  {showMealDetails?.name[languageFood]}
                 </li>
               </ul>
             )}
