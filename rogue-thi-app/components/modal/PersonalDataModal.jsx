@@ -22,13 +22,16 @@ export default function PersonalDataModal ({ userdata }) {
    */
   function renderPersonalEntry (i18nKey, name, render) {
     return (
-      <ListGroup.Item action onClick={() => {
-        if (i18nKey === 'examRegulations') {
-          navigator.clipboard.writeText('SPO: ' + userdata.pvers)
-        } else {
-          navigator.clipboard.writeText(userdata[name])
-        }
-      }}>
+      <ListGroup.Item
+        action
+        onClick={() => {
+          if (i18nKey === 'examRegulations') {
+            navigator.clipboard.writeText('SPO: ' + userdata.pvers)
+          } else {
+            navigator.clipboard.writeText(userdata[name])
+          }
+        }}
+      >
         {t(`personal.modals.personalData.${i18nKey}`)}
         <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
           <ReactPlaceholder type="text" rows={1} ready={userdata}>
@@ -61,7 +64,8 @@ export default function PersonalDataModal ({ userdata }) {
               /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
               href={userdata?.po_url && userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
               target="_blank"
-              rel="noreferrer">
+              rel="noreferrer"
+            >
               {userdata.pvers}
             </a>
           ))}
