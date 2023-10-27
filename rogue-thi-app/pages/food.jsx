@@ -61,13 +61,16 @@ export default function Mensa () {
   const router = useRouter()
   const { i18n, t } = useTranslation('food')
 
-  let languageFood = ''
-  if (selectedLanguageFood === undefined || selectedLanguageFood.length === 0 || selectedLanguageFood === 'default') {
-    languageFood = i18n.languages[0]
-  } else {
-    languageFood = selectedLanguageFood
-  }
+  // let languageFood = ''
+  // if (selectedLanguageFood === undefined || selectedLanguageFood.length === 0 || selectedLanguageFood === 'default') {
+  //   languageFood = i18n.languages[0]
+  // } else {
+  //   languageFood = selectedLanguageFood
+  // }
 
+  // const currentLocale = languageFood
+
+  const languageFood = selectedLanguageFood && selectedLanguageFood !== 'default' ? selectedLanguageFood : i18n.languages[0]
   const currentLocale = languageFood
 
   useEffect(() => {
@@ -409,7 +412,7 @@ export default function Mensa () {
                   {' '}
                   <strong>{flag}</strong>
                   {' – '}
-                  {flagMap[flag]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
+                  {flagMap[flag]?.[i18n.languages[0]] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>
@@ -433,7 +436,7 @@ export default function Mensa () {
                   {' '}
                   <strong>{key}</strong>
                   {' – '}
-                  {allergenMap[key]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
+                  {allergenMap[key]?.[i18n.languages[0]] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>

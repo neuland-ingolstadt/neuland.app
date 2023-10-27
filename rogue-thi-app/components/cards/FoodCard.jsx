@@ -27,12 +27,16 @@ export default function FoodCard () {
   } = useContext(FoodFilterContext)
   const { i18n, t } = useTranslation(['dashboard', 'food'])
 
+  /*
   let languageFood = ''
   if (selectedLanguageFood === undefined || selectedLanguageFood.length === 0 || selectedLanguageFood === 'default') {
     languageFood = i18n.languages[0]
   } else {
     languageFood = selectedLanguageFood
   }
+  */
+
+  const languageFood = selectedLanguageFood && selectedLanguageFood !== 'default' ? selectedLanguageFood : i18n.languages[0]
 
   useEffect(() => {
     async function load () {

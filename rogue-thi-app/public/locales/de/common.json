@@ -19,9 +19,7 @@
             },
             "languageFood":{
                 "title":"Sprache für den Speiseplan",
-                "german":"Deutsch",
-                "english":"Englisch",
-                "default":"Standart"
+                "default":"Standard"
             },
             "allergens": {
                 "title": "Allergien",

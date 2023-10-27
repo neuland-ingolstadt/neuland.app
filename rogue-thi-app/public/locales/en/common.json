@@ -19,8 +19,6 @@
             },
             "languageFood":{
                 "title":"Language for food menu",
-                "german":"German",
-                "english":"English",
                 "default":"Default"
             },
             "allergens": {

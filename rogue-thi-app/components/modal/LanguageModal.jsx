@@ -1,5 +1,6 @@
 import { useContext, useRef } from 'react'
-import { ShowLanguageModal } from '../../pages/_app'
+
+import { FoodFilterContext, ShowLanguageModal } from '../../pages/_app'
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -21,6 +22,8 @@ export default function LanguageModal () {
   const router = useRouter()
 
   const { t, i18n } = useTranslation('personal')
+
+  const { selectedLanguageFood, toggleSelectedLanguageFood } = useContext(FoodFilterContext)
 
   /**
    * Changes the current language.
@@ -53,6 +56,39 @@ export default function LanguageModal () {
             </Button>
           ))}
         </Form>
+
+        <hr/>
+        <div>
+          <h6>
+            {t('personal.modals.languageFood.title')}
+          </h6>
+        </div>
+
+        <Form.Check
+        id='languageFood-default'
+        label={t('personal.modals.languageFood.default')}
+        checked={selectedLanguageFood === 'default'}
+        onChange={() => toggleSelectedLanguageFood('default')}
+        type={'radio'} // ohne type ist es eine checkbox
+      />
+
+      {languages.map((language, i) => (
+        <Form.Check
+          key={i}
+          // a={console.log(1, language['name'])} // {...}
+          // b={console.log(2, language.key)} // en / de
+          // c={console.log(3, language['name'][language.key])} // Deutsch / English
+
+          id={`languageFood-${language.key}`}
+          // {i18n.languages[0]}
+          // label={t(`food.filterModal.languageFood.${language['name']['en'].toLowerCase()}`)}
+          label={language.name[i18n.languages[0]]}
+          checked={selectedLanguageFood === language.key}
+          onChange={() => toggleSelectedLanguageFood(language.key)}
+          type={'radio'} // ohne type ist es eine checkbox
+        />
+      ))}
+
       </Modal.Body>
     </Modal>
   )

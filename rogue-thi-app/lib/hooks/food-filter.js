@@ -38,7 +38,7 @@ import { useEffect, useState } from 'react'
  * @returns {void}
  */
 export function useFoodFilter () {
-  const [selectedLanguageFood, setSelectedLanguageFood] = useState([])
+  const [selectedLanguageFood, setSelectedLanguageFood] = useState('default')
   const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa', 'reimanns', 'reimanns-static'])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
