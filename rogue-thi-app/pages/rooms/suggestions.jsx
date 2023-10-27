@@ -56,7 +56,7 @@ export default function RoomSearch () {
 
   const { buildingPreferences, setBuildingPreferences, saveBuildingPreferences } = useBuildingFilter()
 
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   const { t } = useTranslation('rooms')
 

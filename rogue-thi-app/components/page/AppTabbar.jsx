@@ -22,7 +22,7 @@ import { i18n } from 'next-i18next'
  */
 export default function AppTabbar () {
   const router = useRouter()
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   return (
     <>

@@ -56,7 +56,7 @@ export default function Mensa () {
   const [futureDay, setFutureDay] = useState(0)
   const [showMealDetails, setShowMealDetails] = useState(null)
   const [week, setWeek] = useState(0)
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
   const router = useRouter()
   const { i18n, t } = useTranslation('food')
   const currentLocale = i18n.languages[0]
