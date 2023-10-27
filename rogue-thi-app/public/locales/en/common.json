@@ -17,10 +17,6 @@
                 "showReimannsStatic": "Show Reimanns (static meals)",
                 "showCanisius": "Show Canisius Convict"
             },
-            "languageFood":{
-                "title":"Language for food menu",
-                "default":"Default"
-            },
             "allergens": {
                 "title": "Allergies",
                 "iconTitle": "Allergens",

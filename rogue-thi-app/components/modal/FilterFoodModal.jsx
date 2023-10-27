@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
-// import languages from '../../data/languages.json'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
@@ -19,11 +18,6 @@ Object.keys(allergenMap)
   .filter(key => key.startsWith('_'))
   .forEach(key => delete allergenMap[key])
 
-// console.log(languages)
-// const languageFoodList = [{ key: 'default', name: { en: 'Default', de: 'Standard' } }, ...languages]
-//! was ist es weitere sprachen gibt
-//! doch kein problem? weil die übersetzung auf die 'en' werte gesetzt ist
-
 /**
  * A modal component that allows users to personalize their food preferences and allergenes
  * @returns {JSX.Element}
@@ -32,13 +26,11 @@ Object.keys(allergenMap)
 export default function FilterFoodModal () {
   const {
     selectedRestaurants,
-    // selectedLanguageFood,
     preferencesSelection,
     setPreferencesSelection,
     allergenSelection,
     setAllergenSelection,
     toggleSelectedRestaurant,
-    // toggleSelectedLanguageFood,
     savePreferencesSelection,
     saveAllergenSelection,
     showFoodFilterModal,
@@ -91,60 +83,6 @@ export default function FilterFoodModal () {
               onChange={() => toggleSelectedRestaurant('canisius')}
             />
           </div>
-
-          {/* <hr/>
-          <div>
-            <h6>
-              {t('food.filterModal.languageFood.title')}
-            </h6>
-          </div>
-
-          <Form.Check
-            id='languageFood-default'
-            label={t('food.filterModal.languageFood.default')}
-            checked={selectedLanguageFood === 'default'}
-            onChange={() => toggleSelectedLanguageFood('default')}
-            type={'radio'} // ohne type ist es eine checkbox
-          />
-
-          {languages.map((language, i) => (
-            <Form.Check
-              key={i}
-              // a={console.log(1, language['name'])} // {...}
-              // b={console.log(2, language.key)} // en / de
-              // c={console.log(3, language['name'][language.key])} // Deutsch / English
-
-              id={`languageFood-${language.key}`}
-              // {i18n.languages[0]}
-              // label={t(`food.filterModal.languageFood.${language['name']['en'].toLowerCase()}`)}
-              label={language.name[i18n.languages[0]]}
-              checked={selectedLanguageFood === language.key}
-              onChange={() => toggleSelectedLanguageFood(language.key)}
-              type={'radio'} // ohne type ist es eine checkbox
-            />
-          ))} */}
-
-          {/* <Form.Check
-            id='LanguageFoodDefault'
-            label={t('food.filterModal.languageFood.default')}
-            checked={selectedLanguageFood === 'default' || selectedLanguageFood.length === 0}
-            onChange={() => toggleSelectedLanguageFood('default')}
-            type={'radio'} // ohne type ist es eine checkbox
-          />
-          <Form.Check
-            id='LanguageFoodDe'
-            label={t('food.filterModal.languageFood.german')}
-            checked={selectedLanguageFood === 'de'}
-            onChange={() => toggleSelectedLanguageFood('de')}
-            type={'radio'}
-          />
-          <Form.Check
-            id='LanguageFoodEng'
-            label={t('food.filterModal.languageFood.english')}
-            checked={selectedLanguageFood === 'en'}
-            onChange={() => toggleSelectedLanguageFood('en')}
-            type={'radio'}
-          /> */}
 
           <hr/>
 

@@ -17,10 +17,6 @@
                 "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
                 "showCanisius": "Canisiuskonvikt anzeigen"
             },
-            "languageFood":{
-                "title":"Sprache für den Speiseplan",
-                "default":"Standard"
-            },
             "allergens": {
                 "title": "Allergien",
                 "iconTitle": "Allergene",
