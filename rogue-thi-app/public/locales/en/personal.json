@@ -27,7 +27,7 @@
                 "title": "Language"
             },
             "languageFood":{
-                "title":"Language for food menu",
+                "title":"Food Language",
                 "default":"Default"
             },
             "personalData": {

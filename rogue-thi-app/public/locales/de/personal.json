@@ -27,7 +27,7 @@
                 "title": "Sprache"
             },
             "languageFood":{
-                "title":"Sprache für den Speiseplan",
+                "title":"Essens Sprache",
                 "default":"Standard"
             },
             "personalData": {
