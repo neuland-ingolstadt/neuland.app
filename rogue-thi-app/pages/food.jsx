@@ -46,6 +46,7 @@ Object.keys(allergenMap)
 export default function Mensa () {
   const {
     selectedRestaurants,
+    selectedLanguageFood,
     preferencesSelection,
     allergenSelection,
     setShowFoodFilterModal
@@ -59,7 +60,8 @@ export default function Mensa () {
   const userKind = useUserKind()
   const router = useRouter()
   const { i18n, t } = useTranslation('food')
-  const currentLocale = i18n.languages[0]
+
+  const currentLocale = (selectedLanguageFood && selectedLanguageFood !== 'default') ? selectedLanguageFood : i18n.languages[0]
 
   useEffect(() => {
     async function load () {
@@ -173,7 +175,7 @@ export default function Mensa () {
         <ListGroup className={styles.variations}>
           {meal?.variations?.map((variant, idx) => (
             <ListGroupItem
-              title={variant.name[i18n.languages[0]]}
+              title={variant.name[currentLocale]}
               content={`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
               key={idx}
             />
@@ -203,7 +205,7 @@ export default function Mensa () {
         <div>
           <div className={styles.variation}>
             <div className={styles.name}>
-              {meal.name[i18n.languages[0]]}
+              {meal.name[currentLocale]}
             </div>
 
             <div className={styles.details}>
@@ -341,7 +343,7 @@ export default function Mensa () {
     )
   }
 
-  const isTranslated = (meal) => meal?.originalLanguage !== i18n.languages[0]
+  const isTranslated = (meal) => meal?.originalLanguage !== currentLocale
 
   return (
     <AppContainer>
@@ -380,7 +382,7 @@ export default function Mensa () {
           </Modal.Header>
 
           <Modal.Body>
-            <h4 className={styles.modalTitle}>{showMealDetails?.name[i18n.languages[0]]}</h4>
+            <h4 className={styles.modalTitle}>{showMealDetails?.name[currentLocale]}</h4>
 
             <h6>{t('foodModal.flags.title')}</h6>
             {showMealDetails?.flags === null && (
@@ -400,7 +402,7 @@ export default function Mensa () {
                   {' '}
                   <strong>{flag}</strong>
                   {' – '}
-                  {flagMap[flag]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
+                  {flagMap[flag]?.[i18n.languages[0]] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>
@@ -424,7 +426,7 @@ export default function Mensa () {
                   {' '}
                   <strong>{key}</strong>
                   {' – '}
-                  {allergenMap[key]?.[currentLocale] || `${t('foodModal.allergens.fallback')}`}
+                  {allergenMap[key]?.[i18n.languages[0]] || `${t('foodModal.allergens.fallback')}`}
                 </li>
               ))}
             </ul>
@@ -543,7 +545,7 @@ export default function Mensa () {
                 </li>
                 <li>
                   <strong>{t('foodModal.translation.translatedName')}</strong>:{' '}
-                  {showMealDetails?.name[i18n.languages[0]]}
+                  {showMealDetails?.name[currentLocale]}
                 </li>
               </ul>
             )}

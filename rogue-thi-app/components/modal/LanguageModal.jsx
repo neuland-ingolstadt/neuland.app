@@ -1,5 +1,6 @@
 import { useContext, useRef } from 'react'
-import { ShowLanguageModal } from '../../pages/_app'
+
+import { FoodFilterContext, ShowLanguageModal } from '../../pages/_app'
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -21,6 +22,8 @@ export default function LanguageModal () {
   const router = useRouter()
 
   const { t, i18n } = useTranslation('personal')
+
+  const { selectedLanguageFood, toggleSelectedLanguageFood } = useContext(FoodFilterContext)
 
   /**
    * Changes the current language.
@@ -56,6 +59,33 @@ export default function LanguageModal () {
             </Button>
           ))}
         </Form>
+
+        <hr/>
+        <div>
+          <h6>
+            {t('personal.modals.languageFood.title')}
+          </h6>
+        </div>
+
+        <Form.Check
+          id='languageFood-default'
+          label={t('personal.modals.languageFood.default')}
+          checked={selectedLanguageFood === 'default'}
+          onChange={() => toggleSelectedLanguageFood('default')}
+          type={'radio'}
+        />
+
+        {languages.map((language, i) => (
+          <Form.Check
+            key={i}
+            id={`languageFood-${language.key}`}
+            label={language.name[i18n.languages[0]]}
+            checked={selectedLanguageFood === language.key}
+            onChange={() => toggleSelectedLanguageFood(language.key)}
+            type={'radio'}
+          />
+        ))}
+
       </Modal.Body>
     </Modal>
   )

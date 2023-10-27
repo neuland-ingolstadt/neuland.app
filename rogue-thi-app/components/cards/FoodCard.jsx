@@ -21,10 +21,13 @@ export default function FoodCard () {
   const [foodError, setFoodError] = useState(null)
   const {
     selectedRestaurants,
+    selectedLanguageFood,
     preferencesSelection,
     allergenSelection
   } = useContext(FoodFilterContext)
   const { i18n, t } = useTranslation(['dashboard', 'food'])
+
+  const languageFood = (selectedLanguageFood && selectedLanguageFood !== 'default') ? selectedLanguageFood : i18n.languages[0]
 
   useEffect(() => {
     async function load () {
@@ -76,11 +79,11 @@ export default function FoodCard () {
           setFoodEntries([])
         } else if (todayEntries.length > 2) {
           setFoodEntries([
-            todayEntries[0].name[i18n.languages[0]],
+            todayEntries[0].name[languageFood],
             `${t('food.text.additional', { count: todayEntries.length - 1 })}`
           ])
         } else {
-          setFoodEntries(todayEntries.map(x => x.name[i18n.languages[0]]))
+          setFoodEntries(todayEntries.map(x => x.name[languageFood]))
         }
       } catch (e) {
         console.error(e)
@@ -88,7 +91,7 @@ export default function FoodCard () {
       }
     }
     load()
-  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n])
+  }, [selectedRestaurants, preferencesSelection, allergenSelection, t, i18n, languageFood])
 
   const placeholder = (
     <ListGroup variant='flush' >
