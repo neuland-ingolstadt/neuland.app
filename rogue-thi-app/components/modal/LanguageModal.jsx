@@ -37,8 +37,11 @@ export default function LanguageModal () {
   }
 
   return (
-    <Modal show={!!showLanguageModal} dialogClassName={styles.themeModal}
-           onHide={() => setShowLanguageModal(false)}>
+    <Modal
+      show={!!showLanguageModal}
+      dialogClassName={styles.themeModal}
+      onHide={() => setShowLanguageModal(false)}
+    >
       <Modal.Header closeButton>
         <Modal.Title>{t('personal.modals.language.title')}</Modal.Title>
       </Modal.Header>

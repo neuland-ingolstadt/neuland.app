@@ -152,25 +152,25 @@ export default function RoomSearch () {
   function GapHeader ({ result }) {
     if (result.gap.endLecture) {
       return (
-      <Trans
-        i18nKey="rooms.suggestions.gaps.header.specific"
-        ns='rooms'
-        components={{
-          arrow: <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
-        }}
-        values={{
-          from: result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : t('rooms.suggestions.gaps.now'),
-          until: getTimetableEntryName(result.gap.endLecture).shortName,
-          room: result.room
-        }}
-      />
+        <Trans
+          i18nKey="rooms.suggestions.gaps.header.specific"
+          ns='rooms'
+          components={{
+            arrow: <FontAwesomeIcon icon={faArrowRight} className={styles.icon} />
+          }}
+          values={{
+            from: result.gap.startLecture ? getTimetableEntryName(result.gap.startLecture).shortName : t('rooms.suggestions.gaps.now'),
+            until: getTimetableEntryName(result.gap.endLecture).shortName,
+            room: result.room
+          }}
+        />
       )
     } else {
       return (
-      <Trans
-        i18nKey="rooms.suggestions.gaps.header.general"
-        ns='rooms'
-      />
+        <Trans
+          i18nKey="rooms.suggestions.gaps.header.general"
+          ns='rooms'
+        />
       )
     }
   }
@@ -183,27 +183,27 @@ export default function RoomSearch () {
   function GapSubtitle ({ result }) {
     if (result.gap.endLecture) {
       return (
-      <Trans
-        i18nKey="rooms.suggestions.gaps.subtitle.specific"
-        ns='rooms'
-        values={{
-          from: result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : t('rooms.suggestions.gaps.now').toLowerCase(),
-          until: formatFriendlyTime(result.gap.endLecture.startDate),
-          room: result.room
-        }}
-      />
+        <Trans
+          i18nKey="rooms.suggestions.gaps.subtitle.specific"
+          ns='rooms'
+          values={{
+            from: result.gap.startLecture ? formatFriendlyTime(result.gap.startLecture.endDate) : t('rooms.suggestions.gaps.now').toLowerCase(),
+            until: formatFriendlyTime(result.gap.endLecture.startDate),
+            room: result.room
+          }}
+        />
       )
     } else {
       return (
-      <Trans
-        i18nKey="rooms.suggestions.gaps.subtitle.general"
-        ns='rooms'
-        values={{
-          from: formatFriendlyTime(result.gap.startDate),
-          until: formatFriendlyTime(result.gap.endDate),
-          duration: Math.ceil((result.gap.endDate.getTime() - result.gap.startDate.getTime()) / 1000 / 60)
-        }}
-      />
+        <Trans
+          i18nKey="rooms.suggestions.gaps.subtitle.general"
+          ns='rooms'
+          values={{
+            from: formatFriendlyTime(result.gap.startDate),
+            until: formatFriendlyTime(result.gap.endDate),
+            duration: Math.ceil((result.gap.endDate.getTime() - result.gap.startDate.getTime()) / 1000 / 60)
+          }}
+        />
       )
     }
   }
@@ -215,17 +215,22 @@ export default function RoomSearch () {
    */
   function DurationButton ({ duration }) {
     const variant = (localStorage.getItem('suggestion-duration') ?? `${SUGGESTION_DURATION_PRESET}`) === `${duration}` ? 'primary' : 'outline-primary'
-    return <Button variant={variant} onClick={async () => {
-      localStorage.setItem('suggestion-duration', duration)
+    return (
+      <Button
+        variant={variant}
+        onClick={async () => {
+          localStorage.setItem('suggestion-duration', duration)
 
-      const suggestions = await getSuggestions()
-      setSuggestions(suggestions)
-    } }>
-      <h3>
-        {duration}
-      </h3>
-      {t('rooms.suggestions.modals.suggestionPreferences.minutes')}
-    </Button>
+          const suggestions = await getSuggestions()
+          setSuggestions(suggestions)
+        } }
+      >
+        <h3>
+          {duration}
+        </h3>
+        {t('rooms.suggestions.modals.suggestionPreferences.minutes')}
+      </Button>
+    )
   }
 
   return (
@@ -239,7 +244,7 @@ export default function RoomSearch () {
       </AppNavbar>
 
       <AppBody>
-      <Modal size="lg" show={showEditDuration} onHide={closeModal}>
+        <Modal size="lg" show={showEditDuration} onHide={closeModal}>
           <Modal.Header closeButton>
             <Modal.Title>{t('rooms.suggestions.modals.suggestionPreferences.title')}</Modal.Title>
           </Modal.Header>

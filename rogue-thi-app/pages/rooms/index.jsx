@@ -51,7 +51,7 @@ export default function Rooms ({ roomData }) {
             {t('rooms.overflow.hourlyPlan')}
           </AppNavbar.Overflow.Link>
           <AppNavbar.Overflow.Link variant="link" onClick={() => window.open('https://ophase.neuland.app/', '_blank')}>
-          {t('rooms.overflow.campusCityTour')}
+            {t('rooms.overflow.campusCityTour')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
