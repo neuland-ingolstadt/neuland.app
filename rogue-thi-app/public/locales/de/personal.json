@@ -28,7 +28,7 @@
                 "subtitle": "App Sprache"
             },
             "languageFood":{
-                "title":"Essens Sprache",
+                "title":"Speiseplan Sprache",
                 "default":"Standard"
             },
             "personalData": {
