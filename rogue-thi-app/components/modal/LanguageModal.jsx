@@ -68,23 +68,23 @@ export default function LanguageModal () {
         </div>
 
         <Form.Check
-        id='languageFood-default'
-        label={t('personal.modals.languageFood.default')}
-        checked={selectedLanguageFood === 'default'}
-        onChange={() => toggleSelectedLanguageFood('default')}
-        type={'radio'} // ohne type ist es eine checkbox
-      />
-
-      {languages.map((language, i) => (
-        <Form.Check
-          key={i}
-          id={`languageFood-${language.key}`}
-          label={language.name[i18n.languages[0]]}
-          checked={selectedLanguageFood === language.key}
-          onChange={() => toggleSelectedLanguageFood(language.key)}
+          id='languageFood-default'
+          label={t('personal.modals.languageFood.default')}
+          checked={selectedLanguageFood === 'default'}
+          onChange={() => toggleSelectedLanguageFood('default')}
           type={'radio'}
         />
-      ))}
+
+        {languages.map((language, i) => (
+          <Form.Check
+            key={i}
+            id={`languageFood-${language.key}`}
+            label={language.name[i18n.languages[0]]}
+            checked={selectedLanguageFood === language.key}
+            onChange={() => toggleSelectedLanguageFood(language.key)}
+            type={'radio'}
+          />
+        ))}
 
       </Modal.Body>
     </Modal>

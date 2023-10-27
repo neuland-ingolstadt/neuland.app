@@ -79,10 +79,8 @@ export function useFoodFilter () {
    * @param {string} name language name (either `default`, `de` or `en`)
    */
   function toggleSelectedLanguageFood (name) {
-    const newSelection = name
-
-    setSelectedLanguageFood(newSelection)
-    localStorage.selectedLanguageFood = JSON.stringify(newSelection)
+    setSelectedLanguageFood(name)
+    localStorage.selectedLanguageFood = JSON.stringify(name)
   }
 
   /**
