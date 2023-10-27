@@ -20,7 +20,7 @@ CLEAN_REGEX = re.compile(r"\s+")
 
 LANGUAGES = ["EN-US"]
 
-MAP_URL = "https://assets.neuland.app/rooms_neuland.geojson"
+MAP_URL = "https://assets.neuland.app/rooms_neuland_v2.3.geojson"
 
 
 class ThiTranslator:
