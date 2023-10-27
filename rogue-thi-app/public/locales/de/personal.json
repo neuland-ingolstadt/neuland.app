@@ -24,10 +24,11 @@
                 "hackerman": "Um das <i>Hackerman</i>-Design freizuschalten, musst du mindestens vier Aufgaben unseres <aCtf>Übungs-CTFs</aCtf> lösen. Wenn du so weit bist, kannst du es <aHackerman>hier</aHackerman> freischalten."
             },
             "language": {
-                "title": "Sprache"
+                "title": "Sprache",
+                "subtitle": "App Sprache"
             },
             "languageFood":{
-                "title":"Sprache für den Speiseplan",
+                "title":"Speiseplan Sprache",
                 "default":"Standard"
             },
             "personalData": {
