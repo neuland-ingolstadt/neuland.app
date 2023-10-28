@@ -6,4 +6,4 @@ for file in $(curl 'https://www.thi.de/studium/pruefung/semestertermine/' | grep
     wget "https://thi.de$file"
 done
 
-cargo run -- output.json
+cargo run -- calendar.json
