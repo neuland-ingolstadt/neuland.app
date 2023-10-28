@@ -148,7 +148,6 @@ export function getNextValidDate () {
 export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
 
-  duration = '00:01' //!
   const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
   const endDate = new Date(
     beginDate.getFullYear(),
@@ -172,9 +171,35 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
  */
 export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL) {
   const data = await API.getFreeRooms(beginDate)
-  // console.log(building, data)
 
-  const raumSuche = 'G213'
+  const openings = getRoomOpenings(data, beginDate)
+  return Object.keys(openings)
+    .flatMap(room =>
+      openings[room].map(opening => ({
+        room,
+        type: opening.type,
+        from: opening.from,
+        until: opening.until
+      }))
+    )
+    .filter(opening =>
+      (building === BUILDINGS_ALL || isInBuilding(opening.room.toLowerCase(), building)) &&
+      beginDate >= opening.from &&
+      endDate <= opening.until
+    )
+    .sort((a, b) => a.room.localeCompare(b.room))
+}
+
+/**
+ * Filters suitable room openings.
+ * @param {Date} beginDate Start date as Date object
+ * @param {string} [raumSuche] Building name (e.g. `G215`), defaults to all buildings
+ * @returns {object[]}
+ */
+export async function getRoomAvailability (beginDate, raumSuche) {
+  const data = await API.getFreeRooms(beginDate)
+
+  // const raumSuche = 'G213'
 
   const inputDate = `${beginDate.getFullYear()}-${beginDate.getMonth() + 1}-${beginDate.getDate()}`
 
@@ -198,36 +223,20 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
       }
     }
   }
-  console.log(raumFrei)
+  // console.log(raumFrei)
 
   // Zeiten verbinden //? nochmal verbinden? Kann ich nicht testen, da es immer so pausen dazwischen gibt
   const raumFreiCombined = [...raumFrei]
   let offset = 0
   for (let index = 0; index < raumFrei.length - 1; index++) {
     if ((raumFrei[index]['bis'] === raumFrei[index + 1]['von'])) {
-      raumFreiCombined.splice(index + offset, 1)
-      raumFreiCombined.splice(index + offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
-      offset--
+      raumFreiCombined.splice(index - offset, 1)
+      raumFreiCombined.splice(index - offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
+      offset++
     }
   }
-  console.log(raumFreiCombined)
-
-  const openings = getRoomOpenings(data, beginDate)
-  return Object.keys(openings)
-    .flatMap(room =>
-      openings[room].map(opening => ({
-        room,
-        type: opening.type,
-        from: opening.from,
-        until: opening.until
-      }))
-    )
-    .filter(opening =>
-      (building === BUILDINGS_ALL || isInBuilding(opening.room.toLowerCase(), building)) &&
-      beginDate >= opening.from &&
-      endDate <= opening.until
-    )
-    .sort((a, b) => a.room.localeCompare(b.room))
+  // console.log(raumFreiCombined)
+  return raumFreiCombined
 }
 
 /**

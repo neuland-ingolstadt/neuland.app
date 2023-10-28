@@ -206,7 +206,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       year: date.getFullYear()
     })
 
-    console.log(res)
+    // console.log(res)
     return res
   }
 
