@@ -1,9 +1,10 @@
 use regex::Regex;
 use serde::Serialize;
 use std::env::args;
-use std::fs::File;
-use std::io::{stdin, Write};
-use std::process::exit;
+use std::fs;
+use std::io::Write;
+use std::path::Path;
+use std::error::Error;
 
 /// The regex string to match dates
 const DATE_REGEX: &str = r"\d{2}\.\d{2}\.\d{4}";
@@ -22,21 +23,13 @@ struct Date {
     has_hours: Option<bool>,
 }
 
-fn main() {
-    // Get cli arguments
-    let mut arguments = args();
-    let input_file = arguments.nth(1).expect("No input file was specified");
-    let output_file = arguments.next().expect("No output file was specified");
-
+fn handle_file(input_file: &Path, dates: &mut Vec<Date>) -> Result<(), Box<dyn Error>> {
     // get the text from the pdf
-    let text = pdf_extract::extract_text(&input_file).expect("The pd couldn't be parsed");
+    let text = pdf_extract::extract_text(&input_file)?;
 
     // Create the regexes
     let date_regex = Regex::new(DATE_REGEX).expect("The date regex isn't valid");
     let time_regex = Regex::new(TIME_REGEX).expect("The time regex isn't valid");
-
-    // Initialize a vec to save dates
-    let mut dates = Vec::new();
 
     // Sometimes what should be a single line is split over multiple. So this string is used to collect those into a single line
     let mut complete_line = String::new();
@@ -63,36 +56,46 @@ fn main() {
         }
     }
 
+    Ok(())
+}
+
+fn handle_all_files(path: &str) -> Result<Vec<Date>, Box<dyn Error>> {
+    let mut dates = vec![];
+
+    let files = fs::read_dir(path).expect("Could not list pdf files");
+    for file in files {
+        let path = file?.path();
+        println!("Handling file: {:?}", path);
+        if path.extension().map_or(true, |v| v != "pdf") {
+            continue;
+        }
+
+        println!("Parsing PDF file: {:?}", path);
+        let _ = handle_file(path.as_path(), &mut dates);
+    }
+
+    Ok(dates)    
+}
+
+fn main() {
+    // Get cli arguments
+    let mut arguments = args();
+    let output_file = arguments.nth(1).expect("No output file was specified");
+
+    // List all PDF files and run handle_file on them
+    let dates = handle_all_files("./").expect("Failed reading PDF files");
+
     // serialize the dates
-    let json = serde_json::to_string_pretty(&dates).expect("Dates couldnt be serialized");
+    let json = serde_json::to_string_pretty(&dates).expect("Dates couldn't be serialized");
 
     // Print the json to make sure its correct
     println!("{}", json);
     println!("\nPlease triple check if everything is correct");
     println!("Incorrect entries might get people in trouble.");
 
-    // wait for user input
-    let mut input = String::new();
-    while !(input == "y" || input == "n") {
-        input.clear();
-        println!("Is it correct y/n");
-        stdin()
-            .read_line(&mut input)
-            .expect("Couldn't read the line");
-        // Needs to be trimmed, else a \n will be at the end of the string
-        input = input.trim().to_string();
-    }
-
-    if input == "y" {
-        // If the json is correct, save it
-        let mut file = File::create(&output_file).expect("Couldn't open the json file");
-        write!(file, "{}", json).expect("Couldn't write to the json file");
-        println!("The json was saved to {}", output_file);
-    } else {
-        // if it is not, abort
-        eprintln!("The file wasn't parsed correctly. Please input dates manually to the json or fix this program");
-        exit(1);
-    }
+    let mut file = fs::File::create(&output_file).expect("Couldn't open the json file");
+    write!(file, "{}", json).expect("Couldn't write to the json file");
+    println!("The json was saved to {}", output_file);
 }
 
 /// Parse the given string into a date by using the given regexes
