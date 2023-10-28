@@ -9,7 +9,7 @@ from shutil import copy
 
 API_URL = "https://hiplan.thi.de/webservice/production2/index.php"
 DEEPL_API_URL = "https://api.deepl.com/v2/translate"
-MAIN_DIR = Path(__file__).parent.parent / "rogue-thi-app" / "public" / "locales"
+MAIN_DIR = Path(__file__).parent.parent / "thi-api-translations"
 
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 THI_USERNAME = os.getenv("THI_USERNAME")

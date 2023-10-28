@@ -1,12 +1,12 @@
-#FROM python:3 AS spo
-#WORKDIR /opt/
-#COPY spo-parser/requirements.txt .
-#RUN apt-get update \
-#	&& apt-get install -y libgl1 ghostscript \
-#	&& pip install -r requirements.txt
-#
-#COPY spo-parser .
-#RUN ./run_extraction.sh
+FROM python:3 AS spo
+WORKDIR /opt/
+COPY spo-parser/requirements.txt .
+RUN apt-get update \
+	&& apt-get install -y libgl1 ghostscript \
+	&& pip install -r requirements.txt
+
+COPY spo-parser .
+RUN ./run_extraction.sh
 
 
 # course names are currently unused
@@ -38,6 +38,14 @@ RUN pip install -r requirements.txt \
 
 
 
+FROM python:3 as thitranslator
+WORKDIR /opt/
+COPY thi-translator .
+RUN pip install -r requirements.txt \
+	&& python3 thi-translator.py
+
+
+
 FROM alekzonder/puppeteer:latest AS pwaicons
 USER root
 WORKDIR /opt/
@@ -49,8 +57,9 @@ RUN mkdir ./splash && \
 
 
 FROM nginx:latest
-#COPY --from=spo /opt/spo-grade-weights.json /usr/share/nginx/html/generated/
+COPY --from=spo /opt/spo-grade-weights.json /usr/share/nginx/html/generated/
 #COPY --from=courses /opt/ical-courses.json /usr/share/nginx/html/generated/
+COPY --from=thitranslator /opt/thi-api-translations /usr/share/nginx/html/generated/
 COPY --from=calendar /opt/calendar.json /usr/share/nginx/html/generated/
 COPY --from=roomdistances /opt/room-distances.json /usr/share/nginx/html/generated/
 COPY --from=pwaicons /opt/splash.tar.gz /usr/share/nginx/html/generated/
