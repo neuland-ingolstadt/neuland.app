@@ -190,6 +190,7 @@ export default function RoomMap ({ highlight, roomData }) {
    * @returns Leaflet feature object
    */
   function renderRoom (entry, key, onlyAvailable) {
+    // console.log(entry['properties']['Raum'], key, onlyAvailable, entry)
     const avail = availableRooms?.find(x => x.room === entry.properties.Raum)
     if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
       return null
@@ -327,6 +328,8 @@ export default function RoomMap ({ highlight, roomData }) {
             </div>
           </div>
         </div>
+
+        {/* {console.log(filteredRooms) /*! Anzahl der gefilterten Räume */}
 
         <LayersControl position="topright" collapsed={false}>
           {FLOOR_ORDER

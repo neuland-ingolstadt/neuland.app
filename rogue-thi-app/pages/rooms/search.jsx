@@ -148,6 +148,7 @@ export default function RoomSearch () {
 
         <br />
 
+        {/* {console.log(filterResults)} */}
         {searching &&
           <ReactPlaceholder type="text" rows={10} ready={filterResults}>
             <ListGroup>

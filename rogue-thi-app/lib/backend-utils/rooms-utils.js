@@ -69,6 +69,7 @@ function isInBuilding (room, building) {
  * @returns {object}
  */
 export function getRoomOpenings (rooms, date) {
+  // console.log(rooms)
   date = formatISODate(date)
   const openings = {}
   // get todays rooms
@@ -147,6 +148,7 @@ export function getNextValidDate () {
 export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
 
+  duration = '00:01' //!
   const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
   const endDate = new Date(
     beginDate.getFullYear(),
@@ -170,6 +172,45 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
  */
 export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL) {
   const data = await API.getFreeRooms(beginDate)
+  // console.log(building, data)
+
+  const raumSuche = 'G213'
+
+  const inputDate = `${beginDate.getFullYear()}-${beginDate.getMonth() + 1}-${beginDate.getDate()}`
+
+  // suche nach 'raumSuche' und speichere die freien Zeiten in 'raumFrei'
+  const raumFrei = []
+  for (const keyDay in data) {
+    const thisDate = new Date(data[keyDay].datum.split('T')[0])
+    const thisDateString = `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`
+    if (inputDate === thisDateString) {
+      for (let index = 0; index < data[keyDay]['rtypes'].length; index++) {
+        for (const keyStunde in data[keyDay]['rtypes'][index]['stunden']) {
+          const von = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['von']
+          const bis = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['bis']
+          for (let index2 = 0; index2 < data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'].length; index2++) {
+            const thisRoom = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'][index2][2]
+            if (thisRoom.toLowerCase() === raumSuche.toLocaleLowerCase()) {
+              raumFrei.push({ von, bis })
+            }
+          }
+        }
+      }
+    }
+  }
+  console.log(raumFrei)
+
+  // Zeiten verbinden //? nochmal verbinden? Kann ich nicht testen, da es immer so pausen dazwischen gibt
+  const raumFreiCombined = [...raumFrei]
+  let offset = 0
+  for (let index = 0; index < raumFrei.length - 1; index++) {
+    if ((raumFrei[index]['bis'] === raumFrei[index + 1]['von'])) {
+      raumFreiCombined.splice(index + offset, 1)
+      raumFreiCombined.splice(index + offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
+      offset--
+    }
+  }
+  console.log(raumFreiCombined)
 
   const openings = getRoomOpenings(data, beginDate)
   return Object.keys(openings)
