@@ -11,6 +11,7 @@ export function useUserKind () {
 
   useEffect(() => {
     async function loadFaculty () {
+      // return 'Nachhaltige Infrastruktur'
       return await API.getFaculty()
     }
 

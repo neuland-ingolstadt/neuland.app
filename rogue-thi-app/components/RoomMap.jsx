@@ -128,10 +128,16 @@ export default function RoomMap ({ highlight, roomData }) {
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
 
+    // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
+    const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
+    const campusRooms = filtered.filter(x => x.properties.Raum.includes('N') === showNeuburg)
+
+    const centerRooms = campusRooms.length > 0 ? campusRooms : filtered
+
     let lon = 0
     let lat = 0
     let count = 0
-    filtered.forEach(x => {
+    centerRooms.forEach(x => {
       lon += x.coordinates[0][0]
       lat += x.coordinates[0][1]
       count += 1
@@ -139,7 +145,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, mapCenter])
+  }, [searchText, allRooms, mapCenter, userFaculty])
 
   useEffect(() => {
     async function load () {
@@ -313,7 +319,6 @@ export default function RoomMap ({ highlight, roomData }) {
 
         <TileLayer
           attribution={t('rooms.map.attribution')}
-          // url={`https://tiles-eu.stadiamaps.com/tiles/alidade_smooth${isDark() ? '_dark' : ''}/{z}/{x}/{y}{r}.png`}
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxNativeZoom={19}
           maxZoom={21}
