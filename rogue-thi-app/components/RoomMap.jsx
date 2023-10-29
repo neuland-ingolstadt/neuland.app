@@ -58,7 +58,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
-  const [roomAvailableText, setroomAvailableText] = useState([])
+  const [RoomAvailabilityList] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -126,6 +126,8 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
+
+    loadRoomAvailability(filtered)
 
     let lon = 0
     let lat = 0
@@ -219,6 +221,15 @@ export default function RoomMap ({ highlight, roomData }) {
             <>
               <br />
               {t('rooms.map.occupied')}
+              <br />
+              {/* {t('rooms.map.freeFromUntil', {
+                from: RoomAvailabilityList[entry.properties.Raum]['from'],
+                until: RoomAvailabilityList[entry.properties.Raum]['until']
+              })} */}
+              {t('rooms.map.freeFromUntil', {
+                from: (RoomAvailabilityList[entry.properties.Raum] && RoomAvailabilityList[entry.properties.Raum]['from']) || 'Error',
+                until: (RoomAvailabilityList[entry.properties.Raum] && RoomAvailabilityList[entry.properties.Raum]['until']) || 'Error'
+              })}
             </>
           )}
           {special && (
@@ -260,40 +271,66 @@ export default function RoomMap ({ highlight, roomData }) {
     )
   }
 
-  useEffect(() => {
-    async function updateRoomAvailability () {
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-      // today.setDate(today.getDate() + 1) //!
-      // const room = 'G213'
-      const room = searchText
-      const availabilityData = await getRoomAvailability(today, room)
+  const devmode = true //!
+  // useEffect(() => { //ToDo wenn sich RoomAvailabilityList ändert, dann änderungen ane´zeigen
+  //   setRoomAvailabilityList(RoomAvailabilityList)
+  // }, [RoomAvailabilityList])
 
-      let showRoomAvailabilit
-      if (availabilityData.length) {
-        let availabilityFromDate
-        for (let index = 0; index < availabilityData.length; index++) {
-          const thisDate = new Date(availabilityData[index]['von'])
+  async function loadRoomAvailability (filteredList) {
+    const roomRequestList = []
+    for (let index = 0; index < filteredList.length; index++) {
+      const thisRoom = filteredList[index]['properties']['Raum']
+      roomRequestList.push(thisRoom)
+    }
+    const roomAvailabilityData = await getRoomAvailability(roomRequestList)
+    // console.log(roomAvailabilityData)
+
+    for (const room in roomAvailabilityData) {
+      let thisRoomAvailability = {
+        from: 'Unknown',
+        until: 'Unknown'
+      }
+      if (roomAvailabilityData[room]?.length) {
+        let fromDate
+        let untilDate
+        let untilIndex = 0
+        for (let index = 0; index < roomAvailabilityData[room].length; index++) {
+          const thisFromDate = new Date(roomAvailabilityData[room][index]['von'])
+          const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
           const today = new Date()
-          // today.setHours(12, 0, 0, 0) //!
-          // today.setDate(today.getDate() + 1) //!
-          if (thisDate > today) {
-            console.log(thisDate)
-            availabilityFromDate = thisDate
+          if (devmode) { //!
+            today.setHours(12, 0, 0, 0)
+            today.setDate(today.getDate() + 1)
+          }
+          if (thisFromDate > today) {
+            fromDate = thisFromDate
+            untilDate = thisUntilDate
+            untilIndex = index
             break
           }
         }
-        showRoomAvailabilit = `${availabilityFromDate.getHours()}:${availabilityFromDate.getMinutes()}`
-      } else {
-        showRoomAvailabilit = ''
+
+        // Prüfen ob der Raum mehrere Slots frei ist
+        for (let index = untilIndex; index + 1 < roomAvailabilityData[room].length; index++) {
+          const thisFromDate = new Date(roomAvailabilityData[room][index + 1]['von'])
+          const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
+          const dateDiff = thisFromDate - thisUntilDate
+          const dateDiffMinute = dateDiff / 1000 / 60
+
+          if (dateDiffMinute <= 10) {
+            untilDate = thisUntilDate
+          }
+        }
+
+        const from = `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`
+        const until = `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
+        thisRoomAvailability = { from, until }
       }
 
-      setroomAvailableText(showRoomAvailabilit)
+      RoomAvailabilityList[room] = thisRoomAvailability
     }
-
-    // Rufen Sie die Funktion updateRoomAvailability auf, wenn searchText oder andere Abhängigkeiten geändert werden.
-    updateRoomAvailability()
-  }, [searchText]) // Hier setzen Sie die Abhängigkeit, die die Aktualisierung auslösen soll.
+    // console.log(RoomAvailabilityList)
+  }
 
   return (
     <>
@@ -307,13 +344,21 @@ export default function RoomMap ({ highlight, roomData }) {
           ref={searchField}
         />
 
-        <div>
-          <Link href="/rooms/search">
+        {/* <div>
+          <Link href="">
             <a className={styles.linkToSearch}>
-              {`${t('rooms.map.roomAvailable')} ${roomAvailableText}`}
+              { // {t('rooms.map.freeFromUntil', {
+                // from: RoomAvailabilityList[searchText]['from'],
+                // until: RoomAvailabilityList[searchText]['until']
+              // })}
+              }
+              {t('rooms.map.freeFromUntil', {
+                from: (RoomAvailabilityList[searchText] && RoomAvailabilityList[searchText]['from']) || 'Error',
+                until: (RoomAvailabilityList[searchText] && RoomAvailabilityList[searchText]['until']) || 'Error'
+              })}
             </a>
           </Link>
-        </div>
+        </div> */}
 
         <div className={styles.links}>
           <Link href="/rooms/search">

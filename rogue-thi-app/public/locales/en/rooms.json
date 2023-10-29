@@ -14,7 +14,6 @@
             "occupied": "Occupied",
             "freeFromUntil": "Free from {{from}} to {{until}}",
             "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-            "roomAvailable": "Room available from:",
             "legend": {
                 "free": "Free",
                 "occupied": "Occupied",

@@ -193,50 +193,68 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
 /**
  * Filters suitable room openings.
  * @param {Date} beginDate Start date as Date object
- * @param {string} [raumSuche] Building name (e.g. `G215`), defaults to all buildings
+ * @param {Array} [roomRequestList] Building name (e.g. `["G215"]`)
  * @returns {object[]}
  */
-export async function getRoomAvailability (beginDate, raumSuche) {
-  const data = await API.getFreeRooms(beginDate)
+export async function getRoomAvailability (roomRequestList, beginDate) {
+  if (beginDate === undefined) {
+    beginDate = new Date()
+    beginDate.setHours(0, 0, 0, 0)
+  }
 
-  // const raumSuche = 'G213'
+  const devmode = true //!
+  if (devmode) {
+    beginDate.setHours(12, 0, 0, 0)
+    beginDate.setDate(beginDate.getDate() + 1)
+  }
+  console.log(beginDate)
+
+  const data = await API.getFreeRooms(beginDate)
+  // console.log(data)
 
   const inputDate = `${beginDate.getFullYear()}-${beginDate.getMonth() + 1}-${beginDate.getDate()}`
 
-  // suche nach 'raumSuche' und speichere die freien Zeiten in 'raumFrei'
-  const raumFrei = []
-  for (const keyDay in data) {
-    const thisDate = new Date(data[keyDay].datum.split('T')[0])
-    const thisDateString = `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`
-    if (inputDate === thisDateString) {
-      for (let index = 0; index < data[keyDay]['rtypes'].length; index++) {
-        for (const keyStunde in data[keyDay]['rtypes'][index]['stunden']) {
-          const von = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['von']
-          const bis = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['bis']
-          for (let index2 = 0; index2 < data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'].length; index2++) {
-            const thisRoom = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'][index2][2]
-            if (String(thisRoom).toLowerCase() === raumSuche.toLocaleLowerCase()) {
-              raumFrei.push({ von, bis })
+  const roomList = {}
+  for (let index0 = 0; index0 < roomRequestList.length; index0++) {
+    const thisRoom = roomRequestList[index0]
+
+    // suche nach 'roomRequestList' und speichere die freien Zeiten in 'raumFrei'
+    const raumFrei = []
+    for (const keyDay in data) {
+      const thisDate = new Date(data[keyDay].datum.split('T')[0])
+      const thisDateString = `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`
+      if (inputDate === thisDateString) {
+        for (let index1 = 0; index1 < data[keyDay]['rtypes'].length; index1++) {
+          for (const keyStunde in data[keyDay]['rtypes'][index1]['stunden']) {
+            const von = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['von']
+            const bis = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['bis']
+            for (let index2 = 0; index2 < data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['raeume'].length; index2++) {
+              const thisRoom2 = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['raeume'][index2][2]
+              if (String(thisRoom2).toLowerCase() === thisRoom.toLocaleLowerCase()) {
+                raumFrei.push({ von, bis })
+              }
             }
           }
         }
       }
     }
-  }
-  // console.log(raumFrei)
 
-  // Zeiten verbinden //? nochmal verbinden? Kann ich nicht testen, da es immer so pausen dazwischen gibt
-  const raumFreiCombined = [...raumFrei]
-  let offset = 0
-  for (let index = 0; index < raumFrei.length - 1; index++) {
-    if ((raumFrei[index]['bis'] === raumFrei[index + 1]['von'])) {
-      raumFreiCombined.splice(index - offset, 1)
-      raumFreiCombined.splice(index - offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
-      offset++
+    // Zeiten verbinden //? nochmal verbinden? Kann ich nicht testen, da es immer so pausen dazwischen gibt
+    const raumFreiCombined = [...raumFrei]
+    let offset = 0
+    for (let index = 0; index < raumFrei.length - 1; index++) {
+      if ((raumFrei[index]['bis'] === raumFrei[index + 1]['von'])) {
+        raumFreiCombined.splice(index - offset, 1)
+        raumFreiCombined.splice(index - offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
+        offset++
+      }
     }
+    // console.log(raumFreiCombined)
+    roomList[thisRoom] = raumFreiCombined
   }
-  // console.log(raumFreiCombined)
-  return raumFreiCombined
+
+  // console.log(roomList)
+  return roomList
 }
 
 /**
