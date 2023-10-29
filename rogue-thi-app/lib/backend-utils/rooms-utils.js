@@ -69,7 +69,6 @@ function isInBuilding (room, building) {
  * @returns {object}
  */
 export function getRoomOpenings (rooms, date) {
-  // console.log(rooms)
   date = formatISODate(date)
   const openings = {}
   // get todays rooms
@@ -207,7 +206,6 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
     beginDate.setHours(12, 0, 0, 0)
     beginDate.setDate(beginDate.getDate() + 1)
   }
-  // console.log(beginDate)
 
   const data = await API.getFreeRooms(beginDate)
   // console.log(data)
@@ -218,20 +216,20 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
   for (let index0 = 0; index0 < roomRequestList.length; index0++) {
     const thisRoom = roomRequestList[index0]
 
-    // suche nach 'roomRequestList' und speichere die freien Zeiten in 'raumFrei'
-    const raumFrei = []
+    // search for 'roomRequestList' and store the available times in 'roomAvailable'
+    const roomAvailable = []
     for (const keyDay in data) {
       const thisDate = new Date(data[keyDay].datum.split('T')[0])
       const thisDateString = `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`
       if (inputDate === thisDateString) {
         for (let index1 = 0; index1 < data[keyDay]['rtypes'].length; index1++) {
-          for (const keyStunde in data[keyDay]['rtypes'][index1]['stunden']) {
-            const von = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['von']
-            const bis = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['bis']
-            for (let index2 = 0; index2 < data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['raeume'].length; index2++) {
-              const thisRoom2 = data[keyDay]['rtypes'][index1]['stunden'][keyStunde]['raeume'][index2][2]
+          for (const keyHour in data[keyDay]['rtypes'][index1]['stunden']) {
+            const von = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['von']
+            const bis = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['bis']
+            for (let index2 = 0; index2 < data[keyDay]['rtypes'][index1]['stunden'][keyHour]['raeume'].length; index2++) {
+              const thisRoom2 = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['raeume'][index2][2]
               if (String(thisRoom2).toLowerCase() === thisRoom.toLocaleLowerCase()) {
-                raumFrei.push({ von, bis })
+                roomAvailable.push({ von, bis })
               }
             }
           }
@@ -239,18 +237,18 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
       }
     }
 
-    // Zeiten verbinden //? nochmal verbinden? Kann ich nicht testen, da es immer so pausen dazwischen gibt
-    const raumFreiCombined = [...raumFrei]
+    // Join times // ? join again? I can't test it because there are always breaks in between.
+    const roomAvailableCombined = [...roomAvailable]
     let offset = 0
-    for (let index = 0; index < raumFrei.length - 1; index++) {
-      if ((raumFrei[index]['bis'] === raumFrei[index + 1]['von'])) {
-        raumFreiCombined.splice(index - offset, 1)
-        raumFreiCombined.splice(index - offset, 1, { von: raumFrei[index]['von'], bis: raumFrei[index + 1]['bis'] })
+    for (let index = 0; index < roomAvailable.length - 1; index++) {
+      if ((roomAvailable[index]['bis'] === roomAvailable[index + 1]['von'])) {
+        roomAvailableCombined.splice(index - offset, 1)
+        roomAvailableCombined.splice(index - offset, 1, { von: roomAvailable[index]['von'], bis: roomAvailable[index + 1]['bis'] })
         offset++
       }
     }
-    // console.log(raumFreiCombined)
-    roomList[thisRoom] = raumFreiCombined
+    // console.log(roomAvailableCombined)
+    roomList[thisRoom] = roomAvailableCombined
   }
 
   // console.log(roomList)

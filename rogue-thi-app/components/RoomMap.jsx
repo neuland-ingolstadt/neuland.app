@@ -298,7 +298,7 @@ export default function RoomMap ({ highlight, roomData }) {
           }
         }
 
-        // Prüfen ob der Raum mehrere Slots frei ist
+        // Check if the room has multiple available slots, and join them
         for (let index = untilIndex; index + 1 < roomAvailabilityData[room].length; index++) {
           const thisFromDate = new Date(roomAvailabilityData[room][index + 1]['von'])
           const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
