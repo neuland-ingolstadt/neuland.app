@@ -193,7 +193,6 @@ export default function RoomMap ({ highlight, roomData }) {
    * @returns Leaflet feature object
    */
   function renderRoom (entry, key, onlyAvailable) {
-    // console.log(entry['properties']['Raum'], key, onlyAvailable, entry)
     const avail = availableRooms?.find(x => x.room === entry.properties.Raum)
     if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
       return null
@@ -222,14 +221,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <br />
               {t('rooms.map.occupied')}
               <br />
-              {/* {t('rooms.map.freeFromUntil', {
-                from: roomAvailabilityList[entry.properties.Raum]['from'],
-                until: roomAvailabilityList[entry.properties.Raum]['until']
-              })} */}
-              {t('rooms.map.freeFromUntil', {
-                from: (roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum]['from']) || 'Error',
-                until: (roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum]['until']) || 'Error'
-              })}
+              {(roomAvailabilityList[entry.properties.Raum] || '')}
             </>
           )}
           {special && (
@@ -286,10 +278,6 @@ export default function RoomMap ({ highlight, roomData }) {
     // console.log(roomAvailabilityData)
 
     for (const room in roomAvailabilityData) {
-      let thisRoomAvailability = {
-        from: t('rooms.map.roomAvailabilityUnknown'),
-        until: t('rooms.map.roomAvailabilityUnknown')
-      }
       if (roomAvailabilityData[room]?.length) {
         let fromDate
         let untilDate
@@ -326,10 +314,11 @@ export default function RoomMap ({ highlight, roomData }) {
 
         const from = `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`
         const until = `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
-        thisRoomAvailability = { from, until }
+        roomAvailabilityList[room] = t('rooms.map.freeFromUntil', {
+          from,
+          until
+        })
       }
-
-      roomAvailabilityList[room] = thisRoomAvailability
     }
     // console.log(roomAvailabilityList)
     roomAvailabilityList = { ...roomAvailabilityList } // update Popup
@@ -348,21 +337,13 @@ export default function RoomMap ({ highlight, roomData }) {
           ref={searchField}
         />
 
-        {/* <div>
+        <div>
           <Link href="">
             <a className={styles.linkToSearch}>
-              { // {t('rooms.map.freeFromUntil', {
-                // from: roomAvailabilityList[searchText]['from'],
-                // until: roomAvailabilityList[searchText]['until']
-              // })}
-              }
-              {t('rooms.map.freeFromUntil', {
-                from: (roomAvailabilityList[searchText] && roomAvailabilityList[searchText]['from']) || 'Error',
-                until: (roomAvailabilityList[searchText] && roomAvailabilityList[searchText]['until']) || 'Error'
-              })}
+              {(roomAvailabilityList[searchText] || '')}
             </a>
           </Link>
-        </div> */}
+        </div>
 
         <div className={styles.links}>
           <Link href="/rooms/search">
@@ -422,8 +403,6 @@ export default function RoomMap ({ highlight, roomData }) {
             </div>
           </div>
         </div>
-
-        {/* {console.log(filteredRooms) /*! Anzahl der gefilterten Räume */}
 
         <LayersControl position="topright" collapsed={false}>
           {FLOOR_ORDER
