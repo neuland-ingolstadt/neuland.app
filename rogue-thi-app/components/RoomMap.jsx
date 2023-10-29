@@ -140,7 +140,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : DEFAULT_CENTER
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms])
+  }, [searchText, allRooms, loadRoomAvailability])
 
   useEffect(() => {
     async function load () {
