@@ -277,7 +277,6 @@ export default function RoomMap ({ highlight, roomData }) {
   // }, [roomAvailabilityList])
 
   async function loadRoomAvailability (filteredList) {
-    console.log(0)
     const roomRequestList = []
     for (let index = 0; index < filteredList.length; index++) {
       const thisRoom = filteredList[index]['properties']['Raum']
