@@ -202,12 +202,12 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
     beginDate.setHours(0, 0, 0, 0)
   }
 
-  const devmode = true //!
+  const devmode = false //!
   if (devmode) {
     beginDate.setHours(12, 0, 0, 0)
     beginDate.setDate(beginDate.getDate() + 1)
   }
-  console.log(beginDate)
+  // console.log(beginDate)
 
   const data = await API.getFreeRooms(beginDate)
   // console.log(data)

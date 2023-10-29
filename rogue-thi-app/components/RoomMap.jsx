@@ -58,7 +58,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
-  const [RoomAvailabilityList] = useState({})
+  let [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -223,12 +223,12 @@ export default function RoomMap ({ highlight, roomData }) {
               {t('rooms.map.occupied')}
               <br />
               {/* {t('rooms.map.freeFromUntil', {
-                from: RoomAvailabilityList[entry.properties.Raum]['from'],
-                until: RoomAvailabilityList[entry.properties.Raum]['until']
+                from: roomAvailabilityList[entry.properties.Raum]['from'],
+                until: roomAvailabilityList[entry.properties.Raum]['until']
               })} */}
               {t('rooms.map.freeFromUntil', {
-                from: (RoomAvailabilityList[entry.properties.Raum] && RoomAvailabilityList[entry.properties.Raum]['from']) || 'Error',
-                until: (RoomAvailabilityList[entry.properties.Raum] && RoomAvailabilityList[entry.properties.Raum]['until']) || 'Error'
+                from: (roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum]['from']) || 'Error',
+                until: (roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum]['until']) || 'Error'
               })}
             </>
           )}
@@ -271,12 +271,13 @@ export default function RoomMap ({ highlight, roomData }) {
     )
   }
 
-  const devmode = true //!
-  // useEffect(() => { //ToDo wenn sich RoomAvailabilityList ändert, dann änderungen ane´zeigen
-  //   setRoomAvailabilityList(RoomAvailabilityList)
-  // }, [RoomAvailabilityList])
+  const devmode = false //!
+  // useEffect(() => {
+  //   setRoomAvailabilityList(roomAvailabilityList)
+  // }, [roomAvailabilityList])
 
   async function loadRoomAvailability (filteredList) {
+    console.log(0)
     const roomRequestList = []
     for (let index = 0; index < filteredList.length; index++) {
       const thisRoom = filteredList[index]['properties']['Raum']
@@ -287,8 +288,8 @@ export default function RoomMap ({ highlight, roomData }) {
 
     for (const room in roomAvailabilityData) {
       let thisRoomAvailability = {
-        from: 'Unknown',
-        until: 'Unknown'
+        from: t('rooms.map.roomAvailabilityUnknown'),
+        until: t('rooms.map.roomAvailabilityUnknown')
       }
       if (roomAvailabilityData[room]?.length) {
         let fromDate
@@ -319,6 +320,8 @@ export default function RoomMap ({ highlight, roomData }) {
 
           if (dateDiffMinute <= 10) {
             untilDate = thisUntilDate
+          } else {
+            break
           }
         }
 
@@ -327,9 +330,11 @@ export default function RoomMap ({ highlight, roomData }) {
         thisRoomAvailability = { from, until }
       }
 
-      RoomAvailabilityList[room] = thisRoomAvailability
+      roomAvailabilityList[room] = thisRoomAvailability
     }
-    // console.log(RoomAvailabilityList)
+    // console.log(roomAvailabilityList)
+    roomAvailabilityList = { ...roomAvailabilityList } // update Popup
+    setRoomAvailabilityList(roomAvailabilityList)
   }
 
   return (
@@ -348,13 +353,13 @@ export default function RoomMap ({ highlight, roomData }) {
           <Link href="">
             <a className={styles.linkToSearch}>
               { // {t('rooms.map.freeFromUntil', {
-                // from: RoomAvailabilityList[searchText]['from'],
-                // until: RoomAvailabilityList[searchText]['until']
+                // from: roomAvailabilityList[searchText]['from'],
+                // until: roomAvailabilityList[searchText]['until']
               // })}
               }
               {t('rooms.map.freeFromUntil', {
-                from: (RoomAvailabilityList[searchText] && RoomAvailabilityList[searchText]['from']) || 'Error',
-                until: (RoomAvailabilityList[searchText] && RoomAvailabilityList[searchText]['until']) || 'Error'
+                from: (roomAvailabilityList[searchText] && roomAvailabilityList[searchText]['from']) || 'Error',
+                until: (roomAvailabilityList[searchText] && roomAvailabilityList[searchText]['until']) || 'Error'
               })}
             </a>
           </Link>
