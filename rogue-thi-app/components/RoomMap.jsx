@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
@@ -58,6 +58,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
+  const [roomAvailableText, setroomAvailableText] = useState([])
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -259,6 +260,41 @@ export default function RoomMap ({ highlight, roomData }) {
     )
   }
 
+  useEffect(() => {
+    async function updateRoomAvailability () {
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      // today.setDate(today.getDate() + 1) //!
+      // const room = 'G213'
+      const room = searchText
+      const availabilityData = await getRoomAvailability(today, room)
+
+      let showRoomAvailabilit
+      if (availabilityData.length) {
+        let availabilityFromDate
+        for (let index = 0; index < availabilityData.length; index++) {
+          const thisDate = new Date(availabilityData[index]['von'])
+          const today = new Date()
+          // today.setHours(12, 0, 0, 0) //!
+          // today.setDate(today.getDate() + 1) //!
+          if (thisDate > today) {
+            console.log(thisDate)
+            availabilityFromDate = thisDate
+            break
+          }
+        }
+        showRoomAvailabilit = `${availabilityFromDate.getHours()}:${availabilityFromDate.getMinutes()}`
+      } else {
+        showRoomAvailabilit = ''
+      }
+
+      setroomAvailableText(showRoomAvailabilit)
+    }
+
+    // Rufen Sie die Funktion updateRoomAvailability auf, wenn searchText oder andere Abhängigkeiten geändert werden.
+    updateRoomAvailability()
+  }, [searchText]) // Hier setzen Sie die Abhängigkeit, die die Aktualisierung auslösen soll.
+
   return (
     <>
       <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
@@ -270,6 +306,15 @@ export default function RoomMap ({ highlight, roomData }) {
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
+
+        <div>
+          <Link href="/rooms/search">
+            <a className={styles.linkToSearch}>
+              {`${t('rooms.map.roomAvailable')} ${roomAvailableText}`}
+            </a>
+          </Link>
+        </div>
+
         <div className={styles.links}>
           <Link href="/rooms/search">
             <a className={styles.linkToSearch}>

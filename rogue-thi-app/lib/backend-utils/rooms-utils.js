@@ -215,7 +215,7 @@ export async function getRoomAvailability (beginDate, raumSuche) {
           const bis = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['bis']
           for (let index2 = 0; index2 < data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'].length; index2++) {
             const thisRoom = data[keyDay]['rtypes'][index]['stunden'][keyStunde]['raeume'][index2][2]
-            if (thisRoom.toLowerCase() === raumSuche.toLocaleLowerCase()) {
+            if (String(thisRoom).toLowerCase() === raumSuche.toLocaleLowerCase()) {
               raumFrei.push({ von, bis })
             }
           }
