@@ -282,22 +282,22 @@ export default function RoomMap ({ highlight, roomData }) {
     }
     const roomAvailabilityData = await getRoomAvailability(roomRequestList)
 
-    const roomAvailabilityList1 = { ...roomAvailabilityData }
+    const roomAvailabilityList1 = {}
 
     // remove Timelots From The Past
     const removeTimelotsFromThePast = true
-    let spliceOffset = 0
+    // let spliceOffset = 0
     if (removeTimelotsFromThePast) {
-      for (const room in roomAvailabilityList1) {
-        for (let index = 0; index < roomAvailabilityList1[room].length; index++) {
+      for (const room in roomAvailabilityData) {
+        for (let index = 0; index < roomAvailabilityData[room].length; index++) {
           const today = new Date()
+          const thisDateUntil = new Date(roomAvailabilityData[room][index]['bis'])
           if (devmode) { //!
             today.setHours(12, 0, 0, 0)
             // today.setDate(today.getDate() + 1)
           }
-          if (new Date(roomAvailabilityList1[room][index]['bis']) < today) {
-            roomAvailabilityList1[room].splice(index - spliceOffset, 1)
-            spliceOffset++
+          if (thisDateUntil > today) {
+            roomAvailabilityList1[room] = roomAvailabilityData[room]
           }
         }
       }
