@@ -5,6 +5,8 @@ import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
 import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
+import allergyMap from '../../data/allergens.json'
+
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
 // const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
@@ -54,22 +56,21 @@ function parseDataFromXml (xml) {
       sourceItems = [sourceItems]
     }
 
-    const addInReg = /\s*\((.*?)\)\s*/
+    const addInReg = /\s*\((.*?)\)\s*/g;
     const meals = sourceItems.map(item => {
-      // sometimes, the title is undefined (see #123)
       let text = item.title._text ?? ''
-      const allergens = new Set()
-      while (addInReg.test(text)) {
-        const [addInText, addIn] = text.match(addInReg)
-        text = text.replace(addInText, ' ')
-
-        const newAllergens = addIn.split(',')
-        newAllergens.forEach(newAll => allergens.add(newAll))
+      const array = [...text.matchAll(addInReg)];
+      const allergens = new Set();
+      for(const element of array){
+        const code = element[1].split(',')[0].trim();
+        if( Object.keys(allergyMap).includes(code) ){
+          text = text.replace( element[0], ' ');
+          element[1].split(',').forEach( word => allergens.add(word.trim()));
+        }
       }
 
       // convert 'Suppe 1' -> 'Suppe', 'Essen 3' -> 'Essen', etc.
       const category = item.category._text.split(' ')[0]
-
       const flags = []
       if (item.piktogramme._text) {
         const matches = item.piktogramme._text.match(/class='infomax-food-icon .*?'/g)
