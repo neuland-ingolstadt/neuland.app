@@ -58,7 +58,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const userKind = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
-  let [roomAvailabilityList, setRoomAvailabilityList] = useState({})
+  const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -220,8 +220,17 @@ export default function RoomMap ({ highlight, roomData }) {
             <>
               <br />
               {t('rooms.map.occupied')}
-              <br />
+              {/* <br />
               {(roomAvailabilityList[entry.properties.Raum] || '')}
+              <br />
+              {((roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum][0]) || '')} */}
+              <br />
+              {roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum].map((availability, index) => (
+                <div key={index}>
+                  {availability}
+                  {index !== roomAvailabilityList[entry.properties.Raum].length - 1 && <br />}
+                </div>
+              ))}
             </>
           )}
           {special && (
@@ -277,49 +286,89 @@ export default function RoomMap ({ highlight, roomData }) {
     const roomAvailabilityData = await getRoomAvailability(roomRequestList)
     // console.log(roomAvailabilityData)
 
-    for (const room in roomAvailabilityData) {
-      if (roomAvailabilityData[room]?.length) {
-        let fromDate
-        let untilDate
-        let untilIndex = 0
-        for (let index = 0; index < roomAvailabilityData[room].length; index++) {
-          const thisFromDate = new Date(roomAvailabilityData[room][index]['von'])
-          const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
+    // roomAvailabilityList = {}
+    // for (const room in roomAvailabilityData) {
+    //   if (roomAvailabilityData[room]?.length) {
+    //     let fromDate
+    //     let untilDate
+    //     let untilIndex = 0
+    //     for (let index = 0; index < roomAvailabilityData[room].length; index++) {
+    //       const thisFromDate = new Date(roomAvailabilityData[room][index]['von'])
+    //       const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
+    //       const today = new Date()
+    //       if (devmode) { //!
+    //         today.setHours(12, 0, 0, 0)
+    //         // today.setDate(today.getDate() + 1)
+    //       }
+    //       if (thisUntilDate > today) {
+    //         fromDate = thisFromDate
+    //         untilDate = thisUntilDate
+    //         untilIndex = index
+    //         break
+    //       }
+    //     }
+
+    //     // Check if the room has multiple available slots, and join them
+    //     for (let index = untilIndex; index + 1 < roomAvailabilityData[room].length; index++) {
+    //       const thisFromDate = new Date(roomAvailabilityData[room][index + 1]['von'])
+    //       const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
+    //       const dateDiff = thisFromDate - thisUntilDate
+    //       const dateDiffMinute = dateDiff / 1000 / 60
+    //       if (dateDiffMinute <= 10) {
+    //         untilDate = thisUntilDate
+    //       } else {
+    //         break
+    //       }
+    //     }
+
+    //     const from = `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`
+    //     const until = `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
+    //     if (roomAvailabilityList[room] === undefined) { roomAvailabilityList[room] = [] }
+    //     roomAvailabilityList[room].push(t('rooms.map.freeFromUntil', {
+    //       from,
+    //       until
+    //     }))
+    //   }
+    // }
+
+    const roomAvailabilityList1 = { ...roomAvailabilityData }
+
+    // remove Timelots From The Past
+    const removeTimelotsFromThePast = true
+    let spliceOffset = 0
+    if (removeTimelotsFromThePast) {
+      for (const room in roomAvailabilityList1) {
+        // console.log(room, roomAvailabilityList[room])
+        for (let index = 0; index < roomAvailabilityList1[room].length; index++) {
           const today = new Date()
           if (devmode) { //!
             today.setHours(12, 0, 0, 0)
-            today.setDate(today.getDate() + 1)
+            // today.setDate(today.getDate() + 1)
           }
-          if (thisFromDate > today) {
-            fromDate = thisFromDate
-            untilDate = thisUntilDate
-            untilIndex = index
-            break
-          }
-        }
-
-        // Check if the room has multiple available slots, and join them
-        for (let index = untilIndex; index + 1 < roomAvailabilityData[room].length; index++) {
-          const thisFromDate = new Date(roomAvailabilityData[room][index + 1]['von'])
-          const thisUntilDate = new Date(roomAvailabilityData[room][index]['bis'])
-          const dateDiff = thisFromDate - thisUntilDate
-          const dateDiffMinute = dateDiff / 1000 / 60
-
-          if (dateDiffMinute <= 10) {
-            untilDate = thisUntilDate
-          } else {
-            break
+          // console.log(new Date(roomAvailabilityList[room][index]['bis']), today)
+          if (new Date(roomAvailabilityList1[room][index]['bis']) < today) {
+            roomAvailabilityList1[room].splice(index - spliceOffset, 1)
+            spliceOffset++
           }
         }
-
-        const from = `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`
-        const until = `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
-        roomAvailabilityList[room] = t('rooms.map.freeFromUntil', {
-          from,
-          until
-        })
       }
     }
+    // console.log(roomAvailabilityList1)
+
+    let roomAvailabilityList = {}
+    for (const room in roomAvailabilityList1) {
+      // console.log(roomAvailabilityList1[room])
+      roomAvailabilityList[room] = []
+      for (let index = 0; index < roomAvailabilityList1[room].length; index++) {
+        const fromDate = new Date(roomAvailabilityList1[room][index]['von'])
+        const untilDate = new Date(roomAvailabilityList1[room][index]['bis'])
+        roomAvailabilityList[room].push(t('rooms.map.freeFromUntil', {
+          from: `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`,
+          until: `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
+        }))
+      }
+    }
+
     // console.log(roomAvailabilityList)
     roomAvailabilityList = { ...roomAvailabilityList } // update Popup
     setRoomAvailabilityList(roomAvailabilityList)
@@ -338,7 +387,7 @@ export default function RoomMap ({ highlight, roomData }) {
         />
 
         <div> { /* //ToDo: Layout muss noch verbessert werden */ }
-          {(roomAvailabilityList[searchText] || '')}
+          {((roomAvailabilityList[searchText] && roomAvailabilityList[searchText][0]) || '')}
         </div>
 
         <div className={styles.links}>

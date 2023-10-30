@@ -204,7 +204,7 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
   const devmode = false //!
   if (devmode) {
     beginDate.setHours(12, 0, 0, 0)
-    beginDate.setDate(beginDate.getDate() + 1)
+    // beginDate.setDate(beginDate.getDate() + 1)
   }
 
   const data = await API.getFreeRooms(beginDate)
@@ -236,18 +236,40 @@ export async function getRoomAvailability (roomRequestList, beginDate) {
         }
       }
     }
+    // console.log(JSON.parse(JSON.stringify(roomAvailable)))
 
-    // Join times // ? join again? I can't test it because there are always breaks in between.
-    const roomAvailableCombined = [...roomAvailable]
-    let offset = 0
-    for (let index = 0; index < roomAvailable.length - 1; index++) {
-      if ((roomAvailable[index]['bis'] === roomAvailable[index + 1]['von'])) {
-        roomAvailableCombined.splice(index - offset, 1)
-        roomAvailableCombined.splice(index - offset, 1, { von: roomAvailable[index]['von'], bis: roomAvailable[index + 1]['bis'] })
-        offset++
+    // Merge Timeslots
+    const breaksIgnore = true
+    const breaksDuration = 10
+    function combineTimeslots () {
+      if (roomAvailable.length <= 1) {
+        return roomAvailable
       }
+
+      const mergedTimeslots = [roomAvailable[0]]
+
+      for (let i = 1; i < roomAvailable.length; i++) {
+        const currentSlot = roomAvailable[i]
+        const lastMergedSlot = mergedTimeslots[mergedTimeslots.length - 1]
+
+        const currentSlotFrom = new Date(currentSlot.von).getTime()
+        const lastMergedSlotUntil = new Date(lastMergedSlot.bis).getTime()
+
+        const dateDiffMinute = (currentSlotFrom - lastMergedSlotUntil) / (1000 * 60)
+
+        if ((!breaksIgnore && dateDiffMinute === 0) || (breaksIgnore && dateDiffMinute <= breaksDuration)) {
+          lastMergedSlot.bis = currentSlot.bis
+        } else {
+          mergedTimeslots.push(currentSlot)
+        }
+      }
+
+      return mergedTimeslots
     }
+
+    const roomAvailableCombined = combineTimeslots()
     // console.log(roomAvailableCombined)
+
     roomList[thisRoom] = roomAvailableCombined
   }
 
