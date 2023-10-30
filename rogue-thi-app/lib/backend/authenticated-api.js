@@ -19,13 +19,34 @@ const KEY_GET_LECTURERS = 'getLecturers'
  * @returns {string} Faculty name (e.g. `Informatik`)
  */
 function extractFacultyFromPersonalData (data) {
-  if (!data || !data.persdata || !data.persdata.stg) {
+  if (
+    !data ||
+    !data.persdata ||
+    (!data.persdata.stg && !data.persdata.po_url)
+  ) {
     return null
   }
 
+  const faculties = Object.keys(courseShortNames).filter(
+    (key) => key !== '_source'
+  )
+
+  // try to match the faculty by the PO URL (shortNames.json courses are not always up to date)
+  const poKey = data.persdata.po_url
+    .split('/')
+    .filter((x) => x.length > 0)
+    .slice(-3)[0]
+  const facultyMatch = faculties.filter((key) => key !== '_source')
+    .find((faculty) => courseShortNames[faculty].poKey === poKey)
+
+  if (facultyMatch) {
+    return facultyMatch
+  }
+
   const shortName = data.persdata.stg
-  const faculty = Object.keys(courseShortNames)
-    .find(faculty => courseShortNames[faculty].includes(shortName))
+  const faculty = faculties.find((faculty) =>
+    courseShortNames[faculty].courses.includes(shortName)
+  )
 
   return faculty
 }
