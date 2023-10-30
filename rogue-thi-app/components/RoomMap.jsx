@@ -337,12 +337,8 @@ export default function RoomMap ({ highlight, roomData }) {
           ref={searchField}
         />
 
-        <div>
-          <Link href="">
-            <a className={styles.linkToSearch}>
-              {(roomAvailabilityList[searchText] || '')}
-            </a>
-          </Link>
+        <div> { /* //ToDo: Layout muss noch verbessert werden */ }
+          {(roomAvailabilityList[searchText] || '')}
         </div>
 
         <div className={styles.links}>
