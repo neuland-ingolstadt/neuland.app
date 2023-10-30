@@ -296,8 +296,12 @@ export default function RoomMap ({ highlight, roomData }) {
             today.setHours(12, 0, 0, 0)
             // today.setDate(today.getDate() + 1)
           }
+          // console.log(today, thisDateUntil, thisDateUntil > today)
           if (thisDateUntil > today) {
-            roomAvailabilityList1[room] = roomAvailabilityData[room]
+            if (roomAvailabilityList1[room] === undefined) {
+              roomAvailabilityList1[room] = []
+            }
+            roomAvailabilityList1[room].push(roomAvailabilityData[room][index])
           }
         }
       }
