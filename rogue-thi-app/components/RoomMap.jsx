@@ -145,7 +145,6 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
-    console.log(filtered)
 
     loadRoomAvailability(filtered)
 
@@ -319,7 +318,7 @@ export default function RoomMap ({ highlight, roomData }) {
           ref={searchField}
         />
 
-        <div> { /* //ToDo: Layout muss noch verbessert werden */ }
+        <div>
           {((roomAvailabilityList[searchText] && t('rooms.map.freeFromUntil', {
             from: formatFriendlyTime(roomAvailabilityList[searchText][0].from),
             until: formatFriendlyTime(roomAvailabilityList[searchText][0].until)
@@ -393,7 +392,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
                 name={translateFloors(floorName)}
-                checked={i === filteredFloorOrder.length - 1}
+                checked={i === filteredFloorOrder.length - (searchText ? 1 : 2)}
               >
                 <LayerGroup>
                   {renderFloor(floorName)}
