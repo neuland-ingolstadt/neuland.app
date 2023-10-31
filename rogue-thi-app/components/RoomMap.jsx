@@ -41,7 +41,8 @@ const FLOOR_ORDER = [
   '2',
   '1.5',
   '1',
-  'EG'
+  'EG',
+  '-1'
 ]
 const INGOLSTADT_CENTER = [48.76630, 11.43330]
 const NEUBURG_CENTER = [48.73227, 11.17261]
@@ -117,12 +118,10 @@ export default function RoomMap ({ highlight, roomData }) {
 
       const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
         const availability = openings
-          .filter(opening => new Date(opening.until) > new Date() && new Date(opening.from) > addSearchDuration(new Date()))
-          .map(opening => t('rooms.map.freeFromUntil', {
-            from: formatFriendlyTime(opening.from),
-            until: formatFriendlyTime(opening.until)
-          }))
-
+          .filter(opening =>
+            new Date(opening.until) > new Date() &&
+            new Date(opening.from) > addSearchDuration(new Date())
+          )
         return [room, availability]
       }))
 
@@ -146,6 +145,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
+    console.log(filtered)
 
     loadRoomAvailability(filtered)
 
@@ -166,7 +166,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, mapCenter, userFaculty, t])
+  }, [searchText, allRooms, mapCenter, userFaculty])
 
   useEffect(() => {
     async function load () {
@@ -249,9 +249,12 @@ export default function RoomMap ({ highlight, roomData }) {
               {t('rooms.map.occupied')}
               <br />
 
-              {availabilityData && availabilityData.map((availability) => (
+              {availabilityData && availabilityData.map((opening) => (
                 <>
-                  {availability}
+                  {t('rooms.map.freeFromUntil', {
+                    from: formatFriendlyTime(opening.from),
+                    until: formatFriendlyTime(opening.until)
+                  })}
                   <br />
                 </>
               ))}
@@ -317,7 +320,10 @@ export default function RoomMap ({ highlight, roomData }) {
         />
 
         <div> { /* //ToDo: Layout muss noch verbessert werden */ }
-          {((roomAvailabilityList[searchText] && roomAvailabilityList[searchText][0]) || '')}
+          {((roomAvailabilityList[searchText] && t('rooms.map.freeFromUntil', {
+            from: formatFriendlyTime(roomAvailabilityList[searchText][0].from),
+            until: formatFriendlyTime(roomAvailabilityList[searchText][0].until)
+          })) || '')}
         </div>
 
         <div className={styles.links}>
@@ -387,7 +393,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
                 name={translateFloors(floorName)}
-                checked={i === filteredFloorOrder.length - 2}
+                checked={i === filteredFloorOrder.length - 1}
               >
                 <LayerGroup>
                   {renderFloor(floorName)}
