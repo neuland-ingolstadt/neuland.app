@@ -318,7 +318,7 @@ export default function RoomMap ({ highlight, roomData }) {
           ref={searchField}
         />
 
-        <div>
+        <div className={styles.openings}>
           {((roomAvailabilityList[searchText] && t('rooms.map.freeFromUntil', {
             from: formatFriendlyTime(roomAvailabilityList[searchText][0].from),
             until: formatFriendlyTime(roomAvailabilityList[searchText][0].until)
