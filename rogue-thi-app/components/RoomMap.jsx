@@ -392,7 +392,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
                 name={translateFloors(floorName)}
-                checked={i === filteredFloorOrder.length - (searchText ? 1 : 2)}
+                checked={i === ((filteredFloorOrder.indexOf('EG') !== -1) ? filteredFloorOrder.indexOf('EG') : filteredFloorOrder.length - 1)}
               >
                 <LayerGroup>
                   {renderFloor(floorName)}
