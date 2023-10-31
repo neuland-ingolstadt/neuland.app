@@ -8,6 +8,13 @@
   margin-top: 0.2em;
 }
 
+.openings {
+  font-size: 10pt;
+  margin-top: 0.2em;
+  color: var(--muted-font-color, #6c757d);
+  float: left;
+}
+
 .legend {
   display: flex;
 }

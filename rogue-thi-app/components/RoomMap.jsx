@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, filterRooms, getNextValidDate, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
@@ -41,7 +41,8 @@ const FLOOR_ORDER = [
   '2',
   '1.5',
   '1',
-  'EG'
+  'EG',
+  '-1'
 ]
 const INGOLSTADT_CENTER = [48.76630, 11.43330]
 const NEUBURG_CENTER = [48.73227, 11.17261]
@@ -59,6 +60,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const { userKind, userFaculty } = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
+  const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -110,6 +112,22 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
+    async function loadRoomAvailability (filteredList) {
+      const roomRequestList = filteredList.map(room => room.properties.Raum)
+      const roomAvailabilityData = await getRoomAvailability(roomRequestList)
+
+      const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+        const availability = openings
+          .filter(opening =>
+            new Date(opening.until) > new Date() &&
+            new Date(opening.from) > addSearchDuration(new Date())
+          )
+        return [room, availability]
+      }))
+
+      setRoomAvailabilityList(roomAvailabilityList)
+    }
+
     if (!searchText) {
       return [allRooms, mapCenter]
     }
@@ -127,6 +145,8 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
+
+    loadRoomAvailability(filtered)
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
     const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
@@ -204,6 +224,7 @@ export default function RoomMap ({ highlight, roomData }) {
     }
 
     const special = SPECIAL_ROOMS[entry.properties.Raum]
+    const availabilityData = (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1)
 
     return (
       <FeatureGroup key={key}>
@@ -225,6 +246,17 @@ export default function RoomMap ({ highlight, roomData }) {
             <>
               <br />
               {t('rooms.map.occupied')}
+              <br />
+
+              {availabilityData && availabilityData.map((opening) => (
+                <>
+                  {t('rooms.map.freeFromUntil', {
+                    from: formatFriendlyTime(opening.from),
+                    until: formatFriendlyTime(opening.until)
+                  })}
+                  <br />
+                </>
+              ))}
             </>
           )}
           {special && (
@@ -285,6 +317,14 @@ export default function RoomMap ({ highlight, roomData }) {
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
+
+        <div className={styles.openings}>
+          {((roomAvailabilityList[searchText] && roomAvailabilityList[searchText].length && t('rooms.map.freeFromUntil', {
+            from: formatFriendlyTime(roomAvailabilityList[searchText][0].from),
+            until: formatFriendlyTime(roomAvailabilityList[searchText][0].until)
+          })) || '')}
+        </div>
+
         <div className={styles.links}>
           <Link href="/rooms/search">
             <a className={styles.linkToSearch}>
@@ -352,7 +392,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
                 name={translateFloors(floorName)}
-                checked={i === filteredFloorOrder.length - 2}
+                checked={i === ((filteredFloorOrder.indexOf('EG') !== -1) ? filteredFloorOrder.indexOf('EG') : filteredFloorOrder.length - 1)}
               >
                 <LayerGroup>
                   {renderFloor(floorName)}

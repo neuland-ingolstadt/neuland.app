@@ -146,19 +146,28 @@ export function getNextValidDate () {
  */
 export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
-
-  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
-  const endDate = new Date(
-    beginDate.getFullYear(),
-    beginDate.getMonth(),
-    beginDate.getDate(),
-    beginDate.getHours() + durationHours,
-    beginDate.getMinutes() + durationMinutes,
-    beginDate.getSeconds(),
-    beginDate.getMilliseconds()
-  )
+  const endDate = addSearchDuration(beginDate, duration)
 
   return searchRooms(beginDate, endDate, building)
+}
+
+/**
+ * Add the duration given as a string to the given date.
+ * @param {Date} date The date to add the duration to
+ * @param {string} duration Duration as a string in the format `HH:MM`
+ * @returns
+ */
+export function addSearchDuration (date, duration = DURATION_PRESET) {
+  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours() + durationHours,
+    date.getMinutes() + durationMinutes,
+    date.getSeconds(),
+    date.getMilliseconds()
+  )
 }
 
 /**
@@ -187,6 +196,52 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
       endDate <= opening.until
     )
     .sort((a, b) => a.room.localeCompare(b.room))
+}
+
+/**
+ * Filters suitable room openings.
+ * @param {Date} day Start date as Date object
+ * @param {string[]} [roomRequestList] Room names (e.g. `["G215"]`)
+ * @returns {object[]}
+ */
+export async function getRoomAvailability (roomRequestList, day = new Date()) {
+  day.setHours(0, 0, 0, 0)
+
+  const data = await API.getFreeRooms(day)
+
+  // get todays rooms openings
+  const openings = getRoomOpenings(data, day)
+
+  // filter for requested rooms
+  const roomOpenings = Object.fromEntries(Object.entries(openings).filter(([room]) => roomRequestList.includes(room)))
+
+  // combine openings that are less than IGNORE_GAPS (= 15 minutes) minutes apart
+  const processedOpenings = Object.fromEntries(Object.entries(roomOpenings).map(([room, openings]) => {
+    const processedOpenings = []
+    let lastOpening = null
+    for (let index = 0; index < openings.length; index++) {
+      const opening = openings[index]
+      if (lastOpening === null) {
+        lastOpening = opening
+        continue
+      }
+
+      if (addMinutes(lastOpening.until, IGNORE_GAPS) > opening.from) {
+        lastOpening.until = opening.until
+      } else {
+        processedOpenings.push(lastOpening)
+        lastOpening = opening
+      }
+    }
+
+    if (lastOpening !== null) {
+      processedOpenings.push(lastOpening)
+    }
+
+    return [room, processedOpenings]
+  }))
+
+  return processedOpenings
 }
 
 /**
