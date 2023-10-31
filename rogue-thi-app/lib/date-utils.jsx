@@ -225,7 +225,7 @@ export function getMonday (date) {
 }
 
 /**
- * Returns the start end the end of the week
+ * Returns the start and the end of the week
  * @param {Date} date
  * @returns {string}
  */

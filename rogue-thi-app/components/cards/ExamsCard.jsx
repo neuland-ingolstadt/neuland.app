@@ -18,7 +18,7 @@ export default function ExamsCard () {
   const router = useRouter()
   const time = useTime()
   const [exams, setExams] = useState(null)
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   useEffect(() => {
     async function load () {

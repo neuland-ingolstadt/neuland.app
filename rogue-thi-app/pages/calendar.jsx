@@ -39,7 +39,7 @@ export default function Calendar () {
   const now = useTime()
   const [exams, setExams] = useState(null)
   const [focusedExam, setFocusedExam] = useState(null)
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   const { i18n, t } = useTranslation('calendar')
 

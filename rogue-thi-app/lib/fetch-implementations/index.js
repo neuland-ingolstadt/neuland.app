@@ -21,7 +21,6 @@ export default async function obtainFetchImplementation (mode, options) {
     if (!WebSocketProxyConnection) {
       WebSocketProxyConnection = (await import('fetch-bypass-cors')).default
     }
-    console.log(0, WebSocketProxyConnection)
     return new WebSocketProxyConnection(options)
   } else {
     throw new Error(`Unknown fetch implementation: ${mode}`)
