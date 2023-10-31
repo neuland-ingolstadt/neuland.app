@@ -193,10 +193,7 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
    * @param {Date} date Date to fetch the room availability for
    */
   async getFreeRooms (date) {
-    // console.log(KEY_GET_FREE_ROOMS)
     const key = `${KEY_GET_FREE_ROOMS}-${date.toDateString()}`
-    // const key = `getAllRooms-${date.toDateString()}`
-    // console.log(key)
     const res = await this.requestCached(key, {
       service: 'thiapp',
       method: 'rooms',
@@ -206,7 +203,6 @@ export class AuthenticatedAPIClient extends AnonymousAPIClient {
       year: date.getFullYear()
     })
 
-    // console.log(res)
     return res
   }
 
