@@ -22,7 +22,8 @@
                 "occupancyUnknown": "Occupancy Unknown"
             },
             "floors": {
-                "eg": "GF"
+                "eg": "GF",
+                "ug": "-1"
             }
         },
         "search": {

@@ -24,10 +24,11 @@
                 "hackerman": "To unlock the <i>Hackerman</i> design, you need to solve at least four tasks in our <aCtf>Practice CTF</aCtf>. Once you're there, you can unlock it <aHackerman>here</aHackerman>."
             },
             "language": {
-                "title": "Language"
+                "title": "Language",
+                "subtitle": "App Language"
             },
             "languageFood":{
-                "title":"Language for food menu",
+                "title":"Food Language",
                 "default":"Default"
             },
             "personalData": {

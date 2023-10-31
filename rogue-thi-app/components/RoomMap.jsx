@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
-import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer } from 'react-leaflet'
+import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer, useMap } from 'react-leaflet'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
@@ -43,7 +43,8 @@ const FLOOR_ORDER = [
   '1',
   'EG'
 ]
-const DEFAULT_CENTER = [48.76630, 11.43330]
+const INGOLSTADT_CENTER = [48.76630, 11.43330]
+const NEUBURG_CENTER = [48.73227, 11.17261]
 
 const SPECIAL_COLORS = [...new Set(Object.values(SPECIAL_ROOMS).map(x => x.color))]
 
@@ -55,13 +56,14 @@ export default function RoomMap ({ highlight, roomData }) {
   const router = useRouter()
   const searchField = useRef()
   const location = useLocation()
-  const userKind = useUserKind()
+  const { userKind, userFaculty } = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
   const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
+  const mapCenter = userFaculty && userFaculty === 'Nachhaltige Infrastruktur' ? NEUBURG_CENTER : INGOLSTADT_CENTER
   /**
    * WILL BE USED WITH NEW TILE SERVICE
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -128,7 +130,7 @@ export default function RoomMap ({ highlight, roomData }) {
     }
 
     if (!searchText) {
-      return [allRooms, DEFAULT_CENTER]
+      return [allRooms, mapCenter]
     }
 
     const cleanedText = searchText.toUpperCase().trim()
@@ -147,18 +149,24 @@ export default function RoomMap ({ highlight, roomData }) {
 
     loadRoomAvailability(filtered)
 
+    // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
+    const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
+    const campusRooms = filtered.filter(x => x.properties.Raum.includes('N') === showNeuburg)
+
+    const centerRooms = campusRooms.length > 0 ? campusRooms : filtered
+
     let lon = 0
     let lat = 0
     let count = 0
-    filtered.forEach(x => {
+    centerRooms.forEach(x => {
       lon += x.coordinates[0][0]
       lat += x.coordinates[0][1]
       count += 1
     })
-    const filteredCenter = count > 0 ? [lon / count, lat / count] : DEFAULT_CENTER
+    const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, t])
+  }, [searchText, allRooms, mapCenter, userFaculty, t])
 
   useEffect(() => {
     async function load () {
@@ -288,6 +296,14 @@ export default function RoomMap ({ highlight, roomData }) {
     )
   }
 
+  const Recenter = ({ position }) => {
+    const map = useMap()
+    useEffect(() => {
+      map.setView(position)
+    }, [map, position])
+    return null
+  }
+
   return (
     <>
       <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
@@ -334,9 +350,10 @@ export default function RoomMap ({ highlight, roomData }) {
         // https://github.com/Leaflet/Leaflet/issues/3184
         tap={false}
       >
+        <Recenter position={center} />
+
         <TileLayer
           attribution={t('rooms.map.attribution')}
-          // url={`https://tiles-eu.stadiamaps.com/tiles/alidade_smooth${isDark() ? '_dark' : ''}/{z}/{x}/{y}{r}.png`}
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxNativeZoom={19}
           maxZoom={21}
@@ -370,7 +387,7 @@ export default function RoomMap ({ highlight, roomData }) {
               <LayersControl.BaseLayer
                 key={floorName + (searchText || 'empty-search')}
                 name={translateFloors(floorName)}
-                checked={i === filteredFloorOrder.length - 1}
+                checked={i === filteredFloorOrder.length - 2}
               >
                 <LayerGroup>
                   {renderFloor(floorName)}

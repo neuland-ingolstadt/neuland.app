@@ -56,7 +56,7 @@ export function useDashboard () {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])
   const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [unlockedThemes, setUnlockedThemes] = useState([])
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   useEffect(() => {
     async function load () {

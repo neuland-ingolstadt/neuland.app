@@ -46,6 +46,12 @@ export default function LanguageModal () {
         <Modal.Title>{t('personal.modals.language.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body ref={languageModalBody}>
+        <div>
+          <h5>
+            {t('personal.modals.language.subtitle')}
+          </h5>
+        </div>
+
         <Form>
           {languages.map((language, i) => (
             <Button
@@ -62,28 +68,30 @@ export default function LanguageModal () {
 
         <hr/>
         <div>
-          <h6>
+          <h5>
             {t('personal.modals.languageFood.title')}
-          </h6>
+          </h5>
         </div>
 
-        <Form.Check
+        <Button
           id='languageFood-default'
-          label={t('personal.modals.languageFood.default')}
-          checked={selectedLanguageFood === 'default'}
-          onChange={() => toggleSelectedLanguageFood('default')}
-          type={'radio'}
-        />
+          className={styles.themeButton}
+          variant={selectedLanguageFood === 'default' ? 'primary' : 'secondary'}
+          onClick={() => toggleSelectedLanguageFood('default')}
+        >
+          {t('personal.modals.languageFood.default')}
+        </Button>
 
         {languages.map((language, i) => (
-          <Form.Check
+          <Button
             key={i}
             id={`languageFood-${language.key}`}
-            label={language.name[i18n.languages[0]]}
-            checked={selectedLanguageFood === language.key}
-            onChange={() => toggleSelectedLanguageFood(language.key)}
-            type={'radio'}
-          />
+            className={styles.themeButton}
+            variant={selectedLanguageFood === language.key ? 'primary' : 'secondary'}
+            onClick={() => toggleSelectedLanguageFood(language.key)}
+          >
+            {language.name[i18n.languages[0]]}
+          </Button>
         ))}
 
       </Modal.Body>

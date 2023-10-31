@@ -24,7 +24,7 @@ import { useTranslation } from 'next-i18next'
 export default function RoomCard () {
   const router = useRouter()
   const [filterResults, setFilterResults] = useState(null)
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
   const { t } = useTranslation('dashboard')
 
   useEffect(() => {

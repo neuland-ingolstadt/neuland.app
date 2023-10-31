@@ -57,7 +57,7 @@ export default function Personal () {
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
 
-  const userKind = useUserKind()
+  const { userKind } = useUserKind()
 
   const CopyableField = ({ label, value }) => {
     // Only the value is clickable to copy it to the clipboard.

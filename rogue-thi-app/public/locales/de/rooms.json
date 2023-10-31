@@ -22,7 +22,8 @@
                 "occupancyUnknown": "Belegung unbekannt"
             },
             "floors": {
-                "eg": "EG"
+                "eg": "EG",
+                "ug": "-1"
             }
         },
         "search": {
