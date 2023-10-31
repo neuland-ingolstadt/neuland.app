@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
@@ -109,6 +109,24 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
+    async function loadRoomAvailability (filteredList) {
+      const roomRequestList = filteredList.map(room => room.properties.Raum)
+      const roomAvailabilityData = await getRoomAvailability(roomRequestList)
+
+      const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+        const availability = openings
+          .filter(opening => new Date(opening.until) > new Date() && new Date(opening.from) > addSearchDuration(new Date()))
+          .map(opening => t('rooms.map.freeFromUntil', {
+            from: formatFriendlyTime(opening.from),
+            until: formatFriendlyTime(opening.until)
+          }))
+
+        return [room, availability]
+      }))
+
+      setRoomAvailabilityList(roomAvailabilityList)
+    }
+
     if (!searchText) {
       return [allRooms, DEFAULT_CENTER]
     }
@@ -140,7 +158,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : DEFAULT_CENTER
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms])
+  }, [searchText, allRooms, t])
 
   useEffect(() => {
     async function load () {
@@ -199,6 +217,7 @@ export default function RoomMap ({ highlight, roomData }) {
     }
 
     const special = SPECIAL_ROOMS[entry.properties.Raum]
+    const availabilityData = (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1)
 
     return (
       <FeatureGroup key={key}>
@@ -220,16 +239,13 @@ export default function RoomMap ({ highlight, roomData }) {
             <>
               <br />
               {t('rooms.map.occupied')}
-              {/* <br />
-              {(roomAvailabilityList[entry.properties.Raum] || '')}
               <br />
-              {((roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum][0]) || '')} */}
-              <br />
-              {roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum].map((availability, index) => (
-                <div key={index}>
+
+              {availabilityData && availabilityData.map((availability) => (
+                <>
                   {availability}
-                  {index !== roomAvailabilityList[entry.properties.Raum].length - 1 && <br />}
-                </div>
+                  <br />
+                </>
               ))}
             </>
           )}
@@ -270,60 +286,6 @@ export default function RoomMap ({ highlight, roomData }) {
         <>{floorRooms.map((entry, j) => renderRoom(entry, j, true))}</>
       </LayerGroup>
     )
-  }
-
-  const devmode = false //!
-
-  async function loadRoomAvailability (filteredList) {
-    const roomRequestList = []
-    for (let index = 0; index < filteredList.length; index++) {
-      const thisRoom = filteredList[index]['properties']['Raum']
-      roomRequestList.push(thisRoom)
-    }
-    const roomAvailabilityData = await getRoomAvailability(roomRequestList)
-
-    const roomAvailabilityList1 = {}
-
-    // remove Timelots From The Past
-    const removeTimelotsFromThePast = true
-    // let spliceOffset = 0
-    if (removeTimelotsFromThePast) {
-      for (const room in roomAvailabilityData) {
-        for (let index = 0; index < roomAvailabilityData[room].length; index++) {
-          const today = new Date()
-          const thisDateUntil = new Date(roomAvailabilityData[room][index]['bis'])
-          if (devmode) { //!
-            today.setHours(12, 0, 0, 0)
-            // today.setDate(today.getDate() + 1)
-          }
-          // console.log(today, thisDateUntil, thisDateUntil > today)
-          if (thisDateUntil > today) {
-            if (roomAvailabilityList1[room] === undefined) {
-              roomAvailabilityList1[room] = []
-            }
-            roomAvailabilityList1[room].push(roomAvailabilityData[room][index])
-          }
-        }
-      }
-    }
-    // console.log(roomAvailabilityList1)
-
-    let roomAvailabilityList = {}
-    for (const room in roomAvailabilityList1) {
-      roomAvailabilityList[room] = []
-      for (let index = 0; index < roomAvailabilityList1[room].length; index++) {
-        const fromDate = new Date(roomAvailabilityList1[room][index]['von'])
-        const untilDate = new Date(roomAvailabilityList1[room][index]['bis'])
-        roomAvailabilityList[room].push(t('rooms.map.freeFromUntil', {
-          from: `${fromDate.getHours()}:${String(fromDate.getMinutes()).padStart(2, '0')}`,
-          until: `${untilDate.getHours()}:${String(untilDate.getMinutes()).padStart(2, '0')}`
-        }))
-      }
-    }
-
-    // console.log(roomAvailabilityList)
-    roomAvailabilityList = { ...roomAvailabilityList } // update Popup
-    setRoomAvailabilityList(roomAvailabilityList)
   }
 
   return (

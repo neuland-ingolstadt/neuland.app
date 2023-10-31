@@ -146,19 +146,28 @@ export function getNextValidDate () {
  */
 export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
   const beginDate = new Date(date + 'T' + time)
-
-  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
-  const endDate = new Date(
-    beginDate.getFullYear(),
-    beginDate.getMonth(),
-    beginDate.getDate(),
-    beginDate.getHours() + durationHours,
-    beginDate.getMinutes() + durationMinutes,
-    beginDate.getSeconds(),
-    beginDate.getMilliseconds()
-  )
+  const endDate = addSearchDuration(beginDate, duration)
 
   return searchRooms(beginDate, endDate, building)
+}
+
+/**
+ * Add the duration given as a string to the given date.
+ * @param {Date} date The date to add the duration to
+ * @param {string} duration Duration as a string in the format `HH:MM`
+ * @returns
+ */
+export function addSearchDuration (date, duration = DURATION_PRESET) {
+  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours() + durationHours,
+    date.getMinutes() + durationMinutes,
+    date.getSeconds(),
+    date.getMilliseconds()
+  )
 }
 
 /**
@@ -191,90 +200,48 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
 
 /**
  * Filters suitable room openings.
- * @param {Date} beginDate Start date as Date object
- * @param {Array} [roomRequestList] Building name (e.g. `["G215"]`)
+ * @param {Date} day Start date as Date object
+ * @param {string[]} [roomRequestList] Room names (e.g. `["G215"]`)
  * @returns {object[]}
  */
-export async function getRoomAvailability (roomRequestList, beginDate) {
-  if (beginDate === undefined) {
-    beginDate = new Date()
-    beginDate.setHours(0, 0, 0, 0)
-  }
+export async function getRoomAvailability (roomRequestList, day = new Date()) {
+  day.setHours(0, 0, 0, 0)
 
-  const devmode = false //!
-  if (devmode) {
-    beginDate.setHours(12, 0, 0, 0)
-    // beginDate.setDate(beginDate.getDate() + 1)
-  }
+  const data = await API.getFreeRooms(day)
 
-  const data = await API.getFreeRooms(beginDate)
-  // console.log(data)
+  // get todays rooms openings
+  const openings = getRoomOpenings(data, day)
 
-  const inputDate = `${beginDate.getFullYear()}-${beginDate.getMonth() + 1}-${beginDate.getDate()}`
+  // filter for requested rooms
+  const roomOpenings = Object.fromEntries(Object.entries(openings).filter(([room]) => roomRequestList.includes(room)))
 
-  const roomList = {}
-  for (let index0 = 0; index0 < roomRequestList.length; index0++) {
-    const thisRoom = roomRequestList[index0]
+  // combine openings that are less than IGNORE_GAPS (= 15 minutes) minutes apart
+  const processedOpenings = Object.fromEntries(Object.entries(roomOpenings).map(([room, openings]) => {
+    const processedOpenings = []
+    let lastOpening = null
+    for (let index = 0; index < openings.length; index++) {
+      const opening = openings[index]
+      if (lastOpening === null) {
+        lastOpening = opening
+        continue
+      }
 
-    // search for 'roomRequestList' and store the available times in 'roomAvailable'
-    const roomAvailable = []
-    for (const keyDay in data) {
-      const thisDate = new Date(data[keyDay].datum.split('T')[0])
-      const thisDateString = `${thisDate.getFullYear()}-${thisDate.getMonth() + 1}-${thisDate.getDate()}`
-      if (inputDate === thisDateString) {
-        for (let index1 = 0; index1 < data[keyDay]['rtypes'].length; index1++) {
-          for (const keyHour in data[keyDay]['rtypes'][index1]['stunden']) {
-            const von = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['von']
-            const bis = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['bis']
-            for (let index2 = 0; index2 < data[keyDay]['rtypes'][index1]['stunden'][keyHour]['raeume'].length; index2++) {
-              const thisRoom2 = data[keyDay]['rtypes'][index1]['stunden'][keyHour]['raeume'][index2][2]
-              if (String(thisRoom2).toLowerCase() === thisRoom.toLocaleLowerCase()) {
-                roomAvailable.push({ von, bis })
-              }
-            }
-          }
-        }
+      if (addMinutes(lastOpening.until, IGNORE_GAPS) > opening.from) {
+        lastOpening.until = opening.until
+      } else {
+        processedOpenings.push(lastOpening)
+        lastOpening = opening
       }
     }
-    // console.log(JSON.parse(JSON.stringify(roomAvailable)))
 
-    // Merge Timeslots
-    const breaksIgnore = true
-    const breaksDuration = 10
-    function combineTimeslots () {
-      if (roomAvailable.length <= 1) {
-        return roomAvailable
-      }
-
-      const mergedTimeslots = [roomAvailable[0]]
-
-      for (let i = 1; i < roomAvailable.length; i++) {
-        const currentSlot = roomAvailable[i]
-        const lastMergedSlot = mergedTimeslots[mergedTimeslots.length - 1]
-
-        const currentSlotFrom = new Date(currentSlot.von).getTime()
-        const lastMergedSlotUntil = new Date(lastMergedSlot.bis).getTime()
-
-        const dateDiffMinute = (currentSlotFrom - lastMergedSlotUntil) / (1000 * 60)
-
-        if ((!breaksIgnore && dateDiffMinute === 0) || (breaksIgnore && dateDiffMinute <= breaksDuration)) {
-          lastMergedSlot.bis = currentSlot.bis
-        } else {
-          mergedTimeslots.push(currentSlot)
-        }
-      }
-
-      return mergedTimeslots
+    if (lastOpening !== null) {
+      processedOpenings.push(lastOpening)
     }
 
-    const roomAvailableCombined = combineTimeslots()
-    // console.log(roomAvailableCombined)
+    return [room, processedOpenings]
+  }))
 
-    roomList[thisRoom] = roomAvailableCombined
-  }
-
-  // console.log(roomList)
-  return roomList
+  return processedOpenings
 }
 
 /**
