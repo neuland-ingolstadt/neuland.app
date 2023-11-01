@@ -20,7 +20,9 @@ export function formatFriendlyDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return t('common.dates.tomorrow')
   } else {
-    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short', day: 'numeric', month: '2-digit', year: 'numeric' })
+    const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
+    const date = datetime.toLocaleString(undefined, { day: 'numeric', month: '2-digit', year: 'numeric' })
+    return `${weekday}, ${date}`
   }
 }
 
@@ -48,7 +50,7 @@ export function formatFriendlyTime (datetime) {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(getAdjustedLocale(), { hour: 'numeric', minute: '2-digit' })
+  return datetime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
 }
 
 /**
@@ -100,7 +102,9 @@ export function formatNearDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return i18n.t('common.dates.tomorrow', { ns: 'common' })
   } else {
-    return datetime.toLocaleString(getAdjustedLocale(), { weekday: 'long', day: 'numeric', month: 'numeric' })
+    const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'long' })
+    const date = datetime.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
+    return weekday + ', ' + date
   }
 }
 
@@ -115,7 +119,7 @@ export function buildLinedWeekdaySpan (datetime) {
   }
 
   const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
-  const date = datetime.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
+  const date = datetime.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
 
   return <span>{weekday}<br />{date}</span>
 }
@@ -282,8 +286,8 @@ export function getFriendlyWeek (date) {
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() + 6)
 
-    return monday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' }) +
-      ' – ' + sunday.toLocaleString(getAdjustedLocale(), { day: 'numeric', month: 'numeric' })
+    return monday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' }) +
+      ' – ' + sunday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
   }
 }
 
