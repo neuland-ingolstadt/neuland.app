@@ -21,7 +21,10 @@ export function useUserKind () {
         setUserKind(USER_EMPLOYEE)
       } else {
         setUserKind(USER_STUDENT)
-        setUserFaculty(await loadFaculty())
+
+        if (localStorage.isStudent === 'true') {
+          setUserFaculty(await loadFaculty())
+        }
       }
     }
 
