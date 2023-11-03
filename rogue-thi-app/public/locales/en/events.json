@@ -2,10 +2,11 @@
     "events": {
         "appbar": {
             "title": "Events"
+        },
+        "noEvents": "There are currently no event dates available.",
+        "dates": {
+            "until": "until"
         }
-    },
-    "noEvents": "There are currently no event dates available.",
-    "dates": {
-        "until": "until"
     }
+    
 }
