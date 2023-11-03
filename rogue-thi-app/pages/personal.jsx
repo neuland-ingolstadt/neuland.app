@@ -40,9 +40,12 @@ import { useTranslation } from 'next-i18next'
 
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 
-const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
+import { exec } from 'child_process'
 
-export default function Personal () {
+const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
+const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
+
+export default function Personal ({ commitHash }) {
   const [userdata, setUserdata] = useState(null)
   const [ects, setEcts] = useState(null)
   const [grades, setGrades] = useState(null)
@@ -329,6 +332,14 @@ export default function Personal () {
           )}
         </div>
 
+        <div className={styles.version}>
+          Version:
+          &nbsp;
+          <a href={`${GIT_URL}/commit/${commitHash}`} target="_blank" rel="noreferrer">
+            {commitHash.substr(0, 7)}
+          </a>
+        </div>
+
         <PersonalDataModal userdata={userdata} />
         <DashboardModal />
         <FilterFoodModal />
@@ -340,11 +351,24 @@ export default function Personal () {
   )
 }
 
+async function getCommitHash () {
+  return new Promise((resolve, reject) => {
+    exec('git rev-parse HEAD', (err, stdout) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve(stdout.trim())
+    })
+  })
+}
+
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
       'personal',
       'common'
-    ]))
+    ])),
+    commitHash: await getCommitHash()
   }
 })
