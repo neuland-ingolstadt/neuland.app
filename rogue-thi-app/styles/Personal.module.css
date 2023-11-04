@@ -37,16 +37,3 @@
 .placeholder {
   margin: 3.5px 0;
 }
-
-.version {
-  color: var(--muted-font-color, #6c757d);
-  display: flex;
-  justify-content: center;
-  font-size: 0.8em;
-  margin: 1rem 0;
-}
-
-.version a {
-  color: var(--muted-font-color, #6c757d);
-  text-decoration: underline;
-}

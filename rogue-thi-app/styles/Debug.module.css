@@ -1,13 +1,51 @@
-.container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.heading {
+  margin-top: 20px;
 }
 
-.jsonText {
-  width: 400px;
-  height: 300px;
+.version {
+  color: var(--muted-font-color, #6c757d);
+  display: flex;
+  justify-content: center;
+  font-size: 0.8em;
+  margin: 1rem 0;
+}
+
+.version a {
+  color: var(--muted-font-color, #6c757d);
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--gray-dark, #343a40);
+  border-radius: 8px;
+  min-height: 500px;
+}
+
+.spinner {
+  position: absolute;
+}
+
+.code{
+  background-color: transparent !important;
+  margin-bottom: 0 !important;
+  padding: 1.2rem !important;
+}
+
+.code :global(.hljs-string) {
+  color: var(--green);
+}
+
+.code :global(.hljs-number) {
+  color: var(--yellow);
+}
+
+.code :global(.hljs-attr) {
+  color: var(--blue);
+}
+
+.code :global(.hljs-literal) {
+  color: var(--orange);
 }
