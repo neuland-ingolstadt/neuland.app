@@ -2,6 +2,7 @@ import { formatISODate, getAdjustedDay, getMonday } from '../date-utils'
 import NeulandAPI from '../backend/neuland-api'
 
 import flagContradictions from '../../data/flag-contradictions.json'
+import stopWords from '../../data/stop-words.json'
 
 /**
  * Fetches and parses the meal plan
@@ -108,19 +109,90 @@ export function unifyFoodEntries (entries) {
   return entries.map(entry => ({
     timestamp: entry.timestamp,
     meals: entry.meals.map(meal => ({
-      name: capitalize(meal.name),
-      category: meal.category,
-      prices: meal.prices || {
-        student: null,
-        employee: null,
-        guest: null
-      },
-      allergens: meal.allergens || null,
-      flags: cleanMealFlags(meal.flags),
-      nutrition: meal.nutrition || null,
-      variations: meal.variations || [],
-      originalLanguage: meal.originalLanguage || 'de',
-      static: meal.static || false
+      ...unifyMeal(meal),
+      variations: meal.variations?.map(variant => unifyMeal(variant))
     }))
   }))
+}
+
+/**
+ * Unifies a single meal to a common format
+ * @param {object} meal
+ * @returns {object} Unified meal
+ */
+function unifyMeal (meal) {
+  return {
+    name: capitalize(meal.name),
+    category: meal.category,
+    prices: meal.prices || {
+      student: null,
+      employee: null,
+      guest: null
+    },
+    allergens: meal.allergens || null,
+    flags: cleanMealFlags(meal.flags),
+    nutrition: meal.nutrition || null,
+    originalLanguage: meal.originalLanguage || 'de',
+    static: meal.static || false,
+    additional: meal.additional || false
+  }
+}
+
+/**
+ * Merges meals with a similar name and same category into one meal with variations (Week entries)
+ * @param {object[]} entries
+ * @returns {object[]} Merged meals
+ */
+export function mergeMealVariations (entries) {
+  return entries.map(day => {
+    return {
+      ...day,
+      meals: mergeDayEntries(day.meals)
+    }
+  })
+}
+
+/**
+ * Merge meals with a similar name and same category into one meal with variations (Day entries)
+ * @param {object[]} dayEntries
+ * @returns {object[]} Merged meals
+ */
+function mergeDayEntries (dayEntries) {
+  const variationKeys = dayEntries.map(meal => {
+    const comparingKeys = dayEntries.filter(x => x.name !== meal.name && x.name.startsWith(meal.name) && x.category === meal.category)
+    return {
+      meal,
+      variations: comparingKeys
+    }
+  })
+
+  const mergedEntries = dayEntries.filter(meal => !variationKeys.map(keys => keys.variations).flat().map(x => x.name).includes(meal.name))
+
+  // remove duplicate meals
+  const noDuplicates = mergedEntries.filter((meal, index, self) =>
+    index === self.findIndex(x => x.name === meal.name)
+  )
+
+  // add variations
+  variationKeys.filter(({ variations }) => variations.length > 0).forEach(({ meal, variations }) => {
+    meal.variations = variations.map(variant => {
+      return {
+        ...variant,
+        name: cleanMealName(variant.name.replace(meal.name, '').trim()),
+        prices: Object.fromEntries(Object.entries(variant.prices).map(([key, value]) => [key, value - meal.prices[key]])),
+        additional: true
+      }
+    })
+  })
+
+  return noDuplicates
+}
+
+/**
+ * Removes german stop words from the given name
+ * @param {*} name
+ * @returns {string} Cleaned name
+ */
+function cleanMealName (name) {
+  return name.split(' ').filter(x => !stopWords.de.includes(x)).join(' ')
 }

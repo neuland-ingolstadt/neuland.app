@@ -1,6 +1,6 @@
+import { mergeMealVariations, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
-import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const pdf = require('pdf-parse')
 
@@ -133,7 +133,8 @@ export default async function handler (_, res) {
         })
       })
 
-      const translatedMeals = await translateMeals(mealPlan)
+      const mergedMeal = mergeMealVariations(mealPlan)
+      const translatedMeals = await translateMeals(mergedMeal)
       return unifyFoodEntries(translatedMeals)
     })
 

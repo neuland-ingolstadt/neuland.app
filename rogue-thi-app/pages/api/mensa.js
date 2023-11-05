@@ -1,9 +1,9 @@
 import xmljs from 'xml-js'
 
+import { mergeMealVariations, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
-import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
@@ -126,7 +126,8 @@ async function fetchPlan () {
 
     if (resp.status === 200) {
       const mealPlan = parseDataFromXml(await resp.text())
-      const translatedMeals = await translateMeals(mealPlan)
+      const mergedMeals = mergeMealVariations(mealPlan)
+      const translatedMeals = await translateMeals(mergedMeals)
       return unifyFoodEntries(translatedMeals)
     } else {
       throw new Error('Data source returned an error: ' + await resp.text())
