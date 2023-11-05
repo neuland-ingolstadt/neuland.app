@@ -110,7 +110,7 @@ export function unifyFoodEntries (entries) {
     timestamp: entry.timestamp,
     meals: entry.meals.map(meal => ({
       ...unifyMeal(meal),
-      variations: meal.variations?.map(variant => unifyMeal(variant))
+      variants: meal.variants?.map(variant => unifyMeal(variant))
     }))
   }))
 }
@@ -139,11 +139,11 @@ function unifyMeal (meal) {
 }
 
 /**
- * Merges meals with a similar name and same category into one meal with variations (Week entries)
+ * Merges meals with a similar name and same category into one meal with variants (Week entries)
  * @param {object[]} entries
  * @returns {object[]} Merged meals
  */
-export function mergeMealVariations (entries) {
+export function mergeMealvariants (entries) {
   return entries.map(day => {
     return {
       ...day,
@@ -153,7 +153,7 @@ export function mergeMealVariations (entries) {
 }
 
 /**
- * Merge meals with a similar name and same category into one meal with variations (Day entries)
+ * Merge meals with a similar name and same category into one meal with variants (Day entries)
  * @param {object[]} dayEntries
  * @returns {object[]} Merged meals
  */
@@ -162,20 +162,20 @@ function mergeDayEntries (dayEntries) {
     const comparingKeys = dayEntries.filter(x => x.name !== meal.name && x.name.startsWith(meal.name) && x.category === meal.category)
     return {
       meal,
-      variations: comparingKeys
+      variants: comparingKeys
     }
   })
 
-  const mergedEntries = dayEntries.filter(meal => !variationKeys.map(keys => keys.variations).flat().map(x => x.name).includes(meal.name))
+  const mergedEntries = dayEntries.filter(meal => !variationKeys.map(keys => keys.variants).flat().map(x => x.name).includes(meal.name))
 
   // remove duplicate meals
   const noDuplicates = mergedEntries.filter((meal, index, self) =>
     index === self.findIndex(x => x.name === meal.name)
   )
 
-  // add variations
-  variationKeys.filter(({ variations }) => variations.length > 0).forEach(({ meal, variations }) => {
-    meal.variations = variations.map(variant => {
+  // add variants
+  variationKeys.filter(({ variants }) => variants.length > 0).forEach(({ meal, variants }) => {
+    meal.variants = variants.map(variant => {
       return {
         ...variant,
         name: cleanMealName(variant.name.replace(meal.name, '').trim()),

@@ -74,8 +74,8 @@
             "originalName": "Original name",
             "translatedName": "Translated name"
         },
-        "variations": {
-            "title": "Variations"
+        "variants": {
+            "title": "variants"
         }
     }
 }

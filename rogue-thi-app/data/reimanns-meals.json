@@ -12,7 +12,7 @@
             "student": 5.5,
             "guest": 5.5
         },
-        "variations": [
+        "variants": [
             {
                 "name": {
                     "de": "Hähnchenstreifen",
@@ -40,7 +40,7 @@
             "student": 5.8,
             "guest": 5.8
         },
-        "variations": [
+        "variants": [
             {
                 "name": {
                     "de": "Menü mit Pommes und Getränk",
@@ -67,7 +67,7 @@
             "student": 3.8,
             "guest": 3.8
         },
-        "variations": [
+        "variants": [
             {
                 "name": {
                     "de": "Menü mit Pommes und Getränk",
@@ -94,7 +94,7 @@
             "student": 5.8,
             "guest": 5.8
         },
-        "variations": [
+        "variants": [
             {
                 "name": {
                     "de": "Hähnchenstreifen",

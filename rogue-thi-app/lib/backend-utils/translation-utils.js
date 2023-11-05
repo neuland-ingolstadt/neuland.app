@@ -57,7 +57,7 @@ function translateFallback (meals) {
           en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${meal.name}` : meal.name
         },
         originalLanguage: 'de',
-        variations: meal.variations && meal.variations.map((variant) => {
+        variants: meal.variants && meal.variants.map((variant) => {
           return {
             ...variant,
             name: {
@@ -102,7 +102,7 @@ export async function translateMeals (meals) {
           de: meal.name,
           en: await getTranslation(meal.name, 'EN-GB')
         },
-        variations: meal.variations && await Promise.all(meal.variations.map(async (variant) => {
+        variants: meal.variants && await Promise.all(meal.variants.map(async (variant) => {
           return {
             ...variant,
             name: {

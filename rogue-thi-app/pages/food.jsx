@@ -165,15 +165,15 @@ export default function Mensa () {
   }
 
   /**
-   * Renders the variations of a meal in a list.
+   * Renders the variants of a meal in a list.
    * @param {object} meal
    * @returns {JSX.Element}
    **/
-  function renderFoodVariations (meal) {
-    return meal?.variations?.length > 0 && (
+  function renderFoodvariants (meal) {
+    return meal?.variants?.length > 0 && (
       <p>
-        <ListGroup className={styles.variations}>
-          {meal?.variations?.map((variant, idx) => (
+        <ListGroup className={styles.variants}>
+          {meal?.variants?.map((variant, idx) => (
             <ListGroupItem
               title={variant.name[currentLocale]}
               content={`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant)}`}
@@ -235,8 +235,8 @@ export default function Mensa () {
           </div>
         </div>
 
-        {/* Variations of meal */}
-        {renderFoodVariations(meal)}
+        {/* variants of meal */}
+        {renderFoodvariants(meal)}
       </ListGroup.Item>
     )
   }
@@ -435,7 +435,7 @@ export default function Mensa () {
 
             {(showMealDetails?.nutrition && (
               <p>
-                <ListGroup className={styles.variations}>
+                <ListGroup className={styles.variants}>
                   <ListGroupItem
                     title={t('foodModal.nutrition.energy.title')}
                     content={`${showMealDetails?.nutrition.kj ? showMealDetails?.nutrition.kj + ' kJ' : ''} / ${showMealDetails?.nutrition.kcal ? showMealDetails?.nutrition.kcal + ' kcal' : ''}`}
@@ -496,7 +496,7 @@ export default function Mensa () {
 
             <h5>{t('foodModal.prices.title')}</h5>
             <p>
-              <ListGroup className={styles.variations}>
+              <ListGroup className={styles.variants}>
                 {showMealDetails?.prices.student !== null && (
                   <ListGroupItem
                     title={t('foodModal.prices.students')}
@@ -526,11 +526,11 @@ export default function Mensa () {
               )}
             </p>
 
-            {/* Variations of meal */}
-            {showMealDetails?.variations?.length > 0 && (
-              <h6>{t('foodModal.variations.title')}</h6>
+            {/* variants of meal */}
+            {showMealDetails?.variants?.length > 0 && (
+              <h6>{t('foodModal.variants.title')}</h6>
             )}
-            {renderFoodVariations(showMealDetails)}
+            {renderFoodvariants(showMealDetails)}
 
             <p>
               <h6>{t('foodModal.warning.title')}</h6>

@@ -1,6 +1,6 @@
 import xmljs from 'xml-js'
 
-import { mergeMealVariations, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -126,7 +126,7 @@ async function fetchPlan () {
 
     if (resp.status === 200) {
       const mealPlan = parseDataFromXml(await resp.text())
-      const mergedMeals = mergeMealVariations(mealPlan)
+      const mergedMeals = mergeMealvariants(mealPlan)
       const translatedMeals = await translateMeals(mergedMeals)
       return unifyFoodEntries(translatedMeals)
     } else {
