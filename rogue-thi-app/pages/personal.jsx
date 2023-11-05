@@ -42,7 +42,7 @@ import { TextBlock } from 'react-placeholder/lib/placeholders'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
-export default function Personal ({ commitHash }) {
+export default function Personal () {
   const [userdata, setUserdata] = useState(null)
   const [ects, setEcts] = useState(null)
   const [grades, setGrades] = useState(null)
