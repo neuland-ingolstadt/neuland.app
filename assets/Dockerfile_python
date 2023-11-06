@@ -4,12 +4,12 @@ WORKDIR /opt/
 RUN apt-get update && apt-get install -y libgl1 ghostscript
 
 ## Copy paths
-COPY all_python/spo-parser spo-parser/.
-COPY all_python/room-distances room-distances/.
-COPY all_python/course-downloader course-downloader/.
-COPY all_python/thi-translator thi-translator/.
-COPY all_python/install.sh .
-COPY all_python/run.sh .
+COPY python/spo-parser spo-parser/.
+COPY python/room-distances room-distances/.
+COPY python/course-downloader course-downloader/.
+COPY python/thi-translator thi-translator/.
+COPY python/install.sh .
+COPY python/run.sh .
 
 ## Make Bash scripts executable
 RUN chmod +x install.sh
