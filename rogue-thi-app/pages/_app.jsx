@@ -89,15 +89,25 @@ function MyApp ({ Component, pageProps }) {
 
   // Update the theme color when the user changes the theme
   useEffect(() => {
+    const prideColors = [
+      '#b61616',
+      '#ff8c00',
+      '#ffdb3b',
+      '#019d30',
+      '#0b68ea',
+      '#8845ef'
+    ]
+    const today = new Date()
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const isDarkMode = mediaQuery.matches
+
     const themeColors = {
       light: LIGHT,
       dark: DARK,
       retro: '#121212',
       barbie: '#d44e95',
       hacker: '#0ae40a',
-      pride: '#8845ef',
+      pride: prideColors[today.getDay() % prideColors.length],
       blue: '#005ea1',
       95: '#008080'
     }
