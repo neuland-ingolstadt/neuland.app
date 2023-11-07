@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 if [ -n "$NEXT_PUBLIC_GUEST_ONLY" ]; then
 	echo "Skipping grade weight extraction (guest only mode)"

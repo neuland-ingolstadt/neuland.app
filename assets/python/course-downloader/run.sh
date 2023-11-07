@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # Fail if any error occurs
 set -euxo pipefail
