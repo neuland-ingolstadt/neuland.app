@@ -1,7 +1,7 @@
-#!/bin/bash
+#! /bin/bash
 
 # Fail if any error occurs
-set -euxo pipefai
+set -euxo pipefail
 
 # Find all child directories with a requirements.txt file
 directories=(*/)
