@@ -1,7 +1,7 @@
 [
     { "name": { "en": "Automatic", "de": "Automatisch" }, "style": "default", "mapTheme": "system" },
     { "name": { "en": "Light", "de": "Hell" }, "style": "light", "mapTheme": "light"},
-    { "name": { "en": "THI Light", "de": "THI Hell" }, "style": "thi-light", "mapTheme": "light"},
+    { "name": { "en": "Blue", "de": "Blau" }, "style": "blue", "mapTheme": "light"},
     { "name": { "en": "Dark", "de": "Dunkel" }, "style": "dark", "mapTheme": "dark" },
     { "name": { "en": "Barbie & Ken", "de": "Barbie & Ken" }, "style": "barbie", "mapTheme": "light" },
     { "name": { "en": "Retro", "de": "Retro" }, "style": "retro", "mapTheme": "dark" },
