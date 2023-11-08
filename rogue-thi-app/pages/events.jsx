@@ -52,7 +52,7 @@ export default function Events () {
           ...x,
           begin: x.begin ? new Date(x.begin) : null,
           end: x.end ? new Date(x.end) : null
-        }))
+        })).filter((x) => x.end === null || x.end > new Date())
 
       setEvents(newEvents)
     }

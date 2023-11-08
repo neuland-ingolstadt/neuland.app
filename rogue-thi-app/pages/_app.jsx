@@ -29,6 +29,7 @@ config.autoAddCss = false
 function MyApp ({ Component, pageProps }) {
   const router = useRouter()
   const [theme, setTheme] = useState('default')
+  const [themeColor, setThemeColor] = useState(undefined)
   const [showThemeModal, setShowThemeModal] = useState(false)
   const [showDashboardModal, setShowDashboardModal] = useState(false)
   const [showPersonalDataModal, setShowPersonalDataModal] = useState(false)
@@ -42,6 +43,9 @@ function MyApp ({ Component, pageProps }) {
     bringBackDashboardEntry,
     resetOrder
   } = useDashboard()
+
+  const LIGHT = '#ffffff'
+  const DARK = '#202020'
 
   useEffect(() => {
     // migrate legacy cookie theme setting to localStorage
@@ -64,6 +68,52 @@ function MyApp ({ Component, pageProps }) {
       return theme
     }
   }, [theme, router.pathname])
+
+  // Update the theme color and theme when the user changes dark/light mode
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = () => {
+      if (theme === 'default') {
+        if (mediaQuery.matches) {
+          setThemeColor(DARK)
+          setTheme('default')
+        } else {
+          setThemeColor(LIGHT)
+          setTheme('default')
+        }
+      }
+    }
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  })
+
+  // Update the theme color when the user changes the theme
+  useEffect(() => {
+    const prideColors = [
+      '#b61616',
+      '#ff8c00',
+      '#ffdb3b',
+      '#019d30',
+      '#0b68ea',
+      '#8845ef'
+    ]
+    const today = new Date()
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const isDarkMode = mediaQuery.matches
+
+    const themeColors = {
+      light: LIGHT,
+      dark: DARK,
+      retro: '#121212',
+      barbie: '#d44e95',
+      hacker: '#0ae40a',
+      pride: prideColors[today.getDay() % prideColors.length],
+      blue: '#005ea1',
+      95: '#008080'
+    }
+    const selectedThemeColor = themeColors[theme] || (isDarkMode ? DARK : LIGHT)
+    setThemeColor(selectedThemeColor)
+  }, [theme])
 
   return (
     <ShowLanguageModal.Provider value={[showLanguageModal, setShowLanguageModal]}>
@@ -92,7 +142,7 @@ function MyApp ({ Component, pageProps }) {
                     />
                     <meta name="description" content="Eine inoffizielle App für die Technische Hochschule Ingolstadt"/>
                     <meta name="keywords" content="THI, Technische Hochschule Ingolstadt, App"/>
-                    <meta name="theme-color" content="#8845ef"/>
+                    <meta name="theme-color" content={themeColor}/>
 
                     <link rel="manifest" href="/manifest.json"/>
                     <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
