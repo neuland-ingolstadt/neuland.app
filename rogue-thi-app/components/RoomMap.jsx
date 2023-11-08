@@ -127,7 +127,9 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
-    loadRoomAvailability()
+    if (Object.keys(roomAvailabilityList).length === 0) {
+      loadRoomAvailability()
+    }
 
     if (!searchText) {
       return [allRooms, mapCenter]
