@@ -168,7 +168,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, mapCenter, userFaculty])
+  }, [roomAvailabilityList, searchText, allRooms, userFaculty, mapCenter])
 
   useEffect(() => {
     async function load () {
