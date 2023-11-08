@@ -213,7 +213,7 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
   const openings = getRoomOpenings(data, day)
 
   // filter for requested rooms
-  const roomOpenings = Object.fromEntries(Object.entries(openings).filter(([room]) => roomRequestList.includes(room)))
+  const roomOpenings = Object.fromEntries(Object.entries(openings))
 
   // combine openings that are less than IGNORE_GAPS (= 15 minutes) minutes apart
   const processedOpenings = Object.fromEntries(Object.entries(roomOpenings).map(([room, openings]) => {

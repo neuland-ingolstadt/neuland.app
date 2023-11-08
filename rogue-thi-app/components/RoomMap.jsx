@@ -108,25 +108,26 @@ export default function RoomMap ({ highlight, roomData }) {
       .flat()
   }, [roomData])
 
+  async function loadRoomAvailability () {
+    const roomAvailabilityData = await getRoomAvailability()
+
+    const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+      const availability = openings
+        .filter(opening =>
+          new Date(opening.until) > new Date() &&
+          new Date(opening.from) > addSearchDuration(new Date())
+        )
+      return [room, availability]
+    }))
+
+    setRoomAvailabilityList(roomAvailabilityList)
+  }
+
   /**
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
-    async function loadRoomAvailability (filteredList) {
-      const roomRequestList = filteredList.map(room => room.properties.Raum)
-      const roomAvailabilityData = await getRoomAvailability(roomRequestList)
-
-      const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
-        const availability = openings
-          .filter(opening =>
-            new Date(opening.until) > new Date() &&
-            new Date(opening.from) > addSearchDuration(new Date())
-          )
-        return [room, availability]
-      }))
-
-      setRoomAvailabilityList(roomAvailabilityList)
-    }
+    loadRoomAvailability()
 
     if (!searchText) {
       return [allRooms, mapCenter]
@@ -145,8 +146,6 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
-
-    loadRoomAvailability(filtered)
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
     const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
