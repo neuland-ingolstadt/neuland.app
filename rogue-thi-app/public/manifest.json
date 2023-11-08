@@ -1,7 +1,6 @@
 {
   "name": "neuland.app",
   "short_name": "neuland.app",
-  "theme_color": "#8845ef",
   "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
