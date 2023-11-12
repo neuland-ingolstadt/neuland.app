@@ -9,7 +9,7 @@ from shutil import copy
 
 API_URL = "https://hiplan.thi.de/webservice/production2/index.php"
 DEEPL_API_URL = "https://api.deepl.com/v2/translate"
-MAIN_DIR = Path(__file__).parent.parent / "thi-api-translations"
+MAIN_DIR = Path(__file__).parent.parent / "rogue-thi-app" / "public" / "locales"
 
 DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
 THI_USERNAME = os.getenv("THI_USERNAME")
@@ -20,7 +20,7 @@ CLEAN_REGEX = re.compile(r"\s+")
 
 LANGUAGES = ["EN-US"]
 
-MAP_URL = "https://assets.neuland.app/human-made/rooms_neuland_v2.3.geojson"
+MAP_URL = "https://assets.neuland.app/rooms_neuland_v2.3.geojson"
 
 
 class ThiTranslator:

@@ -1,0 +1,2 @@
+0 0 1,15 * * cd ./room-distances && bash ./run.sh
+0 0 1,15 * * cd ./spo-parser && bash ./run.sh
