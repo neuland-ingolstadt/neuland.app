@@ -108,24 +108,27 @@ export default function RoomMap ({ highlight, roomData }) {
       .flat()
   }, [roomData])
 
+  async function loadRoomAvailability () {
+    const roomAvailabilityData = await getRoomAvailability()
+
+    const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+      const availability = openings
+        .filter(opening =>
+          new Date(opening.until) > new Date() &&
+          new Date(opening.from) > addSearchDuration(new Date())
+        )
+      return [room, availability]
+    }))
+
+    setRoomAvailabilityList(roomAvailabilityList)
+  }
+
   /**
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
-    async function loadRoomAvailability (filteredList) {
-      const roomRequestList = filteredList.map(room => room.properties.Raum)
-      const roomAvailabilityData = await getRoomAvailability(roomRequestList)
-
-      const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
-        const availability = openings
-          .filter(opening =>
-            new Date(opening.until) > new Date() &&
-            new Date(opening.from) > addSearchDuration(new Date())
-          )
-        return [room, availability]
-      }))
-
-      setRoomAvailabilityList(roomAvailabilityList)
+    if (Object.keys(roomAvailabilityList).length === 0) {
+      loadRoomAvailability()
     }
 
     if (!searchText) {
@@ -165,7 +168,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [searchText, allRooms, mapCenter, userFaculty])
+  }, [roomAvailabilityList, searchText, allRooms, userFaculty, mapCenter])
 
   useEffect(() => {
     async function load () {
