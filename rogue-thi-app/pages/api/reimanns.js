@@ -1,10 +1,10 @@
 import cheerio from 'cheerio'
 
 import { addWeek, getDays, getWeek } from '../../lib/date-utils'
+import { getMealHash, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import staticMeals from '../../data/reimanns-meals.json'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
-import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const CACHE_TTL = 10 * 60 * 1000 // 10m
 const URL = 'http://reimanns.in/mittagsgerichte-wochenkarte/'
@@ -91,6 +91,7 @@ export default async function handler (req, res) {
         timestamp: day,
         meals: days[day].map(meal => ({
           name: meal,
+          id: getMealHash(meal, 'reimanns'),
           category: 'Essen',
           prices: {
             student: 5.5,

@@ -1,4 +1,4 @@
-import { mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getMealHash, mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
@@ -109,6 +109,7 @@ export default async function handler (_, res) {
         return dishes.map((day, index) => {
           const dayDishes = day.map((dish) => ({
             name: dish.name,
+            id: getMealHash(dish.name, 'canisius'),
             category: 'Essen',
             prices: dish.prices,
             allergens: null,

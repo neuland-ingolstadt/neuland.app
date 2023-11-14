@@ -9,28 +9,28 @@ import ReactPlaceholder from 'react-placeholder'
 import { faChevronLeft, faChevronRight, faExclamationTriangle, faFilter, faHeartCircleCheck, faUtensils } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import AppBody from '../components/page/AppBody'
-import AppContainer from '../components/page/AppContainer'
-import AppNavbar from '../components/page/AppNavbar'
-import AppTabbar from '../components/page/AppTabbar'
+import AppBody from '../../components/page/AppBody'
+import AppContainer from '../../components/page/AppContainer'
+import AppNavbar from '../../components/page/AppNavbar'
+import AppTabbar from '../../components/page/AppTabbar'
 
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
-import { buildLinedWeekdaySpan, getAdjustedDay, getFriendlyWeek } from '../lib/date-utils'
-import FilterFoodModal from '../components/modal/FilterFoodModal'
-import { FoodFilterContext } from './_app'
-import { loadFoodEntries } from '../lib/backend-utils/food-utils'
+import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
+import { buildLinedWeekdaySpan, getAdjustedDay, getFriendlyWeek } from '../../lib/date-utils'
+import FilterFoodModal from '../../components/modal/FilterFoodModal'
+import { FoodFilterContext } from '../_app'
+import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
 
-import { SwipeableTab } from '../components/SwipeableTabs'
-import allergenMap from '../data/allergens.json'
-import flagMap from '../data/mensa-flags.json'
-import styles from '../styles/Mensa.module.css'
+import { SwipeableTab } from '../../components/SwipeableTabs'
+import allergenMap from '../../data/allergens.json'
+import flagMap from '../../data/mensa-flags.json'
+import styles from '../../styles/Mensa.module.css'
 
 import SwipeableViews from 'react-swipeable-views'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { getAdjustedLocale } from '../lib/locale-utils'
+import { getAdjustedLocale } from '../../lib/locale-utils'
 
 const COLOR_WARN = '#bb0000'
 const COLOR_GOOD = '#00bb00'
@@ -199,7 +199,9 @@ export default function Mensa () {
       <ListGroup.Item
         key={key}
         className={styles.item}
-        onClick={() => setShowMealDetails(meal)}
+        onClick={
+          () => router.push('/food/[mealId]', `/food/${meal.id}`)
+        }
         action
       >
         <div>
@@ -383,6 +385,7 @@ export default function Mensa () {
 
           <Modal.Body>
             <h4 className={styles.modalTitle}>{showMealDetails?.name[currentLocale]}</h4>
+            <h4 className={styles.modalTitle}>{showMealDetails?.id}</h4>
 
             <h6>{t('foodModal.flags.title')}</h6>
             {showMealDetails?.flags === null && (
