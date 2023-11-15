@@ -1,6 +1,6 @@
 import xmljs from 'xml-js'
 
-import { mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getMealHash, mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -95,6 +95,7 @@ function parseDataFromXml (xml) {
 
       return {
         name: text.trim(),
+        id: getMealHash(text.trim(), 'mensa'),
         category,
         prices: {
           student: parseGermanFloat(item.preis1._text),

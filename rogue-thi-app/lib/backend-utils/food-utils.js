@@ -4,6 +4,8 @@ import NeulandAPI from '../backend/neuland-api'
 import flagContradictions from '../../data/flag-contradictions.json'
 import stopWords from '../../data/stop-words.json'
 
+const hash = require('object-hash')
+
 /**
  * Fetches and parses the meal plan
  * @param {string[]} restaurants Requested restaurants
@@ -123,6 +125,7 @@ export function unifyFoodEntries (entries) {
 function unifyMeal (meal) {
   return {
     name: capitalize(meal.name),
+    id: meal.id,
     category: meal.category,
     prices: meal.prices || {
       student: null,
@@ -195,4 +198,8 @@ function mergeDayEntries (dayEntries) {
  */
 function cleanMealName (name) {
   return name.split(' ').filter(x => !stopWords.de.includes(x)).join(' ')
+}
+
+export function getMealHash (mealName, restaurant) {
+  return hash(mealName)
 }
