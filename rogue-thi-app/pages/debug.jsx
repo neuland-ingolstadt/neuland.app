@@ -7,27 +7,32 @@ import Form from 'react-bootstrap/Form'
 import Link from 'next/link'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Row from 'react-bootstrap/Row'
+import Spinner from 'react-bootstrap/Spinner'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
+
 import { NoSessionError, UnavailableSessionError, callWithSession } from '../lib/backend/thi-session-handler'
 import API from '../lib/backend/anonymous-api'
 
-import styles from '../styles/Common.module.css'
+import styles from '../styles/Debug.module.css'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
+const COMMIT_HASH = process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'
 
 /**
  * Page containing debug tools for development purposes.
  */
 export default function Debug () {
   const [parameters, setParameters] = useState([])
-  const [result, setResult] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [result, setResult] = useState('After submitting, the result will appear here')
   const router = useRouter()
 
   useEffect(() => {
@@ -93,9 +98,11 @@ export default function Debug () {
       params[entry.name] = entry.value
     }
     try {
-      setResult('Loading...')
+      setResult('')
+      setIsLoading(true)
       const resp = await API.request(params)
       setResult(JSON.stringify(resp, null, 4))
+      setIsLoading(false)
     } catch (e) {
       console.error(e)
       setResult(e.toString())
@@ -119,7 +126,7 @@ export default function Debug () {
         <h3 className={styles.heading}>Fields</h3>
         <ListGroup>
           {parameters && parameters.map((param, idx) =>
-            <ListGroup.Item key={idx} className={styles.item}>
+            <ListGroup.Item key={idx}>
               <Row>
                 <Col>
                   <Form.Control
@@ -137,7 +144,7 @@ export default function Debug () {
                     onChange={e => changeParameterValue(idx, e.target.value)}
                   />
                 </Col>
-                <Col>
+                <Col xs="auto">
                   <Button variant="danger" onClick={() => removeParameter(idx)}>
                     Remove
                   </Button>
@@ -153,9 +160,20 @@ export default function Debug () {
 
         <br />
         <h3 className={styles.heading}>Result</h3>
-        <pre>
-          {result}
-        </pre>
+        <div className={styles.container}>
+          <Spinner animation="border" className={styles.spinner} hidden={!isLoading}/>
+          <SyntaxHighlighter language='json' className={styles.code}>
+            { result }
+          </SyntaxHighlighter>
+        </div>
+
+        <div className={styles.version}>
+          Version:
+          &nbsp;
+          <a href={`${GIT_URL}/commit/${COMMIT_HASH}`} target="_blank" rel="noreferrer">
+            {COMMIT_HASH.substring(0, 7)}
+          </a>
+        </div>
       </AppBody>
 
       <AppTabbar />

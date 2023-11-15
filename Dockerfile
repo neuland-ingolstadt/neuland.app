@@ -41,6 +41,8 @@ COPY rogue-thi-app/public/favicon.svg .
 RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true --path-override '/' --xhtml --favicon --dark-mode favicon.svg ./splash/
 
 
+RUN export NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse HEAD)
+ENV NEXT_PUBLIC_COMMIT_HASH=$NEXT_PUBLIC_COMMIT_HASH
 
 FROM node:18
 

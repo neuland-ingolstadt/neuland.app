@@ -9,15 +9,11 @@
     "compile-scss": "sass --no-source-map --style compressed scss/themes/:public/themes/",
     "build": "next build",
     "start": "next start",
-    "android-add": "rm -rf android/ && npx cap add android",
-    "android-open": "npm run prebuild && next build && next export && npx cap sync android && npx cap open android",
-    "android-run": "npm run prebuild && next build && next export && npx cap sync android && npx cap run android",
-    "ios-open": "npm run prebuild && next build && next export && npx cap sync ios && npx cap open ios",
-    "ios-run": "npm run prebuild && next build && next export && npx cap sync ios && npx cap run ios",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
   },
   "dependencies": {
     "@capacitor-community/http": "^1.4.1",
+    "@capacitor/core": "^4.6.2",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.0.0",
     "@fortawesome/free-solid-svg-icons": "^6.0.0",
@@ -45,15 +41,12 @@
     "react-placeholder": "^4.1.0",
     "react-swipeable-views": "^0.14.0",
     "react-swipeable-views-utils": "^0.14.0",
+    "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.45.1",
     "win95.css": "github:neuland-ingolstadt/win95.css#commit=477a22394b61b57b20ee2c3a83b769c9a6dc8e46",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
-    "@capacitor/android": "^4.6.2",
-    "@capacitor/cli": "^4.6.2",
-    "@capacitor/core": "^4.6.2",
-    "@capacitor/ios": "^4.6.2",
     "eslint": "^8.11.0",
     "eslint-config-next": "^12.1.0",
     "eslint-config-standard": "^17.0.0-1",
