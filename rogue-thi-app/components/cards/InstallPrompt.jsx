@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
-import { Capacitor } from '@capacitor/core'
 import Card from 'react-bootstrap/Card'
 
 import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -21,10 +20,6 @@ export default function InstallPrompt ({ onHide }) {
   const { t } = useTranslation(['dashboard'])
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
-      return
-    }
-
     if (os === OS_IOS) {
       const isInstalled = navigator.standalone
       setShowPrompt(!isInstalled && OS_IOS)
