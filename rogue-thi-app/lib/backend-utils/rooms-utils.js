@@ -91,11 +91,22 @@ export function getRoomOpenings (rooms, date) {
           room: room === 0 ? ROOMS_ALL : room,
           type: stunde.type,
           from: new Date(stunde.von),
-          until: new Date(stunde.bis)
+          until: new Date(stunde.bis),
+          capacityData: stunde.raeume
         }))
     )
     // iterate over every room
-    .forEach(({ room, type, from, until }) => {
+    .forEach(({ room, type, from, until, capacityData }) => {
+      // for (let i = 0; i < capacity.length; i++) {
+      //   if (capacity[i][2] === room) {
+      //     capacity = capacity[i][3]
+      //     break
+      //   }
+      // }
+
+      const capResult = capacityData.find(entry => entry[2] === room)
+      const capacity = capResult ? capResult[3] : null
+
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
       // find overlapping opening
@@ -110,7 +121,7 @@ export function getRoomOpenings (rooms, date) {
         opening.until = maxDate(until, opening.until)
       } else {
         // create new opening
-        roomOpenings.push({ type, from, until })
+        roomOpenings.push({ type, from, until, capacity })
       }
     })
   return openings
@@ -187,7 +198,8 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
         room,
         type: opening.type,
         from: opening.from,
-        until: opening.until
+        until: opening.until,
+        capacity: opening.capacity
       }))
     )
     .filter(opening =>
