@@ -97,13 +97,6 @@ export function getRoomOpenings (rooms, date) {
     )
     // iterate over every room
     .forEach(({ room, type, from, until, capacityData }) => {
-      // for (let i = 0; i < capacity.length; i++) {
-      //   if (capacity[i][2] === room) {
-      //     capacity = capacity[i][3]
-      //     break
-      //   }
-      // }
-
       const capResult = capacityData.find(entry => entry[2] === room)
       const capacity = capResult ? capResult[3] : null
 
@@ -223,7 +216,6 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
 
   // get todays rooms openings
   const openings = getRoomOpenings(data, day)
-  // console.log(openings)
 
   // filter for requested rooms
   const roomOpenings = Object.fromEntries(Object.entries(openings))
@@ -254,7 +246,6 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
     return [room, processedOpenings]
   }))
 
-  // console.log(processedOpenings)
   return processedOpenings
 }
 
@@ -264,7 +255,6 @@ export async function getRoomCapacity (roomRequestList, day = new Date()) {
 
   const data = await API.getFreeRooms(day)
   const thisDate = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}T00:00:00.000000`
-  // console.log(data, thisDate)
   let dataToday
   data.forEach(element => {
     if (element['datum'] === thisDate) {
@@ -276,19 +266,14 @@ export async function getRoomCapacity (roomRequestList, day = new Date()) {
     return roomCapacityData
   }
   const capacityData = dataToday['rtypes']
-  // console.log(capacityData)
 
   capacityData.forEach(roomType => {
-    // console.log(roomType)
     for (const stunde in roomType['stunden']) { //! vllt nur die erste Stunde?
-      // console.log(roomType['stunden'][stunde])
       roomType['stunden'][stunde]['raeume'].forEach(raum => {
-        // console.log(raum[2], raum[3])
         roomCapacityData[raum[2]] = raum[3]
       })
     }
   })
-  // console.log(roomCapacityData)
 
   return roomCapacityData
 }
