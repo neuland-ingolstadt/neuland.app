@@ -50,6 +50,7 @@
             },
             "noSuggestions": "No suggestions available.",
             "noAvailableRooms": "No available rooms found.",
+            "seats": "Seats",
             "gaps": {
                 "header": {
                     "general": "Available Rooms",

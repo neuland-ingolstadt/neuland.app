@@ -50,6 +50,7 @@
             },
             "noSuggestions": "Keine Vorschläge verfügbar.",
             "noAvailableRooms": "Keine freien Räume gefunden.",
+            "seats": "Plätze",
             "gaps": {
                 "header": {
                     "general": "Freie Räume",

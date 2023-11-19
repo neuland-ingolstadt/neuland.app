@@ -243,7 +243,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const availabilityData = (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1)
     let roomCapacityText = getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)
     if (roomCapacity[entry.properties.Raum] !== undefined) {
-      roomCapacityText = `${roomCapacityText.split('(')[0]} (${roomCapacity[entry.properties.Raum]} Seats)`
+      roomCapacityText = `${roomCapacityText.split('(')[0]} (${roomCapacity[entry.properties.Raum]} ${t('rooms.suggestions.seats')})`
     }
 
     return (
@@ -252,7 +252,6 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {/* //!Alt `, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}, ` */}
           {`, ${roomCapacityText}, `}
           {avail && (
             <>
