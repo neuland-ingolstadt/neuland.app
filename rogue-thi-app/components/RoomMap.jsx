@@ -110,7 +110,6 @@ export default function RoomMap ({ highlight, roomData }) {
   }, [roomData])
 
   async function loadRoomAvailability () {
-    console.log('F: loadRoomAvailability') //!
     const roomAvailabilityData = await getRoomAvailability()
 
     const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
@@ -126,7 +125,6 @@ export default function RoomMap ({ highlight, roomData }) {
   }
 
   async function loadRoomCapacity () {
-    console.log('F: loadRoomCapacity') //!
     const roomCapacityData = await getRoomCapacity()
 
     setRoomCapacity(roomCapacityData)
@@ -138,10 +136,9 @@ export default function RoomMap ({ highlight, roomData }) {
   const [filteredRooms, center] = useMemo(() => {
     if (Object.keys(roomAvailabilityList).length === 0) {
       loadRoomAvailability()
-      // loadRoomCapacity() //! nach unten
     }
     if (Object.keys(roomCapacity).length === 0) {
-      loadRoomCapacity() //! Endlosschleife
+      loadRoomCapacity()
     }
 
     if (!searchText) {
@@ -161,11 +158,6 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
-
-    // console.log(1)
-    //! infinity loop fixed
-    // loadRoomAvailability(filtered)
-    // loadRoomCapacity()
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
     const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
