@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getRoomCapacity, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
@@ -61,6 +61,7 @@ export default function RoomMap ({ highlight, roomData }) {
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
   const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
+  const [roomCapacity, setRoomCapacity] = useState({})
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -84,6 +85,7 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed room data for Leaflet.
    */
   const allRooms = useMemo(() => {
+    // console.log(roomData)
     return roomData.features
       .map(feature => {
         const { properties, geometry } = feature
@@ -109,26 +111,61 @@ export default function RoomMap ({ highlight, roomData }) {
   }, [roomData])
 
   async function loadRoomAvailability () {
+    console.log('F: loadRoomAvailability')
     const roomAvailabilityData = await getRoomAvailability()
+    // console.log(JSON.parse(JSON.stringify(roomAvailabilityData))) //! Hier ist capa vorhanden
 
     const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+      // console.log(openings)
       const availability = openings
         .filter(opening =>
           new Date(opening.until) > new Date() &&
           new Date(opening.from) > addSearchDuration(new Date())
         )
+      availability.capacity = openings[0].capacity
       return [room, availability]
     }))
 
+    // console.log(JSON.parse(JSON.stringify(roomAvailabilityList))) //! Heir ist capa nicht mehr vorhanden
     setRoomAvailabilityList(roomAvailabilityList)
+  }
+
+  async function loadRoomCapacity () {
+    console.log('F: loadRoomCapacity')
+    const roomCapacityData = await getRoomCapacity()
+
+    /*
+    const roomCapacity = {}
+    for (const room in roomCapacityData) {
+      // console.log(roomCapacityData[room][0]['capacity'], roomCapacityData[room][0])
+      if (roomCapacityData[room][0] !== undefined && roomCapacityData[room][0]['capacity'] !== undefined) {
+        if (roomCapacity[room] === undefined) {
+          roomCapacity[room] = {}
+        }
+
+        roomCapacity[room]['capacity'] = roomCapacityData[room][0]['capacity']
+        // console.log(roomCapacityData[room]['capacity'], room, roomCapacity[room])
+      }
+    }
+    // console.log(roomCapacity)
+
+    setRoomCapacity(roomCapacity)
+    */
+
+    setRoomCapacity(roomCapacityData)
   }
 
   /**
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
+    // console.log('Aaaaaaaa')
     if (Object.keys(roomAvailabilityList).length === 0) {
       loadRoomAvailability()
+      loadRoomCapacity()
+    }
+    if (Object.keys(roomCapacity).length === 0) {
+      // loadRoomCapacity()
     }
 
     if (!searchText) {
@@ -147,6 +184,7 @@ export default function RoomMap ({ highlight, roomData }) {
 
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
+    // console.log(allRooms)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
 
     loadRoomAvailability(filtered)
@@ -168,7 +206,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [roomAvailabilityList, searchText, allRooms, userFaculty, mapCenter])
+  }, [roomAvailabilityList, roomCapacity, searchText, allRooms, userFaculty, mapCenter])
 
   useEffect(() => {
     async function load () {
@@ -227,7 +265,22 @@ export default function RoomMap ({ highlight, roomData }) {
     }
 
     const special = SPECIAL_ROOMS[entry.properties.Raum]
+    // console.log(JSON.parse(JSON.stringify(roomAvailabilityList)))
+    // console.log((roomAvailabilityList[entry.properties.Raum] || []), (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1))
     const availabilityData = (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1)
+    // console.log(availabilityData)
+    // console.log(openings)
+    console.log(roomCapacity[entry.properties.Raum])
+    let roomCapacityText = getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)
+    // console.log(availabilityData)
+    // roomAvailabilityList[entry.properties.Raum] && roomAvailabilityList[entry.properties.Raum].map((opening) => (
+    //   roomCapacityText = ` (${opening.capacity} Seats)`
+    // ))
+    if (roomCapacity[entry.properties.Raum] !== undefined) {
+      roomCapacityText = `${roomCapacityText.split('(')[0]} (${roomCapacity[entry.properties.Raum]} Seats)`
+      // console.log(entry.properties.Raum, roomCapacityText)
+    }
+    // console.log(entry.properties.Raum, roomCapacityText)
 
     return (
       <FeatureGroup key={key}>
@@ -235,7 +288,9 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`}
+          {/* console.log(entry) */}
+          {/* `, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}, ` */}
+          {`, ${roomCapacityText}, `}
           {avail && (
             <>
               <br />
@@ -253,6 +308,7 @@ export default function RoomMap ({ highlight, roomData }) {
 
               {availabilityData && availabilityData.map((opening) => (
                 <>
+                  {/* console.log(opening.capacity) */}
                   {t('rooms.map.freeFromUntil', {
                     from: formatFriendlyTime(opening.from),
                     until: formatFriendlyTime(opening.until)
@@ -288,6 +344,7 @@ export default function RoomMap ({ highlight, roomData }) {
    * @returns Leaflet layer group
    */
   function renderFloor (floorName) {
+    //! console.log(filteredRooms)
     const floorRooms = filteredRooms
       .filter(x => x.properties.Etage === floorName)
 

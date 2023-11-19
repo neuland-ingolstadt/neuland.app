@@ -223,6 +223,7 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
 
   // get todays rooms openings
   const openings = getRoomOpenings(data, day)
+  // console.log(openings)
 
   // filter for requested rooms
   const roomOpenings = Object.fromEntries(Object.entries(openings))
@@ -253,7 +254,43 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
     return [room, processedOpenings]
   }))
 
+  // console.log(processedOpenings)
   return processedOpenings
+}
+
+export async function getRoomCapacity (roomRequestList, day = new Date()) {
+  const roomCapacityData = {}
+  day.setHours(0, 0, 0, 0)
+
+  const data = await API.getFreeRooms(day)
+  const thisDate = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}T00:00:00.000000`
+  // console.log(data, thisDate)
+  let dataToday
+  data.forEach(element => {
+    if (element['datum'] === thisDate) {
+      dataToday = element
+    }
+  })
+
+  if (dataToday['rtypes'] === undefined) {
+    return roomCapacityData
+  }
+  const capacityData = dataToday['rtypes']
+  // console.log(capacityData)
+
+  capacityData.forEach(roomType => {
+    // console.log(roomType)
+    for (const stunde in roomType['stunden']) { //! vllt nur die erste Stunde?
+      // console.log(roomType['stunden'][stunde])
+      roomType['stunden'][stunde]['raeume'].forEach(raum => {
+        // console.log(raum[2], raum[3])
+        roomCapacityData[raum[2]] = raum[3]
+      })
+    }
+  })
+  // console.log(roomCapacityData)
+
+  return roomCapacityData
 }
 
 /**
