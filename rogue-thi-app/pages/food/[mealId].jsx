@@ -1,4 +1,4 @@
-import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getDayFromHash, loadFoodEntries } from '../../lib/backend-utils/food-utils'
 import { useTranslation } from 'next-i18next'
 
 import AppBody from '../../components/page/AppBody'
@@ -254,10 +254,9 @@ export default function Food ({ meal }) {
 export const getServerSideProps = async ({ locale, params }) => {
   async function findMeal () {
     const mealId = params.mealId
-    console.log('mealId', mealId)
 
     const data = await loadFoodEntries()
-    const day = mealId.split('-').slice(0, 3).join('-')
+    const day = getDayFromHash(mealId)
     const dayData = data.find(dayData => dayData.timestamp === day)
 
     if (!dayData) return null

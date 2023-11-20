@@ -201,5 +201,11 @@ function cleanMealName (name) {
 }
 
 export function getMealHash (day, mealName) {
-  return `${day}-${hash(mealName)}`
+  const dayHash = day.replace(/-/g, '').slice(2)
+  return `${dayHash}${hash(mealName).substring(0, 6)}`
+}
+
+export function getDayFromHash (hash) {
+  const day = hash.substring(0, 6)
+  return `20${day.substring(0, 2)}-${day.substring(2, 4)}-${day.substring(4, 6)}`
 }

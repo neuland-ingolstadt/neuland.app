@@ -109,7 +109,7 @@ export default async function handler (_, res) {
         return dishes.map((day, index) => {
           const dayDishes = day.map((dish) => ({
             name: dish.name,
-            id: getMealHash(day, dish.name),
+            id: getMealHash(dates[index], dish.name),
             category: 'Essen',
             prices: dish.prices,
             allergens: null,
@@ -119,6 +119,7 @@ export default async function handler (_, res) {
 
           const daySalads = salads.map((salad) => ({
             name: salad.name,
+            id: getMealHash(dates[index], salad.name),
             originalLanguage: 'de',
             category: 'Salat',
             prices: salad.prices,
