@@ -146,7 +146,7 @@ function unifyMeal (meal) {
  * @param {object[]} entries
  * @returns {object[]} Merged meals
  */
-export function mergeMealvariants (entries) {
+export function mergeMealVariants (entries) {
   return entries.map(day => {
     return {
       ...day,

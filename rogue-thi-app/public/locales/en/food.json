@@ -28,8 +28,7 @@
             "next": "Next week"
         }
     },
-    "foodModal": {
-        "header": "Details",
+    "foodDetails": {
         "flags": {
             "title": "Notes",
             "unknown": "Unknown",
@@ -75,7 +74,8 @@
             "translatedName": "Translated name"
         },
         "variants": {
-            "title": "variants"
+            "title": "Variants",
+            "click": "Click for more information"
         }
     }
 }

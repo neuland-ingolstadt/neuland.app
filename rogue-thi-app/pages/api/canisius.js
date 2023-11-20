@@ -1,4 +1,4 @@
-import { getMealHash, mergeMealvariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getMealHash, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
@@ -134,7 +134,7 @@ export default async function handler (_, res) {
         })
       })
 
-      const mergedMeal = mergeMealvariants(mealPlan)
+      const mergedMeal = mergeMealVariants(mealPlan)
       const translatedMeals = await translateMeals(mergedMeal)
       return unifyFoodEntries(translatedMeals)
     })

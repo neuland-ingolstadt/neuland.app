@@ -107,9 +107,20 @@ export default async function handler (req, res) {
       const scrapedMeals = await translateMeals(mealPlan)
 
       // add static meals (no need to translate)
+      const hashedStaticMeals = (day) => {
+        return staticMeals.map(meal => ({
+          ...meal,
+          id: getMealHash(day.timestamp, meal.name),
+          variants: meal.variants?.map(variant => ({
+            ...variant,
+            id: getMealHash(day.timestamp, variant.name)
+          }))
+        }))
+      }
+
       // TODO: add allergens, flags, nutrition (ask Reimanns for data)
       scrapedMeals.forEach(day => {
-        day.meals.push(...staticMeals)
+        day.meals.push(...hashedStaticMeals(day))
       })
 
       return unifyFoodEntries(scrapedMeals)
