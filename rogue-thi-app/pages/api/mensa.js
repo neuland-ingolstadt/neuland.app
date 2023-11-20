@@ -95,7 +95,7 @@ function parseDataFromXml (xml) {
 
       return {
         name: text.trim(),
-        id: getMealHash(text.trim(), 'mensa'),
+        id: getMealHash(formatISODate(date), text.trim()),
         category,
         prices: {
           student: parseGermanFloat(item.preis1._text),

@@ -91,7 +91,7 @@ export default async function handler (req, res) {
         timestamp: day,
         meals: days[day].map(meal => ({
           name: meal,
-          id: getMealHash(meal, 'reimanns'),
+          id: getMealHash(day, meal),
           category: 'Essen',
           prices: {
             student: 5.5,

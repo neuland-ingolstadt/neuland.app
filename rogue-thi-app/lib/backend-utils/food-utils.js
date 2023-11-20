@@ -12,7 +12,7 @@ const hash = require('object-hash')
  * @param {string} language Language code
  * @returns {object[]}
  */
-export async function loadFoodEntries (restaurants) {
+export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reimanns-static', 'canisius']) {
   const entries = []
 
   if (restaurants.includes('mensa')) {
@@ -200,6 +200,6 @@ function cleanMealName (name) {
   return name.split(' ').filter(x => !stopWords.de.includes(x)).join(' ')
 }
 
-export function getMealHash (mealName, restaurant) {
-  return hash(mealName)
+export function getMealHash (day, mealName) {
+  return `${day}-${hash(mealName)}`
 }
