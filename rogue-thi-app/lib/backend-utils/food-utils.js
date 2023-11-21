@@ -112,7 +112,7 @@ export function unifyFoodEntries (entries) {
     timestamp: entry.timestamp,
     meals: entry.meals.map(meal => ({
       ...unifyMeal(meal),
-      variants: meal.variants?.map(variant => unifyMeal(variant))
+      variants: meal.variants?.map(variant => unifyMeal(variant, meal))
     }))
   }))
 }
@@ -120,12 +120,13 @@ export function unifyFoodEntries (entries) {
 /**
  * Unifies a single meal to a common format
  * @param {object} meal
+ * @param {parent} [parentMeal] Parent meal (if meal is a variant of another meal)
  * @returns {object} Unified meal
  */
-function unifyMeal (meal) {
+function unifyMeal (meal, parentMeal = null) {
   return {
     name: capitalize(meal.name),
-    id: meal.id,
+    id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,
     category: meal.category,
     prices: meal.prices || {
       student: null,
@@ -137,7 +138,8 @@ function unifyMeal (meal) {
     nutrition: meal.nutrition || null,
     originalLanguage: meal.originalLanguage || 'de',
     static: meal.static || false,
-    additional: meal.additional || false
+    additional: meal.additional || false,
+    parent: parentMeal
   }
 }
 

@@ -99,7 +99,20 @@ export default function Food ({ meal }) {
 
       <AppBody className={styles.appBody}>
         {/* name */}
-        <h4>{meal?.name[currentLocale]}</h4>
+        <div>
+          <h4>{meal?.name[currentLocale]}</h4>
+          {meal?.parent && (
+            <Link href={`/food/${meal.parent.id}`}>
+              <a className={'text-decoration-none text-reset'}>
+                <div className={styles.parentMeal}>
+                  <FontAwesomeIcon icon={faBurger}/>
+                  <p>{meal?.parent.name[currentLocale]}</p>
+
+                </div>
+              </a>
+            </Link>
+          )}
+        </div>
 
         {/* tags (allergies, match, etc.) */}
         <div className={styles.indicator}>
@@ -251,9 +264,9 @@ export default function Food ({ meal }) {
   )
 }
 
-export const getServerSideProps = async ({ locale, params }) => {
+export const getStaticProps = async ({ locale, params }) => {
   async function findMeal () {
-    const mealId = params.mealId
+    const mealId = params.mealId.join('/')
 
     const data = await loadFoodEntries()
     const day = getDayFromHash(mealId)
@@ -275,6 +288,35 @@ export const getServerSideProps = async ({ locale, params }) => {
         'common'
       ])),
       meal: await findMeal()
+    },
+    revalidate: 60 * 60 * 24 // 24 hours
+  }
+}
+
+export async function getStaticPaths () {
+  async function getBuildMeals () {
+    const getData = async () => {
+      try {
+        const data = await loadFoodEntries()
+        return data
+      } catch (e) {
+        console.error(e)
+        return []
+      }
     }
+
+    // flatten variants
+    const dayMeals = (await getData())
+      .flatMap(day => day.meals)
+    const variants = dayMeals.flatMap(meal => meal.variants || [])
+
+    const meals = [...dayMeals, ...variants]
+
+    return meals.map(meal => `/food/${meal.id}`)
+  }
+
+  return {
+    paths: await getBuildMeals(),
+    fallback: 'blocking'
   }
 }

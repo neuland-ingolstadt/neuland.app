@@ -184,3 +184,21 @@ a > .card:hover {
     grid-template-rows: repeat(3, 1fr);
   }
 }
+
+.parentMeal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: var(--primary);
+  gap: 6px;
+  transition: color 0.2s ease-in-out;
+}
+
+.parentMeal:hover {
+  color: var(--secondary)
+}
+
+.parentMeal > p {
+  padding: 0;
+  margin: 0;
+}
