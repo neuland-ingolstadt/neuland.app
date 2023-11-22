@@ -111,14 +111,24 @@ export default function RoomMap ({ highlight, roomData }) {
   async function loadRoomAvailability () {
     const roomAvailabilityData = await getRoomAvailability()
 
+    // const thisDate = new Date('2023-11-22 12:00:00')
+    // console.log(roomAvailabilityData['G308'])
+    // console.log(roomAvailabilityData['G308'][0]['until'] > thisDate)
+    // console.log(roomAvailabilityData['G308'][0]['from'] < thisDate)
+
+    // console.log(roomAvailabilityData['G308'][1]['until'] > thisDate)
+    // console.log(roomAvailabilityData['G308'][1]['from'] < thisDate)
     const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
       const availability = openings
         .filter(opening =>
-          new Date(opening.until) > new Date() &&
-          new Date(opening.from) > addSearchDuration(new Date())
+          new Date(opening.until) > new Date() // &&
+          // new Date(opening.until) > thisDate
+          // new Date(opening.from) < addSearchDuration(new Date())
+          // &&new Date(opening.from) < thisDate
         )
       return [room, availability]
     }))
+    // console.log(roomAvailabilityList['G308'])
 
     setRoomAvailabilityList(roomAvailabilityList)
   }
