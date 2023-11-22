@@ -118,7 +118,6 @@ export default function RoomMap ({ highlight, roomData }) {
         )
       return [room, availability]
     }))
-    // console.log(roomAvailabilityList['G308'])
 
     setRoomAvailabilityList(roomAvailabilityList)
   }
