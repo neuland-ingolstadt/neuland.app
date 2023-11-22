@@ -245,8 +245,8 @@ export default function RoomMap ({ highlight, roomData }) {
           </strong>
           {
             roomCapacity[entry.properties.Raum]
-              ? ` ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n).split('(')[0]} (${roomCapacity[entry.properties.Raum]} ${t('rooms.suggestions.seats')})`
-              : ` ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`
+              ? `${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n).split('(')[0]} (${roomCapacity[entry.properties.Raum]} ${t('rooms.suggestions.seats')})`
+              : getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)
           }
           {avail && (
             <>
