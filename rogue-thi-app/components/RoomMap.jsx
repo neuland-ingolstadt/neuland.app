@@ -116,7 +116,7 @@ export default function RoomMap ({ highlight, roomData }) {
       const availability = openings
         .filter(opening =>
           new Date(opening.until) > new Date() &&
-          new Date(opening.from) > addSearchDuration(new Date())
+          new Date(opening.from) < addSearchDuration(new Date())
         )
       return [room, availability]
     }))
