@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
