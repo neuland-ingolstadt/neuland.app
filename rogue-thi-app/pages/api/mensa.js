@@ -1,6 +1,6 @@
 import xmljs from 'xml-js'
 
-import { getMealHash, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -10,6 +10,18 @@ const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xm
 // const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
+
+/**
+ * Sends a HTTP response as JSON.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
+function sendJson (res, code, value) {
+  res.statusCode = code
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify(value, jsonReplacer))
+}
 
 /**
  * Parses a float like "1,5".
@@ -68,7 +80,10 @@ function parseDataFromXml (xml) {
       }
 
       // convert 'Suppe 1' -> 'Suppe', 'Essen 3' -> 'Essen', etc.
-      const category = item.category._text.split(' ')[0]
+      let category = item.category._text.split(' ')[0]
+      if (category.includes('Suppen')) {
+        category = 'Suppe'
+      }
 
       const flags = []
       if (item.piktogramme._text) {
@@ -144,10 +159,9 @@ export default async function handler (req, res) {
   try {
     res.statusCode = 200
     const plan = await fetchPlan()
-    res.end(JSON.stringify(plan))
+    sendJson(res, 200, plan)
   } catch (e) {
     console.error(e)
-    res.statusCode = 500
-    res.end(JSON.stringify('Unexpected/Malformed response from the Mensa backend!'))
+    sendJson(res, 500, 'Unexpected/Malformed response from the Mensa backend!')
   }
 }

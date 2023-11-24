@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 
 import { addWeek, getDays, getWeek } from '../../lib/date-utils'
-import { getMealHash, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getMealHash, jsonReplacer, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import staticMeals from '../../data/reimanns-meals.json'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -20,7 +20,7 @@ const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify(value))
+  res.end(JSON.stringify(value, jsonReplacer))
 }
 
 function toNum2 (text) {

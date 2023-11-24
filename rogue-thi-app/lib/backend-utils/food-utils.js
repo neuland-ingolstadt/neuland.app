@@ -202,12 +202,43 @@ function cleanMealName (name) {
   return name.split(' ').filter(x => !stopWords.de.includes(x)).join(' ')
 }
 
+/**
+ * Converts the given meal name and day to a pseudo-unique hash
+ * @param {*} day Day in ISO format
+ * @param {*} mealName Meal name
+ * @returns {string} Meal hash (starts with a short version of the day and ends with a short hash of the meal name)
+ */
 export function getMealHash (day, mealName) {
   const dayHash = day.replace(/-/g, '').slice(2)
   return `${dayHash}${hash(mealName).substring(0, 6)}`
 }
 
+/**
+ * Returns the day from the given hash
+ * @param {*} hash Meal hash
+ * @returns {string} Day in ISO format
+ */
 export function getDayFromHash (hash) {
   const day = hash.substring(0, 6)
   return `20${day.substring(0, 2)}-${day.substring(2, 4)}-${day.substring(4, 6)}`
+}
+
+/**
+ * A function uses with JSON.stringify to set the float precision to 2
+ * @param {*} key JSON key
+ * @param {*} value JSON value
+ * @returns {number} Original value or rounded value
+ */
+export function jsonReplacer (key, value) {
+  if (typeof value === 'number') {
+    // if the number is an integer, return the original value
+    if (value % 1 === 0) {
+      return value
+    }
+
+    // round float to 2 decimal places
+    return Math.round(value * 100) / 100
+  }
+
+  return value
 }
