@@ -1,6 +1,6 @@
 import xmljs from 'xml-js'
 
-import { getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { checkFoodAPIVersion, getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -80,10 +80,7 @@ function parseDataFromXml (xml) {
       }
 
       // convert 'Suppe 1' -> 'Suppe', 'Essen 3' -> 'Essen', etc.
-      let category = item.category._text.split(' ')[0]
-      if (category.includes('Suppen')) {
-        category = 'Suppe'
-      }
+      const category = item.category._text.split(' ')[0]
 
       const flags = []
       if (item.piktogramme._text) {
@@ -136,15 +133,17 @@ function parseDataFromXml (xml) {
  * Fetches and parses the mensa plan.
  * @returns {object[]}
  */
-async function fetchPlan () {
-  const plan = await cache.get('mensa', async () => {
+async function fetchPlan (version) {
+  const plan = await cache.get(`mensa-${version}`, async () => {
     const resp = await fetch(URL_DE)
 
     if (resp.status === 200) {
       const mealPlan = parseDataFromXml(await resp.text())
-      const mergedMeals = mergeMealVariants(mealPlan)
+
+      const mergedMeals = version !== 'v1' ? mergeMealVariants(mealPlan) : mealPlan
+
       const translatedMeals = await translateMeals(mergedMeals)
-      return unifyFoodEntries(translatedMeals)
+      return unifyFoodEntries(translatedMeals, version)
     } else {
       throw new Error('Data source returned an error: ' + await resp.text())
     }
@@ -154,11 +153,17 @@ async function fetchPlan () {
 }
 
 export default async function handler (req, res) {
-  res.setHeader('Content-Type', 'application/json')
+  const version = req.query.version || 'v1'
+  try {
+    checkFoodAPIVersion(version)
+  } catch (e) {
+    console.error(e)
+    sendJson(res, 400, e.message)
+  }
 
   try {
     res.statusCode = 200
-    const plan = await fetchPlan()
+    const plan = await fetchPlan(version)
     sendJson(res, 200, plan)
   } catch (e) {
     console.error(e)

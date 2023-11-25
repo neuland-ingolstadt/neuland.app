@@ -10,13 +10,13 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useContext } from 'react'
 import { useRouter } from 'next/router'
 
-import { containsSelectedAllergen, containsSelectedPreference, formatGram, formatPrice, getAdjustedFoodLocale, getUserSpecificPrice } from '../../lib/food-utils'
+import { containsSelectedAllergen, containsSelectedPreference, formatGram, formatPrice, getAdjustedFoodLocale, getCategoryIcon, getUserSpecificPrice } from '../../lib/food-utils'
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
 
 import styles from '../../styles/Meals.module.css'
 
-import { faBolt, faBurger, faCaretUp, faCubesStacked, faDrumstickBite, faEgg, faExclamationTriangle, faHeartCircleCheck, faUser, faUserGraduate, faUserTie, faWheatAwn } from '@fortawesome/free-solid-svg-icons'
+import { faBolt, faCaretUp, faCubesStacked, faDrumstickBite, faEgg, faExclamationTriangle, faHeartCircleCheck, faUser, faUserGraduate, faUserTie, faWheatAwn } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
@@ -78,7 +78,7 @@ export default function Food ({ meal }) {
       <Link href={`/food/${variant.id}`}>
         <a className={'text-decoration-none text-reset'}>
           <div className={`${styles.cardContainer} ${styles.card}`}>
-            <FontAwesomeIcon icon={faBurger} className={styles.cardIcon}/>
+            <FontAwesomeIcon icon={getCategoryIcon(variant)} className={styles.cardIcon}/>
 
             <div className={styles.cardBody}>
               <div className={styles.price}>{`${variant.additional ? '+ ' : ''}${variant.name[currentLocale]}`}</div>
@@ -105,7 +105,7 @@ export default function Food ({ meal }) {
             <Link href={`/food/${meal.parent.id}`}>
               <a className={'text-decoration-none text-reset'}>
                 <div className={styles.parentMeal}>
-                  <FontAwesomeIcon icon={faBurger}/>
+                  <FontAwesomeIcon icon={getCategoryIcon(meal)}/>
                   <p>{meal?.parent.name[currentLocale]}</p>
 
                 </div>

@@ -1,4 +1,4 @@
-import { getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { checkFoodAPIVersion, getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
 
@@ -80,9 +80,18 @@ function getMealsFromBlock (text) {
   })
 }
 
-export default async function handler (_, res) {
+export default async function handler (req, res) {
+  const version = req.query.version || 'v1'
+
   try {
-    const data = await cache.get('canisius', async () => {
+    checkFoodAPIVersion(version)
+  } catch (e) {
+    sendJson(res, 400, e.message)
+    return
+  }
+
+  try {
+    const data = await cache.get(`canisius-${version}`, async () => {
       const pdfBuffer = await getPdf()
       const mealPlan = await pdf(pdfBuffer).then(function (data) {
         const text = data.text.replace(NEW_LINE_REGEX, ' ')
@@ -137,7 +146,7 @@ export default async function handler (_, res) {
 
       const mergedMeal = mergeMealVariants(mealPlan)
       const translatedMeals = await translateMeals(mergedMeal)
-      return unifyFoodEntries(translatedMeals)
+      return unifyFoodEntries(translatedMeals, version)
     })
 
     sendJson(res, 200, data)

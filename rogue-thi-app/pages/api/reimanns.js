@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 
 import { addWeek, getDays, getWeek } from '../../lib/date-utils'
-import { getMealHash, jsonReplacer, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
+import { checkFoodAPIVersion, getMealHash, jsonReplacer, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import staticMeals from '../../data/reimanns-meals.json'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
@@ -28,8 +28,16 @@ function toNum2 (text) {
 }
 
 export default async function handler (req, res) {
+  const version = req.query.version || 'v1'
   try {
-    const data = await cache.get('reimanns', async () => {
+    checkFoodAPIVersion(version)
+  } catch (e) {
+    sendJson(res, 400, e.message)
+    return
+  }
+
+  try {
+    const data = await cache.get(`reimanns-${version}`, async () => {
       const resp = await fetch(URL)
       const body = await resp.text()
       if (resp.status !== 200) {
@@ -114,6 +122,10 @@ export default async function handler (req, res) {
           variants: meal.variants?.map(variant => ({
             ...variant,
             id: getMealHash(day.timestamp, variant.name)
+          })),
+          additions: meal.additions?.map(addition => ({
+            ...addition,
+            id: getMealHash(day.timestamp, addition.name)
           }))
         }))
       }
@@ -123,7 +135,7 @@ export default async function handler (req, res) {
         day.meals.push(...hashedStaticMeals(day))
       })
 
-      return unifyFoodEntries(scrapedMeals)
+      return unifyFoodEntries(scrapedMeals, version)
     })
 
     sendJson(res, 200, data)

@@ -1,4 +1,5 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from './hooks/user-kind'
+import { faBowlFood, faBurger, faSeedling } from '@fortawesome/free-solid-svg-icons'
 import { getAdjustedLocale } from './locale-utils'
 
 /**
@@ -93,4 +94,15 @@ export function getUserSpecificPrice (meal, userKind) {
     [USER_STUDENT]: meal.prices.student
   }
   return formatPrice(prices[userKind])
+}
+
+export function getCategoryIcon (meal) {
+  switch (meal.category) {
+    case 'soup':
+      return faBowlFood
+    case 'salad':
+      return faSeedling
+    default:
+      return faBurger
+  }
 }

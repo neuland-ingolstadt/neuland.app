@@ -6,6 +6,8 @@ import stopWords from '../../data/stop-words.json'
 
 const hash = require('object-hash')
 
+const VERSIONS = ['v1', 'v2']
+
 /**
  * Fetches and parses the meal plan
  * @param {string[]} restaurants Requested restaurants
@@ -107,13 +109,27 @@ function capitalize (mealNames) {
  * @param {object[]} entries Meal plan entries
  * @returns {object[]} Unified meal plan entries
  */
-export function unifyFoodEntries (entries) {
+export function unifyFoodEntries (entries, version = 'v1') {
   return entries.map(entry => ({
     timestamp: entry.timestamp,
-    meals: entry.meals.map(meal => ({
-      ...unifyMeal(meal),
-      variants: meal.variants?.map(variant => unifyMeal(variant, meal))
-    }))
+    meals: entry.meals.map(meal => {
+      return ({
+        ...unifyMeal(meal, version),
+        ...(version === 'v1'
+          ? {
+            variations: [...meal.variants || [], ...meal.additions || []]
+              .map(variant => unifyMeal(variant, version, meal))
+          }
+          : {}),
+        ...(version !== 'v1'
+          ? {
+            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)),
+            additions: meal.additions?.map(addition => unifyMeal(addition, version, meal))
+          }
+          : {}
+        )
+      })
+    })
   }))
 }
 
@@ -123,11 +139,12 @@ export function unifyFoodEntries (entries) {
  * @param {parent} [parentMeal] Parent meal (if meal is a variant of another meal)
  * @returns {object} Unified meal
  */
-function unifyMeal (meal, parentMeal = null) {
+function unifyMeal (meal, version, parentMeal = null) {
+  const mealCategory = meal.category || parentMeal?.category || 'main'
+
   return {
     name: capitalize(meal.name),
-    id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,
-    category: meal.category,
+    category: version !== 'v1' ? standardizeCategory(mealCategory) : mealCategory,
     prices: meal.prices || {
       student: null,
       employee: null,
@@ -138,8 +155,17 @@ function unifyMeal (meal, parentMeal = null) {
     nutrition: meal.nutrition || null,
     originalLanguage: meal.originalLanguage || 'de',
     static: meal.static || false,
-    additional: meal.additional || false,
-    parent: parentMeal
+    ...(version === 'v1'
+      ? { additional: meal.additional || false }
+      : {}
+    ),
+    ...(version !== 'v1'
+      ? {
+        id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,
+        parent: reduceParentMeal(parentMeal)
+      }
+      : {}
+    )
   }
 }
 
@@ -241,4 +267,55 @@ export function jsonReplacer (key, value) {
   }
 
   return value
+}
+
+/**
+ * Checks if the given API version is valid
+ * @param {*} version API version
+ * @returns {void}
+ * @throws {Error} If the given API version is invalid
+ * @example checkAPIVersion('1') // OK
+ * @example checkAPIVersion('-137') // Error
+ */
+export function checkFoodAPIVersion (version) {
+  if (version && !VERSIONS.includes(version)) {
+    throw new Error(`Invalid API version: ${version}, valid versions are: ${VERSIONS.join(', ')}`)
+  }
+}
+
+/**
+ * Only keeps the name, category and id of the given meal
+ * @param {*} parentMeal Meal to reduce
+ * @returns {object} Reduced meal object
+ */
+function reduceParentMeal (parentMeal) {
+  if (!parentMeal) return null
+
+  return {
+    name: parentMeal.name,
+    category: parentMeal.category,
+    id: parentMeal.id
+  }
+}
+
+function standardizeCategory (category) {
+  const validCategories = ['main', 'soup', 'salad']
+
+  if (validCategories.includes(category)) {
+    return category
+  }
+
+  if (category.includes('Suppe')) {
+    return 'soup'
+  }
+
+  if (category === 'Essen') {
+    return 'main'
+  }
+
+  if (category.includes('Salat')) {
+    return 'salad'
+  }
+
+  throw new Error(`Unknown category: ${category}`)
 }

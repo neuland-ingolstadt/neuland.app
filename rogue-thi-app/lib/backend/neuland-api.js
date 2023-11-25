@@ -23,15 +23,15 @@ class NeulandAPIClient {
   }
 
   async getMensaPlan () {
-    return this.performRequest('/api/mensa/')
+    return this.performRequest('/api/mensa/?version=v2')
   }
 
   async getReimannsPlan () {
-    return this.performRequest('/api/reimanns/')
+    return this.performRequest('/api/reimanns/?version=v2')
   }
 
   async getCanisiusPlan () {
-    return this.performRequest('/api/canisius/')
+    return this.performRequest('/api/canisius/?version=v2')
   }
 
   /**
