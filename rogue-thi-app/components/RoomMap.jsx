@@ -26,7 +26,7 @@ const SPECIAL_ROOMS = {
 const SEARCHED_PROPERTIES = [
   'Gebaeude',
   'Raum',
-  'Funktion'
+  'Funktion_de'
 ]
 const FLOOR_SUBSTITUTES = {
   0: 'EG', // room G0099
@@ -138,8 +138,8 @@ export default function RoomMap ({ highlight, roomData }) {
     const cleanedText = searchText.toUpperCase().trim()
 
     const getProp = (room, prop) => {
-      if (prop === 'Funktion') {
-        return getTranslatedRoomFunction(room?.properties?.Funktion).toUpperCase()
+      if (prop === 'Funktion_de') {
+        return getTranslatedRoomFunction(room?.properties?.Funktion_de).toUpperCase()
       }
 
       return room.properties[prop]?.toUpperCase()
@@ -148,8 +148,6 @@ export default function RoomMap ({ highlight, roomData }) {
     const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
-
-    loadRoomAvailability(filtered)
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
     const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
@@ -235,7 +233,8 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`}
+          {entry?.properties?.Funktion_de !== '' ? ', ' : ''}
+          {getTranslatedRoomFunction(entry?.properties?.Funktion_de, i18n)}
           {avail && (
             <>
               <br />

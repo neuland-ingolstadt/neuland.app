@@ -14,7 +14,7 @@ import styles from '../../styles/Rooms.module.css'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
-const ROOMDATA_URL = 'https://assets.neuland.app/rooms_neuland_v2.3.geojson'
+const ROOMDATA_URL = 'https://assets.neuland.app/rooms_neuland_v2.4.geojson'
 
 // import RoomMap without SSR because react-leaflet really does not like SSR
 const RoomMap = dynamic(() => import('../../components/RoomMap'), { ssr: false })
