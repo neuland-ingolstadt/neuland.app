@@ -206,10 +206,9 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
 /**
  * Filters suitable room openings.
  * @param {Date} day Start date as Date object
- * @param {string[]} [roomRequestList] Room names (e.g. `["G215"]`)
  * @returns {object[]}
  */
-export async function getRoomAvailability (roomRequestList, day = new Date()) {
+export async function getRoomAvailability (day = new Date()) {
   day.setHours(0, 0, 0, 0)
 
   const data = await API.getFreeRooms(day)
@@ -249,33 +248,64 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
   return processedOpenings
 }
 
-export async function getRoomCapacity (roomRequestList, day = new Date()) {
+export async function getRoomCapacity (day = new Date()) {
+  let c = 0
   const roomCapacityData = {}
   day.setHours(0, 0, 0, 0)
-
   const data = await API.getFreeRooms(day)
-  const thisDate = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}T00:00:00.000000`
-  let dataToday
-  data.forEach(element => {
-    if (element['datum'] === thisDate) {
-      dataToday = element
+
+  //! Check only Today
+  // const thisDate = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}T00:00:00.000000`
+  // let dataToday
+  // data.forEach(element => {
+  //   if (element['datum'] === thisDate) {
+  //     dataToday = element
+  //   }
+  // })
+
+  // if (dataToday['rtypes'] === undefined) {
+  //   return roomCapacityData
+  // }
+  // const capacityData = dataToday['rtypes']
+
+  // capacityData.forEach(roomType => {
+  //   for (const stunde in roomType['stunden']) {
+  //     roomType['stunden'][stunde]['raeume'].forEach(raum => {
+  //       c++
+  //       roomCapacityData[raum[2]] = raum[3]
+  //     })
+  //   }
+  // })
+
+  //! Check Every Day (The capacity is not provided for each room, because it depends on whether a room is free on that day)
+  data.forEach(dataOfThisDay => {
+    const tempDay = {}
+    if (dataOfThisDay['rtypes'] === undefined) {
+      return roomCapacityData
     }
+
+    const capacityData = dataOfThisDay['rtypes']
+
+    capacityData.forEach(roomType => {
+      const tempRoomType = {}
+      for (const stunde in roomType['stunden']) { //! vllt nur die erste Stunde analysiern? Nur die erste stunde reicht nicht
+        roomType['stunden'][stunde]['raeume'].forEach(raum => {
+          c++
+          roomCapacityData[raum[2]] = raum[3]
+          tempRoomType[raum[2]] = raum[3]
+          tempDay[raum[2]] = raum[3]
+        })
+      }
+
+      console.log(dataOfThisDay['datum'].split('T')[0], 'RoTy', Object.keys(tempRoomType).length, 'Day', Object.keys(tempDay).length, 'All', Object.keys(roomCapacityData).length)
+    })
+    console.log(' ')
   })
 
-  if (dataToday['rtypes'] === undefined) {
-    return roomCapacityData
-  }
-  const capacityData = dataToday['rtypes']
+  console.log(Object.keys(roomCapacityData).length)
+  console.log(c) // count, wie oft die loop die durchlaufen wird
 
-  capacityData.forEach(roomType => {
-    for (const stunde in roomType['stunden']) { //! vllt nur die erste Stunde?
-      roomType['stunden'][stunde]['raeume'].forEach(raum => {
-        roomCapacityData[raum[2]] = raum[3]
-      })
-    }
-  })
-
-  return roomCapacityData
+  return roomCapacityData // 27.11.2023: length = 94; Same for every week?
 }
 
 /**
