@@ -115,8 +115,8 @@ export default function RoomMap ({ highlight, roomData }) {
     const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
       const availability = openings
         .filter(opening =>
-          new Date(opening.until) > new Date()
-          // && new Date(opening.from) < addSearchDuration(new Date())
+          new Date(opening.until) > new Date() &&
+          new Date(opening.from) > addSearchDuration(new Date())
         )
       return [room, availability]
     }))
