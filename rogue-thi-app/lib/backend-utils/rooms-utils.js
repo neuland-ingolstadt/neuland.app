@@ -249,37 +249,11 @@ export async function getRoomAvailability (day = new Date()) {
 }
 
 export async function getRoomCapacity (day = new Date()) {
-  let c = 0
   const roomCapacityData = {}
   day.setHours(0, 0, 0, 0)
   const data = await API.getFreeRooms(day)
 
-  //! Check only Today
-  // const thisDate = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}T00:00:00.000000`
-  // let dataToday
-  // data.forEach(element => {
-  //   if (element['datum'] === thisDate) {
-  //     dataToday = element
-  //   }
-  // })
-
-  // if (dataToday['rtypes'] === undefined) {
-  //   return roomCapacityData
-  // }
-  // const capacityData = dataToday['rtypes']
-
-  // capacityData.forEach(roomType => {
-  //   for (const stunde in roomType['stunden']) {
-  //     roomType['stunden'][stunde]['raeume'].forEach(raum => {
-  //       c++
-  //       roomCapacityData[raum[2]] = raum[3]
-  //     })
-  //   }
-  // })
-
-  //! Check Every Day (The capacity is not provided for each room, because it depends on whether a room is free on that day)
   data.forEach(dataOfThisDay => {
-    const tempDay = {}
     if (dataOfThisDay['rtypes'] === undefined) {
       return roomCapacityData
     }
@@ -287,23 +261,13 @@ export async function getRoomCapacity (day = new Date()) {
     const capacityData = dataOfThisDay['rtypes']
 
     capacityData.forEach(roomType => {
-      const tempRoomType = {}
-      for (const stunde in roomType['stunden']) { //! vllt nur die erste Stunde analysiern? Nur die erste stunde reicht nicht
+      for (const stunde in roomType['stunden']) {
         roomType['stunden'][stunde]['raeume'].forEach(raum => {
-          c++
           roomCapacityData[raum[2]] = raum[3]
-          tempRoomType[raum[2]] = raum[3]
-          tempDay[raum[2]] = raum[3]
         })
       }
-
-      console.log(dataOfThisDay['datum'].split('T')[0], 'RoTy', Object.keys(tempRoomType).length, 'Day', Object.keys(tempDay).length, 'All', Object.keys(roomCapacityData).length)
     })
-    console.log(' ')
   })
-
-  console.log(Object.keys(roomCapacityData).length)
-  console.log(c) // count, wie oft die loop die durchlaufen wird
 
   return roomCapacityData // 27.11.2023: length = 94; Same for every week?
 }
