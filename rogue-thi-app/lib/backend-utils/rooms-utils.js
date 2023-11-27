@@ -248,17 +248,22 @@ export async function getRoomAvailability (day = new Date()) {
   return processedOpenings
 }
 
+/**
+ * Filters room capacities.
+ * @param {Date} day Start date as Date object
+ * @returns {object[]}
+ */
 export async function getRoomCapacity (day = new Date()) {
   const roomCapacityData = {}
   day.setHours(0, 0, 0, 0)
   const data = await API.getFreeRooms(day)
 
-  data.forEach(dataOfThisDay => {
-    if (dataOfThisDay['rtypes'] === undefined) {
+  data.forEach(thisDay => {
+    if (thisDay['rtypes'] === undefined) {
       return roomCapacityData
     }
 
-    const capacityData = dataOfThisDay['rtypes']
+    const capacityData = thisDay['rtypes']
 
     capacityData.forEach(roomType => {
       for (const stunde in roomType['stunden']) {
