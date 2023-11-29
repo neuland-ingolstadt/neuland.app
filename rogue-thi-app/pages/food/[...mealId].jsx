@@ -39,7 +39,7 @@ export default function Food ({ meal }) {
   }
 
   const currentLocale = getAdjustedFoodLocale(selectedLanguageFood, i18n)
-  const isTranslated = meal?.originalLanguage !== currentLocale && !meal.static
+  const isTranslated = meal?.originalLanguage !== currentLocale && !meal?.static
 
   function PriceCard ({ icon, category, price }) {
     return (
@@ -102,7 +102,7 @@ export default function Food ({ meal }) {
         <div>
           <h4>{meal?.name[currentLocale]}</h4>
           {meal?.parent && (
-            <Link href={`/food/${meal.parent.id}`}>
+            <Link href={`/food/${meal?.parent.id}`}>
               <a className={'text-decoration-none text-reset'}>
                 <div className={styles.parentMeal}>
                   <FontAwesomeIcon icon={getCategoryIcon(meal)}/>
@@ -247,7 +247,7 @@ export default function Food ({ meal }) {
             <ul>
               <li>
                 <strong>{t('foodDetails.translation.originalName')}</strong>:{' '}
-                {meal?.name[meal.originalLanguage]}
+                {meal?.name[meal?.originalLanguage]}
               </li>
               <li>
                 <strong>{t('foodDetails.translation.translatedName')}</strong>:{' '}
@@ -275,10 +275,10 @@ export const getStaticProps = async ({ locale, params }) => {
     if (!dayData) return null
 
     // flatten variants
-    const variants = dayData.meals.flatMap(meal => meal.variants || [])
+    const variants = dayData.meals.flatMap(meal => meal?.variants || [])
     const meals = [...dayData.meals, ...variants]
 
-    return meals.find(meal => meal.id === mealId)
+    return meals.find(meal => meal?.id === mealId)
   }
 
   return {
@@ -308,11 +308,11 @@ export async function getStaticPaths () {
     // flatten variants
     const dayMeals = (await getData())
       .flatMap(day => day.meals)
-    const variants = dayMeals.flatMap(meal => meal.variants || [])
+    const variants = dayMeals.flatMap(meal => meal?.variants || [])
 
     const meals = [...dayMeals, ...variants]
 
-    return meals.map(meal => `/food/${meal.id}`)
+    return meals.map(meal => `/food/${meal?.id}`)
   }
 
   return {

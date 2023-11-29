@@ -309,13 +309,9 @@ function standardizeCategory (category) {
     return 'soup'
   }
 
-  if (category === 'Essen') {
-    return 'main'
-  }
-
   if (category.includes('Salat')) {
     return 'salad'
   }
 
-  throw new Error(`Unknown category: ${category}`)
+  return 'main'
 }
