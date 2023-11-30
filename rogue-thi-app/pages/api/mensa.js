@@ -116,7 +116,8 @@ function parseDataFromXml (xml) {
         },
         allergens: [...allergens],
         flags,
-        nutrition
+        nutrition,
+        restaurant: 'mensa'
       }
     })
 
@@ -130,23 +131,32 @@ function parseDataFromXml (xml) {
 }
 
 /**
+ * Fetches the mensa plan.
+ * @param {string} version API version
+ * @returns {object[]}
+ */
+export async function getMensaPlan (version) {
+  const resp = await fetch(URL_DE)
+
+  if (resp.status !== 200) {
+    throw new Error('Data source returned an error: ' + await resp.text())
+  }
+
+  const mealPlan = parseDataFromXml(await resp.text())
+
+  const mergedMeals = version !== 'v1' ? mergeMealVariants(mealPlan) : mealPlan
+
+  const translatedMeals = await translateMeals(mergedMeals)
+  return unifyFoodEntries(translatedMeals, version)
+}
+
+/**
  * Fetches and parses the mensa plan.
  * @returns {object[]}
  */
 async function fetchPlan (version) {
   const plan = await cache.get(`mensa-${version}`, async () => {
-    const resp = await fetch(URL_DE)
-
-    if (resp.status === 200) {
-      const mealPlan = parseDataFromXml(await resp.text())
-
-      const mergedMeals = version !== 'v1' ? mergeMealVariants(mealPlan) : mealPlan
-
-      const translatedMeals = await translateMeals(mergedMeals)
-      return unifyFoodEntries(translatedMeals, version)
-    } else {
-      throw new Error('Data source returned an error: ' + await resp.text())
-    }
+    return await getMensaPlan(version)
   })
 
   return plan

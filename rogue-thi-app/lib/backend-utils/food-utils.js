@@ -19,9 +19,6 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
 
   if (restaurants.includes('mensa')) {
     const data = await NeulandAPI.getMensaPlan()
-    data.forEach(day => day.meals.forEach(entry => {
-      entry.restaurant = 'Mensa'
-    }))
     entries.push(data)
   }
 
@@ -31,9 +28,6 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
 
-    filteredData.forEach(day => day.meals.forEach(entry => {
-      entry.restaurant = 'Reimanns'
-    }))
     entries.push(filteredData)
   }
 
@@ -43,9 +37,6 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
     const startOfToday = new Date(formatISODate(new Date())).getTime()
     const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
 
-    filteredData.forEach(day => day.meals.forEach(entry => {
-      entry.restaurant = 'Canisius'
-    }))
     entries.push(filteredData)
   }
 
@@ -123,8 +114,8 @@ export function unifyFoodEntries (entries, version = 'v1') {
           : {}),
         ...(version !== 'v1'
           ? {
-            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)),
-            additions: meal.additions?.map(addition => unifyMeal(addition, version, meal))
+            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)) || null,
+            additions: meal.additions?.map(addition => unifyMeal(addition, version, meal)) || null
           }
           : {}
         )
@@ -155,6 +146,7 @@ function unifyMeal (meal, version, parentMeal = null) {
     nutrition: meal.nutrition || null,
     originalLanguage: meal.originalLanguage || 'de',
     static: meal.static || false,
+    restaurant: meal.restaurant || null,
     ...(version === 'v1'
       ? { additional: meal.additional || false }
       : {}
@@ -193,7 +185,7 @@ function mergeDayEntries (dayEntries) {
     const comparingKeys = dayEntries.filter(x => x.name !== meal.name && x.name.startsWith(meal.name) && x.category === meal.category)
     return {
       meal,
-      variants: comparingKeys
+      variants: comparingKeys || []
     }
   })
 

@@ -187,15 +187,15 @@ export default function Mensa () {
   function renderMealDay (day, key) {
     const includeStaticReimanns = selectedRestaurants.includes('reimanns-static')
 
-    const mensa = day.meals.filter(x => x.restaurant === 'Mensa')
+    const mensa = day.meals.filter(x => x.restaurant === 'mensa')
     const mensaSoups = mensa.filter(x => x.category.includes('soup'))
     const mensaFood = mensa.filter(x => !x.category.includes('soup'))
 
-    const reimanns = day.meals.filter(x => x.restaurant === 'Reimanns').filter(x => !x.static || x.static === includeStaticReimanns)
+    const reimanns = day.meals.filter(x => x.restaurant === 'reimanns').filter(x => !x.static || x.static === includeStaticReimanns)
     const reimannsFood = reimanns.filter(x => !x.category.includes('salad'))
     const reimannsSalad = reimanns.filter(x => x.category.includes('salad'))
 
-    const canisius = day.meals.filter(x => x.restaurant === 'Canisius')
+    const canisius = day.meals.filter(x => x.restaurant === 'canisius')
     const canisiusSalads = canisius.filter(x => x.category.includes('salad'))
     const canisiusFood = canisius.filter(x => !x.category.includes('salad'))
 

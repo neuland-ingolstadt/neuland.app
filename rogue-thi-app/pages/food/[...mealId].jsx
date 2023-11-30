@@ -1,4 +1,4 @@
-import { getDayFromHash, loadFoodEntries } from '../../lib/backend-utils/food-utils'
+import { getDayFromHash } from '../../lib/backend-utils/food-utils'
 import { useTranslation } from 'next-i18next'
 
 import AppBody from '../../components/page/AppBody'
@@ -21,6 +21,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
 import Link from 'next/link'
+
+import { getCanisiusPlan } from '../api/canisius'
+import { getMensaPlan } from '../api/mensa'
+import { getReimannsPlan } from '../api/reimanns'
 
 export default function Food ({ meal }) {
   const router = useRouter()
@@ -150,13 +154,12 @@ export default function Food ({ meal }) {
         {/* notes */}
         <h6>{t('foodDetails.flags.title')}</h6>
         <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
-          {meal?.flags === null && (
+          {(meal?.flags === null || meal?.flags?.length === 0) && (
             <span className={styles.unknown}>
-              {t('foodDetails.flags.unknown')}
+              {meal?.flags?.length === 0 ? `${t('foodDetails.flags.empty')}` : t('foodDetails.flags.unknown')}
             </span>
           )}
 
-          {meal?.allergens?.length === 0 && `${t('foodDetails.flags.empty')}`}
           <ul>
             {meal?.flags?.map(flag => (
               <li key={flag} className={containsSelectedPreference([flag], preferencesSelection) ? styles.goodColor : ''}>
@@ -171,12 +174,11 @@ export default function Food ({ meal }) {
         {/* allergenes */}
         <h6>{t('foodDetails.allergens.title')}</h6>
         <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
-          {meal?.allergens === null && (
+          {(meal?.allergens === null || meal?.allergens?.length === 0) && (
             <span className={styles.unknown}>
-              {t('foodDetails.allergens.unknown')}
+              {meal?.allergens?.length === 0 ? `${t('foodDetails.allergens.empty')}` : t('foodDetails.allergens.unknown')}
             </span>
           )}
-          {meal?.allergens?.length === 0 && `${t('foodDetails.allergens.empty')}`}
           <ul>
             {meal?.allergens?.map(key => (
               <li key={key} className={containsSelectedAllergen([key], allergenSelection) ? styles.warnColor : ''}>
@@ -264,11 +266,24 @@ export default function Food ({ meal }) {
   )
 }
 
+async function getMealData () {
+  const data = [
+    ...(await getMensaPlan('v2')),
+    ...(await getReimannsPlan('v2')),
+    ...(await getCanisiusPlan('v2'))
+  ]
+
+  return data.map(day => ({
+    ...day,
+    meals: day.meals.map(meal => meal || null)
+  }))
+}
+
 export const getStaticProps = async ({ locale, params }) => {
   async function findMeal () {
     const mealId = params.mealId.join('/')
 
-    const data = await loadFoodEntries()
+    const data = await getMealData()
     const day = getDayFromHash(mealId)
     const dayData = data.find(dayData => dayData.timestamp === day)
 
@@ -297,7 +312,7 @@ export async function getStaticPaths () {
   async function getBuildMeals () {
     const getData = async () => {
       try {
-        const data = await loadFoodEntries()
+        const data = await getMealData()
         return data
       } catch (e) {
         console.error(e)
