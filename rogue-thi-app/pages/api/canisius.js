@@ -117,7 +117,8 @@ export async function getCanisiusPlan (version) {
         prices: dish.prices,
         allergens: null,
         flags: null,
-        nutrition: null
+        nutrition: null,
+        restaurant: 'canisius'
       }))
 
       const daySalads = salads.map((salad) => ({
