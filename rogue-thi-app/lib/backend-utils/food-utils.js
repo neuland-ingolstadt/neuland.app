@@ -108,7 +108,7 @@ export function unifyFoodEntries (entries, version = 'v1') {
         ...unifyMeal(meal, version),
         ...(version === 'v1'
           ? {
-            variations: [...meal.variants || [], ...meal.additions || []]
+            variations: [...(meal.variants || []), ...(meal.additions || [])]
               .map(variant => unifyMeal(variant, version, meal))
           }
           : {}),
@@ -227,18 +227,8 @@ function cleanMealName (name) {
  * @returns {string} Meal hash (starts with a short version of the day and ends with a short hash of the meal name)
  */
 export function getMealHash (day, mealName) {
-  const dayHash = day.replace(/-/g, '').slice(2)
+  const dayHash = day.replace(/-/g, '').slice(-2)
   return `${dayHash}${hash(mealName).substring(0, 6)}`
-}
-
-/**
- * Returns the day from the given hash
- * @param {*} hash Meal hash
- * @returns {string} Day in ISO format
- */
-export function getDayFromHash (hash) {
-  const day = hash.substring(0, 6)
-  return `20${day.substring(0, 2)}-${day.substring(2, 4)}-${day.substring(4, 6)}`
 }
 
 /**

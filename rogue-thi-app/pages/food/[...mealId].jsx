@@ -1,4 +1,3 @@
-import { getDayFromHash } from '../../lib/backend-utils/food-utils'
 import { useTranslation } from 'next-i18next'
 
 import AppBody from '../../components/page/AppBody'
@@ -268,15 +267,12 @@ export default function Food ({ meal }) {
 
 async function getMealData () {
   const data = [
-    ...(await getMensaPlan('v2')),
-    ...(await getReimannsPlan('v2')),
-    ...(await getCanisiusPlan('v2'))
+    await getMensaPlan('v2'),
+    await getReimannsPlan('v2'),
+    await getCanisiusPlan('v2')
   ]
 
-  return data.map(day => ({
-    ...day,
-    meals: day.meals.map(meal => meal || null)
-  }))
+  return data.flatMap(x => x.flatMap(x => x.meals))
 }
 
 export const getStaticProps = async ({ locale, params }) => {
@@ -284,16 +280,12 @@ export const getStaticProps = async ({ locale, params }) => {
     const mealId = params.mealId.join('/')
 
     const data = await getMealData()
-    const day = getDayFromHash(mealId)
-    const dayData = data.find(dayData => dayData.timestamp === day)
-
-    if (!dayData) return null
 
     // flatten variants
-    const variants = dayData.meals.flatMap(meal => meal?.variants || [])
-    const meals = [...dayData.meals, ...variants]
+    const variants = data.flatMap(meal => meal?.variants || [])
+    const meals = [...data, ...variants]
 
-    return meals.find(meal => meal?.id === mealId)
+    return meals.find(meal => meal?.id === mealId) || null
   }
 
   return {
