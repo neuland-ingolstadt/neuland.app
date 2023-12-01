@@ -398,7 +398,7 @@ export async function getEmptySuggestions (asGap = false) {
 
   if (asGap) {
     if (rooms.length < 1) {
-      return null
+      return []
     }
 
     return [(

@@ -106,7 +106,7 @@ export default function RoomSearch () {
     if (deltaTime > suggestionDuration * 60 * 1000) {
       const emptySuggestions = await getEmptySuggestions(true)
 
-      if (emptySuggestions) {
+      if (emptySuggestions.length > 0 && emptySuggestions[0]) {
         suggestions.unshift(emptySuggestions[0])
       }
     }
