@@ -1,11 +1,11 @@
-import requests
-import os
-from dotenv import load_dotenv
 import json
-import deepl
-from pathlib import Path
+import os
 import re
-from shutil import copy
+from pathlib import Path
+
+import deepl
+import requests
+from dotenv import load_dotenv
 
 API_URL = "https://hiplan.thi.de/webservice/production2/index.php"
 DEEPL_API_URL = "https://api.deepl.com/v2/translate"
@@ -20,7 +20,7 @@ CLEAN_REGEX = re.compile(r"\s+")
 
 LANGUAGES = ["EN-US"]
 
-MAP_URL = "https://assets.neuland.app/rooms_neuland_v2.3.geojson"
+MAP_URL = "https://assets.neuland.app/rooms_neuland_v2.4.geojson"
 
 
 class ThiTranslator:
@@ -57,11 +57,18 @@ class ThiTranslator:
             raise ValueError("THI_PASSWORD is not set")
 
     def __check_deepL(self):
+        """
+        Checks the validity of the DeepL API key by attempting to translate a test text.
+        If the API key is not valid, a ValueError is raised.
+
+        Raises:
+            ValueError: If the DeepL API key is not valid.
+        """
         try:
             self.translator.translate_text("test", target_lang="EN-US")
         except Exception as e:
             print(self.DEEPL_API_KEY)
-            raise ValueError("DeepL API key is not valid")
+            raise ValueError("DeepL API key is not valid") from e
 
     def __open_session(self):
         """Opens a session with the THI API and returns the session id"""
@@ -73,7 +80,7 @@ class ThiTranslator:
             "format": "json",
         }
 
-        session_req = requests.post(API_URL, data=data)
+        session_req = requests.post(API_URL, data=data, timeout=5)
         return session_req.json()["data"][0]
 
     def __close_session(self):
@@ -85,7 +92,7 @@ class ThiTranslator:
             "format": "json",
         }
 
-        session_req = requests.post(API_URL, data=data)
+        session_req = requests.post(API_URL, data=data, timeout=5)
         return session_req.json()["data"]
 
     def add_to_output(self, data, key):
@@ -103,7 +110,7 @@ class ThiTranslator:
             "to": "z",
         }
 
-        lecturers_req = requests.post(API_URL, data=data)
+        lecturers_req = requests.post(API_URL, data=data, timeout=5)
 
         return lecturers_req.json()["data"][1]
 
@@ -125,7 +132,7 @@ class ThiTranslator:
 
         for lang in LANGUAGES:
             result = self.translator.translate_text(text, target_lang=lang)
-            results[lang.split("-")[0].lower()] = result.text
+            results[lang.split("-", maxsplit=1)[0].lower()] = result.text
 
         return results
 
@@ -144,23 +151,25 @@ class ThiTranslator:
 
     def translate_room_functions(self):
         """Translates the map properties to english using the DeepL API"""
-        response = requests.get(MAP_URL)
+        response = requests.get(MAP_URL, timeout=5)
         data = response.json()["features"]
 
-        room_properties = [feature["properties"]["Funktion"] for feature in data]
-        room_properties = list(set(room_properties))
+        results = {}
 
         room_properties = [
-            property
-            for property in room_properties
-            if property is not None and property != ""
+            {
+                "en": CLEAN_REGEX.sub(" ", feature["properties"]["Funktion_en"]),
+                "de": CLEAN_REGEX.sub(" ", feature["properties"]["Funktion_de"]),
+            }
+            for feature in data
         ]
 
-        room_properties = [CLEAN_REGEX.sub(" ", property).strip() for property in room_properties]
+        for room_keys in room_properties:
+            results[room_keys["de"]] = room_keys
 
-        translated = [self.__translate(property) for property in room_properties]
+        results = {key: value for key, value in results.items() if key != ""}
 
-        return dict(zip(room_properties, translated))
+        return list(results.items())
 
     def translate_lecturer_functions(self):
         """
@@ -195,7 +204,7 @@ class ThiTranslator:
 
         translated = [self.__translate(organization) for organization in organizations]
 
-        return dict(zip(organizations, translated))
+        return dict(zip(organizations, translated.items()))
 
     def close(self):
         """Closes the session"""
@@ -205,7 +214,6 @@ class ThiTranslator:
 
     def save_file(self, data, name):
         """Saves the data to a file with the given name"""
-        
 
     def export_files(self):
         """Creates to localizations files for each language"""
@@ -216,17 +224,20 @@ class ThiTranslator:
 
             content = {
                 "__source": "Generated using the thi-translator script",
-                "apiTranslations": {}
+                "apiTranslations": {},
             }
 
-            for key in self.output.keys():
+            for key, items in self.output.items():
                 content["apiTranslations"][key] = {}
-                for item_key, value in self.output[key].items():
+                for item_key, value in items:
                     content["apiTranslations"][key][item_key] = value[lang_short]
 
-            with open(MAIN_DIR / lang_short / 'api-translations.json', "w+", encoding="utf-8") as f:
-                f.write(json.dumps(content, indent=4, ensure_ascii=False, sort_keys=True))
-
+            with open(
+                MAIN_DIR / lang_short / "api-translations.json", "w+", encoding="utf-8"
+            ) as f:
+                f.write(
+                    json.dumps(content, indent=4, ensure_ascii=False, sort_keys=True)
+                )
 
 
 def main():

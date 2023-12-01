@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability } from '../lib/backend-utils/rooms-utils'
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
@@ -25,8 +25,7 @@ const SPECIAL_ROOMS = {
 }
 const SEARCHED_PROPERTIES = [
   'Gebaeude',
-  'Raum',
-  'Funktion'
+  'Raum'
 ]
 const FLOOR_SUBSTITUTES = {
   0: 'EG', // room G0099
@@ -127,6 +126,8 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
+    const searchedProperties = [...SEARCHED_PROPERTIES, `Funktion_${i18n.language}`]
+
     if (Object.keys(roomAvailabilityList).length === 0) {
       loadRoomAvailability()
     }
@@ -138,18 +139,12 @@ export default function RoomMap ({ highlight, roomData }) {
     const cleanedText = searchText.toUpperCase().trim()
 
     const getProp = (room, prop) => {
-      if (prop === 'Funktion') {
-        return getTranslatedRoomFunction(room?.properties?.Funktion).toUpperCase()
-      }
-
       return room.properties[prop]?.toUpperCase()
     }
 
-    const fullTextSearcher = room => SEARCHED_PROPERTIES.some(x => getProp(room, x)?.includes(cleanedText))
+    const fullTextSearcher = room => searchedProperties.some(prop => getProp(room, prop)?.includes(cleanedText))
     const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
     const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
-
-    loadRoomAvailability(filtered)
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
     const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
@@ -168,7 +163,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [roomAvailabilityList, searchText, allRooms, userFaculty, mapCenter])
+  }, [roomAvailabilityList, searchText, allRooms, userFaculty, mapCenter, i18n.language])
 
   useEffect(() => {
     async function load () {
@@ -205,6 +200,11 @@ export default function RoomMap ({ highlight, roomData }) {
     return translated
   }
 
+  function getRoomFunction (room) {
+    const name = room?.properties?.[`Funktion_${i18n.language}`] || room?.properties?.Funktion_de
+    return name ? name.replace(/\s+/g, ' ') : null
+  }
+
   /**
    * Removes focus from the search.
    */
@@ -235,7 +235,8 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {`, ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)}`}
+          {getRoomFunction(entry) !== null && ', '}
+          {getRoomFunction(entry)}
           {avail && (
             <>
               <br />
