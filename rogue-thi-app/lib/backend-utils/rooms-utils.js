@@ -260,9 +260,6 @@ export async function getRoomCapacity (day = new Date()) {
   const roomCapacityData = Object.fromEntries(Object.entries(openings).map(([key, value]) => [key, value[0].capacity]))
 
   return roomCapacityData
-  // Same length for every week?
-  // 27.11.2023: length = 94;
-  // 03.12.2023: length = 93;
 }
 
 /**
