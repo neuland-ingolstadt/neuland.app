@@ -254,27 +254,15 @@ export async function getRoomAvailability (day = new Date()) {
  * @returns {object[]}
  */
 export async function getRoomCapacity (day = new Date()) {
-  const roomCapacityData = {}
-  day.setHours(0, 0, 0, 0)
   const data = await API.getFreeRooms(day)
+  const openings = await getRoomOpenings(data, day)
 
-  data.forEach(thisDay => {
-    if (thisDay['rtypes'] === undefined) {
-      return roomCapacityData
-    }
+  const roomCapacityData = Object.fromEntries(Object.entries(openings).map(([key, value]) => [key, value[0].capacity]))
 
-    const capacityData = thisDay['rtypes']
-
-    capacityData.forEach(roomType => {
-      for (const stunde in roomType['stunden']) {
-        roomType['stunden'][stunde]['raeume'].forEach(raum => {
-          roomCapacityData[raum[2]] = raum[3]
-        })
-      }
-    })
-  })
-
-  return roomCapacityData // 27.11.2023: length = 94; Same for every week?
+  return roomCapacityData
+  // Same length for every week?
+  // 27.11.2023: length = 94;
+  // 03.12.2023: length = 93;
 }
 
 /**
