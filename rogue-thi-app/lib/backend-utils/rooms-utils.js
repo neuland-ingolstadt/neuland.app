@@ -92,13 +92,13 @@ export function getRoomOpenings (rooms, date) {
           type: stunde.type,
           from: new Date(stunde.von),
           until: new Date(stunde.bis),
-          capacityData: stunde.raeume
+          capacity: stunde.raeume
         }))
     )
     // iterate over every room
-    .forEach(({ room, type, from, until, capacityData }) => {
-      const capResult = capacityData.find(entry => entry[2] === room)
-      const capacity = capResult ? capResult[3] : null
+    .forEach(({ room, type, from, until, capacity }) => {
+      const capResult = capacity.find(entry => entry[2] === room)
+      capacity = capResult ? capResult[3] : null
 
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
