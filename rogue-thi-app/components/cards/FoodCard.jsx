@@ -71,7 +71,7 @@ export default function FoodCard () {
         const todayEntries = entries
           .find(x => x.timestamp === today)
           ?.meals
-          .filter(x => (x.category !== 'Suppe' && x.category !== 'Salat') && selectedRestaurants.includes(x.restaurant.toLowerCase()))
+          .filter(x => (x.category !== 'soup' && x.category !== 'salad') && selectedRestaurants.includes(x.restaurant.toLowerCase()))
 
         todayEntries?.sort((a, b) => userMealRating(b) - userMealRating(a))
 

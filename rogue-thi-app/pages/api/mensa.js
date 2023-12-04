@@ -1,15 +1,27 @@
 import xmljs from 'xml-js'
 
+import { checkFoodAPIVersion, getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { formatISODate } from '../../lib/date-utils'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
-import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL_DE = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/mensa-ingolstadt.xml'
 // const URL_EN = 'https://www.max-manager.de/daten-extern/sw-erlangen-nuernberg/xml/en/mensa-ingolstadt.xml'
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
+
+/**
+ * Sends a HTTP response as JSON.
+ * @param {object} res Next.js response object
+ * @param {number} status HTTP status code
+ * @param {object} body Response body
+ */
+function sendJson (res, code, value) {
+  res.statusCode = code
+  res.setHeader('Content-Type', 'application/json')
+  res.end(JSON.stringify(value, jsonReplacer))
+}
 
 /**
  * Parses a float like "1,5".
@@ -95,6 +107,7 @@ function parseDataFromXml (xml) {
 
       return {
         name: text.trim(),
+        id: getMealHash(formatISODate(date), text.trim()),
         category,
         prices: {
           student: parseGermanFloat(item.preis1._text),
@@ -103,7 +116,8 @@ function parseDataFromXml (xml) {
         },
         allergens: [...allergens],
         flags,
-        nutrition
+        nutrition,
+        restaurant: 'mensa'
       }
     })
 
@@ -117,35 +131,52 @@ function parseDataFromXml (xml) {
 }
 
 /**
+ * Fetches the mensa plan.
+ * @param {string} version API version
+ * @returns {object[]}
+ */
+export async function getMensaPlan (version) {
+  const resp = await fetch(URL_DE)
+
+  if (resp.status !== 200) {
+    throw new Error('Data source returned an error: ' + await resp.text())
+  }
+
+  const mealPlan = parseDataFromXml(await resp.text())
+
+  const mergedMeals = version !== 'v1' ? mergeMealVariants(mealPlan) : mealPlan
+
+  const translatedMeals = await translateMeals(mergedMeals)
+  return unifyFoodEntries(translatedMeals, version)
+}
+
+/**
  * Fetches and parses the mensa plan.
  * @returns {object[]}
  */
-async function fetchPlan () {
-  const plan = await cache.get('mensa', async () => {
-    const resp = await fetch(URL_DE)
-
-    if (resp.status === 200) {
-      const mealPlan = parseDataFromXml(await resp.text())
-      const translatedMeals = await translateMeals(mealPlan)
-      return unifyFoodEntries(translatedMeals)
-    } else {
-      throw new Error('Data source returned an error: ' + await resp.text())
-    }
+async function fetchPlan (version) {
+  const plan = await cache.get(`mensa-${version}`, async () => {
+    return await getMensaPlan(version)
   })
 
   return plan
 }
 
 export default async function handler (req, res) {
-  res.setHeader('Content-Type', 'application/json')
+  const version = req.query.version || 'v1'
+  try {
+    checkFoodAPIVersion(version)
+  } catch (e) {
+    console.error(e)
+    sendJson(res, 400, e.message)
+  }
 
   try {
     res.statusCode = 200
-    const plan = await fetchPlan()
-    res.end(JSON.stringify(plan))
+    const plan = await fetchPlan(version)
+    sendJson(res, 200, plan)
   } catch (e) {
     console.error(e)
-    res.statusCode = 500
-    res.end(JSON.stringify('Unexpected/Malformed response from the Mensa backend!'))
+    sendJson(res, 500, 'Unexpected/Malformed response from the Mensa backend!')
   }
 }

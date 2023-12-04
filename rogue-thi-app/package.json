@@ -30,6 +30,7 @@
     "next": "^12.1.0",
     "next-i18next": "^13.2.2",
     "node-fetch": "^3.2.3",
+    "object-hash": "^3.0.0",
     "pdf-parse": "^1.1.1",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
