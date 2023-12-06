@@ -114,8 +114,7 @@ export function unifyFoodEntries (entries, version = 'v1') {
           : {}),
         ...(version !== 'v1'
           ? {
-            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)) || null,
-            additions: meal.additions?.map(addition => unifyMeal(addition, version, meal)) || null
+            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)) || null
           }
           : {}
         )
@@ -147,10 +146,7 @@ function unifyMeal (meal, version, parentMeal = null) {
     originalLanguage: meal.originalLanguage || 'de',
     static: meal.static || false,
     restaurant: meal.restaurant || null,
-    ...(version === 'v1'
-      ? { additional: meal.additional || false }
-      : {}
-    ),
+    additional: meal.additional || false,
     ...(version !== 'v1'
       ? {
         id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,

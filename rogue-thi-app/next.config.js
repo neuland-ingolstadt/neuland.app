@@ -1,22 +1,22 @@
 const { i18n } = require('./next-i18next.config')
 
 // https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md
+/**
+ * Update: December 2023, remove deprecated permissions
+ * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy#browser_compatibility
+ */
 const permissionPolicyFeatures = [
   'accelerometer',
-  'ambient-light-sensor',
   'autoplay',
-  'battery',
   'camera',
   'cross-origin-isolated',
   'display-capture',
-  'document-domain',
   'encrypted-media',
   'fullscreen',
   'gyroscope',
   'magnetometer',
   'microphone',
   'midi',
-  'navigation-override',
   'payment',
   'picture-in-picture',
   'publickey-credentials-get',
@@ -78,7 +78,6 @@ module.exports = {
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
               manifest-src 'self';
-              prefetch-src 'self';
               `.replace(/\s+/g, ' ')
           }
         ]

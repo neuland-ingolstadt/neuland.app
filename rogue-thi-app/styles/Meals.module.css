@@ -114,6 +114,7 @@ a > .card:hover {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: 85vh
 }
 
 .appBody :global(h6) {
@@ -201,4 +202,24 @@ a > .card:hover {
 .parentMeal > p {
   padding: 0;
   margin: 0;
+}
+
+.unknownContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  margin: 0px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.unknownMealIcon {
+  font-size: 6rem;
+  color: var(--primary);
+}
+
+.unknownTitle {
+  font-weight: bold;
 }
