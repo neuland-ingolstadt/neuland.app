@@ -306,14 +306,16 @@ export default function Food ({ meal, id, locale }) {
       </AppContainer>
 
       <Head>
-        <title>{meal.name[serverLocale]}</title>
-        <meta
-          name="description"
-          content={t('foodDetails.meta.description', {
-            name: formatName(meal.name[locale]),
-            restaurant: formatName(meal.restaurant)
-          })}
-        />
+        <title>{meal?.name[serverLocale] || t('list.titles.meals')}</title>
+        {meal && (
+          <meta
+            name="description"
+            content={t('foodDetails.meta.description', {
+              name: formatName(meal.name[locale]),
+              restaurant: formatName(meal.restaurant)
+            })}
+          />
+        )}
       </Head>
     </>
   )
