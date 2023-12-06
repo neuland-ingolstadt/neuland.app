@@ -86,20 +86,17 @@ export function getRoomOpenings (rooms, date) {
     // flatten room list
     .flatMap(stunde =>
       stunde.raeume
-        .map(([,, room]) => ({
+        .map(([,, room, capacity]) => ({
           // 0 indicates that every room is free
           room: room === 0 ? ROOMS_ALL : room,
           type: stunde.type,
           from: new Date(stunde.von),
           until: new Date(stunde.bis),
-          capacity: stunde.raeume
+          capacity: Number(capacity) || null
         }))
     )
     // iterate over every room
     .forEach(({ room, type, from, until, capacity }) => {
-      const capResult = capacity.find(entry => entry[2] === room)
-      capacity = capResult ? capResult[3] : null
-
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
       // find overlapping opening
