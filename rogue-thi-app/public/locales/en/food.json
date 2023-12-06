@@ -76,6 +76,13 @@
         "variants": {
             "title": "Variants",
             "click": "Click for more information"
+        },
+        "unknownMeal": {
+            "title": "Unknown meal",
+            "text": "The Meal ID <i>{{id}}</i> is unknown to us. Please contact us if you think this is an error."
+        },
+        "meta": {
+            "description": "Check out the details of {{name}} at {{restaurant}}."
         }
     }
 }

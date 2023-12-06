@@ -19,13 +19,14 @@ import { faBolt, faCaretUp, faCubesStacked, faDrumstickBite, faEgg, faExclamatio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
+import Head from 'next/head'
 import Link from 'next/link'
 
 import { getCanisiusPlan } from '../api/canisius'
 import { getMensaPlan } from '../api/mensa'
 import { getReimannsPlan } from '../api/reimanns'
 
-export default function Food ({ meal, id }) {
+export default function Food ({ meal, id, locale }) {
   const [backAvailable, setBackAvailable] = useState(true)
   const { t, i18n } = useTranslation('food')
   const { userKind } = useUserKind()
@@ -287,15 +288,30 @@ export default function Food ({ meal, id }) {
     )
   }
 
-  return (
-    <AppContainer>
-      <AppNavbar title={t('list.titles.meals')} showBack={backAvailable}/>
-      <AppBody className={styles.appBody}>
-        {meal ? <MealPage/> : <UnknownMeal/>}
-      </AppBody>
+  const serverLocale = currentLocale || locale
 
-      <AppTabbar/>
-    </AppContainer>
+  return (
+    <>
+      <AppContainer>
+        <AppNavbar title={t('list.titles.meals')} showBack={backAvailable}/>
+        <AppBody className={styles.appBody}>
+          {meal ? <MealPage/> : <UnknownMeal/>}
+        </AppBody>
+
+        <AppTabbar/>
+      </AppContainer>
+
+      <Head>
+        <title>{meal.name[serverLocale]}</title>
+        <meta
+          name="description"
+          content={t('foodDetails.meta.description', {
+            name: meal.name[locale],
+            restaurant: meal.restaurant
+          })}
+        />
+      </Head>
+    </>
   )
 }
 
@@ -329,7 +345,8 @@ export const getStaticProps = async ({ locale, params }) => {
         'common'
       ])),
       meal: await findMeal(),
-      id: params.mealId.join('/')
+      id: params.mealId.join('/'),
+      locale
     },
     revalidate: 60 * 60 * 12 // 12 hours
   }

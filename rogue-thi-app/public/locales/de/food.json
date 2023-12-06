@@ -80,7 +80,10 @@
         },
         "unknownMeal": {
             "title": "Unbekanntes Gericht",
-            "description": "Die Essens-ID <i>{{id}}</i> konnte nicht gefunden werden."
+            "description": "Die Essens-ID <i>{{id}}</i> konnte nicht gefunden werden. Bitte kontaktiere uns, falls du denkst, dass es sich um einen Fehler handelt."
+        },
+        "meta": {
+            "description": "Schaue dir Details von {{name}} ({{restaurant}}) an."
         }
     }
 }
