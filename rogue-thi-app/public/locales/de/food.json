@@ -77,6 +77,10 @@
         "variants": {
             "title": "Varianten",
             "click": "Klicke für mehr Informationen."
+        },
+        "unknownMeal": {
+            "title": "Unbekanntes Gericht",
+            "description": "Die Essens-ID <i>{{id}}</i> konnte nicht gefunden werden."
         }
     }
 }

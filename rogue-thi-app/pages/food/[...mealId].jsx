@@ -1,13 +1,13 @@
-import { useTranslation } from 'next-i18next'
+import { Trans, useTranslation } from 'next-i18next'
 
 import AppBody from '../../components/page/AppBody'
 import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
+
+import { useContext, useEffect, useState } from 'react'
 import { FoodFilterContext } from '../_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useContext } from 'react'
-import { useRouter } from 'next/router'
 
 import { containsSelectedAllergen, containsSelectedPreference, formatGram, formatPrice, getAdjustedFoodLocale, getCategoryIcon, getUserSpecificPrice } from '../../lib/food-utils'
 import allergenMap from '../../data/allergens.json'
@@ -25,10 +25,17 @@ import { getCanisiusPlan } from '../api/canisius'
 import { getMensaPlan } from '../api/mensa'
 import { getReimannsPlan } from '../api/reimanns'
 
-export default function Food ({ meal }) {
-  const router = useRouter()
+export default function Food ({ meal, id }) {
+  const [backAvailable, setBackAvailable] = useState(true)
   const { t, i18n } = useTranslation('food')
   const { userKind } = useUserKind()
+
+  useEffect(() => {
+    // hide back button if user clicks on a link to a meal (e.g. in PWA -> no history)
+    if (window.history.length <= 2) {
+      setBackAvailable(false)
+    }
+  }, [])
 
   const {
     selectedLanguageFood,
@@ -36,13 +43,34 @@ export default function Food ({ meal }) {
     allergenSelection
   } = useContext(FoodFilterContext)
 
-  if (!meal && typeof window !== 'undefined') {
-    router.replace('/food')
-    return null
-  }
-
   const currentLocale = getAdjustedFoodLocale(selectedLanguageFood, i18n)
   const isTranslated = meal?.originalLanguage !== currentLocale && !meal?.static
+
+  const validNutrition = meal?.nutrition && Object.values(meal?.nutrition).every(x => x && x !== '')
+
+  function UnknownMeal () {
+    return (
+      <div className={styles.unknownContainer}>
+        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.unknownMealIcon}/>
+        <div className={`${styles.cardContainer} ${styles.card}`}>
+          <div className={styles.cardBody}>
+            <div className={styles.unknownTitle}>{t('foodDetails.unknownMeal.title')}</div>
+            <p className={styles.unknownDescription}>
+              <Trans
+                i18nKey={'foodDetails.unknownMeal.description'}
+                ns='food'
+                components={{ i: <i /> }}
+                values={{
+                  id
+                }}
+              />
+            </p>
+          </div>
+        </div>
+      </div>
+
+    )
+  }
 
   function PriceCard ({ icon, category, price }) {
     return (
@@ -50,7 +78,7 @@ export default function Food ({ meal }) {
         <FontAwesomeIcon icon={icon} className={styles.cardIcon}/>
 
         <div className={styles.priceCard}>
-          <div className={styles.price}>{price}</div>
+          <div className={styles.price}>{`${meal.additional ? '+' : ''} ${price}`}</div>
           <div className={styles.category}>{category}</div>
         </div>
       </div>
@@ -96,11 +124,9 @@ export default function Food ({ meal }) {
     )
   }
 
-  return (
-    <AppContainer>
-      <AppNavbar title={t('list.titles.meals')}/>
-
-      <AppBody className={styles.appBody}>
+  function MealPage () {
+    return (
+      <>
         {/* name */}
         <div>
           <h4>{meal?.name[currentLocale]}</h4>
@@ -191,7 +217,7 @@ export default function Food ({ meal }) {
 
         {/* nutrition */}
         <h6>{t('foodDetails.nutrition.title')}</h6>
-        {meal?.nutrition && (
+        {validNutrition && (
           <div className={styles.nutrition}>
             <NutritionCard
               icon={faBolt}
@@ -229,7 +255,7 @@ export default function Food ({ meal }) {
             />
           </div>)
         }
-        {meal?.nutrition === null && (
+        {!validNutrition && (
           <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
             <span className={styles.unknown}>
               {t('foodDetails.allergens.unknown')}
@@ -239,8 +265,8 @@ export default function Food ({ meal }) {
 
         {/* disclaimer section */}
         <div>
+          <h6>{t('foodDetails.warning.title')}</h6>
           <p>
-            <h6>{t('foodDetails.warning.title')}</h6>
             {`${isTranslated ? `${t('foodDetails.translation.warning')} ` : ''}${t('foodDetails.warning.text')}`}
           </p>
 
@@ -257,7 +283,15 @@ export default function Food ({ meal }) {
             </ul>
           )}
         </div>
+      </>
+    )
+  }
 
+  return (
+    <AppContainer>
+      <AppNavbar title={t('list.titles.meals')} showBack={backAvailable}/>
+      <AppBody className={styles.appBody}>
+        {meal ? <MealPage/> : <UnknownMeal/>}
       </AppBody>
 
       <AppTabbar/>
@@ -272,7 +306,7 @@ async function getMealData () {
     await getCanisiusPlan('v2')
   ]
 
-  return data.flatMap(x => x.flatMap(x => x.meals))
+  return data.flat().flatMap(x => x.meals)
 }
 
 export const getStaticProps = async ({ locale, params }) => {
@@ -294,9 +328,10 @@ export const getStaticProps = async ({ locale, params }) => {
         'food',
         'common'
       ])),
-      meal: await findMeal()
+      meal: await findMeal(),
+      id: params.mealId.join('/')
     },
-    revalidate: 60 * 60 * 24 // 24 hours
+    revalidate: 60 * 60 * 12 // 12 hours
   }
 }
 
