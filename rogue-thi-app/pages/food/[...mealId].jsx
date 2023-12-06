@@ -290,6 +290,10 @@ export default function Food ({ meal, id, locale }) {
 
   const serverLocale = currentLocale || locale
 
+  const formatName = (name) => {
+    return `${name[0].toUpperCase()}${name.slice(1)}`
+  }
+
   return (
     <>
       <AppContainer>
@@ -306,8 +310,8 @@ export default function Food ({ meal, id, locale }) {
         <meta
           name="description"
           content={t('foodDetails.meta.description', {
-            name: meal.name[locale],
-            restaurant: meal.restaurant
+            name: formatName(meal.name[locale]),
+            restaurant: formatName(meal.restaurant)
           })}
         />
       </Head>
