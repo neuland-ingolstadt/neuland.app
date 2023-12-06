@@ -47,7 +47,7 @@ export default function Food ({ meal, id, locale }) {
   const currentLocale = getAdjustedFoodLocale(selectedLanguageFood, i18n)
   const isTranslated = meal?.originalLanguage !== currentLocale && !meal?.static
 
-  const validNutrition = meal?.nutrition && Object.values(meal?.nutrition).every(x => x && x !== '')
+  const validNutrition = meal?.nutrition && Object.values(meal?.nutrition).some(x => x && x !== '')
 
   function UnknownMeal () {
     return (
