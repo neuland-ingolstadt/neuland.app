@@ -121,6 +121,29 @@ export default function Mensa () {
   }
 
   /**
+   * Get all allergens that are not selected (and thereby shown by full name)
+   * @param {*} meal meal to filter allergens from
+   * @returns {Array} allergens that are not in user selection
+   */
+  function filterAllergens (meal) {
+    const fullAllergens = Object.entries(allergenSelection).filter(([key, value]) => value).map(([key, value]) => key)
+    console.log(JSON.stringify(fullAllergens))
+
+    const mealAllergens = meal.allergens?.filter(allergen => Object.keys(allergenMap).includes(allergen)) || []
+
+    return mealAllergens.filter(allergen => !fullAllergens.includes(allergen))
+  }
+
+  /**
+   * Returns true if a preference is matched or a allergen is contained in the meal.
+   * @param {*} meal meal to check
+   * @returns {boolean} true if meal is matched
+   */
+  function showMatch (meal) {
+    return (!containsSelectedAllergen(meal.allergens, allergenSelection) && containsSelectedPreference(meal.flags, preferencesSelection)) || containsSelectedAllergen(meal.allergens, allergenSelection)
+  }
+
+  /**
    * Renders a meal entry.
    * @param {object} meal
    * @param {any} key
@@ -165,9 +188,16 @@ export default function Mensa () {
                   {t('preferences.match')}
                 </span>
               )}
+
+              {showMatch(meal) && (
+                <br />
+              )}
+
               {userPreferences?.join(', ')}
               {userPreferences?.length > 0 && userAllergens?.length > 0 && ' • '}
-              {userAllergens?.join(', ')}
+              {userAllergens?.join(', ') || ''}
+              {userAllergens?.length > 0 && ', '}
+              {filterAllergens(meal)?.join(', ')}
             </div>
           </div>
         </div>
