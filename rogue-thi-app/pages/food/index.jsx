@@ -194,7 +194,7 @@ export default function Mensa () {
               {userPreferences?.join(', ')}
               {userPreferences?.length > 0 && (userAllergens?.length > 0 || filterAllergens(meal).length > 0) && ' • '}
               {userAllergens?.join(', ') || ''}
-              {userAllergens?.length > 0 && ', '}
+              {userAllergens?.length > 0 && filterAllergens(meal).length > 0 && ', '}
               {filterAllergens(meal)?.join(', ')}
             </div>
           </div>
