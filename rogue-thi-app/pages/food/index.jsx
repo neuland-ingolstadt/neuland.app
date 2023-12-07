@@ -29,7 +29,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { containsSelectedAllergen, containsSelectedPreference, getAdjustedFoodLocale, getMatchingAllergens, getMatchingPreferences, getUserSpecificPrice } from '../../lib/food-utils'
+import { containsSelectedAllergen, containsSelectedPreference, getAdjustedFoodLocale, getMatchingPreferences, getUserSpecificPrice } from '../../lib/food-utils'
 
 // delete comments
 Object.keys(allergenMap)
@@ -121,13 +121,21 @@ export default function Mensa () {
   }
 
   /**
+   * Returns true if a preference is matched or a allergen is contained in the meal.
+   * @param {*} meal meal to check
+   * @returns {boolean} true if meal is matched
+   */
+  function showMatch (meal) {
+    return (!containsSelectedAllergen(meal.allergens, allergenSelection) && containsSelectedPreference(meal.flags, preferencesSelection)) || containsSelectedAllergen(meal.allergens, allergenSelection)
+  }
+
+  /**
    * Renders a meal entry.
    * @param {object} meal
    * @param {any} key
    * @returns {JSX.Element}
    */
   function renderMealEntry (meal, key) {
-    const userAllergens = getMatchingAllergens(meal, allergenSelection, allergenMap, currentLocale)
     const userPreferences = getMatchingPreferences(meal, preferencesSelection, flagMap, currentLocale)
 
     return (
@@ -152,7 +160,6 @@ export default function Mensa () {
 
           <div>
             <div className={styles.indicator}>
-              {/* {!meal.allergens && t('warning.unknownIngredients.text')} */}
               {containsSelectedAllergen(meal.allergens, allergenSelection) && (
                 <span className={`${styles.box} ${styles.warn}`}>
                   <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} className={styles.icon}/>
@@ -165,9 +172,14 @@ export default function Mensa () {
                   {t('preferences.match')}
                 </span>
               )}
+
+              {showMatch(meal) && (
+                <br />
+              )}
+
               {userPreferences?.join(', ')}
-              {userPreferences?.length > 0 && userAllergens?.length > 0 && ' • '}
-              {userAllergens?.join(', ')}
+              {userPreferences?.length > 0 && ' • '}
+              {meal.allergens ? meal.allergens?.join(', ') : t('warning.unknownIngredients.text')}
             </div>
           </div>
         </div>
