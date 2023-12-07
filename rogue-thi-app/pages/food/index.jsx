@@ -127,8 +127,6 @@ export default function Mensa () {
    */
   function filterAllergens (meal) {
     const fullAllergens = Object.entries(allergenSelection).filter(([key, value]) => value).map(([key, value]) => key)
-    console.log(JSON.stringify(fullAllergens))
-
     const mealAllergens = meal.allergens?.filter(allergen => Object.keys(allergenMap).includes(allergen)) || []
 
     return mealAllergens.filter(allergen => !fullAllergens.includes(allergen))
@@ -194,7 +192,7 @@ export default function Mensa () {
               )}
 
               {userPreferences?.join(', ')}
-              {userPreferences?.length > 0 && userAllergens?.length > 0 && ' • '}
+              {userPreferences?.length > 0 && (userAllergens?.length > 0 || filterAllergens(meal).length > 0) && ' • '}
               {userAllergens?.join(', ') || ''}
               {userAllergens?.length > 0 && ', '}
               {filterAllergens(meal)?.join(', ')}
