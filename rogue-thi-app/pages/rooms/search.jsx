@@ -159,7 +159,11 @@ export default function RoomSearch () {
                     </Link>
                     {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                     <div className={styles.details}>
-                      {getTranslatedRoomFunction(result.type)}
+                      {
+                        result.capacity
+                          ? `${getTranslatedRoomFunction(result.type).split('(')[0]} (${result.capacity} ${t('rooms.suggestions.seats')})`
+                          : getTranslatedRoomFunction(result.type)
+                      }
                     </div>
                   </div>
                   <div className={styles.right}>
