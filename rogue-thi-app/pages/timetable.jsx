@@ -204,12 +204,20 @@ export default function Timetable () {
                       {getTimetableEntryName(item).name}
                     </div>
                     <div className={styles.room}>
-                      {item.rooms.map((room, i) => /^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
-                        ? <Link key={i} href={`/rooms?highlight=${room}`}>
-                          <a onClick={e => e.stopPropagation()}>{room}</a>
-                        </Link>
-                        : <span key={i}>{room}</span>
-                      )}
+                      {item.rooms.map((room, i, array) => (
+                        <>
+                          {/^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
+                            ? (
+                              <Link key={i} href={`/rooms?highlight=${room}`}>
+                                <a onClick={(e) => e.stopPropagation()}>{room}</a>
+                              </Link>
+                            )
+                            : (
+                              <span key={i}>{room}</span>
+                            )}
+                          {i < array.length - 1 && ' '}
+                        </>
+                      ))}
                     </div>
                   </div>
                   <div className={styles.right}>

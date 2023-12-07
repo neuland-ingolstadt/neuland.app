@@ -1,6 +1,6 @@
+import { checkFoodAPIVersion, getMealHash, jsonReplacer, mergeMealVariants, unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 import { translateMeals } from '../../lib/backend-utils/translation-utils'
-import { unifyFoodEntries } from '../../lib/backend-utils/food-utils'
 
 const pdf = require('pdf-parse')
 
@@ -24,7 +24,7 @@ const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 function sendJson (res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
-  res.end(JSON.stringify(value))
+  res.end(JSON.stringify(value, jsonReplacer))
 }
 
 function getPrices (text) {
@@ -80,61 +80,84 @@ function getMealsFromBlock (text) {
   })
 }
 
-export default async function handler (_, res) {
+/**
+ * Fetches the Canisius meal plan.
+ * @param {*} version API version
+ * @returns {object[]}
+ */
+export async function getCanisiusPlan (version) {
+  const pdfBuffer = await getPdf()
+  const mealPlan = await pdf(pdfBuffer).then(function (data) {
+    const text = data.text.replace(NEW_LINE_REGEX, ' ')
+
+    let days = text.split(TITLE_REGEX)
+    const dates = text.match(TITLE_REGEX).map(getDateFromTitle)
+
+    if (!days || !dates) {
+      throw new Error('Unexpected/Malformed pdf from the Canisius website!')
+    }
+
+    // keep days only
+    days = days.slice(1, 6)
+
+    // split last day into friday and weekly salad menu
+    const fridaySaladSplit = days[4].split('Salate der Saison vom Büfett')
+
+    days[4] = fridaySaladSplit[0]
+
+    const salads = getMealsFromBlock(fridaySaladSplit[1])
+
+    // trim whitespace and split into dishes
+    const dishes = days.map(getMealsFromBlock)
+    return dishes.map((day, index) => {
+      const dayDishes = day.map((dish) => ({
+        name: dish.name,
+        id: getMealHash(dates[index], dish.name),
+        category: 'Essen',
+        prices: dish.prices,
+        allergens: null,
+        flags: null,
+        nutrition: null,
+        restaurant: 'canisius'
+      }))
+
+      const daySalads = salads.map((salad) => ({
+        name: salad.name,
+        id: getMealHash(dates[index], salad.name),
+        originalLanguage: 'de',
+        category: 'Salat',
+        prices: salad.prices,
+        allergens: null,
+        flags: null,
+        nutrition: null,
+        restaurant: 'canisius'
+      }))
+
+      return {
+        timestamp: dates[index],
+        meals: dayDishes.length > 0 ? [...dayDishes, ...daySalads] : []
+      }
+    })
+  })
+
+  const mergedMeal = mergeMealVariants(mealPlan)
+  const translatedMeals = await translateMeals(mergedMeal)
+  return unifyFoodEntries(translatedMeals, version)
+}
+
+export default async function handler (req, res) {
+  const version = req.query.version || 'v1'
+
   try {
-    const data = await cache.get('canisius', async () => {
-      const pdfBuffer = await getPdf()
-      const mealPlan = await pdf(pdfBuffer).then(function (data) {
-        const text = data.text.replace(NEW_LINE_REGEX, ' ')
+    checkFoodAPIVersion(version)
+  } catch (e) {
+    sendJson(res, 400, e.message)
+    return
+  }
 
-        let days = text.split(TITLE_REGEX)
-        const dates = text.match(TITLE_REGEX).map(getDateFromTitle)
-
-        if (!days || !dates) {
-          sendJson(res, 500, {})
-        }
-
-        // keep days only
-        days = days.slice(1, 6)
-
-        // split last day into friday and weekly salad menu
-        const fridaySaladSplit = days[4].split('Salate der Saison vom Büfett')
-
-        days[4] = fridaySaladSplit[0]
-
-        const salads = getMealsFromBlock(fridaySaladSplit[1])
-
-        // trim whitespace and split into dishes
-        const dishes = days.map(getMealsFromBlock)
-        return dishes.map((day, index) => {
-          const dayDishes = day.map((dish) => ({
-            name: dish.name,
-            category: 'Essen',
-            prices: dish.prices,
-            allergens: null,
-            flags: null,
-            nutrition: null
-          }))
-
-          const daySalads = salads.map((salad) => ({
-            name: salad.name,
-            originalLanguage: 'de',
-            category: 'Salat',
-            prices: salad.prices,
-            allergens: null,
-            flags: null,
-            nutrition: null
-          }))
-
-          return {
-            timestamp: dates[index],
-            meals: dayDishes.length > 0 ? [...dayDishes, ...daySalads] : []
-          }
-        })
-      })
-
-      const translatedMeals = await translateMeals(mealPlan)
-      return unifyFoodEntries(translatedMeals)
+  try {
+    const data = await cache.get(`canisius-${version}`, async () => {
+      return await getCanisiusPlan(version)
     })
 
     sendJson(res, 200, data)

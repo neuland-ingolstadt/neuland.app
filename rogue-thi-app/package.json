@@ -21,7 +21,7 @@
     "cheerio": "^1.0.0-rc.10",
     "deepl-node": "^1.10.2",
     "dompurify": "^2.3.4",
-    "fetch-bypass-cors": "github:neuland-ingolstadt/fetch-bypass-cors#v1.0.3",
+    "fetch-bypass-cors": "github:neuland-ingolstadt/fetch-bypass-cors#v1.0.4",
     "fetch-cookie": "^2.0.1",
     "i18next": "^22.5.0",
     "ical-generator": "^3.6.1",
@@ -30,6 +30,7 @@
     "next": "^12.1.0",
     "next-i18next": "^13.2.2",
     "node-fetch": "^3.2.3",
+    "object-hash": "^3.0.0",
     "pdf-parse": "^1.1.1",
     "prop-types": "^15.8.0",
     "react": "^17.0.2",
@@ -41,7 +42,7 @@
     "react-swipeable-views-utils": "^0.14.0",
     "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.45.1",
-    "win95.css": "github:neuland-ingolstadt/win95.css#commit=477a22394b61b57b20ee2c3a83b769c9a6dc8e46",
+    "win95.css": "github:neuland-ingolstadt/win95.css#1.0.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
