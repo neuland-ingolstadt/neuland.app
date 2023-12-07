@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
 import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getRoomCapacity, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import { TUX_ROOMS, addSearchDuration, filterRooms, getNextValidDate, getRoomAvailability, getRoomCapacity, getRoomWithCapacity, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
 
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
@@ -174,9 +174,7 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-
   }, [roomAvailabilityList, roomCapacity, searchText, allRooms, userFaculty, mapCenter, i18n.language])
-
 
   useEffect(() => {
     async function load () {
@@ -214,7 +212,7 @@ export default function RoomMap ({ highlight, roomData }) {
   }
 
   function getRoomFunction (room) {
-    const name = room?.properties?.[`Funktion_${i18n.language}`] || room?.properties?.Funktion_de
+    const name = room?.properties?.[`Funktion_${i18n.language}`] || room?.properties?.Funktion_de || getTranslatedRoomFunction(room?.properties?.['Funktion_de']) || ''
     return name ? name.replace(/\s+/g, ' ') : null
   }
 
@@ -248,11 +246,7 @@ export default function RoomMap ({ highlight, roomData }) {
           <strong>
             {entry.properties.Raum}
           </strong>
-          {
-            roomCapacity[entry.properties.Raum]
-              ? ` ${getTranslatedRoomFunction(entry?.properties?.Funktion, i18n).split('(')[0]} (${roomCapacity[entry.properties.Raum]} ${t('rooms.suggestions.seats')})`
-              : getTranslatedRoomFunction(entry?.properties?.Funktion, i18n)
-          }
+          {` ${getRoomWithCapacity(getRoomFunction(entry), roomCapacity[entry.properties.Raum], t)}`}
           {avail && (
             <>
               <br />

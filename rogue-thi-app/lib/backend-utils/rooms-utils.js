@@ -365,6 +365,18 @@ export function getTranslatedRoomName (room) {
 }
 
 /**
+ * Returns the room function or if available, the room function with the given capacity
+ * @param {string} roomFunction Room Function (e.g. Seminarraum (50 Plätze))
+ * @param {number} capacity seat capacity
+ * @param {*} t i18n t function
+ * @returns
+ */
+export function getRoomWithCapacity (roomFunction, capacity, t) {
+  roomFunction = roomFunction || ''
+  return capacity ? `${roomFunction.split('(')[0]} (${capacity} ${t('rooms.suggestions.seats')})` : roomFunction
+}
+
+/**
  * Finds empty rooms for the current time with the given duration.
  * @param {boolean} [asGap] Whether to return the result as a gap with start and end date or only the rooms
  * @param {number} [duration] Duration of the gap in minutes

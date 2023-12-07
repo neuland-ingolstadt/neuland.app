@@ -23,7 +23,7 @@ import AppTabbar from '../../components/page/AppTabbar'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 
-import { SUGGESTION_DURATION_PRESET, TUX_ROOMS, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
+import { SUGGESTION_DURATION_PRESET, TUX_ROOMS, findSuggestedRooms, getAllUserBuildings, getEmptySuggestions, getRoomWithCapacity, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
@@ -312,11 +312,7 @@ export default function RoomSearch () {
                       </Link>
                       {TUX_ROOMS.includes(roomResult.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                       <div className={styles.details}>
-                        {
-                          roomResult.capacity
-                            ? `${getTranslatedRoomFunction(roomResult.type).split('(')[0]} (${roomResult.capacity} ${t('rooms.suggestions.seats')})`
-                            : getTranslatedRoomFunction(roomResult.type)
-                        }
+                        {getRoomWithCapacity(getTranslatedRoomFunction(roomResult.type), roomResult.capacity, t)}
                       </div>
                     </div>
                     <div className={styles.right}>
