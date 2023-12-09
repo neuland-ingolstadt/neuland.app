@@ -121,18 +121,6 @@ export default function Mensa () {
   }
 
   /**
-   * Get all allergens that are not selected (and thereby shown by full name)
-   * @param {*} meal meal to filter allergens from
-   * @returns {Array} allergens that are not in user selection
-   */
-  function filterAllergens (meal) {
-    const fullAllergens = Object.entries(allergenSelection).filter(([key, value]) => value).map(([key, value]) => key)
-    const mealAllergens = meal.allergens?.filter(allergen => Object.keys(allergenMap).includes(allergen)) || []
-
-    return mealAllergens.filter(allergen => !fullAllergens.includes(allergen))
-  }
-
-  /**
    * Returns true if a preference is matched or a allergen is contained in the meal.
    * @param {*} meal meal to check
    * @returns {boolean} true if meal is matched
@@ -173,7 +161,6 @@ export default function Mensa () {
 
           <div>
             <div className={styles.indicator}>
-              {/* {!meal.allergens && t('warning.unknownIngredients.text')} */}
               {containsSelectedAllergen(meal.allergens, allergenSelection) && (
                 <span className={`${styles.box} ${styles.warn}`}>
                   <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} className={styles.icon}/>
@@ -192,10 +179,8 @@ export default function Mensa () {
               )}
 
               {userPreferences?.join(', ')}
-              {userPreferences?.length > 0 && (userAllergens?.length > 0 || filterAllergens(meal).length > 0) && ' • '}
-              {userAllergens?.join(', ') || ''}
-              {userAllergens?.length > 0 && filterAllergens(meal).length > 0 && ', '}
-              {filterAllergens(meal)?.join(', ')}
+              {userPreferences?.length > 0 && ' • '}
+              {meal.allergens ? meal.allergens?.join(', ') : t('warning.unknownIngredients.text')}
             </div>
           </div>
         </div>

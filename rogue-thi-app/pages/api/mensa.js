@@ -114,7 +114,8 @@ function parseDataFromXml (xml) {
           employee: parseGermanFloat(item.preis2._text),
           guest: parseGermanFloat(item.preis3._text)
         },
-        allergens: [...allergens],
+        // ensure a deterministic order for easier reading
+        allergens: [...allergens].sort(),
         flags,
         nutrition,
         restaurant: 'mensa'
