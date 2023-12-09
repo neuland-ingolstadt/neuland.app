@@ -29,7 +29,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
-import { containsSelectedAllergen, containsSelectedPreference, getAdjustedFoodLocale, getMatchingAllergens, getMatchingPreferences, getUserSpecificPrice } from '../../lib/food-utils'
+import { containsSelectedAllergen, containsSelectedPreference, getAdjustedFoodLocale, getMatchingPreferences, getUserSpecificPrice } from '../../lib/food-utils'
 
 // delete comments
 Object.keys(allergenMap)
@@ -136,7 +136,6 @@ export default function Mensa () {
    * @returns {JSX.Element}
    */
   function renderMealEntry (meal, key) {
-    const userAllergens = getMatchingAllergens(meal, allergenSelection, allergenMap, currentLocale)
     const userPreferences = getMatchingPreferences(meal, preferencesSelection, flagMap, currentLocale)
 
     return (
