@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
+import { getRoomAvailability } from '../lib/backend-utils/rooms-utils'
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -112,6 +113,7 @@ export default function Timetable () {
   const [isDetailedData, setIsDetailedData] = useState(false)
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
+  const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
@@ -175,6 +177,41 @@ export default function Timetable () {
     load(week[0])
   }, [router, timetable, focusedEntry, isDetailedData, week, fetchedWeek])
 
+  if (Object.keys(roomAvailabilityList).length === 0) {
+    loadRoomAvailability()
+  }
+
+  async function loadRoomAvailability () {
+    const roomAvailabilityData = await getRoomAvailability()
+
+    const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
+      const availability = openings
+        .filter(opening =>
+          new Date(opening.until) > new Date()
+        )
+      return [room, availability]
+    }))
+
+    console.log(roomAvailabilityList)
+    setRoomAvailabilityList(roomAvailabilityList)
+  }
+
+  function roomAvailabilityText (room) {
+    const dateFrom = roomAvailabilityList?.[room]?.[0]?.['from']
+    const dateUntil = roomAvailabilityList?.[room]?.[0]?.['until']
+    if (dateFrom && dateUntil) {
+      if (dateFrom > new Date()) {
+        const date = new Date(dateFrom)
+        return ` ${t('timetable.availableFrom')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+      } else {
+        const date = new Date(dateUntil)
+        return ` ${t('timetable.availableUntil')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+      }
+    } else {
+      return ''
+    }
+  }
+
   /**
    * Renderer for `react-swipeable-views` that displays the timetable for a particular week
    * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
@@ -215,6 +252,7 @@ export default function Timetable () {
                             : (
                               <span key={i}>{room}</span>
                             )}
+                          {isToday(group.date) && roomAvailabilityText(room)}
                           {i < array.length - 1 && ' '}
                         </>
                       ))}

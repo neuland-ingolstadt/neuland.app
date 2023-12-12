@@ -72,6 +72,8 @@
                     "close": "Close"
                 }
             }
-        }
+        },
+        "availableFrom": "available from",
+        "availableUntil": "available until"
     }
 }

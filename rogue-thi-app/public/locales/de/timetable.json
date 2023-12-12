@@ -72,6 +72,8 @@
                     "close": "Schließen"
                 }
             }
-        }
+        },
+        "availableFrom": "Verfügbar ab",
+        "availableUntil": "Verfügbar bis"
     }
 }
