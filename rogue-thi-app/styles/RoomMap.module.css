@@ -60,12 +60,6 @@
   max-width: 50vw;
 }
 
-/* Ugly workaround for line between tiles especially on dark map (see https://github.com/Leaflet/Leaflet/issues/3575) */
-.mapContainer :global(.leaflet-tile) {
-  width: 257px !important;
-  height: 257px !important;
-}
-
 .mapContainer :global(.leaflet-control-attribution) > a:link {
   color: var(--primary);
   transition: color 0.2s ease-in-out;
