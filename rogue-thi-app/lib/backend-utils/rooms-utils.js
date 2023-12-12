@@ -86,16 +86,17 @@ export function getRoomOpenings (rooms, date) {
     // flatten room list
     .flatMap(stunde =>
       stunde.raeume
-        .map(([,, room]) => ({
+        .map(([,, room, capacity]) => ({
           // 0 indicates that every room is free
           room: room === 0 ? ROOMS_ALL : room,
           type: stunde.type,
           from: new Date(stunde.von),
-          until: new Date(stunde.bis)
+          until: new Date(stunde.bis),
+          capacity: Number(capacity) || null
         }))
     )
     // iterate over every room
-    .forEach(({ room, type, from, until }) => {
+    .forEach(({ room, type, from, until, capacity }) => {
       // initialize room
       const roomOpenings = openings[room] = openings[room] || []
       // find overlapping opening
@@ -110,7 +111,7 @@ export function getRoomOpenings (rooms, date) {
         opening.until = maxDate(until, opening.until)
       } else {
         // create new opening
-        roomOpenings.push({ type, from, until })
+        roomOpenings.push({ type, from, until, capacity })
       }
     })
   return openings
@@ -187,7 +188,8 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
         room,
         type: opening.type,
         from: opening.from,
-        until: opening.until
+        until: opening.until,
+        capacity: opening.capacity
       }))
     )
     .filter(opening =>
@@ -201,10 +203,9 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
 /**
  * Filters suitable room openings.
  * @param {Date} day Start date as Date object
- * @param {string[]} [roomRequestList] Room names (e.g. `["G215"]`)
  * @returns {object[]}
  */
-export async function getRoomAvailability (roomRequestList, day = new Date()) {
+export async function getRoomAvailability (day = new Date()) {
   day.setHours(0, 0, 0, 0)
 
   const data = await API.getFreeRooms(day)
@@ -242,6 +243,20 @@ export async function getRoomAvailability (roomRequestList, day = new Date()) {
   }))
 
   return processedOpenings
+}
+
+/**
+ * Filters room capacities.
+ * @param {Date} day Start date as Date object
+ * @returns {object[]}
+ */
+export async function getRoomCapacity (day = new Date()) {
+  const data = await API.getFreeRooms(day)
+  const openings = await getRoomOpenings(data, day)
+
+  const roomCapacityData = Object.fromEntries(Object.entries(openings).map(([key, value]) => [key, value[0].capacity]))
+
+  return roomCapacityData
 }
 
 /**
@@ -347,6 +362,18 @@ export function getTranslatedRoomName (room) {
     default:
       return room
   }
+}
+
+/**
+ * Returns the room function or if available, the room function with the given capacity
+ * @param {string} roomFunction Room Function (e.g. Seminarraum (50 Plätze))
+ * @param {number} capacity seat capacity
+ * @param {*} t i18n t function
+ * @returns
+ */
+export function getRoomWithCapacity (roomFunction, capacity, t) {
+  roomFunction = roomFunction || ''
+  return capacity ? `${roomFunction.split('(')[0]} (${capacity} ${t('rooms.suggestions.seats')})` : roomFunction
 }
 
 /**

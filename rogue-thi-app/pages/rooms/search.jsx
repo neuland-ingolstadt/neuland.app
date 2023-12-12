@@ -15,7 +15,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, TUX_ROOMS, filterRooms, getNextValidDate, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
+import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, TUX_ROOMS, filterRooms, getNextValidDate, getRoomWithCapacity, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
 import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
 import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
 
@@ -159,7 +159,7 @@ export default function RoomSearch () {
                     </Link>
                     {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
                     <div className={styles.details}>
-                      {getTranslatedRoomFunction(result.type)}
+                      {getRoomWithCapacity(getTranslatedRoomFunction(result.type), result.capacity, t)}
                     </div>
                   </div>
                   <div className={styles.right}>

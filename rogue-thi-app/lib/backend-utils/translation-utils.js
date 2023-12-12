@@ -56,7 +56,16 @@ function translateFallback (meals) {
           de: meal.name,
           en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${meal.name}` : meal.name
         },
-        originalLanguage: 'de'
+        originalLanguage: 'de',
+        variants: meal.variants && meal.variants.map((variant) => {
+          return {
+            ...variant,
+            name: {
+              de: variant.name,
+              en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${variant.name}` : variant.name
+            }
+          }
+        })
       }
     })
 
@@ -93,6 +102,15 @@ export async function translateMeals (meals) {
           de: meal.name,
           en: await getTranslation(meal.name, 'EN-GB')
         },
+        variants: meal.variants && await Promise.all(meal.variants.map(async (variant) => {
+          return {
+            ...variant,
+            name: {
+              de: variant.name,
+              en: await getTranslation(variant.name, 'EN-GB')
+            }
+          }
+        })),
         originalLanguage: 'de'
       }
     }))

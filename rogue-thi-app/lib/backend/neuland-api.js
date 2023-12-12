@@ -13,7 +13,7 @@ class NeulandAPIClient {
       // XXX we assume here we never set the endpoint mode to `websocket-proxy` for the neuland API
       this.connection = await obtainFetchImplementation(ENDPOINT_MODE, {})
     }
-    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}?cache=27`)
+    const resp = await this.connection.fetch(`${ENDPOINT_HOST}${url}`)
 
     if (resp.status === 200) {
       return await resp.json()
@@ -23,15 +23,15 @@ class NeulandAPIClient {
   }
 
   async getMensaPlan () {
-    return this.performRequest('/api/mensa/')
+    return this.performRequest('/api/mensa/?version=v2')
   }
 
   async getReimannsPlan () {
-    return this.performRequest('/api/reimanns/')
+    return this.performRequest('/api/reimanns/?version=v2')
   }
 
   async getCanisiusPlan () {
-    return this.performRequest('/api/canisius/')
+    return this.performRequest('/api/canisius/?version=v2')
   }
 
   /**
