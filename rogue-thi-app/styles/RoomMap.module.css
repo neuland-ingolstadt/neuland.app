@@ -66,6 +66,11 @@
   height: 257px !important;
 }
 
+/* Ugly workaround for line between tiles #2 https://github.com/neuland-ingolstadt/neuland.app/issues/382*/
+.mapContainer :global(.leaflet-tile) {
+  mix-blend-mode: unset !important;
+}
+
 .mapContainer :global(.leaflet-control-attribution) > a:link {
   color: var(--primary);
   transition: color 0.2s ease-in-out;
