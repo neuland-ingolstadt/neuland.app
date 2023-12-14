@@ -198,23 +198,20 @@ export default function Timetable () {
 
   let roomAvailabilityTextCount = 0
   function roomAvailabilityText (room, lessonStart, lessonEnd) {
-    //! Bug: Freitag bei 12:37: Es sollte das selbe wie bei 11:37 anzeigen; nämlich frei ab 12:20 STATT frei bis 13:05
     const availForm = roomAvailabilityList?.[room]?.[0]?.['from']
     const availUntil = roomAvailabilityList?.[room]?.[0]?.['until']
-    console.log(`${availForm.getHours()}:${String(availForm.getMinutes()).padStart(2, '0')}`, `${availUntil.getHours()}:${String(availUntil.getMinutes()).padStart(2, '0')}`, `${lessonStart.getHours()}:${String(lessonStart.getMinutes()).padStart(2, '0')}`)
     if (availForm && availUntil &&
-      lessonStart > new Date() && // nur wenn Info noch relevant ist
-      roomAvailabilityTextCount === 0 // Zeige nur eine Info
+      lessonStart > new Date() && // only if the information is still relevant
+      roomAvailabilityTextCount === 0 // show only one information
     ) {
       roomAvailabilityTextCount++
-      if (availForm > lessonStart) { // Zeige lessonStart als frei ab, anstatt garnichts
+      if (availForm > lessonStart) { // display 'lessonStart' as free instead of nothing
         return ` ${t('timetable.availableFrom')} ${lessonStart.getHours()}:${String(lessonStart.getMinutes()).padStart(2, '0')}`
-      } else if (availForm > new Date()) { // Wird fast immer angezeigt
+      } else if (availForm > new Date()) { // will be returned most of the time
         const date = new Date(availForm)
         return ` ${t('timetable.availableFrom')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
-      } else { // Wird selten angezeigt: wenn availUntil < lessonStart
+      } else { // will be returned rarely, if: availUntil < lessonStart
         const date = new Date(availUntil)
-        console.log(date)
         return ` ${t('timetable.availableUntil')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
       }
     } else {
