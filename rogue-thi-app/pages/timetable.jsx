@@ -199,21 +199,26 @@ export default function Timetable () {
   function roomAvailabilityText (room, lessonStart, lessonEnd) {
     const availForm = roomAvailabilityList?.[room]?.[0]?.['from']
     const availUntil = roomAvailabilityList?.[room]?.[0]?.['until']
+
     if (availForm && availUntil &&
       lessonStart > new Date() && // only if the information is still relevant
       roomAvailabilityTextCount === 0 // show only one information
     ) {
       roomAvailabilityTextCount++
-      if (availForm > lessonStart) {
+      const availFormDate = availForm
+      let availUntilDate = availUntil
+      if (new Date(availUntil) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug fix
+        availUntilDate = new Date(availUntil - -10 * 60 * 1000)
+      }
+
+      if (availFormDate > lessonStart) {
         return ` ${t('timetable.freeAtLectureStart')}`
-      } else if (availForm > new Date()) {
-        const date = new Date(availForm)
-        return ` ${t('timetable.availableFrom')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
-      } else if ((availUntil === lessonStart) || (new Date(availUntil) - -10 * 60 * 1000 === lessonStart - 0)) { // 10min offset bug
+      } else if (availFormDate > new Date()) {
+        return ` ${t('timetable.availableFrom')} ${formatFriendlyTime(availFormDate)}`
+      } else if (availUntilDate.getTime() === lessonStart.getTime()) {
         return ` ${t('timetable.alreadyAvailable')}`
       } else {
-        const date = new Date(availUntil)
-        return ` ${t('timetable.availableUntil')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
+        return ` ${t('timetable.availableUntil')} ${formatFriendlyTime(availUntilDate)}`
       }
     } else {
       return ''
