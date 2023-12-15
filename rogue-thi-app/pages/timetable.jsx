@@ -192,7 +192,6 @@ export default function Timetable () {
       return [room, availability]
     }))
 
-    console.log(roomAvailabilityList)
     setRoomAvailabilityList(roomAvailabilityList)
   }
 
