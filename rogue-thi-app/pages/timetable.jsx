@@ -204,14 +204,14 @@ export default function Timetable () {
       roomAvailabilityTextCount === 0 // show only one information
     ) {
       roomAvailabilityTextCount++
-      if (availForm > lessonStart) { // display 'lessonStart' as free instead of nothing
-        return ` ${t('timetable.availableFrom')} ${lessonStart.getHours()}:${String(lessonStart.getMinutes()).padStart(2, '0')}`
-      } else if (availForm > new Date()) { // will be returned most of the time
+      if (availForm > lessonStart) {
+        return ` ${t('timetable.freeAtLectureStart')}`
+      } else if (availForm > new Date()) {
         const date = new Date(availForm)
         return ` ${t('timetable.availableFrom')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
-      } else if (new Date(availUntil) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug
-        return ` ${t('timetable.availableUntil')} ${lessonStart.getHours()}:${String(lessonStart.getMinutes()).padStart(2, '0')}`
-      } else { // will be returned rarely, if: availUntil < lessonStart
+      } else if ((availUntil === lessonStart) || (new Date(availUntil) - -10 * 60 * 1000 === lessonStart - 0)) { // 10min offset bug
+        return ` ${t('timetable.alreadyAvailable')}`
+      } else {
         const date = new Date(availUntil)
         return ` ${t('timetable.availableUntil')} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`
       }

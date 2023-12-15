@@ -74,6 +74,8 @@
             }
         },
         "availableFrom": "available from",
-        "availableUntil": "available until"
+        "availableUntil": "available until",
+        "freeAtLectureStart": "free at lecture start",
+        "alreadyAvailable": "already available"
     }
 }

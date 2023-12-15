@@ -74,6 +74,8 @@
             }
         },
         "availableFrom": "Verfügbar ab",
-        "availableUntil": "Verfügbar bis"
+        "availableUntil": "Verfügbar bis",
+        "freeAtLectureStart": "frei ab Vorlesungsbeginn",
+        "alreadyAvailable": "bereits verfügbar"
     }
 }
