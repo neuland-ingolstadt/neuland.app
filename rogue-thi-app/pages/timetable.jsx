@@ -177,30 +177,21 @@ export default function Timetable () {
     load(week[0])
   }, [router, timetable, focusedEntry, isDetailedData, week, fetchedWeek])
 
-  if (Object.keys(roomAvailabilityList).length === 0) {
+  useEffect(() => {
+    async function loadRoomAvailability () {
+      const roomAvailabilityData = await getRoomAvailability()
+
+      setRoomAvailabilityList(roomAvailabilityData)
+    }
+
     loadRoomAvailability()
-  }
-
-  async function loadRoomAvailability () {
-    const roomAvailabilityData = await getRoomAvailability()
-
-    const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
-      const availability = openings
-      //* this filter would break roomAvailabilityText()
-      // .filter(opening =>
-      //   new Date(opening.until) > new Date()
-      // )
-      return [room, availability]
-    }))
-
-    setRoomAvailabilityList(roomAvailabilityList)
-  }
+  }, [])
 
   let roomAvailabilityTextCount = 0
   function roomAvailabilityText (room, lessonStart, lessonEnd) {
     let availForm
     let availUntil
-    for (let index = 0; index < roomAvailabilityList?.[room].length; index++) {
+    for (let index = 0; index < roomAvailabilityList?.[room]?.length; index++) {
       if (new Date(roomAvailabilityList?.[room]?.[index]?.['until']) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug fix
         availForm = roomAvailabilityList?.[room]?.[0]?.['from']
         availUntil = new Date(roomAvailabilityList?.[room]?.[0]?.['until'] - -10 * 60 * 1000)
