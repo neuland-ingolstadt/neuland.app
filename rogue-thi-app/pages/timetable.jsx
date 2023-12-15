@@ -186,9 +186,10 @@ export default function Timetable () {
 
     const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
       const availability = openings
-        .filter(opening =>
-          new Date(opening.until) > new Date()
-        )
+      //* this filter would break roomAvailabilityText()
+      // .filter(opening =>
+      //   new Date(opening.until) > new Date()
+      // )
       return [room, availability]
     }))
 
@@ -197,28 +198,34 @@ export default function Timetable () {
 
   let roomAvailabilityTextCount = 0
   function roomAvailabilityText (room, lessonStart, lessonEnd) {
-    const availForm = roomAvailabilityList?.[room]?.[0]?.['from']
-    const availUntil = roomAvailabilityList?.[room]?.[0]?.['until']
+    let availForm
+    let availUntil
+    for (let index = 0; index < roomAvailabilityList?.[room].length; index++) {
+      if (new Date(roomAvailabilityList?.[room]?.[index]?.['until']) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug fix
+        availForm = roomAvailabilityList?.[room]?.[0]?.['from']
+        availUntil = new Date(roomAvailabilityList?.[room]?.[0]?.['until'] - -10 * 60 * 1000)
+        break
+      } else if (new Date(roomAvailabilityList?.[room]?.[index]?.['until']) > new Date()) {
+        availForm = roomAvailabilityList?.[room]?.[0]?.['from']
+        availUntil = roomAvailabilityList?.[room]?.[0]?.['until']
+        break
+      }
+    }
 
     if (availForm && availUntil &&
       lessonStart > new Date() && // only if the information is still relevant
       roomAvailabilityTextCount === 0 // show only one information
     ) {
       roomAvailabilityTextCount++
-      const availFormDate = availForm
-      let availUntilDate = availUntil
-      if (new Date(availUntil) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug fix
-        availUntilDate = new Date(availUntil - -10 * 60 * 1000)
-      }
 
-      if (availFormDate > lessonStart) {
+      if (availForm > lessonStart) {
         return ` ${t('timetable.freeAtLectureStart')}`
-      } else if (availFormDate > new Date()) {
-        return ` ${t('timetable.availableFrom')} ${formatFriendlyTime(availFormDate)}`
-      } else if (availUntilDate.getTime() === lessonStart.getTime()) {
+      } else if (availForm > new Date()) {
+        return ` ${t('timetable.availableFrom')} ${formatFriendlyTime(availForm)}`
+      } else if (availUntil.getTime() === lessonStart.getTime()) {
         return ` ${t('timetable.alreadyAvailable')}`
       } else {
-        return ` ${t('timetable.availableUntil')} ${formatFriendlyTime(availUntilDate)}`
+        return ` ${t('timetable.availableUntil')} ${formatFriendlyTime(availUntil)}`
       }
     } else {
       return ''
