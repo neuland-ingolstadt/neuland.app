@@ -197,7 +197,7 @@ export default function Timetable () {
   }
 
   let roomAvailabilityTextCount = 0
-  function roomAvailabilityText (room, lessonStart, lessonEnd) { // :)
+  function roomAvailabilityText (room, lessonStart, lessonEnd) {
     let availForm
     let availUntil
     for (let index = 0; index < roomAvailabilityList?.[room].length; index++) {
