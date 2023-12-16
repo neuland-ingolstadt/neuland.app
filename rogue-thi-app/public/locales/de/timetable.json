@@ -72,6 +72,10 @@
                     "close": "Schließen"
                 }
             }
-        }
+        },
+        "availableFrom": "Verfügbar ab",
+        "availableUntil": "Verfügbar bis",
+        "freeAtLectureStart": "frei ab Vorlesungsbeginn",
+        "alreadyAvailable": "bereits verfügbar"
     }
 }

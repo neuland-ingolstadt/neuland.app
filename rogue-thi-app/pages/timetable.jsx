@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
+import { getRoomAvailability } from '../lib/backend-utils/rooms-utils'
 
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -112,6 +113,7 @@ export default function Timetable () {
   const [isDetailedData, setIsDetailedData] = useState(false)
   const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
+  const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
 
   // page (0 = current week)
   const [page, setPage] = useState(0)
@@ -175,6 +177,52 @@ export default function Timetable () {
     load(week[0])
   }, [router, timetable, focusedEntry, isDetailedData, week, fetchedWeek])
 
+  useEffect(() => {
+    async function loadRoomAvailability () {
+      const roomAvailabilityData = await getRoomAvailability()
+
+      setRoomAvailabilityList(roomAvailabilityData)
+    }
+
+    loadRoomAvailability()
+  }, [])
+
+  let roomAvailabilityTextCount = 0
+  function roomAvailabilityText (room, lessonStart, lessonEnd) {
+    let availForm
+    let availUntil
+    for (let index = 0; index < roomAvailabilityList?.[room]?.length; index++) {
+      if (new Date(roomAvailabilityList?.[room]?.[index]?.['until']) - -10 * 60 * 1000 === lessonStart - 0) { // 10min offset bug fix
+        availForm = roomAvailabilityList?.[room]?.[0]?.['from']
+        availUntil = new Date(roomAvailabilityList?.[room]?.[0]?.['until'] - -10 * 60 * 1000)
+        break
+      } else if (new Date(roomAvailabilityList?.[room]?.[index]?.['until']) > new Date()) {
+        availForm = roomAvailabilityList?.[room]?.[0]?.['from']
+        availUntil = roomAvailabilityList?.[room]?.[0]?.['until']
+        break
+      }
+    }
+
+    if (availForm && availUntil &&
+      lessonStart > new Date() && // only if the information is still relevant
+      roomAvailabilityTextCount === 0 // show only one information
+    ) {
+      roomAvailabilityTextCount++
+
+      if (availForm > lessonStart) {
+        return ` ${t('timetable.freeAtLectureStart')}`
+      } else if (availForm > new Date()) {
+        return ` ${t('timetable.availableFrom')} ${formatFriendlyTime(availForm)}`
+      } else if (availUntil.getTime() === lessonStart.getTime()) {
+        return ` ${t('timetable.alreadyAvailable')}`
+      } else {
+        return ` ${t('timetable.availableUntil')} ${formatFriendlyTime(availUntil)}`
+      }
+    } else {
+      return ''
+    }
+  }
+
   /**
    * Renderer for `react-swipeable-views` that displays the timetable for a particular week
    * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
@@ -215,6 +263,7 @@ export default function Timetable () {
                             : (
                               <span key={i}>{room}</span>
                             )}
+                          {isToday(group.date) && roomAvailabilityText(room, item.startDate, item.endDate)}
                           {i < array.length - 1 && ' '}
                         </>
                       ))}
