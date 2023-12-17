@@ -1,25 +1,30 @@
 // stylelint-disable
-$primary: #21A8C5;
+$primary: #21a8c5;
 $gray-700: #495057;
-$body-bg: #FACDE5;
+$body-bg: #facde5;
 $body-color: black;
 
-@import "../common.scss";
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../common.scss';
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 @font-face {
-    font-family: sacramento;
-    src: url(/fonts/Sacramento-Regular.ttf);
+  font-family: sacramento;
+  src: url(/fonts/Sacramento-Regular.ttf);
 }
 body {
-    font-family: sacramento;
-    font-weight: bolder;
-    font-size: 1.3rem;
+  font-family: sacramento;
+  font-weight: bolder;
+  font-size: 1.3rem;
 }
-.h1, .h2, .h3, .h4, .h5, .h6 {
-    font-size: 1.5rem;
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-size: 1.5rem;
 }
 * {
-    font-family: sacramento;
-    font-weight: bolder;
+  font-family: sacramento;
+  font-weight: bolder;
 }

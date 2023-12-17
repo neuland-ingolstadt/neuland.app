@@ -15,31 +15,73 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { BUILDINGS, BUILDINGS_ALL, DURATION_PRESET, TUX_ROOMS, filterRooms, getNextValidDate, getRoomWithCapacity, getTranslatedRoomFunction, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
-import { NoSessionError, UnavailableSessionError } from '../../lib/backend/thi-session-handler'
-import { formatFriendlyTime, formatISODate, formatISOTime } from '../../lib/date-utils'
+import {
+  BUILDINGS,
+  BUILDINGS_ALL,
+  DURATION_PRESET,
+  TUX_ROOMS,
+  filterRooms,
+  getNextValidDate,
+  getRoomWithCapacity,
+  getTranslatedRoomFunction,
+  getTranslatedRoomName,
+} from '../../lib/backend-utils/rooms-utils'
+import {
+  NoSessionError,
+  UnavailableSessionError,
+} from '../../lib/backend/thi-session-handler'
+import {
+  formatFriendlyTime,
+  formatISODate,
+  formatISOTime,
+} from '../../lib/date-utils'
 
 import styles from '../../styles/RoomsSearch.module.css'
 
 import { Trans, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-const DURATIONS = ['00:15', '00:30', '00:45', '01:00', '01:15', '01:30', '01:45', '02:00', '02:15', '02:30', '02:45', '03:00', '03:15', '03:30', '03:45', '04:00', '04:15', '04:30', '04:45', '05:00', '05:15', '05:30', '05:45', '06:00']
+const DURATIONS = [
+  '00:15',
+  '00:30',
+  '00:45',
+  '01:00',
+  '01:15',
+  '01:30',
+  '01:45',
+  '02:00',
+  '02:15',
+  '02:30',
+  '02:45',
+  '03:00',
+  '03:15',
+  '03:30',
+  '03:45',
+  '04:00',
+  '04:15',
+  '04:30',
+  '04:45',
+  '05:00',
+  '05:15',
+  '05:30',
+  '05:45',
+  '06:00',
+]
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale ?? 'en', [
       'rooms',
       'common',
-      'api-translations'
-    ]))
-  }
+      'api-translations',
+    ])),
+  },
 })
 
 /**
  * Page containing the room search.
  */
-export default function RoomSearch () {
+export default function RoomSearch() {
   const router = useRouter()
   const startDate = getNextValidDate()
 
@@ -73,11 +115,14 @@ export default function RoomSearch () {
   }, [building, date, duration, time])
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         await filter()
       } catch (e) {
-        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+        if (
+          e instanceof NoSessionError ||
+          e instanceof UnavailableSessionError
+        ) {
           router.replace('/login?redirect=rooms%2Fsearch')
         } else {
           console.error(e)
@@ -96,95 +141,111 @@ export default function RoomSearch () {
         <Form>
           <div className={styles.searchForm}>
             <Form.Group>
-              <Form.Label>
-                {t('rooms.search.building')}
-              </Form.Label>
+              <Form.Label>{t('rooms.search.building')}</Form.Label>
               <Form.Control
                 as="select"
                 value={building}
-                onChange={e => setBuilding(e.target.value)}
+                onChange={(e) => setBuilding(e.target.value)}
               >
-                <option key={BUILDINGS_ALL}>{t('rooms.search.buildingsAll')}</option>
-                {BUILDINGS.map(b => <option key={b}>{b}</option>)}
+                <option key={BUILDINGS_ALL}>
+                  {t('rooms.search.buildingsAll')}
+                </option>
+                {BUILDINGS.map((b) => (
+                  <option key={b}>{b}</option>
+                ))}
               </Form.Control>
             </Form.Group>
             <Form.Group>
-              <Form.Label>
-                {t('rooms.search.date')}
-              </Form.Label>
+              <Form.Label>{t('rooms.search.date')}</Form.Label>
               <Form.Control
                 type="date"
                 value={date}
-                onChange={e => setDate(e.target.value)}
+                onChange={(e) => setDate(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>
-                {t('rooms.search.time')}
-              </Form.Label>
+              <Form.Label>{t('rooms.search.time')}</Form.Label>
               <Form.Control
                 type="time"
                 value={time}
-                onChange={e => setTime(e.target.value)}
+                onChange={(e) => setTime(e.target.value)}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>
-                {t('rooms.search.duration')}
-              </Form.Label>
+              <Form.Label>{t('rooms.search.duration')}</Form.Label>
               <Form.Control
                 as="select"
                 value={duration}
-                onChange={e => setDuration(e.target.value)}
+                onChange={(e) => setDuration(e.target.value)}
               >
-                {DURATIONS.map(d => <option key={d}>{d}</option>)}
+                {DURATIONS.map((d) => (
+                  <option key={d}>{d}</option>
+                ))}
               </Form.Control>
             </Form.Group>
           </div>
-          <Button onClick={() => filter()}>
-            {t('rooms.search.search')}
-          </Button>
+          <Button onClick={() => filter()}>{t('rooms.search.search')}</Button>
         </Form>
 
         <br />
 
-        {searching &&
-          <ReactPlaceholder type="text" rows={10} ready={filterResults}>
+        {searching && (
+          <ReactPlaceholder
+            type="text"
+            rows={10}
+            ready={filterResults}
+          >
             <ListGroup>
-              {filterResults && filterResults.map((result, idx) =>
-                <ListGroup.Item key={idx} className={styles.item}>
-                  <div className={styles.left}>
-                    <Link href={`/rooms?highlight=${result.room}`}>
-                      {getTranslatedRoomName(result.room)}
-                    </Link>
-                    {TUX_ROOMS.includes(result.room) && <> <FontAwesomeIcon title="Linux" icon={faLinux} /></>}
-                    <div className={styles.details}>
-                      {getRoomWithCapacity(getTranslatedRoomFunction(result.type), result.capacity, t)}
+              {filterResults &&
+                filterResults.map((result, idx) => (
+                  <ListGroup.Item
+                    key={idx}
+                    className={styles.item}
+                  >
+                    <div className={styles.left}>
+                      <Link href={`/rooms?highlight=${result.room}`}>
+                        {getTranslatedRoomName(result.room)}
+                      </Link>
+                      {TUX_ROOMS.includes(result.room) && (
+                        <>
+                          {' '}
+                          <FontAwesomeIcon
+                            title="Linux"
+                            icon={faLinux}
+                          />
+                        </>
+                      )}
+                      <div className={styles.details}>
+                        {getRoomWithCapacity(
+                          getTranslatedRoomFunction(result.type),
+                          result.capacity,
+                          t
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.right}>
-                    <Trans
-                      i18nKey="rooms.common.availableFromUntil"
-                      ns='rooms'
-                      values={{
-                        from: formatFriendlyTime(result.from),
-                        until: formatFriendlyTime(result.until)
-                      }}
-                      components={{
-                        br: <br />
-                      }}
-                    />
-                  </div>
-                </ListGroup.Item>
-              )}
-              {filterResults && filterResults.length === 0 &&
+                    <div className={styles.right}>
+                      <Trans
+                        i18nKey="rooms.common.availableFromUntil"
+                        ns="rooms"
+                        values={{
+                          from: formatFriendlyTime(result.from),
+                          until: formatFriendlyTime(result.until),
+                        }}
+                        components={{
+                          br: <br />,
+                        }}
+                      />
+                    </div>
+                  </ListGroup.Item>
+                ))}
+              {filterResults && filterResults.length === 0 && (
                 <ListGroup.Item className={styles.item}>
                   {t('rooms.search.results.noAvailableRooms')}
                 </ListGroup.Item>
-              }
+              )}
             </ListGroup>
           </ReactPlaceholder>
-        }
+        )}
       </AppBody>
 
       <AppTabbar />

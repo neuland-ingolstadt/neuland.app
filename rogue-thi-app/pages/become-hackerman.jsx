@@ -18,25 +18,25 @@ const FLAG_HASHES = FLAG_CSV.split(',')
 /**
  * Page which allows the user to enable the Hackerman theme by entering CTF flags.
  */
-export default function BecomeHackerman () {
+export default function BecomeHackerman() {
   const router = useRouter()
   const [flags, setFlags] = useState(['', '', '', ''])
   const [flagError, setFlagError] = useState(null)
 
-  function setFlag (i, value) {
+  function setFlag(i, value) {
     const dup = [...flags]
     dup[i] = value
     setFlags(dup)
   }
 
-  async function sha256 (text) {
+  async function sha256(text) {
     const encoder = new TextEncoder()
     const data = encoder.encode(text)
     const buff = await crypto.subtle.digest('SHA-256', data)
     const array = new Uint8Array(buff)
-    return [...array].map(x => x.toString(16).padStart(2, '0')).join('')
+    return [...array].map((x) => x.toString(16).padStart(2, '0')).join('')
   }
-  async function checkFlags () {
+  async function checkFlags() {
     let hasError = false
     const hashes = await Promise.all(flags.map(sha256))
     flags.forEach((x, i) => {
@@ -57,7 +57,9 @@ export default function BecomeHackerman () {
     })
 
     if (!hasError) {
-      const unlocked = localStorage.unlockedThemes ? JSON.parse(localStorage.unlockedThemes) : []
+      const unlocked = localStorage.unlockedThemes
+        ? JSON.parse(localStorage.unlockedThemes)
+        : []
       unlocked.push('hacker')
       localStorage.unlockedThemes = JSON.stringify(unlocked)
 
@@ -79,7 +81,7 @@ export default function BecomeHackerman () {
                 as="input"
                 placeholder="Flag 0"
                 value={flags[0]}
-                onChange={e => setFlag(0, e.target.value)}
+                onChange={(e) => setFlag(0, e.target.value)}
               />
             </ListGroup.Item>
             <ListGroup.Item>
@@ -87,7 +89,7 @@ export default function BecomeHackerman () {
                 as="input"
                 placeholder="Flag 1"
                 value={flags[1]}
-                onChange={e => setFlag(1, e.target.value)}
+                onChange={(e) => setFlag(1, e.target.value)}
               />
             </ListGroup.Item>
             <ListGroup.Item>
@@ -95,7 +97,7 @@ export default function BecomeHackerman () {
                 as="input"
                 placeholder="Flag 2"
                 value={flags[2]}
-                onChange={e => setFlag(2, e.target.value)}
+                onChange={(e) => setFlag(2, e.target.value)}
               />
             </ListGroup.Item>
             <ListGroup.Item>
@@ -103,14 +105,16 @@ export default function BecomeHackerman () {
                 as="input"
                 placeholder="Flag 3"
                 value={flags[3]}
-                onChange={e => setFlag(3, e.target.value)}
+                onChange={(e) => setFlag(3, e.target.value)}
               />
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button variant="primary" onClick={checkFlags}>
+              <Button
+                variant="primary"
+                onClick={checkFlags}
+              >
                 Check Flags!
-              </Button>
-              {' '}
+              </Button>{' '}
               {flagError}
             </ListGroup.Item>
           </ListGroup>
@@ -124,8 +128,6 @@ export default function BecomeHackerman () {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+  },
 })

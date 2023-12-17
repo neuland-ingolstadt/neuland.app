@@ -13,7 +13,7 @@ import {
   RenderMobilityEntry,
   getMobilityEntries,
   getMobilityLabel,
-  getMobilitySettings
+  getMobilitySettings,
 } from '../lib/backend-utils/mobility-utils'
 import stations from '../data/mobility.json'
 import { useTime } from '../lib/hooks/time-hook'
@@ -23,7 +23,7 @@ import { useTranslation } from 'next-i18next'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-export default function Bus () {
+export default function Bus() {
   const time = useTime()
   const [kind, setKind] = useState(null)
   const [station, setStation] = useState(null)
@@ -38,7 +38,7 @@ export default function Bus () {
   }, [])
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         if (kind) {
           localStorage.mobilityKind = kind
@@ -64,7 +64,7 @@ export default function Bus () {
    * Changes the mobility type.
    * @param {string} kind Mobility type (either `bus`, `train`, `parking` or `charging`)
    */
-  function changeKind (kind) {
+  function changeKind(kind) {
     setKind(kind)
     setData(null)
     if (kind === 'bus' || kind === 'train') {
@@ -81,56 +81,79 @@ export default function Bus () {
       <AppBody>
         <Form className={styles.stationForm}>
           <Form.Group>
-            <Form.Label>
-              {t('form.type.label')}
-            </Form.Label>
+            <Form.Label>{t('form.type.label')}</Form.Label>
             <Form.Control
               as="select"
               value={kind}
-              onChange={e => changeKind(e.target.value)}
+              onChange={(e) => changeKind(e.target.value)}
             >
               <option value="bus">{t('form.type.option.bus')}</option>
               <option value="train">{t('form.type.option.train')}</option>
               <option value="parking">{t('form.type.option.parking')}</option>
-              <option value="charging">{t('form.type.option.charging')}</option>ç
+              <option value="charging">{t('form.type.option.charging')}</option>
+              ç
             </Form.Control>
           </Form.Group>
           {(kind === 'bus' || kind === 'train') && (
             <Form.Group>
               <Form.Label>
-                {kind === 'bus' ? t('form.station.label.bus') : t('form.station.label.train')}
+                {kind === 'bus'
+                  ? t('form.station.label.bus')
+                  : t('form.station.label.train')}
               </Form.Label>
               <Form.Control
                 as="select"
                 value={station || ''}
-                onChange={e => setStation(e.target.value)}
+                onChange={(e) => setStation(e.target.value)}
               >
-                {kind && stations[kind].stations.map(station =>
-                  <option key={station.id} value={station.id}>{station.name}</option>
-                )}
+                {kind &&
+                  stations[kind].stations.map((station) => (
+                    <option
+                      key={station.id}
+                      value={station.id}
+                    >
+                      {station.name}
+                    </option>
+                  ))}
               </Form.Control>
             </Form.Group>
           )}
         </Form>
 
         <ListGroup>
-          <ReactPlaceholder type="text" rows={10} ready={data || dataError}>
+          <ReactPlaceholder
+            type="text"
+            rows={10}
+            ready={data || dataError}
+          >
             {dataError && (
               <ListGroup.Item className={styles.mobilityItem}>
-                {t('transport.error.retrieval')}<br />
+                {t('transport.error.retrieval')}
+                <br />
                 {dataError}
               </ListGroup.Item>
             )}
-            {data && data.length === 0 &&
+            {data && data.length === 0 && (
               <ListGroup.Item className={styles.mobilityItem}>
                 {t('transport.details.noElements')}
               </ListGroup.Item>
-            }
-            {data && data.map((item, idx) => (
-              <ListGroup.Item key={idx} className={styles.mobilityItem}>
-                <RenderMobilityEntry kind={kind} item={item} maxLen={200} styles={styles} detailed={true} t={t} />
-              </ListGroup.Item>
-            ))}
+            )}
+            {data &&
+              data.map((item, idx) => (
+                <ListGroup.Item
+                  key={idx}
+                  className={styles.mobilityItem}
+                >
+                  <RenderMobilityEntry
+                    kind={kind}
+                    item={item}
+                    maxLen={200}
+                    styles={styles}
+                    detailed={true}
+                    t={t}
+                  />
+                </ListGroup.Item>
+              ))}
           </ReactPlaceholder>
         </ListGroup>
 
@@ -142,9 +165,6 @@ export default function Bus () {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'mobility',
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['mobility', 'common'])),
+  },
 })

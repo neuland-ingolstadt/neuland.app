@@ -7,13 +7,13 @@ import { getNextValidDate } from './rooms-utils'
  * @param {object} item Timetable item
  * @returns {object}
  */
-export function getTimetableEntryName (item) {
+export function getTimetableEntryName(item) {
   const match = item.shortName.match(/^[A-Z]{2}\S*/)
   if (match) {
     const [shortName] = match
     return {
       name: item.name,
-      shortName
+      shortName,
     }
   } else {
     // fallback for weird entries like
@@ -23,7 +23,7 @@ export function getTimetableEntryName (item) {
     const shortName = name.length < 10 ? name : name.substr(0, 10) + '…'
     return {
       name,
-      shortName
+      shortName,
     }
   }
 }
@@ -34,14 +34,14 @@ export function getTimetableEntryName (item) {
  * @param {object[]} timetable Timetable
  * @returns {object[]}
  **/
-export function getTimetableGaps (timetable) {
+export function getTimetableGaps(timetable) {
   let gaps = []
   for (let i = 0; i < timetable.length - 1; i++) {
     const gap = {
       startDate: timetable[i].endDate,
       endDate: timetable[i + 1].startDate,
       startLecture: timetable[i],
-      endLecture: timetable[i + 1]
+      endLecture: timetable[i + 1],
     }
 
     gaps.push(gap)
@@ -52,17 +52,17 @@ export function getTimetableGaps (timetable) {
     gaps.unshift({
       startDate: getNextValidDate(),
       endDate: timetable[0].startDate,
-      endLecture: timetable[0]
+      endLecture: timetable[0],
     })
   }
 
-  gaps.forEach(x => {
+  gaps.forEach((x) => {
     // substract 10 minutes for valid room times
     x.endDate.setMinutes(x.endDate.getMinutes() - 10)
   })
 
   // filter out gaps that are too short (<= 10 minutes) (10 minute are already substracted => 0)
-  gaps = gaps.filter(x => x.endDate - x.startDate > 0)
+  gaps = gaps.filter((x) => x.endDate - x.startDate > 0)
 
   return gaps
 }
@@ -73,24 +73,25 @@ export function getTimetableGaps (timetable) {
  * @param {boolean} detailed Fetch lecture descriptions
  * @returns {object[]}
  */
-export async function getFriendlyTimetable (date, detailed) {
+export async function getFriendlyTimetable(date, detailed) {
   const { timetable } = await API.getTimetable(date, detailed)
 
   /**
    * During the semester break, the API returns an null array ('[null]').
    * To prevent errors for the room suggestions or the timetable view, we return an empty array.
    */
-  if (timetable.every(x => x === null)) {
+  if (timetable.every((x) => x === null)) {
     console.error('API returned null array for timetable!')
     return []
   }
 
   return timetable
-    .flatMap(day =>
-      Object.values(day.hours)
-        .flatMap(hours => hours.map(hour => ({ date: day.date, ...hour })))
+    .flatMap((day) =>
+      Object.values(day.hours).flatMap((hours) =>
+        hours.map((hour) => ({ date: day.date, ...hour }))
+      )
     )
-    .map(x => {
+    .map((x) => {
       const startDate = combineDateTime(x.date, x.von)
       const endDate = combineDateTime(x.date, x.bis)
 
@@ -99,7 +100,7 @@ export async function getFriendlyTimetable (date, detailed) {
       if (x.details.raum) {
         rooms = x.details.raum
           .split(',')
-          .map(x => x.trim().toUpperCase())
+          .map((x) => x.trim().toUpperCase())
           .sort()
       }
 
@@ -118,9 +119,9 @@ export async function getFriendlyTimetable (date, detailed) {
         ects: x.details.ectspoints,
         objective: x.details.ziel,
         contents: x.details.inhalt,
-        literature: x.details.literatur
+        literature: x.details.literatur,
       }
     })
-    .filter(x => x.endDate > date)
+    .filter((x) => x.endDate > date)
     .sort((a, b) => a.startDate - b.startDate)
 }

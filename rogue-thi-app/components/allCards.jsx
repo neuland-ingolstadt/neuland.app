@@ -13,7 +13,7 @@ import {
   faMap,
   faScroll,
   faUser,
-  faUserGraduate
+  faUserGraduate,
 } from '@fortawesome/free-solid-svg-icons'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '../lib/hooks/user-kind'
@@ -25,54 +25,78 @@ export const ALL_DASHBOARD_CARDS = [
     key: 'install',
     removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: hidePromptCard => (
+    card: (hidePromptCard) => (
       <InstallPrompt
         key="install"
         onHide={() => hidePromptCard('install')}
       />
-    )
+    ),
   },
   {
     key: 'exams',
     removable: true,
     default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT],
-    card: () => <ExamsCard key="exams" />
+    card: () => <ExamsCard key="exams" />,
   },
   {
     key: 'timetable',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE],
-    card: () => <TimetableCard key="timetable" />
+    card: () => <TimetableCard key="timetable" />,
   },
   {
     key: 'mensa',
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <FoodCard key="mensa" />
+    card: () => <FoodCard key="mensa" />,
   },
   {
     key: 'mobility',
     removable: true,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <MobilityCard key="mobility" />
+    default: [
+      PLATFORM_DESKTOP,
+      PLATFORM_MOBILE,
+      USER_STUDENT,
+      USER_EMPLOYEE,
+      USER_GUEST,
+    ],
+    card: () => <MobilityCard key="mobility" />,
   },
   {
     key: 'calendar',
     removable: true,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <CalendarCard key="calendar" />
+    default: [
+      PLATFORM_DESKTOP,
+      PLATFORM_MOBILE,
+      USER_STUDENT,
+      USER_EMPLOYEE,
+      USER_GUEST,
+    ],
+    card: () => <CalendarCard key="calendar" />,
   },
   {
     key: 'events',
     removable: true,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <EventsCard key="events" />
+    default: [
+      PLATFORM_DESKTOP,
+      PLATFORM_MOBILE,
+      USER_STUDENT,
+      USER_EMPLOYEE,
+      USER_GUEST,
+    ],
+    card: () => <EventsCard key="events" />,
   },
   {
     key: 'rooms',
     removable: true,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: () => <RoomCard key="rooms" />
+    default: [
+      PLATFORM_DESKTOP,
+      PLATFORM_MOBILE,
+      USER_STUDENT,
+      USER_EMPLOYEE,
+      USER_GUEST,
+    ],
+    card: () => <RoomCard key="rooms" />,
   },
   {
     key: 'roomplan',
@@ -85,7 +109,7 @@ export const ALL_DASHBOARD_CARDS = [
         i18nKey="roomplan"
         link="/rooms"
       />
-    )
+    ),
   },
   {
     key: 'library',
@@ -98,7 +122,7 @@ export const ALL_DASHBOARD_CARDS = [
         i18nKey="library"
         link="/library"
       />
-    )
+    ),
   },
   {
     key: 'grades',
@@ -111,12 +135,18 @@ export const ALL_DASHBOARD_CARDS = [
         i18nKey="grades"
         link="/grades"
       />
-    )
+    ),
   },
   {
     key: 'personal',
     removable: false,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    default: [
+      PLATFORM_DESKTOP,
+      PLATFORM_MOBILE,
+      USER_STUDENT,
+      USER_EMPLOYEE,
+      USER_GUEST,
+    ],
     card: () => (
       <BaseCard
         key="personal"
@@ -124,7 +154,7 @@ export const ALL_DASHBOARD_CARDS = [
         i18nKey="personal"
         link="/personal"
       />
-    )
+    ),
   },
   {
     key: 'lecturers',
@@ -137,6 +167,6 @@ export const ALL_DASHBOARD_CARDS = [
         i18nKey="lecturers"
         link="/lecturers"
       />
-    )
-  }
+    ),
+  },
 ]

@@ -4,13 +4,13 @@
 .imprint h4,
 .imprint h5,
 .imprintTitle {
-	font-size: calc(13px + 0.5vw);
+  font-size: calc(13px + 0.5vw);
 }
 
 .imprint {
-	font-size: calc(10px + 0.3vw);
+  font-size: calc(10px + 0.3vw);
 }
 
 .imprintTitle {
-	margin-top: 15px;
+  margin-top: 15px;
 }

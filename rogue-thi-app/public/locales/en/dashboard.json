@@ -1,94 +1,94 @@
 {
-    "timetable": {
-        "title": "Timetable",
-        "text": {
-            "endingSoon": "ends in {{mins}} min",
-            "ongoing": "ends at {{time}}",
-            "startingSoon": "starts in {{mins}} min",
-            "future": "at",
-            "noLectures": "You have no more lectures today.",
-            "error": "Error retrieving timetable."
-        }
-    },
-    "food": {
-        "location": {
-            "food": {
-                "title": "Food"
-            },
-            "cafeteria": {
-                "title": "Cafeteria"
-            },
-            "reimanns": {
-                "title": "Reimanns"
-            },
-            "canisius": {
-                "title": "Canisiuskonvikt"
-            }
-        },
-        "error": {
-            "empty": "Today's menu is empty.",
-            "generic": "Error retrieving the menu.<br />Something seems to be broken."
-        },
-        "text.additional": "and {{count}} more dishes"
-    },
-    "transport": {
-        "title": {
-            "train": "Train ({{station}})",
-            "bus": "Bus ({{station}})",
-            "parking": "Parking",
-            "charging": "Charging Stations"
-        },
-        "error": {
-            "empty": "No items.",
-            "generic": "Error retrieving."
-        }
-    },
-    "calendar": {
-        "title": "Calendar",
-        "date": {
-            "ends": "ends",
-            "starts": "starts"
-        },
-        "exam": "Exam"
-    },
-    "exams": {
-        "title": "Exams"
-    },
-    "events": {
-        "title": "Events",
-        "organizer.attribute": "by"
-    },
-    "rooms": {
-        "title": "Rooms",
-        "text": "Available from {{from}} to {{until}}"
-    },
-    "roomplan": {
-        "title": "Room Plan"
-    },
-    "library": {
-        "title": "Library"
-    },
-    "grades": {
-        "title": "Grades & Subjects"
-    },
-    "personal": {
-        "title": "Personal Data"
-    },
-    "lecturers": {
-        "title": "Lecturers"
-    },
-    "election": {
-        "title": "University Elections",
-        "text": "The university elections are currently taking place. Your participation is important to strengthen the democratic structures at our university.",
-        "button": "Vote Online",
-        "icon.close": "Close"
-    },
-    "install": {
-        "title": "Installation",
-        "text": {
-            "question": "Want to <strong>install</strong> this app on your smartphone?",
-            "ios": "In Safari, tap <strong>Share</strong> and then tap <strong>Add to Home Screen</strong>.",
-            "android": "In Chrome, tap the <strong>Menu</strong> button and then tap <strong>Add to Home Screen</strong>."
-        }
+  "timetable": {
+    "title": "Timetable",
+    "text": {
+      "endingSoon": "ends in {{mins}} min",
+      "ongoing": "ends at {{time}}",
+      "startingSoon": "starts in {{mins}} min",
+      "future": "at",
+      "noLectures": "You have no more lectures today.",
+      "error": "Error retrieving timetable."
     }
+  },
+  "food": {
+    "location": {
+      "food": {
+        "title": "Food"
+      },
+      "cafeteria": {
+        "title": "Cafeteria"
+      },
+      "reimanns": {
+        "title": "Reimanns"
+      },
+      "canisius": {
+        "title": "Canisiuskonvikt"
+      }
+    },
+    "error": {
+      "empty": "Today's menu is empty.",
+      "generic": "Error retrieving the menu.<br />Something seems to be broken."
+    },
+    "text.additional": "and {{count}} more dishes"
+  },
+  "transport": {
+    "title": {
+      "train": "Train ({{station}})",
+      "bus": "Bus ({{station}})",
+      "parking": "Parking",
+      "charging": "Charging Stations"
+    },
+    "error": {
+      "empty": "No items.",
+      "generic": "Error retrieving."
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "date": {
+      "ends": "ends",
+      "starts": "starts"
+    },
+    "exam": "Exam"
+  },
+  "exams": {
+    "title": "Exams"
+  },
+  "events": {
+    "title": "Events",
+    "organizer.attribute": "by"
+  },
+  "rooms": {
+    "title": "Rooms",
+    "text": "Available from {{from}} to {{until}}"
+  },
+  "roomplan": {
+    "title": "Room Plan"
+  },
+  "library": {
+    "title": "Library"
+  },
+  "grades": {
+    "title": "Grades & Subjects"
+  },
+  "personal": {
+    "title": "Personal Data"
+  },
+  "lecturers": {
+    "title": "Lecturers"
+  },
+  "election": {
+    "title": "University Elections",
+    "text": "The university elections are currently taking place. Your participation is important to strengthen the democratic structures at our university.",
+    "button": "Vote Online",
+    "icon.close": "Close"
+  },
+  "install": {
+    "title": "Installation",
+    "text": {
+      "question": "Want to <strong>install</strong> this app on your smartphone?",
+      "ios": "In Safari, tap <strong>Share</strong> and then tap <strong>Add to Home Screen</strong>.",
+      "android": "In Chrome, tap the <strong>Menu</strong> button and then tap <strong>Add to Home Screen</strong>."
+    }
+  }
 }

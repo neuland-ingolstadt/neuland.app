@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export function useBuildingFilter () {
+export function useBuildingFilter() {
   const [buildingPreferences, setBuildingPreferences] = useState({})
 
   useEffect(() => {
@@ -12,13 +12,13 @@ export function useBuildingFilter () {
   /**
    * Persists the building preferences to localStorage.
    */
-  function saveBuildingPreferences () {
+  function saveBuildingPreferences() {
     localStorage.buildingPreferences = JSON.stringify(buildingPreferences)
   }
 
   return {
     buildingPreferences,
     setBuildingPreferences,
-    saveBuildingPreferences
+    saveBuildingPreferences,
   }
 }

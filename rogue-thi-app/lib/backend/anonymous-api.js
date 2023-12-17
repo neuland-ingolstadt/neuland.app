@@ -41,7 +41,7 @@ const THI_CERTS = [
   G9w84FoVxp7Z8VlIMCFlA2zs6SFz7JsDoeA3raAVGI/6ugLOpyypEBMs1OUIJqsi
   l2D4kF501KKaU73yqWjgom7C12yxow+ev+to51byrvLjKzg6CYG1a4XXvi3tPxq3
   smPi9WIsgtRqAEFQ8TmDn5XpNpaYbg==
-  -----END CERTIFICATE-----`
+  -----END CERTIFICATE-----`,
 ]
 
 /**
@@ -52,7 +52,7 @@ export class APIError extends Error {
    * @param {number} status HTTP status code
    * @param {object} data Error data
    */
-  constructor (status, data) {
+  constructor(status, data) {
     super(`${data} (${status})`)
     this.status = status
     this.data = data
@@ -67,15 +67,15 @@ export class APIError extends Error {
  * @see {@link https://github.com/neuland-ingolstadt/neuland.app/blob/develop/docs/thi-rest-api.md}
  */
 export class AnonymousAPIClient {
-  constructor () {
+  constructor() {
     if (typeof localStorage === 'undefined') {
       this.cache = new MemoryCache({
-        ttl: CACHE_TTL
+        ttl: CACHE_TTL,
       })
     } else {
       this.cache = new LocalStorageCache({
         namespace: CACHE_NAMESPACE,
-        ttl: CACHE_TTL
+        ttl: CACHE_TTL,
       })
     }
   }
@@ -83,7 +83,7 @@ export class AnonymousAPIClient {
   /**
    * Submits an API request to the THI backend using a WebSocket proxy
    */
-  async request (params) {
+  async request(params) {
     if (!this.connection) {
       this.connection = await obtainFetchImplementation(ENDPOINT_MODE, {
         target: ENDPOINT_HOST,
@@ -92,26 +92,29 @@ export class AnonymousAPIClient {
         closed: () => {
           this.connection = null
         },
-        error: err => {
+        error: (err) => {
           console.error(err)
           this.connection = null
-        }
+        },
       })
     }
 
     const headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'X-API-KEY': API_KEY
+      'X-API-KEY': API_KEY,
     }
     if (ENDPOINT_MODE !== 'direct') {
       headers['Host'] = ENDPOINT_HOST
       headers['User-Agent'] = USER_AGENT
     }
-    const resp = await this.connection.fetch(`https://${ENDPOINT_HOST}${ENDPOINT_URL}`, {
-      method: 'POST',
-      body: new URLSearchParams(params).toString(),
-      headers
-    })
+    const resp = await this.connection.fetch(
+      `https://${ENDPOINT_HOST}${ENDPOINT_URL}`,
+      {
+        method: 'POST',
+        body: new URLSearchParams(params).toString(),
+        headers,
+      }
+    )
     try {
       return await resp.json()
     } catch (e) {
@@ -122,7 +125,7 @@ export class AnonymousAPIClient {
   /**
    * Creates a login session.
    */
-  async login (username, passwd) {
+  async login(username, passwd) {
     await this.clearCache()
 
     const res = await this.request({
@@ -130,7 +133,7 @@ export class AnonymousAPIClient {
       method: 'open',
       format: 'json',
       username,
-      passwd
+      passwd,
     })
 
     if (res.status !== 0) {
@@ -139,7 +142,7 @@ export class AnonymousAPIClient {
 
     return {
       session: res.data[0],
-      isStudent: res.data[2] === 3
+      isStudent: res.data[2] === 3,
     }
   }
 
@@ -148,12 +151,12 @@ export class AnonymousAPIClient {
    * @param {string} session Session token
    * @returns {boolean} `true` if the session is valid.
    */
-  async isAlive (session) {
+  async isAlive(session) {
     const res = await this.request({
       service: 'session',
       method: 'isalive',
       format: 'json',
-      session
+      session,
     })
 
     return res.data === 'STATUS_OK'
@@ -164,12 +167,12 @@ export class AnonymousAPIClient {
    * @param {string} session Session token
    * @returns {boolean} `true` if the session was destroyed.
    */
-  async logout (session) {
+  async logout(session) {
     const res = await this.request({
       service: 'session',
       method: 'close',
       format: 'json',
-      session
+      session,
     })
 
     return res.data === 'STATUS_OK'
@@ -180,7 +183,7 @@ export class AnonymousAPIClient {
    * Should be called either before login or after logout
    * to prevent responses from different users from being mixed up.
    */
-  async clearCache () {
+  async clearCache() {
     this.cache.flushAll()
   }
 }

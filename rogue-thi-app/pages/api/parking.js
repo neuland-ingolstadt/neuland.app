@@ -13,13 +13,13 @@ const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
  * @param {number} status HTTP status code
  * @param {object} body Response body
  */
-function sendJson (res, code, value) {
+function sendJson(res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(value))
 }
 
-export default async function handler (req, res) {
+export default async function handler(req, res) {
   try {
     const data = await cache.get('parking', async () => {
       const resp = await fetch(URL)
@@ -31,7 +31,7 @@ export default async function handler (req, res) {
       const $ = cheerio.load(body)
       const lots = $('.parkplatz-anzahl').map((i, el) => ({
         name: $(el).parent().find('.parkplatz-name-kurz').text().trim(),
-        available: parseInt($(el).text().trim())
+        available: parseInt($(el).text().trim()),
       }))
 
       return Array.from(lots)
@@ -40,6 +40,10 @@ export default async function handler (req, res) {
     sendJson(res, 200, data)
   } catch (e) {
     console.error(e)
-    sendJson(res, 500, 'Unexpected/Malformed response from the Stadt Ingolstadt website!')
+    sendJson(
+      res,
+      500,
+      'Unexpected/Malformed response from the Stadt Ingolstadt website!'
+    )
   }
 }

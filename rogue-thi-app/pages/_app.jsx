@@ -26,7 +26,7 @@ export const ShowLanguageModal = createContext(false)
 
 config.autoAddCss = false
 
-function MyApp ({ Component, pageProps }) {
+function MyApp({ Component, pageProps }) {
   const router = useRouter()
   const [theme, setTheme] = useState('default')
   const [themeColor, setThemeColor] = useState(undefined)
@@ -41,7 +41,7 @@ function MyApp ({ Component, pageProps }) {
     moveDashboardEntry,
     hideDashboardEntry,
     bringBackDashboardEntry,
-    resetOrder
+    resetOrder,
   } = useDashboard()
 
   const LIGHT = '#ffffff'
@@ -50,14 +50,16 @@ function MyApp ({ Component, pageProps }) {
   useEffect(() => {
     // migrate legacy cookie theme setting to localStorage
     // added 2022-04-15, can be removed later
-    const entry = document.cookie.split(';').find(x => x.trim().startsWith('theme='))
+    const entry = document.cookie
+      .split(';')
+      .find((x) => x.trim().startsWith('theme='))
     if (entry) {
       localStorage.theme = entry.split('=')[1]
       document.cookie = `theme=; expires=${new Date().toUTCString()}; path=/; SameSite=Strict; Secure`
     }
 
     const theme = localStorage.theme
-    if (theme && themes.find(x => x.style === theme)) {
+    if (theme && themes.find((x) => x.style === theme)) {
       setTheme(theme)
     }
   }, [])
@@ -95,7 +97,7 @@ function MyApp ({ Component, pageProps }) {
       '#ffdb3b',
       '#019d30',
       '#0b68ea',
-      '#8845ef'
+      '#8845ef',
     ]
     const today = new Date()
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -109,19 +111,27 @@ function MyApp ({ Component, pageProps }) {
       hacker: '#0ae40a',
       pride: prideColors[today.getDay() % prideColors.length],
       blue: '#005ea1',
-      95: '#008080'
+      95: '#008080',
     }
     const selectedThemeColor = themeColors[theme] || (isDarkMode ? DARK : LIGHT)
     setThemeColor(selectedThemeColor)
   }, [theme])
 
   return (
-    <ShowLanguageModal.Provider value={[showLanguageModal, setShowLanguageModal]}>
+    <ShowLanguageModal.Provider
+      value={[showLanguageModal, setShowLanguageModal]}
+    >
       <ThemeContext.Provider value={[computedTheme, setTheme]}>
         <FoodFilterContext.Provider value={foodFilter}>
-          <ShowDashboardModal.Provider value={[showDashboardModal, setShowDashboardModal]}>
-            <ShowPersonalDataModal.Provider value={[showPersonalDataModal, setShowPersonalDataModal]}>
-              <ShowThemeModal.Provider value={[showThemeModal, setShowThemeModal]}>
+          <ShowDashboardModal.Provider
+            value={[showDashboardModal, setShowDashboardModal]}
+          >
+            <ShowPersonalDataModal.Provider
+              value={[showPersonalDataModal, setShowPersonalDataModal]}
+            >
+              <ShowThemeModal.Provider
+                value={[showThemeModal, setShowThemeModal]}
+              >
                 <DashboardContext.Provider
                   value={{
                     shownDashboardEntries,
@@ -129,28 +139,56 @@ function MyApp ({ Component, pageProps }) {
                     moveDashboardEntry,
                     hideDashboardEntry,
                     bringBackDashboardEntry,
-                    resetOrder
+                    resetOrder,
                   }}
                 >
-
                   <Head>
-                    <meta charSet="utf-8"/>
-                    <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
+                    <meta charSet="utf-8" />
+                    <meta
+                      httpEquiv="X-UA-Compatible"
+                      content="IE=edge"
+                    />
                     <meta
                       name="viewport"
                       content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
                     />
-                    <meta name="description" content="Eine inoffizielle App für die Technische Hochschule Ingolstadt"/>
-                    <meta name="keywords" content="THI, Technische Hochschule Ingolstadt, App"/>
-                    <meta name="theme-color" content={themeColor}/>
+                    <meta
+                      name="description"
+                      content="Eine inoffizielle App für die Technische Hochschule Ingolstadt"
+                    />
+                    <meta
+                      name="keywords"
+                      content="THI, Technische Hochschule Ingolstadt, App"
+                    />
+                    <meta
+                      name="theme-color"
+                      content={themeColor}
+                    />
 
-                    <link rel="manifest" href="/manifest.json"/>
-                    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+                    <link
+                      rel="manifest"
+                      href="/manifest.json"
+                    />
+                    <meta
+                      name="apple-mobile-web-app-status-bar-style"
+                      content="default"
+                    />
 
                     {/* generated using npx pwa-asset-generator (run via Dockerfile) */}
-                    <meta name="apple-mobile-web-app-capable" content="yes"/>
-                    <link rel="apple-touch-icon" href="/apple-icon-180.png"/>
-                    <link rel="icon" type="image/png" sizes="196x196" href="/favicon-196.png"/>
+                    <meta
+                      name="apple-mobile-web-app-capable"
+                      content="yes"
+                    />
+                    <link
+                      rel="apple-touch-icon"
+                      href="/apple-icon-180.png"
+                    />
+                    <link
+                      rel="icon"
+                      type="image/png"
+                      sizes="196x196"
+                      href="/favicon-196.png"
+                    />
                     <link
                       rel="apple-touch-startup-image"
                       href="/apple-splash-dark-2048-2732.jpg"
@@ -282,12 +320,15 @@ function MyApp ({ Component, pageProps }) {
                       media="(prefers-color-scheme: dark) and (device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)"
                     />
 
-                    <link rel="stylesheet" href={`/themes/${computedTheme}.css`}/>
+                    <link
+                      rel="stylesheet"
+                      href={`/themes/${computedTheme}.css`}
+                    />
                   </Head>
 
                   {computedTheme === 'hacker' && (
                     <div className="matrixBackground">
-                      <TheMatrixAnimation/>
+                      <TheMatrixAnimation />
                     </div>
                   )}
 
@@ -305,7 +346,7 @@ function MyApp ({ Component, pageProps }) {
 MyApp.propTypes = {
   Component: PropTypes.any,
   pageProps: PropTypes.any,
-  theme: PropTypes.string
+  theme: PropTypes.string,
 }
 
 export default appWithTranslation(MyApp)

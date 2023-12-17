@@ -11,7 +11,10 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faChevronRight,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import AppBody from '../components/page/AppBody'
@@ -19,10 +22,21 @@ import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
+import {
+  NoSessionError,
+  UnavailableSessionError,
+} from '../lib/backend/thi-session-handler'
 import { OS_IOS, useOperatingSystem } from '../lib/hooks/os-hook'
-import { addWeek, formatFriendlyTime, getFriendlyWeek, getWeek } from '../lib/date-utils'
-import { getFriendlyTimetable, getTimetableEntryName } from '../lib/backend-utils/timetable-utils'
+import {
+  addWeek,
+  formatFriendlyTime,
+  getFriendlyWeek,
+  getWeek,
+} from '../lib/date-utils'
+import {
+  getFriendlyTimetable,
+  getTimetableEntryName,
+} from '../lib/backend-utils/timetable-utils'
 
 import styles from '../styles/Timetable.module.css'
 
@@ -34,27 +48,24 @@ const VirtualizeSwipeableViews = virtualize(SwipeableViews)
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'timetable',
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['timetable', 'common'])),
+  },
 })
 
 /**
  * Groups timetable entries by date.
  * @param {object[]} timetable
  */
-function groupTimetableEntries (timetable) {
+function groupTimetableEntries(timetable) {
   // get all available dates and remove duplicates
   const dates = timetable
-    .map(x => x.date)
+    .map((x) => x.date)
     .filter((v, i, a) => a.indexOf(v) === i)
 
   // get events for each date
-  const groups = dates.map(date => ({
+  const groups = dates.map((date) => ({
     date,
-    items: timetable.filter(x => x.date === date)
+    items: timetable.filter((x) => x.date === date),
   }))
 
   return groups
@@ -65,7 +76,7 @@ function groupTimetableEntries (timetable) {
  * @param {Date} date
  * @returns {boolean}
  */
-function isToday (date) {
+function isToday(date) {
   return new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
 }
 
@@ -76,7 +87,7 @@ function isToday (date) {
  * @param {Date} end End of the week
  * @returns {boolean}
  */
-function isInWeek (date, start, end) {
+function isInWeek(date, start, end) {
   date = new Date(date)
   return date > start && date < end
 }
@@ -86,8 +97,10 @@ function isInWeek (date, start, end) {
  * @param {Date} date
  * @returns {string}
  */
-function getDay (date) {
-  return new Date(date).toLocaleDateString(getAdjustedLocale(), { day: 'numeric' })
+function getDay(date) {
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), {
+    day: 'numeric',
+  })
 }
 
 /**
@@ -95,14 +108,16 @@ function getDay (date) {
  * @param {Date} date
  * @returns {string}
  */
-function getWeekday (date) {
-  return new Date(date).toLocaleDateString(getAdjustedLocale(), { weekday: 'short' })
+function getWeekday(date) {
+  return new Date(date).toLocaleDateString(getAdjustedLocale(), {
+    weekday: 'short',
+  })
 }
 
 /**
  * Page displaying the users timetable.
  */
-export default function Timetable () {
+export default function Timetable() {
   const { t } = useTranslation('timetable')
 
   const router = useRouter()
@@ -110,7 +125,8 @@ export default function Timetable () {
   const [timetable, setTimetable] = useState(null)
   const [focusedEntry, setFocusedEntry] = useState(null)
   const [isDetailedData, setIsDetailedData] = useState(false)
-  const [showTimetableExplanation, setShowTimetableExplanation] = useState(false)
+  const [showTimetableExplanation, setShowTimetableExplanation] =
+    useState(false)
   const [showICalExplanation, setShowICalExplanation] = useState(false)
 
   // page (0 = current week)
@@ -132,7 +148,7 @@ export default function Timetable () {
   }, [page, effectiveDate])
 
   useEffect(() => {
-    async function load (currWeek) {
+    async function load(currWeek) {
       // we need to load data only if we have not done it yet or if we have no
       // detailed data but want to display an entry in detail
       if (currWeek === fetchedWeek && (!focusedEntry || isDetailedData)) {
@@ -150,21 +166,29 @@ export default function Timetable () {
         if (focusedEntry) {
           // find the focused entry in the new data
           const detailedEntry = groupedData
-            .map(group => group.items.find(x =>
-              x.datum === focusedEntry.datum &&
-              x.veranstaltung === focusedEntry.veranstaltung)
+            .map((group) =>
+              group.items.find(
+                (x) =>
+                  x.datum === focusedEntry.datum &&
+                  x.veranstaltung === focusedEntry.veranstaltung
+              )
             )
-            .find(x => x)
+            .find((x) => x)
 
           if (detailedEntry) {
             setFocusedEntry(detailedEntry)
           } else {
             // just keep the old entry. The user wont see goals, content or literature
-            console.error('could not find the focused timetable entry in new detailed data')
+            console.error(
+              'could not find the focused timetable entry in new detailed data'
+            )
           }
         }
       } catch (e) {
-        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+        if (
+          e instanceof NoSessionError ||
+          e instanceof UnavailableSessionError
+        ) {
           router.replace('/login?redirect=timetable')
         } else {
           console.error(e)
@@ -179,81 +203,97 @@ export default function Timetable () {
    * Renderer for `react-swipeable-views` that displays the timetable for a particular week
    * @see {@link https://react-swipeable-views.com/api/api/#virtualize}
    */
-  function timetableRenderer ({ key, index }) {
-    const [start, end] = getWeek(effectiveDate).map(date => addWeek(date, index))
-    const current = timetable && timetable.filter(group => isInWeek(group.date, start, end))
+  function timetableRenderer({ key, index }) {
+    const [start, end] = getWeek(effectiveDate).map((date) =>
+      addWeek(date, index)
+    )
+    const current =
+      timetable && timetable.filter((group) => isInWeek(group.date, start, end))
 
     return (
       <div key={key}>
-        {current && current.map((group, idx) =>
-          <div key={idx} className={`${styles.day} ${isToday(group.date) && styles.today}`}>
-            <div className={`text-muted ${styles.heading}`}>
-              <div className={styles.date}>
-                {getDay(group.date)}
+        {current &&
+          current.map((group, idx) => (
+            <div
+              key={idx}
+              className={`${styles.day} ${isToday(group.date) && styles.today}`}
+            >
+              <div className={`text-muted ${styles.heading}`}>
+                <div className={styles.date}>{getDay(group.date)}</div>
+                <div className={styles.weekday}>{getWeekday(group.date)}</div>
               </div>
-              <div className={styles.weekday}>
-                {getWeekday(group.date)}
-              </div>
-            </div>
 
-            <ListGroup className={styles.items} variant="flush">
-              {group.items.map((item, idx) =>
-                <ListGroup.Item key={idx} className={styles.item} onClick={() => setFocusedEntry(item)} action>
-                  <div className={styles.left}>
-                    <div className={styles.name}>
-                      {getTimetableEntryName(item).name}
-                    </div>
-                    <div className={styles.room}>
-                      {item.rooms.map((room, i, array) => (
-                        <>
-                          {/^[A-Z](G|[0-9E]\.)?\d*$/.test(room)
-                            ? (
-                              <Link key={i} href={`/rooms?highlight=${room}`}>
-                                <a onClick={(e) => e.stopPropagation()}>{room}</a>
+              <ListGroup
+                className={styles.items}
+                variant="flush"
+              >
+                {group.items.map((item, idx) => (
+                  <ListGroup.Item
+                    key={idx}
+                    className={styles.item}
+                    onClick={() => setFocusedEntry(item)}
+                    action
+                  >
+                    <div className={styles.left}>
+                      <div className={styles.name}>
+                        {getTimetableEntryName(item).name}
+                      </div>
+                      <div className={styles.room}>
+                        {item.rooms.map((room, i, array) => (
+                          <>
+                            {/^[A-Z](G|[0-9E]\.)?\d*$/.test(room) ? (
+                              <Link
+                                key={i}
+                                href={`/rooms?highlight=${room}`}
+                              >
+                                <a onClick={(e) => e.stopPropagation()}>
+                                  {room}
+                                </a>
                               </Link>
-                            )
-                            : (
+                            ) : (
                               <span key={i}>{room}</span>
                             )}
-                          {i < array.length - 1 && ' '}
-                        </>
-                      ))}
+                            {i < array.length - 1 && ' '}
+                          </>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.right}>
-                    {formatFriendlyTime(item.startDate)} <br />
-                    {formatFriendlyTime(item.endDate)}
-                  </div>
-                </ListGroup.Item>
-              )}
-            </ListGroup>
-          </div>
-        )}
-        {current && current.length === 0 &&
+                    <div className={styles.right}>
+                      {formatFriendlyTime(item.startDate)} <br />
+                      {formatFriendlyTime(item.endDate)}
+                    </div>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </div>
+          ))}
+        {current && current.length === 0 && (
           <div className={`text-muted ${styles.notice}`}>
-            <p>
-              {t('timetable.overview.noLectures')}
-            </p>
+            <p>{t('timetable.overview.noLectures')}</p>
             <p>
               <Trans
                 i18nKey="timetable.overview.configureTimetable"
                 ns="timetable"
-                components={{ a: <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"/> }}
+                components={{
+                  a: (
+                    <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" />
+                  ),
+                }}
               />
             </p>
           </div>
-        }
+        )}
       </div>
     )
   }
 
-  function ExplanationListElement ({ i18nKey }) {
+  function ExplanationListElement({ i18nKey }) {
     return (
       <li>
         <Trans
           i18nKey={`timetable.modals.${i18nKey}`}
           ns="timetable"
-          components={{ em: <em/> }}
+          components={{ em: <em /> }}
         />
       </li>
     )
@@ -261,56 +301,84 @@ export default function Timetable () {
 
   return (
     <AppContainer>
-      <AppNavbar title={t('timetable.appbar.title')} showBack={'desktop-only'}>
+      <AppNavbar
+        title={t('timetable.appbar.title')}
+        showBack={'desktop-only'}
+      >
         <AppNavbar.Overflow>
-          <AppNavbar.Overflow.Link variant="link" onClick={() => setShowTimetableExplanation(true)}>
+          <AppNavbar.Overflow.Link
+            variant="link"
+            onClick={() => setShowTimetableExplanation(true)}
+          >
             {t('timetable.overflow.editLectures')}
           </AppNavbar.Overflow.Link>
-          <AppNavbar.Overflow.Link variant="link" onClick={() => setShowICalExplanation(true)}>
+          <AppNavbar.Overflow.Link
+            variant="link"
+            onClick={() => setShowICalExplanation(true)}
+          >
             {t('timetable.overflow.subscribeCalendar')}
           </AppNavbar.Overflow.Link>
         </AppNavbar.Overflow>
       </AppNavbar>
 
       <AppBody>
-        <Modal size="lg" show={showTimetableExplanation} onHide={() => setShowTimetableExplanation(false)}>
+        <Modal
+          size="lg"
+          show={showTimetableExplanation}
+          onHide={() => setShowTimetableExplanation(false)}
+        >
           <Modal.Header closeButton>
-            <Modal.Title>{t('timetable.modals.timetableExplanation.title')}</Modal.Title>
+            <Modal.Title>
+              {t('timetable.modals.timetableExplanation.title')}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {t('timetable.modals.timetableExplanation.body.header')}
             <ul>
-              <ExplanationListElement i18nKey="timetableExplanation.body.login"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.subjects"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.courseOfStudies"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.studyGroups"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.semesterGroup"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.clickOnStudy"/>
-              <ExplanationListElement i18nKey="timetableExplanation.body.selectSubjects"/>
+              <ExplanationListElement i18nKey="timetableExplanation.body.login" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.subjects" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.courseOfStudies" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.studyGroups" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.semesterGroup" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.clickOnStudy" />
+              <ExplanationListElement i18nKey="timetableExplanation.body.selectSubjects" />
             </ul>
 
             {/* TODO: Video? */}
           </Modal.Body>
           <Modal.Footer>
-            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
+            <a
+              href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"
+              target="_blank"
+              rel="noreferrer"
+            >
               <Button variant="primary">
-                {t('timetable.modals.timetableExplanation.actions.toMyTimetable')}
+                {t(
+                  'timetable.modals.timetableExplanation.actions.toMyTimetable'
+                )}
               </Button>
             </a>
-            <Button variant="secondary" onClick={() => setShowTimetableExplanation(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowTimetableExplanation(false)}
+            >
               {t('timetable.modals.timetableExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
-        <Modal size="lg" show={showICalExplanation} onHide={() => setShowICalExplanation(false)}>
+        <Modal
+          size="lg"
+          show={showICalExplanation}
+          onHide={() => setShowICalExplanation(false)}
+        >
           <Modal.Header closeButton>
-            <Modal.Title>{t('timetable.modals.subscriptionExplanation.title')}</Modal.Title>
+            <Modal.Title>
+              {t('timetable.modals.subscriptionExplanation.title')}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>
-              {t('timetable.modals.subscriptionExplanation.body.header')}
-            </p>
+            <p>{t('timetable.modals.subscriptionExplanation.body.header')}</p>
             <p>
               {t('timetable.modals.subscriptionExplanation.body.url')}
               <ul>
@@ -320,7 +388,7 @@ export default function Timetable () {
                 <ExplanationListElement i18nKey="subscriptionExplanation.body.subscribe" />
               </ul>
             </p>
-            {os === OS_IOS &&
+            {os === OS_IOS && (
               <p>
                 {t('timetable.modals.subscriptionExplanation.body.ios.header')}
                 <ul>
@@ -330,40 +398,83 @@ export default function Timetable () {
                   <ExplanationListElement i18nKey="subscriptionExplanation.body.ios.save" />
                 </ul>
               </p>
-            }
+            )}
           </Modal.Body>
           <Modal.Footer>
-            <a href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de" target="_blank" rel="noreferrer">
+            <a
+              href="https://www3.primuss.de/stpl/login.php?FH=fhin&Lang=de"
+              target="_blank"
+              rel="noreferrer"
+            >
               <Button variant="primary">
-                {t('timetable.modals.subscriptionExplanation.actions.toMyTimetable')}
+                {t(
+                  'timetable.modals.subscriptionExplanation.actions.toMyTimetable'
+                )}
               </Button>
             </a>
-            <Button variant="secondary" onClick={() => setShowICalExplanation(false)}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowICalExplanation(false)}
+            >
               {t('timetable.modals.subscriptionExplanation.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
-        <Modal size="lg" show={!!focusedEntry} onHide={() => setFocusedEntry(null)}>
+        <Modal
+          size="lg"
+          show={!!focusedEntry}
+          onHide={() => setFocusedEntry(null)}
+        >
           <Modal.Header closeButton>
-            <Modal.Title>{focusedEntry && getTimetableEntryName(focusedEntry).name}</Modal.Title>
+            <Modal.Title>
+              {focusedEntry && getTimetableEntryName(focusedEntry).name}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <h5>{t('timetable.modals.lectureDetails.general')}</h5>
             <p>
-              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>: {focusedEntry && focusedEntry.lecturer}<br />
-              <strong>{t('timetable.modals.lectureDetails.abbreviation')}</strong>: {focusedEntry && getTimetableEntryName(focusedEntry).shortName}<br />
-              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>: {focusedEntry && focusedEntry.exam}<br />
-              <strong>{t('timetable.modals.lectureDetails.courseOfStudies')}</strong>: {focusedEntry && focusedEntry.course}<br />
-              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>: {focusedEntry && focusedEntry.studyGroup}<br />
-              <strong>{t('timetable.modals.lectureDetails.semesterWeeklyHours')}</strong>: {focusedEntry && focusedEntry.sws}<br />
-              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>: {focusedEntry && focusedEntry.ects}<br />
+              <strong>{t('timetable.modals.lectureDetails.lecturer')}</strong>:{' '}
+              {focusedEntry && focusedEntry.lecturer}
+              <br />
+              <strong>
+                {t('timetable.modals.lectureDetails.abbreviation')}
+              </strong>
+              : {focusedEntry && getTimetableEntryName(focusedEntry).shortName}
+              <br />
+              <strong>{t('timetable.modals.lectureDetails.exam')}</strong>:{' '}
+              {focusedEntry && focusedEntry.exam}
+              <br />
+              <strong>
+                {t('timetable.modals.lectureDetails.courseOfStudies')}
+              </strong>
+              : {focusedEntry && focusedEntry.course}
+              <br />
+              <strong>{t('timetable.modals.lectureDetails.studyGroup')}</strong>
+              : {focusedEntry && focusedEntry.studyGroup}
+              <br />
+              <strong>
+                {t('timetable.modals.lectureDetails.semesterWeeklyHours')}
+              </strong>
+              : {focusedEntry && focusedEntry.sws}
+              <br />
+              <strong>{t('timetable.modals.lectureDetails.ects')}</strong>:{' '}
+              {focusedEntry && focusedEntry.ects}
+              <br />
             </p>
 
             <h5>{t('timetable.modals.lectureDetails.goal')}</h5>
-            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+            <ReactPlaceholder
+              type="text"
+              rows={5}
+              ready={isDetailedData}
+            >
               {focusedEntry && focusedEntry.objective && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.objective) }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(focusedEntry.objective),
+                  }}
+                ></div>
               )}
               {focusedEntry && !focusedEntry.objective && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
@@ -371,9 +482,17 @@ export default function Timetable () {
             </ReactPlaceholder>
 
             <h5>{t('timetable.modals.lectureDetails.content')}</h5>
-            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+            <ReactPlaceholder
+              type="text"
+              rows={5}
+              ready={isDetailedData}
+            >
               {focusedEntry && focusedEntry.contents && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.contents) }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(focusedEntry.contents),
+                  }}
+                ></div>
               )}
               {focusedEntry && !focusedEntry.contents && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
@@ -381,9 +500,17 @@ export default function Timetable () {
             </ReactPlaceholder>
 
             <h5>{t('timetable.modals.lectureDetails.literature')}</h5>
-            <ReactPlaceholder type="text" rows={5} ready={isDetailedData}>
+            <ReactPlaceholder
+              type="text"
+              rows={5}
+              ready={isDetailedData}
+            >
               {focusedEntry && focusedEntry.literature && (
-                <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(focusedEntry.literature) }}></div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(focusedEntry.literature),
+                  }}
+                ></div>
               )}
               {focusedEntry && !focusedEntry.literature && (
                 <p>{t('timetable.modals.lectureDetails.notSpecified')}</p>
@@ -391,30 +518,49 @@ export default function Timetable () {
             </ReactPlaceholder>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setFocusedEntry(null)}>
+            <Button
+              variant="secondary"
+              onClick={() => setFocusedEntry(null)}
+            >
               {t('timetable.modals.lectureDetails.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <div className={styles.weekSelector}>
-          <Button className={styles.prevWeek} variant="link" onClick={() => setPage(idx => idx - 1)}>
-            <FontAwesomeIcon title={t('timetable.weekSelection.weekBack')} icon={faChevronLeft} />
+          <Button
+            className={styles.prevWeek}
+            variant="link"
+            onClick={() => setPage((idx) => idx - 1)}
+          >
+            <FontAwesomeIcon
+              title={t('timetable.weekSelection.weekBack')}
+              icon={faChevronLeft}
+            />
           </Button>
-          <div className={styles.currentWeek}>
-            {getFriendlyWeek(week[0])}
-          </div>
-          <Button className={styles.nextWeek} variant="link" onClick={() => setPage(idx => idx + 1)}>
-            <FontAwesomeIcon title={t('timetable.weekSelection.weekForward')} icon={faChevronRight} />
+          <div className={styles.currentWeek}>{getFriendlyWeek(week[0])}</div>
+          <Button
+            className={styles.nextWeek}
+            variant="link"
+            onClick={() => setPage((idx) => idx + 1)}
+          >
+            <FontAwesomeIcon
+              title={t('timetable.weekSelection.weekForward')}
+              icon={faChevronRight}
+            />
           </Button>
         </div>
 
-        <ReactPlaceholder type="text" rows={20} ready={timetable}>
+        <ReactPlaceholder
+          type="text"
+          rows={20}
+          ready={timetable}
+        >
           <VirtualizeSwipeableViews
             className={styles.slide}
             slideRenderer={timetableRenderer}
             index={page}
-            onChangeIndex={idx => setPage(idx)}
+            onChangeIndex={(idx) => setPage(idx)}
           />
         </ReactPlaceholder>
       </AppBody>

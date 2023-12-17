@@ -6,54 +6,71 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
-import { AttributionControl, CircleMarker, FeatureGroup, LayerGroup, LayersControl, MapContainer, Polygon, Popup, TileLayer, useMap } from 'react-leaflet'
+import {
+  AttributionControl,
+  CircleMarker,
+  FeatureGroup,
+  LayerGroup,
+  LayersControl,
+  MapContainer,
+  Polygon,
+  Popup,
+  TileLayer,
+  useMap,
+} from 'react-leaflet'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLinux } from '@fortawesome/free-brands-svg-icons'
 
-import { NoSessionError, UnavailableSessionError } from '../lib/backend/thi-session-handler'
-import { TUX_ROOMS, filterRooms, getNextValidDate, getRoomAvailability, getRoomCapacity, getRoomWithCapacity, getTranslatedRoomFunction } from '../lib/backend-utils/rooms-utils'
+import {
+  NoSessionError,
+  UnavailableSessionError,
+} from '../lib/backend/thi-session-handler'
+import {
+  TUX_ROOMS,
+  filterRooms,
+  getNextValidDate,
+  getRoomAvailability,
+  getRoomCapacity,
+  getRoomWithCapacity,
+  getTranslatedRoomFunction,
+} from '../lib/backend-utils/rooms-utils'
 
 import { USER_GUEST, useUserKind } from '../lib/hooks/user-kind'
-import { formatFriendlyTime, formatISODate, formatISOTime } from '../lib/date-utils'
+import {
+  formatFriendlyTime,
+  formatISODate,
+  formatISOTime,
+} from '../lib/date-utils'
 import { useLocation } from '../lib/hooks/geolocation'
 
 import styles from '../styles/RoomMap.module.css'
 import { useTranslation } from 'next-i18next'
 
 const SPECIAL_ROOMS = {
-  G308: { text: 'Linux PC-Pool', color: '#F5BD0C' }
+  G308: { text: 'Linux PC-Pool', color: '#F5BD0C' },
 }
-const SEARCHED_PROPERTIES = [
-  'Gebaeude',
-  'Raum'
-]
+const SEARCHED_PROPERTIES = ['Gebaeude', 'Raum']
 const FLOOR_SUBSTITUTES = {
   0: 'EG', // room G0099
   OG: '1', // floor 1 in H (Carissma)
   AG: '1.5', // floor 1.5 in A
   G: '1.5', // floor 1.5 in H (Reimanns)
-  null: '4' // floor 4 in Z (Arbeitsamt),
+  null: '4', // floor 4 in Z (Arbeitsamt),
 }
-const FLOOR_ORDER = [
-  '4',
-  '3',
-  '2',
-  '1.5',
-  '1',
-  'EG',
-  '-1'
-]
-const INGOLSTADT_CENTER = [48.76630, 11.43330]
+const FLOOR_ORDER = ['4', '3', '2', '1.5', '1', 'EG', '-1']
+const INGOLSTADT_CENTER = [48.7663, 11.4333]
 const NEUBURG_CENTER = [48.73227, 11.17261]
 
-const SPECIAL_COLORS = [...new Set(Object.values(SPECIAL_ROOMS).map(x => x.color))]
+const SPECIAL_COLORS = [
+  ...new Set(Object.values(SPECIAL_ROOMS).map((x) => x.color)),
+]
 
 /**
  * Room map based on Leaflet.
  * Implemented as a component because this is the best way to bypass SSR, which is incompatible with Leaflet.
  */
-export default function RoomMap ({ highlight, roomData }) {
+export default function RoomMap({ highlight, roomData }) {
   const router = useRouter()
   const searchField = useRef()
   const location = useLocation()
@@ -65,7 +82,10 @@ export default function RoomMap ({ highlight, roomData }) {
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
-  const mapCenter = userFaculty && userFaculty === 'Nachhaltige Infrastruktur' ? NEUBURG_CENTER : INGOLSTADT_CENTER
+  const mapCenter =
+    userFaculty && userFaculty === 'Nachhaltige Infrastruktur'
+      ? NEUBURG_CENTER
+      : INGOLSTADT_CENTER
   /**
    * WILL BE USED WITH NEW TILE SERVICE
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -86,7 +106,7 @@ export default function RoomMap ({ highlight, roomData }) {
    */
   const allRooms = useMemo(() => {
     return roomData.features
-      .map(feature => {
+      .map((feature) => {
         const { properties, geometry } = feature
 
         if (!geometry || !geometry.coordinates || geometry.type !== 'Polygon') {
@@ -100,29 +120,30 @@ export default function RoomMap ({ highlight, roomData }) {
           FLOOR_ORDER.push(properties.Etage)
         }
 
-        return geometry.coordinates.map(points => ({
+        return geometry.coordinates.map((points) => ({
           properties,
           coordinates: points.map(([lon, lat]) => [lat, lon]),
-          options: { }
+          options: {},
         }))
       })
       .flat()
   }, [roomData])
 
-  async function loadRoomAvailability () {
+  async function loadRoomAvailability() {
     const roomAvailabilityData = await getRoomAvailability()
-    const roomAvailabilityList = Object.fromEntries(Object.entries(roomAvailabilityData).map(([room, openings]) => {
-      const availability = openings
-        .filter(opening =>
-          new Date(opening.until) > new Date()
+    const roomAvailabilityList = Object.fromEntries(
+      Object.entries(roomAvailabilityData).map(([room, openings]) => {
+        const availability = openings.filter(
+          (opening) => new Date(opening.until) > new Date()
         )
-      return [room, availability]
-    }))
+        return [room, availability]
+      })
+    )
 
     setRoomAvailabilityList(roomAvailabilityList)
   }
 
-  async function loadRoomCapacity () {
+  async function loadRoomCapacity() {
     const roomCapacityData = await getRoomCapacity()
 
     setRoomCapacity(roomCapacityData)
@@ -132,7 +153,10 @@ export default function RoomMap ({ highlight, roomData }) {
    * Preprocessed and filtered room data for Leaflet.
    */
   const [filteredRooms, center] = useMemo(() => {
-    const searchedProperties = [...SEARCHED_PROPERTIES, `Funktion_${i18n.language}`]
+    const searchedProperties = [
+      ...SEARCHED_PROPERTIES,
+      `Funktion_${i18n.language}`,
+    ]
 
     if (Object.keys(roomAvailabilityList).length === 0) {
       loadRoomAvailability()
@@ -151,20 +175,31 @@ export default function RoomMap ({ highlight, roomData }) {
       return room.properties[prop]?.toUpperCase()
     }
 
-    const fullTextSearcher = room => searchedProperties.some(prop => getProp(room, prop)?.includes(cleanedText))
-    const roomOnlySearcher = room => getProp(room, 'Raum').startsWith(cleanedText)
-    const filtered = allRooms.filter(/^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText) ? roomOnlySearcher : fullTextSearcher)
+    const fullTextSearcher = (room) =>
+      searchedProperties.some((prop) =>
+        getProp(room, prop)?.includes(cleanedText)
+      )
+    const roomOnlySearcher = (room) =>
+      getProp(room, 'Raum').startsWith(cleanedText)
+    const filtered = allRooms.filter(
+      /^[A-Z](G|[0-9E]\.)?\d*$/.test(cleanedText)
+        ? roomOnlySearcher
+        : fullTextSearcher
+    )
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
-    const showNeuburg = userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
-    const campusRooms = filtered.filter(x => x.properties.Raum.includes('N') === showNeuburg)
+    const showNeuburg =
+      userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
+    const campusRooms = filtered.filter(
+      (x) => x.properties.Raum.includes('N') === showNeuburg
+    )
 
     const centerRooms = campusRooms.length > 0 ? campusRooms : filtered
 
     let lon = 0
     let lat = 0
     let count = 0
-    centerRooms.forEach(x => {
+    centerRooms.forEach((x) => {
       lon += x.coordinates[0][0]
       lat += x.coordinates[0][1]
       count += 1
@@ -172,10 +207,18 @@ export default function RoomMap ({ highlight, roomData }) {
     const filteredCenter = count > 0 ? [lon / count, lat / count] : mapCenter
 
     return [filtered, filteredCenter]
-  }, [roomAvailabilityList, roomCapacity, searchText, allRooms, userFaculty, mapCenter, i18n.language])
+  }, [
+    roomAvailabilityList,
+    roomCapacity,
+    searchText,
+    allRooms,
+    userFaculty,
+    mapCenter,
+    i18n.language,
+  ])
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         const dateObj = getNextValidDate()
         const date = formatISODate(dateObj)
@@ -183,7 +226,10 @@ export default function RoomMap ({ highlight, roomData }) {
         const rooms = await filterRooms(date, time)
         setAvailableRooms(rooms)
       } catch (e) {
-        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+        if (
+          e instanceof NoSessionError ||
+          e instanceof UnavailableSessionError
+        ) {
           setAvailableRooms(null)
         } else {
           console.error(e)
@@ -199,7 +245,7 @@ export default function RoomMap ({ highlight, roomData }) {
    * @param {string} floor The floor name as specified in the data
    * @returns The translated floor name (or the original if not found)
    */
-  function translateFloors (floor) {
+  function translateFloors(floor) {
     const translated = t(`rooms.map.floors.${floor.toLowerCase()}`)
 
     if (translated.startsWith('rooms.')) {
@@ -209,15 +255,19 @@ export default function RoomMap ({ highlight, roomData }) {
     return translated
   }
 
-  function getRoomFunction (room) {
-    const name = room?.properties?.[`Funktion_${i18n.language}`] || room?.properties?.Funktion_de || getTranslatedRoomFunction(room?.properties?.['Funktion_de']) || ''
+  function getRoomFunction(room) {
+    const name =
+      room?.properties?.[`Funktion_${i18n.language}`] ||
+      room?.properties?.Funktion_de ||
+      getTranslatedRoomFunction(room?.properties?.['Funktion_de']) ||
+      ''
     return name ? name.replace(/\s+/g, ' ') : null
   }
 
   /**
    * Removes focus from the search.
    */
-  function unfocus (e) {
+  function unfocus(e) {
     e.preventDefault()
     searchField.current?.blur()
   }
@@ -229,28 +279,32 @@ export default function RoomMap ({ highlight, roomData }) {
    * @param {boolean} onlyAvailable Display only rooms that are currently free
    * @returns Leaflet feature object
    */
-  function renderRoom (entry, key, onlyAvailable) {
-    const avail = availableRooms?.find(x => x.room === entry.properties.Raum)
+  function renderRoom(entry, key, onlyAvailable) {
+    const avail = availableRooms?.find((x) => x.room === entry.properties.Raum)
     if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
       return null
     }
 
     const special = SPECIAL_ROOMS[entry.properties.Raum]
-    const availabilityData = (roomAvailabilityList[entry.properties.Raum] || []).slice(0, 1)
+    const availabilityData = (
+      roomAvailabilityList[entry.properties.Raum] || []
+    ).slice(0, 1)
 
     return (
       <FeatureGroup key={key}>
         <Popup className={styles.popup}>
-          <strong>
-            {entry.properties.Raum}
-          </strong>
-          {` ${getRoomWithCapacity(getRoomFunction(entry), roomCapacity[entry.properties.Raum], t)}`}
+          <strong>{entry.properties.Raum}</strong>
+          {` ${getRoomWithCapacity(
+            getRoomFunction(entry),
+            roomCapacity[entry.properties.Raum],
+            t
+          )}`}
           {avail && (
             <>
               <br />
               {t('rooms.map.freeFromUntil', {
                 from: formatFriendlyTime(avail.from),
-                until: formatFriendlyTime(avail.until)
+                until: formatFriendlyTime(avail.until),
               })}
             </>
           )}
@@ -260,22 +314,32 @@ export default function RoomMap ({ highlight, roomData }) {
               {t('rooms.map.occupied')}
               <br />
 
-              {availabilityData && availabilityData.map((opening) => (
-                <>
-                  {t('rooms.map.freeFromUntil', {
-                    from: formatFriendlyTime(opening.from),
-                    until: formatFriendlyTime(opening.until)
-                  })}
-                  <br />
-                </>
-              ))}
+              {availabilityData &&
+                availabilityData.map((opening) => (
+                  <>
+                    {t('rooms.map.freeFromUntil', {
+                      from: formatFriendlyTime(opening.from),
+                      until: formatFriendlyTime(opening.until),
+                    })}
+                    <br />
+                  </>
+                ))}
             </>
           )}
           {special && (
             <>
               <br />
               {special.text}
-              {TUX_ROOMS.includes(entry.properties.Raum) && <> <FontAwesomeIcon title="Linux" icon={faLinux} fontSize={12}/></>}
+              {TUX_ROOMS.includes(entry.properties.Raum) && (
+                <>
+                  {' '}
+                  <FontAwesomeIcon
+                    title="Linux"
+                    icon={faLinux}
+                    fontSize={12}
+                  />
+                </>
+              )}
             </>
           )}
         </Popup>
@@ -284,7 +348,13 @@ export default function RoomMap ({ highlight, roomData }) {
           pathOptions={{
             ...entry.options,
             color: special && avail ? special.color : null,
-            className: `${avail ? (!special ? styles.roomAvailable : '') : styles.roomOccupied}`
+            className: `${
+              avail
+                ? !special
+                  ? styles.roomAvailable
+                  : ''
+                : styles.roomOccupied
+            }`,
           }}
         />
       </FeatureGroup>
@@ -296,9 +366,10 @@ export default function RoomMap ({ highlight, roomData }) {
    * @param {string} floorName The floor name as specified in the data
    * @returns Leaflet layer group
    */
-  function renderFloor (floorName) {
-    const floorRooms = filteredRooms
-      .filter(x => x.properties.Etage === floorName)
+  function renderFloor(floorName) {
+    const floorRooms = filteredRooms.filter(
+      (x) => x.properties.Etage === floorName
+    )
 
     return (
       <LayerGroup>
@@ -320,21 +391,31 @@ export default function RoomMap ({ highlight, roomData }) {
 
   return (
     <>
-      <Form className={styles.searchForm} onSubmit={e => unfocus(e)}>
+      <Form
+        className={styles.searchForm}
+        onSubmit={(e) => unfocus(e)}
+      >
         <Form.Control
           as="input"
           placeholder={t('rooms.map.searchPlaceholder')}
           value={searchText}
-          onChange={e => setSearchText(e.target.value)}
+          onChange={(e) => setSearchText(e.target.value)}
           isInvalid={filteredRooms.length === 0}
           ref={searchField}
         />
 
         <div className={styles.openings}>
-          {((roomAvailabilityList[searchText] && roomAvailabilityList[searchText].length && t('rooms.map.freeFromUntil', {
-            from: formatFriendlyTime(roomAvailabilityList[searchText][0].from),
-            until: formatFriendlyTime(roomAvailabilityList[searchText][0].until)
-          })) || '')}
+          {(roomAvailabilityList[searchText] &&
+            roomAvailabilityList[searchText].length &&
+            t('rooms.map.freeFromUntil', {
+              from: formatFriendlyTime(
+                roomAvailabilityList[searchText][0].from
+              ),
+              until: formatFriendlyTime(
+                roomAvailabilityList[searchText][0].until
+              ),
+            })) ||
+            ''}
         </div>
 
         <div className={styles.links}>
@@ -343,7 +424,7 @@ export default function RoomMap ({ highlight, roomData }) {
               {t('rooms.map.extendedSearch')}
             </a>
           </Link>
-          {userKind !== USER_GUEST &&
+          {userKind !== USER_GUEST && (
             <>
               <> · </>
               <Link href="/rooms/suggestions">
@@ -352,7 +433,7 @@ export default function RoomMap ({ highlight, roomData }) {
                 </a>
               </Link>
             </>
-          }
+          )}
         </div>
       </Form>
 
@@ -379,54 +460,73 @@ export default function RoomMap ({ highlight, roomData }) {
         <AttributionControl position="bottomleft" />
 
         <div className="leaflet-bottom leaflet-right">
-          <div className={`leaflet-control leaflet-bar ${styles.legendControl}`}>
+          <div
+            className={`leaflet-control leaflet-bar ${styles.legendControl}`}
+          >
             {availableRooms && (
               <>
-                <div className={styles.legendFree}>{` ${t('rooms.map.legend.free')}`}</div>
-                <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupied')}`}</div>
+                <div className={styles.legendFree}>{` ${t(
+                  'rooms.map.legend.free'
+                )}`}</div>
+                <div className={styles.legendTaken}>{` ${t(
+                  'rooms.map.legend.occupied'
+                )}`}</div>
               </>
             )}
-            {!availableRooms && <div className={styles.legendTaken}>{` ${t('rooms.map.legend.occupancyUnknown')}`}</div>}
+            {!availableRooms && (
+              <div className={styles.legendTaken}>{` ${t(
+                'rooms.map.legend.occupancyUnknown'
+              )}`}</div>
+            )}
             <div>
-              {SPECIAL_COLORS.map(color => (
-                <span key={color} className={styles.legendSpecial} style={{ '--legend-color': color }}>
-                </span>
+              {SPECIAL_COLORS.map((color) => (
+                <span
+                  key={color}
+                  className={styles.legendSpecial}
+                  style={{ '--legend-color': color }}
+                ></span>
               ))}
               {` ${t('rooms.map.legend.specialEquipment')}`}
             </div>
           </div>
         </div>
 
-        <LayersControl position="topright" collapsed={false}>
-          {FLOOR_ORDER
-            .filter(name => filteredRooms.some(x => x.properties.Etage === name))
-            .map((floorName, i, filteredFloorOrder) => (
-              <LayersControl.BaseLayer
-                key={floorName + (searchText || 'empty-search')}
-                name={translateFloors(floorName)}
-                checked={i === ((filteredFloorOrder.indexOf('EG') !== -1) ? filteredFloorOrder.indexOf('EG') : filteredFloorOrder.length - 1)}
-              >
-                <LayerGroup>
-                  {renderFloor(floorName)}
-                </LayerGroup>
-              </LayersControl.BaseLayer>
-            ))}
+        <LayersControl
+          position="topright"
+          collapsed={false}
+        >
+          {FLOOR_ORDER.filter((name) =>
+            filteredRooms.some((x) => x.properties.Etage === name)
+          ).map((floorName, i, filteredFloorOrder) => (
+            <LayersControl.BaseLayer
+              key={floorName + (searchText || 'empty-search')}
+              name={translateFloors(floorName)}
+              checked={
+                i ===
+                (filteredFloorOrder.indexOf('EG') !== -1
+                  ? filteredFloorOrder.indexOf('EG')
+                  : filteredFloorOrder.length - 1)
+              }
+            >
+              <LayerGroup>{renderFloor(floorName)}</LayerGroup>
+            </LayersControl.BaseLayer>
+          ))}
         </LayersControl>
 
-        {location &&
+        {location && (
           <CircleMarker
             center={[location.latitude, location.longitude]}
             fillOpacity={1.0}
-            color='#ffffff'
+            color="#ffffff"
             radius={8}
             weight={3}
             className={styles.locationMarker}
           />
-        }
+        )}
       </MapContainer>
     </>
   )
 }
 RoomMap.propTypes = {
-  highlight: PropTypes.string
+  highlight: PropTypes.string,
 }

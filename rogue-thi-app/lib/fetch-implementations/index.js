@@ -8,7 +8,7 @@ let WebSocketProxyConnection = null
  * @param {object} options Connection parameters, only used by the proxy
  * @returns An object with a `fetch` method.
  */
-export default async function obtainFetchImplementation (mode, options) {
+export default async function obtainFetchImplementation(mode, options) {
   if (mode === 'direct') {
     return new BrowserFetchConnection(options)
   } else if (mode === 'websocket-proxy') {

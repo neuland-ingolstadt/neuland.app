@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useWindowSize } from '../lib/hooks/window-size'
 
-function getRandomChar () {
+function getRandomChar() {
   return String.fromCharCode(Math.floor(Math.random() * (126 - 33) + 33))
 }
 
 /**
  * Canvas that renders a Matrix-like animation.
  */
-export default function TheMatrixAnimation () {
+export default function TheMatrixAnimation() {
   const canvas = useRef()
   const windowSize = useWindowSize()
 
@@ -59,7 +59,9 @@ export default function TheMatrixAnimation () {
     ctx.font = '15pt monospace'
     ypos.forEach((y, i) => {
       const x = i * 20
-      const startY = Math.floor(Math.random() * (canvas.current.height - 16 * 20))
+      const startY = Math.floor(
+        Math.random() * (canvas.current.height - 16 * 20)
+      )
       for (let j = 1; j < 16; j++) {
         ctx.fillStyle = `rgb(0, ${j * 16}, 0)`
         ctx.fillText(getRandomChar(), x, startY + j * 20)
@@ -68,11 +70,12 @@ export default function TheMatrixAnimation () {
       ypos[i] = startY + 16 * 20
     })
 
-    const interval = setInterval(() => renderFrame(canvas.current, ctx, ypos), 50)
+    const interval = setInterval(
+      () => renderFrame(canvas.current, ctx, ypos),
+      50
+    )
     return () => clearInterval(interval)
   }, [canvas, renderFrame, windowSize])
 
-  return (
-    <canvas ref={canvas} />
-  )
+  return <canvas ref={canvas} />
 }

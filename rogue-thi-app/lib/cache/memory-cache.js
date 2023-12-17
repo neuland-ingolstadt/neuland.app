@@ -7,7 +7,7 @@ export default class MemoryCache {
   /**
    * @param {number} ttl Seconds after which an entry should be discarded
    */
-  constructor ({ ttl }) {
+  constructor({ ttl }) {
     this.ttl = ttl
     this.cache = new Map()
     this.interval = setInterval(() => this.checkExpiry(), CHECK_INTERVAL)
@@ -16,16 +16,16 @@ export default class MemoryCache {
   /**
    * Removes expired cache entries.
    */
-  checkExpiry () {
+  checkExpiry() {
     Object.keys(this.cache)
-      .filter(x => this.cache.get(x).expiry < Date.now())
-      .forEach(x => this.cache.delete(x))
+      .filter((x) => this.cache.get(x).expiry < Date.now())
+      .forEach((x) => this.cache.delete(x))
   }
 
   /**
    * Stops the cache.
    */
-  close () {
+  close() {
     clearInterval(this.interval)
   }
 
@@ -34,7 +34,7 @@ export default class MemoryCache {
    * @param {string} key Cache key
    * @returns {*} Cached value
    */
-  get (key) {
+  get(key) {
     const json = this.cache.get(key)
     if (!json) {
       return undefined
@@ -53,10 +53,10 @@ export default class MemoryCache {
    * @param {string} key Cache key
    * @param {*} value Value to be cached (must be serializable)
    */
-  set (key, value) {
+  set(key, value) {
     this.cache.set(key, {
       value,
-      expiry: Date.now() + this.ttl
+      expiry: Date.now() + this.ttl,
     })
   }
 
@@ -64,14 +64,14 @@ export default class MemoryCache {
    * Deletes a cached value.
    * @param {string} key Cache key
    */
-  delete (key) {
+  delete(key) {
     this.cache.delete(key)
   }
 
   /**
    * Removes all cache entries.
    */
-  flushAll () {
+  flushAll() {
     this.cache.clear()
   }
 }

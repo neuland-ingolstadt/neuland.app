@@ -1,33 +1,33 @@
 {
-    "error": {
-        "wrongCredentials": "Deine Zugangsdaten sind falsch.",
-        "generic": "Bei der Verbindung zum Server ist ein Fehler aufgetreten.",
-        "backend": "Das THI Backend ist derzeit nicht erreichbar. Bitte versuche es später erneut."
-    },
-    "alert": "Für diese Funktion musst du eingeloggt sein.",
-    "guestOnly": {
-        "warning": "Die App kann derzeit nur als Gast verwendet werden. Weitere Informationen findet ihr unten.",
-        "title": "Warum kann ich mich nicht einloggen?",
-        "details": "Die Hochschule hat uns dazu angewiesen, die Login-Funktion zu deaktivieren. Wir arbeiten an einer Lösung, allerdings ist nicht abzusehen, wann es so weit sein wird. Vor einer Nutzung der offiziellen THI-App raten wir aus Sicherheitsgründen ab.",
-        "details2": "Der Speiseplan, die Semester- und Veranstaltungstermine, die Raumkarte, die Bus- und Zugabfahrtszeiten sowie die Parkplatzinformationen können weiterhin über den Gastmodus genutzt werden."
-    },
-    "notes": {
-        "title1": "Was ist das?",
-        "text1": "Das ist eine inoffizielle Alternative zur THI-App, welche eine verbesserte Benutzererfahrung bieten soll. Sie wird bei von Studierenden bei <a>Neuland Ingolstadt e.V.</a> für Studierende entwickelt und ist kein Angebot der Technischen Hochschule Ingolstadt.",
-        "title2": "Sind meine Daten sicher?",
-        "text2": "<strong>Ja. </strong> Deine Daten werden auf deinem Gerät verschlüsselt und sicher über die offizielle Schnittstelle an die THI übertragen. Nur du und die THI haben Zugriff auf deine Zugangsdaten und deine persönlichen Daten."
-    },
-    "links": {
-        "security": "Hier findest du weitere Informationen zur Sicherheit.",
-        "imprint": "Impressum",
-        "privacy": "Datenschutzerklärung",
-        "github": "Quellcode auf GitHub"
-    },
-    "form": {
-        "username": "THI-Benutzername",
-        "password": "Passwort",
-        "login": "Anmelden",
-        "guest": "Als Gast fortfahren",
-        "save": "Angemeldet bleiben"
-    }
+  "error": {
+    "wrongCredentials": "Deine Zugangsdaten sind falsch.",
+    "generic": "Bei der Verbindung zum Server ist ein Fehler aufgetreten.",
+    "backend": "Das THI Backend ist derzeit nicht erreichbar. Bitte versuche es später erneut."
+  },
+  "alert": "Für diese Funktion musst du eingeloggt sein.",
+  "guestOnly": {
+    "warning": "Die App kann derzeit nur als Gast verwendet werden. Weitere Informationen findet ihr unten.",
+    "title": "Warum kann ich mich nicht einloggen?",
+    "details": "Die Hochschule hat uns dazu angewiesen, die Login-Funktion zu deaktivieren. Wir arbeiten an einer Lösung, allerdings ist nicht abzusehen, wann es so weit sein wird. Vor einer Nutzung der offiziellen THI-App raten wir aus Sicherheitsgründen ab.",
+    "details2": "Der Speiseplan, die Semester- und Veranstaltungstermine, die Raumkarte, die Bus- und Zugabfahrtszeiten sowie die Parkplatzinformationen können weiterhin über den Gastmodus genutzt werden."
+  },
+  "notes": {
+    "title1": "Was ist das?",
+    "text1": "Das ist eine inoffizielle Alternative zur THI-App, welche eine verbesserte Benutzererfahrung bieten soll. Sie wird bei von Studierenden bei <a>Neuland Ingolstadt e.V.</a> für Studierende entwickelt und ist kein Angebot der Technischen Hochschule Ingolstadt.",
+    "title2": "Sind meine Daten sicher?",
+    "text2": "<strong>Ja. </strong> Deine Daten werden auf deinem Gerät verschlüsselt und sicher über die offizielle Schnittstelle an die THI übertragen. Nur du und die THI haben Zugriff auf deine Zugangsdaten und deine persönlichen Daten."
+  },
+  "links": {
+    "security": "Hier findest du weitere Informationen zur Sicherheit.",
+    "imprint": "Impressum",
+    "privacy": "Datenschutzerklärung",
+    "github": "Quellcode auf GitHub"
+  },
+  "form": {
+    "username": "THI-Benutzername",
+    "password": "Passwort",
+    "login": "Anmelden",
+    "guest": "Als Gast fortfahren",
+    "save": "Angemeldet bleiben"
+  }
 }

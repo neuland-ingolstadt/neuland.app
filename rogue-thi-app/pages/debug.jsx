@@ -16,7 +16,11 @@ import AppTabbar from '../components/page/AppTabbar'
 
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
 
-import { NoSessionError, UnavailableSessionError, callWithSession } from '../lib/backend/thi-session-handler'
+import {
+  NoSessionError,
+  UnavailableSessionError,
+  callWithSession,
+} from '../lib/backend/thi-session-handler'
 import API from '../lib/backend/anonymous-api'
 
 import styles from '../styles/Debug.module.css'
@@ -29,38 +33,43 @@ const COMMIT_HASH = process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'
 /**
  * Page containing debug tools for development purposes.
  */
-export default function Debug () {
+export default function Debug() {
   const [parameters, setParameters] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [result, setResult] = useState('After submitting, the result will appear here')
+  const [result, setResult] = useState(
+    'After submitting, the result will appear here'
+  )
   const router = useRouter()
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         const initialParams = [
           {
             name: 'service',
-            value: 'thiapp'
+            value: 'thiapp',
           },
           {
             name: 'method',
-            value: 'persdata'
+            value: 'persdata',
           },
           {
             name: 'session',
             // don't do anything with the session key, just return it
-            value: await callWithSession(session => session)
+            value: await callWithSession((session) => session),
           },
           {
             name: 'format',
-            value: 'json'
-          }
+            value: 'json',
+          },
         ]
 
         setParameters(initialParams)
       } catch (e) {
-        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+        if (
+          e instanceof NoSessionError ||
+          e instanceof UnavailableSessionError
+        ) {
           router.replace('/login?redirect=debug')
         } else {
           console.error(e)
@@ -71,28 +80,30 @@ export default function Debug () {
     load()
   }, [router])
 
-  function changeParameterName (i, name) {
+  function changeParameterName(i, name) {
     parameters[i].name = name
     setParameters(parameters.slice(0))
   }
-  function changeParameterValue (i, value) {
+  function changeParameterValue(i, value) {
     parameters[i].value = value
     setParameters(parameters.slice(0))
   }
-  function addParameter () {
-    const newParams = parameters.concat([{
-      name: '',
-      value: ''
-    }])
+  function addParameter() {
+    const newParams = parameters.concat([
+      {
+        name: '',
+        value: '',
+      },
+    ])
     setParameters(newParams)
   }
-  function removeParameter (index) {
+  function removeParameter(index) {
     const newParams = parameters.slice(0)
     newParams.splice(index, 1)
     setParameters(newParams)
   }
 
-  async function submit () {
+  async function submit() {
     const params = {}
     for (const entry of parameters) {
       params[entry.name] = entry.value
@@ -120,57 +131,81 @@ export default function Debug () {
           here on Github
         </Link>
         <br />
-        Below you can experiment with the API. The session field is auto filled with
-        a valid session token for your user.
-
+        Below you can experiment with the API. The session field is auto filled
+        with a valid session token for your user.
         <h3 className={styles.heading}>Fields</h3>
         <ListGroup>
-          {parameters && parameters.map((param, idx) =>
-            <ListGroup.Item key={idx}>
-              <Row>
-                <Col>
-                  <Form.Control
-                    type="text"
-                    placeholder="name"
-                    value={param.name}
-                    onChange={e => changeParameterName(idx, e.target.value)}
-                  />
-                </Col>
-                <Col>
-                  <Form.Control
-                    type={parameters[idx].name === 'session' ? 'password' : 'text'}
-                    placeholder="value"
-                    value={param.value}
-                    onChange={e => changeParameterValue(idx, e.target.value)}
-                  />
-                </Col>
-                <Col xs="auto">
-                  <Button variant="danger" onClick={() => removeParameter(idx)}>
-                    Remove
-                  </Button>
-                </Col>
-              </Row>
-            </ListGroup.Item>
-          )}
+          {parameters &&
+            parameters.map((param, idx) => (
+              <ListGroup.Item key={idx}>
+                <Row>
+                  <Col>
+                    <Form.Control
+                      type="text"
+                      placeholder="name"
+                      value={param.name}
+                      onChange={(e) => changeParameterName(idx, e.target.value)}
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      type={
+                        parameters[idx].name === 'session' ? 'password' : 'text'
+                      }
+                      placeholder="value"
+                      value={param.value}
+                      onChange={(e) =>
+                        changeParameterValue(idx, e.target.value)
+                      }
+                    />
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      variant="danger"
+                      onClick={() => removeParameter(idx)}
+                    >
+                      Remove
+                    </Button>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+            ))}
         </ListGroup>
         <br />
-        <Button variant="primary" onClick={submit}>Submit</Button>
-        {' '}
-        <Button variant="success" onClick={addParameter}>Add Field</Button>
-
+        <Button
+          variant="primary"
+          onClick={submit}
+        >
+          Submit
+        </Button>{' '}
+        <Button
+          variant="success"
+          onClick={addParameter}
+        >
+          Add Field
+        </Button>
         <br />
         <h3 className={styles.heading}>Result</h3>
         <div className={styles.container}>
-          <Spinner animation="border" className={styles.spinner} hidden={!isLoading}/>
-          <SyntaxHighlighter language='json' className={styles.code}>
-            { result }
+          <Spinner
+            animation="border"
+            className={styles.spinner}
+            hidden={!isLoading}
+          />
+          <SyntaxHighlighter
+            language="json"
+            className={styles.code}
+          >
+            {result}
           </SyntaxHighlighter>
         </div>
-
         <div className={styles.version}>
-          Version:
-          &nbsp;
-          <a href={`${GIT_URL}/commit/${COMMIT_HASH}`} target="_blank" rel="noreferrer">
+          Version: &nbsp;
+          <a
+            href={`${GIT_URL}/commit/${COMMIT_HASH}`}
+            target="_blank"
+            rel="noreferrer"
+          >
             {COMMIT_HASH.substring(0, 7)}
           </a>
         </div>
@@ -183,8 +218,6 @@ export default function Debug () {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['common'])),
+  },
 })

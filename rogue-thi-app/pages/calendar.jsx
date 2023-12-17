@@ -21,7 +21,7 @@ import {
   formatFriendlyDateRange,
   formatFriendlyDateTime,
   formatFriendlyDateTimeRange,
-  formatFriendlyRelativeTime
+  formatFriendlyRelativeTime,
 } from '../lib/date-utils'
 import { NoSessionError } from '../lib/backend/thi-session-handler'
 import { useTime } from '../lib/hooks/time-hook'
@@ -34,7 +34,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 /**
  * Page containing the semester and exam dates.
  */
-export default function Calendar () {
+export default function Calendar() {
   const router = useRouter()
   const now = useTime()
   const [exams, setExams] = useState(null)
@@ -44,7 +44,7 @@ export default function Calendar () {
   const { i18n, t } = useTranslation('calendar')
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         const examList = await loadExamList()
         setExams(examList)
@@ -63,13 +63,26 @@ export default function Calendar () {
     }
   }, [router, userKind])
 
-  function InformationNotice () {
+  function InformationNotice() {
     return (
       <Trans
         i18nKey="calendar.notice"
         ns="calendar"
         components={{
-          a: i18n.languages[0] === 'de' ? <a href="https://www.thi.de/studium/pruefung/semestertermine/" target="_blank" rel="noreferrer"/> : <a href="https://www.thi.de/en/international/studies/examination/semester-dates/" target="_blank" rel="noreferrer"/>
+          a:
+            i18n.languages[0] === 'de' ? (
+              <a
+                href="https://www.thi.de/studium/pruefung/semestertermine/"
+                target="_blank"
+                rel="noreferrer"
+              />
+            ) : (
+              <a
+                href="https://www.thi.de/en/international/studies/examination/semester-dates/"
+                target="_blank"
+                rel="noreferrer"
+              />
+            ),
         }}
       />
     )
@@ -83,42 +96,76 @@ export default function Calendar () {
       <AppNavbar title={t('calendar.appbar.title')} />
 
       <AppBody className={styles.container}>
-        <Modal show={!!focusedExam} onHide={() => setFocusedExam(null)}>
+        <Modal
+          show={!!focusedExam}
+          onHide={() => setFocusedExam(null)}
+        >
           <Modal.Header closeButton>
             <Modal.Title>{focusedExam && focusedExam.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <strong>{t('calendar.modals.exams.type')}</strong>: {focusedExam && focusedExam.type}<br />
-            <strong>{t('calendar.modals.exams.room')}</strong>: {focusedExam && (focusedExam.rooms || 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.seat')}</strong>: {focusedExam && (focusedExam.seat || 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.date')}</strong>: {focusedExam && (focusedExam.date ? formatFriendlyDateTime(focusedExam.date) : 'TBD')}<br />
-            <strong>{t('calendar.modals.exams.notes')}</strong>: {focusedExam && (focusedExam.notes || t('calendar.modals.exams.none'))}<br />
-            <strong>{t('calendar.modals.exams.examiner')}</strong>: {focusedExam && focusedExam.examiners.join('; ')}<br />
-            <strong>{t('calendar.modals.exams.registerDate')}</strong>: {focusedExam && formatFriendlyDateTime(focusedExam.enrollment)}<br />
+            <strong>{t('calendar.modals.exams.type')}</strong>:{' '}
+            {focusedExam && focusedExam.type}
+            <br />
+            <strong>{t('calendar.modals.exams.room')}</strong>:{' '}
+            {focusedExam && (focusedExam.rooms || 'TBD')}
+            <br />
+            <strong>{t('calendar.modals.exams.seat')}</strong>:{' '}
+            {focusedExam && (focusedExam.seat || 'TBD')}
+            <br />
+            <strong>{t('calendar.modals.exams.date')}</strong>:{' '}
+            {focusedExam &&
+              (focusedExam.date
+                ? formatFriendlyDateTime(focusedExam.date)
+                : 'TBD')}
+            <br />
+            <strong>{t('calendar.modals.exams.notes')}</strong>:{' '}
+            {focusedExam &&
+              (focusedExam.notes || t('calendar.modals.exams.none'))}
+            <br />
+            <strong>{t('calendar.modals.exams.examiner')}</strong>:{' '}
+            {focusedExam && focusedExam.examiners.join('; ')}
+            <br />
+            <strong>{t('calendar.modals.exams.registerDate')}</strong>:{' '}
+            {focusedExam && formatFriendlyDateTime(focusedExam.enrollment)}
+            <br />
             <strong>{t('calendar.modals.exams.tools')}</strong>:
             <ul>
-              {focusedExam && focusedExam.aids.map((helper, i) =>
-                <li key={i}>{helper}</li>)}
+              {focusedExam &&
+                focusedExam.aids.map((helper, i) => <li key={i}>{helper}</li>)}
             </ul>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setFocusedExam(null)}>
+            <Button
+              variant="secondary"
+              onClick={() => setFocusedExam(null)}
+            >
               {t('calendar.modals.exams.actions.close')}
             </Button>
           </Modal.Footer>
         </Modal>
 
         <SwipeableTabs defaultPage={page}>
-          <SwipeableTab className={styles.tab} title={t('calendar.tabs.semester')}>
+          <SwipeableTab
+            className={styles.tab}
+            title={t('calendar.tabs.semester')}
+          >
             <ListGroup variant="flush">
-              {calendar.map((item, idx) =>
-                <ListGroup.Item key={idx} className={styles.item}>
+              {calendar.map((item, idx) => (
+                <ListGroup.Item
+                  key={idx}
+                  className={styles.item}
+                >
                   <div className={styles.left}>
                     {!item.url && item.name[i18n.languages[0]]}
                     {item.url && (
-                      <a href={item.url} className={styles.eventUrl} target="_blank" rel="noreferrer">
-                        {item.name[i18n.languages[0]]}
-                        {' '}
+                      <a
+                        href={item.url}
+                        className={styles.eventUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {item.name[i18n.languages[0]]}{' '}
                         <FontAwesomeIcon icon={faExternalLinkAlt} />
                       </a>
                     )}
@@ -130,12 +177,14 @@ export default function Calendar () {
                     </div>
                   </div>
                   <div className={styles.details}>
-                    {(item.end && item.begin < now)
-                      ? `${t('calendar.dates.until')} ${formatFriendlyRelativeTime(item.end)}`
+                    {item.end && item.begin < now
+                      ? `${t(
+                          'calendar.dates.until'
+                        )} ${formatFriendlyRelativeTime(item.end)}`
                       : formatFriendlyRelativeTime(item.begin)}
                   </div>
                 </ListGroup.Item>
-              )}
+              ))}
             </ListGroup>
             <div className="text-muted">
               <small>
@@ -144,35 +193,50 @@ export default function Calendar () {
             </div>
           </SwipeableTab>
 
-          <SwipeableTab className={styles.tab} title={t('calendar.tabs.exams')}>
+          <SwipeableTab
+            className={styles.tab}
+            title={t('calendar.tabs.exams')}
+          >
             <ListGroup variant="flush">
-              <ReactPlaceholder type="text" rows={4} ready={exams || userKind === USER_GUEST}>
+              <ReactPlaceholder
+                type="text"
+                rows={4}
+                ready={exams || userKind === USER_GUEST}
+              >
                 {exams && exams.length === 0 && (
-                  <ListGroup.Item>
-                    {t('calendar.noExams')}
-                  </ListGroup.Item>
+                  <ListGroup.Item>{t('calendar.noExams')}</ListGroup.Item>
                 )}
-                {exams && exams.map((item, idx) =>
-                  <ListGroup.Item key={idx} className={styles.item} action onClick={() => setFocusedExam(item)}>
-                    <div className={styles.left}>
-                      {item.name}<br />
+                {exams &&
+                  exams.map((item, idx) => (
+                    <ListGroup.Item
+                      key={idx}
+                      className={styles.item}
+                      action
+                      onClick={() => setFocusedExam(item)}
+                    >
+                      <div className={styles.left}>
+                        {item.name}
+                        <br />
 
-                      <div className={styles.details}>
-                        {item.date && <>
-                          {formatFriendlyDateTime(item.date)}
-                          {' '}({formatFriendlyRelativeTime(item.date)})
+                        <div className={styles.details}>
+                          {item.date && (
+                            <>
+                              {formatFriendlyDateTime(item.date)} (
+                              {formatFriendlyRelativeTime(item.date)})
+                              <br />
+                            </>
+                          )}
+                          {t('calendar.modals.exams.room')}:{' '}
+                          {item.rooms || 'TBD'}
                           <br />
-                        </>}
-                        {t('calendar.modals.exams.room')}: {item.rooms || 'TBD'}<br />
-                        {item.seat && `${t('calendar.modals.exams.seat')}: ${item.seat}`}
+                          {item.seat &&
+                            `${t('calendar.modals.exams.seat')}: ${item.seat}`}
+                        </div>
                       </div>
-                    </div>
-                  </ListGroup.Item>
-                )}
+                    </ListGroup.Item>
+                  ))}
                 {userKind === USER_GUEST && (
-                  <ListGroup.Item>
-                    {t('calendar.guestNotice')}
-                  </ListGroup.Item>
+                  <ListGroup.Item>{t('calendar.guestNotice')}</ListGroup.Item>
                 )}
               </ReactPlaceholder>
             </ListGroup>
@@ -192,9 +256,6 @@ export default function Calendar () {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'calendar',
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['calendar', 'common'])),
+  },
 })

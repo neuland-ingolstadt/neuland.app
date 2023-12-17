@@ -7,7 +7,25 @@ import roomDistances from '../../data/room-distances.json'
 
 const IGNORE_GAPS = 15
 
-export const BUILDINGS = ['A', 'B', 'BN', 'C', 'CN', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'P', 'W', 'Z']
+export const BUILDINGS = [
+  'A',
+  'B',
+  'BN',
+  'C',
+  'CN',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'M',
+  'P',
+  'W',
+  'Z',
+]
 export const BUILDINGS_ALL = 'Alle'
 export const ROOMS_ALL = 'Alle'
 export const DURATION_PRESET = '01:00'
@@ -20,7 +38,7 @@ export const TUX_ROOMS = ['G308']
  * @param {number} minutes
  * @returns {Date}
  */
-export function addMinutes (date, minutes) {
+export function addMinutes(date, minutes) {
   return new Date(
     date.getFullYear(),
     date.getMonth(),
@@ -38,7 +56,7 @@ export function addMinutes (date, minutes) {
  * @param {Date} b
  * @returns {Date}
  */
-function minDate (a, b) {
+function minDate(a, b) {
   return a < b ? a : b
 }
 
@@ -48,7 +66,7 @@ function minDate (a, b) {
  * @param {Date} b
  * @returns {Date}
  */
-function maxDate (a, b) {
+function maxDate(a, b) {
   return a > b ? a : b
 }
 
@@ -58,7 +76,7 @@ function maxDate (a, b) {
  * @param {string} building Building name (e.g. `G`)
  * @returns {boolean}
  */
-function isInBuilding (room, building) {
+function isInBuilding(room, building) {
   return new RegExp(`${building}\\d+`, 'i').test(room)
 }
 
@@ -68,42 +86,42 @@ function isInBuilding (room, building) {
  * @param {Date} date Date to filter for
  * @returns {object}
  */
-export function getRoomOpenings (rooms, date) {
+export function getRoomOpenings(rooms, date) {
   date = formatISODate(date)
   const openings = {}
   // get todays rooms
-  rooms.filter(room => room.datum.startsWith(date))
+  rooms
+    .filter((room) => room.datum.startsWith(date))
     // flatten room types
-    .flatMap(room => room.rtypes)
+    .flatMap((room) => room.rtypes)
     // flatten time slots
-    .flatMap(rtype =>
-      Object.values(rtype.stunden)
-        .map(stunde => ({
-          type: rtype.raumtyp,
-          ...stunde
-        }))
+    .flatMap((rtype) =>
+      Object.values(rtype.stunden).map((stunde) => ({
+        type: rtype.raumtyp,
+        ...stunde,
+      }))
     )
     // flatten room list
-    .flatMap(stunde =>
-      stunde.raeume
-        .map(([,, room, capacity]) => ({
-          // 0 indicates that every room is free
-          room: room === 0 ? ROOMS_ALL : room,
-          type: stunde.type,
-          from: new Date(stunde.von),
-          until: new Date(stunde.bis),
-          capacity: Number(capacity) || null
-        }))
+    .flatMap((stunde) =>
+      stunde.raeume.map(([, , room, capacity]) => ({
+        // 0 indicates that every room is free
+        room: room === 0 ? ROOMS_ALL : room,
+        type: stunde.type,
+        from: new Date(stunde.von),
+        until: new Date(stunde.bis),
+        capacity: Number(capacity) || null,
+      }))
     )
     // iterate over every room
     .forEach(({ room, type, from, until, capacity }) => {
       // initialize room
-      const roomOpenings = openings[room] = openings[room] || []
+      const roomOpenings = (openings[room] = openings[room] || [])
       // find overlapping opening
       // ignore gaps of up to IGNORE_GAPS minutes since the time slots don't line up perfectly
-      const opening = roomOpenings.find(opening =>
-        from <= addMinutes(opening.until, IGNORE_GAPS) &&
-        until >= addMinutes(opening.from, -IGNORE_GAPS)
+      const opening = roomOpenings.find(
+        (opening) =>
+          from <= addMinutes(opening.until, IGNORE_GAPS) &&
+          until >= addMinutes(opening.from, -IGNORE_GAPS)
       )
       if (opening) {
         // extend existing opening
@@ -122,14 +140,16 @@ export function getRoomOpenings (rooms, date) {
  * If outside the opening hours, this will skip to the time the university opens.
  * @returns {Date}
  */
-export function getNextValidDate () {
+export function getNextValidDate() {
   const startDate = new Date()
 
-  if (startDate.getDay() === 0 || startDate.getHours() > 20) { // sunday or after 9pm
+  if (startDate.getDay() === 0 || startDate.getHours() > 20) {
+    // sunday or after 9pm
     startDate.setDate(startDate.getDate() + 1)
     startDate.setHours(8)
     startDate.setMinutes(15)
-  } else if (startDate.getHours() < 8) { // before 6am
+  } else if (startDate.getHours() < 8) {
+    // before 6am
     startDate.setHours(8)
     startDate.setMinutes(15)
   }
@@ -145,7 +165,12 @@ export function getNextValidDate () {
  * @param {string} [duration] Minimum opening duration
  * @returns {object[]}
  */
-export async function filterRooms (date, time, building = BUILDINGS_ALL, duration = DURATION_PRESET) {
+export async function filterRooms(
+  date,
+  time,
+  building = BUILDINGS_ALL,
+  duration = DURATION_PRESET
+) {
   const beginDate = new Date(date + 'T' + time)
   const endDate = addSearchDuration(beginDate, duration)
 
@@ -158,8 +183,10 @@ export async function filterRooms (date, time, building = BUILDINGS_ALL, duratio
  * @param {string} duration Duration as a string in the format `HH:MM`
  * @returns
  */
-export function addSearchDuration (date, duration = DURATION_PRESET) {
-  const [durationHours, durationMinutes] = duration.split(':').map(x => parseInt(x, 10))
+export function addSearchDuration(date, duration = DURATION_PRESET) {
+  const [durationHours, durationMinutes] = duration
+    .split(':')
+    .map((x) => parseInt(x, 10))
   return new Date(
     date.getFullYear(),
     date.getMonth(),
@@ -178,24 +205,30 @@ export function addSearchDuration (date, duration = DURATION_PRESET) {
  * @param {string} [building] Building name (e.g. `G`), defaults to all buildings
  * @returns {object[]}
  */
-export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL) {
+export async function searchRooms(
+  beginDate,
+  endDate,
+  building = BUILDINGS_ALL
+) {
   const data = await API.getFreeRooms(beginDate)
 
   const openings = getRoomOpenings(data, beginDate)
   return Object.keys(openings)
-    .flatMap(room =>
-      openings[room].map(opening => ({
+    .flatMap((room) =>
+      openings[room].map((opening) => ({
         room,
         type: opening.type,
         from: opening.from,
         until: opening.until,
-        capacity: opening.capacity
+        capacity: opening.capacity,
       }))
     )
-    .filter(opening =>
-      (building === BUILDINGS_ALL || isInBuilding(opening.room.toLowerCase(), building)) &&
-      beginDate >= opening.from &&
-      endDate <= opening.until
+    .filter(
+      (opening) =>
+        (building === BUILDINGS_ALL ||
+          isInBuilding(opening.room.toLowerCase(), building)) &&
+        beginDate >= opening.from &&
+        endDate <= opening.until
     )
     .sort((a, b) => a.room.localeCompare(b.room))
 }
@@ -205,7 +238,7 @@ export async function searchRooms (beginDate, endDate, building = BUILDINGS_ALL)
  * @param {Date} day Start date as Date object
  * @returns {object[]}
  */
-export async function getRoomAvailability (day = new Date()) {
+export async function getRoomAvailability(day = new Date()) {
   day.setHours(0, 0, 0, 0)
 
   const data = await API.getFreeRooms(day)
@@ -217,30 +250,32 @@ export async function getRoomAvailability (day = new Date()) {
   const roomOpenings = Object.fromEntries(Object.entries(openings))
 
   // combine openings that are less than IGNORE_GAPS (= 15 minutes) minutes apart
-  const processedOpenings = Object.fromEntries(Object.entries(roomOpenings).map(([room, openings]) => {
-    const processedOpenings = []
-    let lastOpening = null
-    for (let index = 0; index < openings.length; index++) {
-      const opening = openings[index]
-      if (lastOpening === null) {
-        lastOpening = opening
-        continue
+  const processedOpenings = Object.fromEntries(
+    Object.entries(roomOpenings).map(([room, openings]) => {
+      const processedOpenings = []
+      let lastOpening = null
+      for (let index = 0; index < openings.length; index++) {
+        const opening = openings[index]
+        if (lastOpening === null) {
+          lastOpening = opening
+          continue
+        }
+
+        if (addMinutes(lastOpening.until, IGNORE_GAPS) > opening.from) {
+          lastOpening.until = opening.until
+        } else {
+          processedOpenings.push(lastOpening)
+          lastOpening = opening
+        }
       }
 
-      if (addMinutes(lastOpening.until, IGNORE_GAPS) > opening.from) {
-        lastOpening.until = opening.until
-      } else {
+      if (lastOpening !== null) {
         processedOpenings.push(lastOpening)
-        lastOpening = opening
       }
-    }
 
-    if (lastOpening !== null) {
-      processedOpenings.push(lastOpening)
-    }
-
-    return [room, processedOpenings]
-  }))
+      return [room, processedOpenings]
+    })
+  )
 
   return processedOpenings
 }
@@ -250,11 +285,13 @@ export async function getRoomAvailability (day = new Date()) {
  * @param {Date} day Start date as Date object
  * @returns {object[]}
  */
-export async function getRoomCapacity (day = new Date()) {
+export async function getRoomCapacity(day = new Date()) {
   const data = await API.getFreeRooms(day)
   const openings = await getRoomOpenings(data, day)
 
-  const roomCapacityData = Object.fromEntries(Object.entries(openings).map(([key, value]) => [key, value[0].capacity]))
+  const roomCapacityData = Object.fromEntries(
+    Object.entries(openings).map(([key, value]) => [key, value[0].capacity])
+  )
 
   return roomCapacityData
 }
@@ -264,11 +301,14 @@ export async function getRoomCapacity (day = new Date()) {
  * @param {Array} arr Array
  * @returns {*} Most common element
  */
-function mode (arr) {
+function mode(arr) {
   return arr.reduce(
     (a, b, _, arr) =>
-      (arr.filter(v => v === a).length >= arr.filter(v => v === b).length ? a : b),
-    null)
+      arr.filter((v) => v === a).length >= arr.filter((v) => v === b).length
+        ? a
+        : b,
+    null
+  )
 }
 
 /**
@@ -277,7 +317,7 @@ function mode (arr) {
  * @param {Array} rooms Array of timetable entries as returned by `searchRooms`
  * @returns {Array}
  */
-function sortRoomsByDistance (room, rooms) {
+function sortRoomsByDistance(room, rooms) {
   const distances = getRoomDistances(room)
 
   // sort by distance
@@ -290,11 +330,13 @@ function sortRoomsByDistance (room, rooms) {
 /**
  * Returns all buildings filtered by Neuburg or Ingolstadt using the timetable.
  */
-export async function getAllUserBuildings () {
+export async function getAllUserBuildings() {
   const majorityRoom = await getMajorityRoom()
 
   if (majorityRoom) {
-    return BUILDINGS.filter(building => building.includes('N') === majorityRoom.includes('N'))
+    return BUILDINGS.filter(
+      (building) => building.includes('N') === majorityRoom.includes('N')
+    )
   }
 
   return BUILDINGS
@@ -307,11 +349,11 @@ export async function getAllUserBuildings () {
  * @param {Date} endDate End date as Date object
  * @returns {Array}
  **/
-export async function findSuggestedRooms (room, startDate, endDate) {
+export async function findSuggestedRooms(room, startDate, endDate) {
   let rooms = await searchRooms(startDate, endDate)
 
   // hide Neuburg buildings if next lecture is not in Neuburg
-  rooms = rooms.filter(x => x.room.includes('N') === room.includes('N'))
+  rooms = rooms.filter((x) => x.room.includes('N') === room.includes('N'))
 
   // get distances to other rooms
   rooms = sortRoomsByDistance(room, rooms)
@@ -323,7 +365,7 @@ export async function findSuggestedRooms (room, startDate, endDate) {
  * Finds the room with the most lectures for the complete timetable.
  * @returns {string} Room name (e.g. `G215`)
  */
-async function getMajorityRoom () {
+async function getMajorityRoom() {
   const date = new Date()
   if (date.getDay() === 0) {
     date.setDate(date.getDate() + 1)
@@ -332,7 +374,7 @@ async function getMajorityRoom () {
   const week = getWeek(date)
 
   const timetable = await getFriendlyTimetable(week[0], false)
-  const rooms = timetable.flatMap(x => x.rooms)
+  const rooms = timetable.flatMap((x) => x.rooms)
 
   return mode(rooms)
 }
@@ -342,11 +384,17 @@ async function getMajorityRoom () {
  * @param {string} roomFunction Room function (e.g. `Seminarraum`)
  * @returns {string} Translated room function
  */
-export function getTranslatedRoomFunction (roomFunction) {
+export function getTranslatedRoomFunction(roomFunction) {
   const roomFunctionCleaned = roomFunction?.replace(/\s+/g, ' ')?.trim() ?? ''
 
-  const translatedRoomFunction = i18n.t(`apiTranslations.roomFunctions.${roomFunctionCleaned}`, { ns: 'api-translations' })
-  return translatedRoomFunction === `apiTranslations.roomFunctions.${roomFunctionCleaned}` ? roomFunctionCleaned : translatedRoomFunction
+  const translatedRoomFunction = i18n.t(
+    `apiTranslations.roomFunctions.${roomFunctionCleaned}`,
+    { ns: 'api-translations' }
+  )
+  return translatedRoomFunction ===
+    `apiTranslations.roomFunctions.${roomFunctionCleaned}`
+    ? roomFunctionCleaned
+    : translatedRoomFunction
 }
 
 /**
@@ -355,7 +403,7 @@ export function getTranslatedRoomFunction (roomFunction) {
  * @param {string} room Room name (e.g. `G215`)
  * @returns {string} Translated room name
  */
-export function getTranslatedRoomName (room) {
+export function getTranslatedRoomName(room) {
   switch (room) {
     case ROOMS_ALL:
       return i18n.t('rooms.allRooms', { ns: 'common' })
@@ -371,9 +419,13 @@ export function getTranslatedRoomName (room) {
  * @param {*} t i18n t function
  * @returns
  */
-export function getRoomWithCapacity (roomFunction, capacity, t) {
+export function getRoomWithCapacity(roomFunction, capacity, t) {
   roomFunction = roomFunction || ''
-  return capacity ? `${roomFunction.split('(')[0]} (${capacity} ${t('rooms.suggestions.seats')})` : roomFunction
+  return capacity
+    ? `${roomFunction.split('(')[0]} (${capacity} ${t(
+        'rooms.suggestions.seats'
+      )})`
+    : roomFunction
 }
 
 /**
@@ -382,9 +434,11 @@ export function getRoomWithCapacity (roomFunction, capacity, t) {
  * @param {number} [duration] Duration of the gap in minutes
  * @returns {Array}
  **/
-export async function getEmptySuggestions (asGap = false) {
+export async function getEmptySuggestions(asGap = false) {
   const userDurationStorage = localStorage.getItem('suggestion-duration')
-  const userDuration = userDurationStorage ? parseInt(userDurationStorage) : SUGGESTION_DURATION_PRESET
+  const userDuration = userDurationStorage
+    ? parseInt(userDurationStorage)
+    : SUGGESTION_DURATION_PRESET
 
   const endDate = addMinutes(new Date(), userDuration)
   let rooms = await searchRooms(new Date(), endDate)
@@ -394,17 +448,23 @@ export async function getEmptySuggestions (asGap = false) {
   if (buildingFilter) {
     // test if any of the rooms is in any of the user's preferred buildings
     const userBuildings = JSON.parse(buildingFilter)
-    const filteredBuildings = Object.keys(userBuildings).filter(x => userBuildings[x])
+    const filteredBuildings = Object.keys(userBuildings).filter(
+      (x) => userBuildings[x]
+    )
 
     if (filteredBuildings.length !== 0) {
-      const filteredRooms = rooms.filter(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+      const filteredRooms = rooms.filter((x) =>
+        filteredBuildings.some((y) => isInBuilding(x.room, y))
+      )
 
       if (filteredRooms.length >= 4) {
         // enough rooms in preferred buildings -> filter out other buildings
         rooms = filteredRooms
       } else {
         // not enough rooms in preferred buildings -> show all rooms but sort by preferred buildings
-        rooms = rooms.sort(x => filteredBuildings.some(y => isInBuilding(x.room, y)))
+        rooms = rooms.sort((x) =>
+          filteredBuildings.some((y) => isInBuilding(x.room, y))
+        )
       }
     }
   }
@@ -418,7 +478,9 @@ export async function getEmptySuggestions (asGap = false) {
     rooms = sortRoomsByDistance(majorityRoom, rooms)
 
     // hide Neuburg buildings if next lecture is not in Neuburg
-    rooms = rooms.filter(x => x.room.includes('N') === majorityRoom.includes('N'))
+    rooms = rooms.filter(
+      (x) => x.room.includes('N') === majorityRoom.includes('N')
+    )
   }
 
   rooms = rooms.slice(0, 4)
@@ -428,17 +490,15 @@ export async function getEmptySuggestions (asGap = false) {
       return []
     }
 
-    return [(
+    return [
       {
-        gap: (
-          {
-            startDate: new Date(),
-            endDate
-          }
-        ),
-        rooms
-      }
-    )]
+        gap: {
+          startDate: new Date(),
+          endDate,
+        },
+        rooms,
+      },
+    ]
   }
 
   return rooms
@@ -449,7 +509,7 @@ export async function getEmptySuggestions (asGap = false) {
  * @param {string} room Room name (e.g. `G215`)
  * @returns {object}
  **/
-export function getRoomDistances (room) {
+export function getRoomDistances(room) {
   if (!room) {
     return {}
   }

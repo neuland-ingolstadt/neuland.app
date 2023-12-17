@@ -3,17 +3,17 @@ import { useEffect, useState } from 'react'
 /**
  * React hook that provides the current window size
  */
-export function useWindowSize () {
+export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,
-    height: undefined
+    height: undefined,
   })
 
   useEffect(() => {
-    function handleResize () {
+    function handleResize() {
       setWindowSize({
         width: window.innerWidth,
-        height: window.innerHeight
+        height: window.innerHeight,
       })
     }
 

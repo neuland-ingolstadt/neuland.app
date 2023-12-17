@@ -14,7 +14,9 @@ const VERSIONS = ['v1', 'v2']
  * @param {string} language Language code
  * @returns {object[]}
  */
-export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reimanns-static', 'canisius']) {
+export async function loadFoodEntries(
+  restaurants = ['mensa', 'reimanns', 'reimanns-static', 'canisius']
+) {
   const entries = []
 
   if (restaurants.includes('mensa')) {
@@ -22,11 +24,13 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
     entries.push(data)
   }
 
-  if (restaurants.some(x => ['reimanns', 'reimanns-static'].includes(x))) {
+  if (restaurants.some((x) => ['reimanns', 'reimanns-static'].includes(x))) {
     const data = await NeulandAPI.getReimannsPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
-    const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
+    const filteredData = data.filter(
+      (x) => new Date(x.timestamp).getTime() >= startOfToday
+    )
 
     entries.push(filteredData)
   }
@@ -35,7 +39,9 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
     const data = await NeulandAPI.getCanisiusPlan()
 
     const startOfToday = new Date(formatISODate(new Date())).getTime()
-    const filteredData = data.filter(x => (new Date(x.timestamp)).getTime() >= startOfToday)
+    const filteredData = data.filter(
+      (x) => new Date(x.timestamp).getTime() >= startOfToday
+    )
 
     entries.push(filteredData)
   }
@@ -51,17 +57,19 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
   })
 
   // remove weekend
-  days = days.filter(x => x.getDay() !== 0 && x.getDay() !== 6)
+  days = days.filter((x) => x.getDay() !== 0 && x.getDay() !== 6)
 
   // map to ISO date
-  days = days.map(x => formatISODate(x))
+  days = days.map((x) => formatISODate(x))
 
   // map entries to daysTest
-  return days.map(day => {
-    const dayEntries = entries.flatMap(r => r.find(x => x.timestamp === day)?.meals || [])
+  return days.map((day) => {
+    const dayEntries = entries.flatMap(
+      (r) => r.find((x) => x.timestamp === day)?.meals || []
+    )
     return {
       timestamp: day,
-      meals: dayEntries
+      meals: dayEntries,
     }
   })
 }
@@ -71,14 +79,16 @@ export async function loadFoodEntries (restaurants = ['mensa', 'reimanns', 'reim
  * @param {string[]} flags Meal flags
  * @returns {string[]} Cleaned meal flags
  **/
-function cleanMealFlags (flags) {
+function cleanMealFlags(flags) {
   if (!flags) return null
 
   // find contradictions
-  const contradictions = flags.filter(x => flagContradictions[x]?.some(y => flags?.includes(y)))
+  const contradictions = flags.filter((x) =>
+    flagContradictions[x]?.some((y) => flags?.includes(y))
+  )
 
   // remove contradictions
-  flags = flags?.filter(x => !contradictions.includes(x)) || []
+  flags = flags?.filter((x) => !contradictions.includes(x)) || []
 
   return flags
 }
@@ -89,10 +99,13 @@ function cleanMealFlags (flags) {
  * @returns {object} Capitalized meal names
  * @example { de: 'veganer burger', en: 'vegan burger' } => { de: 'Veganer burger', en: 'Vegan burger' }
  */
-function capitalize (mealNames) {
-  return Object.fromEntries(Object.entries(mealNames).map(([key, value]) =>
-    [key, value.charAt(0).toUpperCase() + value.slice(1)]
-  ))
+function capitalize(mealNames) {
+  return Object.fromEntries(
+    Object.entries(mealNames).map(([key, value]) => [
+      key,
+      value.charAt(0).toUpperCase() + value.slice(1),
+    ])
+  )
 }
 
 /**
@@ -100,26 +113,30 @@ function capitalize (mealNames) {
  * @param {object[]} entries Meal plan entries
  * @returns {object[]} Unified meal plan entries
  */
-export function unifyFoodEntries (entries, version = 'v1') {
-  return entries.map(entry => ({
+export function unifyFoodEntries(entries, version = 'v1') {
+  return entries.map((entry) => ({
     timestamp: entry.timestamp,
-    meals: entry.meals.map(meal => {
-      return ({
+    meals: entry.meals.map((meal) => {
+      return {
         ...unifyMeal(meal, version),
         ...(version === 'v1'
           ? {
-            variations: [...(meal.variants || []), ...(meal.additions || [])]
-              .map(variant => unifyMeal(variant, version, meal))
-          }
+              variations: [
+                ...(meal.variants || []),
+                ...(meal.additions || []),
+              ].map((variant) => unifyMeal(variant, version, meal)),
+            }
           : {}),
         ...(version !== 'v1'
           ? {
-            variants: meal.variants?.map(variant => unifyMeal(variant, version, meal)) || null
-          }
-          : {}
-        )
-      })
-    })
+              variants:
+                meal.variants?.map((variant) =>
+                  unifyMeal(variant, version, meal)
+                ) || null,
+            }
+          : {}),
+      }
+    }),
   }))
 }
 
@@ -129,16 +146,17 @@ export function unifyFoodEntries (entries, version = 'v1') {
  * @param {parent} [parentMeal] Parent meal (if meal is a variant of another meal)
  * @returns {object} Unified meal
  */
-function unifyMeal (meal, version, parentMeal = null) {
+function unifyMeal(meal, version, parentMeal = null) {
   const mealCategory = meal.category || parentMeal?.category || 'main'
 
   return {
     name: capitalize(meal.name),
-    category: version !== 'v1' ? standardizeCategory(mealCategory) : mealCategory,
+    category:
+      version !== 'v1' ? standardizeCategory(mealCategory) : mealCategory,
     prices: meal.prices || {
       student: null,
       employee: null,
-      guest: null
+      guest: null,
     },
     allergens: meal.allergens || null,
     flags: cleanMealFlags(meal.flags),
@@ -149,11 +167,10 @@ function unifyMeal (meal, version, parentMeal = null) {
     additional: meal.additional || false,
     ...(version !== 'v1'
       ? {
-        id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,
-        parent: reduceParentMeal(parentMeal)
-      }
-      : {}
-    )
+          id: parentMeal !== null ? `${parentMeal.id}/${meal.id}` : meal.id,
+          parent: reduceParentMeal(parentMeal),
+        }
+      : {}),
   }
 }
 
@@ -162,11 +179,11 @@ function unifyMeal (meal, version, parentMeal = null) {
  * @param {object[]} entries
  * @returns {object[]} Merged meals
  */
-export function mergeMealVariants (entries) {
-  return entries.map(day => {
+export function mergeMealVariants(entries) {
+  return entries.map((day) => {
     return {
       ...day,
-      meals: mergeDayEntries(day.meals)
+      meals: mergeDayEntries(day.meals),
     }
   })
 }
@@ -176,33 +193,52 @@ export function mergeMealVariants (entries) {
  * @param {object[]} dayEntries
  * @returns {object[]} Merged meals
  */
-function mergeDayEntries (dayEntries) {
-  const variationKeys = dayEntries.map(meal => {
-    const comparingKeys = dayEntries.filter(x => x.name !== meal.name && x.name.startsWith(meal.name) && x.category === meal.category)
+function mergeDayEntries(dayEntries) {
+  const variationKeys = dayEntries.map((meal) => {
+    const comparingKeys = dayEntries.filter(
+      (x) =>
+        x.name !== meal.name &&
+        x.name.startsWith(meal.name) &&
+        x.category === meal.category
+    )
     return {
       meal,
-      variants: comparingKeys || []
+      variants: comparingKeys || [],
     }
   })
 
-  const mergedEntries = dayEntries.filter(meal => !variationKeys.map(keys => keys.variants).flat().map(x => x.name).includes(meal.name))
+  const mergedEntries = dayEntries.filter(
+    (meal) =>
+      !variationKeys
+        .map((keys) => keys.variants)
+        .flat()
+        .map((x) => x.name)
+        .includes(meal.name)
+  )
 
   // remove duplicate meals
-  const noDuplicates = mergedEntries.filter((meal, index, self) =>
-    index === self.findIndex(x => x.name === meal.name)
+  const noDuplicates = mergedEntries.filter(
+    (meal, index, self) => index === self.findIndex((x) => x.name === meal.name)
   )
 
   // add variants
-  variationKeys.filter(({ variants }) => variants.length > 0).forEach(({ meal, variants }) => {
-    meal.variants = variants.map(variant => {
-      return {
-        ...variant,
-        name: cleanMealName(variant.name.replace(meal.name, '').trim()),
-        prices: Object.fromEntries(Object.entries(variant.prices).map(([key, value]) => [key, value - meal.prices[key]])),
-        additional: true
-      }
+  variationKeys
+    .filter(({ variants }) => variants.length > 0)
+    .forEach(({ meal, variants }) => {
+      meal.variants = variants.map((variant) => {
+        return {
+          ...variant,
+          name: cleanMealName(variant.name.replace(meal.name, '').trim()),
+          prices: Object.fromEntries(
+            Object.entries(variant.prices).map(([key, value]) => [
+              key,
+              value - meal.prices[key],
+            ])
+          ),
+          additional: true,
+        }
+      })
     })
-  })
 
   return noDuplicates
 }
@@ -212,8 +248,11 @@ function mergeDayEntries (dayEntries) {
  * @param {*} name
  * @returns {string} Cleaned name
  */
-function cleanMealName (name) {
-  return name.split(' ').filter(x => !stopWords.de.includes(x)).join(' ')
+function cleanMealName(name) {
+  return name
+    .split(' ')
+    .filter((x) => !stopWords.de.includes(x))
+    .join(' ')
 }
 
 /**
@@ -222,7 +261,7 @@ function cleanMealName (name) {
  * @param {*} mealName Meal name
  * @returns {string} Meal hash (starts with a short version of the day and ends with a short hash of the meal name)
  */
-export function getMealHash (day, mealName) {
+export function getMealHash(day, mealName) {
   const dayHash = day.replace(/-/g, '').slice(-2)
   return `${dayHash}${hash(mealName).substring(0, 6)}`
 }
@@ -233,7 +272,7 @@ export function getMealHash (day, mealName) {
  * @param {*} value JSON value
  * @returns {number} Original value or rounded value
  */
-export function jsonReplacer (key, value) {
+export function jsonReplacer(key, value) {
   if (typeof value === 'number') {
     // if the number is an integer, return the original value
     if (value % 1 === 0) {
@@ -255,9 +294,13 @@ export function jsonReplacer (key, value) {
  * @example checkAPIVersion('1') // OK
  * @example checkAPIVersion('-137') // Error
  */
-export function checkFoodAPIVersion (version) {
+export function checkFoodAPIVersion(version) {
   if (version && !VERSIONS.includes(version)) {
-    throw new Error(`Invalid API version: ${version}, valid versions are: ${VERSIONS.join(', ')}`)
+    throw new Error(
+      `Invalid API version: ${version}, valid versions are: ${VERSIONS.join(
+        ', '
+      )}`
+    )
   }
 }
 
@@ -266,17 +309,17 @@ export function checkFoodAPIVersion (version) {
  * @param {*} parentMeal Meal to reduce
  * @returns {object} Reduced meal object
  */
-function reduceParentMeal (parentMeal) {
+function reduceParentMeal(parentMeal) {
   if (!parentMeal) return null
 
   return {
     name: parentMeal.name,
     category: parentMeal.category,
-    id: parentMeal.id
+    id: parentMeal.id,
   }
 }
 
-function standardizeCategory (category) {
+function standardizeCategory(category) {
   const validCategories = ['main', 'soup', 'salad']
 
   if (validCategories.includes(category)) {

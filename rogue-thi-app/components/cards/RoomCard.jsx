@@ -6,9 +6,16 @@ import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
 
 import BaseCard from './BaseCard'
 
-import { findSuggestedRooms, getEmptySuggestions, getTranslatedRoomName } from '../../lib/backend-utils/rooms-utils'
+import {
+  findSuggestedRooms,
+  getEmptySuggestions,
+  getTranslatedRoomName,
+} from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
-import { getFriendlyTimetable, getTimetableGaps } from '../../lib/backend-utils/timetable-utils'
+import {
+  getFriendlyTimetable,
+  getTimetableGaps,
+} from '../../lib/backend-utils/timetable-utils'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 
 import ReactPlaceholder from 'react-placeholder/lib'
@@ -21,18 +28,20 @@ import { useTranslation } from 'next-i18next'
 /**
  * Dashboard card for semester and exam dates.
  */
-export default function RoomCard () {
+export default function RoomCard() {
   const router = useRouter()
   const [filterResults, setFilterResults] = useState(null)
   const { userKind } = useUserKind()
   const { t } = useTranslation('dashboard')
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         // get timetable and filter for today
         const timetable = await getFriendlyTimetable(new Date(), false)
-        const today = timetable.filter(x => isSameDay(x.startDate, new Date()))
+        const today = timetable.filter((x) =>
+          isSameDay(x.startDate, new Date())
+        )
 
         if (today.length < 1) {
           // no lectures today -> general room search
@@ -51,7 +60,8 @@ export default function RoomCard () {
 
         // filter for suitable rooms
         const nextGap = gaps[0]
-        const room = nextGap.endLecture.rooms[0] || nextGap.endLecture.raum || undefined
+        const room =
+          nextGap.endLecture.rooms[0] || nextGap.endLecture.raum || undefined
 
         if (!room) {
           // no room -> general room search
@@ -60,7 +70,11 @@ export default function RoomCard () {
           return
         }
 
-        const rooms = await findSuggestedRooms(room, nextGap.startDate, nextGap.endDate)
+        const rooms = await findSuggestedRooms(
+          room,
+          nextGap.startDate,
+          nextGap.endDate
+        )
 
         // idea: instead of showing the rooms that are near to the next lecture, show the rooms that are between the current lecture and the next lecture
 
@@ -97,25 +111,29 @@ export default function RoomCard () {
       i18nKey="rooms"
       link="/rooms/suggestions"
     >
-      <ReactPlaceholder ready={filterResults || userKind !== USER_STUDENT} customPlaceholder={placeholder}>
+      <ReactPlaceholder
+        ready={filterResults || userKind !== USER_STUDENT}
+        customPlaceholder={placeholder}
+      >
         <ListGroup variant="flush">
-          {filterResults && filterResults.slice(0, 2).map((x, i) => {
-            return (
-              <ListGroup.Item key={i}>
-                <Link href={'/rooms/suggestions'}>
-                  <div>
+          {filterResults &&
+            filterResults.slice(0, 2).map((x, i) => {
+              return (
+                <ListGroup.Item key={i}>
+                  <Link href={'/rooms/suggestions'}>
                     <div>
-                      {getTranslatedRoomName(x.room)}
+                      <div>{getTranslatedRoomName(x.room)}</div>
+                      <div className="text-muted">
+                        {t('rooms.text', {
+                          from: formatFriendlyTime(x.from),
+                          until: formatFriendlyTime(x.until),
+                        })}
+                      </div>
                     </div>
-                    <div className="text-muted">
-                      {t('rooms.text', { from: formatFriendlyTime(x.from), until: formatFriendlyTime(x.until) })}
-                    </div>
-                  </div>
-                </Link>
-              </ListGroup.Item>
-            )
-          }
-          )}
+                  </Link>
+                </ListGroup.Item>
+              )
+            })}
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>

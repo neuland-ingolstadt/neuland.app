@@ -1,53 +1,33 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "node": true
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "standard",
+    "next",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "standard",
-        "next",
-        "next/core-web-vitals"
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "no-prototype-builtins": "off",
+    "import/no-anonymous-default-export": "off",
+    "sort-imports": [
+      "warn",
+      {
+        "allowSeparatedGroups": true
+      }
     ],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "no-prototype-builtins": "off",
-        "import/no-anonymous-default-export": "off",
-        "sort-imports": ["warn", {
-            "allowSeparatedGroups": true
-        }],
-        "dot-notation": "off",
-        "react/jsx-wrap-multilines": [
-            "error",
-            {
-              "declaration": "parens-new-line",
-              "assignment": "parens-new-line",
-              "return": "parens-new-line",
-              "arrow": "ignore",
-              "condition": "ignore",
-              "logical": "ignore",
-              "prop": "ignore"
-            }
-          ],
-        "indent": ["error", 2, {
-            "SwitchCase": 1
-        }],
-        "react/jsx-closing-bracket-location": ["error", "line-aligned"],
-        "react/jsx-indent": ["error", 2],
-        "react/jsx-first-prop-new-line": ["error", "multiline"],
-        "react/jsx-max-props-per-line": ["error", {
-            "maximum": 1,
-            "when": "multiline"
-        }]
-    }
+    "dot-notation": "off"
+  }
 }

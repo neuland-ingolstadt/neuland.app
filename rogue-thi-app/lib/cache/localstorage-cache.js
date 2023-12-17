@@ -8,7 +8,7 @@ export default class LocalStorageCache {
    * @param {string} namespace Unique key which all cache entries will be prefixed with
    * @param {number} ttl Seconds after which an entry should be discarded
    */
-  constructor ({ namespace, ttl }) {
+  constructor({ namespace, ttl }) {
     this.namespace = namespace
     this.ttl = ttl
     this.interval = setInterval(() => this.checkExpiry(), CHECK_INTERVAL)
@@ -17,16 +17,20 @@ export default class LocalStorageCache {
   /**
    * Removes expired cache entries.
    */
-  checkExpiry () {
+  checkExpiry() {
     Object.keys(localStorage)
-      .filter(x => x.startsWith(`${this.namespace}-`) && localStorage[x].expiry < Date.now())
-      .forEach(x => delete localStorage[x])
+      .filter(
+        (x) =>
+          x.startsWith(`${this.namespace}-`) &&
+          localStorage[x].expiry < Date.now()
+      )
+      .forEach((x) => delete localStorage[x])
   }
 
   /**
    * Stops the cache.
    */
-  close () {
+  close() {
     clearInterval(this.interval)
   }
 
@@ -35,7 +39,7 @@ export default class LocalStorageCache {
    * @param {string} key Cache key
    * @returns {*} Cached value
    */
-  get (key) {
+  get(key) {
     const json = localStorage[`${this.namespace}-${key}`]
     if (!json) {
       return undefined
@@ -54,10 +58,10 @@ export default class LocalStorageCache {
    * @param {string} key Cache key
    * @param {*} value Value to be cached (must be serializable)
    */
-  set (key, value) {
+  set(key, value) {
     localStorage[`${this.namespace}-${key}`] = JSON.stringify({
       value,
-      expiry: Date.now() + this.ttl
+      expiry: Date.now() + this.ttl,
     })
   }
 
@@ -65,16 +69,16 @@ export default class LocalStorageCache {
    * Deletes a cached value.
    * @param {string} key Cache key
    */
-  delete (key) {
+  delete(key) {
     delete localStorage[`${this.namespace}-${key}`]
   }
 
   /**
    * Removes all cache entries.
    */
-  flushAll () {
+  flushAll() {
     Object.keys(localStorage)
-      .filter(x => x.startsWith(`${this.namespace}-`))
-      .forEach(x => delete localStorage[x])
+      .filter((x) => x.startsWith(`${this.namespace}-`))
+      .forEach((x) => delete localStorage[x])
   }
 }

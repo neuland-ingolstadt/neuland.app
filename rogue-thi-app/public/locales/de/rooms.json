@@ -1,85 +1,85 @@
 {
-    "rooms": {
+  "rooms": {
+    "overflow": {
+      "hourlyPlan": "Stündlicher Plan",
+      "campusCityTour": "Campus- & Stadtführung"
+    },
+    "map": {
+      "appbar": {
+        "title": "Raumplan"
+      },
+      "searchPlaceholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
+      "extendedSearch": "Erweiterte Suche",
+      "automaticSuggestion": "Automatische Vorschläge",
+      "occupied": "Belegt",
+      "freeFromUntil": "Frei von {{from}} bis {{until}}",
+      "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
+      "roomAvailabilityUnknown": "Unbekannt",
+      "legend": {
+        "free": "Frei",
+        "occupied": "Belegt",
+        "specialEquipment": "Sonderausstattung",
+        "occupancyUnknown": "Belegung unbekannt"
+      },
+      "floors": {
+        "eg": "EG",
+        "ug": "-1"
+      }
+    },
+    "search": {
+      "appbar": {
+        "title": "Erweiterte Raumsuche"
+      },
+      "building": "Gebäude",
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "duration": "Dauer",
+      "search": "Suchen",
+      "buildingsAll": "Alle",
+      "results": {
+        "availableFromUntil": "frei ab {{from}}<br />bis {{until}}",
+        "noAvailableRooms": "Keine freien Räume gefunden"
+      }
+    },
+    "suggestions": {
+      "appbar": {
+        "title": "Raumvorschläge",
         "overflow": {
-            "hourlyPlan": "Stündlicher Plan",
-            "campusCityTour": "Campus- & Stadtführung"
-        },
-        "map": {
-            "appbar": {
-                "title": "Raumplan"
-            },
-            "searchPlaceholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
-            "extendedSearch": "Erweiterte Suche",
-            "automaticSuggestion": "Automatische Vorschläge",
-            "occupied": "Belegt",
-            "freeFromUntil": "Frei von {{from}} bis {{until}}",
-            "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
-            "roomAvailabilityUnknown": "Unbekannt",
-            "legend": {
-                "free": "Frei",
-                "occupied": "Belegt",
-                "specialEquipment": "Sonderausstattung",
-                "occupancyUnknown": "Belegung unbekannt"
-            },
-            "floors": {
-                "eg": "EG",
-                "ug": "-1"
-            }
-        },
-        "search": {
-            "appbar": {
-                "title": "Erweiterte Raumsuche"
-            },
-            "building": "Gebäude",
-            "date": "Datum",
-            "time": "Uhrzeit",
-            "duration": "Dauer",
-            "search": "Suchen",
-            "buildingsAll": "Alle",
-            "results": {
-                "availableFromUntil": "frei ab {{from}}<br />bis {{until}}",
-                "noAvailableRooms": "Keine freien Räume gefunden"
-            }
-        },
-        "suggestions": {
-            "appbar": {
-                "title": "Raumvorschläge",
-                "overflow": {
-                    "suggestionPreferences": "Vorschlags-Präferenzen bearbeiten"
-                }
-            },
-            "noSuggestions": "Keine Vorschläge verfügbar.",
-            "noAvailableRooms": "Keine freien Räume gefunden.",
-            "seats": "Plätze",
-            "gaps": {
-                "header": {
-                    "general": "Freie Räume",
-                    "specific": "{{from}} <arrow/> {{until}} ({{room}})"
-                },
-                "subtitle": {
-                    "general": "Räume bis {{until}} ({{duration}} Minuten)",
-                    "specific": "Pause von {{from}} bis {{until}}"
-                },
-                "now": "Jetzt"
-            },
-            "modals": {
-                "suggestionPreferences": {
-                    "title": "Vorschlags-Präferenzen",
-                    "description": "Hier kannst du die Dauer und Gebäude der Raumvorschläge anpassen.",
-                    "duration": "Dauer",
-                    "preferredBuildings": "Bevorzugte Gebäude",
-                    "minutes": "Minuten",
-                    "close": "Schließen"
-                }
-            }
-        },
-        "list": {
-            "appbar": {
-                "title": "Stündlicher Raumplan"
-            }
-        },
-        "common": {
-            "availableFromUntil": "frei ab {{from}}<br />bis {{until}}"
+          "suggestionPreferences": "Vorschlags-Präferenzen bearbeiten"
         }
+      },
+      "noSuggestions": "Keine Vorschläge verfügbar.",
+      "noAvailableRooms": "Keine freien Räume gefunden.",
+      "seats": "Plätze",
+      "gaps": {
+        "header": {
+          "general": "Freie Räume",
+          "specific": "{{from}} <arrow/> {{until}} ({{room}})"
+        },
+        "subtitle": {
+          "general": "Räume bis {{until}} ({{duration}} Minuten)",
+          "specific": "Pause von {{from}} bis {{until}}"
+        },
+        "now": "Jetzt"
+      },
+      "modals": {
+        "suggestionPreferences": {
+          "title": "Vorschlags-Präferenzen",
+          "description": "Hier kannst du die Dauer und Gebäude der Raumvorschläge anpassen.",
+          "duration": "Dauer",
+          "preferredBuildings": "Bevorzugte Gebäude",
+          "minutes": "Minuten",
+          "close": "Schließen"
+        }
+      }
+    },
+    "list": {
+      "appbar": {
+        "title": "Stündlicher Raumplan"
+      }
+    },
+    "common": {
+      "availableFromUntil": "frei ab {{from}}<br />bis {{until}}"
     }
+  }
 }

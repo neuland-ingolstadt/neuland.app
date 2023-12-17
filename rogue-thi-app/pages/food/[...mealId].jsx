@@ -9,13 +9,33 @@ import { useContext, useEffect, useState } from 'react'
 import { FoodFilterContext } from '../_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { containsSelectedAllergen, containsSelectedPreference, formatGram, formatPrice, getAdjustedFoodLocale, getCategoryIcon, getUserSpecificPrice } from '../../lib/food-utils'
+import {
+  containsSelectedAllergen,
+  containsSelectedPreference,
+  formatGram,
+  formatPrice,
+  getAdjustedFoodLocale,
+  getCategoryIcon,
+  getUserSpecificPrice,
+} from '../../lib/food-utils'
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
 
 import styles from '../../styles/Meals.module.css'
 
-import { faBolt, faCaretUp, faCubesStacked, faDrumstickBite, faEgg, faExclamationTriangle, faHeartCircleCheck, faUser, faUserGraduate, faUserTie, faWheatAwn } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBolt,
+  faCaretUp,
+  faCubesStacked,
+  faDrumstickBite,
+  faEgg,
+  faExclamationTriangle,
+  faHeartCircleCheck,
+  faUser,
+  faUserGraduate,
+  faUserTie,
+  faWheatAwn,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
@@ -26,7 +46,7 @@ import { getCanisiusPlan } from '../api/canisius'
 import { getMensaPlan } from '../api/mensa'
 import { getReimannsPlan } from '../api/reimanns'
 
-export default function Food ({ meal, id, locale }) {
+export default function Food({ meal, id, locale }) {
   const [backAvailable, setBackAvailable] = useState(true)
   const { t, i18n } = useTranslation('food')
   const { userKind } = useUserKind()
@@ -38,58 +58,70 @@ export default function Food ({ meal, id, locale }) {
     }
   }, [])
 
-  const {
-    selectedLanguageFood,
-    preferencesSelection,
-    allergenSelection
-  } = useContext(FoodFilterContext)
+  const { selectedLanguageFood, preferencesSelection, allergenSelection } =
+    useContext(FoodFilterContext)
 
   const currentLocale = getAdjustedFoodLocale(selectedLanguageFood, i18n)
   const isTranslated = meal?.originalLanguage !== currentLocale && !meal?.static
 
-  const validNutrition = meal?.nutrition && Object.values(meal?.nutrition).some(x => x && x !== '')
+  const validNutrition =
+    meal?.nutrition && Object.values(meal?.nutrition).some((x) => x && x !== '')
 
-  function UnknownMeal () {
+  function UnknownMeal() {
     return (
       <div className={styles.unknownContainer}>
-        <FontAwesomeIcon icon={faExclamationTriangle} className={styles.unknownMealIcon}/>
+        <FontAwesomeIcon
+          icon={faExclamationTriangle}
+          className={styles.unknownMealIcon}
+        />
         <div className={`${styles.cardContainer} ${styles.card}`}>
           <div className={styles.cardBody}>
-            <div className={styles.unknownTitle}>{t('foodDetails.unknownMeal.title')}</div>
+            <div className={styles.unknownTitle}>
+              {t('foodDetails.unknownMeal.title')}
+            </div>
             <p className={styles.unknownDescription}>
               <Trans
                 i18nKey={'foodDetails.unknownMeal.description'}
-                ns='food'
+                ns="food"
                 components={{ i: <i /> }}
                 values={{
-                  id
+                  id,
                 }}
               />
             </p>
           </div>
         </div>
       </div>
-
     )
   }
 
-  function PriceCard ({ icon, category, price }) {
+  function PriceCard({ icon, category, price }) {
     return (
-      <div className={`${styles.cardContainer} ${styles.priceCard} ${styles.card}`}>
-        <FontAwesomeIcon icon={icon} className={styles.cardIcon}/>
+      <div
+        className={`${styles.cardContainer} ${styles.priceCard} ${styles.card}`}
+      >
+        <FontAwesomeIcon
+          icon={icon}
+          className={styles.cardIcon}
+        />
 
         <div className={styles.priceCard}>
-          <div className={styles.price}>{`${meal.additional ? '+' : ''} ${price}`}</div>
+          <div className={styles.price}>{`${
+            meal.additional ? '+' : ''
+          } ${price}`}</div>
           <div className={styles.category}>{category}</div>
         </div>
       </div>
     )
   }
 
-  function NutritionCard ({ icon, title, value, subTitle, subValue }) {
+  function NutritionCard({ icon, title, value, subTitle, subValue }) {
     return (
       <div className={`${styles.cardContainer}  ${styles.card}`}>
-        <FontAwesomeIcon icon={icon} className={styles.cardIcon}/>
+        <FontAwesomeIcon
+          icon={icon}
+          className={styles.cardIcon}
+        />
 
         <div className={styles.cardBody}>
           <div className={styles.nutritionRow}>
@@ -105,27 +137,36 @@ export default function Food ({ meal, id, locale }) {
     )
   }
 
-  function VariantCard ({ variant }) {
+  function VariantCard({ variant }) {
     return (
       <Link href={`/food/${variant.id}`}>
         <a className={'text-decoration-none text-reset'}>
           <div className={`${styles.cardContainer} ${styles.card}`}>
-            <FontAwesomeIcon icon={getCategoryIcon(variant)} className={styles.cardIcon}/>
+            <FontAwesomeIcon
+              icon={getCategoryIcon(variant)}
+              className={styles.cardIcon}
+            />
 
             <div className={styles.cardBody}>
-              <div className={styles.price}>{`${variant.additional ? '+ ' : ''}${variant.name[currentLocale]}`}</div>
-              <div className={styles.category}>{t('foodDetails.variants.click')}</div>
+              <div className={styles.price}>{`${
+                variant.additional ? '+ ' : ''
+              }${variant.name[currentLocale]}`}</div>
+              <div className={styles.category}>
+                {t('foodDetails.variants.click')}
+              </div>
             </div>
 
-            {`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(variant, userKind)}`}
+            {`${variant.additional ? '+ ' : ''}${getUserSpecificPrice(
+              variant,
+              userKind
+            )}`}
           </div>
         </a>
       </Link>
-
     )
   }
 
-  function MealPage () {
+  function MealPage() {
     return (
       <>
         {/* name */}
@@ -135,9 +176,8 @@ export default function Food ({ meal, id, locale }) {
             <Link href={`/food/${meal?.parent.id}`}>
               <a className={'text-decoration-none text-reset'}>
                 <div className={styles.parentMeal}>
-                  <FontAwesomeIcon icon={getCategoryIcon(meal)}/>
+                  <FontAwesomeIcon icon={getCategoryIcon(meal)} />
                   <p>{meal?.parent.name[currentLocale]}</p>
-
                 </div>
               </a>
             </Link>
@@ -148,23 +188,44 @@ export default function Food ({ meal, id, locale }) {
         <div className={styles.indicator}>
           {containsSelectedAllergen(meal?.allergens, allergenSelection) && (
             <span className={`${styles.box} ${styles.warn}`}>
-              <FontAwesomeIcon title={t('warning.unknownIngredients.iconTitle')} icon={faExclamationTriangle} className={styles.icon}/>
+              <FontAwesomeIcon
+                title={t('warning.unknownIngredients.iconTitle')}
+                icon={faExclamationTriangle}
+                className={styles.icon}
+              />
               {t('preferences.warn')}
             </span>
           )}
-          {!containsSelectedAllergen(meal?.allergens, allergenSelection) && containsSelectedPreference(meal?.flags, preferencesSelection) && (
-            <span className={`${styles.box} ${styles.match}`}>
-              <FontAwesomeIcon title={t('preferences.iconTitle')} icon={faHeartCircleCheck} className={styles.icon}/>
-              {t('preferences.match')}
-            </span>
-          )}
+          {!containsSelectedAllergen(meal?.allergens, allergenSelection) &&
+            containsSelectedPreference(meal?.flags, preferencesSelection) && (
+              <span className={`${styles.box} ${styles.match}`}>
+                <FontAwesomeIcon
+                  title={t('preferences.iconTitle')}
+                  icon={faHeartCircleCheck}
+                  className={styles.icon}
+                />
+                {t('preferences.match')}
+              </span>
+            )}
         </div>
 
         {/* prices */}
         <div className={styles.prices}>
-          <PriceCard icon={faUserGraduate} category={t('foodDetails.prices.students')} price={formatPrice(meal?.prices.student)}/>
-          <PriceCard icon={faUserTie} category={t('foodDetails.prices.employees')} price={formatPrice(meal?.prices.employee)}/>
-          <PriceCard icon={faUser} category={t('foodDetails.prices.guests')} price={formatPrice(meal?.prices.guest)}/>
+          <PriceCard
+            icon={faUserGraduate}
+            category={t('foodDetails.prices.students')}
+            price={formatPrice(meal?.prices.student)}
+          />
+          <PriceCard
+            icon={faUserTie}
+            category={t('foodDetails.prices.employees')}
+            price={formatPrice(meal?.prices.employee)}
+          />
+          <PriceCard
+            icon={faUser}
+            category={t('foodDetails.prices.guests')}
+            price={formatPrice(meal?.prices.guest)}
+          />
         </div>
 
         {/* variants */}
@@ -172,26 +233,41 @@ export default function Food ({ meal, id, locale }) {
           <>
             <h6>{t('foodDetails.variants.title')}</h6>
             {meal?.variants.map((variant, i) => (
-              <VariantCard key={i} variant={variant}/>
+              <VariantCard
+                key={i}
+                variant={variant}
+              />
             ))}
           </>
         )}
 
         {/* notes */}
         <h6>{t('foodDetails.flags.title')}</h6>
-        <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
+        <div
+          className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}
+        >
           {(meal?.flags === null || meal?.flags?.length === 0) && (
             <span className={styles.unknown}>
-              {meal?.flags?.length === 0 ? `${t('foodDetails.flags.empty')}` : t('foodDetails.flags.unknown')}
+              {meal?.flags?.length === 0
+                ? `${t('foodDetails.flags.empty')}`
+                : t('foodDetails.flags.unknown')}
             </span>
           )}
 
           <ul>
-            {meal?.flags?.map(flag => (
-              <li key={flag} className={containsSelectedPreference([flag], preferencesSelection) ? styles.goodColor : ''}>
+            {meal?.flags?.map((flag) => (
+              <li
+                key={flag}
+                className={
+                  containsSelectedPreference([flag], preferencesSelection)
+                    ? styles.goodColor
+                    : ''
+                }
+              >
                 <strong>{flag}</strong>
                 {' – '}
-                {flagMap[flag]?.[i18n.languages[0]] || `${t('foodDetails.allergens.fallback')}`}
+                {flagMap[flag]?.[i18n.languages[0]] ||
+                  `${t('foodDetails.allergens.fallback')}`}
               </li>
             ))}
           </ul>
@@ -199,18 +275,30 @@ export default function Food ({ meal, id, locale }) {
 
         {/* allergenes */}
         <h6>{t('foodDetails.allergens.title')}</h6>
-        <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
+        <div
+          className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}
+        >
           {(meal?.allergens === null || meal?.allergens?.length === 0) && (
             <span className={styles.unknown}>
-              {meal?.allergens?.length === 0 ? `${t('foodDetails.allergens.empty')}` : t('foodDetails.allergens.unknown')}
+              {meal?.allergens?.length === 0
+                ? `${t('foodDetails.allergens.empty')}`
+                : t('foodDetails.allergens.unknown')}
             </span>
           )}
           <ul>
-            {meal?.allergens?.map(key => (
-              <li key={key} className={containsSelectedAllergen([key], allergenSelection) ? styles.warnColor : ''}>
+            {meal?.allergens?.map((key) => (
+              <li
+                key={key}
+                className={
+                  containsSelectedAllergen([key], allergenSelection)
+                    ? styles.warnColor
+                    : ''
+                }
+              >
                 <strong>{key}</strong>
                 {' – '}
-                {allergenMap[key]?.[i18n.languages[0]] || `${t('foodDetails.allergens.fallback')}`}
+                {allergenMap[key]?.[i18n.languages[0]] ||
+                  `${t('foodDetails.allergens.fallback')}`}
               </li>
             ))}
           </ul>
@@ -223,7 +311,11 @@ export default function Food ({ meal, id, locale }) {
             <NutritionCard
               icon={faBolt}
               title={t('foodDetails.nutrition.energy.title')}
-              value={`${meal?.nutrition.kj ? meal?.nutrition.kj + ' kJ' : ''} / ${meal?.nutrition.kcal ? meal?.nutrition.kcal + ' kcal' : ''}`}
+              value={`${
+                meal?.nutrition.kj ? meal?.nutrition.kj + ' kJ' : ''
+              } / ${
+                meal?.nutrition.kcal ? meal?.nutrition.kcal + ' kcal' : ''
+              }`}
             />
             <NutritionCard
               icon={faDrumstickBite}
@@ -254,10 +346,12 @@ export default function Food ({ meal, id, locale }) {
               title={t('foodDetails.nutrition.salt.title')}
               value={formatGram(meal?.nutrition.salt)}
             />
-          </div>)
-        }
+          </div>
+        )}
         {!validNutrition && (
-          <div className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}>
+          <div
+            className={`${styles.cardContainer} ${styles.cardColumn} ${styles.card}`}
+          >
             <span className={styles.unknown}>
               {t('foodDetails.allergens.unknown')}
             </span>
@@ -268,7 +362,9 @@ export default function Food ({ meal, id, locale }) {
         <div>
           <h6>{t('foodDetails.warning.title')}</h6>
           <p>
-            {`${isTranslated ? `${t('foodDetails.translation.warning')} ` : ''}${t('foodDetails.warning.text')}`}
+            {`${
+              isTranslated ? `${t('foodDetails.translation.warning')} ` : ''
+            }${t('foodDetails.warning.text')}`}
           </p>
 
           {isTranslated && (
@@ -297,12 +393,15 @@ export default function Food ({ meal, id, locale }) {
   return (
     <>
       <AppContainer>
-        <AppNavbar title={t('list.titles.meals')} showBack={backAvailable}/>
+        <AppNavbar
+          title={t('list.titles.meals')}
+          showBack={backAvailable}
+        />
         <AppBody className={styles.appBody}>
-          {meal ? <MealPage/> : <UnknownMeal/>}
+          {meal ? <MealPage /> : <UnknownMeal />}
         </AppBody>
 
-        <AppTabbar/>
+        <AppTabbar />
       </AppContainer>
 
       <Head>
@@ -312,7 +411,7 @@ export default function Food ({ meal, id, locale }) {
             name="description"
             content={t('foodDetails.meta.description', {
               name: formatName(meal.name[locale]),
-              restaurant: formatName(meal.restaurant)
+              restaurant: formatName(meal.restaurant),
             })}
           />
         )}
@@ -321,45 +420,42 @@ export default function Food ({ meal, id, locale }) {
   )
 }
 
-async function getMealData () {
+async function getMealData() {
   const data = [
     await getMensaPlan('v2'),
     await getReimannsPlan('v2'),
-    await getCanisiusPlan('v2')
+    await getCanisiusPlan('v2'),
   ]
 
-  return data.flat().flatMap(x => x.meals)
+  return data.flat().flatMap((x) => x.meals)
 }
 
 export const getStaticProps = async ({ locale, params }) => {
-  async function findMeal () {
+  async function findMeal() {
     const mealId = params.mealId.join('/')
 
     const data = await getMealData()
 
     // flatten variants
-    const variants = data.flatMap(meal => meal?.variants || [])
+    const variants = data.flatMap((meal) => meal?.variants || [])
     const meals = [...data, ...variants]
 
-    return meals.find(meal => meal?.id === mealId) || null
+    return meals.find((meal) => meal?.id === mealId) || null
   }
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? 'en', [
-        'food',
-        'common'
-      ])),
+      ...(await serverSideTranslations(locale ?? 'en', ['food', 'common'])),
       meal: await findMeal(),
       id: params.mealId.join('/'),
-      locale
+      locale,
     },
-    revalidate: 60 * 60 * 12 // 12 hours
+    revalidate: 60 * 60 * 12, // 12 hours
   }
 }
 
-export async function getStaticPaths () {
-  async function getBuildMeals () {
+export async function getStaticPaths() {
+  async function getBuildMeals() {
     const getData = async () => {
       try {
         const data = await getMealData()
@@ -371,17 +467,16 @@ export async function getStaticPaths () {
     }
 
     // flatten variants
-    const dayMeals = (await getData())
-      .flatMap(day => day.meals)
-    const variants = dayMeals.flatMap(meal => meal?.variants || [])
+    const dayMeals = (await getData()).flatMap((day) => day.meals)
+    const variants = dayMeals.flatMap((meal) => meal?.variants || [])
 
     const meals = [...dayMeals, ...variants]
 
-    return meals.map(meal => `/food/${meal?.id}`)
+    return meals.map((meal) => `/food/${meal?.id}`)
   }
 
   return {
     paths: await getBuildMeals(),
-    fallback: 'blocking'
+    fallback: 'blocking',
   }
 }

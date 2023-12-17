@@ -1,11 +1,13 @@
 $primary: #8845ef;
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "../common.scss";
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../common.scss';
 
 // react-placeholder
 // declare after bootstrap, since we need bootstrap variables
-.text-row, .rect-shape, .round-shape {
+.text-row,
+.rect-shape,
+.round-shape {
   background: $gray-200 !important;
 }
 

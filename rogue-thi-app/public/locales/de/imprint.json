@@ -1,18 +1,18 @@
 {
-    "imprint": {
-        "appbar": {
-            "title": "Impressum"
-        },
-        "feedback": {
-            "title": "Wir würden uns über euer Feedback freuen.",
-            "email": "E-Mail",
-            "website": "Webseite",
-            "instagram": "Instagram",
-            "sourceCode": "Quellcode auf GitHub",
-            "joinNeuland": "Jetzt Mitglied werden und die Entwicklung unterstützen!"
-        },
-        "legal": {
-            "title": "Rechtliche Hinweise von Neuland Ingolstadt e.V."
-        }
+  "imprint": {
+    "appbar": {
+      "title": "Impressum"
+    },
+    "feedback": {
+      "title": "Wir würden uns über euer Feedback freuen.",
+      "email": "E-Mail",
+      "website": "Webseite",
+      "instagram": "Instagram",
+      "sourceCode": "Quellcode auf GitHub",
+      "joinNeuland": "Jetzt Mitglied werden und die Entwicklung unterstützen!"
+    },
+    "legal": {
+      "title": "Rechtliche Hinweise von Neuland Ingolstadt e.V."
     }
+  }
 }

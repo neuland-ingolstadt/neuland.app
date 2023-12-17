@@ -1,51 +1,61 @@
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from './hooks/user-kind'
-import { faBowlFood, faBurger, faSeedling } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBowlFood,
+  faBurger,
+  faSeedling,
+} from '@fortawesome/free-solid-svg-icons'
 import { getAdjustedLocale } from './locale-utils'
 
 /**
-   * Checks whether the user should be allergens.
-   * @param {string[]} allergens Selected allergens
-   * @returns {boolean}
-   */
-export function containsSelectedAllergen (allergens, allergenSelection) {
+ * Checks whether the user should be allergens.
+ * @param {string[]} allergens Selected allergens
+ * @returns {boolean}
+ */
+export function containsSelectedAllergen(allergens, allergenSelection) {
   if (!allergens) {
     return false
   }
-  return allergens.some(x => allergenSelection[x])
+  return allergens.some((x) => allergenSelection[x])
 }
 
-export function containsSelectedPreference (flags, preferencesSelection) {
+export function containsSelectedPreference(flags, preferencesSelection) {
   if (!flags) {
     return false
   }
-  return flags.some(x => preferencesSelection[x])
+  return flags.some((x) => preferencesSelection[x])
 }
 
 /**
-   * Formats a weight in grams.
-   * @param {number} x Weight
-   * @returns {string}
-   */
-export function formatGram (x) {
+ * Formats a weight in grams.
+ * @param {number} x Weight
+ * @returns {string}
+ */
+export function formatGram(x) {
   return x ? `${formatFloat(x)} g` : x
 }
 
 /**
-   * Formats a float for the current locale.
-   * @param {number} x
-   * @returns {string}
-   */
-export function formatFloat (x) {
-  return (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 2 })).format(x)
+ * Formats a float for the current locale.
+ * @param {number} x
+ * @returns {string}
+ */
+export function formatFloat(x) {
+  return new Intl.NumberFormat(getAdjustedLocale(), {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 2,
+  }).format(x)
 }
 
 /**
-   * Formats a price in euros.
-   * @param {number} x Price
-   * @returns {string}
-   */
-export function formatPrice (x) {
-  return x?.toLocaleString(getAdjustedLocale(), { style: 'currency', currency: 'EUR' })
+ * Formats a price in euros.
+ * @param {number} x Price
+ * @returns {string}
+ */
+export function formatPrice(x) {
+  return x?.toLocaleString(getAdjustedLocale(), {
+    style: 'currency',
+    currency: 'EUR',
+  })
 }
 
 /**
@@ -56,8 +66,18 @@ export function formatPrice (x) {
  * @param {*} currentLocale
  * @returns {string[]} flags
  */
-export function getMatchingPreferences (meal, preferencesSelection, flagMap, currentLocale) {
-  return meal.flags && meal.flags.filter(x => preferencesSelection[x] || ['veg', 'V'].includes(x))?.map(x => flagMap[x]?.[currentLocale])
+export function getMatchingPreferences(
+  meal,
+  preferencesSelection,
+  flagMap,
+  currentLocale
+) {
+  return (
+    meal.flags &&
+    meal.flags
+      .filter((x) => preferencesSelection[x] || ['veg', 'V'].includes(x))
+      ?.map((x) => flagMap[x]?.[currentLocale])
+  )
 }
 
 /**
@@ -68,8 +88,18 @@ export function getMatchingPreferences (meal, preferencesSelection, flagMap, cur
  * @param {*} currentLocale
  * @returns {string[]} flags
  */
-export function getMatchingAllergens (meal, allergenSelection, allergenMap, currentLocale) {
-  return meal.allergens && meal.allergens.filter(x => allergenSelection[x]).map(x => allergenMap[x]?.[currentLocale])
+export function getMatchingAllergens(
+  meal,
+  allergenSelection,
+  allergenMap,
+  currentLocale
+) {
+  return (
+    meal.allergens &&
+    meal.allergens
+      .filter((x) => allergenSelection[x])
+      .map((x) => allergenMap[x]?.[currentLocale])
+  )
 }
 
 /**
@@ -78,25 +108,27 @@ export function getMatchingAllergens (meal, allergenSelection, allergenMap, curr
  * @param {*} i18n
  * @returns {string} adjusted locale (e.g. 'de')
  */
-export function getAdjustedFoodLocale (selectedLanguageFood, i18n) {
-  return (selectedLanguageFood && selectedLanguageFood !== 'default') ? selectedLanguageFood : i18n.languages[0]
+export function getAdjustedFoodLocale(selectedLanguageFood, i18n) {
+  return selectedLanguageFood && selectedLanguageFood !== 'default'
+    ? selectedLanguageFood
+    : i18n.languages[0]
 }
 
 /**
-   * Formats a price according to the users group (student, employee or guest).
-   * @param {object} meal Parsed meal object
-   * @returns {string}
-   */
-export function getUserSpecificPrice (meal, userKind) {
+ * Formats a price according to the users group (student, employee or guest).
+ * @param {object} meal Parsed meal object
+ * @returns {string}
+ */
+export function getUserSpecificPrice(meal, userKind) {
   const prices = {
     [USER_GUEST]: meal.prices.guest,
     [USER_EMPLOYEE]: meal.prices.employee,
-    [USER_STUDENT]: meal.prices.student
+    [USER_STUDENT]: meal.prices.student,
   }
   return formatPrice(prices[userKind])
 }
 
-export function getCategoryIcon (meal) {
+export function getCategoryIcon(meal) {
   switch (meal.category) {
     case 'soup':
       return faBowlFood

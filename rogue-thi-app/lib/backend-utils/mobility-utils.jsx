@@ -15,10 +15,10 @@ import { useTranslation } from 'next-i18next'
  * Retrieves the users mobility preferences.
  * @returns {object}
  */
-export function getMobilitySettings () {
+export function getMobilitySettings() {
   return {
     kind: localStorage.mobilityKind || 'bus',
-    station: localStorage.mobilityStation || stations.bus.defaultStation
+    station: localStorage.mobilityStation || stations.bus.defaultStation,
   }
 }
 
@@ -29,15 +29,19 @@ export function getMobilitySettings () {
  * @param {object} t Translation object
  * @returns {string}
  */
-export function getMobilityLabel (kind, station, t) {
+export function getMobilityLabel(kind, station, t) {
   switch (kind) {
     case 'bus': {
-      const busEntry = stations.bus.stations.find(x => x.id === station)
-      return t('transport.title.bus', { station: busEntry ? busEntry.name : '?' })
+      const busEntry = stations.bus.stations.find((x) => x.id === station)
+      return t('transport.title.bus', {
+        station: busEntry ? busEntry.name : '?',
+      })
     }
     case 'train': {
-      const trainEntry = stations.train.stations.find(x => x.id === station)
-      return t('transport.title.train', { station: trainEntry ? trainEntry.name : '?' })
+      const trainEntry = stations.train.stations.find((x) => x.id === station)
+      return t('transport.title.train', {
+        station: trainEntry ? trainEntry.name : '?',
+      })
     }
     case 'parking':
       return t('transport.title.parking')
@@ -52,11 +56,11 @@ export function getMobilityLabel (kind, station, t) {
  * Fetches and parses parking availability for the campus
  * @returns {object}
  */
-async function getAndConvertCampusParkingData () {
+async function getAndConvertCampusParkingData() {
   let available = null
   try {
     const entries = await API.getCampusParkingData()
-    available = entries.find(x => x.name === 'TG Gießerei Hochschule')?.free
+    available = entries.find((x) => x.name === 'TG Gießerei Hochschule')?.free
     available = typeof available === 'string' ? parseInt(available) : null
   } catch (e) {
     available = null
@@ -64,7 +68,7 @@ async function getAndConvertCampusParkingData () {
 
   return {
     name: 'Congressgarage',
-    available
+    available,
   }
 }
 
@@ -74,7 +78,7 @@ async function getAndConvertCampusParkingData () {
  * @param {string} station Station name (only for `bus` or `train`)
  * @returns {object[]}
  */
-export async function getMobilityEntries (kind, station) {
+export async function getMobilityEntries(kind, station) {
   if (kind === 'bus') {
     return NeulandAPI.getBusPlan(station)
   } else if (kind === 'train') {
@@ -82,39 +86,41 @@ export async function getMobilityEntries (kind, station) {
   } else if (kind === 'parking') {
     const [data, campusEntry] = await Promise.all([
       NeulandAPI.getParkingData(),
-      getAndConvertCampusParkingData()
+      getAndConvertCampusParkingData(),
     ])
     data.push(campusEntry)
 
     return [
-      ...stations.parking.map(x => {
-        const entry = data.find(y => x.name === y.name)
+      ...stations.parking.map((x) => {
+        const entry = data.find((y) => x.name === y.name)
         return {
           name: x.name,
           priceLevel: x.priceLevel,
-          available: entry ? entry.available : null
+          available: entry ? entry.available : null,
         }
       }),
-      ...data.filter(x => !stations.parking.find(y => x.name === y.name))
+      ...data.filter((x) => !stations.parking.find((y) => x.name === y.name)),
     ]
   } else if (kind === 'charging') {
     const data = await NeulandAPI.getCharingStationData()
     return [
       ...stations.charging
-        .map(x => data.find(y => x.id === y.id))
-        .filter(x => !!x),
-      ...data.filter(x => !stations.charging.find(y => x.id === y.id))
+        .map((x) => data.find((y) => x.id === y.id))
+        .filter((x) => !!x),
+      ...data.filter((x) => !stations.charging.find((y) => x.id === y.id)),
     ]
   } else {
     throw new Error('Invalid mobility kind ' + kind)
   }
 }
 
-export function RenderMobilityEntryPlaceholder ({ kind, styles }) {
+export function RenderMobilityEntryPlaceholder({ kind, styles }) {
   if (kind === 'charging') {
     return (
       <>
-        <div className={`${styles.mobilityDestination} ${styles.placeholder_4_0}`}>
+        <div
+          className={`${styles.mobilityDestination} ${styles.placeholder_4_0}`}
+        >
           <TextBlock rows={1} />
         </div>
       </>
@@ -123,9 +129,7 @@ export function RenderMobilityEntryPlaceholder ({ kind, styles }) {
 
   return (
     <>
-      <div className={styles.mobilityRoute}>
-        - - -
-      </div>
+      <div className={styles.mobilityRoute}>- - -</div>
       <div className={styles.mobilityDestination}>
         <TextBlock rows={1} />
       </div>
@@ -140,7 +144,7 @@ export function RenderMobilityEntryPlaceholder ({ kind, styles }) {
  * @param {number} maxLen Truncate the string after this many characters
  * @param {string} styles CSS object
  */
-export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
+export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
   const { t } = useTranslation('mobility')
 
   if (kind === 'bus') {
@@ -148,15 +152,9 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
 
     return (
       <>
-        <div className={styles.mobilityRoute}>
-          {item.route}
-        </div>
-        <div className={styles.mobilityDestination}>
-          {item.destination}
-        </div>
-        <div className={styles.mobilityTime}>
-          {timeString}
-        </div>
+        <div className={styles.mobilityRoute}>{item.route}</div>
+        <div className={styles.mobilityDestination}>{item.destination}</div>
+        <div className={styles.mobilityTime}>{timeString}</div>
       </>
     )
   } else if (kind === 'train') {
@@ -164,13 +162,21 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
 
     return (
       <>
-        <div className={styles.mobilityRoute}>
-          {item.name}
+        <div className={styles.mobilityRoute}>{item.name}</div>
+        <div
+          className={`${styles.mobilityDestination} ${
+            item.canceled ? styles.mobilityCanceled : ''
+          }`}
+        >
+          {item.destination.length <= maxLen
+            ? item.destination
+            : item.destination.substr(0, maxLen) + '…'}
         </div>
-        <div className={`${styles.mobilityDestination} ${item.canceled ? styles.mobilityCanceled : ''}`}>
-          {item.destination.length <= maxLen ? item.destination : item.destination.substr(0, maxLen) + '…'}
-        </div>
-        <div className={`${styles.mobilityTime} ${item.canceled ? styles.mobilityCanceled : ''}`}>
+        <div
+          className={`${styles.mobilityTime} ${
+            item.canceled ? styles.mobilityCanceled : ''
+          }`}
+        >
           {timeString}
         </div>
       </>
@@ -181,36 +187,46 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
             {item.priceLevel === 'free' && (
-              <FontAwesomeIcon title={t('transport.details.parking.free')} icon={faCreativeCommonsNcEu} />
+              <FontAwesomeIcon
+                title={t('transport.details.parking.free')}
+                icon={faCreativeCommonsNcEu}
+              />
             )}
             {item.priceLevel === 'restricted' && (
-              <FontAwesomeIcon title={t('transport.details.parking.restricted')} icon={faKey} />
+              <FontAwesomeIcon
+                title={t('transport.details.parking.restricted')}
+                icon={faKey}
+              />
             )}
-            {item.priceLevel > 0 && new Array(item.priceLevel)
-              .fill(0)
-              .map((_, i) => (
-                <FontAwesomeIcon title={t('transport.details.parking.paid')} key={i} icon={faEuroSign} />
+            {item.priceLevel > 0 &&
+              new Array(item.priceLevel).fill(0).map((_, i) => (
+                <FontAwesomeIcon
+                  title={t('transport.details.parking.paid')}
+                  key={i}
+                  icon={faEuroSign}
+                />
               ))}
           </div>
         )}
-        <div className={styles.mobilityDestination}>
-          {item.name}
-        </div>
+        <div className={styles.mobilityDestination}>{item.name}</div>
         <div className={styles.mobilityTime}>
           {typeof item.available === 'number'
-            ? t('transport.details.parking.available', { available: item.available })
-            : t('transport.details.parking.unknown') }
+            ? t('transport.details.parking.available', {
+                available: item.available,
+              })
+            : t('transport.details.parking.unknown')}
         </div>
       </>
     )
   } else if (kind === 'charging') {
     return (
       <>
-        <div className={styles.mobilityDestination}>
-          {item.name}
-        </div>
+        <div className={styles.mobilityDestination}>{item.name}</div>
         <div className={styles.mobilityTime}>
-          {t('transport.details.charging.available', { available: item.available, total: item.total })}
+          {t('transport.details.charging.available', {
+            available: item.available,
+            total: item.total,
+          })}
         </div>
       </>
     )
@@ -226,7 +242,7 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
    * @param {boolean} detailed - Whether to return a detailed time string (card vs page)
    * @returns {string} The formatted time string.
    */
-  function formatTimes (time, cardMin, detailedMin) {
+  function formatTimes(time, cardMin, detailedMin) {
     const cardMs = cardMin * 60 * 1000
     const detailedMs = detailedMin * 60 * 1000
     const actualTime = new Date(time)
@@ -234,7 +250,11 @@ export function RenderMobilityEntry ({ kind, item, maxLen, styles, detailed }) {
     let timeString
 
     if (detailed) {
-      timeString = `${formatFriendlyTime(actualTime)} ${timeDifference < detailedMs ? `- ${formatRelativeMinutes(actualTime)}` : ''}`
+      timeString = `${formatFriendlyTime(actualTime)} ${
+        timeDifference < detailedMs
+          ? `- ${formatRelativeMinutes(actualTime)}`
+          : ''
+      }`
     } else {
       if (timeDifference > cardMs) {
         timeString = formatFriendlyTime(actualTime)

@@ -1,89 +1,88 @@
 {
-    "warning": {
-        "unknownIngredients": {
-            "text": "Unbekannte Zutaten / Allergene'",
-            "iconTitle": "Allergiewarnung"
-        }
-    },
-    "filter": "Filter",
-    "preferences": {
-        "iconTitle": "Bevorzugtes Essen",
-        "match": "Bevorzugt",
-        "warn": "Allergene"
-    },
-    "list": {
-        "titles": {
-            "cafeteria": "Mensa",
-            "meals": "Gerichte",
-            "soups": "Suppen",
-            "salads": "Salate"
-            
-        }
-    },
-    "error": {
-        "dataUnavailable": "Keine Daten verfügbar"
-    },
-    "navigation": {
-        "weeks": {
-            "previous": "Woche zurück",
-            "next": "Woche vor"
-        }
-    },
-    "foodDetails": {
-        "flags": {
-            "title": "Anmerkungen",
-            "unknown": "Unbekannt",
-            "empty": "Keine Anmerkungen vorhanden."
-        },
-        "allergens": {
-            "title": "Allergene",
-            "unknown": "Unbekannt",
-            "empty": "Keine Allergene vorhanden.",
-            "fallback" : "Unbekannt (Das ist schlecht)"
-        },
-        "nutrition": {
-            "title": "Nährwerte",
-            "energy.title": "Energie",
-            "fat": {
-                "title": "Fett",
-                "saturated": "davon gesättigte Fettsäuren"
-            },
-            "carbohydrates": {
-                "title": "Kohlenhydrate",
-                "sugar": "davon Zucker"
-            },
-            "fiber.title": "Ballaststoffe",
-            "protein.title": "Eiweiß",
-            "salt.title": "Salz",
-            "unknown.title": "Unbekannt."
-        },
-        "prices": {
-            "title": "Preise",
-            "students": "Studierende",
-            "employees": "Mitarbeitende",
-            "guests": "Gäste",
-            "unknown": "Unbekannt"
-        },
-        "warning": {
-            "title": "Angaben ohne Gewähr.",
-            "text": "Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert. Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion."
-        },
-        "translation": {
-            "title": "Übersetzung",
-            "warning": "Dieses Gericht wurde automatisch übersetzt.",
-            "originalName": "Originalname",
-            "translatedName": "Übersetzter Name"
-        },
-        "variants": {
-            "title": "Varianten",
-            "click": "Klicke für mehr Informationen."
-        },
-        "unknownMeal": {
-            "title": "Unbekanntes Gericht",
-            "description": "Die Essens-ID <i>{{id}}</i> konnte nicht gefunden werden. Bitte kontaktiere uns, falls du denkst, dass es sich um einen Fehler handelt."
-        },
-        "meta": {
-            "description": "Schaue dir Details von {{name}} ({{restaurant}}) an."
-        }
+  "warning": {
+    "unknownIngredients": {
+      "text": "Unbekannte Zutaten / Allergene'",
+      "iconTitle": "Allergiewarnung"
     }
+  },
+  "filter": "Filter",
+  "preferences": {
+    "iconTitle": "Bevorzugtes Essen",
+    "match": "Bevorzugt",
+    "warn": "Allergene"
+  },
+  "list": {
+    "titles": {
+      "cafeteria": "Mensa",
+      "meals": "Gerichte",
+      "soups": "Suppen",
+      "salads": "Salate"
+    }
+  },
+  "error": {
+    "dataUnavailable": "Keine Daten verfügbar"
+  },
+  "navigation": {
+    "weeks": {
+      "previous": "Woche zurück",
+      "next": "Woche vor"
+    }
+  },
+  "foodDetails": {
+    "flags": {
+      "title": "Anmerkungen",
+      "unknown": "Unbekannt",
+      "empty": "Keine Anmerkungen vorhanden."
+    },
+    "allergens": {
+      "title": "Allergene",
+      "unknown": "Unbekannt",
+      "empty": "Keine Allergene vorhanden.",
+      "fallback": "Unbekannt (Das ist schlecht)"
+    },
+    "nutrition": {
+      "title": "Nährwerte",
+      "energy.title": "Energie",
+      "fat": {
+        "title": "Fett",
+        "saturated": "davon gesättigte Fettsäuren"
+      },
+      "carbohydrates": {
+        "title": "Kohlenhydrate",
+        "sugar": "davon Zucker"
+      },
+      "fiber.title": "Ballaststoffe",
+      "protein.title": "Eiweiß",
+      "salt.title": "Salz",
+      "unknown.title": "Unbekannt."
+    },
+    "prices": {
+      "title": "Preise",
+      "students": "Studierende",
+      "employees": "Mitarbeitende",
+      "guests": "Gäste",
+      "unknown": "Unbekannt"
+    },
+    "warning": {
+      "title": "Angaben ohne Gewähr.",
+      "text": "Bitte prüfe die Angaben auf den Infobildschirmen, bevor du etwas konsumiert. Die Nährwertangaben beziehen sich auf eine durchschnittliche Portion."
+    },
+    "translation": {
+      "title": "Übersetzung",
+      "warning": "Dieses Gericht wurde automatisch übersetzt.",
+      "originalName": "Originalname",
+      "translatedName": "Übersetzter Name"
+    },
+    "variants": {
+      "title": "Varianten",
+      "click": "Klicke für mehr Informationen."
+    },
+    "unknownMeal": {
+      "title": "Unbekanntes Gericht",
+      "description": "Die Essens-ID <i>{{id}}</i> konnte nicht gefunden werden. Bitte kontaktiere uns, falls du denkst, dass es sich um einen Fehler handelt."
+    },
+    "meta": {
+      "description": "Schaue dir Details von {{name}} ({{restaurant}}) an."
+    }
+  }
 }

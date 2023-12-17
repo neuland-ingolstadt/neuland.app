@@ -1,5 +1,17 @@
-@import "default.scss";
+@import 'default.scss';
 
 :root {
-  --navbar-border-image: linear-gradient(90deg, #F44336 16.66%, #FF9800 16.67%, #FF9800 33.33%, #FFEB3B 33.34%, #FFEB3B 49.99%, #4CAF50 50%, #4CAF50 66.66%, #2196F3 66.67%, #2196F3 83.33%, #9C27B0 83.34%);
+  --navbar-border-image: linear-gradient(
+    90deg,
+    #f44336 16.66%,
+    #ff9800 16.67%,
+    #ff9800 33.33%,
+    #ffeb3b 33.34%,
+    #ffeb3b 49.99%,
+    #4caf50 50%,
+    #4caf50 66.66%,
+    #2196f3 66.67%,
+    #2196f3 83.33%,
+    #9c27b0 83.34%
+  );
 }

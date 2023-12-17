@@ -1,45 +1,45 @@
 {
-    "form": {
-        "type": {
-            "label": "Verkehrsmittel",
-            "option": {
-                "bus": "Bus",
-                "train": "Bahn",
-                "parking": "Auto",
-                "charging": "E-Auto"
-            }
-        },
-        "station": {
-            "label": {
-                "bus": "Haltestelle",
-                "train": "Bahnhof"
-            }
-        }
+  "form": {
+    "type": {
+      "label": "Verkehrsmittel",
+      "option": {
+        "bus": "Bus",
+        "train": "Bahn",
+        "parking": "Auto",
+        "charging": "E-Auto"
+      }
     },
-    "transport": {
-        "title": {
-            "bus": "Bus ({{station}})",
-            "train": "Bahn ({{station}})",
-            "parking": "Parkplätze",
-            "charging": "Ladestationen",
-            "unknown": "Mobilität"
-        },
-        "details": {
-            "charging": {
-                "available": "{{available}} von {{total}} frei"
-            },
-            "parking": {
-                "available": "{{available}} frei",
-                "unknown": "n/a",
-                "employees": "Mitarbeiter",
-                "free": "Kostenlos",
-                "paid": "Kostenpflichtig",
-                "restricted": "Zugangsbeschränkt"
-            },
-            "noElements": "Keine Elemente."
-        },
-        "error": {
-            "retrieval": "Fehler beim Abruf."
-        }
+    "station": {
+      "label": {
+        "bus": "Haltestelle",
+        "train": "Bahnhof"
+      }
     }
+  },
+  "transport": {
+    "title": {
+      "bus": "Bus ({{station}})",
+      "train": "Bahn ({{station}})",
+      "parking": "Parkplätze",
+      "charging": "Ladestationen",
+      "unknown": "Mobilität"
+    },
+    "details": {
+      "charging": {
+        "available": "{{available}} von {{total}} frei"
+      },
+      "parking": {
+        "available": "{{available}} frei",
+        "unknown": "n/a",
+        "employees": "Mitarbeiter",
+        "free": "Kostenlos",
+        "paid": "Kostenpflichtig",
+        "restricted": "Zugangsbeschränkt"
+      },
+      "noElements": "Keine Elemente."
+    },
+    "error": {
+      "retrieval": "Fehler beim Abruf."
+    }
+  }
 }

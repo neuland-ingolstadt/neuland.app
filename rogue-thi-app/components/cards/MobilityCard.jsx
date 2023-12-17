@@ -6,7 +6,7 @@ import {
   faBus,
   faCar,
   faChargingStation,
-  faTrain
+  faTrain,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -14,7 +14,7 @@ import {
   RenderMobilityEntryPlaceholder,
   getMobilityEntries,
   getMobilityLabel,
-  getMobilitySettings
+  getMobilitySettings,
 } from '../../lib/backend-utils/mobility-utils'
 import BaseCard from './BaseCard'
 import { useTime } from '../../lib/hooks/time-hook'
@@ -27,13 +27,13 @@ const MOBILITY_ICONS = {
   bus: faBus,
   train: faTrain,
   parking: faCar,
-  charging: faChargingStation
+  charging: faChargingStation,
 }
 
 /**
  * Dashboard card for the mobility page.
  */
-export default function MobilityCard () {
+export default function MobilityCard() {
   const time = useTime()
   const [mobility, setMobility] = useState(null)
   const [mobilityError, setMobilityError] = useState(null)
@@ -44,7 +44,9 @@ export default function MobilityCard () {
     return mobilitySettings ? MOBILITY_ICONS[mobilitySettings.kind] : faBus
   }, [mobilitySettings])
   const mobilityLabel = useMemo(() => {
-    return mobilitySettings ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station, t) : t('transport.title.unknown')
+    return mobilitySettings
+      ? getMobilityLabel(mobilitySettings.kind, mobilitySettings.station, t)
+      : t('transport.title.unknown')
   }, [mobilitySettings, t])
 
   useEffect(() => {
@@ -52,13 +54,18 @@ export default function MobilityCard () {
   }, [])
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       if (!mobilitySettings) {
         return
       }
 
       try {
-        setMobility(await getMobilityEntries(mobilitySettings.kind, mobilitySettings.station))
+        setMobility(
+          await getMobilityEntries(
+            mobilitySettings.kind,
+            mobilitySettings.station
+          )
+        )
       } catch (e) {
         console.error(e)
         setMobilityError(t('transport.error.retrieval'))
@@ -70,8 +77,14 @@ export default function MobilityCard () {
   const placeholder = (
     <ListGroup variant="flush">
       {Array.from({ length: 4 }, (_, i) => (
-        <ListGroup.Item className={styles.mobilityItem} key={i}>
-          <RenderMobilityEntryPlaceholder kind={mobilitySettings?.kind} styles={styles} />
+        <ListGroup.Item
+          className={styles.mobilityItem}
+          key={i}
+        >
+          <RenderMobilityEntryPlaceholder
+            kind={mobilitySettings?.kind}
+            styles={styles}
+          />
         </ListGroup.Item>
       ))}
     </ListGroup>
@@ -83,20 +96,32 @@ export default function MobilityCard () {
       title={t(mobilityLabel)}
       link="/mobility"
     >
-      <ReactPlaceholder ready={mobility || mobilityError} customPlaceholder={placeholder}>
+      <ReactPlaceholder
+        ready={mobility || mobilityError}
+        customPlaceholder={placeholder}
+      >
         <ListGroup variant="flush">
-          {mobility && mobility.slice(0, 4).map((entry, i) => <ListGroup.Item key={i} className={styles.mobilityItem}>
-            <RenderMobilityEntry kind={mobilitySettings.kind} item={entry} maxLen={MAX_STATION_LENGTH} styles={styles} detailed={false}/>
-          </ListGroup.Item>
+          {mobility &&
+            mobility.slice(0, 4).map((entry, i) => (
+              <ListGroup.Item
+                key={i}
+                className={styles.mobilityItem}
+              >
+                <RenderMobilityEntry
+                  kind={mobilitySettings.kind}
+                  item={entry}
+                  maxLen={MAX_STATION_LENGTH}
+                  styles={styles}
+                  detailed={false}
+                />
+              </ListGroup.Item>
+            ))}
+          {mobility && mobility.length === 0 && (
+            <ListGroup.Item>{t('transport.error.empty')}</ListGroup.Item>
           )}
-          {mobility && mobility.length === 0 &&
-            <ListGroup.Item>
-              {t('transport.error.empty')}
-            </ListGroup.Item>}
-          {mobilityError &&
-            <ListGroup.Item>
-              {t('transport.error.generic')}
-            </ListGroup.Item>}
+          {mobilityError && (
+            <ListGroup.Item>{t('transport.error.generic')}</ListGroup.Item>
+          )}
         </ListGroup>
       </ReactPlaceholder>
     </BaseCard>

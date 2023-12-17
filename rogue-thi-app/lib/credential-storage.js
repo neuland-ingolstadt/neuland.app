@@ -2,11 +2,11 @@ import { openDB } from 'idb'
 
 const STORE_NAME = 'credentials'
 
-function objectToArrayBuffer (obj) {
+function objectToArrayBuffer(obj) {
   return new TextEncoder().encode(JSON.stringify(obj))
 }
 
-function arrayBufferToObject (buf) {
+function arrayBufferToObject(buf) {
   return JSON.parse(new TextDecoder().decode(buf))
 }
 
@@ -23,7 +23,7 @@ export default class CredentialStorage {
   /**
    * @param {string} name Namespace for the credential storage
    */
-  constructor (name) {
+  constructor(name) {
     this.name = name
 
     if (typeof window === 'undefined') {
@@ -37,11 +37,11 @@ export default class CredentialStorage {
     }
   }
 
-  async _openDatabase () {
+  async _openDatabase() {
     return await openDB(this.name, 1, {
-      upgrade (db) {
+      upgrade(db) {
         db.createObjectStore(STORE_NAME, { keyPath: 'id' })
-      }
+      },
     })
   }
 
@@ -50,11 +50,11 @@ export default class CredentialStorage {
    * @param {string} id Unique identifier for this set of credentials
    * @param {object} data Object containing the credentials
    */
-  async write (id, data) {
+  async write(id, data) {
     const key = await crypto.subtle.generateKey(
       {
         name: 'AES-CBC',
-        length: 256
+        length: 256,
       },
       false,
       ['encrypt', 'decrypt']
@@ -64,7 +64,7 @@ export default class CredentialStorage {
     const encrypted = await crypto.subtle.encrypt(
       {
         name: 'AES-CBC',
-        iv
+        iv,
       },
       key,
       objectToArrayBuffer(data)
@@ -83,10 +83,10 @@ export default class CredentialStorage {
    * @param {string} id Identifier as used in `write`
    * @returns {object} Object containing the credentials
    */
-  async read (id) {
+  async read(id) {
     const db = await this._openDatabase()
     try {
-      const { key, iv, encrypted } = await db.get(STORE_NAME, id) || {}
+      const { key, iv, encrypted } = (await db.get(STORE_NAME, id)) || {}
 
       if (!key) {
         return
@@ -95,7 +95,7 @@ export default class CredentialStorage {
       const decrypted = await crypto.subtle.decrypt(
         {
           name: 'AES-CBC',
-          iv
+          iv,
         },
         key,
         encrypted
@@ -111,7 +111,7 @@ export default class CredentialStorage {
    * Deletes a set of credentials from the storage
    * @param {string} id Identifier as used in `write`
    */
-  async delete (id) {
+  async delete(id) {
     const db = await this._openDatabase()
     try {
       await db.delete(STORE_NAME, id)
