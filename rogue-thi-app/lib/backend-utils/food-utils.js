@@ -145,7 +145,7 @@ function unifyMeal (meal, version, parentMeal = null) {
     nutrition: meal.nutrition || null,
     originalLanguage: meal.originalLanguage || 'de',
     static: meal.static || false,
-    restaurant: meal.restaurant || null,
+    restaurant: meal.restaurant || parentMeal?.restaurant || null,
     additional: meal.additional || false,
     ...(version !== 'v1'
       ? {
