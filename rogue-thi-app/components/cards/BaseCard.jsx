@@ -18,19 +18,29 @@ import { useTranslation } from 'next-i18next'
  * @param {string} className Class name to attach to the card
  * @param {object[]} children Body of the card
  */
-export default function BaseCard ({ link, icon, title, i18nKey, className, children }) {
+export default function BaseCard({
+  link,
+  icon,
+  title,
+  i18nKey,
+  className,
+  children,
+}) {
   const { t } = useTranslation('dashboard')
   return (
     <Link href={link}>
       <Card className={[styles.card, className]}>
         <Card.Body>
           <Card.Title>
-            <FontAwesomeIcon icon={icon} fixedWidth />
-            {' '}
-            {
-              title || t(`${i18nKey}.title`)
-            }
-            <Button variant="link" className={styles.cardButton}>
+            <FontAwesomeIcon
+              icon={icon}
+              fixedWidth
+            />{' '}
+            {title || t(`${i18nKey}.title`)}
+            <Button
+              variant="link"
+              className={styles.cardButton}
+            >
               <FontAwesomeIcon icon={faChevronRight} />
             </Button>
           </Card.Title>
@@ -46,5 +56,5 @@ BaseCard.propTypes = {
   title: PropTypes.string,
   i18nKey: PropTypes.string,
   className: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
 }

@@ -17,33 +17,38 @@ import { useTranslation } from 'next-i18next'
 /**
  * Main page.
  */
-export default function Home () {
+export default function Home() {
   const [, setShowDashboardModal] = useContext(ShowDashboardModal)
 
   // page state
-  const {
-    shownDashboardEntries,
-    hideDashboardEntry
-  } = useContext(DashboardContext)
+  const { shownDashboardEntries, hideDashboardEntry } =
+    useContext(DashboardContext)
 
   const { t } = useTranslation('common')
 
   return (
     <AppContainer>
-      <AppNavbar title="neuland.app" showBack={false}>
+      <AppNavbar
+        title="neuland.app"
+        showBack={false}
+      >
         <AppNavbar.Button onClick={() => setShowDashboardModal(true)}>
-          <FontAwesomeIcon title={t('dashboard.orderModal.icons.personalize')} icon={faPen} fixedWidth />
+          <FontAwesomeIcon
+            title={t('dashboard.orderModal.icons.personalize')}
+            icon={faPen}
+            fixedWidth
+          />
         </AppNavbar.Button>
       </AppNavbar>
 
       <AppBody>
         <div className={styles.cardDeck}>
-          {shownDashboardEntries.map(entry => entry.card(hideDashboardEntry))}
+          {shownDashboardEntries.map((entry) => entry.card(hideDashboardEntry))}
         </div>
-        <DashboardModal/>
+        <DashboardModal />
       </AppBody>
 
-      <AppTabbar/>
+      <AppTabbar />
     </AppContainer>
   )
 }
@@ -53,7 +58,7 @@ export const getStaticProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale ?? 'en', [
       'dashboard',
       'mobility',
-      'common'
-    ]))
-  }
+      'common',
+    ])),
+  },
 })

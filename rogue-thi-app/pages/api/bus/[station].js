@@ -4,14 +4,14 @@ import stations from '../../../data/mobility.json'
 
 const CACHE_TTL = 60 * 1000
 const MIN_REGEX = /(\d+) min/
-const URLS = Object.fromEntries(stations.bus.stations.map(x => [x.id, x.url]))
+const URLS = Object.fromEntries(stations.bus.stations.map((x) => [x.id, x.url]))
 
 const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
 
 /**
  * Parses a relative timestamp such as '0' or '5 min'
  */
-function parseDepartureTime (str) {
+function parseDepartureTime(str) {
   let delta
   if (str === '0') {
     delta = 0
@@ -34,13 +34,13 @@ function parseDepartureTime (str) {
  * @param {object} body Response body
  */
 
-function sendJson (res, code, value) {
+function sendJson(res, code, value) {
   res.statusCode = code
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(value))
 }
 
-export default async function handler (req, res) {
+export default async function handler(req, res) {
   const station = req.query.station
   if (!URLS.hasOwnProperty(station)) {
     sendJson(res, 400, 'Unknown station')
@@ -50,7 +50,7 @@ export default async function handler (req, res) {
   try {
     const departures = await cache.get(station, async () => {
       const resp = await fetch(URLS[station], {
-        headers: { Accept: 'application/json' } // required so that the backend returns proper utf-8
+        headers: { Accept: 'application/json' }, // required so that the backend returns proper utf-8
       })
       const body = await resp.text()
 
@@ -61,10 +61,10 @@ export default async function handler (req, res) {
         }
 
         const { departures } = JSON.parse(body)
-        return departures.map(departure => ({
+        return departures.map((departure) => ({
           route: departure.route,
           destination: departure.destination,
-          time: parseDepartureTime(departure.strTime)
+          time: parseDepartureTime(departure.strTime),
         }))
       } else {
         throw new Error('Data source returned an error: ' + body)

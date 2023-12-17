@@ -11,7 +11,20 @@ import nodeFetch from 'node-fetch'
 
 import AsyncMemoryCache from '../../lib/cache/async-memory-cache'
 
-const MONTHS = { Januar: 1, Februar: 2, März: 3, April: 4, Mai: 5, Juni: 6, Juli: 7, August: 8, September: 9, Oktober: 10, November: 11, Dezember: 12 }
+const MONTHS = {
+  Januar: 1,
+  Februar: 2,
+  März: 3,
+  April: 4,
+  Mai: 5,
+  Juni: 6,
+  Juli: 7,
+  August: 8,
+  September: 9,
+  Oktober: 10,
+  November: 11,
+  Dezember: 12,
+}
 
 const CACHE_TTL = 24 * 60 * 60 * 1000 // 24h
 const LOGIN_URL = 'https://moodle.thi.de/login/index.php'
@@ -28,37 +41,32 @@ const cache = new AsyncMemoryCache({ ttl: CACHE_TTL })
  * @param {string} str
  * @returns {Date}
  */
-function parseLocalDateTime (str) {
+function parseLocalDateTime(str) {
   // use \p{Letter} because \w doesnt match umlauts
   // https://stackoverflow.com/a/70273329
-  const [, day, month, year, hour, minute] = str.match(/, (\d+). (\p{Letter}+) (\d+), (\d+):(\d+)$/u)
-  return new Date(
-    year,
-    MONTHS[month] - 1,
-    day,
-    hour,
-    minute
+  const [, day, month, year, hour, minute] = str.match(
+    /, (\d+). (\p{Letter}+) (\d+), (\d+):(\d+)$/u
   )
+  return new Date(year, MONTHS[month] - 1, day, hour, minute)
 }
 
 /**
  * Load persisted events from disk.
  * @returns {object[]}
  */
-async function loadEvents () {
-  return JSON.parse(await fs.readFile(EVENT_STORE))
-    .map(event => ({
-      ...event,
-      begin: new Date(event.begin),
-      end: new Date(event.end)
-    }))
+async function loadEvents() {
+  return JSON.parse(await fs.readFile(EVENT_STORE)).map((event) => ({
+    ...event,
+    begin: new Date(event.begin),
+    end: new Date(event.end),
+  }))
 }
 
 /**
  * Persist events to disk.
  * @param {object[]} events
  */
-async function saveEvents (events) {
+async function saveEvents(events) {
   await fs.writeFile(EVENT_STORE, JSON.stringify(events))
 }
 
@@ -66,7 +74,7 @@ async function saveEvents (events) {
  * Fetches a login XSRF token.
  * @param {object} fetch Cookie-aware implementation of `fetch`
  */
-async function fetchToken (fetch) {
+async function fetchToken(fetch) {
   const resp = await fetch(LOGIN_URL)
   const $ = cheerio.load(await resp.text())
 
@@ -79,7 +87,7 @@ async function fetchToken (fetch) {
  * @param {string} username
  * @param {string} password
  */
-async function login (fetch, username, password) {
+async function login(fetch, username, password) {
   const data = new URLSearchParams()
   data.append('anchor', '')
   data.append('logintoken', await fetchToken(fetch))
@@ -89,9 +97,9 @@ async function login (fetch, username, password) {
   const resp = await fetch(LOGIN_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: data.toString()
+    body: data.toString(),
   })
   const $ = cheerio.load(await resp.text())
 
@@ -105,14 +113,14 @@ async function login (fetch, username, password) {
  * @param {object} fetch Cookie-aware implementation of `fetch`
  * @returns {string[]}
  */
-async function getEventList (fetch) {
+async function getEventList(fetch) {
   const resp = await fetch(EVENT_LIST_URL)
   const $ = cheerio.load(await resp.text())
 
   // get links from content table
   const links = $('.entriesview a.menu-action').get()
   // extract href attributes
-  return links.map(elem => $(elem).attr('href'))
+  return links.map((elem) => $(elem).attr('href'))
 }
 
 /**
@@ -120,7 +128,7 @@ async function getEventList (fetch) {
  * @param {object} fetch Cookie-aware implementation of `fetch`
  * @param {string} url
  */
-async function getEventDetails (fetch, url) {
+async function getEventDetails(fetch, url) {
   // check URL just to make sure we're not fetching the wrong thing
   if (!url.startsWith(EVENT_DETAILS_PREFIX)) {
     throw new Error('Invalid URL')
@@ -132,9 +140,14 @@ async function getEventDetails (fetch, url) {
   // get rows from content table
   const rows = $('.entry tr:not(.lastrow)').get()
   // get two columns and map into object
-  return Object.fromEntries(rows.map(elem => {
-    return [$(elem).find('.c0 > b').text().trim(), $(elem).find('.c1').text().trim()]
-  }))
+  return Object.fromEntries(
+    rows.map((elem) => {
+      return [
+        $(elem).find('.c0 > b').text().trim(),
+        $(elem).find('.c1').text().trim(),
+      ]
+    })
+  )
 }
 
 /**
@@ -142,7 +155,7 @@ async function getEventDetails (fetch, url) {
  * @param {string} username
  * @param {string} password
  */
-export async function getAllEventDetails (username, password) {
+export async function getAllEventDetails(username, password) {
   // create a fetch method that keeps cookies
   const fetch = fetchCookie(nodeFetch)
 
@@ -158,7 +171,7 @@ export async function getAllEventDetails (username, password) {
       organizer: details.Verein.trim().replace(/( \.)$/g, ''),
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
-      end: details.Ende ? parseLocalDateTime(details.Ende) : null
+      end: details.Ende ? parseLocalDateTime(details.Ende) : null,
     })
   }
 
@@ -168,12 +181,18 @@ export async function getAllEventDetails (username, password) {
   if (remoteEvents.length > 0) {
     // remove all events which disappeared from the server
     // this will not work if the first event gets removed
-    const remoteStart = remoteEvents.map(event => event.begin).reduce((a, b) => a < b ? a : b)
-    events = events.filter(a => a.begin < remoteStart).concat(remoteEvents)
+    const remoteStart = remoteEvents
+      .map((event) => event.begin)
+      .reduce((a, b) => (a < b ? a : b))
+    events = events.filter((a) => a.begin < remoteStart).concat(remoteEvents)
   }
 
-  events = events.filter(event => new Date(event.begin) > now || new Date(event.end) > now)
-  events = events.sort((a, b) => a.end - b.end).sort((a, b) => a.begin - b.begin)
+  events = events.filter(
+    (event) => new Date(event.begin) > now || new Date(event.end) > now
+  )
+  events = events
+    .sort((a, b) => a.end - b.end)
+    .sort((a, b) => a.begin - b.begin)
 
   // we need to persist the events because they disappear on monday
   // even if the event has not passed yet
@@ -190,7 +209,7 @@ export async function getAllEventDetails (username, password) {
  * @param {number} status HTTP status code
  * @param {object} body Response body
  */
-function sendJson (res, status, body) {
+function sendJson(res, status, body) {
   res.statusCode = status
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(body))
@@ -202,19 +221,22 @@ function sendJson (res, status, body) {
  * @param {number} status HTTP status code
  * @param {object} body Response body
  */
-function sendCalendar (res, status, body) {
+function sendCalendar(res, status, body) {
   res.statusCode = status
   res.setHeader('Content-Type', 'text/calendar')
   res.end(body.toString())
 }
 
-export default async function handler (req, res) {
+export default async function handler(req, res) {
   try {
     const username = process.env.MOODLE_USERNAME
     const password = process.env.MOODLE_PASSWORD
 
     if (username && password) {
-      const plan = await cache.get('events', async () => await getAllEventDetails(username, password))
+      const plan = await cache.get(
+        'events',
+        async () => await getAllEventDetails(username, password)
+      )
       const format = req.query.format ?? 'json'
 
       if (format === 'json') {
@@ -230,7 +252,7 @@ export default async function handler (req, res) {
             description: `Veranstalter: ${event.organizer}`,
             start: event.begin,
             // discard the end if it is before the start
-            end: event.end > event.begin ? event.end : undefined
+            end: event.end > event.begin ? event.end : undefined,
           })
         }
         sendCalendar(res, 200, cal)

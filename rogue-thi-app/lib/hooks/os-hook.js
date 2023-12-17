@@ -4,7 +4,7 @@ export const OS_ANDROID = 'android'
 export const OS_IOS = 'ios'
 export const OS_OTHER = 'other'
 
-function getOperatingSystem () {
+function getOperatingSystem() {
   if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
     return OS_IOS
   } else if (/Android/.test(navigator.userAgent)) {
@@ -17,7 +17,7 @@ function getOperatingSystem () {
 /**
  * React Hook that provides the users operating system.
  */
-export function useOperatingSystem () {
+export function useOperatingSystem() {
   const [os, setOS] = useState(OS_OTHER)
   useEffect(() => {
     setOS(getOperatingSystem())

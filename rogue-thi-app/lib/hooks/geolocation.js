@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 /**
  * React Hook that continuously provides the users current location.
  */
-export function useLocation () {
+export function useLocation() {
   const [location, setLocation] = useState(undefined)
 
   useEffect(() => {
@@ -12,11 +12,14 @@ export function useLocation () {
       return
     }
 
-    const watch = navigator.geolocation.watchPosition(position => {
-      setLocation(position.coords)
-    }, err => {
-      console.error(err)
-    })
+    const watch = navigator.geolocation.watchPosition(
+      (position) => {
+        setLocation(position.coords)
+      },
+      (err) => {
+        console.error(err)
+      }
+    )
 
     return () => {
       navigator.geolocation.clearWatch(watch)

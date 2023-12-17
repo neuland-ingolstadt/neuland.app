@@ -10,14 +10,14 @@ You should know how to program in object oriented languages. Prior experience wi
 
 You need to install the necessary tools.
 
-* [Git](https://git-scm.com/downloads)
-* [Node.js 18 LTS](https://nodejs.org/en/)
-* [Visual Studio Code](https://code.visualstudio.com/)
-* [ESLint for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Git](https://git-scm.com/downloads)
+- [Node.js 18 LTS](https://nodejs.org/en/)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [ESLint for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
 ## Setting up the environment
 
-Make a personal copy of the source code using the *Fork* button on the top right of this page.
+Make a personal copy of the source code using the _Fork_ button on the top right of this page.
 
 Open a terminal (e.g. PowerShell if you're on Windows) and download the source code to your PC using Git:
 
@@ -55,14 +55,14 @@ Go to [https://localhost:3000](https://localhost:3000) in your browser and voil√
 
 A quick overview over the structure of the source code:
 
-* `/pages`  
-The pages of the application that you see in your browser. This is where to look if you want to change the structure of the UI.
-* `/components`  
-Various reusable UI components such as the navigation and tab bar. Look here if a page references a custom component.
-* `/styles`  
-CSS files describing the look of the application. Look here if you want to change the design of the UI.
-* `/lib`  
-Various reusable utilities such as a client for the THI API and a timestamp formatter.
+- `/pages`  
+  The pages of the application that you see in your browser. This is where to look if you want to change the structure of the UI.
+- `/components`  
+  Various reusable UI components such as the navigation and tab bar. Look here if a page references a custom component.
+- `/styles`  
+  CSS files describing the look of the application. Look here if you want to change the design of the UI.
+- `/lib`  
+  Various reusable utilities such as a client for the THI API and a timestamp formatter.
 
 ## Getting help
 

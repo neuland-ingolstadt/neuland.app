@@ -15,10 +15,10 @@ import { useTranslation } from 'next-i18next'
 
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 
-export async function getStaticProps ({ locale }) {
+export async function getStaticProps({ locale }) {
   const locales = await serverSideTranslations(locale ?? 'en', [
     'imprint',
-    'common'
+    'common',
   ])
 
   try {
@@ -27,16 +27,16 @@ export async function getStaticProps ({ locale }) {
     return {
       props: {
         neulandImprint: html,
-        ...locales
-      }
+        ...locales,
+      },
     }
   } catch (e) {
     console.error(e)
     return {
       props: {
         neulandImprint: `Laden fehlgeschlagen! <a href="${IMPRINT_URL}">Bitte hier klicken</a>`,
-        ...locales
-      }
+        ...locales,
+      },
     }
   }
 }
@@ -44,7 +44,7 @@ export async function getStaticProps ({ locale }) {
 /**
  * Page showing the Neuland and THI imprints.
  */
-export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) {
+export default function Imprint({ neulandImprint: unsanitizedNeulandImprint }) {
   const [neulandImprint, setNeulandImprint] = useState('Lädt...')
   const [debugUnlockProgress, setDebugUnlockProgress] = useState(0)
 
@@ -54,7 +54,7 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
     setNeulandImprint(DOMPurify.sanitize(unsanitizedNeulandImprint))
   }, [unsanitizedNeulandImprint])
 
-  function debugUnlockClicked () {
+  function debugUnlockClicked() {
     if (debugUnlockProgress < 4) {
       setDebugUnlockProgress(debugUnlockProgress + 1)
       return
@@ -87,22 +87,38 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
             </a>
             <br />
             {`${t('imprint.feedback.email')}: `}
-            <a href="https://neuland-ingolstadt.de" target="_blank" rel="noreferrer">
+            <a
+              href="https://neuland-ingolstadt.de"
+              target="_blank"
+              rel="noreferrer"
+            >
               https://neuland-ingolstadt.de
             </a>
             <br />
             {`${t('imprint.feedback.instagram')}: `}
-            <a href="https://www.instagram.com/neuland_ingolstadt/" target="_blank" rel="noreferrer">
+            <a
+              href="https://www.instagram.com/neuland_ingolstadt/"
+              target="_blank"
+              rel="noreferrer"
+            >
               @neuland_ingolstadt
             </a>
             <br />
             {`${t('imprint.feedback.sourceCode')}: `}
-            <a href="https://github.com/neuland-ingolstadt/neuland.app" target="_blank" rel="noreferrer">
+            <a
+              href="https://github.com/neuland-ingolstadt/neuland.app"
+              target="_blank"
+              rel="noreferrer"
+            >
               neuland-ingolstadt/neuland.app
             </a>
             <br />
             <br />
-            <a href="https://join.neuland-ingolstadt.de" target="_blank" rel="noreferrer">
+            <a
+              href="https://join.neuland-ingolstadt.de"
+              target="_blank"
+              rel="noreferrer"
+            >
               {t('imprint.feedback.joinNeuland')}
             </a>
           </ListGroup.Item>
@@ -111,10 +127,12 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
         <ListGroup>
           <h1 className={styles.imprintTitle}>{t('imprint.legal.title')}</h1>
           <ListGroup.Item>
-            <div className={styles.imprint} dangerouslySetInnerHTML={{ __html: neulandImprint }} />
+            <div
+              className={styles.imprint}
+              dangerouslySetInnerHTML={{ __html: neulandImprint }}
+            />
           </ListGroup.Item>
         </ListGroup>
-
       </AppBody>
 
       <AppTabbar />
@@ -123,5 +141,5 @@ export default function Imprint ({ neulandImprint: unsanitizedNeulandImprint }) 
 }
 
 Imprint.propTypes = {
-  neulandImprint: PropTypes.string
+  neulandImprint: PropTypes.string,
 }

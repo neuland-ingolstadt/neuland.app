@@ -10,7 +10,7 @@ import SwipeableViews from 'react-swipeable-views'
  * @param {object} children Array of `SwipeableTab` objects
  * @param {number} defaultPage Index of the tab to show by default
  */
-export default function SwipeableTabs ({ className, children, defaultPage }) {
+export default function SwipeableTabs({ className, children, defaultPage }) {
   const [page, setPage] = useState(defaultPage || 0)
 
   useEffect(() => {
@@ -19,16 +19,21 @@ export default function SwipeableTabs ({ className, children, defaultPage }) {
 
   return (
     <div className={className}>
-      <Nav variant="pills" activeKey={page.toString()} onSelect={key => setPage(parseInt(key))}>
-        {children.map((child, idx) =>
+      <Nav
+        variant="pills"
+        activeKey={page.toString()}
+        onSelect={(key) => setPage(parseInt(key))}
+      >
+        {children.map((child, idx) => (
           <Nav.Item key={idx}>
-            <Nav.Link eventKey={idx.toString()} >
-              {child.props.title}
-            </Nav.Link>
+            <Nav.Link eventKey={idx.toString()}>{child.props.title}</Nav.Link>
           </Nav.Item>
-        )}
+        ))}
       </Nav>
-      <SwipeableViews index={page} onChangeIndex={idx => setPage(idx)}>
+      <SwipeableViews
+        index={page}
+        onChangeIndex={(idx) => setPage(idx)}
+      >
         {children}
       </SwipeableViews>
     </div>
@@ -37,22 +42,18 @@ export default function SwipeableTabs ({ className, children, defaultPage }) {
 SwipeableTabs.propTypes = {
   className: PropTypes.string,
   defaultPage: PropTypes.number,
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 /**
  * Object to be used as a child of `SwipeableTabs`.
  * @param {string} className Class name to attach to the tab
  */
-export function SwipeableTab ({ className, children }) {
-  return (
-    <div className={className}>
-      {children}
-    </div>
-  )
+export function SwipeableTab({ className, children }) {
+  return <div className={className}>{children}</div>
 }
 SwipeableTab.propTypes = {
   className: PropTypes.string,
   title: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
-  children: PropTypes.any
+  children: PropTypes.any,
 }

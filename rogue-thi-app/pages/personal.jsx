@@ -22,13 +22,29 @@ import {
   faChevronRight,
   faExternalLink,
   faGavel,
-  faShield
+  faShield,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { FoodFilterContext, ShowDashboardModal, ShowLanguageModal, ShowPersonalDataModal, ShowThemeModal, ThemeContext } from './_app'
-import { NoSessionError, UnavailableSessionError, forgetSession } from '../lib/backend/thi-session-handler'
-import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT, useUserKind } from '../lib/hooks/user-kind'
+import {
+  FoodFilterContext,
+  ShowDashboardModal,
+  ShowLanguageModal,
+  ShowPersonalDataModal,
+  ShowThemeModal,
+  ThemeContext,
+} from './_app'
+import {
+  NoSessionError,
+  UnavailableSessionError,
+  forgetSession,
+} from '../lib/backend/thi-session-handler'
+import {
+  USER_EMPLOYEE,
+  USER_GUEST,
+  USER_STUDENT,
+  useUserKind,
+} from '../lib/hooks/user-kind'
 import { calculateECTS, loadGrades } from '../lib/backend-utils/grades-utils'
 import API from '../lib/backend/authenticated-api'
 
@@ -42,7 +58,7 @@ import { TextBlock } from 'react-placeholder/lib/placeholders'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
-export default function Personal () {
+export default function Personal() {
   const [userdata, setUserdata] = useState(null)
   const [ects, setEcts] = useState(null)
   const [grades, setGrades] = useState(null)
@@ -69,7 +85,7 @@ export default function Personal () {
 
     return (
       <span
-        onClick={e => {
+        onClick={(e) => {
           if (!value) {
             e.preventDefault()
             return
@@ -78,21 +94,22 @@ export default function Personal () {
         }}
       >
         {label}:{' '}
-        {value
-          ? (
-            <>
-              <span style={{ cursor: 'pointer' }} onClick={handleCopy}>
-                {value}
-              </span>
-            </>
-          )
-          : null}
+        {value ? (
+          <>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={handleCopy}
+            >
+              {value}
+            </span>
+          </>
+        ) : null}
       </span>
     )
   }
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         const response = await API.getPersonalData()
         const data = response.persdata
@@ -106,7 +123,10 @@ export default function Personal () {
         const j = await calculateECTS()
         setEcts(j)
       } catch (e) {
-        if (e instanceof NoSessionError || e instanceof UnavailableSessionError) {
+        if (
+          e instanceof NoSessionError ||
+          e instanceof UnavailableSessionError
+        ) {
           router.replace('/login?redirect=personal')
         } else {
           console.error(e)
@@ -128,13 +148,22 @@ export default function Personal () {
   const placeholder = (
     <>
       <ListGroup.Item action>
-        <TextBlock rows={2} className={styles.placeholder} />
+        <TextBlock
+          rows={2}
+          className={styles.placeholder}
+        />
       </ListGroup.Item>
       <ListGroup.Item action>
-        <TextBlock rows={2} className={styles.placeholder} />
+        <TextBlock
+          rows={2}
+          className={styles.placeholder}
+        />
       </ListGroup.Item>
       <ListGroup.Item action>
-        <TextBlock rows={1} className={styles.placeholder} />
+        <TextBlock
+          rows={1}
+          className={styles.placeholder}
+        />
       </ListGroup.Item>
     </>
   )
@@ -144,45 +173,74 @@ export default function Personal () {
       <AppNavbar title={t('personal.title')} />
 
       <AppBody>
-        <ReactPlaceholder ready={userdata || userKind !== USER_STUDENT} customPlaceholder={placeholder}>
+        <ReactPlaceholder
+          ready={userdata || userKind !== USER_STUDENT}
+          customPlaceholder={placeholder}
+        >
+          {userKind === USER_STUDENT && (
+            <ListGroup>
+              <ListGroup.Item
+                action
+                onClick={() => setShowPersonalDataModal(true)}
+              >
+                <div className={styles.name_interaction_icon}>
+                  <FontAwesomeIcon
+                    icon={faChevronRight}
+                    className="text-muted"
+                  />
+                </div>
+                {userdata && userdata.name + ', ' + userdata.vname}
+                <br />
+                {userdata && userdata.fachrich}
+              </ListGroup.Item>
 
-          {userKind === USER_STUDENT &&
-          <ListGroup>
-            <ListGroup.Item action onClick={() => setShowPersonalDataModal(true)}>
-              <div className={styles.name_interaction_icon}>
-                <FontAwesomeIcon icon={faChevronRight} className="text-muted" />
-              </div>
-              {userdata && userdata.name + ', ' + userdata.vname}<br />
-              {userdata && userdata.fachrich}
-            </ListGroup.Item>
-
-            <ListGroup.Item className="text-muted">
-              <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-                {userdata && `${userdata.stgru}. ${t('personal.semester')}`}<br />
-              </span>
-              {userdata && (
-                <>
-                  <CopyableField label={t('personal.overview.matriculationNumber')} value={userdata.mtknr} /> <br />
-                  <CopyableField label={t('personal.overview.libraryNumber')} value={userdata.bibnr} />
-                </>
-              )}
-
-            </ListGroup.Item>
-
-            <ListGroup.Item action onClick={() => router.push('/grades')}>
-              <div className={styles.interaction_icon}>
-                <span className="text-muted">
-                  {grades && missingGrades && grades.length + '/' + (grades.length + missingGrades.length)}
-                  {` ${t('personal.overview.grades')} `}
-                  <FontAwesomeIcon icon={faChevronRight} />
+              <ListGroup.Item className="text-muted">
+                <span
+                  className={
+                    userdata
+                      ? styles.personal_value
+                      : styles.personal_value_loading
+                  }
+                >
+                  {userdata && `${userdata.stgru}. ${t('personal.semester')}`}
+                  <br />
                 </span>
-              </div>
-              <span className="text-muted">
-                {ects !== null && `${ects} ${t('personal.overview.ects')} `}
-              </span>
-            </ListGroup.Item>
-          </ListGroup>
-          }
+                {userdata && (
+                  <>
+                    <CopyableField
+                      label={t('personal.overview.matriculationNumber')}
+                      value={userdata.mtknr}
+                    />{' '}
+                    <br />
+                    <CopyableField
+                      label={t('personal.overview.libraryNumber')}
+                      value={userdata.bibnr}
+                    />
+                  </>
+                )}
+              </ListGroup.Item>
+
+              <ListGroup.Item
+                action
+                onClick={() => router.push('/grades')}
+              >
+                <div className={styles.interaction_icon}>
+                  <span className="text-muted">
+                    {grades &&
+                      missingGrades &&
+                      grades.length +
+                        '/' +
+                        (grades.length + missingGrades.length)}
+                    {` ${t('personal.overview.grades')} `}
+                    <FontAwesomeIcon icon={faChevronRight} />
+                  </span>
+                </div>
+                <span className="text-muted">
+                  {ects !== null && `${ects} ${t('personal.overview.ects')} `}
+                </span>
+              </ListGroup.Item>
+            </ListGroup>
+          )}
 
           <PersonalDataModal userdata={userdata} />
         </ReactPlaceholder>
@@ -190,20 +248,28 @@ export default function Personal () {
         <br />
 
         <ListGroup>
+          {themes
+            .filter((item) => item.style === theme)
+            .map((item) => (
+              <ListGroup.Item
+                action
+                onClick={() => setShowThemeModal(true)}
+                key={item.style}
+              >
+                <div className={styles.interaction_icon}>
+                  <span className="text-muted">
+                    {`${item.name[i18n.languages[0]]} `}
+                    <FontAwesomeIcon icon={faChevronRight} />
+                  </span>
+                </div>
+                {t('personal.theme')}
+              </ListGroup.Item>
+            ))}
 
-          {themes.filter(item => item.style === theme).map(item => (
-            <ListGroup.Item action onClick={() => setShowThemeModal(true)} key={item.style}>
-              <div className={styles.interaction_icon}>
-                <span className="text-muted">
-                  {`${item.name[i18n.languages[0]]} `}
-                  <FontAwesomeIcon icon={faChevronRight} />
-                </span>
-              </div>
-              {t('personal.theme')}
-            </ListGroup.Item>
-          ))}
-
-          <ListGroup.Item action onClick={() => setShowDashboardModal(true)}>
+          <ListGroup.Item
+            action
+            onClick={() => setShowDashboardModal(true)}
+          >
             <div className={styles.interaction_icon}>
               <span className="text-muted">
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -212,7 +278,10 @@ export default function Personal () {
             {t('personal.dashboard')}
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => setShowLanguageModal(true)}>
+          <ListGroup.Item
+            action
+            onClick={() => setShowLanguageModal(true)}
+          >
             <div className={styles.interaction_icon}>
               <span className="text-muted">
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -221,7 +290,10 @@ export default function Personal () {
             {t('personal.language')}
           </ListGroup.Item>
 
-          <ListGroup.Item action onClick={() => setShowFoodFilterModal(true)}>
+          <ListGroup.Item
+            action
+            onClick={() => setShowFoodFilterModal(true)}
+          >
             <div className={styles.interaction_icon}>
               <span className="text-muted">
                 <FontAwesomeIcon icon={faChevronRight} />
@@ -229,28 +301,39 @@ export default function Personal () {
             </div>
             {t('personal.foodPreferences')}
           </ListGroup.Item>
-
         </ListGroup>
 
         <br />
 
         <ListGroup>
-
           <ListGroup.Item
             action
             className={styles.interaction_row}
-            onClick={() => window.open('https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin', '_blank')}
+            onClick={() =>
+              window.open(
+                'https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhin',
+                '_blank'
+              )
+            }
           >
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+            <FontAwesomeIcon
+              icon={faExternalLink}
+              className={styles.interaction_icon}
+            />
             Primuss
           </ListGroup.Item>
 
           <ListGroup.Item
             action
             className={styles.interaction_row}
-            onClick={() => window.open('https://moodle.thi.de/moodle', '_blank')}
+            onClick={() =>
+              window.open('https://moodle.thi.de/moodle', '_blank')
+            }
           >
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+            <FontAwesomeIcon
+              icon={faExternalLink}
+              className={styles.interaction_icon}
+            />
             Moodle
           </ListGroup.Item>
 
@@ -259,29 +342,40 @@ export default function Personal () {
             className={styles.interaction_row}
             onClick={() => window.open('https://outlook.thi.de/', '_blank')}
           >
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
+            <FontAwesomeIcon
+              icon={faExternalLink}
+              className={styles.interaction_icon}
+            />
             E-Mail
           </ListGroup.Item>
 
-          {userKind === USER_EMPLOYEE &&
-          <ListGroup.Item action onClick={() => window.open('https://mythi.de', '_blank')}>
-            <FontAwesomeIcon icon={faExternalLink} className={styles.interaction_icon} />
-            MyTHI
-          </ListGroup.Item>
-          }
+          {userKind === USER_EMPLOYEE && (
+            <ListGroup.Item
+              action
+              onClick={() => window.open('https://mythi.de', '_blank')}
+            >
+              <FontAwesomeIcon
+                icon={faExternalLink}
+                className={styles.interaction_icon}
+              />
+              MyTHI
+            </ListGroup.Item>
+          )}
         </ListGroup>
 
         <br />
 
         <ListGroup>
-
           {showDebug && (
             <ListGroup.Item
               action
               className={styles.interaction_row}
               onClick={() => router.push('/debug')}
             >
-              <FontAwesomeIcon icon={faBug} className={styles.interaction_icon} />
+              <FontAwesomeIcon
+                icon={faBug}
+                className={styles.interaction_icon}
+              />
               {t('personal.debug')}
             </ListGroup.Item>
           )}
@@ -291,7 +385,10 @@ export default function Personal () {
             className={styles.interaction_row}
             onClick={() => window.open(PRIVACY_URL, '_blank')}
           >
-            <FontAwesomeIcon icon={faShield} className={styles.interaction_icon} />
+            <FontAwesomeIcon
+              icon={faShield}
+              className={styles.interaction_icon}
+            />
             {t('personal.privacy')}
           </ListGroup.Item>
 
@@ -300,10 +397,12 @@ export default function Personal () {
             className={styles.interaction_row}
             onClick={() => router.push('/imprint')}
           >
-            <FontAwesomeIcon icon={faGavel} className={styles.interaction_icon} />
+            <FontAwesomeIcon
+              icon={faGavel}
+              className={styles.interaction_icon}
+            />
             {t('personal.imprint')}
           </ListGroup.Item>
-
         </ListGroup>
 
         <br />
@@ -342,9 +441,6 @@ export default function Personal () {
 
 export const getStaticProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'personal',
-      'common'
-    ]))
-  }
+    ...(await serverSideTranslations(locale ?? 'en', ['personal', 'common'])),
+  },
 })

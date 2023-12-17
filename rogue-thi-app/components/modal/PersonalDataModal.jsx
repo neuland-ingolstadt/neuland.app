@@ -9,8 +9,10 @@ import styles from '../../styles/PersonalDataModal.module.css'
 import { getAdjustedLocale } from '../../lib/locale-utils'
 import { useTranslation } from 'next-i18next'
 
-export default function PersonalDataModal ({ userdata }) {
-  const [showPersonalDataModal, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
+export default function PersonalDataModal({ userdata }) {
+  const [showPersonalDataModal, setShowPersonalDataModal] = useContext(
+    ShowPersonalDataModal
+  )
 
   const { t } = useTranslation('personal')
 
@@ -20,7 +22,7 @@ export default function PersonalDataModal ({ userdata }) {
    * @param {string} name Row name as returned by the backend
    * @param {object} render Function returning the data to be displayed. If set, the `name` parameter will be ignored.
    */
-  function renderPersonalEntry (i18nKey, name, render) {
+  function renderPersonalEntry(i18nKey, name, render) {
     return (
       <ListGroup.Item
         action
@@ -33,8 +35,16 @@ export default function PersonalDataModal ({ userdata }) {
         }}
       >
         {t(`personal.modals.personalData.${i18nKey}`)}
-        <span className={userdata ? styles.personal_value : styles.personal_value_loading}>
-          <ReactPlaceholder type="text" rows={1} ready={userdata}>
+        <span
+          className={
+            userdata ? styles.personal_value : styles.personal_value_loading
+          }
+        >
+          <ReactPlaceholder
+            type="text"
+            rows={1}
+            ready={userdata}
+          >
             {userdata && render && render()}
             {userdata && !render && userdata[name]}
           </ReactPlaceholder>
@@ -43,10 +53,16 @@ export default function PersonalDataModal ({ userdata }) {
     )
   }
 
-  const formatNum = (new Intl.NumberFormat(getAdjustedLocale(), { minimumFractionDigits: 2, maximumFractionDigits: 2 })).format
+  const formatNum = new Intl.NumberFormat(getAdjustedLocale(), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format
 
   return (
-    <Modal show={showPersonalDataModal} onHide={() => setShowPersonalDataModal(false)}>
+    <Modal
+      show={showPersonalDataModal}
+      onHide={() => setShowPersonalDataModal(false)}
+    >
       <Modal.Header closeButton>
         <Modal.Title className={styles.modalHeader}>
           Persönliche Daten
@@ -56,13 +72,23 @@ export default function PersonalDataModal ({ userdata }) {
         <ListGroup>
           {renderPersonalEntry('matriculationNumber', 'mtknr')}
           {renderPersonalEntry('libraryNumber', 'bibnr')}
-          {renderPersonalEntry('printerBalance', null, () => `${formatNum(userdata.pcounter.replace('€', ''))}€`)}
+          {renderPersonalEntry(
+            'printerBalance',
+            null,
+            () => `${formatNum(userdata.pcounter.replace('€', ''))}€`
+          )}
           {renderPersonalEntry('fieldOfStudy', 'fachrich')}
           {renderPersonalEntry('semester', 'stgru')}
           {renderPersonalEntry('examRegulations', null, () => (
             <a
               /* see: https://github.com/neuland-ingolstadt/THI-App/issues/90#issuecomment-924768749 */
-              href={userdata?.po_url && userdata.po_url.replace('verwaltung-und-stabsstellen', 'hochschulorganisation')}
+              href={
+                userdata?.po_url &&
+                userdata.po_url.replace(
+                  'verwaltung-und-stabsstellen',
+                  'hochschulorganisation'
+                )
+              }
               target="_blank"
               rel="noreferrer"
             >
@@ -75,7 +101,12 @@ export default function PersonalDataModal ({ userdata }) {
           {renderPersonalEntry('firstName', 'vname')}
           {renderPersonalEntry('lastName', 'name')}
           {renderPersonalEntry('street', 'str')}
-          {renderPersonalEntry('city', null, () => userdata.plz && userdata.ort && `${userdata.plz} ${userdata.ort}`)}
+          {renderPersonalEntry(
+            'city',
+            null,
+            () =>
+              userdata.plz && userdata.ort && `${userdata.plz} ${userdata.ort}`
+          )}
         </ListGroup>
       </Modal.Body>
     </Modal>

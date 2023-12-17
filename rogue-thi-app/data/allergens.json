@@ -1,150 +1,150 @@
 {
-	"_source": {
-		"de": "https://www.werkswelt.de/?id=ingo",
-		"en": "translated from https://www.werkswelt.de/?id=ingo"
-	},
-	"1": {
-		"de": "Farbstoff",
-		"en": "Artificial coloring"
-	},
-	"2": {
-		"de": "Coffein",
-		"en": "Caffeine"
-	},
-	"4": {
-		"de": "Konservierungsstoff",
-		"en": "Preservatives"
-	},
-	"5": {
-		"de": "Süßungsmittel",
-		"en": "Sweeteners"
-	},
-	"7": {
-		"de": "Antioxidationsmittel",
-		"en": "Antioxidants"
-	},
-	"8": {
-		"de": "Geschmacksverstärker",
-		"en": "Flavor enhancers"
-	},
-	"9": {
-		"de": "geschwefelt",
-		"en": "Sulfurized"
-	},
-	"10": {
-		"de": "geschwärzt",
-		"en": "Blackened"
-	},
-	"12": {
-		"de": "Phosphat",
-		"en": "Phosphate"
-	},
-	"13": {
-		"de": "enthält eine Phenylalaninquelle",
-		"en": "Contains phenylalanine source"
-	},
-	"30": {
-		"de": "Fettglasur",
-		"en": "Fat glaze"
-	},
-	"Wz": {
-		"de": "Weizen(Dinkel,Kamut)",
-		"en": "Wheat (spelt, kamut)"
-	},
-	"Gf": {
-		"de": "Glutenfrei",
-		"en": "Gluten-free"
-	},
-	"Ro": {
-		"de": "Roggen",
-		"en": "Rye"
-	},
-	"Ge": {
-		"de": "Gerste",
-		"en": "Barley"
-	},
-	"Hf": {
-		"de": "Hafer",
-		"en": "Oats"
-	},
-	"Kr": {
-		"de": "Krebstiere",
-		"en": "Crustaceans"
-	},
-	"Ei": {
-		"de": "Eier",
-		"en": "Eggs"
-	},
-	"Fi": {
-		"de": "Fisch",
-		"en": "Fish"
-	},
-	"Er": {
-		"de": "Erdnüsse",
-		"en": "Peanuts"
-	},
-	"So": {
-		"de": "Sojabohnen",
-		"en": "Soybeans"
-	},
-	"Mi": {
-		"de": "Milch/Laktose",
-		"en": "Milk/lactose"
-	},
-	"Man": {
-		"de": "Mandeln",
-		"en": "Almonds"
-	},
-	"Hs": {
-		"de": "Haselnüsse",
-		"en": "Hazelnuts"
-	},
-	"Wa": {
-		"de": "Walnüsse",
-		"en": "Walnuts"
-	},
-	"Ka": {
-		"de": "Kaschu(Cashew)nüsse",
-		"en": "Cashew nuts"
-	},
-	"Pe": {
-		"de": "Pekannüsse",
-		"en": "Pecans"
-	},
-	"Pa": {
-		"de": "Paranüsse",
-		"en": "Brazil nuts"
-	},
-	"Pi": {
-		"de": "Schalenfrüchte Pistazien",
-		"en": "Pistachios"
-	},
-	"Mac": {
-		"de": "Macadamianüsse",
-		"en": "Macadamia nuts"
-	},
-	"Sel": {
-		"de": "Sellerie",
-		"en": "Celery"
-	},
-	"Sen": {
-		"de": "Senf",
-		"en": "Mustard"
-	},
-	"Ses": {
-		"de": "Sesam",
-		"en": "Sesame"
-	},
-	"Su": {
-		"de": "Schwefeldioxid u. Sulfite",
-		"en": "Sulfur dioxide and sulfites"
-	},
-	"Lu": {
-		"de": "Lupinen",
-		"en": "Lupins"
-	},
-	"We": {
-		"de": "Weichtiere",
-		"en": "Molluscs"
-	}
+  "_source": {
+    "de": "https://www.werkswelt.de/?id=ingo",
+    "en": "translated from https://www.werkswelt.de/?id=ingo"
+  },
+  "1": {
+    "de": "Farbstoff",
+    "en": "Artificial coloring"
+  },
+  "2": {
+    "de": "Coffein",
+    "en": "Caffeine"
+  },
+  "4": {
+    "de": "Konservierungsstoff",
+    "en": "Preservatives"
+  },
+  "5": {
+    "de": "Süßungsmittel",
+    "en": "Sweeteners"
+  },
+  "7": {
+    "de": "Antioxidationsmittel",
+    "en": "Antioxidants"
+  },
+  "8": {
+    "de": "Geschmacksverstärker",
+    "en": "Flavor enhancers"
+  },
+  "9": {
+    "de": "geschwefelt",
+    "en": "Sulfurized"
+  },
+  "10": {
+    "de": "geschwärzt",
+    "en": "Blackened"
+  },
+  "12": {
+    "de": "Phosphat",
+    "en": "Phosphate"
+  },
+  "13": {
+    "de": "enthält eine Phenylalaninquelle",
+    "en": "Contains phenylalanine source"
+  },
+  "30": {
+    "de": "Fettglasur",
+    "en": "Fat glaze"
+  },
+  "Wz": {
+    "de": "Weizen(Dinkel,Kamut)",
+    "en": "Wheat (spelt, kamut)"
+  },
+  "Gf": {
+    "de": "Glutenfrei",
+    "en": "Gluten-free"
+  },
+  "Ro": {
+    "de": "Roggen",
+    "en": "Rye"
+  },
+  "Ge": {
+    "de": "Gerste",
+    "en": "Barley"
+  },
+  "Hf": {
+    "de": "Hafer",
+    "en": "Oats"
+  },
+  "Kr": {
+    "de": "Krebstiere",
+    "en": "Crustaceans"
+  },
+  "Ei": {
+    "de": "Eier",
+    "en": "Eggs"
+  },
+  "Fi": {
+    "de": "Fisch",
+    "en": "Fish"
+  },
+  "Er": {
+    "de": "Erdnüsse",
+    "en": "Peanuts"
+  },
+  "So": {
+    "de": "Sojabohnen",
+    "en": "Soybeans"
+  },
+  "Mi": {
+    "de": "Milch/Laktose",
+    "en": "Milk/lactose"
+  },
+  "Man": {
+    "de": "Mandeln",
+    "en": "Almonds"
+  },
+  "Hs": {
+    "de": "Haselnüsse",
+    "en": "Hazelnuts"
+  },
+  "Wa": {
+    "de": "Walnüsse",
+    "en": "Walnuts"
+  },
+  "Ka": {
+    "de": "Kaschu(Cashew)nüsse",
+    "en": "Cashew nuts"
+  },
+  "Pe": {
+    "de": "Pekannüsse",
+    "en": "Pecans"
+  },
+  "Pa": {
+    "de": "Paranüsse",
+    "en": "Brazil nuts"
+  },
+  "Pi": {
+    "de": "Schalenfrüchte Pistazien",
+    "en": "Pistachios"
+  },
+  "Mac": {
+    "de": "Macadamianüsse",
+    "en": "Macadamia nuts"
+  },
+  "Sel": {
+    "de": "Sellerie",
+    "en": "Celery"
+  },
+  "Sen": {
+    "de": "Senf",
+    "en": "Mustard"
+  },
+  "Ses": {
+    "de": "Sesam",
+    "en": "Sesame"
+  },
+  "Su": {
+    "de": "Schwefeldioxid u. Sulfite",
+    "en": "Sulfur dioxide and sulfites"
+  },
+  "Lu": {
+    "de": "Lupinen",
+    "en": "Lupins"
+  },
+  "We": {
+    "de": "Weichtiere",
+    "en": "Molluscs"
+  }
 }

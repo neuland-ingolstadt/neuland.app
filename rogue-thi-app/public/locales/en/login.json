@@ -1,33 +1,33 @@
 {
-    "error": {
-        "wrongCredentials": "Your login credentials are incorrect.",
-        "generic": "An error occurred while connecting to the server.",
-        "backend": "The THI backend is currently unavailable. Please try again later."
-    },
-    "alert": "You must be logged in to use this feature.",
-    "guestOnly": {
-        "warning": "The app can currently only be used as a guest. More information can be found below.",
-        "title": "Why can't I log in?",
-        "details": "The university has instructed us to disable the login function. We are working on a solution, but it is not clear when it will be ready. We advise against using the official THI app for security reasons.",
-        "details2": "The menu plan, semester and event dates, room map, bus and train departure times, and parking information can still be accessed through the guest mode."
-    },
-    "notes": {
-        "title1": "What is this?",
-        "text1": "This is an unofficial alternative to the THI app, which is intended to provide an improved user experience. It is being developed by students at <a>Neuland Ingolstadt e.V.</a> for students and is not an offering of the Technische Hochschule Ingolstadt.",
-        "title2": "Are my data secure?",
-        "text2": "<strong>Yes.</strong> Your data is encrypted on your device and securely transmitted to THI through the official interface. Only you and the THI have access to your login credentials and personal data."
-    },
-    "links": {
-        "security": "Here you can find more information about security.",
-        "imprint": "Imprint",
-        "privacy": "Privacy Policy",
-        "github": "Source code on GitHub"
-    },
-    "form": {
-        "username": "THI username",
-        "password": "Password",
-        "login": "Log in",
-        "guest": "Continue as guest",
-        "save": "Stay logged in"
-    }
+  "error": {
+    "wrongCredentials": "Your login credentials are incorrect.",
+    "generic": "An error occurred while connecting to the server.",
+    "backend": "The THI backend is currently unavailable. Please try again later."
+  },
+  "alert": "You must be logged in to use this feature.",
+  "guestOnly": {
+    "warning": "The app can currently only be used as a guest. More information can be found below.",
+    "title": "Why can't I log in?",
+    "details": "The university has instructed us to disable the login function. We are working on a solution, but it is not clear when it will be ready. We advise against using the official THI app for security reasons.",
+    "details2": "The menu plan, semester and event dates, room map, bus and train departure times, and parking information can still be accessed through the guest mode."
+  },
+  "notes": {
+    "title1": "What is this?",
+    "text1": "This is an unofficial alternative to the THI app, which is intended to provide an improved user experience. It is being developed by students at <a>Neuland Ingolstadt e.V.</a> for students and is not an offering of the Technische Hochschule Ingolstadt.",
+    "title2": "Are my data secure?",
+    "text2": "<strong>Yes.</strong> Your data is encrypted on your device and securely transmitted to THI through the official interface. Only you and the THI have access to your login credentials and personal data."
+  },
+  "links": {
+    "security": "Here you can find more information about security.",
+    "imprint": "Imprint",
+    "privacy": "Privacy Policy",
+    "github": "Source code on GitHub"
+  },
+  "form": {
+    "username": "THI username",
+    "password": "Password",
+    "login": "Log in",
+    "guest": "Continue as guest",
+    "save": "Stay logged in"
+  }
 }

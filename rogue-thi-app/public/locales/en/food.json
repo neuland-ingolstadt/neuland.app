@@ -1,88 +1,88 @@
 {
-    "warning": {
-        "unknownIngredients": {
-            "text": "Unknown ingredients / allergens",
-            "iconTitle": "Allergy Warning"
-        }
-    },
-    "filter": "Filter",
-    "preferences": {
-        "iconTitle": "Preferred Food",
-        "match": "Match",
-        "warn": "Allergies"
-    },
-    "list": {
-        "titles": {
-            "cafeteria": "Cafeteria",
-            "meals": "Meals",
-            "soups": "Soups",
-            "salads": "Salads"
-        }
-    },
-    "error": {
-        "dataUnavailable": "Data unavailable"
-    },
-    "navigation": {
-        "weeks": {
-            "previous": "Previous week",
-            "next": "Next week"
-        }
-    },
-    "foodDetails": {
-        "flags": {
-            "title": "Notes",
-            "unknown": "Unknown",
-            "empty": "No notes available"
-        },
-        "allergens": {
-            "title": "Allergens",
-            "unknown": "Unknown",
-            "empty": "No allergens present",
-            "fallback": "Unknown (This is bad)"
-        },
-        "nutrition": {
-            "title": "Nutritional Values",
-            "energy.title": "Energy",
-            "fat": {
-                "title": "Fat",
-                "saturated": "of which saturated fat"
-            },
-            "carbohydrates": {
-                "title": "Carbohydrates",
-                "sugar": "of which sugar"
-            },
-            "fiber.title": "Fiber",
-            "protein.title": "Protein",
-            "salt.title": "Salt",
-            "unknown.title": "Unknown"
-        },
-        "prices": {
-            "title": "Prices",
-            "students": "Students",
-            "employees": "Employees",
-            "guests": "Guests",
-            "unknown": "Unknown"
-        },
-        "warning": {
-            "title": "Disclaimer",
-            "text": "Please check the information on the information screens before consuming anything. The nutritional information is based on an average portion."
-        },
-        "translation": {
-            "title": "Translation",
-            "warning": "This meal has been automatically translated.",
-            "originalName": "Original name",
-            "translatedName": "Translated name"
-        },
-        "variants": {
-            "title": "Variants",
-            "click": "Click for more information"
-        },
-        "unknownMeal": {
-            "title": "Unknown meal",
-            "description": "The Meal ID <i>{{id}}</i> is unknown. Please contact us if you think this is an error."
-        },
-        "meta": {
-            "description": "Check out the details of {{name}} at {{restaurant}}."
-        }
+  "warning": {
+    "unknownIngredients": {
+      "text": "Unknown ingredients / allergens",
+      "iconTitle": "Allergy Warning"
     }
+  },
+  "filter": "Filter",
+  "preferences": {
+    "iconTitle": "Preferred Food",
+    "match": "Match",
+    "warn": "Allergies"
+  },
+  "list": {
+    "titles": {
+      "cafeteria": "Cafeteria",
+      "meals": "Meals",
+      "soups": "Soups",
+      "salads": "Salads"
+    }
+  },
+  "error": {
+    "dataUnavailable": "Data unavailable"
+  },
+  "navigation": {
+    "weeks": {
+      "previous": "Previous week",
+      "next": "Next week"
+    }
+  },
+  "foodDetails": {
+    "flags": {
+      "title": "Notes",
+      "unknown": "Unknown",
+      "empty": "No notes available"
+    },
+    "allergens": {
+      "title": "Allergens",
+      "unknown": "Unknown",
+      "empty": "No allergens present",
+      "fallback": "Unknown (This is bad)"
+    },
+    "nutrition": {
+      "title": "Nutritional Values",
+      "energy.title": "Energy",
+      "fat": {
+        "title": "Fat",
+        "saturated": "of which saturated fat"
+      },
+      "carbohydrates": {
+        "title": "Carbohydrates",
+        "sugar": "of which sugar"
+      },
+      "fiber.title": "Fiber",
+      "protein.title": "Protein",
+      "salt.title": "Salt",
+      "unknown.title": "Unknown"
+    },
+    "prices": {
+      "title": "Prices",
+      "students": "Students",
+      "employees": "Employees",
+      "guests": "Guests",
+      "unknown": "Unknown"
+    },
+    "warning": {
+      "title": "Disclaimer",
+      "text": "Please check the information on the information screens before consuming anything. The nutritional information is based on an average portion."
+    },
+    "translation": {
+      "title": "Translation",
+      "warning": "This meal has been automatically translated.",
+      "originalName": "Original name",
+      "translatedName": "Translated name"
+    },
+    "variants": {
+      "title": "Variants",
+      "click": "Click for more information"
+    },
+    "unknownMeal": {
+      "title": "Unknown meal",
+      "description": "The Meal ID <i>{{id}}</i> is unknown. Please contact us if you think this is an error."
+    },
+    "meta": {
+      "description": "Check out the details of {{name}} at {{restaurant}}."
+    }
+  }
 }

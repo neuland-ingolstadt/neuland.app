@@ -2,7 +2,7 @@
 $neuland-color: #8845ef;
 
 $body-bg: #202020;
-$body-color: #DFE5F2;
+$body-color: #dfe5f2;
 
 $white: #fff;
 $gray-100: #f8f9fa;
@@ -41,5 +41,5 @@ $danger: $red;
 $light: $gray-300;
 $dark: $gray-800;
 
-@import "../common.scss";
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../common.scss';
+@import '../../node_modules/bootstrap/scss/bootstrap';

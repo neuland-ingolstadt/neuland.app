@@ -8,9 +8,9 @@ $border-color: $primary;
 
 // Cards
 $card-border-color: $gray-700;
-$card-cap-bg: rgba($body-bg, .03);
+$card-cap-bg: rgba($body-bg, 0.03);
 $card-color: $body-color;
-$card-bg: rgba($body-bg, .7);
+$card-bg: rgba($body-bg, 0.7);
 $nav-tabs-border-color: $primary;
 //$nav-tabs-link-hover-border-color: $gray-700 $gray-700 $nav-tabs-border-color;
 //$nav-tabs-link-active-color: $gray-700;
@@ -21,8 +21,8 @@ $component-active-bg: $primary;
 
 // List group
 $list-group-color: $body-color;
-$list-group-bg: rgba($body-bg, .05);
-$list-group-border-color: rgba($primary, .125);
+$list-group-bg: rgba($body-bg, 0.05);
+$list-group-border-color: rgba($primary, 0.125);
 $list-group-hover-bg: $gray-700;
 $list-group-active-color: $body-color;
 $list-group-active-bg: $gray-700;
@@ -39,7 +39,7 @@ $input-bg: $body-bg;
 $input-disabled-bg: $gray-700;
 $input-color: $body-color;
 $input-border-color: $gray-700;
-$input-box-shadow: inset 0 1px 1px rgba($body-color, .075);
+$input-box-shadow: inset 0 1px 1px rgba($body-color, 0.075);
 $input-focus-bg: $body-bg;
 $input-focus-border-color: lighten($component-active-bg, 25%);
 $input-focus-color: $input-color;
@@ -52,12 +52,12 @@ $custom-select-disabled-color: $gray-700;
 $custom-select-bg: $input-bg;
 $custom-select-disabled-bg: $gray-700;
 $custom-select-indicator-color: $gray-700;
-$custom-select-box-shadow: inset 0 1px 2px rgba($body-color, .075);
+$custom-select-box-shadow: inset 0 1px 2px rgba($body-color, 0.075);
 $custom-select-border-color: $input-border-color;
 
 // Modals
 $modal-content-bg: $body-bg;
-$modal-content-border-color: rgba($body-color, .2);
+$modal-content-border-color: rgba($body-color, 0.2);
 $modal-header-border-color: $gray-700;
 $modal-footer-border-color: $modal-header-border-color;
 $close-color: $body-color;
@@ -73,24 +73,24 @@ $table-dark-color: $gray-700;
 $jumbotron-bg: $gray-700;
 
 // HR
-$hr-border-color: rgba($body-color, .1);
+$hr-border-color: rgba($body-color, 0.1);
 
 // Toasts
 //$toast-color: null;
-$toast-background-color: rgba($body-bg, .85);
-$toast-border-color: rgba(255, 255, 255, .1);
-$toast-box-shadow: 0 .25rem .75rem rgba($body-color, .1);
+$toast-background-color: rgba($body-bg, 0.85);
+$toast-border-color: rgba(255, 255, 255, 0.1);
+$toast-box-shadow: 0 0.25rem 0.75rem rgba($body-color, 0.1);
 $toast-header-color: $gray-700;
-$toast-header-background-color: rgba($body-bg, .85);
-$toast-header-border-color: rgba(255, 255, 255, .05);
+$toast-header-background-color: rgba($body-bg, 0.85);
+$toast-header-border-color: rgba(255, 255, 255, 0.05);
 
 // Dropdowns
 //
 $dropdown-color: $body-color;
 $dropdown-bg: $body-bg;
-$dropdown-border-color: rgba($body-color, .15);
+$dropdown-border-color: rgba($body-color, 0.15);
 $dropdown-divider-bg: $gray-700;
-$dropdown-box-shadow: 0 .5rem 1rem rgba($body-color, .175);
+$dropdown-box-shadow: 0 0.5rem 1rem rgba($body-color, 0.175);
 $dropdown-link-color: $body-color;
 $dropdown-link-hover-color: lighten($body-color, 5%);
 $dropdown-link-hover-bg: $gray-700;
@@ -127,8 +127,10 @@ $navbar-light-brand-hover-color: $body-color;
 $navbar-brand-color: $body-color;
 
 // react-placeholder
-.text-row, .rect-shape, .round-shape {
-  background-color: rgba($body-color, .15) !important;
+.text-row,
+.rect-shape,
+.round-shape {
+  background-color: rgba($body-color, 0.15) !important;
 }
 
 // API playground
@@ -139,22 +141,21 @@ pre {
 :root {
   --navbar-background: #{$body-bg};
   --navbar-border: #{$gray-700};
-  --navbar-shadow: rgba(white, .8);
+  --navbar-shadow: rgba(white, 0.8);
 
   --tabbar-background: #{$body-bg};
   --tabbar-border: #{$gray-700};
-  --tabbar-shadow: rgba(white, .8);
+  --tabbar-shadow: rgba(white, 0.8);
   --tabbar-tab: #{$body-color};
   --tabbar-tab-active: #{$primary};
 
   --home-card-mobile-border: #{$gray-700};
 
   --rooms-controls-background: #{$body-bg};
-  --rooms-controls-border: #{rgba($gray-700, .1)};
+  --rooms-controls-border: #{rgba($gray-700, 0.1)};
 }
 
 // use our CI color
 $theme-colors: (
-  "primary": $primary
+  'primary': $primary,
 );
-

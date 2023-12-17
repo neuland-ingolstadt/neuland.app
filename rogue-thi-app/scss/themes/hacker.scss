@@ -1,18 +1,21 @@
 // stylelint-disable
-$primary: #00FF00;
-$gray-700: #BBBBBB;
-$body-bg: #404040BB;
+$primary: #00ff00;
+$gray-700: #bbbbbb;
+$body-bg: #404040bb;
 $body-color: white;
 
-@import "../common.scss";
-@import "../../node_modules/bootstrap/scss/bootstrap";
+@import '../common.scss';
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 @font-face {
   font-family: fasterone;
   src: url(/fonts/FasterOne-Regular.ttf);
 }
 :is(h1, h2, h3, h4, h5, h6),
-.h1, .h2, .h3, .h4,
+.h1,
+.h2,
+.h3,
+.h4,
 .card-title {
   font-family: fasterone;
   color: #{$primary};

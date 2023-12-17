@@ -136,12 +136,7 @@
   },
   "Nachhaltige Infrastruktur": {
     "poKey": "satzungen-fakultaet-nachhaltige-infrastruktur",
-    "courses": [
-      "NB",
-      "NUM",
-      "SCE",
-      "WIB"
-    ]
+    "courses": ["NB", "NUM", "SCE", "WIB"]
   },
   "Wirtschaftsingenieurwesen": {
     "poKey": "satzungen-fakultaet-wirtschaftsingenieurwesen",

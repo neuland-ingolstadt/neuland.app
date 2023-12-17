@@ -14,22 +14,24 @@ import { NoSessionError } from '../../lib/backend/thi-session-handler'
 /**
  * Dashboard card for semester and exam dates.
  */
-export default function ExamsCard () {
+export default function ExamsCard() {
   const router = useRouter()
   const time = useTime()
   const [exams, setExams] = useState(null)
   const { userKind } = useUserKind()
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         let examList = await loadExamList()
 
         // filter out exams that are already over
-        examList = examList.filter(x => x.date > Date.now())
+        examList = examList.filter((x) => x.date > Date.now())
 
         // filter out exams that are not more than 30 days in the future
-        examList = examList.filter(x => x.date < Date.now() + 1000 * 60 * 60 * 24 * 30)
+        examList = examList.filter(
+          (x) => x.date < Date.now() + 1000 * 60 * 60 * 24 * 30
+        )
 
         setExams(examList)
       } catch (e) {
@@ -59,18 +61,17 @@ export default function ExamsCard () {
       link="/calendar?focus=exams"
     >
       <ListGroup variant="flush">
-        {exams && exams.slice(0, 2).map((x, i) => (
-          <ListGroup.Item key={i}>
-            <div>
-              {x.name}
-            </div>
-            <div className="text-muted">
-              {x.seat}
-              { ' - ' }
-              {formatFriendlyRelativeTime(x.date, time)}
-            </div>
-          </ListGroup.Item>
-        ))}
+        {exams &&
+          exams.slice(0, 2).map((x, i) => (
+            <ListGroup.Item key={i}>
+              <div>{x.name}</div>
+              <div className="text-muted">
+                {x.seat}
+                {' - '}
+                {formatFriendlyRelativeTime(x.date, time)}
+              </div>
+            </ListGroup.Item>
+          ))}
       </ListGroup>
     </BaseCard>
   )

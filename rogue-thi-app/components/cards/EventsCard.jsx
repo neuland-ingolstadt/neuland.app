@@ -13,13 +13,13 @@ import { useTranslation } from 'next-i18next'
 /**
  * Dashboard card for CL events.
  */
-export default function EventsCard () {
+export default function EventsCard() {
   const router = useRouter()
   const [calendar, setCalendar] = useState([])
   const { t } = useTranslation(['dashboard'])
 
   useEffect(() => {
-    async function load () {
+    async function load() {
       try {
         const events = await NeulandAPI.getCampusLifeEvents()
         setCalendar(events)
@@ -40,9 +40,7 @@ export default function EventsCard () {
       <ListGroup variant="flush">
         {calendar.slice(0, 2).map((x, i) => (
           <ListGroup.Item key={i}>
-            <div>
-              {x.title}
-            </div>
+            <div>{x.title}</div>
             <div className="text-muted">
               {t('events.organizer.attribute')} {x.organizer}
             </div>

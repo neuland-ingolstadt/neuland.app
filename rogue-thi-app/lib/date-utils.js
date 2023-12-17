@@ -6,7 +6,7 @@ import { i18n } from 'next-i18next'
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDate (datetime) {
+export function formatFriendlyDate(datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }
@@ -20,8 +20,14 @@ export function formatFriendlyDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return t('common.dates.tomorrow')
   } else {
-    const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
-    const date = datetime.toLocaleString(undefined, { day: 'numeric', month: '2-digit', year: 'numeric' })
+    const weekday = datetime.toLocaleString(getAdjustedLocale(), {
+      weekday: 'short',
+    })
+    const date = datetime.toLocaleString(undefined, {
+      day: 'numeric',
+      month: '2-digit',
+      year: 'numeric',
+    })
     return `${weekday}, ${date}`
   }
 }
@@ -32,7 +38,7 @@ export function formatFriendlyDate (datetime) {
  * @param {Date} end
  * @returns {string}
  */
-export function formatFriendlyDateRange (begin, end) {
+export function formatFriendlyDateRange(begin, end) {
   let str = formatFriendlyDate(begin)
   if (end && begin.toDateString() !== end.toDateString()) {
     str += ' – ' + formatFriendlyDate(end)
@@ -45,12 +51,15 @@ export function formatFriendlyDateRange (begin, end) {
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyTime (datetime) {
+export function formatFriendlyTime(datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }
 
-  return datetime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+  return datetime.toLocaleTimeString(undefined, {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }
 
 /**
@@ -59,7 +68,7 @@ export function formatFriendlyTime (datetime) {
  * @param {Date} end
  * @returns {string}
  */
-export function formatFriendlyDateTimeRange (begin, end) {
+export function formatFriendlyDateTimeRange(begin, end) {
   let str = formatFriendlyDate(begin) + ', ' + formatFriendlyTime(begin)
   if (end) {
     if (begin.toDateString() === end.toDateString()) {
@@ -76,7 +85,7 @@ export function formatFriendlyDateTimeRange (begin, end) {
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatFriendlyDateTime (datetime) {
+export function formatFriendlyDateTime(datetime) {
   const date = formatFriendlyDate(datetime)
   const time = formatFriendlyTime(datetime)
 
@@ -88,7 +97,7 @@ export function formatFriendlyDateTime (datetime) {
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatNearDate (datetime) {
+export function formatNearDate(datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }
@@ -102,8 +111,13 @@ export function formatNearDate (datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return i18n.t('common.dates.tomorrow', { ns: 'common' })
   } else {
-    const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'long' })
-    const date = datetime.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
+    const weekday = datetime.toLocaleString(getAdjustedLocale(), {
+      weekday: 'long',
+    })
+    const date = datetime.toLocaleString(undefined, {
+      day: 'numeric',
+      month: 'numeric',
+    })
     return weekday + ', ' + date
   }
 }
@@ -113,15 +127,26 @@ export function formatNearDate (datetime) {
  * @param datetime
  * @returns {JSX.Element}
  */
-export function buildLinedWeekdaySpan (datetime) {
+export function buildLinedWeekdaySpan(datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }
 
-  const weekday = datetime.toLocaleString(getAdjustedLocale(), { weekday: 'short' })
-  const date = datetime.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
+  const weekday = datetime.toLocaleString(getAdjustedLocale(), {
+    weekday: 'short',
+  })
+  const date = datetime.toLocaleString(undefined, {
+    day: 'numeric',
+    month: 'numeric',
+  })
 
-  return <span>{weekday}<br />{date}</span>
+  return (
+    <span>
+      {weekday}
+      <br />
+      {date}
+    </span>
+  )
 }
 
 /**
@@ -129,28 +154,28 @@ export function buildLinedWeekdaySpan (datetime) {
  * @param {number} delta Time delta in milliseconds
  * @returns {string}
  */
-function formatFriendlyTimeDelta (delta) {
+function formatFriendlyTimeDelta(delta) {
   const rtl = new Intl.RelativeTimeFormat(getAdjustedLocale(), {
     numeric: 'auto',
-    style: 'long'
+    style: 'long',
   })
 
-  const weeks = delta / (7 * 24 * 60 * 60 * 1000) | 0
+  const weeks = (delta / (7 * 24 * 60 * 60 * 1000)) | 0
   if (Math.abs(weeks) > 0) {
     return rtl.format(weeks, 'week')
   }
 
-  const days = delta / (24 * 60 * 60 * 1000) | 0
+  const days = (delta / (24 * 60 * 60 * 1000)) | 0
   if (Math.abs(days) > 0) {
     return rtl.format(days, 'day')
   }
 
-  const hours = delta / (60 * 60 * 1000) | 0
+  const hours = (delta / (60 * 60 * 1000)) | 0
   if (Math.abs(hours) > 0) {
     return rtl.format(hours, 'hour')
   }
 
-  const minutes = delta / (60 * 1000) | 0
+  const minutes = (delta / (60 * 1000)) | 0
   return rtl.format(minutes, 'minute')
 }
 
@@ -159,7 +184,7 @@ function formatFriendlyTimeDelta (delta) {
  * @param {Date} date
  * @returns {string}
  */
-export function formatFriendlyRelativeTime (date) {
+export function formatFriendlyRelativeTime(date) {
   const startOfDay = new Date()
   startOfDay.setHours(0)
   startOfDay.setMinutes(0)
@@ -185,12 +210,15 @@ export function formatFriendlyRelativeTime (date) {
  * @param {Date|string} datetime
  * @returns {string}
  */
-export function formatRelativeMinutes (datetime) {
+export function formatRelativeMinutes(datetime) {
   if (typeof datetime === 'string') {
     datetime = new Date(datetime)
   }
 
-  const minutes = Math.max(Math.floor((datetime.getTime() - Date.now()) / 60000), 0)
+  const minutes = Math.max(
+    Math.floor((datetime.getTime() - Date.now()) / 60000),
+    0
+  )
   return `${minutes} min`
 }
 
@@ -199,10 +227,14 @@ export function formatRelativeMinutes (datetime) {
  * @param {Date} date
  * @returns {string}
  */
-export function formatISODate (date) {
-  return date.getFullYear().toString().padStart(4, '0') + '-' +
-    (date.getMonth() + 1).toString().padStart(2, '0') + '-' +
+export function formatISODate(date) {
+  return (
+    date.getFullYear().toString().padStart(4, '0') +
+    '-' +
+    (date.getMonth() + 1).toString().padStart(2, '0') +
+    '-' +
     date.getDate().toString().padStart(2, '0')
+  )
 }
 
 /**
@@ -210,8 +242,12 @@ export function formatISODate (date) {
  * @param {Date} date
  * @returns {string}
  */
-export function formatISOTime (date) {
-  return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0')
+export function formatISOTime(date) {
+  return (
+    date.getHours().toString().padStart(2, '0') +
+    ':' +
+    date.getMinutes().toString().padStart(2, '0')
+  )
 }
 
 /**
@@ -220,7 +256,7 @@ export function formatISOTime (date) {
  * @param {Date} date
  * @returns {string}
  */
-export function getMonday (date) {
+export function getMonday(date) {
   date = new Date(date)
   const day = date.getDay()
   date.setHours(0, 0, 0, 0)
@@ -233,7 +269,7 @@ export function getMonday (date) {
  * @param {Date} date
  * @returns {string}
  */
-export function getWeek (date) {
+export function getWeek(date) {
   const start = getMonday(date)
   const end = getMonday(date)
   end.setDate(end.getDate() + 7)
@@ -246,7 +282,7 @@ export function getWeek (date) {
  * @param {Date} end
  * @returns {Date[]}
  */
-export function getDays (begin, end) {
+export function getDays(begin, end) {
   const days = []
   const date = new Date(begin)
   // eslint-disable-next-line no-unmodified-loop-condition
@@ -263,7 +299,7 @@ export function getDays (begin, end) {
  * @param {number} delta
  * @returns {Date}
  */
-export function addWeek (date, delta) {
+export function addWeek(date, delta) {
   date = new Date(date)
   date.setDate(date.getDate() + delta * 7)
   return date
@@ -274,7 +310,7 @@ export function addWeek (date, delta) {
  * @param {Date} date
  * @returns {string}
  */
-export function getFriendlyWeek (date) {
+export function getFriendlyWeek(date) {
   const [currStart, currEnd] = getWeek(new Date())
   const [nextStart, nextEnd] = getWeek(addWeek(new Date(), 1))
   if (date >= currStart && date < currEnd) {
@@ -286,8 +322,11 @@ export function getFriendlyWeek (date) {
     const sunday = new Date(monday)
     sunday.setDate(sunday.getDate() + 6)
 
-    return monday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' }) +
-      ' – ' + sunday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
+    return (
+      monday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' }) +
+      ' – ' +
+      sunday.toLocaleString(undefined, { day: 'numeric', month: 'numeric' })
+    )
   }
 }
 
@@ -296,7 +335,7 @@ export function getFriendlyWeek (date) {
  * @param {Date} date
  * @returns {boolean}
  */
-export function isWeekend (date) {
+export function isWeekend(date) {
   return date.getDay() === 0 || date.getDay() === 6
 }
 
@@ -305,7 +344,7 @@ export function isWeekend (date) {
  * @param {Date} date
  * @returns {Date}
  */
-export function getAdjustedDay (date) {
+export function getAdjustedDay(date) {
   if (isWeekend(date)) {
     return getMonday(addWeek(date, 1))
   }
@@ -318,8 +357,12 @@ export function getAdjustedDay (date) {
  * @param {Date} b
  * @returns {boolean}
  **/
-export function isSameDay (a, b) {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+export function isSameDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  )
 }
 
 /**
@@ -328,7 +371,7 @@ export function isSameDay (a, b) {
  * @param {Date} time
  * @returns {Date}
  */
-export function combineDateTime (date, time) {
+export function combineDateTime(date, time) {
   date = new Date(date)
   time = new Date(time)
   date.setHours(time.getHours())
@@ -338,6 +381,6 @@ export function combineDateTime (date, time) {
   return date
 }
 
-function t (...args) {
+function t(...args) {
   return i18n.t(...args, { ns: 'common' })
 }

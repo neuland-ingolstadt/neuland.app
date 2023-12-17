@@ -15,27 +15,41 @@ const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
  * Prompt for surveys.
  * @param {object} onHide Invoked when the user wants to hide the prompt
  */
-export default function SurveyPrompt ({ onHide }) {
+export default function SurveyPrompt({ onHide }) {
   const { t } = useTranslation(['dashboard'])
 
   return (
     <Card className={styles.card}>
       <Card.Body>
         <Card.Title>
-          <FontAwesomeIcon icon={faPoll} fixedWidth />
-          {' '}
+          <FontAwesomeIcon
+            icon={faPoll}
+            fixedWidth
+          />{' '}
           Umfrage
-          <Button variant="link" className={styles.cardButton} onClick={() => onHide()}>
-            <FontAwesomeIcon title={t('prompts.close', { ns: 'common' })} icon={faTimes} />
+          <Button
+            variant="link"
+            className={styles.cardButton}
+            onClick={() => onHide()}
+          >
+            <FontAwesomeIcon
+              title={t('prompts.close', { ns: 'common' })}
+              icon={faTimes}
+            />
           </Button>
         </Card.Title>
         <Card.Text>
           <p>
-            Die Studierendenvertretung möchte mit den Verkehrsbetrieben ein <strong>Semesterticket</strong> aushandeln.
-            Wir möchten euch alle darum bitten, eure Meinung dazu zu äußern:
+            Die Studierendenvertretung möchte mit den Verkehrsbetrieben ein{' '}
+            <strong>Semesterticket</strong> aushandeln. Wir möchten euch alle
+            darum bitten, eure Meinung dazu zu äußern:
           </p>
           <p>
-            <a href={SURVEY_URL} target="_blank" rel="noreferrer">
+            <a
+              href={SURVEY_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
               <Button variant="outline-secondary">An Umfrage teilnehmen</Button>
             </a>
           </p>

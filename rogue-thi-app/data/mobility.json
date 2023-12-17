@@ -1,78 +1,78 @@
 {
-	"bus": {
-		"defaultStation": "hochschule",
-		"stations": [
-			{
-				"id": "fruehlingstrasse",
-				"name": "Frühlingstraße",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Fr__ue__hl&sid=211"
-			},
-			{
-				"id": "hauptbahnhof",
-				"name": "Hauptbahnhof",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Hbf&sid=240"
-			},
-			{
-				"id": "heydeckstrasse",
-				"name": "Heydeckstraße",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Heyde&sid=247"
-			},
-			{
-				"id": "hochschule",
-				"name": "Hochschule",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-THoSc&sid=413"
-			},
-			{
-				"id": "rathausplatz",
-				"name": "Rathausplatz",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Ratha&sid=337"
-			},
-			{
-				"id": "rechbergstrasse",
-				"name": "Rechbergstraße",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Rechb&sid=339"
-			},
-			{
-				"id": "stadttheater",
-				"name": "Stadttheater",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-SThea&sid=397"
-			},
-			{
-				"id": "zob",
-				"name": "ZOB",
-				"url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439"
-			}
-		]
-	},
-	"train": {
-		"defaultStation": "nord",
-		"stations": [
-			{ "id": "nord", "name": "Nordbahnhof" },
-			{ "id": "hbf", "name": "Hauptbahnhof" },
-			{ "id": "audi", "name": "Audi" }
-		]
-	},
-	"parking": [
-		{ "name": "Saturn Arena", "priceLevel": "free" },
-		{ "name": "Schloss", "priceLevel": 3 },
-		{ "name": "Festplatz", "priceLevel": 1 },
-		{ "name": "Nordbahnhof", "priceLevel": 1 },
-		{ "name": "Congressgarage (Mitarbeiter)", "priceLevel": "restricted" },
-		{ "name": "Congressgarage", "priceLevel": 3 },
-		{ "name": "Theater-Ost", "priceLevel": 3 },
-		{ "name": "Theater-West", "priceLevel": 3 },
-		{ "name": "Reduit Tilly", "priceLevel": 2 },
-		{ "name": "Münster", "priceLevel": 3 },
-		{ "name": "Hallenbad", "priceLevel": 2 },
-		{ "name": "Hauptbahnhof Ost", "priceLevel": 1 },
-		{ "name": "Hauptbahnhof West", "priceLevel": 1 }
-	],
-	"charging": [
-		{ "id": "59362", "freeParking": true },
-		{ "id": "59340", "freeParking": true },
-		{ "id": "59360", "freeParking": true },
-		{ "id": "59358", "freeParking": false },
-		{ "id": "59356", "freeParking": false },
-		{ "id": "59200", "freeParking": false }
-	]
+  "bus": {
+    "defaultStation": "hochschule",
+    "stations": [
+      {
+        "id": "fruehlingstrasse",
+        "name": "Frühlingstraße",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Fr__ue__hl&sid=211"
+      },
+      {
+        "id": "hauptbahnhof",
+        "name": "Hauptbahnhof",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Hbf&sid=240"
+      },
+      {
+        "id": "heydeckstrasse",
+        "name": "Heydeckstraße",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Heyde&sid=247"
+      },
+      {
+        "id": "hochschule",
+        "name": "Hochschule",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-THoSc&sid=413"
+      },
+      {
+        "id": "rathausplatz",
+        "name": "Rathausplatz",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=1&station=IN-Ratha&sid=337"
+      },
+      {
+        "id": "rechbergstrasse",
+        "name": "Rechbergstraße",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-Rechb&sid=339"
+      },
+      {
+        "id": "stadttheater",
+        "name": "Stadttheater",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=2&station=IN-SThea&sid=397"
+      },
+      {
+        "id": "zob",
+        "name": "ZOB",
+        "url": "https://www.invg.de/rt/getRealtimeData.action?stopPoint=32&station=IN-ZOB&sid=439"
+      }
+    ]
+  },
+  "train": {
+    "defaultStation": "nord",
+    "stations": [
+      { "id": "nord", "name": "Nordbahnhof" },
+      { "id": "hbf", "name": "Hauptbahnhof" },
+      { "id": "audi", "name": "Audi" }
+    ]
+  },
+  "parking": [
+    { "name": "Saturn Arena", "priceLevel": "free" },
+    { "name": "Schloss", "priceLevel": 3 },
+    { "name": "Festplatz", "priceLevel": 1 },
+    { "name": "Nordbahnhof", "priceLevel": 1 },
+    { "name": "Congressgarage (Mitarbeiter)", "priceLevel": "restricted" },
+    { "name": "Congressgarage", "priceLevel": 3 },
+    { "name": "Theater-Ost", "priceLevel": 3 },
+    { "name": "Theater-West", "priceLevel": 3 },
+    { "name": "Reduit Tilly", "priceLevel": 2 },
+    { "name": "Münster", "priceLevel": 3 },
+    { "name": "Hallenbad", "priceLevel": 2 },
+    { "name": "Hauptbahnhof Ost", "priceLevel": 1 },
+    { "name": "Hauptbahnhof West", "priceLevel": 1 }
+  ],
+  "charging": [
+    { "id": "59362", "freeParking": true },
+    { "id": "59340", "freeParking": true },
+    { "id": "59360", "freeParking": true },
+    { "id": "59358", "freeParking": false },
+    { "id": "59356", "freeParking": false },
+    { "id": "59200", "freeParking": false }
+  ]
 }

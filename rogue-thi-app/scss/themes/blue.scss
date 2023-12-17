@@ -1,12 +1,14 @@
 $primary: #005ea1;
 $secondary: #3a93c3;
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "../common.scss";
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../common.scss';
 
 // react-placeholder
 // declare after bootstrap, since we need bootstrap variables
-.text-row, .rect-shape, .round-shape {
+.text-row,
+.rect-shape,
+.round-shape {
   background: $gray-200 !important;
 }
 
@@ -14,7 +16,6 @@ $secondary: #3a93c3;
   --navbar-border-image: linear-gradient(90deg, #{$primary}, #00b1ec);
   --home-card-mobile-border: #{$gray-300};
 }
-
 
 .navbar-brand > * {
   color: #035fa1 !important;

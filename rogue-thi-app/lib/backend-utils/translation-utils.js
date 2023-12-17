@@ -3,8 +3,10 @@ import AsyncMemoryCache from '../cache/async-memory-cache'
 
 const DEEPL_ENDPOINT = process.env.NEXT_PUBLIC_DEEPL_ENDPOINT || ''
 const DEEPL_API_KEY = process.env.DEEPL_API_KEY || ''
-const ENABLE_DEV_TRANSLATIONS = process.env.ENABLE_DEV_TRANSLATIONS === 'true' || false
-const DISABLE_FALLBACK_WARNINGS = process.env.DISABLE_FALLBACK_WARNINGS === 'true' || false
+const ENABLE_DEV_TRANSLATIONS =
+  process.env.ENABLE_DEV_TRANSLATIONS === 'true' || false
+const DISABLE_FALLBACK_WARNINGS =
+  process.env.DISABLE_FALLBACK_WARNINGS === 'true' || false
 
 const CACHE_TTL = 60 * 60 * 24 * 7 * 1000 // 7 days
 
@@ -20,7 +22,7 @@ const SOURCE_LANG = 'DE'
  * @param {String} target The target language
  * @returns {String} The translated text or the original text if DeepL is not configured or returns an error
  **/
-async function getTranslation (text, target) {
+async function getTranslation(text, target) {
   return await cache.get(`${text}__${target}`, async () => {
     return await translate(text, target)
   })
@@ -33,7 +35,7 @@ async function getTranslation (text, target) {
  * @returns {String} The translated text
  * @throws {Error} If DeepL is not configured or returns an error
  */
-async function translate (text, target) {
+async function translate(text, target) {
   try {
     return (await translator.translateText(text, SOURCE_LANG, target)).text
   } catch (err) {
@@ -47,31 +49,39 @@ async function translate (text, target) {
  * @param {Object} meals The meal plan
  * @returns {Object} The translated meal plan
  **/
-function translateFallback (meals) {
+function translateFallback(meals) {
   return meals.map((day) => {
     const meals = day.meals.map((meal) => {
       return {
         ...meal,
         name: {
           de: meal.name,
-          en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${meal.name}` : meal.name
+          en:
+            isDev && !DISABLE_FALLBACK_WARNINGS
+              ? `FALLBACK: ${meal.name}`
+              : meal.name,
         },
         originalLanguage: 'de',
-        variants: meal.variants && meal.variants.map((variant) => {
-          return {
-            ...variant,
-            name: {
-              de: variant.name,
-              en: isDev && !DISABLE_FALLBACK_WARNINGS ? `FALLBACK: ${variant.name}` : variant.name
+        variants:
+          meal.variants &&
+          meal.variants.map((variant) => {
+            return {
+              ...variant,
+              name: {
+                de: variant.name,
+                en:
+                  isDev && !DISABLE_FALLBACK_WARNINGS
+                    ? `FALLBACK: ${variant.name}`
+                    : variant.name,
+              },
             }
-          }
-        })
+          }),
       }
     })
 
     return {
       ...day,
-      meals
+      meals,
     }
   })
 }
@@ -81,43 +91,55 @@ function translateFallback (meals) {
  * @param {Object} meals The meal plan
  * @returns {Object} The translated meal plan
  */
-export async function translateMeals (meals) {
+export async function translateMeals(meals) {
   if (isDev && !ENABLE_DEV_TRANSLATIONS) {
     console.warn('DeepL is disabled in development mode.')
-    console.warn('To enable DeepL in development mode, set ENABLE_DEV_TRANSLATIONS=true in your .env.local file.')
+    console.warn(
+      'To enable DeepL in development mode, set ENABLE_DEV_TRANSLATIONS=true in your .env.local file.'
+    )
     return translateFallback(meals)
   }
 
   if (!DEEPL_ENDPOINT || !DEEPL_API_KEY || !translator) {
     console.warn('DeepL is not configured.')
-    console.warn('To enable DeepL, set the DEEPL_API_KEY in your .env.local file.')
+    console.warn(
+      'To enable DeepL, set the DEEPL_API_KEY in your .env.local file.'
+    )
     return translateFallback(meals)
   }
 
-  return await Promise.all(meals.map(async (day) => {
-    const meals = await Promise.all(day.meals.map(async (meal) => {
-      return {
-        ...meal,
-        name: {
-          de: meal.name,
-          en: await getTranslation(meal.name, 'EN-GB')
-        },
-        variants: meal.variants && await Promise.all(meal.variants.map(async (variant) => {
+  return await Promise.all(
+    meals.map(async (day) => {
+      const meals = await Promise.all(
+        day.meals.map(async (meal) => {
           return {
-            ...variant,
+            ...meal,
             name: {
-              de: variant.name,
-              en: await getTranslation(variant.name, 'EN-GB')
-            }
+              de: meal.name,
+              en: await getTranslation(meal.name, 'EN-GB'),
+            },
+            variants:
+              meal.variants &&
+              (await Promise.all(
+                meal.variants.map(async (variant) => {
+                  return {
+                    ...variant,
+                    name: {
+                      de: variant.name,
+                      en: await getTranslation(variant.name, 'EN-GB'),
+                    },
+                  }
+                })
+              )),
+            originalLanguage: 'de',
           }
-        })),
-        originalLanguage: 'de'
-      }
-    }))
+        })
+      )
 
-    return {
-      ...day,
-      meals
-    }
-  }))
+      return {
+        ...day,
+        meals,
+      }
+    })
+  )
 }

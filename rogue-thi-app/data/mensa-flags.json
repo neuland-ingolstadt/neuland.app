@@ -1,66 +1,66 @@
 {
-    "_source": {
-		"de": "https://www.werkswelt.de/?id=ingo",
-		"en": "translated from https://www.werkswelt.de/?id=ingo"
-	},
-    "B": {
-        "de": "Bio",
-        "en": "Organic"
-    },
-    "CO2": {
-        "de": "CO2-Arm",
-        "en": "Low CO2 emissions"
-    },
-    "F": {
-        "de": "Fisch",
-        "en": "Fish"
-    },
-    "G": {
-        "de": "Geflügel",
-        "en": "Poultry"
-    },
-    "Gf": {
-        "de": "Glutenfrei",
-        "en": "Gluten-free"
-    },
-    "L": {
-        "de": "Lamm",
-        "en": "Lamb"
-    },
-    "MSC": {
-        "de": "MSC Fisch",
-        "en": "MSC fish"
-    },
-    "MV": {
-        "de": "Mensa Vital",
-        "en": "Mensa Vital"
-    },
-    "R": {
-        "de": "Rind",
-        "en": "Beef"
-    },
-    "S": {
-        "de": "Schwein",
-        "en": "Pork"
-    },
-    "V": {
-        "de": "Vegetarisch",
-        "en": "Vegetarian"
-    },
-    "W": {
-        "de": "Wild",
-        "en": "Wild"
-    },
-    "veg": {
-        "de": "Vegan",
-        "en": "Vegan"
-    },
-    "TODO0": {
-        "de": "Reh",
-        "en": "Deer"
-    },
-    "TODO1": {
-        "de": "Alkohol",
-        "en": "Alcohol"
-    }
+  "_source": {
+    "de": "https://www.werkswelt.de/?id=ingo",
+    "en": "translated from https://www.werkswelt.de/?id=ingo"
+  },
+  "B": {
+    "de": "Bio",
+    "en": "Organic"
+  },
+  "CO2": {
+    "de": "CO2-Arm",
+    "en": "Low CO2 emissions"
+  },
+  "F": {
+    "de": "Fisch",
+    "en": "Fish"
+  },
+  "G": {
+    "de": "Geflügel",
+    "en": "Poultry"
+  },
+  "Gf": {
+    "de": "Glutenfrei",
+    "en": "Gluten-free"
+  },
+  "L": {
+    "de": "Lamm",
+    "en": "Lamb"
+  },
+  "MSC": {
+    "de": "MSC Fisch",
+    "en": "MSC fish"
+  },
+  "MV": {
+    "de": "Mensa Vital",
+    "en": "Mensa Vital"
+  },
+  "R": {
+    "de": "Rind",
+    "en": "Beef"
+  },
+  "S": {
+    "de": "Schwein",
+    "en": "Pork"
+  },
+  "V": {
+    "de": "Vegetarisch",
+    "en": "Vegetarian"
+  },
+  "W": {
+    "de": "Wild",
+    "en": "Wild"
+  },
+  "veg": {
+    "de": "Vegan",
+    "en": "Vegan"
+  },
+  "TODO0": {
+    "de": "Reh",
+    "en": "Deer"
+  },
+  "TODO1": {
+    "de": "Alkohol",
+    "en": "Alcohol"
+  }
 }

@@ -9,7 +9,7 @@ const CRED_ID = 'thi.de'
  * Thrown when the user is not logged in.
  */
 export class NoSessionError extends Error {
-  constructor () {
+  constructor() {
     super('User is not logged in')
   }
 }
@@ -18,7 +18,7 @@ export class NoSessionError extends Error {
  * Thrown when the user is logged in as a guest.
  */
 export class UnavailableSessionError extends Error {
-  constructor () {
+  constructor() {
     super('User is logged in as guest')
   }
 }
@@ -26,7 +26,7 @@ export class UnavailableSessionError extends Error {
 /**
  * Logs in the user and persists the session to localStorage
  */
-export async function createSession (username, password, stayLoggedIn) {
+export async function createSession(username, password, stayLoggedIn) {
   // convert to lowercase just to be safe
   // (the API used to show weird behavior when using upper case usernames)
   username = username.toLowerCase()
@@ -52,7 +52,7 @@ export async function createSession (username, password, stayLoggedIn) {
 /**
  * Logs in the user as a guest.
  */
-export async function createGuestSession () {
+export async function createGuestSession() {
   await API.clearCache()
   localStorage.session = 'guest2'
 }
@@ -66,7 +66,7 @@ export async function createGuestSession () {
  * @param {object} method Method which will receive the session token
  * @returns {*} Value returned by `method`
  */
-export async function callWithSession (method) {
+export async function callWithSession(method) {
   let session = localStorage.session
   const sessionCreated = parseInt(localStorage.sessionCreated)
 
@@ -78,13 +78,16 @@ export async function callWithSession (method) {
   }
 
   const credStore = new CredentialStorage(CRED_NAME)
-  const { username, password } = await credStore.read(CRED_ID) || {}
+  const { username, password } = (await credStore.read(CRED_ID)) || {}
 
   // log in if the session is older than SESSION_EXPIRES
-  if ((sessionCreated + SESSION_EXPIRES < Date.now()) && username && password) {
+  if (sessionCreated + SESSION_EXPIRES < Date.now() && username && password) {
     try {
       console.log('no session, logging in...')
-      const { session: newSession, isStudent } = await API.login(username, password)
+      const { session: newSession, isStudent } = await API.login(
+        username,
+        password
+      )
       session = newSession
 
       localStorage.session = session
@@ -102,9 +105,14 @@ export async function callWithSession (method) {
     // the backend can throw different errors such as 'No Session' or 'Session Is Over'
     if (/session/i.test(e.message)) {
       if (username && password) {
-        console.log('seems to have received a session error trying to get a new session!')
+        console.log(
+          'seems to have received a session error trying to get a new session!'
+        )
         try {
-          const { session: newSession, isStudent } = await API.login(username, password)
+          const { session: newSession, isStudent } = await API.login(
+            username,
+            password
+          )
           session = newSession
 
           localStorage.session = session
@@ -129,7 +137,7 @@ export async function callWithSession (method) {
  *
  * @param {object} router Next.js router object
  */
-export async function forgetSession (router) {
+export async function forgetSession(router) {
   try {
     await API.logout(localStorage.session)
   } catch (e) {

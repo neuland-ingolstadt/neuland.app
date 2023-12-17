@@ -34,12 +34,12 @@
 }
 
 .restaurant {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: gray;
 }
 
 .indicator {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: gray;
 }
 
@@ -69,7 +69,7 @@
 
 .translated {
   color: var(--primary);
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .variants {
@@ -90,7 +90,11 @@
 
 .box {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--secondary) 80%, var(--dark) 20%) 30%, color-mix(in srgb, var(--secondary) 80%, var(--light) 20%));
+  background-image: linear-gradient(
+    70deg,
+    color-mix(in srgb, var(--secondary) 80%, var(--dark) 20%) 30%,
+    color-mix(in srgb, var(--secondary) 80%, var(--light) 20%)
+  );
   padding: 4px 8px 5px 8px;
   border-radius: 5px;
   margin: 10px 10px 5px 0;
@@ -99,19 +103,27 @@
 
 .warn {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--danger) 80%, var(--dark) 20%) 30%, color-mix(in srgb, var(--danger) 80%, var(--light) 20%));
+  background-image: linear-gradient(
+    70deg,
+    color-mix(in srgb, var(--danger) 80%, var(--dark) 20%) 30%,
+    color-mix(in srgb, var(--danger) 80%, var(--light) 20%)
+  );
 }
 
 .match {
   color: var(--white);
-  background-image: linear-gradient(70deg, color-mix(in srgb, var(--success) 80%, var(--dark) 20%) 30%, color-mix(in srgb, var(--success) 70%, var(--light) 30%));
+  background-image: linear-gradient(
+    70deg,
+    color-mix(in srgb, var(--success) 80%, var(--dark) 20%) 30%,
+    color-mix(in srgb, var(--success) 70%, var(--light) 30%)
+  );
 }
 
 .name {
   max-lines: 2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-          line-clamp: 2; 
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

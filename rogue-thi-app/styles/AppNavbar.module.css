@@ -27,14 +27,39 @@
   display: inline;
   margin: 0px 10px;
   border-bottom: 2px solid transparent;
-  border-image: var(--navbar-border-image, linear-gradient(to right, #009664, #96BE00, #D7D700, #F08200, #E6320F, #871932)) 1 0 stretch;
+  border-image: var(
+      --navbar-border-image,
+      linear-gradient(
+        to right,
+        #009664,
+        #96be00,
+        #d7d700,
+        #f08200,
+        #e6320f,
+        #871932
+      )
+    )
+    1 0 stretch;
 }
 
 .titleTextPride {
   display: inline;
   margin: 0px 10px;
   border-bottom: 2px solid transparent;
-  border-image: linear-gradient(90deg, #F44336 16.66%, #FF9800 16.67%, #FF9800 33.33%, #FFEB3B 33.34%, #FFEB3B 49.99%, #4CAF50 50%, #4CAF50 66.66%, #2196F3 66.67%, #2196F3 83.33%, #9C27B0 83.34%) 1 0 stretch;
+  border-image: linear-gradient(
+      90deg,
+      #f44336 16.66%,
+      #ff9800 16.67%,
+      #ff9800 33.33%,
+      #ffeb3b 33.34%,
+      #ffeb3b 49.99%,
+      #4caf50 50%,
+      #4caf50 66.66%,
+      #2196f3 66.67%,
+      #2196f3 83.33%,
+      #9c27b0 83.34%
+    )
+    1 0 stretch;
 }
 
 .right {

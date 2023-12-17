@@ -7,14 +7,12 @@ import styles from '../../styles/AppContainer.module.css'
 /**
  * Wrapper for the entire application UI.
  */
-export default function AppContainer ({ className, children }) {
+export default function AppContainer({ className, children }) {
   return (
-    <Container className={[className, styles.container]}>
-      {children}
-    </Container>
+    <Container className={[className, styles.container]}>{children}</Container>
   )
 }
 AppContainer.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.any
+  children: PropTypes.any,
 }

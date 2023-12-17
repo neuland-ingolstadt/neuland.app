@@ -1,78 +1,78 @@
 {
-    "common": {
-        "dates": {
-            "today": "Today",
-            "tomorrow": "Tomorrow",
-            "thisWeek": "This Week",
-            "nextWeek": "Next Week"
-        }
-    },
-    "food": {
-        "filterModal": {
-            "header": "Filters",
-            "restaurants": {
-                "title": "Restaurants",
-                "showMensa": "Show Cafeteria",
-                "showReimanns": "Show Reimanns",
-                "showReimannsStatic": "Show Reimanns (static meals)",
-                "showCanisius": "Show Canisius Convict"
-            },
-            "allergens": {
-                "title": "Allergies",
-                "iconTitle": "Allergens",
-                "selected": "Selected",
-                "empty": "None"
-            },
-            "preferences": {
-                "title": "Food Preferences",
-                "iconTitle": "Preferences",
-                "selected": "Selected",
-                "empty": "None"
-            },
-            "info": "Your data will only be stored locally on your device and not transmitted to anyone."
-        },
-        "allergensModal": "Select Allergens",
-        "preferencesModal": "Select Preferences"
-    },
-    "dashboard": {
-        "orderModal": {
-            "title": "Dashboard",
-            "body": "Here you can change the order of the entries displayed on the dashboard.",
-            "hiddenCards": "Hidden Cards",
-            "resetOrder": "Reset Order",
-            "icons": {
-                "moveUp": "Move Up",
-                "moveDown": "Move Down",
-                "remove": "Remove",
-                "restore": "Restore",
-                "personalize": "Personalize"
-            }
-        }
-    },
-    "cards": {
-        "home": "Home",
-        "install": "Installation",
-        "timetable": "Timetable",
-        "mensa": "Food",
-        "mobility": "Mobility",
-        "calendar": "Calendar",
-        "events": "Events",
-        "rooms": "Rooms",
-        "roomplan": "Room Plan",
-        "library": "Library",
-        "grades": "Grades & Subjects",
-        "personal": "Profile",
-        "lecturers": "Lecturers",
-        "exams": "Exams"
-    },
-    "prompts": {
-        "close": "Close"
-    },
-    "appbar": {
-        "back": "Back",
-        "overflow": "More options"
-    },
-    "rooms": {
-        "allRooms": "All rooms"
+  "common": {
+    "dates": {
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "thisWeek": "This Week",
+      "nextWeek": "Next Week"
     }
+  },
+  "food": {
+    "filterModal": {
+      "header": "Filters",
+      "restaurants": {
+        "title": "Restaurants",
+        "showMensa": "Show Cafeteria",
+        "showReimanns": "Show Reimanns",
+        "showReimannsStatic": "Show Reimanns (static meals)",
+        "showCanisius": "Show Canisius Convict"
+      },
+      "allergens": {
+        "title": "Allergies",
+        "iconTitle": "Allergens",
+        "selected": "Selected",
+        "empty": "None"
+      },
+      "preferences": {
+        "title": "Food Preferences",
+        "iconTitle": "Preferences",
+        "selected": "Selected",
+        "empty": "None"
+      },
+      "info": "Your data will only be stored locally on your device and not transmitted to anyone."
+    },
+    "allergensModal": "Select Allergens",
+    "preferencesModal": "Select Preferences"
+  },
+  "dashboard": {
+    "orderModal": {
+      "title": "Dashboard",
+      "body": "Here you can change the order of the entries displayed on the dashboard.",
+      "hiddenCards": "Hidden Cards",
+      "resetOrder": "Reset Order",
+      "icons": {
+        "moveUp": "Move Up",
+        "moveDown": "Move Down",
+        "remove": "Remove",
+        "restore": "Restore",
+        "personalize": "Personalize"
+      }
+    }
+  },
+  "cards": {
+    "home": "Home",
+    "install": "Installation",
+    "timetable": "Timetable",
+    "mensa": "Food",
+    "mobility": "Mobility",
+    "calendar": "Calendar",
+    "events": "Events",
+    "rooms": "Rooms",
+    "roomplan": "Room Plan",
+    "library": "Library",
+    "grades": "Grades & Subjects",
+    "personal": "Profile",
+    "lecturers": "Lecturers",
+    "exams": "Exams"
+  },
+  "prompts": {
+    "close": "Close"
+  },
+  "appbar": {
+    "back": "Back",
+    "overflow": "More options"
+  },
+  "rooms": {
+    "allRooms": "All rooms"
+  }
 }

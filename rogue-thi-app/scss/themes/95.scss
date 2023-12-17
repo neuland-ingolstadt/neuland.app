@@ -1,16 +1,16 @@
 // stylelint-disable
 $enable-rounded: false;
 
-@import "../../node_modules/bootstrap/scss/bootstrap";
-@import "../../node_modules/win95.css/assets/win95";
-	
+@import '../../node_modules/bootstrap/scss/bootstrap';
+@import '../../node_modules/win95.css/assets/win95';
+
 .modal-title.h4 {
   font-size: 1rem;
 }
 
 // 95.css sets checkboxes to position absolute and left: -9999 for some reason
-input[type=radio],
-input[type=checkbox] {
+input[type='radio'],
+input[type='checkbox'] {
   position: unset;
   left: unset;
 }

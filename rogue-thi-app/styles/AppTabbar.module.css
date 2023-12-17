@@ -20,7 +20,7 @@
 }
 
 .tabActive {
-  color: var(--tabbar-tab-active, #8845EF) !important;
+  color: var(--tabbar-tab-active, #8845ef) !important;
 }
 
 .icon {
@@ -31,9 +31,9 @@
  * this spacer is placed directly under the app body and provides
  * clerance to ensure nothing is displayed under the tab bar
  */
- @media only screen and (max-width: 768px) {
+@media only screen and (max-width: 768px) {
   .spacer {
     /* 56px footer height + iOS home bar height */
     height: calc(56px + env(safe-area-inset-bottom, 0px));
   }
- }
+}

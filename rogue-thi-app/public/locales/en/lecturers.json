@@ -1,33 +1,33 @@
 {
-    "lecturers": {
-        "appbar": {
-            "title": "Lecturers"
+  "lecturers": {
+    "appbar": {
+      "title": "Lecturers"
+    },
+    "modals": {
+      "details": {
+        "title": "Title",
+        "surname": "Surname",
+        "forename": "Forename",
+        "organization": "Organization",
+        "function": "Function",
+        "room": "Room",
+        "email": "Email",
+        "phone": "Phone",
+        "officeHours": "Office Hours",
+        "insights": "Insights",
+        "actions": {
+          "close": "Close"
         },
-        "modals": {
-            "details": {
-                "title": "Title",
-                "surname": "Surname",
-                "forename": "Forename",
-                "organization": "Organization",
-                "function": "Function",
-                "room": "Room",
-                "email": "Email",
-                "phone": "Phone",
-                "officeHours": "Office Hours",
-                "insights": "Insights",
-                "actions": {
-                    "close": "Close"
-                },
-                "notAvailable": "N/A"
-            }
-        },
-        "search": {
-            "placeholder": "Search all lecturers...",
-            "personalLecturers": "Personal Lecturers",
-            "searchResults": "Search Results"
-        },
-        "body": {
-            "room": "Room"
-        }
+        "notAvailable": "N/A"
+      }
+    },
+    "search": {
+      "placeholder": "Search all lecturers...",
+      "personalLecturers": "Personal Lecturers",
+      "searchResults": "Search Results"
+    },
+    "body": {
+      "room": "Room"
     }
+  }
 }

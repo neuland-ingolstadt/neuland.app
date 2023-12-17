@@ -1,78 +1,78 @@
 {
-    "common": {
-        "dates": {
-            "today": "Heute",
-            "tomorrow": "Morgen",
-            "thisWeek": "Diese Woche",
-            "nextWeek": "Nächste Woche"
-        }
-    },
-    "food": {
-        "filterModal": {
-            "header": "Filter",
-            "restaurants": {
-                "title": "Restaurants",
-                "showMensa": "Mensa anzeigen",
-                "showReimanns": "Reimanns anzeigen",
-                "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
-                "showCanisius": "Canisiuskonvikt anzeigen"
-            },
-            "allergens": {
-                "title": "Allergien",
-                "iconTitle": "Allergene",
-                "selected": "Ausgewählt",
-                "empty": "Keine"
-            },
-            "preferences": {
-                "title": "Essenspräferenzen",
-                "iconTitle": "Präferenzen",
-                "selected": "Ausgewählt",
-                "empty": "Keine"
-            },
-            "info": "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
-        },
-        "allergensModal" : "Allergene auswählen",
-        "preferencesModal" : "Präferenzen auswählen"
-    },
-    "dashboard": {
-        "orderModal": {
-            "title": "Dashboard",
-            "body": "Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.",
-            "hiddenCards": "Ausgeblendete Elemente",
-            "resetOrder": "Reihenfolge zurücksetzen",
-            "icons": {
-                "moveUp": "Nach oben",
-                "moveDown": "Nach unten",
-                "remove": "Entfernen",
-                "restore": "Wiederherstellen",
-                "personalize": "Personalisieren"
-            }
-        }
-    },
-    "cards": {
-        "home": "Home",
-        "install": "Installation",
-        "timetable": "Stundenplan",
-        "mensa": "Essen",
-        "mobility": "Mobilität",
-        "calendar": "Termine",
-        "events": "Veranstaltungen",
-        "rooms": "Räume",
-        "roomplan": "Raumplan",
-        "library": "Bibliothek",
-        "grades": "Noten & Fächer",
-        "personal": "Profil",
-        "lecturers": "Dozenten",
-        "exams": "Prüfungen"
-    },
-    "prompts": {
-        "close": "Schließen"
-    },
-    "appbar": {
-        "back": "Zurück",
-        "overflow": "Mehr Optionen"
-    },
-    "rooms": {
-        "allRooms": "Alle Räume"
+  "common": {
+    "dates": {
+      "today": "Heute",
+      "tomorrow": "Morgen",
+      "thisWeek": "Diese Woche",
+      "nextWeek": "Nächste Woche"
     }
+  },
+  "food": {
+    "filterModal": {
+      "header": "Filter",
+      "restaurants": {
+        "title": "Restaurants",
+        "showMensa": "Mensa anzeigen",
+        "showReimanns": "Reimanns anzeigen",
+        "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
+        "showCanisius": "Canisiuskonvikt anzeigen"
+      },
+      "allergens": {
+        "title": "Allergien",
+        "iconTitle": "Allergene",
+        "selected": "Ausgewählt",
+        "empty": "Keine"
+      },
+      "preferences": {
+        "title": "Essenspräferenzen",
+        "iconTitle": "Präferenzen",
+        "selected": "Ausgewählt",
+        "empty": "Keine"
+      },
+      "info": "Deine Angaben werden nur lokal auf deinem Gerät gespeichert und an niemanden übermittelt."
+    },
+    "allergensModal": "Allergene auswählen",
+    "preferencesModal": "Präferenzen auswählen"
+  },
+  "dashboard": {
+    "orderModal": {
+      "title": "Dashboard",
+      "body": "Hier kannst du die Reihenfolge der im Dashboard angezeigten Einträge verändern.",
+      "hiddenCards": "Ausgeblendete Elemente",
+      "resetOrder": "Reihenfolge zurücksetzen",
+      "icons": {
+        "moveUp": "Nach oben",
+        "moveDown": "Nach unten",
+        "remove": "Entfernen",
+        "restore": "Wiederherstellen",
+        "personalize": "Personalisieren"
+      }
+    }
+  },
+  "cards": {
+    "home": "Home",
+    "install": "Installation",
+    "timetable": "Stundenplan",
+    "mensa": "Essen",
+    "mobility": "Mobilität",
+    "calendar": "Termine",
+    "events": "Veranstaltungen",
+    "rooms": "Räume",
+    "roomplan": "Raumplan",
+    "library": "Bibliothek",
+    "grades": "Noten & Fächer",
+    "personal": "Profil",
+    "lecturers": "Dozenten",
+    "exams": "Prüfungen"
+  },
+  "prompts": {
+    "close": "Schließen"
+  },
+  "appbar": {
+    "back": "Zurück",
+    "overflow": "Mehr Optionen"
+  },
+  "rooms": {
+    "allRooms": "Alle Räume"
+  }
 }

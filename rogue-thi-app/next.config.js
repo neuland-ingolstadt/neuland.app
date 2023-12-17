@@ -24,7 +24,7 @@ const permissionPolicyFeatures = [
   'sync-xhr',
   'usb',
   'web-share',
-  'xr-spatial-tracking'
+  'xr-spatial-tracking',
 ]
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -34,40 +34,38 @@ const API_URL = 'https://' + process.env.NEXT_PUBLIC_THI_API_HOST
 module.exports = {
   i18n,
   trailingSlash: true,
-  async headers () {
+  async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
           {
             key: 'X-Frame-Options',
-            value: 'deny'
+            value: 'deny',
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains; preload'
+            value: 'max-age=31536000; includeSubDomains; preload',
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '1; mode=block',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'SAMEORIGIN',
           },
           {
             key: 'Permissions-Policy',
-            value: permissionPolicyFeatures
-              .map(x => x + '=()')
-              .join(', ')
+            value: permissionPolicyFeatures.map((x) => x + '=()').join(', '),
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin'
+            value: 'origin-when-cross-origin',
           },
           {
             key: 'Content-Security-Policy',
@@ -76,12 +74,12 @@ module.exports = {
               font-src 'self';
               connect-src 'self' ${PROXY_URL} ${API_URL};
               style-src 'self' 'unsafe-inline';
-              script-src 'self'${isDev ? ' \'unsafe-eval\'' : ''};
+              script-src 'self'${isDev ? " 'unsafe-eval'" : ''};
               manifest-src 'self';
-              `.replace(/\s+/g, ' ')
-          }
-        ]
-      }
+              `.replace(/\s+/g, ' '),
+          },
+        ],
+      },
     ]
-  }
+  },
 }

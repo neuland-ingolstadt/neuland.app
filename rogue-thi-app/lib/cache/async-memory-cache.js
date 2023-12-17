@@ -11,7 +11,7 @@ export default class AsyncMemoryCache extends MemoryCache {
    * @param {number} ttl Seconds after which an entry should be discarded
    * @param {number} backoff Seconds to wait before retrying a failed request
    */
-  constructor ({ ttl, backoff }) {
+  constructor({ ttl, backoff }) {
     super({ ttl })
     this.backoff = backoff || DEFAULT_BACKOFF
     this.timers = new Map()
@@ -23,7 +23,7 @@ export default class AsyncMemoryCache extends MemoryCache {
    *
    * @param {object} producer Async function that returns the value to be cached
    */
-  async get (key, producer) {
+  async get(key, producer) {
     // check if there is a cached result
     const promise = super.get(key)
     if (promise) {
@@ -33,7 +33,9 @@ export default class AsyncMemoryCache extends MemoryCache {
     // check if we need to back off
     const { until, count, error } = this.timers.get(key) || {}
     if (until && Date.now() < until) {
-      console.debug(`Failed ${count} times, backing off until ${new Date(until)}`)
+      console.debug(
+        `Failed ${count} times, backing off until ${new Date(until)}`
+      )
       throw error
     }
 
@@ -57,7 +59,7 @@ export default class AsyncMemoryCache extends MemoryCache {
       this.timers.set(key, {
         until: Date.now() + this.backoff * 2 ** (count || 0),
         count: (count || 0) + 1,
-        error: e
+        error: e,
       })
 
       throw e
@@ -67,7 +69,7 @@ export default class AsyncMemoryCache extends MemoryCache {
   /**
    * Prevents writing to the underlying cache.
    */
-  set (key, value) {
+  set(key, value) {
     throw new Error('Values can not be set directly')
   }
 }

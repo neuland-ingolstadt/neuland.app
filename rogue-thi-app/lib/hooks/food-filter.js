@@ -37,9 +37,13 @@ import { useEffect, useState } from 'react'
  * @param {{}} allergens - An object containing the allergens to save.
  * @returns {void}
  */
-export function useFoodFilter () {
+export function useFoodFilter() {
   const [selectedLanguageFood, setSelectedLanguageFood] = useState('default')
-  const [selectedRestaurants, setSelectedRestaurants] = useState(['mensa', 'reimanns', 'reimanns-static'])
+  const [selectedRestaurants, setSelectedRestaurants] = useState([
+    'mensa',
+    'reimanns',
+    'reimanns-static',
+  ])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showFoodFilterModal, setShowFoodFilterModal] = useState(false)
@@ -63,9 +67,9 @@ export function useFoodFilter () {
    * Enables or disables a restaurant.
    * @param {string} name Restaurant name (either `mensa` or `reimanns`)
    */
-  function toggleSelectedRestaurant (name) {
+  function toggleSelectedRestaurant(name) {
     const checked = selectedRestaurants.includes(name)
-    const newSelection = selectedRestaurants.filter(x => x !== name)
+    const newSelection = selectedRestaurants.filter((x) => x !== name)
     if (!checked) {
       newSelection.push(name)
     }
@@ -78,7 +82,7 @@ export function useFoodFilter () {
    * Sets the Language for the food menu.
    * @param {string} name language name (either `default`, `de` or `en`)
    */
-  function toggleSelectedLanguageFood (name) {
+  function toggleSelectedLanguageFood(name) {
     setSelectedLanguageFood(name)
     localStorage.selectedLanguageFood = JSON.stringify(name)
   }
@@ -86,14 +90,14 @@ export function useFoodFilter () {
   /**
    * Persists the preferences selection to localStorage
    */
-  function savePreferencesSelection () {
+  function savePreferencesSelection() {
     localStorage.preferencesSelection = JSON.stringify(preferencesSelection)
   }
 
   /**
    * Persists the allergen selection to localStorage.
    */
-  function saveAllergenSelection () {
+  function saveAllergenSelection() {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
   }
 
@@ -109,6 +113,6 @@ export function useFoodFilter () {
     savePreferencesSelection,
     saveAllergenSelection,
     showFoodFilterModal,
-    setShowFoodFilterModal
+    setShowFoodFilterModal,
   }
 }

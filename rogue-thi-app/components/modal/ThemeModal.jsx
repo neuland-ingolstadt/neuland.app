@@ -17,10 +17,8 @@ const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
  * @returns {JSX.Element} The ThemeModal component
  * @constructor
  */
-export default function ThemeModal () {
-  const {
-    unlockedThemes
-  } = useDashboard()
+export default function ThemeModal() {
+  const { unlockedThemes } = useDashboard()
   const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
   const [theme, setTheme] = useContext(ThemeContext)
   const themeModalBody = useRef()
@@ -30,7 +28,7 @@ export default function ThemeModal () {
    * Changes the current theme.
    * @param {string} theme Theme key
    */
-  function changeTheme (theme) {
+  function changeTheme(theme) {
     localStorage.theme = theme
     setTheme(theme)
     setShowThemeModal(false)
@@ -42,7 +40,7 @@ export default function ThemeModal () {
    * @param {string} href The link to the page
    * @param {string} children The children of the link
    */
-  function TransLink ({ href, children }) {
+  function TransLink({ href, children }) {
     return (
       <Link href={href || ''}>
         <a>{children}</a>
@@ -68,7 +66,10 @@ export default function ThemeModal () {
               className={styles.themeButton}
               variant={theme === availableTheme.style ? 'primary' : 'secondary'}
               onClick={() => changeTheme(availableTheme.style)}
-              disabled={availableTheme.requiresToken && unlockedThemes.indexOf(availableTheme.style) === -1}
+              disabled={
+                availableTheme.requiresToken &&
+                unlockedThemes.indexOf(availableTheme.style) === -1
+              }
             >
               {availableTheme.name[i18n.languages[0]]}
             </Button>
@@ -77,17 +78,17 @@ export default function ThemeModal () {
         <p>
           <Trans
             i18nKey="personal.modals.theme.hackerman"
-            ns='personal'
+            ns="personal"
             components={{
               i: <i />,
-              aCtf: <a
-                href={CTF_URL}
-                target="_blank"
-                rel="noreferrer"
-              />,
-              aHackerman: <TransLink
-                href="/become-hackerman"
-              />
+              aCtf: (
+                <a
+                  href={CTF_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                />
+              ),
+              aHackerman: <TransLink href="/become-hackerman" />,
             }}
           />
         </p>
