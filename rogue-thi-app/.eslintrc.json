@@ -5,7 +5,9 @@
     "node": true
   },
   "extends": [
+    "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "standard",
     "next",
     "next/core-web-vitals",

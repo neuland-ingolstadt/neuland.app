@@ -58,7 +58,7 @@ export default function FoodCard() {
 
       const today = formatISODate(new Date())
       try {
-        function userMealRating(meal) {
+        const userMealRating = (meal) => {
           if (meal.allergens?.some((x) => allergenSelection[x])) {
             return -1
           } else if (meal.flags?.some((x) => preferencesSelection[x])) {

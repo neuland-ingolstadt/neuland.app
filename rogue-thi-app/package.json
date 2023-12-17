@@ -9,7 +9,8 @@
     "compile-scss": "sass --no-source-map --style compressed scss/themes/:public/themes/",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prepare": "cd .. && husky install rogue-thi-app/.husky"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
@@ -53,6 +54,13 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "prettier": "3.1.1"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx}": "eslint --fix",
+    "**/*.{js,css,md,json}": "prettier --write"
   }
 }
