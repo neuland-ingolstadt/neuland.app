@@ -18,18 +18,18 @@ pip install -r requirements.txt
 - Create a .env file in the root directory of the project
 - Enter your DeepL API key in the .env file
 
-    ```bash
-    # .env
-    DEEPL_API_KEY=your-api-key
-    ```
+  ```bash
+  # .env
+  DEEPL_API_KEY=your-api-key
+  ```
 
 - Enter your THI credentials in the .env file
 
-    ```bash
-    # .env
-    THI_USERNAME=your-username
-    THI_PASSWORD=your-password
-    ```
+  ```bash
+  # .env
+  THI_USERNAME=your-username
+  THI_PASSWORD=your-password
+  ```
 
 ```bash
 # Run the script
