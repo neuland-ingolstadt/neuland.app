@@ -27,7 +27,7 @@ export default function CalendarCard() {
         exams = (await loadExamList())
           .filter((x) => !!x.date) // remove exams without a date
           .map((x) => ({
-            name: `${t('calendar.exam')} ${x.titel}`,
+            name: `${t('calendar.exam')} ${x.name}`,
             begin: x.date,
           }))
       } catch (e) {
@@ -58,7 +58,11 @@ export default function CalendarCard() {
         {mixedCalendar &&
           mixedCalendar.slice(0, 2).map((x, i) => (
             <ListGroup.Item key={i}>
-              <div>{x.name[i18n.languages[0]]}</div>
+              <div>
+                {typeof x.name === 'object'
+                  ? x.name[i18n.languages[0]]
+                  : x.name}
+              </div>
               <div className="text-muted">
                 {x.end && x.begin < time
                   ? t('calendar.date.ends') +
