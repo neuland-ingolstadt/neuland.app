@@ -59,11 +59,11 @@
     "organizer.attribute": "von"
   },
   "rooms": {
-    "title": "Räume",
+    "title": "Raumvorschläge",
     "text": "Frei von {{from}} bis {{until}}"
   },
   "roomplan": {
-    "title": "Raumplan"
+    "title": "Raumkarte"
   },
   "library": {
     "title": "Bibliothek"
