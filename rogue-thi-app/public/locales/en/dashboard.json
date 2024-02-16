@@ -59,11 +59,11 @@
     "organizer.attribute": "by"
   },
   "rooms": {
-    "title": "Rooms",
+    "title": "Room Suggestions",
     "text": "Available from {{from}} to {{until}}"
   },
   "roomplan": {
-    "title": "Room Plan"
+    "title": "Room Map"
   },
   "library": {
     "title": "Library"

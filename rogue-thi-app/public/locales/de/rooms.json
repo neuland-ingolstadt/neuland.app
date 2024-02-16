@@ -6,7 +6,7 @@
     },
     "map": {
       "appbar": {
-        "title": "Raumplan"
+        "title": "Raumkarte"
       },
       "searchPlaceholder": "Suche nach 'W003', 'Toilette', 'Bibliothek', ...",
       "extendedSearch": "Erweiterte Suche",
