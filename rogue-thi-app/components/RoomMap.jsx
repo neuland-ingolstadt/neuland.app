@@ -67,6 +67,19 @@ const SPECIAL_COLORS = [
 ]
 
 /**
+ * Updates the map position based on a property.
+ * Necessary since the position of a map can only be set from within the maps context.
+ * @see https://react-leaflet.js.org/docs/api-map/
+ */
+const UpdatePosition = ({ position }) => {
+  const map = useMap()
+  useEffect(() => {
+      map.setView(position)
+  }, [map, position])
+  return null
+}
+
+/**
  * Room map based on Leaflet.
  * Implemented as a component because this is the best way to bypass SSR, which is incompatible with Leaflet.
  */
@@ -381,14 +394,6 @@ export default function RoomMap({ highlight, roomData }) {
     )
   }
 
-  const Recenter = ({ position }) => {
-    const map = useMap()
-    useEffect(() => {
-      map.setView(position)
-    }, [map, position])
-    return null
-  }
-
   return (
     <>
       <Form
@@ -448,7 +453,7 @@ export default function RoomMap({ highlight, roomData }) {
         // https://github.com/Leaflet/Leaflet/issues/3184
         tap={false}
       >
-        <Recenter position={center} />
+        <UpdatePosition position={center} />
 
         <TileLayer
           attribution={t('rooms.map.attribution')}
