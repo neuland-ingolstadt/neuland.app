@@ -103,7 +103,7 @@ async function login(fetch, username, password) {
   })
   const $ = cheerio.load(await resp.text())
 
-  if (!$('#usermenu').length) {
+  if ($('#loginerrormessage').length) {
     throw new Error('Login failed')
   }
 }
