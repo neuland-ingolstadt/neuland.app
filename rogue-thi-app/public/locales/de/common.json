@@ -70,7 +70,8 @@
   },
   "appbar": {
     "back": "Zurück",
-    "overflow": "Mehr Optionen"
+    "overflow": "Mehr Optionen",
+    "rooms": "Räume"
   },
   "rooms": {
     "allRooms": "Alle Räume"

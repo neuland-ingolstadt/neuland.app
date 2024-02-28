@@ -77,7 +77,7 @@ export default function AppTabbar() {
                 icon={faMap}
                 className={styles.icon}
               />
-              {i18n.t('cards.rooms')}
+              {i18n.t('appbar.rooms')}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
