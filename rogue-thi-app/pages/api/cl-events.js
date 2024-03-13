@@ -172,6 +172,7 @@ export async function getAllEventDetails(username, password) {
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
       end: details.Ende ? parseLocalDateTime(details.Ende) : null,
+      location: details.Ort,
     })
   }
 
