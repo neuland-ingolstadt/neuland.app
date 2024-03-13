@@ -254,6 +254,7 @@ export default async function handler(req, res) {
             start: event.begin,
             // discard the end if it is before the start
             end: event.end > event.begin ? event.end : undefined,
+            location: event.location,
           })
         }
         sendCalendar(res, 200, cal)
