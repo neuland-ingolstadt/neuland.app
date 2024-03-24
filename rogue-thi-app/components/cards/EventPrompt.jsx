@@ -37,7 +37,7 @@ export default function EventPrompt({ onHide }) {
           <p>
             Interessierst du dich für Informatik? Die Infoveranstaltung von
             Neuland Ingolstadt e.V. findet am{' '}
-            <strong>Di, 10.10. um 18:00 in Raum J102</strong> statt. Komm
+            <strong>Di, 26.03. um 18:00 in Raum J102</strong> statt. Komm
             vorbei!
           </p>
         </Card.Text>

@@ -1,5 +1,6 @@
 import BaseCard from './cards/BaseCard'
 import CalendarCard from './cards/CalendarCard'
+import EventPrompt from './cards/EventPrompt'
 import EventsCard from './cards/EventsCard'
 import ExamsCard from './cards/ExamsCard'
 import FoodCard from './cards/FoodCard'
@@ -31,6 +32,13 @@ export const ALL_DASHBOARD_CARDS = [
         onHide={() => hidePromptCard('install')}
       />
     ),
+  },
+  {
+    key: 'eventprompt2',
+    label: 'Infoveranstaltung',
+    removable: true,
+    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    card: () => <EventPrompt key="eventprompt2" />
   },
   {
     key: 'exams',
