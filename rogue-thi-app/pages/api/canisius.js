@@ -102,7 +102,7 @@ export async function getCanisiusPlan(version) {
     const text = data.text.replace(NEW_LINE_REGEX, ' ')
 
     let days = text.split(TITLE_REGEX)
-    const dates = text.match(TITLE_REGEX).map(getDateFromTitle)
+    const dates = text.match(TITLE_REGEX)?.map(getDateFromTitle)
 
     if (!days || !dates) {
       throw new Error('Unexpected/Malformed pdf from the Canisius website!')

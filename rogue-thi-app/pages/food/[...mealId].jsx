@@ -421,13 +421,13 @@ export default function Food({ meal, id, locale }) {
 }
 
 async function getMealData() {
-  const data = [
-    await getMensaPlan('v2'),
-    await getReimannsPlan('v2'),
-    await getCanisiusPlan('v2'),
-  ]
+  const data = await Promise.all([
+    getMensaPlan('v2').catch(() => []),
+    getReimannsPlan('v2').catch(() => []),
+    getCanisiusPlan('v2').catch(() => []),
+  ]);
 
-  return data.flat().flatMap((x) => x.meals)
+  return data.flat().flatMap((x) => x.meals);
 }
 
 export const getStaticProps = async ({ locale, params }) => {
