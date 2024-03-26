@@ -72,7 +72,7 @@ export async function getReimannsPlan(version) {
 
   let day = null
   lines.forEach((content) => {
-    content = content.trim()
+    content = content.trim().replace(/^– /, '')
     const dayNameMatch = content.match(
       /montag|dienstag|mittwoch|donnerstag|freitag|samstag|sonntag/iu
     )
