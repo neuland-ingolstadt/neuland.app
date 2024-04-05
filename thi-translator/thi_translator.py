@@ -1,3 +1,13 @@
+"""
+thi_translator.py
+
+This module contains the ThiTranslator class, which is responsible
+for translating text from the THI API to the desired languages using the DeepL API.
+
+It manages the translation process by opening and closing sessions with your personal THI account,
+checking the validity of the DeepL API key, and adding translated data to the output.
+"""
+
 import json
 import os
 import re
@@ -24,17 +34,22 @@ MAP_URL = "https://assets.neuland.app/rooms_neuland_v2.4.geojson"
 
 
 class ThiTranslator:
+    """
+    ThiTranslator is a class that provides translation functionality
+    for THI (Technische Hochschule Ingolstadt) related data.
+    """
+
     def __init__(self):
         load_dotenv()
 
-        self.DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
-        self.THI_USERNAME = os.getenv("THI_USERNAME")
-        self.THI_PASSWORD = os.getenv("THI_PASSWORD")
+        self.deepl_api_key = os.getenv("DEEPL_API_KEY")
+        self.thi_username = os.getenv("THI_USERNAME")
+        self.thi_password = os.getenv("THI_PASSWORD")
 
         self.__check_env()
 
-        self.translator = deepl.Translator(self.DEEPL_API_KEY)
-        self.__check_deepL()
+        self.translator = deepl.Translator(self.deepl_api_key)
+        self.__check_deepl()
 
         self.session_id = self.__open_session()
         self.path = Path(__file__).parent / "data"
@@ -47,16 +62,16 @@ class ThiTranslator:
 
     def __check_env(self):
         """Checks if the environment variables are set"""
-        if not self.DEEPL_API_KEY:
+        if not self.deepl_api_key:
             raise ValueError("DEEPL_API_KEY is not set")
 
-        if not self.THI_USERNAME:
+        if not self.thi_username:
             raise ValueError("THI_USERNAME is not set")
 
-        if not self.THI_PASSWORD:
+        if not self.thi_password:
             raise ValueError("THI_PASSWORD is not set")
 
-    def __check_deepL(self):
+    def __check_deepl(self):
         """
         Checks the validity of the DeepL API key by attempting to translate a test text.
         If the API key is not valid, a ValueError is raised.
@@ -67,7 +82,7 @@ class ThiTranslator:
         try:
             self.translator.translate_text("test", target_lang="EN-US")
         except Exception as e:
-            print(self.DEEPL_API_KEY)
+            print(self.deepl_api_key)
             raise ValueError("DeepL API key is not valid") from e
 
     def __open_session(self):
@@ -75,8 +90,8 @@ class ThiTranslator:
         data = {
             "method": "open",
             "service": "session",
-            "username": self.THI_USERNAME,
-            "passwd": self.THI_PASSWORD,
+            "username": self.thi_username,
+            "passwd": self.thi_password,
             "format": "json",
         }
 
@@ -127,7 +142,7 @@ class ThiTranslator:
         return functions, cleaned_function
 
     def __translate(self, text):
-        """Translates the function to english using the DeepL API"""
+        """Translates the function to the given languages using the DeepL API"""
         results = {"de": text}
 
         for lang in LANGUAGES:
@@ -138,19 +153,20 @@ class ThiTranslator:
 
     def __translate_genders(self, text, cleaned_text):
         """
-        Translates the function to english using the DeepL API
-        The output dict will contain the original text and and use the cleaned text for the translation.
+        Translates the function to the given languages using the DeepL API.
+        The output dict will contain the original text and and
+        use the cleaned text for the translation.
         """
         results = {"de": text}
 
         for lang in LANGUAGES:
             result = self.translator.translate_text(cleaned_text, target_lang=lang)
-            results[lang.split("-")[0].lower()] = result.text
+            results[lang.split("-", maxsplit=1)[0].lower()] = result.text
 
         return results
 
     def translate_room_functions(self):
-        """Translates the map properties to english using the DeepL API"""
+        """Translates the map properties to the given languages"""
         response = requests.get(MAP_URL, timeout=5)
         data = response.json()["features"]
 
@@ -174,7 +190,8 @@ class ThiTranslator:
     def translate_lecturer_functions(self):
         """
         Extracts all functions from the lecturers and translates them to english.
-        Returns a dict with the original functions and the translated functions nested in a dict with the language as key.
+        Returns a dict with the original functions and the translated functions
+        nested in a dict with the language as key.
         """
 
         lecturers = self.__get_lecturers()
@@ -190,7 +207,8 @@ class ThiTranslator:
     def translate_lecturer_organizations(self):
         """
         Extracts all organizations from the lecturers and translates them to english.
-        Returns a dict with the original organizations and the translated organizations nested in a dict with the language as key.
+        Returns a dict with the original organizations and the translated organizations
+        nested in a dict with the language as key.
         """
 
         lecturers = self.__get_lecturers()
@@ -220,7 +238,7 @@ class ThiTranslator:
         languages = LANGUAGES + ["DE"]
 
         for lang in languages:
-            lang_short = lang.split("-")[0].lower()
+            lang_short = lang.split("-", maxsplit=1)[0].lower()
 
             content = {
                 "__source": "Generated using the thi-translator script",
@@ -241,6 +259,18 @@ class ThiTranslator:
 
 
 def main():
+    """
+    The main function of the ThiTranslator program.
+
+    This function initializes an instance of the ThiTranslator class
+    and performs the following tasks:
+
+    1. Translates lecturer functions and adds them to the output.
+    2. Translates lecturer organizations and adds them to the output.
+    3. Translates room functions and adds them to the output.
+    4. Closes the translator.
+    5. Exports the files.
+    """
     translator = ThiTranslator()
 
     # Functions
@@ -254,9 +284,7 @@ def main():
     )
 
     # Map
-    translator.add_to_output(
-        translator.translate_room_functions(), "roomFunctions"
-    )
+    translator.add_to_output(translator.translate_room_functions(), "roomFunctions")
 
     translator.close()
     translator.export_files()

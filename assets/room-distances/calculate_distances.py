@@ -2,7 +2,7 @@
 calculate_distances.py
 
 This module contains functions to calculate the distances between rooms in a building.
-It fetches room data from a URL, calculates the center of each room, and then calculates
+It fetches the room data, calculates the center of each room, and then calculates
 the distances between each pair of rooms.
 """
 
@@ -39,7 +39,8 @@ def find_nearest_staircase(room: dict, staircases: list) -> tuple:
 
     Parameters:
     room (dict): A dictionary containing room data, including its coordinates.
-    staircases (list): A list of dictionaries, each containing staircase data, including its coordinates.
+    staircases (list): A list of dictionaries, each containing staircase data,
+    including its coordinates.
 
     Returns:
     tuple: A tuple containing the distance to the nearest staircase and the staircase data.
@@ -73,8 +74,10 @@ def main():
     """
     Main function to calculate distances between rooms.
 
-    Fetches room data from a URL, filters out rooms without geometry, and rooms and staircases based on their types.
-    Then, it calculates the center of each room and staircase, and calculates the distances between each pair of rooms.
+    Fetches the room data, filters out rooms without geometry,
+    and rooms and staircases based on their types.
+    Then, it calculates the center of each room and staircase,
+    and calculates the distances between each pair of rooms.
     """
     # read file from URL
     response = requests.get(MAP_URL, timeout=5)
@@ -132,14 +135,16 @@ def main():
             elif room["properties"]["Gebaeude"] != room2["properties"]["Gebaeude"]:
                 total_distance = 0
                 # find nearest staircase
-                distance1, nearestStaircase1 = find_nearest_staircase(room, staircases)
+                distance1, nearest_staircase1 = find_nearest_staircase(room, staircases)
                 total_distance += distance1
 
                 # add distance inside staircase (naive assumption)
                 total_distance += float(room["properties"]["Ebene"]) * 5
 
                 # find staircase in other building
-                distance2, nearestStaircase2 = find_nearest_staircase(room2, staircases)
+                distance2, nearest_staircase2 = find_nearest_staircase(
+                    room2, staircases
+                )
                 total_distance += distance2
 
                 # add distance inside staircase (naive assumption)
@@ -147,7 +152,7 @@ def main():
 
                 # add distance between staircases
                 total_distance += distance.distance(
-                    nearestStaircase1["center"], nearestStaircase2["center"]
+                    nearest_staircase1["center"], nearest_staircase2["center"]
                 ).meters
 
                 distances[room_name][room2_name] = ceil(total_distance)
