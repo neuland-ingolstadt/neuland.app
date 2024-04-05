@@ -10,7 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "prepare": "cd .. && husky install rogue-thi-app/.husky"
+    "prepare": "cd .. && husky install rogue-thi-app/.husky",
+    "prettier:format": "prettier --write .",
+    "prettier:check": "prettier --check ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

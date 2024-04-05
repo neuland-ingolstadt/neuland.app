@@ -1,17 +1,33 @@
 name: CI
 on: push
 jobs:
+  prettier:
+    name: Prettier
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rogue-thi-app
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install modules
+        run: npm install
+      - name: Run Prettier
+        run: npx prettier --check .
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./rogue-thi-app
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - name: Install modules
         run: npm install
       - name: Run ESLint
@@ -22,11 +38,11 @@ jobs:
       run:
         working-directory: ./rogue-thi-app
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
       - name: Install modules
         run: npm install
       - name: Build

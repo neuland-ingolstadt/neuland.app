@@ -425,9 +425,9 @@ async function getMealData() {
     getMensaPlan('v2').catch(() => []),
     getReimannsPlan('v2').catch(() => []),
     getCanisiusPlan('v2').catch(() => []),
-  ]);
+  ])
 
-  return data.flat().flatMap((x) => x.meals);
+  return data.flat().flatMap((x) => x.meals)
 }
 
 export const getStaticProps = async ({ locale, params }) => {
