@@ -1,3 +1,3 @@
 #!/bin/bash
 set -euxo pipefail
-python ./thi-translator.py
+python ./thi_translator.py
