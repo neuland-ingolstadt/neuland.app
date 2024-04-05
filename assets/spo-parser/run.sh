@@ -17,3 +17,4 @@ for filename in SPOs/*.pdf; do
 done
 
 python3 combine_jsons.py
+mv ./spo-grade-weights.json /generated/spo-grade-weights.json
