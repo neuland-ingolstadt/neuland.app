@@ -169,12 +169,10 @@ export default function Timetable() {
             .map((group) =>
               group.items.find(
                 (x) =>
-                  x.datum === focusedEntry.datum &&
-                  x.veranstaltung === focusedEntry.veranstaltung
+                  x.date === focusedEntry.date && x.name === focusedEntry.name
               )
             )
             .find((x) => x)
-
           if (detailedEntry) {
             setFocusedEntry(detailedEntry)
           } else {
