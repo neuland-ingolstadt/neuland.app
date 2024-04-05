@@ -3,6 +3,6 @@
   "trailingComma": "es5",
   "singleQuote": true,
   "jsxSingleQuote": false,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "singleAttributePerLine": true
 }

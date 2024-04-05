@@ -11,9 +11,14 @@ You should know how to program in object oriented languages. Prior experience wi
 You need to install the necessary tools.
 
 - [Git](https://git-scm.com/downloads)
-- [Node.js 18 LTS](https://nodejs.org/en/)
+- [Node.js 20 LTS](https://nodejs.org/en/)
 - [Visual Studio Code](https://code.visualstudio.com/)
+
+Install the following Visual Studio Code extensions either manually or by installing the recommended extensions when opening the project:
+
 - [ESLint for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier - Code formatter for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Stylelint for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint)
 
 ## Setting up the environment
 
@@ -33,9 +38,6 @@ npm install
 # or
 yarn
 ```
-
-> **Note**
-> For node.js versions 17 and above, you need to set the environment variable `NODE_OPTIONS=--openssl-legacy-provider` to avoid an error when installing the dependencies.
 
 Now open the `rogue-thi-app` folder in Visual Studio Code.
 

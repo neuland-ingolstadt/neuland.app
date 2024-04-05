@@ -74,7 +74,7 @@ const SPECIAL_COLORS = [
 const UpdatePosition = ({ position }) => {
   const map = useMap()
   useEffect(() => {
-      map.setView(position)
+    map.setView(position)
   }, [map, position])
   return null
 }
