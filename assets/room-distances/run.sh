@@ -1,4 +1,4 @@
 #!/bin/bash
 set -euxo pipefail
-python ./calculate-distances.py
+python ./calculate_distances.py
 mv ./room-distances.json /generated/room-distances.json
