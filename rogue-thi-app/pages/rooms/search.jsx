@@ -147,7 +147,10 @@ export default function RoomSearch() {
                 value={building}
                 onChange={(e) => setBuilding(e.target.value)}
               >
-                <option key={BUILDINGS_ALL}>
+                <option
+                  key={BUILDINGS_ALL}
+                  value={BUILDINGS_ALL}
+                >
                   {t('rooms.search.buildingsAll')}
                 </option>
                 {BUILDINGS.map((b) => (
