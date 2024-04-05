@@ -1,5 +1,4 @@
 import API from '../backend/authenticated-api'
-import courseSPOs from '../../data/spo-grade-weights.json'
 
 const redactGrades = process.env.NEXT_PUBLIC_REDACT_GRADES === 'true' || false
 
@@ -103,9 +102,10 @@ export async function calculateECTS() {
 
 /**
  * Calculates the approximate grade average based on automatically extracted SPO data
+ * @param {object} courseSPOs - The SPO data retrieved from the asset server
  * @returns {object}
  */
-export async function loadGradeAverage() {
+export async function loadGradeAverage(courseSPOs) {
   const gradeList = await getGradeList()
   const spoName = await API.getSpoName()
   if (!spoName || !courseSPOs[spoName]) {

@@ -19,20 +19,15 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { getAdjustedLocale } from '../lib/locale-utils'
+import { getSpoGradeWeights } from '../lib/backend-utils/asset-utils'
 import styles from '../styles/Grades.module.css'
-
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? 'en', ['grades', 'common'])),
-  },
-})
 
 const GRADE_REGEX = /\d+[.,]\d+/
 
 /**
  * Page showing the users grades.
  */
-export default function Grades() {
+export default function Grades({ spoWeights }) {
   const router = useRouter()
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
@@ -63,7 +58,7 @@ export default function Grades() {
         const { finished, missing } = await loadGrades()
         setGrades(finished)
         setMissingGrades(missing)
-        const average = await loadGradeAverage()
+        const average = await loadGradeAverage(spoWeights)
         setGradeAverage(average)
       } catch (e) {
         if (
@@ -85,7 +80,7 @@ export default function Grades() {
       }
     }
     load()
-  }, [router, t])
+  }, [router, spoWeights, t])
 
   /**
    * Copies the formula for calculating the grade average to the users clipboard.
@@ -263,4 +258,16 @@ export default function Grades() {
       <AppTabbar />
     </AppContainer>
   )
+}
+
+export const getStaticProps = async ({ locale }) => {
+  const spoWeights = await getSpoGradeWeights()
+
+  return {
+    props: {
+      spoWeights,
+      ...(await serverSideTranslations(locale ?? 'en', ['grades', 'common'])),
+    },
+    revalidate: 60 * 24 * 7, // revalidate once a week
+  }
 }
