@@ -28,7 +28,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * Dashboard card for semester and exam dates.
  */
-export default function RoomCard() {
+export default function RoomCard({ roomDistances }) {
   const router = useRouter()
   const [filterResults, setFilterResults] = useState(null)
   const { userKind } = useUserKind()
@@ -45,7 +45,7 @@ export default function RoomCard() {
 
         if (today.length < 1) {
           // no lectures today -> general room search
-          const emptyRooms = await getEmptySuggestions()
+          const emptyRooms = await getEmptySuggestions(roomDistances)
           setFilterResults(emptyRooms)
           return
         }
@@ -53,7 +53,7 @@ export default function RoomCard() {
         const gaps = getTimetableGaps(today)
         if (gaps.length < 1) {
           // no lectures today -> general room search
-          const emptyRooms = await getEmptySuggestions()
+          const emptyRooms = await getEmptySuggestions(roomDistances)
           setFilterResults(emptyRooms)
           return
         }
@@ -65,12 +65,13 @@ export default function RoomCard() {
 
         if (!room) {
           // no room -> general room search
-          const emptyRooms = await getEmptySuggestions()
+          const emptyRooms = await getEmptySuggestions(roomDistances)
           setFilterResults(emptyRooms)
           return
         }
 
         const rooms = await findSuggestedRooms(
+          roomDistances,
           room,
           nextGap.startDate,
           nextGap.endDate
@@ -93,7 +94,7 @@ export default function RoomCard() {
     if (userKind === USER_STUDENT) {
       load()
     }
-  }, [router, userKind])
+  }, [roomDistances, router, userKind])
 
   const placeholder = (
     <ListGroup variant="flush">

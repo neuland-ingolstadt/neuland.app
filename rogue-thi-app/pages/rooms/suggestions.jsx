@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -48,22 +48,13 @@ import {
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import { Trans, useTranslation } from 'next-i18next'
+import { getRoomDistances } from '../../lib/backend-utils/asset-utils'
 import { useBuildingFilter } from '../../lib/hooks/building-filter'
-
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'rooms',
-      'api-translations',
-      'common',
-    ])),
-  },
-})
 
 /**
  * Page containing the room search.
  */
-export default function RoomSearch() {
+export default function RoomSearch({ roomDistances }) {
   const router = useRouter()
 
   const [suggestions, setSuggestions] = useState(null)
@@ -80,19 +71,19 @@ export default function RoomSearch() {
 
   const { t } = useTranslation('rooms')
 
-  async function getSuggestions() {
+  const getSuggestions = useCallback(async () => {
     // get timetable and filter for today
     const timetable = await getFriendlyTimetable(new Date(), false)
     const today = timetable.filter((x) => isSameDay(x.startDate, new Date()))
 
     if (today.length < 1) {
       // no lectures today -> general room search
-      return await getEmptySuggestions(true)
+      return await getEmptySuggestions(roomDistances, true)
     }
 
     const gaps = getTimetableGaps(today)
     if (gaps.length < 1) {
-      return await getEmptySuggestions(true)
+      return await getEmptySuggestions(roomDistances, true)
     }
 
     const suggestions = await Promise.all(
@@ -104,7 +95,12 @@ export default function RoomSearch() {
           return
         }
 
-        const rooms = await findSuggestedRooms(room, gap.startDate, gap.endDate)
+        const rooms = await findSuggestedRooms(
+          roomDistances,
+          room,
+          gap.startDate,
+          gap.endDate
+        )
 
         return {
           gap,
@@ -116,7 +112,7 @@ export default function RoomSearch() {
 
     // if there are no suggestions, show empty suggestions
     if (!suggestions[0]?.gap) {
-      return await getEmptySuggestions(true)
+      return await getEmptySuggestions(roomDistances, true)
     }
 
     // if first gap is in too far in the future (now + suggestion duration), show empty suggestions as well
@@ -128,7 +124,7 @@ export default function RoomSearch() {
     )
 
     if (deltaTime > suggestionDuration * 60 * 1000) {
-      const emptySuggestions = await getEmptySuggestions(true)
+      const emptySuggestions = await getEmptySuggestions(roomDistances, true)
 
       if (emptySuggestions.length > 0 && emptySuggestions[0]) {
         suggestions.unshift(emptySuggestions[0])
@@ -136,7 +132,7 @@ export default function RoomSearch() {
     }
 
     return suggestions
-  }
+  }, [roomDistances])
 
   useEffect(() => {
     async function load() {
@@ -161,7 +157,7 @@ export default function RoomSearch() {
     if (userKind !== USER_GUEST) {
       load()
     }
-  }, [router, userKind])
+  }, [getSuggestions, router, userKind])
 
   /**
    * Closes the modal and saves the preferences.
@@ -437,4 +433,20 @@ export default function RoomSearch() {
       <AppTabbar />
     </AppContainer>
   )
+}
+
+export const getStaticProps = async ({ locale }) => {
+  const roomDistances = await getRoomDistances()
+
+  return {
+    props: {
+      roomDistances,
+      ...(await serverSideTranslations(locale ?? 'en', [
+        'rooms',
+        'api-translations',
+        'common',
+      ])),
+    },
+    revalidate: 60 * 24 * 7, // revalidate once a week
+  }
 }

@@ -25,7 +25,7 @@ export const ALL_DASHBOARD_CARDS = [
     key: 'install',
     removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
-    card: (hidePromptCard) => (
+    card: ({ hidePromptCard }) => (
       <InstallPrompt
         key="install"
         onHide={() => hidePromptCard('install')}
@@ -96,7 +96,12 @@ export const ALL_DASHBOARD_CARDS = [
       USER_EMPLOYEE,
       USER_GUEST,
     ],
-    card: () => <RoomCard key="rooms" />,
+    card: ({ roomDistances }) => (
+      <RoomCard
+        key="rooms"
+        roomDistances={roomDistances}
+      />
+    ),
   },
   {
     key: 'roomplan',

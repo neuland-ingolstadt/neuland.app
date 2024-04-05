@@ -10,6 +10,7 @@ import DashboardModal from '../components/modal/DashboardModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { getRoomDistances } from '../lib/backend-utils/asset-utils'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Home.module.css'
 import { useTranslation } from 'next-i18next'
@@ -17,7 +18,7 @@ import { useTranslation } from 'next-i18next'
 /**
  * Main page.
  */
-export default function Home() {
+export default function Home({ roomDistances }) {
   const [, setShowDashboardModal] = useContext(ShowDashboardModal)
 
   // page state
@@ -25,6 +26,11 @@ export default function Home() {
     useContext(DashboardContext)
 
   const { t } = useTranslation('common')
+
+  const cardProps = {
+    hidePromptCard: hideDashboardEntry,
+    roomDistances,
+  }
 
   return (
     <AppContainer>
@@ -43,7 +49,7 @@ export default function Home() {
 
       <AppBody>
         <div className={styles.cardDeck}>
-          {shownDashboardEntries.map((entry) => entry.card(hideDashboardEntry))}
+          {shownDashboardEntries.map((entry) => entry.card(cardProps))}
         </div>
         <DashboardModal />
       </AppBody>
@@ -53,12 +59,18 @@ export default function Home() {
   )
 }
 
-export const getStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale ?? 'en', [
-      'dashboard',
-      'mobility',
-      'common',
-    ])),
-  },
-})
+export const getStaticProps = async ({ locale }) => {
+  const roomDistances = await getRoomDistances()
+
+  return {
+    props: {
+      roomDistances,
+      ...(await serverSideTranslations(locale ?? 'en', [
+        'dashboard',
+        'mobility',
+        'common',
+      ])),
+    },
+    revalidate: 60 * 24 * 7, // revalidate once a week
+  }
+}

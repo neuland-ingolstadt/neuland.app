@@ -3,7 +3,6 @@ import API from '../backend/authenticated-api'
 import { formatISODate, getWeek } from '../date-utils'
 import { getFriendlyTimetable } from './timetable-utils'
 import { i18n } from 'next-i18next'
-import roomDistances from '../../data/room-distances.json'
 
 const IGNORE_GAPS = 15
 
@@ -313,12 +312,13 @@ function mode(arr) {
 
 /**
  * Sorts rooms by distance to the given room.
+ * @param {object} roomDistances Room distances objects as returned by the asset server.
  * @param {string} room Room name (e.g. `G215`)
  * @param {Array} rooms Array of timetable entries as returned by `searchRooms`
  * @returns {Array}
  */
-function sortRoomsByDistance(room, rooms) {
-  const distances = getRoomDistances(room)
+function sortRoomsByDistance(roomDistances, room, rooms) {
+  const distances = getRoomDistances(roomDistances, room)
 
   // sort by distance
   rooms = rooms.sort((a, b) => {
@@ -344,19 +344,25 @@ export async function getAllUserBuildings() {
 
 /**
  * Finds rooms that are close to the given room and are available for the given time.
+ * @param {object} roomDistances Room distances objects as returned by the asset server.
  * @param {string} room Room name (e.g. `G215`)
  * @param {Date} startDate Start date as Date object
  * @param {Date} endDate End date as Date object
  * @returns {Array}
  **/
-export async function findSuggestedRooms(room, startDate, endDate) {
+export async function findSuggestedRooms(
+  roomDistances,
+  room,
+  startDate,
+  endDate
+) {
   let rooms = await searchRooms(startDate, endDate)
 
   // hide Neuburg buildings if next lecture is not in Neuburg
   rooms = rooms.filter((x) => x.room.includes('N') === room.includes('N'))
 
   // get distances to other rooms
-  rooms = sortRoomsByDistance(room, rooms)
+  rooms = sortRoomsByDistance(roomDistances, room, rooms)
 
   return rooms
 }
@@ -430,11 +436,12 @@ export function getRoomWithCapacity(roomFunction, capacity, t) {
 
 /**
  * Finds empty rooms for the current time with the given duration.
+ * @param {object} roomDistances Room distances objects as returned by the asset server.
  * @param {boolean} [asGap] Whether to return the result as a gap with start and end date or only the rooms
  * @param {number} [duration] Duration of the gap in minutes
  * @returns {Array}
  **/
-export async function getEmptySuggestions(asGap = false) {
+export async function getEmptySuggestions(roomDistances, asGap = false) {
   const userDurationStorage = localStorage.getItem('suggestion-duration')
   const userDuration = userDurationStorage
     ? parseInt(userDurationStorage)
@@ -475,7 +482,7 @@ export async function getEmptySuggestions(asGap = false) {
 
   // if majority room is undefined -> do not filter
   if (majorityRoom) {
-    rooms = sortRoomsByDistance(majorityRoom, rooms)
+    rooms = sortRoomsByDistance(roomDistances, majorityRoom, rooms)
 
     // hide Neuburg buildings if next lecture is not in Neuburg
     rooms = rooms.filter(
@@ -506,10 +513,11 @@ export async function getEmptySuggestions(asGap = false) {
 
 /**
  * Returns the distance to other rooms from the given room.
+ * @param {object} roomDistances Room distances objects as returned by the asset server.
  * @param {string} room Room name (e.g. `G215`)
  * @returns {object}
  **/
-export function getRoomDistances(room) {
+export function getRoomDistances(roomDistances, room) {
   if (!room) {
     return {}
   }
