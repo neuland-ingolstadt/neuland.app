@@ -149,7 +149,7 @@ export default function RoomSearch() {
               >
                 <option
                   key={BUILDINGS_ALL}
-                  value={'Alle'}
+                  value={BUILDINGS_ALL}
                 >
                   {t('rooms.search.buildingsAll')}
                 </option>
