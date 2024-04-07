@@ -123,7 +123,8 @@ export default function TimetableCard() {
               return (
                 <ListGroup.Item key={i}>
                   <div>
-                    {getTimetableEntryName(x).shortName} in {x.rooms.join(', ')}
+                    {getTimetableEntryName(x).shortName} in{' '}
+                    {x.rooms.filter((room) => room.trim() !== '').join(', ')}
                   </div>
                   {text}
                 </ListGroup.Item>
