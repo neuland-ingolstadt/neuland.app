@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
@@ -6,12 +6,11 @@ import Modal from 'react-bootstrap/Modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 
-import { FoodFilterContext } from '../../pages/_app'
-
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
 import styles from '../../styles/FilterFoodModal.module.css'
 
+import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
 import { useTranslation } from 'next-i18next'
 
 Object.keys(allergenMap)
@@ -35,7 +34,7 @@ export default function FilterFoodModal() {
     saveAllergenSelection,
     showFoodFilterModal,
     setShowFoodFilterModal,
-  } = useContext(FoodFilterContext)
+  } = useFoodFilter()
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] =
     useState(false)

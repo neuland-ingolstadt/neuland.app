@@ -1,18 +1,16 @@
-import React, { useContext } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
+import React from 'react'
 import ReactPlaceholder from 'react-placeholder'
 
-import { ShowPersonalDataModal } from '../../pages/_app'
 import styles from '../../styles/PersonalDataModal.module.css'
 
 import { getAdjustedLocale } from '../../lib/locale-utils'
+import { useModals } from '../../lib/providers/ModalProvider'
 import { useTranslation } from 'next-i18next'
 
 export default function PersonalDataModal({ userdata }) {
-  const [showPersonalDataModal, setShowPersonalDataModal] = useContext(
-    ShowPersonalDataModal
-  )
+  const { showPersonalDataModal, setShowPersonalDataModal } = useModals()
 
   const { t } = useTranslation('personal')
 

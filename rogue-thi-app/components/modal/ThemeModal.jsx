@@ -1,14 +1,15 @@
-import { ShowThemeModal, ThemeContext } from '../../pages/_app'
-import { useContext, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Link from 'next/link'
 import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
 import themes from '../../data/themes.json'
-import { useDashboard } from '../../lib/hooks/dashboard'
+import { useRef } from 'react'
 
 import { Trans, useTranslation } from 'next-i18next'
+import { useDashboard } from '../../lib/providers/DashboardProvider'
+import { useModals } from '../../lib/providers/ModalProvider'
+import { useTheme } from '../../lib/providers/ThemeProvider'
 
 const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
 
@@ -19,8 +20,8 @@ const CTF_URL = process.env.NEXT_PUBLIC_CTF_URL
  */
 export default function ThemeModal() {
   const { unlockedThemes } = useDashboard()
-  const [showThemeModal, setShowThemeModal] = useContext(ShowThemeModal)
-  const [theme, setTheme] = useContext(ThemeContext)
+  const { showThemeModal, setShowThemeModal } = useModals()
+  const { theme, setTheme } = useTheme()
   const themeModalBody = useRef()
   const { t, i18n } = useTranslation('personal')
 

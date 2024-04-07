@@ -1,43 +1,8 @@
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-/**
- * @typedef {Object} RestaurantPreferences
- * @property {(value: (((prevState: {}) => {}) | {})) => void} setAllergenSelection - A function that sets the selected allergens.
- * @property {{}} allergenSelection - An object containing the selected allergens.
- * @property {toggleSelectedRestaurant} toggleSelectedRestaurant - A function that toggles the selection of a restaurant.
- * @property {toggleSelectedLanguageFood} toggleSelectedLanguageFood - A function that sets the selected LanguageFood.
- * @property {{}} preferencesSelection - An object containing the selected preferences.
- * @property {(value: (((prevState: {}) => {}) | {})) => void} setPreferencesSelection - A function that sets the selected preferences.
- * @property {string[]} selectedRestaurants - An array containing the selected restaurants.
- * @property {string[]} selectedLanguageFood - Contains the selected LanguageFood.
- * @property {savePreferencesSelection} savePreferencesSelection - A function that saves the selected preferences.
- * @property {saveAllergenSelection} saveAllergenSelection - A function that saves the selected allergens.
- */
+const FoodFilterContext = createContext({})
 
-/**
- * @callback toggleSelectedRestaurant
- * @param {string} restaurant - The ID of the restaurant to toggle.
- * @returns {void}
- */
-
-/**
- * @callback toggleSelectedLanguageFood
- * @param {string} language - The language of LanguageFood to set.
- * @returns {void}
- */
-
-/**
- * @callback savePreferencesSelection
- * @param {{}} preferences - An object containing the preferences to save.
- * @returns {void}
- */
-
-/**
- * @callback saveAllergenSelection
- * @param {{}} allergens - An object containing the allergens to save.
- * @returns {void}
- */
-export function useFoodFilter() {
+export default function FoodFilterProvider({ children }) {
   const [selectedLanguageFood, setSelectedLanguageFood] = useState('default')
   const [selectedRestaurants, setSelectedRestaurants] = useState([
     'mensa',
@@ -101,7 +66,7 @@ export function useFoodFilter() {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
   }
 
-  return {
+  const value = {
     selectedRestaurants,
     selectedLanguageFood,
     preferencesSelection,
@@ -115,4 +80,18 @@ export function useFoodFilter() {
     showFoodFilterModal,
     setShowFoodFilterModal,
   }
+
+  return (
+    <FoodFilterContext.Provider value={value}>
+      {children}
+    </FoodFilterContext.Provider>
+  )
+}
+
+export const useFoodFilter = () => {
+  const context = useContext(FoodFilterContext)
+  if (!context) {
+    throw new Error('useFoodFilter must be used within a FoodFilterProvider')
+  }
+  return context
 }

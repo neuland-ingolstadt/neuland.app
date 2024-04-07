@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -26,7 +26,6 @@ import {
   getFriendlyWeek,
 } from '../../lib/date-utils'
 import FilterFoodModal from '../../components/modal/FilterFoodModal'
-import { FoodFilterContext } from '../_app'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
@@ -47,6 +46,7 @@ import {
   getMatchingPreferences,
   getUserSpecificPrice,
 } from '../../lib/food-utils'
+import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
 
 // delete comments
 Object.keys(allergenMap)
@@ -63,7 +63,8 @@ export default function Mensa() {
     preferencesSelection,
     allergenSelection,
     setShowFoodFilterModal,
-  } = useContext(FoodFilterContext)
+  } = useFoodFilter()
+
   const [currentFoodDays, setCurrentFoodDays] = useState(null)
   const [futureFoodDays, setFutureFoodDays] = useState(null)
   const [currentDay, setCurrentDay] = useState(0)
