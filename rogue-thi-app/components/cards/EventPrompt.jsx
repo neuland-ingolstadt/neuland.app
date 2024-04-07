@@ -3,8 +3,7 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-import { faPersonChalkboard, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Presentation, X } from 'lucide-react'
 
 import styles from '../../styles/Home.module.css'
 
@@ -16,21 +15,15 @@ export default function EventPrompt({ onHide }) {
   return (
     <Card className={styles.card}>
       <Card.Body>
-        <Card.Title>
-          <FontAwesomeIcon
-            icon={faPersonChalkboard}
-            fixedWidth
-          />{' '}
-          Infoveranstaltung
+        <Card.Title className={styles.cardTitle}>
+          <Presentation size={22} />
+          <span className={styles.cardTitleText}>Infoveranstaltung</span>
           <Button
             variant="link"
             className={styles.cardButton}
             onClick={() => onHide()}
           >
-            <FontAwesomeIcon
-              title="Schließen"
-              icon={faTimes}
-            />
+            <X size={22} />
           </Button>
         </Card.Title>
         <Card.Text>

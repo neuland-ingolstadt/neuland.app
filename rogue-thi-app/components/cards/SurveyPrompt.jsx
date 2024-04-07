@@ -3,11 +3,9 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-import { faPoll, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { BarChart2, X } from 'lucide-react'
 
 import styles from '../../styles/Home.module.css'
-import { useTranslation } from 'next-i18next'
 
 const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
 
@@ -16,26 +14,18 @@ const SURVEY_URL = process.env.NEXT_PUBLIC_SURVEY_URL
  * @param {object} onHide Invoked when the user wants to hide the prompt
  */
 export default function SurveyPrompt({ onHide }) {
-  const { t } = useTranslation(['dashboard'])
-
   return (
     <Card className={styles.card}>
       <Card.Body>
-        <Card.Title>
-          <FontAwesomeIcon
-            icon={faPoll}
-            fixedWidth
-          />{' '}
-          Umfrage
+        <Card.Title className={styles.cardTitle}>
+          <BarChart2 size={22} />
+          <span className={styles.cardTitleText}>Umfrage</span>
           <Button
             variant="link"
             className={styles.cardButton}
             onClick={() => onHide()}
           >
-            <FontAwesomeIcon
-              title={t('prompts.close', { ns: 'common' })}
-              icon={faTimes}
-            />
+            <X size={22} />
           </Button>
         </Card.Title>
         <Card.Text>

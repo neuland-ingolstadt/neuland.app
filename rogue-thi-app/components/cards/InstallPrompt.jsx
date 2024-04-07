@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-import { faDownload, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Download, X } from 'lucide-react'
 
 import { OS_ANDROID, OS_IOS, useOperatingSystem } from '../../lib/hooks/os-hook'
 import { Trans, useTranslation } from 'next-i18next'
@@ -40,21 +39,15 @@ export default function InstallPrompt({ onHide }) {
     showPrompt && (
       <Card className={styles.card}>
         <Card.Body>
-          <Card.Title>
-            <FontAwesomeIcon
-              icon={faDownload}
-              fixedWidth
-            />{' '}
-            {t('install.title')}
+          <Card.Title className={styles.cardTitle}>
+            <Download size={22} />
+            <span className={styles.cardTitleText}>{t('install.title')}</span>
             <Button
               variant="link"
               className={styles.cardButton}
-              onClick={() => close()}
+              onClick={close}
             >
-              <FontAwesomeIcon
-                title={t('prompts.close', { ns: 'common' })}
-                icon={faTimes}
-              />
+              <X size={22} />
             </Button>
           </Card.Title>
           <Card.Text>

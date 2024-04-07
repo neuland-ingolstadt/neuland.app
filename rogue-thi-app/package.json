@@ -30,6 +30,7 @@
     "ical-generator": "^3.6.1",
     "idb": "^7.0.0",
     "leaflet": "^1.7.1",
+    "lucide-react": "^0.365.0",
     "next": "^12.1.0",
     "next-i18next": "^13.2.2",
     "node-fetch": "^3.2.3",

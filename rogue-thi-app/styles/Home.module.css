@@ -114,3 +114,13 @@
 .placeholder_4_0 {
   margin: 4px 0;
 }
+
+.cardTitle {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cardTitleText {
+  flex: 1;
+}

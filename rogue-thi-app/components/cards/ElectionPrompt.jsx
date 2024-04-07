@@ -3,8 +3,7 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-import { faCheckToSlot, faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Vote, X } from 'lucide-react'
 
 import styles from '../../styles/Home.module.css'
 import { useTranslation } from 'next-i18next'
@@ -20,21 +19,15 @@ export default function ElectionPrompt({ onHide }) {
   return (
     <Card className={styles.card}>
       <Card.Body>
-        <Card.Title>
-          <FontAwesomeIcon
-            icon={faCheckToSlot}
-            fixedWidth
-          />{' '}
-          {t('election.title')}
+        <Card.Title className={styles.cardTitle}>
+          <Vote size={22} />
+          <span className={styles.cardTitleText}>{t('election.title')}</span>
           <Button
             variant="link"
             className={styles.cardButton}
             onClick={() => onHide()}
           >
-            <FontAwesomeIcon
-              title={t('election.icon.close')}
-              icon={faTimes}
-            />
+            <X size={22} />
           </Button>
         </Card.Title>
         <Card.Text>

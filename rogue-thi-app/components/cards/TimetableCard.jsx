@@ -4,8 +4,6 @@ import ReactPlaceholder from 'react-placeholder'
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 import { useRouter } from 'next/router'
 
-import { faCalendarMinus } from '@fortawesome/free-solid-svg-icons'
-
 import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
 import {
   getFriendlyTimetable,
@@ -14,6 +12,8 @@ import {
 import BaseCard from './BaseCard'
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 import { useTranslation } from 'next-i18next'
+
+import { CalendarClock } from 'lucide-react'
 
 import styles from '../../styles/Home.module.css'
 
@@ -65,7 +65,7 @@ export default function TimetableCard() {
 
   return (
     <BaseCard
-      icon={faCalendarMinus}
+      icon={CalendarClock}
       i18nKey="timetable"
       link="/timetable"
     >
