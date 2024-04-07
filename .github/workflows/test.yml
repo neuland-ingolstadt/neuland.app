@@ -1,5 +1,9 @@
 name: CI
-on: push
+on:
+  pull_request:
+    branches: [develop]
+  push:
+
 jobs:
   prettier:
     name: Prettier
@@ -8,24 +12,24 @@ jobs:
       run:
         working-directory: ./rogue-thi-app
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Install modules
         run: npm install
       - name: Run Prettier
-        run: npx prettier --check .
+        run: npm run prettier:check
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./rogue-thi-app
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Install modules
@@ -38,9 +42,9 @@ jobs:
       run:
         working-directory: ./rogue-thi-app
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Install modules
