@@ -28,7 +28,6 @@ import styles from '../styles/Debug.module.css'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const COMMIT_HASH = process.env.NEXT_PUBLIC_COMMIT_HASH || 'unknown'
 
 /**
  * Page containing debug tools for development purposes.
@@ -198,16 +197,6 @@ export default function Debug() {
           >
             {result}
           </SyntaxHighlighter>
-        </div>
-        <div className={styles.version}>
-          Version: &nbsp;
-          <a
-            href={`${GIT_URL}/commit/${COMMIT_HASH}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {COMMIT_HASH.substring(0, 7)}
-          </a>
         </div>
       </AppBody>
 
