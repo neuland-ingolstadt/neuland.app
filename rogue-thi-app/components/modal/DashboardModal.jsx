@@ -1,16 +1,17 @@
-import { DashboardContext, ShowDashboardModal } from '../../pages/_app'
 import {
   faChevronDown,
   faChevronUp,
   faTrash,
   faTrashRestore,
 } from '@fortawesome/free-solid-svg-icons'
-import { useContext, useRef } from 'react'
 import Button from 'react-bootstrap/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
+import { useDashboard } from '../../lib/providers/DashboardProvider'
+import { useModals } from '../../lib/providers/ModalProvider'
+import { useRef } from 'react'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -26,9 +27,8 @@ export default function DashboardModal() {
     hideDashboardEntry,
     bringBackDashboardEntry,
     resetOrder,
-  } = useContext(DashboardContext)
-  const [showDashboardModal, setShowDashboardModal] =
-    useContext(ShowDashboardModal)
+  } = useDashboard()
+  const { showDashboardModal, setShowDashboardModal } = useModals()
   const themeModalBody = useRef()
 
   const { t } = useTranslation('common')

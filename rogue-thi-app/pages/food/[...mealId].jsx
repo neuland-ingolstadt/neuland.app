@@ -5,8 +5,7 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { useContext, useEffect, useState } from 'react'
-import { FoodFilterContext } from '../_app'
+import { useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
@@ -45,6 +44,7 @@ import Link from 'next/link'
 import { getCanisiusPlan } from '../api/canisius'
 import { getMensaPlan } from '../api/mensa'
 import { getReimannsPlan } from '../api/reimanns'
+import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
 
 export default function Food({ meal, id, locale }) {
   const [backAvailable, setBackAvailable] = useState(true)
@@ -59,7 +59,7 @@ export default function Food({ meal, id, locale }) {
   }, [])
 
   const { selectedLanguageFood, preferencesSelection, allergenSelection } =
-    useContext(FoodFilterContext)
+    useFoodFilter()
 
   const currentLocale = getAdjustedFoodLocale(selectedLanguageFood, i18n)
   const isTranslated = meal?.originalLanguage !== currentLocale && !meal?.static

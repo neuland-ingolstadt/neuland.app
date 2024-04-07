@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 import { faUtensils } from '@fortawesome/free-solid-svg-icons'
 
 import { Trans, useTranslation } from 'next-i18next'
 import BaseCard from './BaseCard'
-import { FoodFilterContext } from '../../pages/_app'
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 import { formatISODate } from '../../lib/date-utils'
 import { loadFoodEntries } from '../../lib/backend-utils/food-utils'
 
 import styles from '../../styles/Home.module.css'
+import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
 
 /**
  * Dashboard card for Mensa and Reimanns food plans.
@@ -24,7 +24,7 @@ export default function FoodCard() {
     selectedLanguageFood,
     preferencesSelection,
     allergenSelection,
-  } = useContext(FoodFilterContext)
+  } = useFoodFilter()
   const { i18n, t } = useTranslation(['dashboard', 'food'])
 
   const languageFood =

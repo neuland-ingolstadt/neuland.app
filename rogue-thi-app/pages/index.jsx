@@ -1,28 +1,28 @@
-import React, { useContext } from 'react'
+import React from 'react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
 import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
-import { DashboardContext, ShowDashboardModal } from './_app'
 import DashboardModal from '../components/modal/DashboardModal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Home.module.css'
+import { useDashboard } from '../lib/providers/DashboardProvider'
+import { useModals } from '../lib/providers/ModalProvider'
 import { useTranslation } from 'next-i18next'
 
 /**
  * Main page.
  */
 export default function Home() {
-  const [, setShowDashboardModal] = useContext(ShowDashboardModal)
+  const { setShowDashboardModal } = useModals()
 
   // page state
-  const { shownDashboardEntries, hideDashboardEntry } =
-    useContext(DashboardContext)
+  const { shownDashboardEntries, hideDashboardEntry } = useDashboard()
 
   const { t } = useTranslation('common')
 

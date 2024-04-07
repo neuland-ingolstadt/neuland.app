@@ -26,33 +26,33 @@ export async function loadFoodEntries(
     } catch (e) {
       console.error(e)
     }
+  }
 
-    if (restaurants.some((x) => ['reimanns', 'reimanns-static'].includes(x))) {
-      try {
-        const data = await NeulandAPI.getReimannsPlan()
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-          (x) => new Date(x.timestamp).getTime() >= startOfToday
-        )
+  if (restaurants.some((x) => ['reimanns', 'reimanns-static'].includes(x))) {
+    try {
+      const data = await NeulandAPI.getReimannsPlan()
+      const startOfToday = new Date(formatISODate(new Date())).getTime()
+      const filteredData = data.filter(
+        (x) => new Date(x.timestamp).getTime() >= startOfToday
+      )
 
-        entries.push(filteredData)
-      } catch (e) {
-        console.error(e)
-      }
+      entries.push(filteredData)
+    } catch (e) {
+      console.error(e)
     }
+  }
 
-    if (restaurants.includes('canisius')) {
-      try {
-        const data = await NeulandAPI.getCanisiusPlan()
-        const startOfToday = new Date(formatISODate(new Date())).getTime()
-        const filteredData = data.filter(
-          (x) => new Date(x.timestamp).getTime() >= startOfToday
-        )
+  if (restaurants.includes('canisius')) {
+    try {
+      const data = await NeulandAPI.getCanisiusPlan()
+      const startOfToday = new Date(formatISODate(new Date())).getTime()
+      const filteredData = data.filter(
+        (x) => new Date(x.timestamp).getTime() >= startOfToday
+      )
 
-        entries.push(filteredData)
-      } catch (e) {
-        console.error(e)
-      }
+      entries.push(filteredData)
+    } catch (e) {
+      console.error(e)
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import Button from 'react-bootstrap/Button'
@@ -27,14 +27,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
-  FoodFilterContext,
-  ShowDashboardModal,
-  ShowLanguageModal,
-  ShowPersonalDataModal,
-  ShowThemeModal,
-  ThemeContext,
-} from './_app'
-import {
   NoSessionError,
   UnavailableSessionError,
   forgetSession,
@@ -55,6 +47,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
 import { TextBlock } from 'react-placeholder/lib/placeholders'
+import { useFoodFilter } from '../lib/providers/FoodFilterProvider'
+import { useModals } from '../lib/providers/ModalProvider'
+import { useTheme } from '../lib/providers/ThemeProvider'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 
@@ -64,12 +59,14 @@ export default function Personal() {
   const [grades, setGrades] = useState(null)
   const [missingGrades, setMissingGrades] = useState(null)
   const [showDebug, setShowDebug] = useState(false)
-  const [, setShowDashboardModal] = useContext(ShowDashboardModal)
-  const { setShowFoodFilterModal } = useContext(FoodFilterContext)
-  const [, setShowPersonalDataModal] = useContext(ShowPersonalDataModal)
-  const [, setShowThemeModal] = useContext(ShowThemeModal)
-  const [, setShowLanguageModal] = useContext(ShowLanguageModal)
-  const [theme] = useContext(ThemeContext)
+  const { setShowFoodFilterModal } = useFoodFilter()
+  const {
+    setShowDashboardModal,
+    setShowPersonalDataModal,
+    setShowThemeModal,
+    setShowLanguageModal,
+  } = useModals()
+  const { theme } = useTheme()
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
 

@@ -1,11 +1,15 @@
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
+import { useUserKind } from '../hooks/user-kind'
 
 import {
   ALL_DASHBOARD_CARDS,
   PLATFORM_DESKTOP,
   PLATFORM_MOBILE,
 } from '../../components/allCards'
-import { useUserKind } from './user-kind'
+
+const initialState = {}
+
+const DashboardContext = createContext(initialState)
 
 /**
  * Get the default order of shown and hidden dashboard entries
@@ -23,41 +27,7 @@ function getDefaultDashboardOrder(userKind) {
   }
 }
 
-/**
- * @typedef {Object} DashboardSettings
- * @property {*[]} unlockedThemes - An array of unlocked themes.
- * @property {moveDashboardEntry} moveDashboardEntry - A function that moves a dashboard entry by a certain amount.
- * @property {hideDashboardEntry} hideDashboardEntry - A function that hides a dashboard entry.
- * @property {bringBackDashboardEntry} bringBackDashboardEntry - A function that brings back a hidden dashboard entry.
- * @property {*[]} shownDashboardEntries - An array of dashboard entries that are currently shown.
- * @property {resetOrder} resetOrder - A function that resets the order of the dashboard entries.
- * @property {*[]} hiddenDashboardEntries - An array of dashboard entries that are currently hidden.
- */
-
-/**
- * @callback moveDashboardEntry
- * @param {number} oldIndex - The current index of the dashboard entry.
- * @param {number} diff - The amount to move the dashboard entry by.
- * @returns {void}
- */
-
-/**
- * @callback hideDashboardEntry
- * @param {number} index - The index of the dashboard entry to hide.
- * @returns {void}
- */
-
-/**
- * @callback bringBackDashboardEntry
- * @param {number} index - The index of the hidden dashboard entry to bring back.
- * @returns {void}
- */
-
-/**
- * @callback resetOrder
- * @returns {void}
- */
-export function useDashboard() {
+export default function DashboardProvider({ children }) {
   const [shownDashboardEntries, setShownDashboardEntries] = useState([])
   const [hiddenDashboardEntries, setHiddenDashboardEntries] = useState([])
   const [unlockedThemes, setUnlockedThemes] = useState([])
@@ -177,7 +147,7 @@ export function useDashboard() {
     changeDashboardEntries(defaultEntries.shown, defaultEntries.hidden)
   }
 
-  return {
+  const value = {
     shownDashboardEntries,
     hiddenDashboardEntries,
     unlockedThemes,
@@ -186,4 +156,18 @@ export function useDashboard() {
     bringBackDashboardEntry,
     resetOrder,
   }
+
+  return (
+    <DashboardContext.Provider value={value}>
+      {children}
+    </DashboardContext.Provider>
+  )
+}
+
+export const useDashboard = () => {
+  const context = useContext(DashboardContext)
+  if (!context) {
+    throw new Error('useDashboard must be used within a DashboardProvider')
+  }
+  return context
 }

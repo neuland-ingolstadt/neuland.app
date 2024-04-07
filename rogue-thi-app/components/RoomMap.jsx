@@ -99,20 +99,6 @@ export default function RoomMap({ highlight, roomData }) {
     userFaculty && userFaculty === 'Nachhaltige Infrastruktur'
       ? NEUBURG_CENTER
       : INGOLSTADT_CENTER
-  /**
-   * WILL BE USED WITH NEW TILE SERVICE
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const [theme] = useContext(ThemeContext)
-
-  function isDark () {
-    const themeSettings = themes.filter(item => item.style === theme)[0].mapTheme ?? 'system'
-    if (themeSettings === 'system') {
-      return systemDark
-    } else {
-      return themeSettings === 'dark'
-    }
-  }
-  */
 
   /**
    * Preprocessed room data for Leaflet.

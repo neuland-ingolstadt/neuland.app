@@ -1,6 +1,4 @@
-import { useContext, useRef } from 'react'
-
-import { FoodFilterContext, ShowLanguageModal } from '../../pages/_app'
+import { useRef } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -9,6 +7,8 @@ import languages from '../../data/languages.json'
 import styles from '../../styles/Personalize.module.css'
 import { useRouter } from 'next/router'
 
+import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
+import { useModals } from '../../lib/providers/ModalProvider'
 import { useTranslation } from 'next-i18next'
 
 /**
@@ -17,15 +17,13 @@ import { useTranslation } from 'next-i18next'
  * @constructor
  */
 export default function LanguageModal() {
-  const [showLanguageModal, setShowLanguageModal] =
-    useContext(ShowLanguageModal)
+  const { showLanguageModal, setShowLanguageModal } = useModals()
   const languageModalBody = useRef()
   const router = useRouter()
 
   const { t, i18n } = useTranslation('personal')
 
-  const { selectedLanguageFood, toggleSelectedLanguageFood } =
-    useContext(FoodFilterContext)
+  const { selectedLanguageFood, toggleSelectedLanguageFood } = useFoodFilter()
 
   /**
    * Changes the current language.
