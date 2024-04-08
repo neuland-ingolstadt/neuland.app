@@ -7,8 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { Trash } from 'lucide-react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -229,13 +228,11 @@ export default function Library() {
                 <ListGroup.Item key={i}>
                   <div className={styles.floatRight}>
                     <Button
+                      className={styles.cancelButton}
                       variant="danger"
                       onClick={() => deleteReservation(x.reservation_id)}
                     >
-                      <FontAwesomeIcon
-                        title={t('library.actions.delete')}
-                        icon={faTrashAlt}
-                      />
+                      <Trash size={18} />
                     </Button>
                   </div>
                   <Trans

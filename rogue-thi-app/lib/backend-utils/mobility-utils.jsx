@@ -1,6 +1,4 @@
-import { faEuroSign, faKey } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCreativeCommonsNcEu } from '@fortawesome/free-brands-svg-icons'
+import { Euro, LockKeyhole } from 'lucide-react'
 
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 
@@ -186,24 +184,14 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
       <>
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
-            {item.priceLevel === 'free' && (
-              <FontAwesomeIcon
-                title={t('transport.details.parking.free')}
-                icon={faCreativeCommonsNcEu}
-              />
-            )}
-            {item.priceLevel === 'restricted' && (
-              <FontAwesomeIcon
-                title={t('transport.details.parking.restricted')}
-                icon={faKey}
-              />
-            )}
+            {item.priceLevel === 'free' && <Euro size={16} />}
+            {item.priceLevel === 'restricted' && <LockKeyhole size={16} />}
             {item.priceLevel > 0 &&
               new Array(item.priceLevel).fill(0).map((_, i) => (
-                <FontAwesomeIcon
-                  title={t('transport.details.parking.paid')}
+                <Euro
                   key={i}
-                  icon={faEuroSign}
+                  size={16}
+                  style={{ marginLeft: i === 0 ? 0 : -5 }}
                 />
               ))}
           </div>

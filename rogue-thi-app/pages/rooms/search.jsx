@@ -7,9 +7,6 @@ import Form from 'react-bootstrap/Form'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
-
 import AppBody from '../../components/page/AppBody'
 import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
@@ -19,7 +16,6 @@ import {
   BUILDINGS,
   BUILDINGS_ALL,
   DURATION_PRESET,
-  TUX_ROOMS,
   filterRooms,
   getNextValidDate,
   getRoomWithCapacity,
@@ -209,15 +205,6 @@ export default function RoomSearch() {
                       <Link href={`/rooms?highlight=${result.room}`}>
                         {getTranslatedRoomName(result.room)}
                       </Link>
-                      {TUX_ROOMS.includes(result.room) && (
-                        <>
-                          {' '}
-                          <FontAwesomeIcon
-                            title="Linux"
-                            icon={faLinux}
-                          />
-                        </>
-                      )}
                       <div className={styles.details}>
                         {getRoomWithCapacity(
                           getTranslatedRoomFunction(result.type),

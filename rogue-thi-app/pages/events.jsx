@@ -3,10 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import {
-  faExternalLink,
-  faExternalLinkAlt,
-} from '@fortawesome/free-solid-svg-icons'
+import { ExternalLink } from 'lucide-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons'
 
@@ -93,8 +90,7 @@ export default function Events() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          {item.title}{' '}
-                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                          {item.title} <ExternalLink size={16} />
                         </a>
                       )}
                       <div className={styles.details}>
@@ -108,11 +104,7 @@ export default function Events() {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  {item.organizer}{' '}
-                                  <FontAwesomeIcon
-                                    icon={faExternalLink}
-                                    fixedWidth
-                                  />
+                                  {item.organizer} <ExternalLink size={16} />
                                 </a>
                               )}
                               {club.instagram != null && (

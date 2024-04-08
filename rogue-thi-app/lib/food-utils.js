@@ -1,9 +1,5 @@
+import { Salad, Sandwich, Soup } from 'lucide-react'
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from './hooks/user-kind'
-import {
-  faBowlFood,
-  faBurger,
-  faSeedling,
-} from '@fortawesome/free-solid-svg-icons'
 import { getAdjustedLocale } from './locale-utils'
 
 /**
@@ -131,10 +127,10 @@ export function getUserSpecificPrice(meal, userKind) {
 export function getCategoryIcon(meal) {
   switch (meal.category) {
     case 'soup':
-      return faBowlFood
+      return Soup
     case 'salad':
-      return faSeedling
+      return Salad
     default:
-      return faBurger
+      return Sandwich
   }
 }

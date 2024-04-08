@@ -6,8 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { ExternalLink } from 'lucide-react'
 
 import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import AppBody from '../components/page/AppBody'
@@ -166,7 +165,7 @@ export default function Calendar() {
                         rel="noreferrer"
                       >
                         {item.name[i18n.languages[0]]}{' '}
-                        <FontAwesomeIcon icon={faExternalLinkAlt} />
+                        <ExternalLink size={16} />
                       </a>
                     )}
                     <br />

@@ -3,13 +3,7 @@ import { useRouter } from 'next/router'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
-import {
-  faCalendar,
-  faHome,
-  faMap,
-  faUtensils,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Calendar, Home, Map, User, Utensils } from 'lucide-react'
 
 import { USER_GUEST, useUserKind } from '../../lib/hooks/user-kind'
 
@@ -41,8 +35,8 @@ export default function AppTabbar() {
                 router.pathname === '/' && styles.tabActive,
               ]}
             >
-              <FontAwesomeIcon
-                icon={faHome}
+              <Home
+                size={24}
                 className={styles.icon}
               />
               {i18n.t('cards.home')}
@@ -57,8 +51,8 @@ export default function AppTabbar() {
                   router.pathname === '/timetable' && styles.tabActive,
                 ]}
               >
-                <FontAwesomeIcon
-                  icon={faCalendar}
+                <Calendar
+                  size={24}
                   className={styles.icon}
                 />
                 {i18n.t('cards.timetable')}
@@ -73,8 +67,8 @@ export default function AppTabbar() {
                 router.pathname === '/rooms' && styles.tabActive,
               ]}
             >
-              <FontAwesomeIcon
-                icon={faMap}
+              <Map
+                size={24}
                 className={styles.icon}
               />
               {i18n.t('appbar.rooms')}
@@ -88,11 +82,26 @@ export default function AppTabbar() {
                 router.pathname === '/food' && styles.tabActive,
               ]}
             >
-              <FontAwesomeIcon
-                icon={faUtensils}
+              <Utensils
+                size={24}
                 className={styles.icon}
               />
               {i18n.t('cards.mensa')}
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              onClick={() => router.replace('/personal')}
+              className={[
+                styles.tab,
+                router.pathname === '/personal' && styles.tabActive,
+              ]}
+            >
+              <User
+                size={24}
+                className={styles.icon}
+              />
+              {i18n.t('cards.personal')}
             </Nav.Link>
           </Nav.Item>
         </Nav>

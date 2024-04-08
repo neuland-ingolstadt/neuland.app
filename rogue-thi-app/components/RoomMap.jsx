@@ -19,15 +19,11 @@ import {
   useMap,
 } from 'react-leaflet'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
-
 import {
   NoSessionError,
   UnavailableSessionError,
 } from '../lib/backend/thi-session-handler'
 import {
-  TUX_ROOMS,
   filterRooms,
   getNextValidDate,
   getRoomAvailability,
@@ -329,16 +325,6 @@ export default function RoomMap({ highlight, roomData }) {
             <>
               <br />
               {special.text}
-              {TUX_ROOMS.includes(entry.properties.Raum) && (
-                <>
-                  {' '}
-                  <FontAwesomeIcon
-                    title="Linux"
-                    icon={faLinux}
-                    fontSize={12}
-                  />
-                </>
-              )}
             </>
           )}
         </Popup>

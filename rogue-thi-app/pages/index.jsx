@@ -6,14 +6,11 @@ import AppNavbar from '../components/page/AppNavbar'
 import AppTabbar from '../components/page/AppTabbar'
 
 import DashboardModal from '../components/modal/DashboardModal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { Pencil } from 'lucide-react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Home.module.css'
 import { useDashboard } from '../lib/providers/DashboardProvider'
 import { useModals } from '../lib/providers/ModalProvider'
-import { useTranslation } from 'next-i18next'
 
 /**
  * Main page.
@@ -24,8 +21,6 @@ export default function Home() {
   // page state
   const { shownDashboardEntries, hideDashboardEntry } = useDashboard()
 
-  const { t } = useTranslation('common')
-
   return (
     <AppContainer>
       <AppNavbar
@@ -33,10 +28,9 @@ export default function Home() {
         showBack={false}
       >
         <AppNavbar.Button onClick={() => setShowDashboardModal(true)}>
-          <FontAwesomeIcon
-            title={t('dashboard.orderModal.icons.personalize')}
-            icon={faPen}
-            fixedWidth
+          <Pencil
+            size={18}
+            floodColor={'white'}
           />
         </AppNavbar.Button>
       </AppNavbar>
