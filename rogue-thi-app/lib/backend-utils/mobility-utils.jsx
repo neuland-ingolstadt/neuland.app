@@ -1,4 +1,4 @@
-import { Euro, LockKeyhole } from 'lucide-react'
+import { LockKeyhole } from 'lucide-react'
 
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 
@@ -184,16 +184,10 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
       <>
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
-            {item.priceLevel === 'free' && <Euro size={16} />}
-            {item.priceLevel === 'restricted' && <LockKeyhole size={16} />}
-            {item.priceLevel > 0 &&
-              new Array(item.priceLevel).fill(0).map((_, i) => (
-                <Euro
-                  key={i}
-                  size={16}
-                  style={{ marginLeft: i === 0 ? 0 : -5 }}
-                />
-              ))}
+            {/* TODO */}
+            {item.priceLevel === 'free' && '-€-'}
+            {item.priceLevel === 'restricted' && <LockKeyhole size={14} />}
+            {item.priceLevel > 0 && '€'.repeat(item.priceLevel)}
           </div>
         )}
         <div className={styles.mobilityDestination}>{item.name}</div>
