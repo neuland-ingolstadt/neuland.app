@@ -61,21 +61,6 @@ export default function AppTabbar() {
           )}
           <Nav.Item>
             <Nav.Link
-              onClick={() => router.replace('/rooms')}
-              className={[
-                styles.tab,
-                router.pathname === '/rooms' && styles.tabActive,
-              ]}
-            >
-              <Map
-                size={24}
-                className={styles.icon}
-              />
-              {i18n.t('appbar.rooms')}
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
               onClick={() => router.replace('/food')}
               className={[
                 styles.tab,
@@ -87,6 +72,21 @@ export default function AppTabbar() {
                 className={styles.icon}
               />
               {i18n.t('cards.mensa')}
+            </Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link
+              onClick={() => router.replace('/rooms')}
+              className={[
+                styles.tab,
+                router.pathname === '/rooms' && styles.tabActive,
+              ]}
+            >
+              <Map
+                size={24}
+                className={styles.icon}
+              />
+              {i18n.t('appbar.rooms')}
             </Nav.Link>
           </Nav.Item>
           <Nav.Item>
