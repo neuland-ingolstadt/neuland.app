@@ -22,7 +22,13 @@
 }
 
 .details {
-  color: gray;
+  color: var(--gray);
+}
+
+.organizer {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
 }
 
 .right {
