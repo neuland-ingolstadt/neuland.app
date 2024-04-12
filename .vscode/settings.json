@@ -17,5 +17,6 @@
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "terminal.integrated.cwd": "rogue-thi-app"
 }
