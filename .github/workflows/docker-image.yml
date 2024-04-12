@@ -45,3 +45,9 @@ jobs:
                   push: true
                   tags: ${{ steps.meta.outputs.tags }}
                   labels: ${{ steps.meta.outputs.labels }}
+									build-args: |
+										NEXT_PUBLIC_HACKERMAN_FLAGS=${{ vars.NEXT_PUBLIC_HACKERMAN_FLAGS }}
+										NEXT_PUBLIC_GUEST_ONLY=${{ vars.NEXT_PUBLIC_GUEST_ONLY }}
+										NEXT_PUBLIC_THI_API_KEY=${{ secrets.NEXT_PUBLIC_THI_API_KEY }}
+										NEXT_PUBLIC_HACKERMAN_FLAGS=${{ vars.NEXT_PUBLIC_HACKERMAN_FLAGS }}
+									
