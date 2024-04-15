@@ -143,8 +143,8 @@ async function getEventDetails(fetch, url) {
   return Object.fromEntries(
     rows.map((elem) => {
       return [
-        $(elem).find('.c0 > b').text().trim(),
-        $(elem).find('.c1').text().trim(),
+        $(elem).find('.c0').text().trim().replace(/:$/, ''),
+        $(elem).find('.c1').text().trim().replace(/:$/, ''),
       ]
     })
   )
