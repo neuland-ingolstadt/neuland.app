@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -n "$NEXT_PUBLIC_GUEST_ONLY" ]; then
+if [ "$NEXT_PUBLIC_GUEST_ONLY" = "true" ]; then
 	echo "Skipping grade weight extraction (guest only mode)"
 	echo "{}" > spo-grade-weights.json
 	exit 0
