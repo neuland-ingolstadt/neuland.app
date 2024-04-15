@@ -53,3 +53,7 @@
 .mobilityCanceled {
   text-decoration: line-through;
 }
+
+.strikethrough {
+  text-decoration: line-through;
+}

@@ -184,8 +184,9 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
       <>
         {item.priceLevel && (
           <div className={styles.mobilityRoute}>
-            {/* TODO */}
-            {item.priceLevel === 'free' && '-€-'}
+            {item.priceLevel === 'free' && (
+              <span className={styles.strikethrough}>&nbsp;€&nbsp;</span>
+            )}
             {item.priceLevel === 'restricted' && <LockKeyhole size={14} />}
             {item.priceLevel > 0 && '€'.repeat(item.priceLevel)}
           </div>

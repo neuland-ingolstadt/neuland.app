@@ -128,3 +128,7 @@
 .cardTitleText {
   flex: 1;
 }
+
+.strikethrough {
+  text-decoration: line-through;
+}
