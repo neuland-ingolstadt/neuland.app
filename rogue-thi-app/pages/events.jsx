@@ -47,11 +47,11 @@ export default function Events() {
     async function load() {
       const campusLifeEvents = await NeulandAPI.getCampusLifeEvents()
 
-      const newEvents = campusLifeEvents
+      const newEvents = campusLifeEvents.clEvents
         .map((x) => ({
           ...x,
-          begin: x.begin ? new Date(x.begin) : null,
-          end: x.end ? new Date(x.end) : null,
+          begin: x.begin ? new Date(Number(x.begin)) : null,
+          end: x.end ? new Date(Number(x.end)) : null,
         }))
         .filter((x) => x.end === null || x.end > new Date())
 

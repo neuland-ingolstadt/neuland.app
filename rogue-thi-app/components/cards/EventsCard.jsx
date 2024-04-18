@@ -22,7 +22,7 @@ export default function EventsCard() {
     async function load() {
       try {
         const events = await NeulandAPI.getCampusLifeEvents()
-        setCalendar(events)
+        setCalendar(events.clEvents)
       } catch (e) {
         // directly notifying the user about the error is not necessary here
         console.error(e)

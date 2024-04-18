@@ -1,8 +1,8 @@
 import obtainFetchImplementation from '../fetch-implementations'
-
+import { gql, request } from 'graphql-request'
 const ENDPOINT_MODE = process.env.NEXT_PUBLIC_NEULAND_API_MODE || 'direct'
 const ENDPOINT_HOST = process.env.NEXT_PUBLIC_NEULAND_API_HOST || ''
-
+const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_NEULAND_GRAPHQL_ENDPOINT || 'https://api.neuland.app/graphql'
 class NeulandAPIClient {
   /**
    * Performs a request against the neuland.app API
@@ -19,6 +19,17 @@ class NeulandAPIClient {
       return await resp.json()
     } else {
       throw new Error('API returned an error: ' + (await resp.text()))
+    }
+  }
+
+  async performGraphQLQuery(query) {
+    try {
+      const data = await request(GRAPHQL_ENDPOINT, query)
+      return data
+    }
+    catch (e) {
+      console.error(e)
+      throw new Error('GraphQL query failed', e)
     }
   }
 
@@ -57,7 +68,17 @@ class NeulandAPIClient {
   }
 
   async getCampusLifeEvents() {
-    return this.performRequest('/api/cl-events/')
+     return await this.performGraphQLQuery(gql`
+       query {
+         clEvents {
+           id
+           organizer
+           title
+           begin
+           end
+         }
+       }
+     `)
   }
 }
 

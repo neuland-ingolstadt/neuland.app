@@ -190,7 +190,6 @@ export function formatFriendlyRelativeTime(date) {
   startOfDay.setMinutes(0)
   startOfDay.setSeconds(0)
   startOfDay.setMilliseconds(0)
-
   const deltaFromNow = date.getTime() - Date.now()
   const deltaFromStartOfDay = date.getTime() - startOfDay.getTime()
 
