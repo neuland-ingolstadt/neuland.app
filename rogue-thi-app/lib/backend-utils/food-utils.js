@@ -15,46 +15,11 @@ const VERSIONS = ['v1', 'v2']
  * @returns {object[]}
  */
 export async function loadFoodEntries(
-  restaurants = ['mensa', 'reimanns', 'reimanns-static', 'canisius']
+  restaurants = ['IngolstadtMensa', 'NeuburgMensa', 'Reimanns', 'Canisius'],
+  showStaticMeals = false
 ) {
-  const entries = []
-
-  if (restaurants.includes('mensa')) {
-    try {
-      const data = await NeulandAPI.getMensaPlan()
-      entries.push(data)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  if (restaurants.some((x) => ['reimanns', 'reimanns-static'].includes(x))) {
-    try {
-      const data = await NeulandAPI.getReimannsPlan()
-      const startOfToday = new Date(formatISODate(new Date())).getTime()
-      const filteredData = data.filter(
-        (x) => new Date(x.timestamp).getTime() >= startOfToday
-      )
-
-      entries.push(filteredData)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  if (restaurants.includes('canisius')) {
-    try {
-      const data = await NeulandAPI.getCanisiusPlan()
-      const startOfToday = new Date(formatISODate(new Date())).getTime()
-      const filteredData = data.filter(
-        (x) => new Date(x.timestamp).getTime() >= startOfToday
-      )
-
-      entries.push(filteredData)
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const data2 = await NeulandAPI.getFoodPlan(restaurants)
+  const entries = data2.food
 
   // get start of this week (monday) or next monday if isWeekend
   const startOfThisWeek = getMonday(getAdjustedDay(new Date()))
@@ -74,12 +39,14 @@ export async function loadFoodEntries(
 
   // map entries to daysTest
   return days.map((day) => {
-    const dayEntries = entries.flatMap(
-      (r) => r.find((x) => x.timestamp === day)?.meals || []
-    )
+    const dayEntry = entries.find((r) => r.timestamp === day)
     return {
       timestamp: day,
-      meals: dayEntries,
+      meals: dayEntry
+        ? showStaticMeals
+          ? dayEntry.meals
+          : dayEntry.meals.filter((meal) => !meal.static)
+        : [],
     }
   })
 }

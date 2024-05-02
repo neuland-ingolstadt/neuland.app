@@ -63,6 +63,7 @@ export default function Mensa() {
     preferencesSelection,
     allergenSelection,
     setShowFoodFilterModal,
+    showStaticMeals,
   } = useFoodFilter()
 
   const [currentFoodDays, setCurrentFoodDays] = useState(null)
@@ -79,7 +80,7 @@ export default function Mensa() {
   useEffect(() => {
     async function load() {
       try {
-        const days = await loadFoodEntries(selectedRestaurants)
+        const days = await loadFoodEntries(selectedRestaurants, showStaticMeals)
 
         setCurrentFoodDays(days.slice(0, 5))
         setFutureFoodDays(days?.slice(5, days.length))
@@ -87,12 +88,11 @@ export default function Mensa() {
         setCurrentDay(getAdjustedDay(new Date()).getDay() - 1)
       } catch (e) {
         console.error(e)
-        alert(e)
       }
     }
 
     load()
-  }, [selectedRestaurants, router])
+  }, [selectedRestaurants, router, showStaticMeals])
 
   /**
    * Renders styled ListGroup.Item
@@ -232,25 +232,26 @@ export default function Mensa() {
    * @returns {JSX.Element}
    */
   function renderMealDay(day, key) {
-    const includeStaticReimanns =
-      selectedRestaurants.includes('reimanns-static')
-
-    const mensa = day.meals.filter((x) => x.restaurant === 'mensa')
+    const mensa = day.meals.filter((x) => x.restaurant === 'IngolstadtMensa')
     const mensaSoups = mensa.filter((x) => x.category.includes('soup'))
     const mensaFood = mensa.filter((x) => !x.category.includes('soup'))
 
-    const reimanns = day.meals
-      .filter((x) => x.restaurant === 'reimanns')
-      .filter((x) => !x.static || x.static === includeStaticReimanns)
+    const neuburg = day.meals.filter((x) => x.restaurant === 'NeuburgMensa')
+    const neuburgFood = neuburg.filter((x) => !x.category.includes('soup'))
+
+    const reimanns = day.meals.filter((x) => x.restaurant === 'Reimanns')
     const reimannsFood = reimanns.filter((x) => !x.category.includes('salad'))
     const reimannsSalad = reimanns.filter((x) => x.category.includes('salad'))
 
-    const canisius = day.meals.filter((x) => x.restaurant === 'canisius')
+    const canisius = day.meals.filter((x) => x.restaurant === 'Canisius')
     const canisiusSalads = canisius.filter((x) => x.category.includes('salad'))
     const canisiusFood = canisius.filter((x) => !x.category.includes('salad'))
 
     const noData =
-      mensa.length === 0 && reimanns.length === 0 && canisius.length === 0
+      mensa.length === 0 &&
+      reimanns.length === 0 &&
+      canisius.length === 0 &&
+      neuburg.length === 0
 
     return (
       <SwipeableTab
@@ -278,6 +279,23 @@ export default function Mensa() {
                 <ListGroup className={styles.meals}>
                   {mensaSoups.map((meal, idx) =>
                     renderMealEntry(meal, `mensa-soup-${idx}`)
+                  )}
+                </ListGroup>
+              </>
+            )}
+          </>
+        )}
+        {neuburg.length > 0 && (
+          <>
+            <h4 className={styles.restaurantHeader}>
+              {t('list.titles.neuburg')}
+            </h4>
+            {neuburgFood.length > 0 && (
+              <>
+                <h5 className={styles.kindHeader}>{t('list.titles.meals')}</h5>
+                <ListGroup className={styles.meals}>
+                  {neuburgFood.map((meal, idx) =>
+                    renderMealEntry(meal, `mensa-food-${idx}`)
                   )}
                 </ListGroup>
               </>

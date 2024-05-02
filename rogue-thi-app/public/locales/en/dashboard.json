@@ -15,8 +15,11 @@
       "food": {
         "title": "Food"
       },
-      "cafeteria": {
-        "title": "Cafeteria"
+      "mensaIngolstadt": {
+        "title": "Canteen Ingolstadt"
+      },
+      "mensaNeuburg": {
+        "title": "Counter Neuburg"
       },
       "reimanns": {
         "title": "Reimanns"

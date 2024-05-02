@@ -34,20 +34,23 @@ export default function FoodCard() {
 
   useEffect(() => {
     async function load() {
-      const restaurants = localStorage.selectedRestaurants
-        ? JSON.parse(localStorage.selectedRestaurants)
+      const restaurants = localStorage.selectedRestaurantList
+        ? JSON.parse(localStorage.selectedRestaurantList)
         : ['mensa']
       if (restaurants.length !== 1) {
         setFoodCardTitle('food')
       } else {
         switch (restaurants[0]) {
-          case 'mensa':
-            setFoodCardTitle('cafeteria')
+          case 'IngolstadtMensa':
+            setFoodCardTitle('mensaIngolstadt')
             break
-          case 'reimanns':
+          case 'NeuburgMensa':
+            setFoodCardTitle('mensaNeuburg')
+            break
+          case 'Reimanns':
             setFoodCardTitle('reimanns')
             break
-          case 'canisius':
+          case 'Canisius':
             setFoodCardTitle('canisius')
             break
           default:
@@ -73,14 +76,14 @@ export default function FoodCard() {
           }
         }
 
-        const entries = await loadFoodEntries(restaurants)
+        const entries = await loadFoodEntries(restaurants, false)
         const todayEntries = entries
           .find((x) => x.timestamp === today)
           ?.meals.filter(
             (x) =>
               x.category !== 'soup' &&
               x.category !== 'salad' &&
-              selectedRestaurants.includes(x.restaurant.toLowerCase())
+              selectedRestaurants.includes(x.restaurant)
           )
 
         todayEntries?.sort((a, b) => userMealRating(b) - userMealRating(a))

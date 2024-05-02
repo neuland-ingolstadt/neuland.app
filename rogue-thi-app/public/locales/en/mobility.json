@@ -29,7 +29,7 @@
         "available": "{{available}} of {{total}} available"
       },
       "parking": {
-        "available": "{{available}} available",
+        "available": "{{available}} left",
         "unknown": "n/a",
         "employees": "Employees",
         "free": "Free",

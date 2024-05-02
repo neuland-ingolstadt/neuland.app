@@ -101,7 +101,7 @@ export default function MobilityCard() {
         customPlaceholder={placeholder}
       >
         <ListGroup variant="flush">
-          {mobility &&
+          {mobility !== null &&
             mobility.slice(0, 4).map((entry, i) => (
               <ListGroup.Item
                 key={i}

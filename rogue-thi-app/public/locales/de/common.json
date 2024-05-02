@@ -14,7 +14,8 @@
         "title": "Restaurants",
         "showMensa": "Mensa anzeigen",
         "showReimanns": "Reimanns anzeigen",
-        "showReimannsStatic": "Reimanns anzeigen (feste Gerichte)",
+        "showMensaIngolstadt": "Mensa Ingolstadt anzeigen",
+        "showMensaNeuburg": "Theke Neuburg anzeigen",
         "showCanisius": "Canisiuskonvikt anzeigen"
       },
       "allergens": {
@@ -22,6 +23,10 @@
         "iconTitle": "Allergene",
         "selected": "Ausgewählt",
         "empty": "Keine"
+      },
+      "showStaticMeals": {
+        "title": "Dauerhafte Gerichte",
+        "label": "Dauerhafte Gerichte anzeigen"
       },
       "preferences": {
         "title": "Essenspräferenzen",
