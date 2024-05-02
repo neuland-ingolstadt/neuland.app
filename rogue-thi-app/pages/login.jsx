@@ -24,7 +24,7 @@ const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
-const GUEST_ONLY = !!process.env.NEXT_PUBLIC_GUEST_ONLY
+const GUEST_ONLY = process.env.NEXT_PUBLIC_GUEST_ONLY === 'true'
 
 const KNOWN_BACKEND_ERRORS = ['Response is not valid JSON']
 

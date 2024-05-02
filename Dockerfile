@@ -34,6 +34,8 @@ RUN curl --output-dir data/ https://assets.neuland.app/generated/ical-courses.js
 
 RUN npm run build
 
+ENV NODE_ENV=production
+
 USER node
 EXPOSE 3000
 CMD ["npm", "start"]
