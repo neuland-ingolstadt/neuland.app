@@ -59,7 +59,7 @@ export function getMobilityLabel(kind, station, t) {
  */
 export async function getMobilityEntries(kind, station) {
   if (kind === 'bus') {
-    const data = NeulandAPI.getBusPlan(station)
+    const data = await NeulandAPI.getBusPlan(station)
     return data.bus
   } else if (kind === 'train') {
     const data = await NeulandAPI.getTrainPlan(station)
@@ -215,7 +215,7 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
   function formatTimes(time, cardMin, detailedMin) {
     const cardMs = cardMin * 60 * 1000
     const detailedMs = detailedMin * 60 * 1000
-    const actualTime = new Date(time)
+    const actualTime = new Date(Number(time))
     const timeDifference = actualTime - new Date()
     let timeString
 
