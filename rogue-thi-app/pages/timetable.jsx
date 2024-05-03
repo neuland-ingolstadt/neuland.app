@@ -11,11 +11,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import ReactPlaceholder from 'react-placeholder'
 
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -531,10 +527,7 @@ export default function Timetable() {
             variant="link"
             onClick={() => setPage((idx) => idx - 1)}
           >
-            <FontAwesomeIcon
-              title={t('timetable.weekSelection.weekBack')}
-              icon={faChevronLeft}
-            />
+            <ChevronLeft />
           </Button>
           <div className={styles.currentWeek}>{getFriendlyWeek(week[0])}</div>
           <Button
@@ -542,10 +535,7 @@ export default function Timetable() {
             variant="link"
             onClick={() => setPage((idx) => idx + 1)}
           >
-            <FontAwesomeIcon
-              title={t('timetable.weekSelection.weekForward')}
-              icon={faChevronRight}
-            />
+            <ChevronRight />
           </Button>
         </div>
 

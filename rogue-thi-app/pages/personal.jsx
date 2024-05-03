@@ -16,15 +16,14 @@ import PersonalDataModal from '../components/modal/PersonalDataModal'
 import ThemeModal from '../components/modal/ThemeModal'
 
 import {
-  faArrowRightFromBracket,
-  faArrowRightToBracket,
-  faBug,
-  faChevronRight,
-  faExternalLink,
-  faGavel,
-  faShield,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+  Bug,
+  ChevronRight,
+  ExternalLink,
+  Gavel,
+  LogIn,
+  LogOut,
+  Shield,
+} from 'lucide-react'
 
 import {
   NoSessionError,
@@ -181,9 +180,9 @@ export default function Personal() {
                 onClick={() => setShowPersonalDataModal(true)}
               >
                 <div className={styles.name_interaction_icon}>
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
+                  <ChevronRight
                     className="text-muted"
+                    size={22}
                   />
                 </div>
                 {userdata && userdata.name + ', ' + userdata.vname}
@@ -229,7 +228,10 @@ export default function Personal() {
                         '/' +
                         (grades.length + missingGrades.length)}
                     {` ${t('personal.overview.grades')} `}
-                    <FontAwesomeIcon icon={faChevronRight} />
+                    <ChevronRight
+                      className="text-muted"
+                      size={22}
+                    />
                   </span>
                 </div>
                 <span className="text-muted">
@@ -256,7 +258,10 @@ export default function Personal() {
                 <div className={styles.interaction_icon}>
                   <span className="text-muted">
                     {`${item.name[i18n.languages[0]]} `}
-                    <FontAwesomeIcon icon={faChevronRight} />
+                    <ChevronRight
+                      className="text-muted"
+                      size={22}
+                    />
                   </span>
                 </div>
                 {t('personal.theme')}
@@ -268,9 +273,10 @@ export default function Personal() {
             onClick={() => setShowDashboardModal(true)}
           >
             <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight} />
-              </span>
+              <ChevronRight
+                className="text-muted"
+                size={22}
+              />
             </div>
             {t('personal.dashboard')}
           </ListGroup.Item>
@@ -280,9 +286,10 @@ export default function Personal() {
             onClick={() => setShowLanguageModal(true)}
           >
             <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight} />
-              </span>
+              <ChevronRight
+                className="text-muted"
+                size={22}
+              />
             </div>
             {t('personal.language')}
           </ListGroup.Item>
@@ -292,9 +299,10 @@ export default function Personal() {
             onClick={() => setShowFoodFilterModal(true)}
           >
             <div className={styles.interaction_icon}>
-              <span className="text-muted">
-                <FontAwesomeIcon icon={faChevronRight} />
-              </span>
+              <ChevronRight
+                className="text-muted"
+                size={22}
+              />
             </div>
             {t('personal.foodPreferences')}
           </ListGroup.Item>
@@ -313,8 +321,8 @@ export default function Personal() {
               )
             }
           >
-            <FontAwesomeIcon
-              icon={faExternalLink}
+            <ExternalLink
+              size={20}
               className={styles.interaction_icon}
             />
             Primuss
@@ -327,8 +335,8 @@ export default function Personal() {
               window.open('https://moodle.thi.de/moodle', '_blank')
             }
           >
-            <FontAwesomeIcon
-              icon={faExternalLink}
+            <ExternalLink
+              size={20}
               className={styles.interaction_icon}
             />
             Moodle
@@ -339,8 +347,8 @@ export default function Personal() {
             className={styles.interaction_row}
             onClick={() => window.open('https://outlook.thi.de/', '_blank')}
           >
-            <FontAwesomeIcon
-              icon={faExternalLink}
+            <ExternalLink
+              size={20}
               className={styles.interaction_icon}
             />
             E-Mail
@@ -351,8 +359,8 @@ export default function Personal() {
               action
               onClick={() => window.open('https://mythi.de', '_blank')}
             >
-              <FontAwesomeIcon
-                icon={faExternalLink}
+              <ExternalLink
+                size={20}
                 className={styles.interaction_icon}
               />
               MyTHI
@@ -369,8 +377,8 @@ export default function Personal() {
               className={styles.interaction_row}
               onClick={() => router.push('/debug')}
             >
-              <FontAwesomeIcon
-                icon={faBug}
+              <Bug
+                size={20}
                 className={styles.interaction_icon}
               />
               {t('personal.debug')}
@@ -382,8 +390,8 @@ export default function Personal() {
             className={styles.interaction_row}
             onClick={() => window.open(PRIVACY_URL, '_blank')}
           >
-            <FontAwesomeIcon
-              icon={faShield}
+            <Shield
+              size={20}
               className={styles.interaction_icon}
             />
             {t('personal.privacy')}
@@ -394,8 +402,8 @@ export default function Personal() {
             className={styles.interaction_row}
             onClick={() => router.push('/imprint')}
           >
-            <FontAwesomeIcon
-              icon={faGavel}
+            <Gavel
+              size={20}
               className={styles.interaction_icon}
             />
             {t('personal.imprint')}
@@ -407,20 +415,22 @@ export default function Personal() {
         <div className={styles.logout_button}>
           {userKind === USER_GUEST && (
             <Button
+              className={styles.logout_button}
               variant={'success'}
               onClick={() => forgetSession(router)}
             >
               {`${t('personal.login')} `}
-              <FontAwesomeIcon icon={faArrowRightToBracket} />
+              <LogIn size={18} />
             </Button>
           )}
           {userKind !== USER_GUEST && (
             <Button
+              className={styles.logout_button}
               variant={'danger'}
               onClick={() => forgetSession(router)}
             >
               {`${t('personal.logout')} `}
-              <FontAwesomeIcon icon={faArrowRightFromBracket} />
+              <LogOut size={18} />
             </Button>
           )}
         </div>

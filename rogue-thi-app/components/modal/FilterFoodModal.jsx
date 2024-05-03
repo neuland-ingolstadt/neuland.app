@@ -3,8 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { Pencil } from 'lucide-react'
 
 import allergenMap from '../../data/allergens.json'
 import flagMap from '../../data/mensa-flags.json'
@@ -113,12 +112,9 @@ export default function FilterFoodModal() {
                 setShowAllergenSelection(true)
                 setShowFoodFilterModal(false)
               }}
+              className={styles.editButton}
             >
-              <FontAwesomeIcon
-                title={t('food.filterModal.allergens.iconTitle')}
-                icon={faPen}
-                fixedWidth
-              />
+              <Pencil size={18} />
             </Button>
           </div>
           <div className={styles.filterBody}>
@@ -139,12 +135,9 @@ export default function FilterFoodModal() {
                 setShowPreferencesSelection(true)
                 setShowFoodFilterModal(false)
               }}
+              className={styles.editButton}
             >
-              <FontAwesomeIcon
-                title={t('food.filterModal.preferences.iconTitle')}
-                icon={faPen}
-                fixedWidth
-              />
+              <Pencil size={18} />
             </Button>
           </div>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
-import { faUtensils } from '@fortawesome/free-solid-svg-icons'
+import { Utensils } from 'lucide-react'
 
 import { Trans, useTranslation } from 'next-i18next'
 import BaseCard from './BaseCard'
@@ -132,7 +132,7 @@ export default function FoodCard() {
 
   return (
     <BaseCard
-      icon={faUtensils}
+      icon={Utensils}
       i18nKey={`food.location.${foodCardTitle}`}
       link="/food"
     >

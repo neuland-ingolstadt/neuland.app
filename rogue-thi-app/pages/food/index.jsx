@@ -6,14 +6,13 @@ import Nav from 'react-bootstrap/Nav'
 import ReactPlaceholder from 'react-placeholder'
 
 import {
-  faChevronLeft,
-  faChevronRight,
-  faExclamationTriangle,
-  faFilter,
-  faHeartCircleCheck,
-  faUtensils,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Heart,
+  TriangleAlert,
+  Utensils,
+} from 'lucide-react'
 
 import AppBody from '../../components/page/AppBody'
 import AppContainer from '../../components/page/AppContainer'
@@ -185,11 +184,7 @@ export default function Mensa() {
             <div className={styles.indicator}>
               {containsSelectedAllergen(meal.allergens, allergenSelection) && (
                 <span className={`${styles.box} ${styles.warn}`}>
-                  <FontAwesomeIcon
-                    title={t('warning.unknownIngredients.iconTitle')}
-                    icon={faExclamationTriangle}
-                    className={styles.icon}
-                  />
+                  <TriangleAlert size={16} />
                   {t('preferences.warn')}
                 </span>
               )}
@@ -199,11 +194,7 @@ export default function Mensa() {
                   preferencesSelection
                 ) && (
                   <span className={`${styles.box} ${styles.match}`}>
-                    <FontAwesomeIcon
-                      title={t('preferences.iconTitle')}
-                      icon={faHeartCircleCheck}
-                      className={styles.icon}
-                    />
+                    <Heart size={16} />
                     {t('preferences.match')}
                   </span>
                 )}
@@ -357,9 +348,8 @@ export default function Mensa() {
 
         {noData && (
           <div className={styles.noMealInfo}>
-            <FontAwesomeIcon
-              icon={faUtensils}
-              size="xl"
+            <Utensils
+              size={32}
               style={{ marginBottom: '15px' }}
             />
             <br />
@@ -377,11 +367,7 @@ export default function Mensa() {
         showBack={'desktop-only'}
       >
         <AppNavbar.Button onClick={() => setShowFoodFilterModal(true)}>
-          <FontAwesomeIcon
-            title={t('filter')}
-            icon={faFilter}
-            fixedWidth
-          />
+          <Filter size={18} />
         </AppNavbar.Button>
       </AppNavbar>
 
@@ -393,10 +379,7 @@ export default function Mensa() {
             onClick={() => setWeek(0)}
             disabled={week === 0}
           >
-            <FontAwesomeIcon
-              title={t('navigation.weeks.previous')}
-              icon={faChevronLeft}
-            />
+            <ChevronLeft />
           </Button>
           <div className={styles.weekText}>
             {week === 0 &&
@@ -410,10 +393,7 @@ export default function Mensa() {
             onClick={() => setWeek(1)}
             disabled={week === 1}
           >
-            <FontAwesomeIcon
-              title={t('navigation.weeks.next')}
-              icon={faChevronRight}
-            />
+            <ChevronRight />
           </Button>
         </div>
 

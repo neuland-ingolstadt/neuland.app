@@ -76,6 +76,10 @@
 }
 
 .mobilityRoute {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
   min-width: 3em;
   white-space: nowrap;
   text-align: center;
@@ -113,4 +117,18 @@
 
 .placeholder_4_0 {
   margin: 4px 0;
+}
+
+.cardTitle {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.cardTitleText {
+  flex: 1;
+}
+
+.strikethrough {
+  text-decoration: line-through;
 }

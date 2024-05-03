@@ -7,13 +7,11 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
-import { faChevronLeft, faEllipsisV } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ChevronLeft, EllipsisVertical } from 'lucide-react'
 import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
 
 import styles from '../../styles/AppNavbar.module.css'
-import { useTranslation } from 'next-i18next'
 
 /**
  * Navigation bar to be displayed at the top of the screen.
@@ -21,8 +19,6 @@ import { useTranslation } from 'next-i18next'
 export default function AppNavbar({ title, showBack, children }) {
   const router = useRouter()
   const isDesktop = useMediaQuery('(min-width: 768px)')
-
-  const { t } = useTranslation('common')
 
   /**
    * Indicates whether a back button should be shown.
@@ -54,11 +50,7 @@ export default function AppNavbar({ title, showBack, children }) {
               onClick={() => router.back()}
               className={styles.back}
             >
-              <FontAwesomeIcon
-                title={t('appbar.back', { ns: 'common' })}
-                icon={faChevronLeft}
-                fixedWidth
-              />
+              <ChevronLeft size={18} />
             </Button>
           )}
           <div
@@ -107,19 +99,13 @@ AppNavbar.Button = AppNavbarButton
  * Overflow menu to be displayed in the navbar.
  */
 function AppNavbarOverflow({ children }) {
-  const { t } = useTranslation('common')
-
   return (
     <Dropdown align="right">
       <Dropdown.Toggle
         variant="link"
         bsPrefix="dropdown"
       >
-        <FontAwesomeIcon
-          title={t('appbar.overflow', { ns: 'common' })}
-          icon={faEllipsisV}
-          fixedWidth
-        />
+        <EllipsisVertical size={18} />
       </Dropdown.Toggle>
 
       <Dropdown.Menu align="right">{children}</Dropdown.Menu>

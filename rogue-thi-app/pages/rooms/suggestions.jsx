@@ -11,10 +11,7 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Modal from 'react-bootstrap/Modal'
 
-import { faArrowRight, faCalendar } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
-
+import { ArrowRight, CalendarX } from 'lucide-react'
 import AppBody from '../../components/page/AppBody'
 import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
@@ -28,7 +25,6 @@ import { formatFriendlyTime, isSameDay } from '../../lib/date-utils'
 
 import {
   SUGGESTION_DURATION_PRESET,
-  TUX_ROOMS,
   findSuggestedRooms,
   getAllUserBuildings,
   getEmptySuggestions,
@@ -187,8 +183,8 @@ export default function RoomSearch() {
           ns="rooms"
           components={{
             arrow: (
-              <FontAwesomeIcon
-                icon={faArrowRight}
+              <ArrowRight
+                size={18}
                 className={styles.icon}
               />
             ),
@@ -379,15 +375,6 @@ export default function RoomSearch() {
                         <Link href={`/rooms?highlight=${roomResult.room}`}>
                           {getTranslatedRoomName(roomResult.room)}
                         </Link>
-                        {TUX_ROOMS.includes(roomResult.room) && (
-                          <>
-                            {' '}
-                            <FontAwesomeIcon
-                              title="Linux"
-                              icon={faLinux}
-                            />
-                          </>
-                        )}
                         <div className={styles.details}>
                           {getRoomWithCapacity(
                             getTranslatedRoomFunction(roomResult.type),
@@ -423,9 +410,8 @@ export default function RoomSearch() {
 
         {(userKind === USER_GUEST || suggestions?.length === 0) && (
           <div className={styles.noSuggestions}>
-            <FontAwesomeIcon
-              icon={faCalendar}
-              size="xl"
+            <CalendarX
+              size={32}
               style={{ marginBottom: '15px' }}
             />
             <br />

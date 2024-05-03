@@ -4,10 +4,11 @@ import { useRouter } from 'next/router'
 
 import { USER_STUDENT, useUserKind } from '../../lib/hooks/user-kind'
 import BaseCard from './BaseCard'
-import { faUserGraduate } from '@fortawesome/free-solid-svg-icons'
 import { formatFriendlyRelativeTime } from '../../lib/date-utils'
 import { loadExamList } from '../../lib/backend-utils/calendar-utils'
 import { useTime } from '../../lib/hooks/time-hook'
+
+import { GraduationCap } from 'lucide-react'
 
 import { NoSessionError } from '../../lib/backend/thi-session-handler'
 
@@ -56,7 +57,7 @@ export default function ExamsCard() {
 
   return (
     <BaseCard
-      icon={faUserGraduate}
+      icon={GraduationCap}
       i18nKey="exams"
       link="/calendar?focus=exams"
     >

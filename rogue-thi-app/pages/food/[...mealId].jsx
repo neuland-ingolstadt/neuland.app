@@ -5,7 +5,21 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import { useEffect, useState } from 'react'
+import {
+  Briefcase,
+  Drumstick,
+  Egg,
+  GraduationCap,
+  Heart,
+  Leaf,
+  Popcorn,
+  TriangleAlert,
+  User,
+  Wheat,
+  Zap,
+} from 'lucide-react'
+
+import React, { useEffect, useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import {
@@ -22,20 +36,6 @@ import flagMap from '../../data/mensa-flags.json'
 
 import styles from '../../styles/Meals.module.css'
 
-import {
-  faBolt,
-  faCaretUp,
-  faCubesStacked,
-  faDrumstickBite,
-  faEgg,
-  faExclamationTriangle,
-  faHeartCircleCheck,
-  faUser,
-  faUserGraduate,
-  faUserTie,
-  faWheatAwn,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useUserKind } from '../../lib/hooks/user-kind'
 
 import Head from 'next/head'
@@ -67,8 +67,8 @@ export default function Food({ meal, id, locale }) {
   function UnknownMeal() {
     return (
       <div className={styles.unknownContainer}>
-        <FontAwesomeIcon
-          icon={faExclamationTriangle}
+        <TriangleAlert
+          size={64}
           className={styles.unknownMealIcon}
         />
         <div className={`${styles.cardContainer} ${styles.card}`}>
@@ -97,10 +97,7 @@ export default function Food({ meal, id, locale }) {
       <div
         className={`${styles.cardContainer} ${styles.priceCard} ${styles.card}`}
       >
-        <FontAwesomeIcon
-          icon={icon}
-          className={styles.cardIcon}
-        />
+        {React.createElement(icon, { size: 22 })}
 
         <div className={styles.priceCard}>
           <div className={styles.price}>{`${
@@ -115,10 +112,7 @@ export default function Food({ meal, id, locale }) {
   function NutritionCard({ icon, title, value, subTitle, subValue }) {
     return (
       <div className={`${styles.cardContainer}  ${styles.card}`}>
-        <FontAwesomeIcon
-          icon={icon}
-          className={styles.cardIcon}
-        />
+        {React.createElement(icon, { className: styles.cardIcon, size: 18 })}
 
         <div className={styles.cardBody}>
           <div className={styles.nutritionRow}>
@@ -139,10 +133,10 @@ export default function Food({ meal, id, locale }) {
       <Link href={`/food/${variant.id}`}>
         <a className={'text-decoration-none text-reset'}>
           <div className={`${styles.cardContainer} ${styles.card}`}>
-            <FontAwesomeIcon
-              icon={getCategoryIcon(variant)}
-              className={styles.cardIcon}
-            />
+            {React.createElement(getCategoryIcon(variant), {
+              className: styles.cardIcon,
+              size: 18,
+            })}
 
             <div className={styles.cardBody}>
               <div className={styles.price}>{`${
@@ -173,7 +167,9 @@ export default function Food({ meal, id, locale }) {
             <Link href={`/food/${meal?.parent.id}`}>
               <a className={'text-decoration-none text-reset'}>
                 <div className={styles.parentMeal}>
-                  <FontAwesomeIcon icon={getCategoryIcon(meal)} />
+                  {React.createElement(getCategoryIcon(meal), {
+                    size: 16,
+                  })}
                   <p>{meal?.parent.name[currentLocale]}</p>
                 </div>
               </a>
@@ -185,22 +181,14 @@ export default function Food({ meal, id, locale }) {
         <div className={styles.indicator}>
           {containsSelectedAllergen(meal?.allergens, allergenSelection) && (
             <span className={`${styles.box} ${styles.warn}`}>
-              <FontAwesomeIcon
-                title={t('warning.unknownIngredients.iconTitle')}
-                icon={faExclamationTriangle}
-                className={styles.icon}
-              />
+              <TriangleAlert size={16} />
               {t('preferences.warn')}
             </span>
           )}
           {!containsSelectedAllergen(meal?.allergens, allergenSelection) &&
             containsSelectedPreference(meal?.flags, preferencesSelection) && (
               <span className={`${styles.box} ${styles.match}`}>
-                <FontAwesomeIcon
-                  title={t('preferences.iconTitle')}
-                  icon={faHeartCircleCheck}
-                  className={styles.icon}
-                />
+                <Heart size={16} />
                 {t('preferences.match')}
               </span>
             )}
@@ -209,17 +197,17 @@ export default function Food({ meal, id, locale }) {
         {/* prices */}
         <div className={styles.prices}>
           <PriceCard
-            icon={faUserGraduate}
+            icon={GraduationCap}
             category={t('foodDetails.prices.students')}
             price={formatPrice(meal?.prices.student)}
           />
           <PriceCard
-            icon={faUserTie}
+            icon={Briefcase}
             category={t('foodDetails.prices.employees')}
             price={formatPrice(meal?.prices.employee)}
           />
           <PriceCard
-            icon={faUser}
+            icon={User}
             category={t('foodDetails.prices.guests')}
             price={formatPrice(meal?.prices.guest)}
           />
@@ -306,7 +294,7 @@ export default function Food({ meal, id, locale }) {
         {validNutrition && (
           <div className={styles.nutrition}>
             <NutritionCard
-              icon={faBolt}
+              icon={Zap}
               title={t('foodDetails.nutrition.energy.title')}
               value={`${
                 meal?.nutrition.kj ? meal?.nutrition.kj + ' kJ' : ''
@@ -315,31 +303,31 @@ export default function Food({ meal, id, locale }) {
               }`}
             />
             <NutritionCard
-              icon={faDrumstickBite}
+              icon={Drumstick}
               title={t('foodDetails.nutrition.fat.title')}
               value={formatGram(meal?.nutrition.fat)}
               subTitle={t('foodDetails.nutrition.fat.saturated')}
               subValue={formatGram(meal?.nutrition.fatSaturated)}
             />
             <NutritionCard
-              icon={faCubesStacked}
+              icon={Leaf}
               title={t('foodDetails.nutrition.carbohydrates.title')}
               value={formatGram(meal?.nutrition.carbs)}
               subTitle={t('foodDetails.nutrition.carbohydrates.sugar')}
               subValue={formatGram(meal?.nutrition.sugar)}
             />
             <NutritionCard
-              icon={faWheatAwn}
+              icon={Wheat}
               title={t('foodDetails.nutrition.fiber.title')}
               value={formatGram(meal?.nutrition.fiber)}
             />
             <NutritionCard
-              icon={faEgg}
+              icon={Egg}
               title={t('foodDetails.nutrition.protein.title')}
               value={formatGram(meal?.nutrition.protein)}
             />
             <NutritionCard
-              icon={faCaretUp}
+              icon={Popcorn}
               title={t('foodDetails.nutrition.salt.title')}
               value={formatGram(meal?.nutrition.salt)}
             />

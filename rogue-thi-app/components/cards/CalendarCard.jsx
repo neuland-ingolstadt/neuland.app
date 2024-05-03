@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { useRouter } from 'next/router'
 
-import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { Calendar } from 'lucide-react'
 
 import { calendar, loadExamList } from '../../lib/backend-utils/calendar-utils'
 import BaseCard from './BaseCard'
@@ -50,7 +50,7 @@ export default function CalendarCard() {
 
   return (
     <BaseCard
-      icon={faCalendarAlt}
+      icon={Calendar}
       i18nKey="calendar"
       link="/calendar"
     >
