@@ -9,3 +9,9 @@
 .filterBody {
   clear: both;
 }
+
+.editButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

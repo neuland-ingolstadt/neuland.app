@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { useRouter } from 'next/router'
 
-import { faUserGroup } from '@fortawesome/free-solid-svg-icons'
+import { Users } from 'lucide-react'
 
 import BaseCard from './BaseCard'
 
@@ -33,7 +33,7 @@ export default function EventsCard() {
 
   return (
     <BaseCard
-      icon={faUserGroup}
+      icon={Users}
       i18nKey="events"
       link="/events"
     >

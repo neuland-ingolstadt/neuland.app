@@ -20,6 +20,10 @@
 }
 
 .mobilityRoute {
+  display: flex;
+  min-height: 1.5em;
+  align-items: center;
+  justify-content: center;
   min-width: 3em;
   white-space: nowrap;
   text-align: center;
@@ -47,5 +51,9 @@
 }
 
 .mobilityCanceled {
+  text-decoration: line-through;
+}
+
+.strikethrough {
   text-decoration: line-through;
 }

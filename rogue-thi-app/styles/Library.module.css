@@ -3,5 +3,15 @@
 }
 
 .floatRight {
-  float: right;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+}
+
+.cancelButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }

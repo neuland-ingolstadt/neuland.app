@@ -8,13 +8,7 @@ import MobilityCard from './cards/MobilityCard'
 import RoomCard from './cards/RoomCard'
 import TimetableCard from './cards/TimetableCard'
 
-import {
-  faBook,
-  faMap,
-  faScroll,
-  faUser,
-  faUserGraduate,
-} from '@fortawesome/free-solid-svg-icons'
+import { GraduationCap, Library, Map, Scroll, User } from 'lucide-react'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '../lib/hooks/user-kind'
 
@@ -105,7 +99,7 @@ export const ALL_DASHBOARD_CARDS = [
     card: () => (
       <BaseCard
         key="roomplan"
-        icon={faMap}
+        icon={Map}
         i18nKey="roomplan"
         link="/rooms"
       />
@@ -118,7 +112,7 @@ export const ALL_DASHBOARD_CARDS = [
     card: () => (
       <BaseCard
         key="library"
-        icon={faBook}
+        icon={Library}
         i18nKey="library"
         link="/library"
       />
@@ -131,7 +125,7 @@ export const ALL_DASHBOARD_CARDS = [
     card: () => (
       <BaseCard
         key="grades"
-        icon={faScroll}
+        icon={Scroll}
         i18nKey="grades"
         link="/grades"
       />
@@ -150,7 +144,7 @@ export const ALL_DASHBOARD_CARDS = [
     card: () => (
       <BaseCard
         key="personal"
-        icon={faUser}
+        icon={User}
         i18nKey="personal"
         link="/personal"
       />
@@ -163,7 +157,7 @@ export const ALL_DASHBOARD_CARDS = [
     card: () => (
       <BaseCard
         key="lecturers"
-        icon={faUserGraduate}
+        icon={GraduationCap}
         i18nKey="lecturers"
         link="/lecturers"
       />

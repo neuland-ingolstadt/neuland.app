@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { useRouter } from 'next/router'
 
-import { faDoorOpen } from '@fortawesome/free-solid-svg-icons'
+import { DoorOpen } from 'lucide-react'
 
 import BaseCard from './BaseCard'
 
@@ -107,7 +107,7 @@ export default function RoomCard() {
 
   return (
     <BaseCard
-      icon={faDoorOpen}
+      icon={DoorOpen}
       i18nKey="rooms"
       link="/rooms/suggestions"
     >

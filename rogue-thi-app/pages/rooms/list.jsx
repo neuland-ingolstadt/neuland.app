@@ -5,9 +5,6 @@ import { useRouter } from 'next/router'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLinux } from '@fortawesome/free-brands-svg-icons'
-
 import AppBody from '../../components/page/AppBody'
 import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
@@ -19,7 +16,6 @@ import {
 } from '../../lib/backend/thi-session-handler'
 import {
   ROOMS_ALL,
-  TUX_ROOMS,
   getTranslatedRoomName,
 } from '../../lib/backend-utils/rooms-utils'
 import { formatFriendlyTime, formatNearDate } from '../../lib/date-utils'
@@ -132,15 +128,6 @@ export default function RoomList() {
                                 <Link href={`/rooms?highlight=${room}`}>
                                   {getTranslatedRoomName(room)}
                                 </Link>
-                                {TUX_ROOMS.includes(room) && (
-                                  <>
-                                    {' '}
-                                    <FontAwesomeIcon
-                                      title="Linux"
-                                      icon={faLinux}
-                                    />
-                                  </>
-                                )}
                                 {idx === rooms.length - 1 ? '' : ', '}
                               </span>
                             ))}

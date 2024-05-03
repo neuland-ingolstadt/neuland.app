@@ -98,7 +98,10 @@
   padding: 4px 8px 5px 8px;
   border-radius: 5px;
   margin: 10px 10px 5px 0;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 6px;
 }
 
 .warn {
@@ -132,10 +135,6 @@
   padding-bottom: 5px;
   margin-bottom: 10px;
   border-bottom: 1px solid var(--secondary);
-}
-
-.icon {
-  margin-right: 6px;
 }
 
 .container {

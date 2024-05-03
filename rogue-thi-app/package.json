@@ -15,10 +15,6 @@
     "prettier:check": "prettier --check ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.2.1",
-    "@fortawesome/free-brands-svg-icons": "^6.0.0",
-    "@fortawesome/free-solid-svg-icons": "^6.0.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@restart/hooks": "^0.4.7",
     "bootstrap": "^4.6.1",
     "cheerio": "^1.0.0-rc.10",
@@ -30,6 +26,7 @@
     "ical-generator": "^3.6.1",
     "idb": "^7.0.0",
     "leaflet": "^1.7.1",
+    "lucide-react": "^0.365.0",
     "next": "^12.1.0",
     "next-i18next": "^13.2.2",
     "node-fetch": "^3.2.3",

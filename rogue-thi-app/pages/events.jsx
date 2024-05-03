@@ -3,12 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import {
-  faExternalLink,
-  faExternalLinkAlt,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInstagram } from '@fortawesome/free-brands-svg-icons'
+import { ExternalLink, Instagram } from 'lucide-react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -93,12 +88,11 @@ export default function Events() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          {item.title}{' '}
-                          <FontAwesomeIcon icon={faExternalLinkAlt} />
+                          {item.title} <ExternalLink size={16} />
                         </a>
                       )}
                       <div className={styles.details}>
-                        <span>
+                        <span className={styles.organizer}>
                           {club != null && (
                             <>
                               {club.website != null && (
@@ -108,11 +102,7 @@ export default function Events() {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  {item.organizer}{' '}
-                                  <FontAwesomeIcon
-                                    icon={faExternalLink}
-                                    fixedWidth
-                                  />
+                                  {item.organizer} <ExternalLink size={16} />
                                 </a>
                               )}
                               {club.instagram != null && (
@@ -122,10 +112,7 @@ export default function Events() {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  <FontAwesomeIcon
-                                    icon={faInstagram}
-                                    fixedWidth
-                                  />
+                                  <Instagram size={16} />
                                 </a>
                               )}
                             </>

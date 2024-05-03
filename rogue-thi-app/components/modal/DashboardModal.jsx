@@ -1,11 +1,5 @@
-import {
-  faChevronDown,
-  faChevronUp,
-  faTrash,
-  faTrashRestore,
-} from '@fortawesome/free-solid-svg-icons'
+import { ArchiveRestore, ChevronDown, ChevronUp, Trash } from 'lucide-react'
 import Button from 'react-bootstrap/Button'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import styles from '../../styles/Personalize.module.css'
@@ -59,32 +53,20 @@ export default function DashboardModal() {
                     variant="text"
                     onClick={() => hideDashboardEntry(entry.key)}
                   >
-                    <FontAwesomeIcon
-                      title={t('dashboard.orderModal.icons.remove')}
-                      icon={faTrash}
-                      fixedWidth
-                    />
+                    <Trash size={18} />
                   </Button>
                 )}
                 <Button
                   variant="text"
                   onClick={() => moveDashboardEntry(i, -1)}
                 >
-                  <FontAwesomeIcon
-                    title={t('dashboard.orderModal.icons.moveUp')}
-                    icon={faChevronUp}
-                    fixedWidth
-                  />
+                  <ChevronUp size={18} />
                 </Button>
                 <Button
                   variant="text"
                   onClick={() => moveDashboardEntry(i, +1)}
                 >
-                  <FontAwesomeIcon
-                    title={t('dashboard.orderModal.icons.moveDown')}
-                    icon={faChevronDown}
-                    fixedWidth
-                  />
+                  <ChevronDown size={18} />
                 </Button>
               </div>
             </ListGroup.Item>
@@ -107,11 +89,7 @@ export default function DashboardModal() {
                   variant="text"
                   onClick={() => bringBackDashboardEntry(i)}
                 >
-                  <FontAwesomeIcon
-                    title={t('dashboard.orderModal.icons.restore')}
-                    icon={faTrashRestore}
-                    fixedWidth
-                  />
+                  <ArchiveRestore size={18} />
                 </Button>
               </div>
             </ListGroup.Item>
