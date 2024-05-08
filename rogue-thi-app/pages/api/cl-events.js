@@ -161,19 +161,27 @@ export async function getAllEventDetails(username, password) {
 
   await login(fetch, username, password)
 
-  const remoteEvents = []
-  for (const url of await getEventList(fetch)) {
+  const eventUrls = await getEventList(fetch)
+  const eventPromises = eventUrls.map(async (url) => {
     const details = await getEventDetails(fetch, url)
-    // do not include location and description
-    // since it may contain sensitive information
-    remoteEvents.push({
+
+    // only include location if approved by the organizer
+    return {
       id: crypto.createHash('sha256').update(url).digest('hex'),
       organizer: details.Verein.trim().replace(/( \.)$/g, ''),
       title: details.Event,
       begin: details.Start ? parseLocalDateTime(details.Start) : null,
       end: details.Ende ? parseLocalDateTime(details.Ende) : null,
-    })
-  }
+      location:
+        details['Veröffentlichung des Ortes & Bescheibung in Apps']
+          .trim()
+          .toLowerCase() === 'ja'
+          ? details.Ort
+          : null,
+    }
+  })
+
+  const remoteEvents = await Promise.all(eventPromises)
 
   const now = new Date()
   let events = !isDev ? await loadEvents() : []

@@ -20,13 +20,15 @@ export function formatFriendlyDate(datetime) {
   } else if (datetime.toDateString() === tomorrow.toDateString()) {
     return t('common.dates.tomorrow')
   } else {
+    const sameYear = datetime.getFullYear() === today.getFullYear()
+
     const weekday = datetime.toLocaleString(getAdjustedLocale(), {
       weekday: 'short',
     })
     const date = datetime.toLocaleString(undefined, {
       day: 'numeric',
       month: '2-digit',
-      year: 'numeric',
+      year: sameYear ? undefined : '2-digit',
     })
     return `${weekday}, ${date}`
   }

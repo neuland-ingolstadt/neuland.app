@@ -15,6 +15,7 @@
 
 .item {
   display: flex;
+  gap: 5px;
 }
 
 .left {
@@ -22,11 +23,27 @@
 }
 
 .details {
+  display: flex;
+  flex-direction: column;
   color: var(--gray);
 }
 
-.organizer {
-  display: inline-flex;
+.rightDetails {
+  align-items: flex-end;
+}
+
+.socials {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.eventDetails {
+  display: flex;
   gap: 5px;
   align-items: center;
 }
