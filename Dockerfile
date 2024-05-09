@@ -2,7 +2,7 @@ FROM alekzonder/puppeteer:latest AS pwaicons
 USER root
 WORKDIR /opt/
 COPY rogue-thi-app/public/favicon.svg .
-RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true --path-override '/' --xhtml --favicon --dark-mode favicon.svg ./splash/
+RUN mkdir ./splash && npx pwa-asset-generator --no-sandbox=true --path-override '/' --xhtml --dark-mode favicon.svg ./splash/
 
 
 RUN export NEXT_PUBLIC_COMMIT_HASH=$(git rev-parse HEAD)
