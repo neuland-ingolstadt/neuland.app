@@ -52,7 +52,7 @@ export default function StyleProvider({ children }) {
           rel="icon"
           type="image/png"
           sizes="196x196"
-          href="/favicon-196.png"
+          href="/favicon.png"
         />
         <link
           rel="apple-touch-startup-image"
