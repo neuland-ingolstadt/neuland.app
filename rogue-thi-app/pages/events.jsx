@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import ReactPlaceholder from 'react-placeholder'
 
-import { ExternalLink, Instagram } from 'lucide-react'
+import {
+  Calendar,
+  ExternalLink,
+  Globe,
+  Instagram,
+  MapPin,
+  Users,
+} from 'lucide-react'
 
 import AppBody from '../components/page/AppBody'
 import AppContainer from '../components/page/AppContainer'
@@ -92,7 +99,7 @@ export default function Events() {
                         </a>
                       )}
                       <div className={styles.details}>
-                        <span className={styles.organizer}>
+                        <span className={styles.eventDetails}>
                           {club != null && (
                             <>
                               {club.website != null && (
@@ -102,34 +109,74 @@ export default function Events() {
                                   target="_blank"
                                   rel="noreferrer"
                                 >
-                                  {item.organizer} <ExternalLink size={16} />
-                                </a>
-                              )}
-                              {club.instagram != null && (
-                                <a
-                                  href={club.instagram}
-                                  className={styles.eventUrl}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  <Instagram size={16} />
+                                  <Users size={16} />
+                                  {` ${club.club} `}
                                 </a>
                               )}
                             </>
                           )}
-                          {club == null && <>{item.organizer}</>}
+                          {club == null && (
+                            <>
+                              <Users
+                                size={16}
+                                className={styles.icon}
+                              />
+                              {item.organizer}
+                            </>
+                          )}
                         </span>
-                        <br />
-                        {item.begin &&
-                          formatFriendlyDateTimeRange(item.begin, item.end)}
+
+                        {item.begin && (
+                          <span className={styles.eventDetails}>
+                            <Calendar
+                              size={16}
+                              className={styles.icon}
+                            />
+                            {formatFriendlyDateTimeRange(item.begin, item.end)}
+                          </span>
+                        )}
+
+                        {item.location && (
+                          <span className={styles.eventDetails}>
+                            <MapPin
+                              size={16}
+                              className={styles.icon}
+                            />
+                            {item.location}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <div className={styles.details}>
+                    <div className={`${styles.details} ${styles.rightDetails}`}>
                       {item.end && item.begin < now
                         ? `${t(
                             'events.dates.until'
                           )} ${formatFriendlyRelativeTime(item.end)}`
                         : formatFriendlyRelativeTime(item.begin)}
+
+                      <span style={{ flex: 1 }}></span>
+                      <span className={styles.socials}>
+                        {club != null && club.website != null && (
+                          <a
+                            href={club.website}
+                            className={styles.eventUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Globe size={20} />
+                          </a>
+                        )}
+                        {club != null && club.instagram != null && (
+                          <a
+                            href={club.instagram}
+                            className={styles.eventUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Instagram size={20} />
+                          </a>
+                        )}
+                      </span>
                     </div>
                   </ListGroup.Item>
                 )
