@@ -28,9 +28,10 @@ export default function EventPrompt({ onHide }) {
         </Card.Title>
         <Card.Text>
           <p>
-            Stell dir vor es sind Wahlen, aber keiner geht hin? So macht Demokratie doch keinen Sinn!{' '}
-            <strong>Di. 11.06 bis Do. 13.06</strong> unter:{' '}
-            <a href='https://studverthi.de/jetzt-waehlen'>studverthi.de/jetzt-waehlen</a>
+            Interessierst du dich für Informatik? Die Infoveranstaltung von
+            Neuland Ingolstadt e.V. findet am{' '}
+            <strong>Di, 10.10. um 18:00 in Raum J102</strong> statt. Komm
+            vorbei!
           </p>
         </Card.Text>
       </Card.Body>

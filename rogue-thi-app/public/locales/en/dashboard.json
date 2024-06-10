@@ -79,7 +79,7 @@
   },
   "election": {
     "title": "University Elections",
-    "text": "The university elections are currently taking place. Your participation is important to strengthen the democratic structures at our university.",
+    "text": "Imagine there are elections, but nobody goes? Democracy makes no sense like that!<br/>Vote on <strong>Tue. 11.06 to Thu. 13.06</strong>:",
     "button": "Vote Online",
     "icon.close": "Close"
   },
