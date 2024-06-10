@@ -5,8 +5,8 @@ import Card from 'react-bootstrap/Card'
 
 import { Vote, X } from 'lucide-react'
 
+import { Trans, useTranslation } from 'next-i18next'
 import styles from '../../styles/Home.module.css'
-import { useTranslation } from 'next-i18next'
 
 const electionUrl = process.env.NEXT_PUBLIC_ELECTION_URL
 
@@ -31,10 +31,15 @@ export default function ElectionPrompt({ onHide }) {
           </Button>
         </Card.Title>
         <Card.Text>
-          <p>{t('election.text')}</p>
+          <p>
+            <Trans
+              i18nKey="election.text"
+              ns="dashboard"
+              components={{ strong: <strong />, br: <br /> }}
+            />
+          </p>
           <a
             href={electionUrl}
-            ping="/api/election-vote-ping"
             target="_blank"
             rel="noreferrer"
           >
