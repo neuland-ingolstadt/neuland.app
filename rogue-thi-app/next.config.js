@@ -70,11 +70,12 @@ module.exports = {
           {
             key: 'Content-Security-Policy',
             value: `default-src 'none';
-              img-src 'self' data: https://tile.openstreetmap.org/;
+              img-src 'self';
               font-src 'self';
-              connect-src 'self' ${PROXY_URL} ${API_URL};
+              connect-src 'self' maps.opheys.dev ${PROXY_URL} ${API_URL};
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? " 'unsafe-eval'" : ''};
+              worker-src blob:;
               manifest-src 'self';
               `.replace(/\s+/g, ' '),
           },

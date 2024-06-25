@@ -10,6 +10,7 @@ const initialState = {
   setTheme: () => {},
   themeColor: undefined,
   setThemeColor: () => {},
+  mode: 'light',
 }
 
 const ThemeContext = createContext(initialState)
@@ -80,11 +81,22 @@ export default function ThemeProvider({ children }) {
     }
   }, [theme, router.pathname])
 
+  const [mode, setMode] = useState('light')
+  useEffect(() => {
+    if (['default', 'pride'].includes(theme)) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+      setMode(mediaQuery.matches ? 'dark' : 'light')
+    } else {
+      setMode(theme === 'dark' ? 'dark' : 'light')
+    }
+  }, [theme])
+
   const value = {
     theme: computedTheme,
     setTheme,
     themeColor,
     setThemeColor,
+    mode,
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

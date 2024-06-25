@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 
 import Form from 'react-bootstrap/Form'
 
+import VectorTileLayer from 'react-leaflet-vector-tile-layer'
+
 import {
   AttributionControl,
   CircleMarker,
@@ -15,7 +17,6 @@ import {
   MapContainer,
   Polygon,
   Popup,
-  TileLayer,
   useMap,
 } from 'react-leaflet'
 
@@ -41,6 +42,7 @@ import {
 import { useLocation } from '../lib/hooks/geolocation'
 
 import styles from '../styles/RoomMap.module.css'
+import { useTheme } from '../lib/providers/ThemeProvider'
 import { useTranslation } from 'next-i18next'
 
 const SPECIAL_ROOMS = {
@@ -88,6 +90,9 @@ export default function RoomMap({ highlight, roomData }) {
   const [availableRooms, setAvailableRooms] = useState(null)
   const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
   const [roomCapacity, setRoomCapacity] = useState({})
+  const { mode } = useTheme()
+
+  console.log('mode', mode)
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -427,11 +432,11 @@ export default function RoomMap({ highlight, roomData }) {
       >
         <UpdatePosition position={center} />
 
-        <TileLayer
-          attribution={t('rooms.map.attribution')}
-          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maxNativeZoom={19}
+        <VectorTileLayer
+          styleUrl={`https://maps.opheys.dev/styles/${mode}/style.json`}
           maxZoom={21}
+          minZoom={15}
+          attribution={t('rooms.map.attribution')}
         />
 
         <AttributionControl position="bottomleft" />
