@@ -213,11 +213,9 @@ export default function RoomMap({ highlight, roomData }) {
       const bounds = getFeatureBounds(features)
 
       // If position switches to the other campus, skip the animation
-      const currentCenter = mapRef.current?.getMap().getCenter()
-      const distance = getDistance(currentCenter.toArray(), [
-        bounds[1],
-        bounds[0],
-      ])
+      const currentCenter =
+        mapRef.current?.getMap().getCenter().toArray() || mapCenter
+      const distance = getDistance(currentCenter, [bounds[1], bounds[0]])
 
       const animate = distance < 1
 
@@ -250,6 +248,7 @@ export default function RoomMap({ highlight, roomData }) {
     allRooms,
     userFaculty,
     currentFloor,
+    mapCenter,
   ])
 
   useEffect(() => {
