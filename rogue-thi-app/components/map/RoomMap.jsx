@@ -71,7 +71,7 @@ export default function RoomMap({ highlight, roomData }) {
   const [roomCapacity, setRoomCapacity] = useState({})
   const [currentFloor, setCurrentFloor] = useState('EG')
   const [popup, setPopup] = useState(null)
-  const { mode } = useTheme()
+  const { mapTheme } = useTheme()
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
@@ -89,12 +89,12 @@ export default function RoomMap({ highlight, roomData }) {
     const primary = getComputedStyle(root).getPropertyValue('--primary')
 
     const grayColor =
-      mode === 'light'
+      mapTheme === 'light'
         ? getComputedStyle(root).getPropertyValue('--gray')
         : getComputedStyle(root).getPropertyValue('--gray-dark')
 
     return [primary, grayColor]
-  }, [mode])
+  }, [mapTheme])
 
   /**
    * Hide popup when the search text or the current floor changes.
@@ -453,7 +453,7 @@ export default function RoomMap({ highlight, roomData }) {
       <Map
         ref={mapRef}
         reuseMaps
-        mapStyle={`https://tile.neuland.app/styles/${mode}/style.json`}
+        mapStyle={`https://tile.neuland.app/styles/${mapTheme}/style.json`}
         attributionControl={false}
         initialViewState={{
           latitude: mapCenter[0],
