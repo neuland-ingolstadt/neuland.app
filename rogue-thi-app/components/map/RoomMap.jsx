@@ -173,6 +173,17 @@ export default function RoomMap({ highlight, roomData }) {
     }
 
     if (!searchText) {
+      const map = mapRef.current?.getMap()
+      const isLoaded = map?.loaded()
+
+      if (isLoaded) {
+        map.flyTo({
+          center: [mapCenter[1], mapCenter[0]],
+          zoom: 16,
+          speed: 1,
+        })
+      }
+
       return [allRooms, FLOOR_ORDER]
     }
 
@@ -322,6 +333,9 @@ export default function RoomMap({ highlight, roomData }) {
     [availableRooms, roomAvailabilityList, t]
   )
 
+  /**
+   * Maps the filtered rooms to their room ids.
+   */
   const filteredRoomIds = useMemo(() => {
     return filteredRooms.map((x) => x.properties.Raum)
   }, [filteredRooms])
@@ -334,86 +348,10 @@ export default function RoomMap({ highlight, roomData }) {
     searchField.current?.blur()
   }
 
-  // /**
-  //  * Renders a room polygon.
-  //  * @param {object} entry GeoJSON feature
-  //  * @param {string} key Unique key that identifies the feature
-  //  * @param {boolean} onlyAvailable Display only rooms that are currently free
-  //  * @returns Leaflet feature object
-  //  */
-  // function renderRoom(entry, key, onlyAvailable) {
-  //   const avail = availableRooms?.find((x) => x.room === entry.properties.Raum)
-  //   if ((avail && !onlyAvailable) || (!avail && onlyAvailable)) {
-  //     return null
-  //   }
-
-  //   // const special = SPECIAL_ROOMS[entry.properties.Raum]
-  //   // const availabilityData = (
-  //   //   roomAvailabilityList[entry.properties.Raum] || []
-  //   // ).slice(0, 1)
-
-  //   return (
-  //     // <FeatureGroup key={key}>
-  //     //   <Popup className={styles.popup}>
-  //     //     <strong>{entry.properties.Raum}</strong>
-  //     //     {` ${getRoomWithCapacity(
-  //     //       getRoomFunction(entry),
-  //     //       roomCapacity[entry.properties.Raum],
-  //     //       t
-  //     //     )}`}
-  //     //     {avail && (
-  //     //       <>
-  //     //         <br />
-  //     //         {t('rooms.map.freeFromUntil', {
-  //     //           from: formatFriendlyTime(avail.from),
-  //     //           until: formatFriendlyTime(avail.until),
-  //     //         })}
-  //     //       </>
-  //     //     )}
-  //     //     {!avail && availableRooms && (
-  //     //       <>
-  //     //         <br />
-  //     //         {t('rooms.map.occupied')}
-  //     //         <br />
-
-  //     //         {availabilityData &&
-  //     //           availabilityData.map((opening) => (
-  //     //             <>
-  //     //               {t('rooms.map.freeFromUntil', {
-  //     //                 from: formatFriendlyTime(opening.from),
-  //     //                 until: formatFriendlyTime(opening.until),
-  //     //               })}
-  //     //               <br />
-  //     //             </>
-  //     //           ))}
-  //     //       </>
-  //     //     )}
-  //     //     {special && (
-  //     //       <>
-  //     //         <br />
-  //     //         {special.text}
-  //     //       </>
-  //     //     )}
-  //     //   </Popup>
-  //     //   <Polygon
-  //     //     positions={entry.coordinates}
-  //     //     pathOptions={{
-  //     //       ...entry.options,
-  //     //       color: special && avail ? special.color : null,
-  //     //       className: `${
-  //     //         avail
-  //     //           ? !special
-  //     //             ? styles.roomAvailable
-  //     //             : ''
-  //     //           : styles.roomOccupied
-  //     //       }`,
-  //     //     }}
-  //     //   />
-  //     // </FeatureGroup>
-  //     <h1>Hi</h1>
-  //   )
-  // }
-
+  /**
+   * onClick handler for rooms on the map.
+   * Creates a popup with information about the room.
+   */
   const clickRoom = useCallback(
     (e) => {
       const features = e.features
@@ -443,6 +381,10 @@ export default function RoomMap({ highlight, roomData }) {
     [getPopupBody, getRoomFunction]
   )
 
+  /**
+   * Filters the rooms based on the search text, the current floor and the availability.
+   * See docs: https://maplibre.org/maplibre-style-spec/expressions/
+   */
   const [availableLayerFilter, occupiedLayerFilter] = useMemo(() => {
     return [
       [
