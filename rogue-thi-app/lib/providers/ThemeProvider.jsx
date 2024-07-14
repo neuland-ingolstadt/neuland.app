@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import themes from '../../data/themes.json'
+import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
 
 const LIGHT = '#ffffff'
@@ -16,24 +17,19 @@ const initialState = {
 const ThemeContext = createContext(initialState)
 
 export default function ThemeProvider({ children }) {
+  const mediaQueryDark = useMediaQuery('(prefers-color-scheme: dark)')
   const router = useRouter()
-  const [systemTheme, setSystemTheme] = useState('light')
   const [theme, setTheme] = useState('default')
   const [themeColor, setThemeColor] = useState(undefined)
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = () => {
-      setSystemTheme(mediaQuery.matches ? 'dark' : 'light')
-    }
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
+  const systemTheme = useMemo(() => {
+    return mediaQueryDark ? 'dark' : 'light'
+  }, [mediaQueryDark])
 
   // Update the theme color and theme when the user changes dark/light mode
   useEffect(() => {
     if (theme === 'default') {
-      if (systemTheme === 'dark') {
+      if (mediaQueryDark) {
         setThemeColor(DARK)
         setTheme('default')
       } else {
@@ -41,7 +37,7 @@ export default function ThemeProvider({ children }) {
         setTheme('default')
       }
     }
-  }, [systemTheme, theme])
+  }, [mediaQueryDark, theme])
 
   // Update the theme color when the user changes the theme
   useEffect(() => {
@@ -86,16 +82,11 @@ export default function ThemeProvider({ children }) {
     }
   }, [theme, router.pathname])
 
-  const [mapTheme, setMapTheme] = useState('light')
-  useEffect(() => {
+  const mapTheme = useMemo(() => {
     const mode = themes.find((x) => x.style === theme)?.mapTheme
 
-    if (mode === 'system') {
-      setMapTheme(systemTheme)
-    } else {
-      setMapTheme(mode)
-    }
-  }, [systemTheme, theme])
+    return mode === 'system' ? systemTheme : theme
+  }, [theme, systemTheme])
 
   const value = {
     theme: computedTheme,
