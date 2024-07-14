@@ -7,7 +7,9 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
-import { ChevronLeft, EllipsisVertical } from 'lucide-react'
+import Link from 'next/link'
+
+import { ChevronLeft, CircleUser, EllipsisVertical } from 'lucide-react'
 import useMediaQuery from '@restart/hooks/useMediaQuery'
 import { useRouter } from 'next/router'
 
@@ -18,6 +20,7 @@ import styles from '../../styles/AppNavbar.module.css'
  */
 export default function AppNavbar({ title, showBack, children }) {
   const router = useRouter()
+  const route = router.pathname.slice(1)
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
   /**
@@ -32,6 +35,8 @@ export default function AppNavbar({ title, showBack, children }) {
       return showBack
     }
   }, [showBack, isDesktop])
+
+  const isPride = useMemo(() => new Date().getMonth() === 5, [])
 
   return (
     <>
@@ -53,17 +58,25 @@ export default function AppNavbar({ title, showBack, children }) {
               <ChevronLeft size={18} />
             </Button>
           )}
-          <div
-            className={
-              new Date().getMonth() === 5
-                ? styles.titleTextPride
-                : styles.titleText
-            }
-          >
+          <div className={`${styles.titleText} ${isPride ? styles.pride : ''}`}>
             {title}
           </div>
         </Navbar.Brand>
-        <Nav>{children}</Nav>
+
+        <Nav
+          style={{
+            marginTop: '4px',
+          }}
+        >
+          {children}
+          {isDesktop && route !== 'personal' && (
+            <Link href="/personal">
+              <AppNavbar.Button>
+                <CircleUser size={24} />
+              </AppNavbar.Button>
+            </Link>
+          )}
+        </Nav>
       </Navbar>
 
       <div className={styles.spacer} />

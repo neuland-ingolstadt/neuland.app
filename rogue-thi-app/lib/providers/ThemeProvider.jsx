@@ -56,12 +56,9 @@ export default function ThemeProvider({ children }) {
     const themeColors = {
       light: LIGHT,
       dark: DARK,
-      retro: '#121212',
-      barbie: '#d44e95',
       hacker: '#0ae40a',
       pride: prideColors[today.getDay() % prideColors.length],
       blue: '#005ea1',
-      95: '#008080',
     }
     const selectedThemeColor = themeColors[theme] || (isDarkMode ? DARK : LIGHT)
     setThemeColor(selectedThemeColor)

@@ -1,9 +1,15 @@
 .navbar {
-  padding: 0 10px;
+  padding: 0 20px;
   /* adds padding for the ios status bar to avoid the navbar overlapping the content */
   padding-top: calc(env(safe-area-inset-top, 0px));
   height: calc(50px + env(safe-area-inset-top, 0px));
   background-color: var(--navbar-background, white);
+}
+
+@media only screen and (max-width: 768px) {
+  .navbar {
+    padding: 0 10px;
+  }
 }
 
 .navbar :global(.navbar-brand) {
@@ -19,11 +25,8 @@
   padding: 10px;
 }
 
-.title {
-  font-size: 15pt;
-}
-
 .titleText {
+  font-weight: 650;
   display: inline;
   margin: 0px 10px;
   border-bottom: 2px solid transparent;
@@ -42,10 +45,7 @@
     1 0 stretch;
 }
 
-.titleTextPride {
-  display: inline;
-  margin: 0px 10px;
-  border-bottom: 2px solid transparent;
+.pride {
   border-image: linear-gradient(
       90deg,
       #f44336 16.66%,

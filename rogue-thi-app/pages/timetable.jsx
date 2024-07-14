@@ -263,6 +263,7 @@ export default function Timetable() {
           ))}
         {current && current.length === 0 && (
           <div className={`text-muted ${styles.notice}`}>
+            <span>🎉</span>
             <p>{t('timetable.overview.noLectures')}</p>
             <p>
               <Trans

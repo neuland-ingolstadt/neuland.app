@@ -18,11 +18,16 @@
 
 .mapContainer {
   border-radius: 8px;
+  margin: 0px 10px;
+  width: calc(100% - 20px) !important;
+  margin-bottom: 10px !important;
 }
 
 @media only screen and (max-width: 576px) {
   .mapContainer {
     border-radius: 0px;
+    margin: 0;
+    width: 100% !important;
   }
 }
 

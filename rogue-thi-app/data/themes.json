@@ -20,21 +20,6 @@
     "mapTheme": "light"
   },
   {
-    "name": { "en": "Barbie & Ken", "de": "Barbie & Ken" },
-    "style": "barbie",
-    "mapTheme": "light"
-  },
-  {
-    "name": { "en": "Retro", "de": "Retro" },
-    "style": "retro",
-    "mapTheme": "dark"
-  },
-  {
-    "name": { "en": "Windows 95", "de": "Windows 95" },
-    "style": "95",
-    "mapTheme": "light"
-  },
-  {
     "name": { "en": "Pride", "de": "Pride" },
     "style": "pride",
     "mapTheme": "system"
