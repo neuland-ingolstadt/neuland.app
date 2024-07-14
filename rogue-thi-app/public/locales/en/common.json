@@ -68,7 +68,8 @@
     "grades": "Grades & Subjects",
     "personal": "Profile",
     "lecturers": "Lecturers",
-    "exams": "Exams"
+    "exams": "Exams",
+    "election": "University Elections"
   },
   "prompts": {
     "close": "Close"

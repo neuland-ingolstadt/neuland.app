@@ -68,7 +68,8 @@
     "grades": "Noten & Fächer",
     "personal": "Profil",
     "lecturers": "Dozenten",
-    "exams": "Prüfungen"
+    "exams": "Prüfungen",
+    "election": "Hochschulwahlen"
   },
   "prompts": {
     "close": "Schließen"

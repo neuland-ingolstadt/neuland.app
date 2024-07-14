@@ -1,5 +1,6 @@
 .searchForm {
   padding: 0px 10px;
+  padding-bottom: 5px;
 }
 
 .links {
@@ -15,186 +16,185 @@
   float: left;
 }
 
-.legend {
-  display: flex;
-}
-
-.legend .middle {
-  flex: 1;
-}
-
-.legend .right {
-  text-align: right;
-}
-
-.legendControl {
-  background: white;
-  padding: 6px;
-}
-
 .mapContainer {
-  flex: 1;
-  margin: 5px 0 25px 0;
   border-radius: 8px;
 }
 
 @media only screen and (max-width: 576px) {
   .mapContainer {
     border-radius: 0px;
-    margin: 5px 0 0 0;
   }
 }
 
-.mapContainer :global(.leaflet-control) {
-  overflow: hidden;
-  background-color: var(--rooms-controls-background, #ffffff);
-  color: unset;
+.ctrlContainer {
+  background-color: var(--rooms-controls-background);
+  padding: 8px;
   border-radius: 8px;
-  border: 1px solid var(--rooms-controls-border, #ced4da);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
 }
 
-.mapContainer :global(.leaflet-control-attribution) {
-  padding: 5px 10px;
-  margin: 0 0 11px 10px;
-  max-width: 50vw;
+.floorControl {
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.mapContainer :global(.leaflet-control-attribution) > a:link {
-  color: var(--primary);
-  transition: color 0.2s ease-in-out;
-}
-
-.mapContainer :global(.leaflet-control-attribution) > a:visited {
-  color: var(--primary);
-}
-
-.mapContainer :global(.leaflet-control-attribution) > a:hover {
-  color: var(--secondary);
-  text-decoration: none;
-}
-
-.test {
-  background-color: red;
-}
-
-/* restyle the layers control without modifying the html */
-.mapContainer :global(.leaflet-control-layers) {
-  padding: 0;
-}
-
-.mapContainer :global(.leaflet-control-layers label) {
-  margin: 0;
-}
-
-/* hide the input control and style the neighboring span instead */
-.mapContainer :global(.leaflet-control-layers input) {
-  display: none;
-}
-
-.mapContainer :global(.leaflet-control-layers input + span) {
-  display: block;
-  width: 100%;
-  padding: 6px 10px;
+.floorButton {
   font-size: 1rem;
-  color: var(--muted-font-color, #6c757d);
-  text-align: center;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.5rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
 }
 
-.mapContainer :global(.leaflet-control-layers input:checked + span) {
-  background-color: var(--primary, #8845ef);
-  color: var(--inverted-font-color, #ffffff);
+.floorButtonActive,
+.floorButton:hover {
+  color: var(--white);
+  text-decoration: none;
+  background-color: var(--primary);
+}
+
+.floorButton:hover {
+  background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
+}
+
+.floorButtonActive:hover {
+  background-color: color-mix(in srgb, var(--primary) 80%, black 20%);
+}
+
+.legendControl {
+  display: grid;
+  flex-direction: column;
+  grid-template-columns: auto auto;
+  gap: 2px 8px;
+  grid-template-rows: auto auto;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.legendControl > p {
+  margin: 0;
+  font-size: 0.8rem;
 }
 
 .legendFree,
-.legendTaken,
-.legendSpecial {
-  margin: 0.2em 0em 0.2em 0.2em;
-}
-
-.legendFree::before {
-  content: '';
-  display: inline-block;
+.legendOccupied {
+  display: block;
   width: 1em;
   height: 1em;
-  margin-bottom: -2px;
-  border-radius: 0.5em;
+  border-radius: 50%;
+}
+
+.legendFree {
   background-color: var(--primary);
+}
+.legendOccupied {
+  background-color: var(--gray);
 }
 
 .roomAvailable {
   fill: var(--primary);
-  fill-opacity: 0.4;
+  fill-opacity: 0.2;
   stroke: var(--primary);
 }
 
 .roomOccupied {
-  fill: var(--gray);
+  fill: transparent;
   stroke: var(--gray);
 }
 
-.legendTaken::before {
-  content: '';
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-bottom: -2px;
-  border-radius: 0.5em;
-  background-color: var(--gray);
+@media (prefers-color-scheme: dark) {
+  .roomOccupied {
+    stroke: var(--dark);
+  }
 }
 
-.legendSpecial::before {
-  content: '';
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  margin-bottom: -2px;
-  border-radius: 0.5em;
-  background-color: var(--legend-color);
+@keyframes markerAnimation {
+  0% {
+    filter: drop-shadow(0px 0px 0px var(--primary));
+  }
+  100% {
+    filter: drop-shadow(0px 0px 10px var(--primary));
+  }
 }
 
 .locationMarker {
-  filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
+  height: 1.3rem;
+  width: 1.3rem;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  background-color: var(--primary);
+  animation: markerAnimation 1.25s infinite;
   fill: var(--primary);
 }
 
-/* Popup close button */
-.popup :global(.leaflet-popup-close-button) > span {
-  color: var(--white);
-  font-size: 1.5rem !important;
-  user-select: none !important;
+.attributionWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.popup :global(.leaflet-popup-close-button) {
-  top: calc(50% - 0.9rem) !important;
-  right: 1rem !important;
-  background-color: var(--primary) !important;
-  border-radius: 50% !important;
-  height: 1.7rem !important;
-  width: 1.7rem !important;
-  transition: background-color 0.2s ease-in-out !important;
+.attributionText {
+  overflow-x: hidden;
+  white-space: nowrap;
 }
 
-.popup :global(.leaflet-popup-close-button:hover) {
-  background-color: var(--navbar-border) !important;
+.attributionButton {
+  cursor: pointer;
 }
 
-/* Whole Popup */
-.popup > div {
-  border-radius: 10px;
-  font-size: 0.8rem;
+.attributionIcon {
   color: var(--tabbar-tab);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease-in-out;
 }
 
-/* Popup wrapper */
-.popup :global(.leaflet-popup-content-wrapper) {
-  padding: 0.2rem;
+.popup {
+  max-width: 400px !important;
+}
+
+.popup :global(.maplibregl-popup-tip) {
+  border-top-color: var(--rooms-controls-background);
+}
+
+.popup :global(.maplibregl-popup-content) {
+  border-radius: 8px;
+  padding: 12px 16px;
   background-color: var(--rooms-controls-background);
-  padding-right: 2.2rem;
 }
 
-/* Popup tip */
-.popup :global(.leaflet-popup-tip) {
-  background-color: var(--tabbar-background);
+.popupContent {
+  display: grid;
+  gap: 0.2em 1em;
+  align-items: center;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+}
+
+.popupHeader {
+  font-size: 1.2em;
+  display: flex;
+  gap: 0.25em;
+  white-space: nowrap;
+}
+
+.popupBody {
+  display: flex;
+  flex-direction: column;
+  grid-row-start: 2;
+  font-size: 1em;
+}
+
+.popupClose {
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 1.5em;
 }

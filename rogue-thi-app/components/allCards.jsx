@@ -11,6 +11,7 @@ import TimetableCard from './cards/TimetableCard'
 import { GraduationCap, Library, Map, Scroll, User } from 'lucide-react'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '../lib/hooks/user-kind'
+import ElectionPrompt from './cards/ElectionPrompt'
 
 export const PLATFORM_DESKTOP = 'desktop'
 export const PLATFORM_MOBILE = 'mobile'
@@ -25,6 +26,13 @@ export const ALL_DASHBOARD_CARDS = [
         onHide={() => hidePromptCard('install')}
       />
     ),
+  },
+  {
+    key: 'election',
+    label: 'Jetzt wählen!',
+    removable: true,
+    default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
+    card: () => <ElectionPrompt key="votepromt2024" />,
   },
   {
     key: 'exams',
