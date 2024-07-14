@@ -1,6 +1,7 @@
 .card {
   cursor: pointer;
   margin: 10px;
+  background-color: transparent;
 }
 
 @media (min-width: 768px) {
