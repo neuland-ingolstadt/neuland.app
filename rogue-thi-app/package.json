@@ -43,7 +43,6 @@
     "react-swipeable-views-utils": "^0.14.0",
     "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.45.1",
-    "win95.css": "github:neuland-ingolstadt/win95.css#1.0.0",
     "xml-js": "^1.6.11"
   },
   "devDependencies": {

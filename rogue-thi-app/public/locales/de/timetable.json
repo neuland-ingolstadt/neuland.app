@@ -4,7 +4,7 @@
       "title": "Stundenplan"
     },
     "overview": {
-      "noLectures": "Keine Veranstaltungen. 🎉",
+      "noLectures": "Keine Veranstaltungen",
       "configureTimetable": "Du kannst deinen Stundenplan im <a>Stundenplantool der THI zusammenstellen</a>, dann erscheinen hier die Fächer."
     },
     "overflow": {

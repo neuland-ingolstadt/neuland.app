@@ -166,7 +166,10 @@ export default function Personal() {
 
   return (
     <AppContainer>
-      <AppNavbar title={t('personal.title')} />
+      <AppNavbar
+        title={t('personal.title')}
+        showBack={'desktop-only'}
+      />
 
       <AppBody>
         <ReactPlaceholder
