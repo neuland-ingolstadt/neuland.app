@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 
 import AppBody from '../../components/page/AppBody'
@@ -8,18 +7,19 @@ import AppContainer from '../../components/page/AppContainer'
 import AppNavbar from '../../components/page/AppNavbar'
 import AppTabbar from '../../components/page/AppTabbar'
 
-import 'leaflet/dist/leaflet.css'
 import styles from '../../styles/Rooms.module.css'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useTranslation } from 'next-i18next'
 
+import RoomMap from '../../components/map/RoomMap'
+
 const ROOMDATA_URL = 'https://assets.neuland.app/rooms_neuland_v2.4.geojson'
 
 // import RoomMap without SSR because react-leaflet really does not like SSR
-const RoomMap = dynamic(() => import('../../components/RoomMap'), {
-  ssr: false,
-})
+// const RoomMap = dynamic(() => import('../../components/RoomMap'), {
+//   ssr: false,
+// })
 
 export async function getStaticProps({ locale }) {
   const response = await fetch(ROOMDATA_URL)
@@ -69,8 +69,8 @@ export default function Rooms({ roomData }) {
 
       <AppBody className={styles.body}>
         <RoomMap
-          highlight={highlight}
           roomData={roomData}
+          highlight={highlight}
         />
       </AppBody>
 

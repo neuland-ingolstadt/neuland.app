@@ -13,7 +13,7 @@
       "automaticSuggestion": "Automatische Vorschläge",
       "occupied": "Belegt",
       "freeFromUntil": "Frei von {{from}} bis {{until}}",
-      "attribution": "&copy; <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
+      "attribution": "© <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"http://osm.org/copyright\">OpenStreetMap</a>-Mitwirkende",
       "roomAvailabilityUnknown": "Unbekannt",
       "legend": {
         "free": "Frei",

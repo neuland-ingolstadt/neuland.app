@@ -10,32 +10,38 @@ const initialState = {
   setTheme: () => {},
   themeColor: undefined,
   setThemeColor: () => {},
+  mapTheme: 'light',
 }
 
 const ThemeContext = createContext(initialState)
 
 export default function ThemeProvider({ children }) {
   const router = useRouter()
+  const [systemTheme, setSystemTheme] = useState('light')
   const [theme, setTheme] = useState('default')
   const [themeColor, setThemeColor] = useState(undefined)
 
-  // Update the theme color and theme when the user changes dark/light mode
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const handleChange = () => {
-      if (theme === 'default') {
-        if (mediaQuery.matches) {
-          setThemeColor(DARK)
-          setTheme('default')
-        } else {
-          setThemeColor(LIGHT)
-          setTheme('default')
-        }
-      }
+      setSystemTheme(mediaQuery.matches ? 'dark' : 'light')
     }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [theme])
+  }, [])
+
+  // Update the theme color and theme when the user changes dark/light mode
+  useEffect(() => {
+    if (theme === 'default') {
+      if (systemTheme === 'dark') {
+        setThemeColor(DARK)
+        setTheme('default')
+      } else {
+        setThemeColor(LIGHT)
+        setTheme('default')
+      }
+    }
+  }, [systemTheme, theme])
 
   // Update the theme color when the user changes the theme
   useEffect(() => {
@@ -80,11 +86,23 @@ export default function ThemeProvider({ children }) {
     }
   }, [theme, router.pathname])
 
+  const [mapTheme, setMapTheme] = useState('light')
+  useEffect(() => {
+    const mode = themes.find((x) => x.style === theme)?.mapTheme
+
+    if (mode === 'system') {
+      setMapTheme(systemTheme)
+    } else {
+      setMapTheme(mode)
+    }
+  }, [systemTheme, theme])
+
   const value = {
     theme: computedTheme,
     setTheme,
     themeColor,
     setThemeColor,
+    mapTheme,
   }
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

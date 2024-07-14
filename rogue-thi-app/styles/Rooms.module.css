@@ -1,9 +1,8 @@
 .container {
   /* fill entire viewport height since we don't need scrolling on this page */
-  height: 100vh;
+  height: calc(100dvh - 10px);
   /* fix for iOS since Safari would otherwise include the status bar in the viewport height */
   max-height: stretch;
-
   display: flex;
   flex-direction: column;
   padding: 0;
