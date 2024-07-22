@@ -29,7 +29,9 @@
       "empty": "Today's menu is empty.",
       "generic": "Error retrieving the menu.<br />Something seems to be broken."
     },
-    "text.additional": "and {{count}} more dishes"
+    "text": {
+      "additional": "and {{count}} more dishes"
+    }
   },
   "transport": {
     "title": {
@@ -56,7 +58,9 @@
   },
   "events": {
     "title": "Events",
-    "organizer.attribute": "by"
+    "organizer": {
+      "attribute": "by"
+    }
   },
   "rooms": {
     "title": "Room Suggestions",
