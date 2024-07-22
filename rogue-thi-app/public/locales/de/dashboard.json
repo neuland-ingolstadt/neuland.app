@@ -29,7 +29,9 @@
       "empty": "Der heutige Speiseplan ist leer.",
       "generic": "Fehler beim Abruf des Speiseplans.<br />Irgendetwas scheint kaputt zu sein."
     },
-    "text.additional": "und {{count}} weitere Gerichte"
+    "text": {
+      "additional": "und {{count}} weitere Gerichte"
+    }
   },
   "transport": {
     "title": {
@@ -56,7 +58,9 @@
   },
   "events": {
     "title": "Veranstaltungen",
-    "organizer.attribute": "von"
+    "organizer": {
+      "attribute": "von"
+    }
   },
   "rooms": {
     "title": "Raumvorschläge",

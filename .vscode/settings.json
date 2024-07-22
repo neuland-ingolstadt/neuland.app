@@ -18,5 +18,11 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "terminal.integrated.cwd": "rogue-thi-app"
+  "terminal.integrated.cwd": "rogue-thi-app",
+  "i18n-ally.localesPaths": ["rogue-thi-app/public/locales"],
+  "i18n-ally.namespace": true,
+  "i18n-ally.pathMatcher": "{locale}/{namespaces}.json",
+  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.theme.annotation": "rgb(200, 147, 124)",
+  "i18n-ally.theme.annotationBorder": "rgba(200, 147, 124,0.5)"
 }
