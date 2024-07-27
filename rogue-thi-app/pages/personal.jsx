@@ -51,6 +51,7 @@ import { useModals } from '../lib/providers/ModalProvider'
 import { useTheme } from '../lib/providers/ThemeProvider'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
+const SYSTEM_STATUS_URL = 'https://status.neuland.app/status/app'
 
 export default function Personal() {
   const [userdata, setUserdata] = useState(null)
@@ -387,7 +388,6 @@ export default function Personal() {
               {t('personal.debug')}
             </ListGroup.Item>
           )}
-
           <ListGroup.Item
             action
             className={styles.interaction_row}
@@ -410,6 +410,17 @@ export default function Personal() {
               className={styles.interaction_icon}
             />
             {t('personal.imprint')}
+          </ListGroup.Item>
+          <ListGroup.Item
+            action
+            className={styles.interaction_row}
+            onClick={() => window.open(SYSTEM_STATUS_URL, '_blank')}
+          >
+            <ExternalLink
+              size={20}
+              className={styles.interaction_icon}
+            />
+            System Status
           </ListGroup.Item>
         </ListGroup>
 
