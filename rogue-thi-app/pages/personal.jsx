@@ -51,7 +51,7 @@ import { useModals } from '../lib/providers/ModalProvider'
 import { useTheme } from '../lib/providers/ThemeProvider'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
-const SYSTEM_STATUS_URL = 'https://status.neuland.app/status/app'
+const SYSTEM_STATUS_URL = process.env.NEXT_PUBLIC_SYSTEM_STATUS_URL
 
 export default function Personal() {
   const [userdata, setUserdata] = useState(null)
