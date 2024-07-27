@@ -11,7 +11,8 @@ import { translateMeals } from '../../lib/backend-utils/translation-utils'
 const pdf = require('pdf-parse')
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
-const URL = 'http://www.canisiusstiftung.de/upload/speiseplan.pdf'
+const URL =
+  'http://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
 
 const TITLE_REGEX = /[A-Z][a-z]*, den [0-9]{1,2}.[0-9]{1,2}.[0-9]{4}/gm
 const DATE_REGEX = /[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}/gm
