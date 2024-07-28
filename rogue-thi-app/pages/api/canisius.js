@@ -12,7 +12,7 @@ const pdf = require('pdf-parse')
 
 const CACHE_TTL = 60 * 60 * 1000 // 60m
 const URL =
-  'https://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
+  'http://www.canisiusstiftung.de/wp-content/uploads/Speiseplan/speiseplan.pdf'
 
 const TITLE_REGEX = /[A-Z][a-z]*, den [0-9]{1,2}.[0-9]{1,2}.[0-9]{4}/gm
 const DATE_REGEX = /[0-9]{1,2}.[0-9]{1,2}.[0-9]{4}/gm
