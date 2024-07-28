@@ -235,14 +235,6 @@ export default function Login() {
               >
                 {t('links.github')}
               </a>
-              <> &ndash; </>
-              <a
-                href={GIT_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {t('links.github')}
-              </a>
             </p>
           </div>
         </div>
