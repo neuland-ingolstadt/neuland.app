@@ -21,7 +21,8 @@
     "security": "Here you can find more information about security.",
     "imprint": "Imprint",
     "privacy": "Privacy Policy",
-    "github": "Source code on GitHub"
+    "github": "Source code on GitHub",
+    "status": "Check system status"
   },
   "form": {
     "username": "THI username",
