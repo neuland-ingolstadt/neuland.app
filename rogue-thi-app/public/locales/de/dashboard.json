@@ -89,10 +89,11 @@
   },
   "install": {
     "title": "Installation",
-    "text": {
-      "question": "Möchtest du diese App auf deinem Smartphone <strong>installieren</strong>?",
-      "ios": "Drücke in Safari auf <strong>Teilen</strong> und dann auf <strong>Zum Home-Bildschirm</strong>.",
-      "android": "Öffne in Chrome das <strong>Menü</strong> und drücke dann auf <strong>Zum Startbildschirm zufügen</strong>."
+    "text1": "<strong>Neuland Next</strong> bringt die neuland.app als <strong>echte App</strong> mit neuem Design und besserer Performance auf dein Smartphone.",
+    "text2": "Lade die App herunter, um loszulegen.",
+    "button": {
+      "ios": "App Store",
+      "android": "Google Play"
     }
   }
 }

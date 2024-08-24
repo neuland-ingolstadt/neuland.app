@@ -17,13 +17,13 @@ export const PLATFORM_DESKTOP = 'desktop'
 export const PLATFORM_MOBILE = 'mobile'
 export const ALL_DASHBOARD_CARDS = [
   {
-    key: 'install',
+    key: 'install2',
     removable: true,
     default: [PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: (hidePromptCard) => (
       <InstallPrompt
-        key="install"
-        onHide={() => hidePromptCard('install')}
+        key="install2"
+        onHide={() => hidePromptCard('install2')}
       />
     ),
   },
