@@ -29,6 +29,10 @@ export default function StyleProvider({ children }) {
           name="theme-color"
           content={themeColor}
         />
+        <meta
+          name="apple-itunes-app"
+          content="app-id=1617096811"
+        />
 
         <link
           rel="manifest"
