@@ -106,7 +106,6 @@ export default function RoomSearch() {
 
     const rooms = await filterRooms(date, time, building, duration)
 
-    console.log(`Found ${rooms.length} results`)
     setFilterResults(rooms)
   }, [building, date, duration, time])
 
