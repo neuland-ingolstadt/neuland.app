@@ -71,8 +71,6 @@ export default function AttributionControl({ attribution }) {
   // hides the attribution after 5 seconds
   useEffect(() => {
     const timeout = setTimeout(() => {
-      console.log('clickedOnce', clickedOnce)
-
       // if the use opens the attribution, don't hide it
       if (clickedOnce) {
         return
