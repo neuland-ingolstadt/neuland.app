@@ -27,8 +27,8 @@ Make a personal copy of the source code using the _Fork_ button on the top right
 Open a terminal (e.g. PowerShell if you're on Windows) and download the source code to your PC using Git:
 
 ```bash
-git clone https://github.com/your-github-username/THI-App.git
-cd THI-App/rogue-thi-app
+git clone https://github.com/your-github-username/neuland.app.git
+cd neuland.app/rogue-thi-app
 ```
 
 Download everything else that is required to run the app:
