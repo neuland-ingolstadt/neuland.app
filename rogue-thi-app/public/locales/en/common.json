@@ -69,7 +69,10 @@
     "personal": "Profile",
     "lecturers": "Lecturers",
     "exams": "Exams",
-    "election": "University Elections"
+    "election": "University Elections",
+    "announcements": {
+      "readMore": "Read more"
+    }
   },
   "prompts": {
     "close": "Close"

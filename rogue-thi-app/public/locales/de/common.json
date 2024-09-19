@@ -69,7 +69,10 @@
     "personal": "Profil",
     "lecturers": "Dozenten",
     "exams": "Prüfungen",
-    "election": "Hochschulwahlen"
+    "election": "Hochschulwahlen",
+    "announcements": {
+      "readMore": "Mehr lesen"
+    }
   },
   "prompts": {
     "close": "Schließen"

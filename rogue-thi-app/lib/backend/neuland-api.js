@@ -14,6 +14,30 @@ class NeulandAPIClient {
     }
   }
 
+  async getAnnouncements() {
+    return await this.performGraphQLQuery(
+      gql`
+        query {
+          announcements {
+            id
+            title {
+              de
+              en
+            }
+            description {
+              de
+              en
+            }
+            startDateTime
+            endDateTime
+            priority
+            url
+          }
+        }
+      `.replace(/\s+/g, ' ')
+    )
+  }
+
   async getFoodPlan(locations) {
     return await this.performGraphQLQuery(
       gql`
