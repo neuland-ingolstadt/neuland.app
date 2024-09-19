@@ -413,7 +413,7 @@ async function getMealData() {
     'Canisius',
   ])
 
-  return data.food.flat().flatMap((x) => x.meals)
+  return data.food.foodData.flat().flatMap((x) => x.meals)
 }
 
 export const getStaticProps = async ({ locale, params }) => {

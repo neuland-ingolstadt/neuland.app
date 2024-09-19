@@ -18,8 +18,8 @@ export async function loadFoodEntries(
   restaurants = ['IngolstadtMensa', 'NeuburgMensa', 'Reimanns', 'Canisius'],
   showStaticMeals = false
 ) {
-  const data2 = await NeulandAPI.getFoodPlan(restaurants)
-  const entries = data2.food
+  const data = await NeulandAPI.getFoodPlan(restaurants)
+  const entries = data.food.foodData
 
   // get start of this week (monday) or next monday if isWeekend
   const startOfThisWeek = getMonday(getAdjustedDay(new Date()))

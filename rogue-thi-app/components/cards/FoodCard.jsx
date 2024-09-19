@@ -36,7 +36,7 @@ export default function FoodCard() {
     async function load() {
       const restaurants = localStorage.selectedRestaurantList
         ? JSON.parse(localStorage.selectedRestaurantList)
-        : ['mensa']
+        : ['IngolstadtMensa']
       if (restaurants.length !== 1) {
         setFoodCardTitle('food')
       } else {
