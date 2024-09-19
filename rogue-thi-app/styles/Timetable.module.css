@@ -65,15 +65,29 @@
 }
 
 .notice {
+  position: fixed;
+  width: 100%;
+  top: 35dvh;
   text-align: center;
-  margin: 0.5rem;
+  transform: translateY(-50%);
+}
+
+.notice > span:first-child {
+  font-size: 5rem;
+  /* Shift to visual center */
+  margin-left: 25px;
+}
+
+.notice > p:nth-child(2) {
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .slide {
   /* workaround to make sure the entire height is swipeable */
   /* TODO: find a better solution */
   min-height: calc(
-    100vh - env(safe-area-inset-top, 0px) - 50px - 38px - 10px - 56px -
+    100vh - env(safe-area-inset-top, 0px) - 70px - 38px - 10px - 56px -
       env(safe-area-inset-bottom, 0px)
   );
 }

@@ -18,7 +18,7 @@ export default function TheMatrixAnimation() {
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 
     // Set color to green and font to 15pt monospace in the drawing context
-    ctx.fillStyle = '#0f0'
+    ctx.fillStyle = 'rgba(0, 255, 0, 0.1)'
     ctx.font = '15pt monospace'
 
     // for each column put a random character at the end
@@ -63,7 +63,7 @@ export default function TheMatrixAnimation() {
         Math.random() * (canvas.current.height - 16 * 20)
       )
       for (let j = 1; j < 16; j++) {
-        ctx.fillStyle = `rgb(0, ${j * 16}, 0)`
+        ctx.fillStyle = `rgba(0, ${j * 16}, 0, 0.1)`
         ctx.fillText(getRandomChar(), x, startY + j * 20)
       }
 

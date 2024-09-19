@@ -20,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from '../styles/Login.module.css'
 
 const ORIGINAL_ERROR_WRONG_CREDENTIALS = 'Wrong credentials'
-
+const SYSTEM_STATUS_URL = process.env.NEXT_PUBLIC_SYSTEM_STATUS_URL
 const IMPRINT_URL = process.env.NEXT_PUBLIC_IMPRINT_URL
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
 const GIT_URL = process.env.NEXT_PUBLIC_GIT_URL
@@ -196,6 +196,15 @@ export default function Login() {
                   strong: <strong />,
                 }}
               />
+            </p>
+            <p>
+              <a
+                href={SYSTEM_STATUS_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t('links.status')}
+              </a>
             </p>
             <p>
               <a href={`${GIT_URL}/blob/master/docs/data-security-de.md`}>

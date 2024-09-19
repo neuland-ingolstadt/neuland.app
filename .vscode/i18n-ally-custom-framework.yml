@@ -1,0 +1,7 @@
+languageIds:
+  - javascript
+  - javascriptreact
+scopeRangeRegex: "useTranslation\\(\\s*\\[?\\s*['\"`](.*?)['\"`]"
+monopoly: true
+usageMatchRegex:
+  - "[^\\w\\d]t\\(['\"`]({key})['\"`]"

@@ -21,7 +21,8 @@
     "security": "Hier findest du weitere Informationen zur Sicherheit.",
     "imprint": "Impressum",
     "privacy": "Datenschutzerklärung",
-    "github": "Quellcode auf GitHub"
+    "github": "Quellcode auf GitHub",
+    "status": "Systemstatus prüfen"
   },
   "form": {
     "username": "THI-Benutzername",

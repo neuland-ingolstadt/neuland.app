@@ -32,7 +32,9 @@
       "empty": "Today's menu is empty.",
       "generic": "Error retrieving the menu.<br />Something seems to be broken."
     },
-    "text.additional": "and {{count}} more dishes"
+    "text": {
+      "additional": "and {{count}} more dishes"
+    }
   },
   "transport": {
     "title": {
@@ -59,7 +61,9 @@
   },
   "events": {
     "title": "Events",
-    "organizer.attribute": "by"
+    "organizer": {
+      "attribute": "by"
+    }
   },
   "rooms": {
     "title": "Room Suggestions",
@@ -88,10 +92,11 @@
   },
   "install": {
     "title": "Installation",
-    "text": {
-      "question": "Want to <strong>install</strong> this app on your smartphone?",
-      "ios": "In Safari, tap <strong>Share</strong> and then tap <strong>Add to Home Screen</strong>.",
-      "android": "In Chrome, tap the <strong>Menu</strong> button and then tap <strong>Add to Home Screen</strong>."
+    "text1": "<strong>Neuland Next</strong> brings neuland.app to your phone as a <strong>real app</strong> with a new design and improved performance.",
+    "text2": "Download the app to get started.",
+    "button": {
+      "ios": "App Store",
+      "android": "Google Play"
     }
   }
 }

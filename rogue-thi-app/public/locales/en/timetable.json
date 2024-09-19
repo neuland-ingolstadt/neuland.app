@@ -4,7 +4,7 @@
       "title": "Timetable"
     },
     "overview": {
-      "noLectures": "No lectures. 🎉",
+      "noLectures": "No lectures",
       "configureTimetable": "You can create your timetable using the <a>THI Timetable Tool</a>, then your subjects will appear here."
     },
     "overflow": {

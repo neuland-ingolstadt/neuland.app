@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { useRouter } from 'next/router'
 
 import Button from 'react-bootstrap/Button'
@@ -18,6 +19,7 @@ import ThemeModal from '../components/modal/ThemeModal'
 import {
   Bug,
   ChevronRight,
+  Download,
   ExternalLink,
   Gavel,
   LogIn,
@@ -31,6 +33,13 @@ import {
   forgetSession,
 } from '../lib/backend/thi-session-handler'
 import {
+  OS_ANDROID,
+  OS_IOS,
+  OS_MACOS,
+  OS_OTHER,
+  useOperatingSystem,
+} from '../lib/hooks/os-hook'
+import {
   USER_EMPLOYEE,
   USER_GUEST,
   USER_STUDENT,
@@ -43,14 +52,17 @@ import styles from '../styles/Personal.module.css'
 import themes from '../data/themes.json'
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { useTranslation } from 'next-i18next'
 
 import { TextBlock } from 'react-placeholder/lib/placeholders'
+
+import { useTranslation } from 'next-i18next'
+
 import { useFoodFilter } from '../lib/providers/FoodFilterProvider'
 import { useModals } from '../lib/providers/ModalProvider'
 import { useTheme } from '../lib/providers/ThemeProvider'
 
 const PRIVACY_URL = process.env.NEXT_PUBLIC_PRIVACY_URL
+const SYSTEM_STATUS_URL = process.env.NEXT_PUBLIC_SYSTEM_STATUS_URL
 
 export default function Personal() {
   const [userdata, setUserdata] = useState(null)
@@ -68,12 +80,21 @@ export default function Personal() {
   const { theme } = useTheme()
   const router = useRouter()
   const { t, i18n } = useTranslation('personal')
-
+  const os = useOperatingSystem()
   const { userKind } = useUserKind()
 
-  const CopyableField = ({ label, value }) => {
-    // Only the value is clickable to copy it to the clipboard.
+  const iosUrl = process.env.NEXT_PUBLIC_IOS_APP_URL
+  const androidUrl = process.env.NEXT_PUBLIC_ANDROID_APP_URL
 
+  const redirectToAppStore = () => {
+    if (os === OS_IOS || os === OS_MACOS) {
+      window.open(iosUrl, '_self')
+    } else if (os === OS_ANDROID) {
+      window.open(androidUrl, '_self')
+    }
+  }
+
+  const CopyableField = ({ label, value }) => {
     const handleCopy = async () => {
       await navigator.clipboard.writeText(value)
       alert(t('personal.overview.copiedToClipboard', { label }))
@@ -166,7 +187,10 @@ export default function Personal() {
 
   return (
     <AppContainer>
-      <AppNavbar title={t('personal.title')} />
+      <AppNavbar
+        title={t('personal.title')}
+        showBack={'desktop-only'}
+      />
 
       <AppBody>
         <ReactPlaceholder
@@ -307,9 +331,25 @@ export default function Personal() {
             {t('personal.foodPreferences')}
           </ListGroup.Item>
         </ListGroup>
-
+        {os !== OS_OTHER && (
+          <>
+            <br />
+            <ListGroup>
+              <ListGroup.Item
+                action
+                className={styles.interaction_row}
+                onClick={() => redirectToAppStore()}
+              >
+                <Download
+                  size={20}
+                  className={styles.interaction_icon}
+                />
+                {t('personal.nextApp')}
+              </ListGroup.Item>
+            </ListGroup>
+          </>
+        )}
         <br />
-
         <ListGroup>
           <ListGroup.Item
             action
@@ -384,7 +424,6 @@ export default function Personal() {
               {t('personal.debug')}
             </ListGroup.Item>
           )}
-
           <ListGroup.Item
             action
             className={styles.interaction_row}
@@ -407,6 +446,17 @@ export default function Personal() {
               className={styles.interaction_icon}
             />
             {t('personal.imprint')}
+          </ListGroup.Item>
+          <ListGroup.Item
+            action
+            className={styles.interaction_row}
+            onClick={() => window.open(SYSTEM_STATUS_URL, '_blank')}
+          >
+            <ExternalLink
+              size={20}
+              className={styles.interaction_icon}
+            />
+            System Status
           </ListGroup.Item>
         </ListGroup>
 
