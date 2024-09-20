@@ -5,13 +5,13 @@ const FoodFilterContext = createContext({})
 export default function FoodFilterProvider({ children }) {
   const [selectedLanguageFood, setSelectedLanguageFood] = useState('default')
   const [selectedRestaurants, setSelectedRestaurants] = useState([
-    'mensa',
-    'reimanns',
-    'reimanns-static',
+    'IngolstadtMensa',
+    'Reimanns',
   ])
   const [preferencesSelection, setPreferencesSelection] = useState({})
   const [allergenSelection, setAllergenSelection] = useState({})
   const [showFoodFilterModal, setShowFoodFilterModal] = useState(false)
+  const [showStaticMeals, setShowStaticMeals] = useState(false)
 
   useEffect(() => {
     if (localStorage.selectedAllergens) {
@@ -20,11 +20,14 @@ export default function FoodFilterProvider({ children }) {
     if (localStorage.preferencesSelection) {
       setPreferencesSelection(JSON.parse(localStorage.preferencesSelection))
     }
-    if (localStorage.selectedRestaurants) {
-      setSelectedRestaurants(JSON.parse(localStorage.selectedRestaurants))
+    if (localStorage.selectedRestaurantList) {
+      setSelectedRestaurants(JSON.parse(localStorage.selectedRestaurantList))
     }
     if (localStorage.selectedLanguageFood) {
       setSelectedLanguageFood(JSON.parse(localStorage.selectedLanguageFood))
+    }
+    if (localStorage.showStaticMeals) {
+      setShowStaticMeals(JSON.parse(localStorage.showStaticMeals))
     }
   }, [])
 
@@ -40,7 +43,7 @@ export default function FoodFilterProvider({ children }) {
     }
 
     setSelectedRestaurants(newSelection)
-    localStorage.selectedRestaurants = JSON.stringify(newSelection)
+    localStorage.selectedRestaurantList = JSON.stringify(newSelection)
   }
 
   /**
@@ -66,6 +69,15 @@ export default function FoodFilterProvider({ children }) {
     localStorage.selectedAllergens = JSON.stringify(allergenSelection)
   }
 
+  /**
+   * Toggles the visibility of the food filter modal.
+   * @returns {void}
+   */
+  function toggleShowStaticMeals() {
+    setShowStaticMeals(!showStaticMeals)
+    localStorage.showStaticMeals = JSON.stringify(!showStaticMeals)
+  }
+
   const value = {
     selectedRestaurants,
     selectedLanguageFood,
@@ -79,6 +91,8 @@ export default function FoodFilterProvider({ children }) {
     saveAllergenSelection,
     showFoodFilterModal,
     setShowFoodFilterModal,
+    showStaticMeals,
+    toggleShowStaticMeals,
   }
 
   return (

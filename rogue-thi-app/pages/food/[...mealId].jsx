@@ -40,10 +40,7 @@ import { useUserKind } from '../../lib/hooks/user-kind'
 
 import Head from 'next/head'
 import Link from 'next/link'
-
-import { getCanisiusPlan } from '../api/canisius'
-import { getMensaPlan } from '../api/mensa'
-import { getReimannsPlan } from '../api/reimanns'
+import neulandApi from '../../lib/backend/neuland-api'
 import { useFoodFilter } from '../../lib/providers/FoodFilterProvider'
 
 export default function Food({ meal, id, locale }) {
@@ -409,13 +406,14 @@ export default function Food({ meal, id, locale }) {
 }
 
 async function getMealData() {
-  const data = await Promise.all([
-    getMensaPlan('v2').catch(() => []),
-    getReimannsPlan('v2').catch(() => []),
-    getCanisiusPlan('v2').catch(() => []),
+  const data = await neulandApi.getFoodPlan([
+    'IngolstadtMensa',
+    'NeuburgMensa',
+    'Reimanns',
+    'Canisius',
   ])
 
-  return data.flat().flatMap((x) => x.meals)
+  return data.food.foodData.flat().flatMap((x) => x.meals)
 }
 
 export const getStaticProps = async ({ locale, params }) => {

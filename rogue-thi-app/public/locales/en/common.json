@@ -14,7 +14,8 @@
         "title": "Restaurants",
         "showMensa": "Show Cafeteria",
         "showReimanns": "Show Reimanns",
-        "showReimannsStatic": "Show Reimanns (static meals)",
+        "showMensaIngolstadt": "Show Canteen Ingolstadt",
+        "showMensaNeuburg": "Show Counter Neuburg",
         "showCanisius": "Show Canisius Convict"
       },
       "allergens": {
@@ -22,6 +23,10 @@
         "iconTitle": "Allergens",
         "selected": "Selected",
         "empty": "None"
+      },
+      "showStaticMeals": {
+        "title": "Static Meals",
+        "label": "Show static meals"
       },
       "preferences": {
         "title": "Food Preferences",
@@ -64,7 +69,10 @@
     "personal": "Profile",
     "lecturers": "Lecturers",
     "exams": "Exams",
-    "election": "University Elections"
+    "election": "University Elections",
+    "announcements": {
+      "readMore": "Read more"
+    }
   },
   "prompts": {
     "close": "Close"

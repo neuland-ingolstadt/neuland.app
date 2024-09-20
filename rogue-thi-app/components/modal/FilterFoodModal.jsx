@@ -33,6 +33,8 @@ export default function FilterFoodModal() {
     saveAllergenSelection,
     showFoodFilterModal,
     setShowFoodFilterModal,
+    showStaticMeals,
+    toggleShowStaticMeals,
   } = useFoodFilter()
   const [showAllergenSelection, setShowAllergenSelection] = useState(false)
   const [showPreferencesSelection, setShowPreferencesSelection] =
@@ -61,28 +63,42 @@ export default function FilterFoodModal() {
 
           <div className={styles.filterBody}>
             <Form.Check
-              id="restaurant-checkbox-mensa"
-              label={t('food.filterModal.restaurants.showMensa')}
-              checked={selectedRestaurants.includes('mensa')}
-              onChange={() => toggleSelectedRestaurant('mensa')}
+              id="restaurant-checkbox-mensa-ingolstadt"
+              label={t('food.filterModal.restaurants.showMensaIngolstadt')}
+              checked={selectedRestaurants.includes('IngolstadtMensa')}
+              onChange={() => toggleSelectedRestaurant('IngolstadtMensa')}
+            />
+            <Form.Check
+              id="restaurant-checkbox-mensa-neuburg"
+              label={t('food.filterModal.restaurants.showMensaNeuburg')}
+              checked={selectedRestaurants.includes('NeuburgMensa')}
+              onChange={() => toggleSelectedRestaurant('NeuburgMensa')}
             />
             <Form.Check
               id="restaurant-checkbox-reimanns"
               label={t('food.filterModal.restaurants.showReimanns')}
-              checked={selectedRestaurants.includes('reimanns')}
-              onChange={() => toggleSelectedRestaurant('reimanns')}
-            />
-            <Form.Check
-              id="restaurant-checkbox-reimanns-static"
-              label={t('food.filterModal.restaurants.showReimannsStatic')}
-              checked={selectedRestaurants.includes('reimanns-static')}
-              onChange={() => toggleSelectedRestaurant('reimanns-static')}
+              checked={selectedRestaurants.includes('Reimanns')}
+              onChange={() => toggleSelectedRestaurant('Reimanns')}
             />
             <Form.Check
               id="restaurant-checkbox-canisius"
               label={t('food.filterModal.restaurants.showCanisius')}
-              checked={selectedRestaurants.includes('canisius')}
-              onChange={() => toggleSelectedRestaurant('canisius')}
+              checked={selectedRestaurants.includes('Canisius')}
+              onChange={() => toggleSelectedRestaurant('Canisius')}
+            />
+          </div>
+
+          <hr />
+          <div className={styles.filterHeader}>
+            <h6>{t('food.filterModal.showStaticMeals.title')}</h6>
+          </div>
+
+          <div className={styles.filterBody}>
+            <Form.Check
+              id="show-static-meals-checkbox"
+              label={t('food.filterModal.showStaticMeals.label')}
+              checked={showStaticMeals}
+              onChange={() => toggleShowStaticMeals()}
             />
           </div>
 

@@ -23,6 +23,7 @@
     "dompurify": "^2.3.4",
     "fetch-bypass-cors": "github:neuland-ingolstadt/fetch-bypass-cors#v1.0.4",
     "fetch-cookie": "^2.0.1",
+    "graphql-request": "^6.1.0",
     "i18next": "^22.5.0",
     "ical-generator": "^3.6.1",
     "idb": "^7.0.0",

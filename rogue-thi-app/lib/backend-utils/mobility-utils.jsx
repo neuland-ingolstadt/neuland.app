@@ -3,7 +3,6 @@ import { LockKeyhole } from 'lucide-react'
 import { TextBlock } from 'react-placeholder/lib/placeholders'
 
 import { formatFriendlyTime, formatRelativeMinutes } from '../date-utils'
-import API from '../backend/authenticated-api'
 import NeulandAPI from '../backend/neuland-api'
 
 import stations from '../../data/mobility.json'
@@ -51,26 +50,6 @@ export function getMobilityLabel(kind, station, t) {
 }
 
 /**
- * Fetches and parses parking availability for the campus
- * @returns {object}
- */
-async function getAndConvertCampusParkingData() {
-  let available = null
-  try {
-    const entries = await API.getCampusParkingData()
-    available = entries.find((x) => x.name === 'TG Gießerei Hochschule')?.free
-    available = typeof available === 'string' ? parseInt(available) : null
-  } catch (e) {
-    available = null
-  }
-
-  return {
-    name: 'Congressgarage',
-    available,
-  }
-}
-
-/**
  * Fetches and parses mobility data
  * @param {string} kind Mobility type (`bus`, `train`, `parking` or `charging`)
  * @param {string} station Station name (only for `bus` or `train`)
@@ -78,35 +57,20 @@ async function getAndConvertCampusParkingData() {
  */
 export async function getMobilityEntries(kind, station) {
   if (kind === 'bus') {
-    return NeulandAPI.getBusPlan(station)
+    const data = await NeulandAPI.getBusPlan(station)
+    return data.bus
   } else if (kind === 'train') {
-    return NeulandAPI.getTrainPlan(station)
+    const data = await NeulandAPI.getTrainPlan(station)
+    return data.train
   } else if (kind === 'parking') {
-    const [data, campusEntry] = await Promise.all([
-      NeulandAPI.getParkingData(),
-      getAndConvertCampusParkingData(),
-    ])
-    data.push(campusEntry)
-
-    return [
-      ...stations.parking.map((x) => {
-        const entry = data.find((y) => x.name === y.name)
-        return {
-          name: x.name,
-          priceLevel: x.priceLevel,
-          available: entry ? entry.available : null,
-        }
-      }),
-      ...data.filter((x) => !stations.parking.find((y) => x.name === y.name)),
-    ]
+    const data = await NeulandAPI.getParkingData()
+    return data.parking.lots
   } else if (kind === 'charging') {
     const data = await NeulandAPI.getCharingStationData()
-    return [
-      ...stations.charging
-        .map((x) => data.find((y) => x.id === y.id))
-        .filter((x) => !!x),
-      ...data.filter((x) => !stations.charging.find((y) => x.id === y.id)),
+    const relevantStations = [
+      59362, 59340, 59360, 59358, 59356, 59200, 59354, 1770740, 22532,
     ]
+    return data.charging.filter((x) => relevantStations.includes(x.id))
   } else {
     throw new Error('Invalid mobility kind ' + kind)
   }
@@ -193,11 +157,17 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
         )}
         <div className={styles.mobilityDestination}>{item.name}</div>
         <div className={styles.mobilityTime}>
-          {typeof item.available === 'number'
-            ? t('transport.details.parking.available', {
-                available: item.available,
-              })
-            : t('transport.details.parking.unknown')}
+          {item.available && item.total ? (
+            <span>
+              {t('transport.details.parking.available', {
+                available: `${Math.round(
+                  ((item.total - item.available) / item.total) * 100
+                )}% - ${item.available}`,
+              })}
+            </span>
+          ) : (
+            <span>{t('transport.details.parking.unknown')}</span>
+          )}
         </div>
       </>
     )
@@ -228,7 +198,7 @@ export function RenderMobilityEntry({ kind, item, maxLen, styles, detailed }) {
   function formatTimes(time, cardMin, detailedMin) {
     const cardMs = cardMin * 60 * 1000
     const detailedMs = detailedMin * 60 * 1000
-    const actualTime = new Date(time)
+    const actualTime = new Date(Number(time))
     const timeDifference = actualTime - new Date()
     let timeString
 

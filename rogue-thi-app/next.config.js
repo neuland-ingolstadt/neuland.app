@@ -72,7 +72,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self';
               font-src 'self';
-              connect-src 'self' tile.neuland.app ${PROXY_URL} ${API_URL};
+              connect-src 'self' tile.neuland.app ${PROXY_URL} ${API_URL} https://api.neuland.app/graphql;
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? " 'unsafe-eval'" : ''};
               worker-src blob:;

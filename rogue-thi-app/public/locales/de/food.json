@@ -13,7 +13,8 @@
   },
   "list": {
     "titles": {
-      "cafeteria": "Mensa",
+      "neuburg": "Theke Neuburg",
+      "cafeteria": "Mensa Ingolstadt",
       "meals": "Gerichte",
       "soups": "Suppen",
       "salads": "Salate"
