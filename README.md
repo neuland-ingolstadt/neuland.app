@@ -5,6 +5,12 @@ Technische Hochschule Ingolstadt built with React and Next.js.
 It includes a reverse engineered documentation for the REST backend
 used by the official app.
 
+> [!WARNING]  
+> The Neuland REST API will soon be replaced by the new GraphQL API.
+> To ensure a seamless transition, we recommend migrating to the GraphQL API as soon as possible.
+> 
+> You can find the complete documentation and instructions for easy migration here: https://api.neuland.app
+
 ## About
 
 ### App
