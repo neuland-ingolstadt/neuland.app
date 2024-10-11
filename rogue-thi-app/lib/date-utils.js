@@ -385,3 +385,25 @@ export function combineDateTime(date, time) {
 function t(...args) {
   return i18n.t(...args, { ns: 'common' })
 }
+
+export function getLocalizedWeekday(weekday) {
+  const weekdays = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  }
+
+  const weekDayIndex = weekdays[weekday] || 0
+
+  // get a date obj with the given weekday and the current date
+  const date = new Date()
+  date.setDate(date.getDate() + ((weekDayIndex - date.getDay() + 7) % 7))
+
+  return date.toLocaleString(getAdjustedLocale(), {
+    weekday: 'long',
+  })
+}

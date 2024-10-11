@@ -5,9 +5,12 @@ export const USER_STUDENT = 'student'
 export const USER_EMPLOYEE = 'employee'
 export const USER_GUEST = 'guest'
 
+const NEUBURG_FACULTIES = ['Nachhaltige Infrastruktur']
+
 export function useUserKind() {
   const [userKind, setUserKind] = useState(USER_GUEST)
   const [userFaculty, setUserFaculty] = useState(null)
+  const [userCampus, setUserCampus] = useState(null)
 
   useEffect(() => {
     async function loadFaculty() {
@@ -31,5 +34,13 @@ export function useUserKind() {
     load()
   }, [])
 
-  return { userKind, userFaculty }
+  useEffect(() => {
+    const campus = NEUBURG_FACULTIES.includes(userFaculty)
+      ? 'Neuburg'
+      : 'Ingolstadt'
+
+    setUserCampus(campus)
+  }, [userFaculty])
+
+  return { userKind, userFaculty, userCampus }
 }

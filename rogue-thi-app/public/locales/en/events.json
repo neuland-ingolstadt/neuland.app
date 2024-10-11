@@ -1,9 +1,34 @@
 {
   "events": {
-    "appbar": {
-      "title": "Events"
+    "events": {
+      "tab": "Events",
+      "noEvents": "There are currently no event dates available."
     },
-    "noEvents": "There are currently no event dates available.",
+    "sports": {
+      "tab": "Sports",
+      "noSports": "There are currently no university sports offers available.",
+      "filterByCampus": "Filter by Campus",
+      "modal": {
+        "close": "Close",
+        "details": {
+          "header": "Details",
+          "description": "Description",
+          "location": "Location",
+          "time": "Time",
+          "weekday": "Weekday"
+        },
+        "registration": {
+          "header": "Registration",
+          "required": "Registration required!",
+          "notRequired": "Spontaneous participation possible!",
+          "email": "E-Mail",
+          "invitationLink": "Invitation Link"
+        }
+      }
+    },
+    "appbar": {
+      "title": "Campus Life"
+    },
     "dates": {
       "until": "until"
     }

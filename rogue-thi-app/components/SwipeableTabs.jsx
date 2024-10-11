@@ -10,7 +10,12 @@ import SwipeableViews from 'react-swipeable-views'
  * @param {object} children Array of `SwipeableTab` objects
  * @param {number} defaultPage Index of the tab to show by default
  */
-export default function SwipeableTabs({ className, children, defaultPage }) {
+export default function SwipeableTabs({
+  className,
+  children,
+  defaultPage,
+  onPageChange,
+}) {
   const [page, setPage] = useState(defaultPage || 0)
 
   useEffect(() => {
@@ -22,7 +27,10 @@ export default function SwipeableTabs({ className, children, defaultPage }) {
       <Nav
         variant="pills"
         activeKey={page.toString()}
-        onSelect={(key) => setPage(parseInt(key))}
+        onSelect={(idx) => {
+          setPage(parseInt(idx))
+          onPageChange && onPageChange(parseInt(idx))
+        }}
       >
         {children.map((child, idx) => (
           <Nav.Item key={idx}>
@@ -43,6 +51,7 @@ SwipeableTabs.propTypes = {
   className: PropTypes.string,
   defaultPage: PropTypes.number,
   children: PropTypes.any,
+  onPageChange: PropTypes.func,
 }
 
 /**

@@ -30,6 +30,7 @@ const permissionPolicyFeatures = [
 const isDev = process.env.NODE_ENV === 'development'
 const PROXY_URL = process.env.NEXT_PUBLIC_PROXY_URL
 const API_URL = 'https://' + process.env.NEXT_PUBLIC_THI_API_HOST
+const NEULAND_API = process.env.NEXT_PUBLIC_NEULAND_GRAPHQL_ENDPOINT
 
 module.exports = {
   i18n,
@@ -72,7 +73,7 @@ module.exports = {
             value: `default-src 'none';
               img-src 'self';
               font-src 'self';
-              connect-src 'self' tile.neuland.app ${PROXY_URL} ${API_URL} https://api.neuland.app/graphql;
+              connect-src 'self' tile.neuland.app ${PROXY_URL} ${API_URL} ${NEULAND_API};
               style-src 'self' 'unsafe-inline';
               script-src 'self'${isDev ? " 'unsafe-eval'" : ''};
               worker-src blob:;
