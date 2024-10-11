@@ -15,6 +15,7 @@
 
 .item {
   display: flex;
+  align-items: center;
   gap: 5px;
 }
 
@@ -48,6 +49,16 @@
   align-items: center;
 }
 
+.eventDetails.location > * {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  flex-grow: 0;
+  text-overflow: ellipsis;
+}
+
 .right {
   color: gray;
   text-align: right;
@@ -55,4 +66,49 @@
 
 .eventUrl {
   color: unset;
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.campusFilter {
+  margin: 10px 0 20px 5px;
+  display: flex;
+  gap: 10px;
+}
+
+.campusFilter > * {
+  font-size: 0.9rem;
+}
+
+.modalHeader::before {
+  content: ' ';
+  display: block;
+  height: 1px;
+  border-radius: 1px;
+  background-color: var(--secondary);
+  margin: 10px 0;
+}
+
+.registration {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.registration > *:first-child {
+  margin-top: 2px;
+}
+.registration > .required {
+  color: var(--danger);
+}
+
+.registration > .notRequired {
+  color: var(--success);
+}
+
+.sportsItem {
+  background-color: transparent;
 }

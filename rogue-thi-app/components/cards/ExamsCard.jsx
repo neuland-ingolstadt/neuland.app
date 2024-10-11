@@ -59,7 +59,7 @@ export default function ExamsCard() {
     <BaseCard
       icon={GraduationCap}
       i18nKey="exams"
-      link="/calendar?focus=exams"
+      link="/calendar?tab=exams"
     >
       <ListGroup variant="flush">
         {exams &&

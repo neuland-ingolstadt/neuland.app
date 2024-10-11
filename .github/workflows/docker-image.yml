@@ -50,3 +50,4 @@ jobs:
             NEXT_PUBLIC_GUEST_ONLY=${{ vars.NEXT_PUBLIC_GUEST_ONLY }}
             NEXT_PUBLIC_THI_API_KEY=${{ secrets.NEXT_PUBLIC_THI_API_KEY }}
             NEXT_PUBLIC_THI_API_MODE=${{ vars.NEXT_PUBLIC_THI_API_MODE }}
+            NEXT_PUBLIC_NEULAND_GRAPHQL_ENDPOINT=${{ github.ref == 'refs/heads/develop' && vars.GRAPHQL_ENDPOINT_DEV || vars.GRAPHQL_ENDPOINT_PROD }}

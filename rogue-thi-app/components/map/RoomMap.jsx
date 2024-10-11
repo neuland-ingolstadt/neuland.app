@@ -64,7 +64,7 @@ export default function RoomMap({ highlight, roomData }) {
   const searchField = useRef()
   const location = useLocation()
   const mapRef = useRef()
-  const { userKind, userFaculty } = useUserKind()
+  const { userKind, userCampus } = useUserKind()
   const [searchText, setSearchText] = useState(highlight || '')
   const [availableRooms, setAvailableRooms] = useState(null)
   const [roomAvailabilityList, setRoomAvailabilityList] = useState({})
@@ -75,10 +75,18 @@ export default function RoomMap({ highlight, roomData }) {
 
   const { t, i18n } = useTranslation(['rooms', 'api-translations'])
 
-  const mapCenter =
-    userFaculty && userFaculty === 'Nachhaltige Infrastruktur'
-      ? NEUBURG_CENTER
-      : INGOLSTADT_CENTER
+  const mapCenter = useMemo(() => {
+    return userCampus === 'Neuburg' ? NEUBURG_CENTER : INGOLSTADT_CENTER
+  }, [userCampus])
+
+  useEffect(() => {
+    const campusCenter =
+      userCampus === 'Neuburg' ? NEUBURG_CENTER : INGOLSTADT_CENTER
+
+    setTimeout(() => {
+      mapRef.current?.getMap().setCenter([campusCenter[1], campusCenter[0]])
+    }, 0)
+  }, [userCampus])
 
   const [primaryColor, grayColor] = useMemo(() => {
     if (typeof window === 'undefined') {
@@ -206,8 +214,7 @@ export default function RoomMap({ highlight, roomData }) {
     )
 
     // this doesn't affect the search results itself, but ensures that the map is centered on the correct campus
-    const showNeuburg =
-      userFaculty === 'Nachhaltige Infrastruktur' || cleanedText.includes('N')
+    const showNeuburg = userCampus === 'Neuburg' || cleanedText.includes('N')
     const campusRooms = filtered.filter(
       (x) => x.properties.Raum.includes('N') === showNeuburg
     )
@@ -257,7 +264,7 @@ export default function RoomMap({ highlight, roomData }) {
     roomCapacity,
     searchText,
     allRooms,
-    userFaculty,
+    userCampus,
     currentFloor,
     mapCenter,
   ])

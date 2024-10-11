@@ -30,6 +30,8 @@ import styles from '../styles/Calendar.module.css'
 import { Trans, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+const TABS = ['semester', 'exams']
+
 /**
  * Page containing the semester and exam dates.
  */
@@ -41,6 +43,9 @@ export default function Calendar() {
   const { userKind } = useUserKind()
 
   const { i18n, t } = useTranslation('calendar')
+
+  const tab = router.query.tab || TABS[0]
+  const defaultPage = TABS.indexOf(tab)
 
   useEffect(() => {
     async function load() {
@@ -86,9 +91,6 @@ export default function Calendar() {
       />
     )
   }
-
-  const { focus } = router.query
-  const page = focus === 'exams' ? 1 : 0
 
   return (
     <AppContainer>
@@ -144,7 +146,10 @@ export default function Calendar() {
           </Modal.Footer>
         </Modal>
 
-        <SwipeableTabs defaultPage={page}>
+        <SwipeableTabs
+          defaultPage={defaultPage}
+          onPageChange={(idx) => router.replace(`/calendar?tab=${TABS[idx]}`)}
+        >
           <SwipeableTab
             className={styles.tab}
             title={t('calendar.tabs.semester')}

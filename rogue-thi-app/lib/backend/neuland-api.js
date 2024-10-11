@@ -205,6 +205,36 @@ class NeulandAPIClient {
       `.replace(/\s+/g, ' ')
     )
   }
+
+  async getUniversitySports() {
+    return await this.performGraphQLQuery(
+      gql`
+        query {
+          universitySports {
+            id
+            title {
+              de
+              en
+            }
+            description {
+              de
+              en
+            }
+            campus
+            location
+            weekday
+            startTime
+            endTime
+            requiresRegistration
+            invitationLink
+            eMail
+            createdAt
+            updatedAt
+          }
+        }
+      `.replace(/\s+/g, ' ')
+    )
+  }
 }
 
 export default new NeulandAPIClient()
