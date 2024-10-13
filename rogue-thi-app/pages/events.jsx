@@ -5,6 +5,8 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import {
   Calendar,
   ChevronRight,
+  CircleAlert,
+  CircleCheck,
   Clock,
   ExternalLink,
   Globe,
@@ -132,9 +134,6 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4 className={styles.modalHeader}>
-            {t('events.sports.modal.details.header')}
-          </h4>
           <strong>{t('events.sports.modal.details.weekday')}</strong>
           <p>{focusedSport && getLocalizedWeekday(focusedSport.weekday)}</p>
 
@@ -160,10 +159,28 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
           <h4 className={styles.modalHeader}>
             {t('events.sports.modal.registration.header')}
           </h4>
-          {focusedSport && focusedSport.requiresRegistration ? (
-            <p>{t('events.sports.modal.registration.required')}</p>
-          ) : (
-            <p>{t('events.sports.modal.registration.notRequired')}</p>
+          {focusedSport && (
+            <span className={styles.registration}>
+              {focusedSport && focusedSport.requiresRegistration ? (
+                <>
+                  <CircleAlert
+                    size={16}
+                    className={styles.required}
+                  />
+                  <span>{t('events.sports.modal.registration.required')}</span>
+                </>
+              ) : (
+                <>
+                  <CircleCheck
+                    size={16}
+                    className={styles.notRequired}
+                  />
+                  <span>
+                    {t('events.sports.modal.registration.notRequired')}
+                  </span>
+                </>
+              )}
+            </span>
           )}
 
           {focusedSport && focusedSport.eMail && (
@@ -379,18 +396,20 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
                     {sports.map((item, idx) => (
                       <ListGroup.Item
                         key={idx}
-                        className={styles.item}
+                        className={`${styles.item} ${styles.sportsItem}`}
                         onClick={() => setFocusedSport(item)}
                       >
                         <div className={styles.left}>
                           {item.title[locale]}
                           <div className={styles.details}>
-                            <span className={styles.eventDetails}>
+                            <span
+                              className={`${styles.eventDetails} ${styles.location}`}
+                            >
                               <MapPin
                                 size={14}
                                 className={styles.icon}
                               />
-                              {item.location}
+                              <span>{item.location}</span>
                             </span>
 
                             <span className={styles.eventDetails}>

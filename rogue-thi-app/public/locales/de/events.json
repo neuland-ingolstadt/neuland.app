@@ -19,8 +19,8 @@
         },
         "registration": {
           "header": "Anmeldung",
-          "required": "Anmeldung erforderlich!",
-          "notRequired": "Spontane Teilnahme möglich!",
+          "required": "Zwingend erforderlich",
+          "notRequired": "Spontane Teilnahme möglich",
           "email": "E-Mail",
           "invitationLink": "Einladungslink"
         }

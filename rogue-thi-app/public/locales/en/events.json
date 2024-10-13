@@ -19,8 +19,8 @@
         },
         "registration": {
           "header": "Registration",
-          "required": "Registration required!",
-          "notRequired": "Spontaneous participation possible!",
+          "required": "Required",
+          "notRequired": "Spontaneous participation possible",
           "email": "E-Mail",
           "invitationLink": "Invitation Link"
         }
