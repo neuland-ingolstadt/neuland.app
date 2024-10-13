@@ -380,7 +380,7 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
             <ListGroup variant="flush">
               {sportsEvents && sportsEvents.length === 0 && (
                 <ListGroup.Item className={styles.item}>
-                  {t('events.sports.noEvents')}
+                  {t('events.sports.noSports')}
                 </ListGroup.Item>
               )}
               {Object.entries(weekdaySports).map(([weekday, sports], idx) => (
