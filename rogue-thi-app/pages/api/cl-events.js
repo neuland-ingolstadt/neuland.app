@@ -45,8 +45,6 @@ export default async function handler(req, res) {
       const end =
         event.end > event.begin ? new Date(Number(event.end)) : undefined
 
-      console.log(start, end)
-
       cal.createEvent({
         id: event.id,
         summary: event.title,
