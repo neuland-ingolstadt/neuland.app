@@ -49,6 +49,7 @@ export default async function handler(req, res) {
         id: event.id,
         summary: event.title,
         description: `Veranstalter: ${event.organizer}`,
+        location: event.location,
         start,
         end,
       })
