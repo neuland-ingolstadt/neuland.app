@@ -198,6 +198,7 @@ class NeulandAPIClient {
             id
             organizer
             title
+            location
             begin
             end
           }
