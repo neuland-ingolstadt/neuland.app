@@ -106,6 +106,7 @@ export default class CredentialStorage {
       } catch (error) {
         if (error.name === 'InvalidAccessError') {
           await this.delete(id)
+          return
         }
         throw error
       }
