@@ -53,17 +53,17 @@ export default class CredentialStorage {
   async write(id, data) {
     const key = await crypto.subtle.generateKey(
       {
-        name: 'AES-CBC',
+        name: 'AES-GCM',
         length: 256,
       },
       false,
       ['encrypt', 'decrypt']
     )
-    const iv = crypto.getRandomValues(new Uint8Array(16))
+    const iv = crypto.getRandomValues(new Uint8Array(12)) // AES-GCM typically uses a 12-byte IV
 
     const encrypted = await crypto.subtle.encrypt(
       {
-        name: 'AES-CBC',
+        name: 'AES-GCM',
         iv,
       },
       key,
@@ -94,7 +94,7 @@ export default class CredentialStorage {
 
       const decrypted = await crypto.subtle.decrypt(
         {
-          name: 'AES-CBC',
+          name: 'AES-GCM',
           iv,
         },
         key,
