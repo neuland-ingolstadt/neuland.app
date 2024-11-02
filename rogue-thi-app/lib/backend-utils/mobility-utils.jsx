@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next'
 export function getMobilitySettings() {
   return {
     kind: localStorage.mobilityKind || 'bus',
-    station: localStorage.mobilityStation || stations.bus.defaultStation,
+    station: localStorage.mobilityStationV2 || stations.bus.defaultStation,
   }
 }
 

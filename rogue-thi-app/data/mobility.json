@@ -45,11 +45,11 @@
     ]
   },
   "train": {
-    "defaultStation": "nord",
+    "defaultStation": "INGOLSTADT_NORD",
     "stations": [
-      { "id": "nord", "name": "Nordbahnhof" },
-      { "id": "hbf", "name": "Hauptbahnhof" },
-      { "id": "audi", "name": "Audi" }
+      { "id": "INGOLSTADT_NORD", "name": "Nordbahnhof" },
+      { "id": "INGOLSTADT_HBF", "name": "Hauptbahnhof" },
+      { "id": "INGOLSTADT_AUDI", "name": "Audi" }
     ]
   },
   "parking": [

@@ -42,7 +42,7 @@ class NeulandAPIClient {
     return await this.performGraphQLQuery(
       gql`
 			query {
-			food(locations: [${locations.map((x) => `"${x}"`).join(',')}]) {
+		  food(locations: [${locations.join(',')}]) {
 				errors {
 					location
 					message
@@ -128,7 +128,7 @@ class NeulandAPIClient {
     return this.performGraphQLQuery(
       gql`
       query {
-        bus(station: "${station}") {
+        bus(station: ${station}) {
           route
           destination
           time
@@ -145,7 +145,7 @@ class NeulandAPIClient {
     return this.performGraphQLQuery(
       gql`
       query {
-        train(station: "${station}") {
+        train(station: ${station}) {
 					name
 					destination
 					plannedTime

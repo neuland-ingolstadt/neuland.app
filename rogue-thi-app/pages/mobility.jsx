@@ -49,9 +49,9 @@ export default function Bus() {
           delete localStorage.mobilityKind
         }
         if (station) {
-          localStorage.mobilityStation = station
+          localStorage.mobilityStationV2 = station
         } else {
-          delete localStorage.mobilityStation
+          delete localStorage.mobilityStationV2
         }
       } catch (e) {
         setDataError(e.message)
