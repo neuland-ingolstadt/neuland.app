@@ -36,18 +36,6 @@
       "additional": "und {{count}} weitere Gerichte"
     }
   },
-  "transport": {
-    "title": {
-      "train": "Bahn ({{station}})",
-      "bus": "Bus ({{station}})",
-      "parking": "Parkplätze",
-      "charging": "Ladestationen"
-    },
-    "error": {
-      "empty": "Keine Elemente.",
-      "generic": "Fehler beim Abruf."
-    }
-  },
   "calendar": {
     "title": "Kalender",
     "date": {

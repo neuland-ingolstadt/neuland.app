@@ -9,7 +9,7 @@
     "warning": "The app can currently only be used as a guest. More information can be found below.",
     "title": "Why can't I log in?",
     "details": "The university has instructed us to disable the login function. We are working on a solution, but it is not clear when it will be ready. We advise against using the official THI app for security reasons.",
-    "details2": "The menu plan, semester and event dates, room map, bus and train departure times, and parking information can still be accessed through the guest mode."
+    "details2": "The menu plan, semester & event dates and the room map can still be accessed through the guest mode."
   },
   "notes": {
     "title1": "What is this?",

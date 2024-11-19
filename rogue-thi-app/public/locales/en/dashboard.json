@@ -36,18 +36,6 @@
       "additional": "and {{count}} more dishes"
     }
   },
-  "transport": {
-    "title": {
-      "train": "Train ({{station}})",
-      "bus": "Bus ({{station}})",
-      "parking": "Parking",
-      "charging": "Charging Stations"
-    },
-    "error": {
-      "empty": "No items.",
-      "generic": "Error retrieving."
-    }
-  },
   "calendar": {
     "title": "Calendar",
     "date": {

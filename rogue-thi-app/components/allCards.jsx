@@ -4,7 +4,6 @@ import EventsCard from './cards/EventsCard'
 import ExamsCard from './cards/ExamsCard'
 import FoodCard from './cards/FoodCard'
 import InstallPrompt from './cards/InstallPrompt'
-import MobilityCard from './cards/MobilityCard'
 import RoomCard from './cards/RoomCard'
 import TimetableCard from './cards/TimetableCard'
 
@@ -53,18 +52,6 @@ export const ALL_DASHBOARD_CARDS = [
     removable: true,
     default: [PLATFORM_DESKTOP, USER_STUDENT, USER_EMPLOYEE, USER_GUEST],
     card: () => <FoodCard key="mensa" />,
-  },
-  {
-    key: 'mobility',
-    removable: true,
-    default: [
-      PLATFORM_DESKTOP,
-      PLATFORM_MOBILE,
-      USER_STUDENT,
-      USER_EMPLOYEE,
-      USER_GUEST,
-    ],
-    card: () => <MobilityCard key="mobility" />,
   },
   {
     key: 'calendar',

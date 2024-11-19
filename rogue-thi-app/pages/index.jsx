@@ -127,7 +127,6 @@ export const getServerSideProps = async ({ locale, req }) => {
       announcements,
       ...(await serverSideTranslations(locale ?? 'en', [
         'dashboard',
-        'mobility',
         'common',
       ])),
     },
