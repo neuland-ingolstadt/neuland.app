@@ -100,7 +100,7 @@ export const getServerSideProps = async ({ locale, req }) => {
       ?.split('=')[1] ?? '[]'
   )
 
-  const announcements = data.announcements
+  const announcements = data.appAnnouncements
     .map((a) => ({
       ...a,
       startDateTime: new Date(Number(a.startDateTime)),

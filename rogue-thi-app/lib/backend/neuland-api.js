@@ -18,7 +18,7 @@ class NeulandAPIClient {
     return await this.performGraphQLQuery(
       gql`
         query {
-          announcements {
+          appAnnouncements {
             id
             title {
               de
