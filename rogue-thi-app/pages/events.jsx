@@ -34,7 +34,6 @@ import SwipeableTabs, { SwipeableTab } from '../components/SwipeableTabs'
 import Button from 'react-bootstrap/Button'
 import Link from 'next/link'
 import Modal from 'react-bootstrap/Modal'
-import clubs from '../data/clubs.json'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -243,9 +242,6 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
               )}
               {campusLifeEvents &&
                 campusLifeEvents.map((item, idx) => {
-                  const club = clubs.find(
-                    (club) => club.club === item.organizer
-                  )
                   return (
                     <ListGroup.Item
                       key={idx}
@@ -265,29 +261,31 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
                         )}
                         <div className={styles.details}>
                           <span className={styles.eventDetails}>
-                            {club != null && (
+                            {item.host != null ? (
                               <>
-                                {club.website != null && (
+                                {item.host.name != null && (
                                   <a
-                                    href={club.website}
+                                    href={item.host.website}
                                     className={styles.eventUrl}
                                     target="_blank"
                                     rel="noreferrer"
                                   >
                                     <Users size={16} />
-                                    {` ${club.club} `}
+                                    {` ${item.host.name} `}
                                   </a>
                                 )}
                               </>
-                            )}
-                            {club == null && (
-                              <>
-                                <Users
-                                  size={16}
-                                  className={styles.icon}
-                                />
-                                {item.organizer}
-                              </>
+                            ) : (
+                              item.host &&
+                              item.host.name != null && (
+                                <>
+                                  <Users
+                                    size={16}
+                                    className={styles.icon}
+                                  />
+                                  {item.host.name}
+                                </>
+                              )
                             )}
                           </span>
 
@@ -326,9 +324,9 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
 
                         <span style={{ flex: 1 }}></span>
                         <span className={styles.socials}>
-                          {club != null && club.website != null && (
+                          {item.host != null && item.host.website != null && (
                             <a
-                              href={club.website}
+                              href={item.host.website}
                               className={styles.eventUrl}
                               target="_blank"
                               rel="noreferrer"
@@ -336,9 +334,9 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
                               <Globe size={20} />
                             </a>
                           )}
-                          {club != null && club.instagram != null && (
+                          {item.host != null && item.host.instagram != null && (
                             <a
-                              href={club.instagram}
+                              href={item.host.instagram}
                               className={styles.eventUrl}
                               target="_blank"
                               rel="noreferrer"

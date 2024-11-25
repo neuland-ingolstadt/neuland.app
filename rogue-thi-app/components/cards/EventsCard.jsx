@@ -41,9 +41,11 @@ export default function EventsCard() {
         {calendar.slice(0, 2).map((x, i) => (
           <ListGroup.Item key={i}>
             <div>{x.title}</div>
-            <div className="text-muted">
-              {t('events.organizer.attribute')} {x.organizer}
-            </div>
+            {x.host?.name && (
+              <div className="text-muted">
+                {t('events.organizer.attribute')} {x.host.name}
+              </div>
+            )}
           </ListGroup.Item>
         ))}
       </ListGroup>

@@ -126,8 +126,11 @@ class NeulandAPIClient {
       gql`
         query {
           clEvents {
-            id
-            organizer
+            host {
+              name
+              website
+              instagram
+            }
             title
             location
             begin
