@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
 import { useRouter } from 'next/router'
 
@@ -16,7 +16,8 @@ import { useTranslation } from 'next-i18next'
 export default function EventsCard() {
   const router = useRouter()
   const [calendar, setCalendar] = useState([])
-  const { t } = useTranslation(['dashboard'])
+  const { t, i18n } = useTranslation(['dashboard'])
+  const locale = useMemo(() => i18n.languages[0], [i18n.languages])
 
   useEffect(() => {
     async function load() {
@@ -40,7 +41,7 @@ export default function EventsCard() {
       <ListGroup variant="flush">
         {calendar.slice(0, 2).map((x, i) => (
           <ListGroup.Item key={i}>
-            <div>{x.title}</div>
+            <div>{x.title[locale]}</div>
             {x.host?.name && (
               <div className="text-muted">
                 {t('events.organizer.attribute')} {x.host.name}
