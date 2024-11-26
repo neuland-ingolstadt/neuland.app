@@ -131,7 +131,10 @@ class NeulandAPIClient {
               website
               instagram
             }
-            title
+            title {
+              de
+              en
+            }
             location
             begin
             end

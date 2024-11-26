@@ -123,6 +123,7 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
     <AppContainer>
       <AppNavbar title={t('events.appbar.title')} />
 
+      {/* SPORTS DETAILS MODAL */}
       <Modal
         show={!!focusedSport}
         onHide={() => setFocusedSport(null)}
@@ -248,7 +249,7 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
                       className={styles.item}
                     >
                       <div className={styles.left}>
-                        {!item.url && item.title}
+                        {!item.url && item.title[locale]}
                         {item.url && (
                           <a
                             href={item.url}
