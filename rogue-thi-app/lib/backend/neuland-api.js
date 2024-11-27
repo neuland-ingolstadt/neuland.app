@@ -131,7 +131,7 @@ class NeulandAPIClient {
               website
               instagram
             }
-            title {
+            titles {
               de
               en
             }

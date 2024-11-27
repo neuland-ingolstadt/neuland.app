@@ -41,7 +41,7 @@ export default function EventsCard() {
       <ListGroup variant="flush">
         {calendar.slice(0, 2).map((x, i) => (
           <ListGroup.Item key={i}>
-            <div>{x.title[locale]}</div>
+            <div>{x.titles[locale]}</div>
             {x.host?.name && (
               <div className="text-muted">
                 {t('events.organizer.attribute')} {x.host.name}

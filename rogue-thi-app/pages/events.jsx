@@ -249,7 +249,7 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
                       className={styles.item}
                     >
                       <div className={styles.left}>
-                        {!item.url && item.title[locale]}
+                        {!item.url && item.titles[locale]}
                         {item.url && (
                           <a
                             href={item.url}
