@@ -39,11 +39,13 @@ export default async function handler(req, res) {
       .timezone('Europe/Berlin')
       .ttl(60 * 60 * 24)
     for (const event of plan.clEvents) {
-      const start = new Date(Number(event.begin))
+      const start = new Date(event.startDateTime)
+      let end = event.endDateTime ? new Date(event.endDateTime) : undefined
 
       // discard the end if it is before the start
-      const end =
-        event.end > event.begin ? new Date(Number(event.end)) : undefined
+      if (end && end < start) {
+        end = undefined
+      }
 
       cal.createEvent({
         id: event.id,

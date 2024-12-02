@@ -90,10 +90,12 @@ export default function Events({ initialCampusEvents, sportsEvents }) {
     return initialCampusEvents
       .map((x) => ({
         ...x,
-        begin: x.begin ? new Date(Number(x.begin)) : null,
-        end: x.end ? new Date(Number(x.end)) : null,
+        begin: x.startDateTime ? new Date(x.startDateTime) : null,
+        end: x.endDateTime ? new Date(x.endDateTime) : null,
       }))
-      .filter((x) => x.end === null || x.end > new Date())
+      .filter(
+        (x) => x.endDateTime === null || new Date(x.endDateTime) > new Date()
+      )
   }, [initialCampusEvents])
 
   const weekdaySports = useMemo(

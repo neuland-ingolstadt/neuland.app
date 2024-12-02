@@ -136,8 +136,8 @@ class NeulandAPIClient {
               en
             }
             location
-            begin
-            end
+            startDateTime
+            endDateTime
           }
         }
       `.replace(/\s+/g, ' ')
