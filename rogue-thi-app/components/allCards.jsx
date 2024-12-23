@@ -7,7 +7,7 @@ import InstallPrompt from './cards/InstallPrompt'
 import RoomCard from './cards/RoomCard'
 import TimetableCard from './cards/TimetableCard'
 
-import { GraduationCap, Library, Map, Scroll, User } from 'lucide-react'
+import { GraduationCap, Map, Scroll, User } from 'lucide-react'
 
 import { USER_EMPLOYEE, USER_GUEST, USER_STUDENT } from '../lib/hooks/user-kind'
 // import ElectionPrompt from './cards/ElectionPrompt'
@@ -99,19 +99,6 @@ export const ALL_DASHBOARD_CARDS = [
         icon={Map}
         i18nKey="roomplan"
         link="/rooms"
-      />
-    ),
-  },
-  {
-    key: 'library',
-    removable: true,
-    default: [PLATFORM_DESKTOP, PLATFORM_MOBILE, USER_STUDENT, USER_EMPLOYEE],
-    card: () => (
-      <BaseCard
-        key="library"
-        icon={Library}
-        i18nKey="library"
-        link="/library"
       />
     ),
   },
