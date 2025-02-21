@@ -12,18 +12,27 @@ const initialState = {}
 const DashboardContext = createContext(initialState)
 
 /**
- * Get the default order of shown and hidden dashboard entries
+ * Check whether to display this card by default property e.g. user kind or current platform
  */
-function getDefaultDashboardOrder(userKind) {
+function shouldDisplayCardByDefault(card, userKind) {
   const platform = window.matchMedia('(max-width: 768px)').matches
     ? PLATFORM_MOBILE
     : PLATFORM_DESKTOP
 
-  const filter = (x) =>
-    x.default.includes(platform) && x.default.includes(userKind)
+  return card.default.includes(platform) && card.default.includes(userKind)
+}
+
+/**
+ * Get the default order of shown and hidden dashboard entries
+ */
+function getDefaultDashboardOrder(userKind) {
   return {
-    shown: ALL_DASHBOARD_CARDS.filter(filter),
-    hidden: ALL_DASHBOARD_CARDS.filter((x) => !filter(x)),
+    shown: ALL_DASHBOARD_CARDS.filter((x) =>
+      shouldDisplayCardByDefault(x, userKind)
+    ),
+    hidden: ALL_DASHBOARD_CARDS.filter(
+      (x) => !shouldDisplayCardByDefault(x, userKind)
+    ),
   }
 }
 
@@ -48,7 +57,8 @@ export default function DashboardProvider({ children }) {
         ALL_DASHBOARD_CARDS.forEach((card) => {
           if (
             !entries.find((x) => x.key === card.key) &&
-            !hiddenEntries.find((x) => x.key === card.key)
+            !hiddenEntries.find((x) => x.key === card.key) &&
+            shouldDisplayCardByDefault(card, userKind)
           ) {
             // new (previously unknown) card
             entries.splice(0, 0, card)
