@@ -49,8 +49,8 @@ export default async function handler(req, res) {
 
       cal.createEvent({
         id: event.id,
-        summary: event.title,
-        description: `Veranstalter: ${event.organizer}`,
+        summary: event.titles.de,
+        description: `Veranstalter: ${event.host.name}`,
         location: event.location,
         start,
         end,
