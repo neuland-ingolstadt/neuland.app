@@ -6,9 +6,16 @@ It includes a reverse engineered documentation for the REST backend
 used by the official app.
 
 > [!CAUTION]  
-> The Neuland REST API is deprecated and was replaced by the GraphQL API.
-> 
-> You can find the new API documentation at [api.neuland.app](https://api.neuland.app/).
+> **Deprecated**  
+>  
+> The entire **neuland.app** web app is deprecated and has been replaced by the React Native **Neuland Next** app and its GraphQL API backend.  
+> Neuland Next is a complete rewrite of the app, which is available for Android, iOS and the web.
+> For more information, please visit [neuland.app](https://neuland.app).  
+>  
+> You can find the new repositories here:  
+> - [neuland.app-native](https://github.com/neuland-ingolstadt/neuland.app-native)  
+> - [neuland.app-backend](https://github.com/neuland-ingolstadt/neuland.app-backend)
+
 
 ## About
 
